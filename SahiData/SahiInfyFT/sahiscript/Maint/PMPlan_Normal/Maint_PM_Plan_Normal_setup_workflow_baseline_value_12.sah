@@ -1,0 +1,196 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data11 = readDataFromCSV("Maint_PM_Plan_Normal_setup_workflow_baseline_value_12","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("System", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data11.user_name1;
+ $inputObject.edt_loginid = $data11.LoginID1;
+ $inputObject.edt_password = $data11.Password1;
+ loginIntoDigite($inputObject);
+ $t.end();
+ 
+ var $t = _testcase("Script 39", "Workflow");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data11.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_button("Reopen")))
+ {
+ _click(_button("Reopen"));
+ _wait(5000);
+ }
+ 
+ var $t = _testcase("Version log", "Getting the current Baseline value of baselined Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data11.nodeIcon11;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.linkProduction;// _InfyFTclick(_link("Production Support Goals"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.setupGoals;// _InfyFTclick(_link("setup goals"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data11.segmentVersions;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_cell("Current Version")))
+ {
+ 
+ var $val = _getText(_cell("infotooltip ValueLeft"));
+ var $version = parseInt($val);
+ 
+ }
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.linkWrkFlow;// _InfyFTclick(_link("Workflow"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data11.reviewer;
+ $inputObject.workflow_stage = $data11.workflow_stage1;//1
+ WorkflowSet($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data11.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data11.reviewer;
+ $inputObject.edt_loginid = $data11.reviewer;
+ $inputObject.edt_password = $data11.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data11.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data11.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.linkWrkFlow;// _InfyFTclick(_link("Workflow"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.multiple_member = $data11.approver;
+ $inputObject.workflow_stage = $data11.workflow_stage2;//2
+ WorkflowSet($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data11.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data11.approver;
+ $inputObject.edt_loginid = $data11.approver;
+ $inputObject.edt_password = $data11.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data11.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data11.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.linkWrkFlow;// _InfyFTclick(_link("Workflow"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data11.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data11.user_name1;
+ $inputObject.edt_loginid = $data11.LoginID1;
+ $inputObject.edt_password = $data11.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data11.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.image = $data11.nodeIcon11;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.linkProduction;// _InfyFTclick(_link("Production Support Goals"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.setupGoals;// _InfyFTclick(_link("setup goals"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data11.segmentVersions;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(5000); 
+ 
+  if(_isVisible(_cell("Current Version")))
+ {
+ 
+ var $val2 = _getText(_cell("infotooltip ValueLeft"));
+ var $version2 = parseInt($val2);
+ 
+ }
+ 
+ 

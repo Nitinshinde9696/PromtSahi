@@ -1,0 +1,30 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+
+  $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Selected_Technology; 
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo2AT;
+ $inputObject.fieldValues = "";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Selected_Technology; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo2AT;
+ $inputObject.fieldValues = "";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Selected_Technology; 
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo2AT;
+ $inputObject.fieldValues = "";
+ verifySwiftFormData($inputObject);

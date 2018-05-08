@@ -1,0 +1,153 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/Inbox.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Package_StatusReport_Iteration_Risk_03", "Package/Status_Report");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ _log($endDate);
+  
+ /*Testcase-1*/ 
+ 
+ var $t = _testcase("TC_1", "Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Praject and navigate to status report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//IMS_Project
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.StatusReport;
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Summary of Iterations");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName41;//Summary of Iterations
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segment51;//Iteration Summary;Open Iteration Summary;Closed Iteration Summary;Iteration Trend;Production Issues Trend
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName60;//Iteration Summary
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo60;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.fieldValues60;//No. of Open Iterations at start of reporting period|No. of Iterations Received during the reporting period|No. of Iterations Closed|No. of Iterations Abandoned|No. of Open Iterations at the end of reporting period|Remarks
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName61;//Open Iteration Summary
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo61;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl
+ $inputObject.fieldValues = $data.fieldValues61;//No. of Iterations overdue|No. of Iterations planned for release in 4 weeks from report end date|No. of Iterations likely to slip schedule|% Iterations likely to slip schedule|No. of Iterations with projected effort deviation > 10%|% Iterations with projected effort deviation > 10%|Remarks
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName62;//Closed Iteration Summary
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo60;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.fieldValues62;//No. of Iterations Closed|No. of Iterations Closed On-Time|% Iterations Closed On-Time|No. of Iterations with effort deviation <=10%|% Iterations with effort deviation <=10%|Remarks
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.IterationTrend;//Chart View|Table View;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.IterationTrendTableView;//Report Name;Report End Date;% Iterations closed on time;% closed Iterations with effort deviation <= 10%;% open Iterations likely to slip schedule;% open Iterations with projected effort deviation > 10%;No. of Iterations overdue
+ InfyFTisVisibleS($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Risks Issues and Complaints");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName42;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segment52;//Risk Classification;Risk Profiler;Customer Complaint List
+ InfyFTisVisibleS($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName63;//Risk Classification
+ $inputObject.rowNo = $data.rowNo61;//0|1|2|3
+ $inputObject.colNo = $data.colNo63;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues63;//Risk Classification
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RiskProfilerTableView;//Month;Overall Score
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName64;//Customer Complaint List
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo64;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl
+ $inputObject.fieldValues = $data.fieldValues64;//Complaint Description|Raised Date|Agreed Date of Closure|Status|Age of Complaints (in days)|Update on actions being taken
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "LCStageWise Effort Distribution");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName43;//LCStageWise Effort Distribution
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segment53;//Effort Summary;LC Stage Wise Effort Distribution
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName65;//Effort Summary
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo61;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl
+ $inputObject.fieldValues = $data.fieldValues65;//Effort as per Alcon allocation (PHrs)|Project specific effort from timesheet (PHrs)|Non project specific effort from timesheet (PHrs)|Total timesheet effort (PHrs)|% Project specific effort|Project specific effort to alcon effort ratio (%)|Remarks
+ verifySwiftFormData($inputObject);
+ 
+/*  $inputObject = {};
+ $inputObject.tableName = $data.tableName66;//LC Stage Wise Effort Distribution
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo65;//1_lbl|2_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = $data.fieldValues66;//Lc Stage|Lc Stage|Actual effort as per timesheet|Deviation %
+ verifySwiftFormData($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldValues67;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();

@@ -1,0 +1,214 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Dev_Closure_Report_Generic_00","Dev/Closure_Report");
+ $data = readDataFromCSV("Dev_Closure_Report_QandP_11","Dev/Closure_Report");
+
+ 
+ var $TC = _testcase("LOGIN & NAVIGATION", "LOGGING WITH VALID USER");
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Ricky_Wang
+ $inputObject.edt_loginid = $generic.LoginID1;// Ricky_Wang
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $generic.report1;//MTR1
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ $TC.end();
+ 
+ var $TC1 = _testcase("TC_1,12", "CHECK THE TABLE NAMES");
+ $TC1.start();
+ 
+ _wait(40000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment6;//Quality And Productivity
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table_name;//Dashboard Metrics|COQ Drill down metrics
+ InfyFTisVisible($inputObject);
+ 
+ $TC1.end();
+ 
+ var $TC3 = _testcase("TC_3", "CHECK FIELDS OF PRODUCTIVITY METRIC");
+ $TC3.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Productivity - IFPUG FP";//$data.Prow1;//1
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.Pcol1;//0_lbl|1_lbl|3_lbl
+ $inputObject.fieldValues ="FP Per Person Months|0.00";// $data.Pval1;//Productivity (FP per person month)|NA|0.00
+ verifySwiftFormData($inputObject);
+ 
+ $TC3.end();
+ 
+ var $TC4 = _testcase("TC_4", "CHECK FIELDS OF DIR METRIC");
+ $TC4.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Overall DIR - Effort"//$data.Rrow1;//2
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.Rcol1;//0_lbl|1_lbl|3_lbl
+ $inputObject.fieldValues = "Defects per 100 PHrs|NA";//$data.Rval1;//DIR|Defects per 100 PHrs|0.00
+ verifySwiftFormData($inputObject);
+ 
+ $TC4.end();
+ 
+ var $TC5 = _testcase("TC_5", "CHECK FIELDS OF QUALITY(EFFORT) METRIC");
+ $TC5.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Quality (Effort)"//$data.QErow1;//3
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.QEcol1;//0_lbl|1_lbl|3_lbl
+ $inputObject.fieldValues = "Escaped defects per 1000 PHrs|0.00";//$data.QEval1;//Quality (Effort)|Escaped defects per 1000 PHrs|10.56
+ verifySwiftFormData($inputObject);
+ 
+ $TC5.end();
+ 
+ var $TC6 = _testcase("TC_6", "CHECK FIELDS OF QUALITY(SIZE) METRIC");
+ $TC6.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Quality (Size)";//$data.QSrow1;//4
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.QScol1;//0_lbl|1_lbl|3_lbl
+ $inputObject.fieldValues = "Escaped defects per 1000 size|NA";//$data.QSval1;//Quality (Size)|Percentage|0.0
+ verifySwiftFormData($inputObject);
+ 
+ $TC6.end();
+ 
+ var $TC7 = _testcase("TC_7", "CHECK FIELDS OF COQ METRIC");
+ $TC7.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "COQ";//$data.COQrow1;//5
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.COQcol1;//0_lbl|1_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = "Percentage|NA";//$data.COQval1;//COQ|Percentage|0.00|NA
+ verifySwiftFormData($inputObject);
+ 
+ $TC7.end();
+ 
+ var $TC8 = _testcase("TC_8", "CHECK FIELDS OF DEFECT REMOVAL EFFECTIVENESS METRIC");
+ $TC8.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Defect Removal Effectiveness"//$data.DRErow1;//6
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.DREcol1;//0_lbl|1_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = "Percentage|NA";//$data.DREval1;//Defect Removal Effectiveness|Percentage|0.00|NA
+ verifySwiftFormData($inputObject);
+ 
+ $TC8.end();
+ 
+ var $TC9 = _testcase("TC_9", "CHECK FIELDS OF SCHEDULE DEVIATION METRIC");
+ $TC9.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Schedule Deviation";//$data.SDrow1;//7
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.SDcol1;//0_lbl|1_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = "Percentage|NA";//$data.SDval1;//Schedule deviation|Percentage|0.00|NA
+ verifySwiftFormData($inputObject);
+ 
+ $TC9.end();
+ 
+ var $TC10 = _testcase("TC_10", "CHECK FIELDS OF EFEORT DEVIATION METRIC");
+ $TC10.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = "Effort Deviation";//$data.EDrow1;//8
+ $inputObject.colNo = "UOM_lbl|Goal_lbl";//$data.EDcol1;//0_lbl|1_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = "Percentage|NA"//$data.EDval1;//Effort deviation|Percentage|-100.00|NA
+ verifySwiftFormData($inputObject);
+ 
+ $TC10.end();
+ 
+ var $TC11 = _testcase("TC_11", "VERIFY REASON FOR DEVIATION FIELD");
+ $TC11.start();
+ 
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.rowNo = "Productivity - IFPUG FP|Overall DIR - Effort|Quality (Effort)|Quality (Size)|COQ|Defect Removal Effectiveness|Schedule Deviation|Effort Deviation|Cycle Time(Deviation)";
+ $inputObject.colNo = "Reasons for Deviation[1]";//5_txt
+ $inputObject.fieldValues = "Productivity - IFPUG FP|Overall DIR - Effort|Quality (Effort)|Quality (Size)|COQ|Defect Removal Effectiveness|Schedule Deviation|Effort Deviation|Cycle Time(Deviation)";
+ setSwiftFormData($inputObject);
+ 
+ $TC11.end(); 
+ 
+ var $TC12 = _testcase("TC_12", "VERIFYING THE COQ DRILL DOWN METRICS TABLE");
+ $TC12.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Drill down metrics
+ $inputObject.rowNo = $data.row4;//0
+ $inputObject.colNo = $data.col4;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl
+ $inputObject.fieldValues = $data.val4;//Metric|UOM of Size|Actual|Estimated|Deviation(%)|Reason for deviation
+ verifySwiftFormData($inputObject);
+ 
+ //*******UOM SIZE SHOULD BE PERCENTAGE******//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Drill down metrics
+ $inputObject.rowNo = $data.row5;//1|2|3
+ $inputObject.colNo = $data.col5;//2_lbl
+ $inputObject.fieldValues = $data.val5;//Percentage|Percentage|Percentage
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table2;//Drill down metrics
+ $inputObject.rowNo = $data.val3;//COQ-Failure|COQ-Prevention|COQ-Appraisal
+ $inputObject.colNo = "Metric[2]";//$data.col5;//2_lbl
+ $inputObject.fieldValues = $data.val3;//COQ-Failure|COQ-Prevention|COQ-Appraisal
+ verifySwiftFormData($inputObject);
+
+ 
+ $TC12.end();
+ 
+ var $TC2 = _testcase("TC_2", "VARIOUS METRICS IN DASHBOARD METRICS");
+ $TC2.start();
+ 
+ // VERIFYING THE DASHBOARD METRICS TABLE//
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Dashboard Metrics";
+ $inputObject.rowNo = $data.row2;//0
+ $inputObject.colNo = $data.col2;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.val2;//UOM of Size|Actual|Goal|Deviation(%)|Reasons for Deviation
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table1;//Dashboard Metrics
+ $inputObject.rowNo = "Overall DIR - Effort|Quality (Effort)|Quality (Size)|COQ|Defect Removal Effectiveness|Schedule Deviation|Effort Deviation";//$data.row1;//0|1|2|3|4|5|7|6|8|9
+ $inputObject.colNo = "Metric_lbl";//$data.col1;//0_lbl
+ $inputObject.fieldValues = "Overall DIR - Effort|Quality (Effort)|Quality (Size)|COQ|Defect Removal Effectiveness|Schedule Deviation|Effort Deviation";//$data.val1;//Metric (UOM)|Quality (Effort)|Effort deviation|COQ|Overall DIR - Effort|Productivity (FP per person month)|Schedule deviation|Quality (Size)|Defect Removal Effectiveness
+ verifySwiftFormData($inputObject);
+ 
+ $TC2.end();

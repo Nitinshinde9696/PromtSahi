@@ -1,0 +1,154 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+ 
+ $data = readDataFromCSV("MechPD_Tools_Reuse_Data_Creation_10","MechPD/Tools_Reuse");
+
+ var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+ var $GetExcel = _testcase("GetExcel"," Getting the Project name From Excel Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "ProjectName";
+  infyFTGetValueFromExcel($inputObject);
+  $prj_Id  = $value; 
+  
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "LoginUser";
+  infyFTGetValueFromExcel($inputObject); 
+
+   $user_Id  = $value;
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "Password";
+  infyFTGetValueFromExcel($inputObject);
+  $user_pswd  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.user_name = $user_Id; 
+$inputObject.edt_loginid = $user_Id;
+$inputObject.edt_password = $user_pswd;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t2 = _testcase("TC_2", "Navigating to Projects_home ");
+$t2.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $prj_Id;
+ selectProject($inputObject)
+
+ $t2.end();
+ 
+ var $PD = _testcase("Product Design"," Creating a Product Design for MechPD PT");
+ $PD.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPD;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+ 
+ $inputObject = {};
+$inputObject.edt_CM_Name = $data.requestTitle;//"Manual MechPD";
+$inputObject.txt_CM_Description = $data.desc221;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.lst_DN_Complexity =  $data.complexity;
+$inputObject.lst_DN_LCStage = $data.LC_stage;
+ModifyEformInstance($inputObject);
+
+  _wait(1000);
+  
+ $P_D = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $P_D;
+
+_include("MechPD_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+ 
+ 
+ $PD.end(); 
+ var $Other_Req = _testcase("Other_Request"," Creating a Other Request for MechPD PT");
+ $Other_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToOther_Request;
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ModifyEformInstance($inputObject);
+  
+  _wait(1000);
+  
+ $Other_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $Other_Request;
+
+_include("MechPD_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+
+ $Other_Req.end(); 
+ var $PM_Req = _testcase("PM_Request"," Creating a Project Mgmt Request for MechPD PT");
+ $PM_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPM_Request;
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ModifyEformInstance($inputObject);
+  
+  _wait(1000);
+  
+ $PM_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $PM_Request;
+
+_include("MechPD_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+
+ $PM_Req.end();
+  
+  var $SetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $SetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.rowNo = 1;
+  $inputObject.columnNames = "P_D|OR|PMR";
+  $inputObject.fieldValues = $P_D+"|"+$Other_Request+"|"+$PM_Request;
+  infyFTSetValueInExcel($inputObject)
+ 
+ $SetExcel.end(); 
+

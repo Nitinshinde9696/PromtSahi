@@ -1,0 +1,348 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+	if(_getGlobal("New_UI")==="yes")
+		$data = readDataFromCSV("Testing_PrjCr_Mgr_F2_F3_F4_F5_negative_08_NewUI","Testing/PrjCr_Mgr");
+	else
+		$data = readDataFromCSV("Testing_PrjCr_Mgr_F2_F3_F4_F5_negative_08","Testing/PrjCr_Mgr");
+ 
+  $dateObj1 = new Date();
+  $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+  $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+  $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+  $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+  $s = _testcase("TC_1.4"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+ $s.end(); 
+ $inputObject = {}; 
+  $inputObject["edt_searchTextBox-inputEl"] = $data.Project_code4;
+  setAllFields($inputObject);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+  $s = _testcase("TC_2.1"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ 
+  $s = _testcase("TC_2.3"," Verifying Fields availability ");
+ $s.start();
+  
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.project_code5;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.project_Namec6;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.project_startc7;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.project_enddtc8;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.ccode9;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.mcode10;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.recom_actionc11;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.iaction12;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.ptype12;
+ //InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.comments14;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.pts15;//_cell("Peak Team Size :")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.rfncra16;//_cell("Reason for not choosing Recommended Action :")
+ InfyFTisVisible($inputObject);
+ 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.msg17;//_span("Note: For assistance on choosing a suitable process type, click on save after choosing Create in initiate action and then navigate to Process Selection Questionnaire tab.")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Help_segment18;//_link("Help")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.RA_segment19;//_link("Recommended Action")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.att_segment20;//_link("Attachments")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.comm_segment21;//_link("Comments")
+ InfyFTisVisible($inputObject);
+ 
+ _assertExists(_button(" Save "));
+ _assertExists(_button("< Return")||_button("Return"));
+  
+ $s.end();
+ 
+   $t = _testcase("TC_2.5"," Read Only");
+ $t.start();
+ _wait(2000);
+  
+ $inputObject = {};	
+ $inputObject.textbox = $data.project_codefield22;
+ InfyFTisReadOnly($inputObject);
+  
+ $inputObject = {};	
+ $inputObject.textbox = $data.project_Name23;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.textbox = $data.project_startdt24;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.textbox = $data.project_enddt25;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.select = $data.recom_action26;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.textbox = $data.cust_code27;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.textbox = $data.mst_cust_code28;
+ InfyFTisReadOnly($inputObject);
+
+ /*
+ if(_isVisible(_textbox("field35")))
+ {
+	$inputObject = {};	
+	$inputObject.textbox = "field35";
+	InfyFTisReadOnly($inputObject);
+}	
+*/
+ 
+ 
+  /*
+ $inputObject = {};
+ $inputObject.span_Name = $data.project_codefield22;//_span("PROJECTCODE")
+ $inputObject.cell_Name = $data.project_code22;
+ InfyFTisReadOnly($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.project_Name23;//_span("CM_Name")
+ $inputObject.cell_Name = $data.project_Namec23;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.project_startdt24;//_span("STARTDATE")
+ $inputObject.cell_Name = $data.project_startc24;
+ InfyFTisReadOnly($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.project_enddt25;//_span("ENDDATE")
+ $inputObject.cell_Name = $data.project_enddtc25;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.recom_action26;//_span("DN_RecommendedAction")
+ $inputObject.cell_Name = $data.recom_actionc26;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.cust_code27;//_span("INFY_CUSTOMER_CODE")
+ $inputObject.cell_Name = $data.cust_codec27;//_cell("Customer Code :")
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.mst_cust_code28;//_span("INFY_MASTER_CUSTOMER_CODE")
+ $inputObject.cell_Name = $data.mst_cust_codec28;//_cell("Master Customer Code :")
+ InfyFTisReadOnly($inputObject);
+*/
+ $t.end();
+ 
+ $raction = _getSelectedText(_select("DN_RecommendedAction"));
+ 
+  $s = _testcase("TC_2.3"," Verifying Recommended action");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.RecomA_Segment29;// Recommended Action
+ SelectSegment($inputObject);
+ 
+ 	$inputObject = {}; 
+	$inputObject.span_Name = $data.RecomA_msg30;//_span("Note: If all the above conditions pass,then its is a candidate for creation.If one of them fails,then it is a candidate for merger.")
+	InfyFTisVisible($inputObject);
+ 
+ 	$inputObject = {}; 
+	$inputObject.span_Name = $data.RecomA_con31;//_span("Conditions to recommend Creation")
+	InfyFTisVisible($inputObject);
+	
+	$inputObject = {}; 
+	$inputObject.span_Name = $data.RecomA_steps32;//_span("The project code initiated for creation, is the first project amongst all the projects belonging to the same master project.")
+	InfyFTisVisible($inputObject);
+	
+	
+	$inputObject = {}; 
+	$inputObject.span_Name = "Note: If all the above conditions pass,then its is a candidate for creation.If one of them fails,then it is a candidate for merger.";
+	// $inputObject.span_name = parseInt($data.RecomA_Span33);//_span(78);
+	// $inputObject.message = $data.RecomA_steps33;
+	InfyFTisVisible($inputObject);
+ 
+ 
+	$inputObject = {};
+	$inputObject.raction = $raction;
+	$raction = InfyFTVerifyRecommendedAction($inputObject);
+  
+ $s.end();
+ 
+  $t = _testcase("TC_2.4"," Modify Project Request");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Detail_Segment34;// _link("Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_InitiateAction = $data.items35;//--None--;Create;Merge
+ verifyEformInstanceDetails($inputObject);
+
+ 
+ if($raction == 0)//Merge
+ {
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.field36;//create
+	$inputObject.lst_PROJECTTYPE = $data.PROJECTTYPE36;
+    ModifyEformInstance($inputObject);
+	
+	_wait(1000);
+		
+	$inputObject = {};
+	$inputObject.select = "DN_SuggestedProcessType";
+	InfyFTisReadOnly($inputObject);
+	
+	$inputObject = {}; 
+	$inputObject.span_Name = $data.process_type38;//_cell("Process Type :")
+	InfyFTisVisible($inputObject);
+	
+	$inputObject = {}; 
+	$inputObject.span_Name = $data.psq_seg39;//_link("Process Selection Questionnaire")
+	InfyFTisVisible($inputObject);
+	
+	$inputObject = {}; 
+	$inputObject.span_Name = $data.workflow_seg40;//_link("Workflow")
+	InfyFTisVisible($inputObject);
+	
+	_assertExists(_button("Route "));
+	_assertExists(_button("Reject"));
+	_assertExists(_button(" Save "));
+	_assertExists(_button("< Return"));
+	_assertTrue(_button("Reject").disabled);
+	_assertTrue(_button(" Save ").disabled);
+	
+ }	
+ else//create  
+ {
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.field41;//merge
+	ModifyEformInstance($inputObject);
+	
+	_wait(1000);
+	
+	//_assertNotVisible(_textarea("field38"));
+	
+	$inputObject = {}; 
+	$inputObject.span_Name = $data.exe_pro_code_lst42;//_cell("Execution Project Code List :")
+	InfyFTisVisible($inputObject);	
+	 
+ }
+ 
+ $t.end();
+ 
+
+  $t = _testcase("TC_3.0","Verifying Process type");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.field36;//create
+ $inputObject.lst_PROJECTTYPE = $data.PROJECTTYPE36;
+ verifyAllFields($inputObject);
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.none36;
+ ModifyEformInstance($inputObject);
+ _wait(500);
+/*  $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+  */
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.field36;//create
+ //$inputObject.lst_PROJECTTYPE = $data.PROJECTTYPE36;
+ $inputObject.operation = "Negative";
+ verifyAllFields($inputObject);
+ 
+ $t.end();
+ 
+  $t = _testcase("TC_4.0","Verifying Process type");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.span_name  = $data.span_Name42; //DN_SuggestedProcessType
+ $inputObject.lst_name = $data.lst_PROJECTTYPE43;//_select("PROJECTTYPE")
+ //InfyFTverifyValue($inputObject);
+ 
+ $t.end();

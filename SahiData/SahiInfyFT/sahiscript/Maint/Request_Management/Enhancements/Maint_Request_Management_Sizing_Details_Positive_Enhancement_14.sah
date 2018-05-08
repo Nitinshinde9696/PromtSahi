@@ -1,0 +1,53 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Sizing_Details_Positive_Enhancement_14","Maint/Request_Management/Enhancements");
+
+ var $n1 = _testcase("TC_11.2"," verifying Application sizing Technique");
+ $n1.start();
+ /*
+ $inputObject = {};
+ $inputObject.item=$id;
+ InfyFTOpenEformInstanceForLastPage($inputObject)
+ */
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sizing_details;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.details;//Details
+ $inputObject.rowNo = $data.row1;//1
+ $inputObject.colNo = $data.col1;//"0_lst|1_lst|8_lst";//$data.colid1;//"0_lst";
+ $inputObject.fieldValues = $data.val1;//"Custom Application|C++|Nesma FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma;//"Nesma FP";//$data.tblname;//
+ $inputObject.rowNo = $data.row1;//1
+ $inputObject.colNo = $data.col2;//"0_edt|1_edt";
+ $inputObject.fieldValues = $data.val2;//"64|54";
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Size_Summary;
+ $inputObject.rowNo = $data.row2;//"0|1|2";//$data.rowid;//"1";
+ $inputObject.colNo = $data.col3;//"0_lbl|1_lbl";//$data.colid1;
+ $inputObject.fieldValues = $data.val3;//"UOM of Size|Nesma FP|Enhancement Size|64.00|Testing Size|54.00";//UOM of Size
+ verifySwiftFormData($inputObject);
+   
+ $n1.end();

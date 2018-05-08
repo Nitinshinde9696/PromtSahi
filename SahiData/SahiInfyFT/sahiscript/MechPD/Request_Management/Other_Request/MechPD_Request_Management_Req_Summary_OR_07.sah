@@ -1,0 +1,108 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("MechPD_Request_Management_Req_Summary_OR_07","MechPD/Request_Management/Other_Request");
+/*
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_1.1.3"," Check the Fields");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Testing Request
+ navigateTo($inputObject);
+ $s.end();
+ var $s = _testcase("TC_2.1"," Check available Fields after saving");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.item = "AutT3";
+ OpenEformInstance($inputObject);
+ 
+ $s.end();
+*/
+ var $s1 = _testcase("TC_3"," Open Request Summery segment");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Summary";
+ SelectSegment($inputObject);
+  
+ $s1.end();
+  
+ var $s2 = _testcase("TC_3.2"," verify Effort Summary fields ");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Effort Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Effort_Summary;//"Effort Summary";
+ $inputObject.rowNo = $data.Erow2;//"0";
+ $inputObject.colNo = $data.Ecol2;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell|6__cell";
+ $inputObject.fieldValues = $data.Eval2;//"Effort Category|Task|Review|Rework|Total|Estimated Effort|% Deviation"
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Effort_Summary;//"Effort Summary";
+ $inputObject.rowNo = $data.Erow3;//"1|2|3|4|5";
+ $inputObject.colNo = $data.Ecol3;//"0_lbl";
+ $inputObject.fieldValues = $data.Eval03;//"Engineering effort|Non Engineering effort|Total effort considered for metrics|Non Request effort|Total Effort"
+ verifySwiftFormData($inputObject);
+ 
+ $s2.end();
+ 
+ /* 
+ var $s = _testcase("TC_3.4"," verify Project Specific Metrics ");
+ $s.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = "Project Specific Metrics";
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.metrics;//"Project Specific Metrics";
+ $inputObject.rowNo = $data.mrow10;//"0";
+ $inputObject.colNo = $data.mcol10;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell";
+ $inputObject.fieldValues = $data.mval10;//"MetricName|UOM|Goal|Actual|% Deviation|Reason for deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName =$data.metrics;//"Project Specific Metrics";
+ $inputObject.rowNo = $data.mrow11;//"6";
+ $inputObject.colNo = $data.mcol11;//"0_lbl|1_lbl";
+ $inputObject.fieldValues = $data.mval11;//"Testing Request|Testing";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $s.end();
+ */
+ 

@@ -1,0 +1,244 @@
+
+/*************************************************************************
+* @author Ram
+* @example: modifyProjectPreferenceSettings
+* @description This function is called to modify Project Preference Settings
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function modifyProjectPreferenceSettings($inputObject)
+{
+	_log("modifyProjectPreferenceSettings Started","success");
+	try 
+	{
+		if($inputObject.segment_name)
+		{
+			SelectSegment($inputObject);
+		}
+		setAllFields($inputObject);
+		_click(_submit("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyProjectPreferenceSettings Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function advanceSearchReset($inputObject)
+{
+	_log("advanceSearchReset Started","success");
+	try 
+	{
+		_click(_link("de-icon-search"));
+		setAllFields($inputObject);
+		_click(_button("reset"));
+		_assertEqual("", _getValue(_textbox("SearchPhrase")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("advanceSearchReset Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function advanceSearchCancel()
+{
+	_log("advanceSearchCancel Started","success");
+	try 
+	{
+		_click(_link("de-icon-search"));
+		_click(_button("advsearch"));
+		_click(_button("cancel"));
+		_click(_button("cancel"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("advanceSearchCancel Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function gotoAdvanceSearch()
+{
+	_log("gotoAdvanceSearch  Started","success");
+	try 
+	{
+	    _click(_div("advanceSearchButtonIcon"));
+		_click(_div("Advanced Search"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("gotoAdvanceSearch  Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function projectSearch()
+{
+	_log("projectSearch Started","success");
+	try 
+	{
+		var $addBtn = "KEY_TOOLTIP_Project_Search";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		if(_exists(_link($addbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($addbtnKey)));
+			_click(_link($addbtnKey));
+		}
+		if(_exists(_link("Project Item Search")))
+		{	
+			_wait(15000,_isVisible(_link("Project Item Search")));
+			_click(_link("Project Item Search"));
+		}
+		if(_exists(_link("de-icon-search")))
+		{
+			_click(_link("de-icon-search"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("projectSearch Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: reopenProject
+* @description This function is called to reopenProject
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function reopenProject()
+{
+	_log("reopenProject  Started","success");
+	try 
+	{
+		_wait(15000,_isVisible(_submit("OpenBtn")));
+		_click(_submit("OpenBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("reopenProject  Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyProjectProfile($inputObject)
+{
+	_log("verifyProjectProfile Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectProfile Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyProjectRequestProfile($inputObject)
+{
+	_log("verifyProjectRequestProfile Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectRequestProfile Completed","success");
+}
+
+
+/**********************************************************************************************
+@Function Number:19
+@author:Ashwini Lalit
+@example:verifyProjectMilestones("Milestone":"starttask1","PlannedDate":"31-Jan-2012", "ActualDate":"28-Feb-2012" );
+@description: verifies Milestone details as displayed in the Project Milestone Segment
+@param: 
+@return: None
+***********************************************************************************************/
+
+function verifyProjectMilestones($inputObject)
+{
+	_log("verifyProjectMilestones Started","success");
+	try 
+	{
+		_wait(2000);
+		if ($inputObject.Milestone !== undefined && $inputObject.PlannedDate !== undefined)
+			_assertEqual($inputObject.PlannedDate,_getCellText(_cell(_table("List"), $inputObject.Milestone, "Planned Date")));
+
+		if ($inputObject.Milestone !== undefined && $inputObject.ActualDate !== undefined)
+			_assertEqual($inputObject.ActualDate,_getCellText(_cell(_table("List"), $inputObject.Milestone, "Actual Date")));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectMilestones Completed","success");
+}
+

@@ -1,0 +1,311 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-2,$dateObj1);
+ var $endDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Package_CC_Linkage_AI_05", "Package/Customer_Complaint");
+ 
+ var $t = _testcase("START");
+ $t.start();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Sreya Chatterjee
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to customer complaint");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //CC
+ InfyFTnavigateTo($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "ADD icon");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $t.end(); 
+ 
+ //$data = readDataFromCSV("InfyFT_sahi2_individual_check", "InfyFTSahi/CC");
+
+ /*********************************************************************************
+  * adding a new customer complaint  
+ *********************************************************************************/
+ 
+ var $t = _testcase("TC_5", "create customer complaint");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name6;
+ $inputObject.txt_CM_Description = $data.CM_Description6;
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.edt_DN_RaisedBy = $data.DN_RaisedBy6; 
+ $inputObject.lst_DN_Severity = $data.DN_Severity6; 
+ $inputObject.lst_DN_AssignedTo = $data.DN_AssignedTo6;
+ $inputObject.lst_DN_ComplaintCategory = $data.DN_ComplaintCategory6; 
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $endDate; 
+ $inputObject.lst_DN_RepeatComplaint = $data.DN_RepeatComplaint6; 
+ ModifyEformInstance($inputObject); 
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name;
+ $inputObject.cell_Name = $data.cell_Name;
+ InfyFTisReadOnly($inputObject); 
+ }
+ var $IDcus =  _getText(_span("CM_ItemCode")); 
+ 
+ $t.end();
+ 
+ /*******************************************************************************************************************
+ * linkage part (linking action item to created complaint)
+ ********************************************************************************************************************/
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",6,$dateObj);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ //$data = readDataFromCSV("InfyFT_sahi6_create_action_item", "InfyFTSahi/CC");
+ 
+ var $t = _testcase("TC_6", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name;
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "navigate to customer complaint");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "open created complaint ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ /*********************************************************************************************************
+ * Adding link to customer complaint for IMS PT
+ **********************************************************************************************************/
+ 
+ var $t = _testcase("TC_9", "select segment");
+ $t.start();
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name5;
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "linking");
+ $t.start();
+ 
+ _wait(2000);
+  if(_isVisible(_link($data.Username1)))
+ {
+ $inputObject = {};
+ $inputObject.NewExisting = $data.NewExisting;
+ $inputObject.Items = $data.Item;
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description5; 
+ $inputObject.lst_DN_Owner = $data.assignedto;
+ $inputObject.lst_DN_Assignee = $data.assignedto; //field199
+ $inputObject.edt_CM_DUEDATE = $startDate;
+ AddTraceability($inputObject);
+ 
+ _wait(3000);
+ var $ID =  _getText(_span("CM_ItemCode"));
+ _wait(1000);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.NewExisting = $data.NewExisting;
+ $inputObject.Items = $data.Item;
+ $inputObject["edt_CM_Name[1]"] = $data.CM_Name;
+ $inputObject["txt_CM_Description[1]"] = $data.CM_Description5; 
+ //$inputObject.lst_DN_Owner[1] = $data.assignedto;
+ $inputObject["lst_DN_Assignee[1]"] = $data.assignedto; //field199
+ $inputObject["edt_CM_DUEDATE[1]"] = $startDate;
+ AddTraceability($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.save1;
+ InfyFTclick($inputObject);
+ 
+ _wait(3000);
+ var $ID =  _getText(_span("CM_ItemCode[1]"));
+ _wait(1000);
+ }
+ 
+ $t.end();
+ 
+ /********************************************************************************************************
+ * Trying to close the complaint when it have linked item 
+ *********************************************************************************************************/ 
+ 
+ var $t = _testcase("TC_11", "navigate to customer complaint");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_12", "checking Complaint can be closed when action item is linked");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"cc123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+  
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status38;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken38;
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause38; 
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate;
+ $inputObject.msgAlert = "Customer Compliant cannot be Closed or Abandoned until all linked Action Items are Completed or Deferred. For details, please refer Linked Items Segment.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status39;
+ $inputObject.msgAlert = "Customer Compliant cannot be Closed or Abandoned until all linked Action Items are Completed or Deferred. For details, please refer Linked Items Segment.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ /******************************************************************************************************************
+ * closing the action item 
+ *******************************************************************************************************************/
+ 
+ var $t = _testcase("TC_13", "navigate to action item");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo39;
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_14", "close the action item");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $ID;//"action37";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $ID;//$ID
+ OpenEformInstance($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.edt_DN_PercentageComplete = $data.field40;//field197
+ $inputObject.edt_CM_DUEDATE = $currentDate; //field193
+ ModifyEformInstance($inputObject);
+  
+ $t.end();
+ 
+ /******************************************************************************************************************
+ * closing the customer complaint 
+ *******************************************************************************************************************/
+ 
+ var $t = _testcase("TC_15", "modify and close the instance");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status38;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken38;
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause38; 
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate;
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END");
+ $t.start();
+ 
+ $t.end();

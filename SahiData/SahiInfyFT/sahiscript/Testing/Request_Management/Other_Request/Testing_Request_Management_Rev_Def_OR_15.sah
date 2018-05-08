@@ -1,0 +1,132 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Testing_Request_Management_Rev_Def_OR_15","Testing/Request_Management/Other_Request");
+/* 
+ var $review_type = "System Appreciation Document Review";
+
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+ $s.start();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Testing Request
+ navigateTo($inputObject);
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.item = "Othr10";//$id;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+*/
+ var $s1 = _testcase("TC_Linked item Segment"," Linked New Review Item segment");
+ $s1.start()
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Reviews;//$data.seg_linkedItem;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ProgramCode = $data.review_name50;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Review Mode in Details tab \n• Field Reviewer in Details tab \n• Field Artifact Name in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.review_name50;
+ $inputObject.lst_DN_ReviewMode  =$data.review_mode47;//
+ $inputObject.lst_DN_Reviewer = $data.reviewer51;//
+ $inputObject.txt_DN_ArtifactName = $data.artifact_name48;//field200 
+ $inputObject.lst_reviewtype = $review_type;//
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+  _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.span_Name = "Review Roles;Comments;Attachments;Activity Log";
+ InfyFTisVisible($inputObject);
+ */
+ 
+ //Tab Defects
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.txt_DN_ClosingComments = $data.Def_closing_commen;//"test";
+ $inputObject.msgAlert= "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Description in Details tab \n• Field Owner in Details tab \n• Field Severity in Details tab";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;//"test DEF";
+ $inputObject.lst_DN_DefectType  = $data.Def_type;//"Comments" ;//
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detcted_by;//"Ricky_Wang";
+ $inputObject.lst_DN_Owner = $data.Def_owner;//"Ricky_Wang";
+ $inputObject.lst_DN_Severity = $data.Def_serverity;//"Critical";
+ $inputObject.txt_CM_Description = $data.Def_desc;//"test";
+ $inputObject.txt_DN_ClosingComments = $data.Def_closing_commen;//"test";
+ InfyFTcreateLinkedItem1($inputObject);
+ var $createdDefID = $inputObject.createdID;
+  
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name;
+ InfyFTcloseWin($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ verifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_Def_rep6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Def_rep_headers;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $createdDefID+";"+$data.Def_type+";"+$data.Def_detcted_by+";"+$data.Def_serverity+";"+$createdID+";"+$data.review_name50+";"+ $review_type;
+ InfyFTisVisible($inputObject);
+ 
+  $s1.end();

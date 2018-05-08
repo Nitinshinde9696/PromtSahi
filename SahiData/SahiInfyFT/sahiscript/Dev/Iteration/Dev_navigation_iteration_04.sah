@@ -1,0 +1,40 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Dev_navigation_iteration_04", "Dev/Iteration");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "START>>Login to SwiftALM"); 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //jyothi_rajan
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //1300
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to Iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 

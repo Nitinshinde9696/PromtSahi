@@ -1,0 +1,233 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+
+ //$data = readDataFromCSV("MechPD_Request_Management_Request_Closure_Common_18","MechPD/Request_Management");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $s1 = _testcase("TC_1.0"," Verifying request closure for Actual Start and End Date");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualStartDate = "";
+ $inputObject.edt_DN_ActualEndDate = "";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Request level checks";//
+ $inputObject.rowNo = "3";
+ $inputObject.colNo = "0_lbl";
+ $inputObject.fieldValues = "Actual Start Date in Details page is blank. Please fill the actual start date. It should >= project start date ( 1-Mar-2009 ) and <= project end date ( 18-Sep-2017 ).";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Request level checks";//
+ $inputObject.rowNo = "4";
+ $inputObject.colNo = "0_lbl";
+ $inputObject.fieldValues = "Actual End Date in Details page is blank. Please fill the actual end date. It should >= project start date ( 1-Mar-2009 ) and <= project end date ( 18-Sep-2017 ).";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualStartDate = $StartDate1;
+ $inputObject.edt_DN_ActualEndDate = $StartDate1;
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Actual Start Date in Details page is blank. Please fill the actual start date. It should >= project start date ( 1-May-2009 ) and <= project end date ( 1-Apr-2025 ).";
+ $inputObject.operation = "Negative"
+ InfyFTisVisible($inputObject);
+ 
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_2","verifying Actual Execution Effort field");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualExecutionEffortP = "";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Request level checks";//
+ $inputObject.rowNo = "5";
+ $inputObject.colNo = "0_lbl|1_lbl";
+ $inputObject.fieldValues = "Actual Execution Effort (Phrs) should be a non-zero value. Please enter Actual Execution Effort (Phrs) in Details page|Needs to be mandatorily corrected";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualExecutionEffortP = "20";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Actual Execution Effort (Phrs) should be a non-zero value. Please enter Actual Execution Effort (Phrs) in Details page";
+ $inputObject.operation = "Negative"
+ InfyFTisVisible($inputObject);
+ 
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_2","verifying Actual Review Effort field");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualReviewEffortPhrs = "";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Request level checks";//
+ $inputObject.rowNo = "6";
+ $inputObject.colNo = "0_lbl|1_lbl";
+ $inputObject.fieldValues = "Actual Review Effort (Phrs) should not be empty. Please enter Actual Review Effort (Phrs) in details page.|Needs to be mandatorily corrected";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualReviewEffortPhrs = "20";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};		   
+ $inputObject.span_Name = "Actual Review Effort (Phrs) should not be empty. Please enter Actual Review Effort (Phrs) in details page.";
+ $inputObject.operation = "Negative"
+ InfyFTisVisible($inputObject);
+ 
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_5","verifying Actual Rework Effort field");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualReworkEffortPhrs = "";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Request level checks";//
+ $inputObject.rowNo = "7";
+ $inputObject.colNo = "0_lbl|1_lbl";
+ $inputObject.fieldValues = "Actual Rework Effort (Phrs) should not be empty. Please enter Actual Rework Effort (Phrs) in details page.|Needs to be mandatorily corrected";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.edt_DN_ActualReworkEffortPhrs = "20";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Actual Rework Effort (Phrs) should not be empty. Please enter Actual Rework Effort (Phrs) in details page.";
+ $inputObject.operation = "Negative"
+ InfyFTisVisible($inputObject);
+ 
+ $s4.end();
+ 
+ var $s5 = _testcase("TC_6","verifying zero Defect");
+ $s5.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.unchk_DN_ZeroDefects = "true";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Request level checks";//
+ $inputObject.rowNo = "12";
+ $inputObject.colNo = "0_lbl|1_lbl";
+ $inputObject.fieldValues = "There are no Defects for the request. Please Check the Zero Defects check box in details page|Needs to be mandatorily corrected";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.chk_DN_ZeroDefects = "true";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Closure Checks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "There are no Defects for the request. Please Check the Zero Defects check box in details page";
+ $inputObject.operation = "Negative"
+ InfyFTisVisible($inputObject);
+ 
+ $s5.end();
+ 
+ 

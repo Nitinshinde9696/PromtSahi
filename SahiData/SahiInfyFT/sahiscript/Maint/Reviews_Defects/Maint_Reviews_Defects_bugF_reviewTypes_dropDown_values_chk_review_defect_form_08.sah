@@ -1,0 +1,313 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $newui = _getGlobal("New_UI");
+
+ $data = readDataFromCSV("Maint_Reviews_Defects_bugF_reviewTypes_dropDown_values_chk_review_defect_form_08", "Maint/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);  
+
+ /*Requirement changed:-not applicable for BUG fix
+ var $TC = _testcase("DFr 2.1.4","Review types with ETL suffix should appear as drop down in review/testing of field")
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPMP;
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colName1;
+ $inputObject.fieldValues = $data.fieldValue;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);  
+ 
+ _click(_span("KEY_Link_New_item-btnIconEl"));
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_reviewtype = $data.reviewtypes;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(1000); 
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("DFr 2.1.4","Review types with ETL suffix should not appear in drop down of review/testing of field when changed in PMP overview")
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPMP;
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colName1;
+ $inputObject.fieldValues = $data.fieldValue1;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+
+ _wait(2000);  
+ 
+ _click(_span("KEY_Link_New_item-btnIconEl"));
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_reviewtype = $data.reviewtypes1;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(2000); 
+ 
+ $TC.end(); 
+ */
+ 
+ var $TC = _testcase("DFr 2.2","Check the drop down values for drop down fields in review and defect form")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.LoginID1;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup;
+ $inputObject.span_Name = $data.Keylink;
+ InfyFTclickPopup($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_DN_DefectType = $data.defecttypes;
+ verifyEformInstanceDetails($inputObject);
+ 
+ InfyFTReturnPopUp(); 
+ 
+ _wait(2000); 
+ 
+
+ var $TC = _testcase("TC_BRD10_FU_25","Check whether the reviewer is able to assign defect to a member of project.")
+ $TC.start();  
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;
+ $inputObject.edt_loginid = $data.LoginID2;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToTeam;
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+if(_isVisible(_link("UserName")))
+		{
+		  var $userID =  _getText(_link("UserName"));
+		  
+		  _wait(1000);
+		  
+		   $inputObject = {};
+           $inputObject.item = $userID;
+           OpenEformInstance($inputObject); 
+		  
+		}
+		else
+		{
+		  var $userID = _getText(_div("ellipsis"));
+		  
+		  _wait(1000);
+		  
+		   $inputObject = {};
+           $inputObject.item = $userID;
+           OpenEformInstance($inputObject);  
+ 
+          _wait(2000);
+		}
+		
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ if($newui = "yes")
+ {
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;
+ SelectSegment($inputObject);
+ 
+ }
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.txt_CM_Description = $data.Description;
+ $inputObject.lst_DN_DefectDetectedBy = $data.detected;
+ $inputObject.lst_DN_Severity = $data.severity;
+ $inputObject.lst_PhaseDetected = $data.phase;
+ $inputObject.lst_DN_Owner = $data.owner;
+ InfyFTcreateLinkedItemForDefect($inputObject);
+ 
+ _wait(2000);
+ 
+ InfyFTReturnPopUp();
+
+ $TC.end(); 
+ 
+
+ 
+ 

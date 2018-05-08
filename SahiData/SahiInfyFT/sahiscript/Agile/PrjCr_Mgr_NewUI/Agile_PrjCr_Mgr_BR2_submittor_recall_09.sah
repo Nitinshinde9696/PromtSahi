@@ -1,0 +1,236 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+  _include("Agile_PrjCr_Mgr_BR2_Delete_Project_03.sah");
+$data = readDataFromCSV("Agile_PrjCr_Mgr_BR2_submittor_recall_09","Agile/PrjCr_Mgr");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+ var $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $s = _testcase("TC_1.4"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {}; 
+  $inputObject["edt_searchTextBox-inputEl"] = $data.Project_code4;
+  setAllFields($inputObject);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ var $s = _testcase("TC_2.1"," verify Request");
+ $s.start();
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ verifyInstanceInListing($inputObject);
+  
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ OpenEformInstance($inputObject);
+
+ $s.end();
+
+_wait(5000);
+
+ var $t = _testcase("TC_5.1"," Project request Workflow");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.field12;
+ $inputObject.lst_PROJECTTYPE = $data.projecttype13;
+ $inputObject.txt_CM_Description = $data.desc14;
+ $inputObject.lst_DN_PeakTeamSize = $data.peak_team_size14;
+ ModifyEformInstance($inputObject);
+   
+ $t.end();
+ var $t = _testcase("TC_5.5.1","Workflow");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name15;//workflow
+ SelectSegment($inputObject);
+ 
+ InfyFTverifyRouteButton();
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage17;
+ $inputObject.multiple_member = $data.user_skip17;
+ WorkflowSet($inputObject);
+ 
+ InfyFTverifyRouteButton();
+  
+ $t.end();
+ _wait(5000);
+ var $t = _testcase("TC_7.4"," Verify segment");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name14+";"+$data.segment_name15+";"+$data.segment_name16+";"+$data.segment_name17;//Questionnaire
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9.5"," Verify Question list");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name14;//Questionnarie segment
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name18;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name181;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_9.6"," Verify Questions");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.lst_DN_IstheprojectmanagedbyI = $data.item_Name19;
+ verifyEformInstanceDetails($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.lst_DN_IstheprojectmanagedbyI = $data.item_Name19;
+  ModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Choosetheappropriatena = $data.item_Name20;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Choosetheappropriatena = $data.item_Name20;
+ ModifyEformInstance($inputObject);
+  
+ _wait(2000);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_12.4"," select Attachment segment");
+ $t.start();
+  
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name16;//Attachments
+ SelectSegment($inputObject);
+ 
+ InfyADDAttachment();
+ _wait(5000);
+ $t.end();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Detail_Segment4;//details
+ SelectSegment($inputObject);
+ 
+ var $chk = InfyFTverifyProjectType();//check project type
+ if($chk == true) 
+{
+
+  var $t = _testcase("TC_14.3"," Route with comments");
+  $t.start();
+  
+  $inputObject = {};
+  $inputObject.segment_name = $data.segment_name15;
+  SelectSegment($inputObject);
+  
+  $inputObject = {};
+  $inputObject.workflow_stage = $data.stage17;
+  $inputObject.multiple_member = $data.user_skip18;
+  WorkflowSet($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.txt_Comments = $data.Comments18;
+  InfyFTClickRoutewithComments($inputObject);
+
+  _wait(10000);
+  logOut();
+  var $t = _testcase("TC_1.1","Login");//approval Login
+  $t.start();
+ 
+  $inputObject = {};
+  $inputObject.user_name = $data.user_name21;
+  $inputObject.edt_loginid = $data.LoginID21;
+  $inputObject.edt_password =$data.Password21;
+  loginIntoDigite($inputObject);
+  $t.end();
+ 
+  var $s = _testcase("TC_2.1"," Open Request");
+  $s.start();
+
+  $inputObject = {};
+  $inputObject.name = $data.navigateTo4;//INbox
+  navigateTo($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.item = $data.Project_requestid4;
+  verifyInstanceInListing($inputObject)
+  
+  $s.end();
+  _wait(10000);
+  logOut();
+ 
+  var $t = _testcase("TC_1.1","Login");
+  $t.start();
+ 
+  $inputObject = {};
+  $inputObject.user_name = $data.user_name1;
+  $inputObject.edt_loginid = $data.LoginID1;
+  $inputObject.edt_password =$data.Password1;
+  loginIntoDigite($inputObject);
+ 
+  $t.end();
+ 
+  var $s = _testcase("TC_1.4"," verify Project");
+  $s.start();
+
+  $inputObject = {};
+  $inputObject.name = $data.navigateTo31;
+  navigateTo($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.item = $data.Project_requestid4;
+  verifyInstanceInListing($inputObject)
+ 
+  $inputObject = {};
+  $inputObject.item = $data.Project_requestid4;
+  OpenEformInstance($inputObject);
+   
+  $inputObject = {};
+  $inputObject.span_Name = "Route";//_span("ABBDBIMS_JUNK")
+  $inputObject.operation = "Negative";
+  
+  InfyFTisVisible($inputObject);
+  
+  _click(_button("Recall"));
+  
+  InfyFTverifyRouteButton();
+ 
+  $s.end();
+  }
+ 

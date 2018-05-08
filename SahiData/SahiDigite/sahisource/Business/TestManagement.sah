@@ -1,0 +1,1032 @@
+
+/*************************************************************************************************
+@Function batchCopy
+@author: Ram
+@example: batchCopy
+@description: To batch Copy
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function batchCopy($inputObject)
+{
+	_log("batchCopy  Started","success");
+	try 
+	{
+		if($inputObject.testunit1)
+		_check(_div("x-grid-row-checker",_near(_cell($inputObject.testunit1))));
+		if($inputObject.testunit2)
+		_check(_div("x-grid-row-checker",_near(_cell($inputObject.testunit2))));
+		var $batchCopyBtn = "KEY_BUTTON_Batch_Copy_Test_Units";
+		var $extJsId = ""; 
+		var $batchCopyBtnKey = $batchCopyBtn + $extJsId;
+		
+		_click(_link($batchCopyBtnKey));
+		_click(_button("OkBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("batchCopy  Completed","success");
+}
+
+/*************************************************************************************************
+@Function reuseTestUnit
+@author: Ram
+@example: reuseTestUnit
+@description: To reuseTestUnit
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function reuseTestUnit($inputObject)
+{
+	_log("reuseTestUnit Started","success");
+	try 
+	{
+		_click(_link("de-icon-import_item"));
+		_selectWindow("LinkTestUnit");
+		_click(_checkbox(0,_near(_cell($inputObject.item))));
+		_click(_submit("QTP_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("reuseTestUnit Completed","success");
+}
+
+/*************************************************************************************************
+@Function createTestUnit1
+@author: Ram
+@example: createTestUnit1
+@description: To create Test Unit
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+
+function createTestUnit1($inputObject)
+{
+	_log("createTestUnit1 Started","success");
+	try 
+	{
+		_click(_link("QTP_Create_Test_Units"));
+		_selectWindow("Test Unit Details :");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createTestUnit1 Completed","success");
+}
+
+/*************************************************************************************************
+@Function copyTestUnit
+@author: Ram
+@example: copyTestUnit
+@description: To copy TestUnit
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function copyTestUnit($inputObject)
+{
+	_log("copyTestUnit Started","success");
+	try 
+	{
+		_click(_link("QTP_Copy_Test_Units"));
+		_selectWindow("Copy Test Unit(s)");
+		_click(_checkbox(0,_near(_cell($inputObject.itemname))));
+		_click(_submit("QTP_Save"));
+		_selectWindow();		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyTestUnit Completed","success");
+}
+
+/*************************************************************************************************
+@Function copyTestScriptEvent
+@author: Ram
+@example: copyTestScriptEvent
+@description: To copy TestScript Event
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function copyTestScriptEvent($inputObject)
+{
+	_log("copyTestScriptEvent Started","success");
+	try 
+	{
+		_click(_link("de-icon-copy"));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyTestScriptEvent Completed","success");
+}
+
+/*************************************************************************************************
+@Function batchCopy
+@author: Ram
+@example: batchCopy
+@description: To batch Copy
+@param: None
+@return: None
+****************************************************************************************************/
+
+function addScriptToEvent($inputObject)
+{
+	_log("addScriptToEvent Started","success");
+	try 
+	{
+		_click(_link("de-icon-import_item"));
+		_selectWindow("Event-Import Test Script(s)");
+		_click(_checkbox(0,_near(_cell($inputObject.itemname))));
+		_click(_submit("SaveIt"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addScriptToEvent Completed","success");
+}
+
+/*************************************************************************************************
+@Function removeTestScript
+@author: Ram
+@example: removeTestScript
+@description: To remove TestScript
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function removeTestScript($inputObject)
+{
+	_log("removeTestScript Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.itemname))));
+		_click(_link("de-icon-delete"))
+		_expectConfirm("Are you sure you want to delete the selected Test Script(s)?", true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("removeTestScript Completed","success");
+}
+
+/*************************************************************************************************
+@Function removeTestUnit
+@author: Ram
+@example: removeTestScript
+@description: To remove TestScript
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function removeTestUnit($inputObject)
+{
+	_log("removeTestUnit Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.itemname))));
+		_click(_link("de-icon-delete"))
+		_expectConfirm("Are you sure you want to delete the selected Test Unit(s)?", true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("removeTestUnit Completed","success");
+}
+
+/**
+ @Function Number:29
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickBatchUpdateTestUnitButton($inputObject)
+{
+	_log("clickBatchUpdateTestUnitButton Started","success");
+	try 
+	{
+		_check(_div("x-grid-row-checker",_near(_cell($inputObject.item))));
+		var $batchCopyBtn = "KEY_BUTTON_Batch_Copy_Test_Units";
+		var $extJsId = ""; 
+		var $batchCopyBtnKey = $batchCopyBtn + $extJsId;		
+		_click(_link($batchCopyBtnKey));
+		_check(_checkbox("ItemID",_near(_cell($inputObject.itemcopy))));
+		_click(_submit("BatchUpdate"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickBatchUpdateTestUnitButton Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function CancelBatchCopy()
+{
+	_log("CancelBatchCopy Started","success");
+	try 
+	{
+		_click(_button("Cancel"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("CancelBatchCopy Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function batchUpdateInstances($inputObject)
+{
+	_log("batchUpdateInstances Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Update"));
+		_wait(9000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("batchUpdateInstances Completed","success");
+}
+
+/**
+ @Function Number:35
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTestUnitFromTestScript($inputObject)
+{
+	_log("openTestUnitFromTestScript Started","success");
+	try 
+	{
+		_click(_cell($inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTestUnitFromTestScript Completed","success");
+}
+
+/**
+ @Function Number:37
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createTestUnitInScript($inputObject)
+{
+	_log("createTestUnitInScript Started","success");
+	try 
+	{
+		_click(_link("QTP_Create_Test_Units"));
+		_selectWindow("CreateTestUnit");
+		setAllFields($inputObject);
+		_click(_button("ScrnButton"));
+		//clicking on return button to close popup.
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createTestUnitInScript Completed","success");
+}
+
+/**
+ @Function Number:40
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function resequenceTestUnitsScripts($inputObject)
+{
+	_log("resequenceTestUnitsScripts Started","success");
+	try 
+	{
+		_click(_link("de-icon-reorder") || _image("QTP_Resequence_Scripts"));
+		_selectWindow("resequenceunits");
+		_setSelected(_select("selectTo"), $inputObject.item);
+		var $numofclick = $inputObject.NoofPosition;
+		var $direction= $inputObject.direction;
+		for(var $k=0; $k<$numofclick; $k++)
+		{
+			if($direction === "up")
+				_click(_link("de-icon-moveto_up"));
+			if($direction === "down")
+				_click(_link("de-icon-moveto_down"));
+		}
+		_click(_button("cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resequenceTestUnitsScripts Completed","success");
+}
+
+/**
+ @Function Number:42
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickCreateTestUnitIconInTestScript()
+{
+	_log("clickCreateTestUnitIconInTestScript Started","success");
+	try 
+	{
+		_click(_link("QTP_Create_Test_Units"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickCreateTestUnitIconInTestScript Completed","success");
+}
+
+/**
+ @Function Number:44
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickReturnInAddItemPopup()
+{
+	_log("clickReturnInAddItemPopup Started","success");
+	try 
+	{
+		_selectWindow("CreateTestUnit");
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickReturnInAddItemPopup Completed","success");
+}
+
+/**
+ @Function Number:46
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyBaselineinPreviousVersion($inputObject)
+{
+	_log("verifyBaselineinPreviousVersion Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_cell("Baseline1",_in(_table("QTP_versionlog")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBaselineinPreviousVersion Completed","success");
+}
+
+/**
+ @Function Number:47
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddTestUnitInTestScript($inputObject)
+{
+	_log("saveAndAddTestUnitInTestScript Started","success");
+	try 
+	{
+		_click(_link("QTP_Create_Test_Units"));
+		_selectWindow("CreateTestUnit");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddTestUnitInTestScript Completed","success");
+}
+
+/**
+ @Function Number:49
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTestScriptInTestEvent($inputObject)
+{
+	_log("openTestScriptInTestEvent Started","success");
+	try 
+	{
+		_click(_span($inputObject.testscript));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTestScriptInTestEvent Completed","success");
+}
+
+/**
+ @Function Number:51
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyScriptNameInPopup($inputObject)
+{
+	_log("verifyScriptNameInPopup Started","success");
+	try 
+	{
+		_selectWindow("EditTestUnits");
+		_assertEqual(_getText(_span("TSNAMESPAN")), $inputObject.testscriptName);
+		_click(_button("< Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyScriptNameInPopup Completed","success");
+}
+
+/**
+ @Function Number:52
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function FillTestUnitDetailsInExecutionWindow($inputObject)
+{
+	_log("FillTestUnitDetailsInExecutionWindow Started","success");
+	try 
+	{
+		_selectWindow("EditTestUnits");
+		setAllFields($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("FillTestUnitDetailsInExecutionWindow Completed","success");
+}
+
+/**
+ @Function Number:54
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ModifyTestUnitInTestScript($inputObject)
+{
+	_log("ModifyTestUnitInTestScript Started","success");
+	try 
+	{
+		_selectWindow("popup");
+		setAllFields($inputObject);
+		if(_isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+		{
+			_click(_submit("SaveBtn") || _submit("//s*Save/s*/"));
+		}
+		else if(_isVisible(_button("ScrnButton")))
+		{
+			_click(_button("ScrnButton"));
+		}
+		else
+		{
+			 _click(_button("SaveBtn") || _button("//s*Save/s*/"));
+		}
+		
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ModifyTestUnitInTestScript Completed","success");
+}
+
+/**
+ @Function Number:57
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickReturnInExecutionWindow($inputObject)
+{
+	_log("clickReturnInExecutionWindow Started","success");
+	try 
+	{
+		if($inputObject.popup)
+			_selectWindow($inputObject.popup);
+	
+		_click(_button("< Return"));
+		
+		if($inputObject.popup)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickReturnInExecutionWindow Completed","success");
+}
+
+/**
+ @Function Number:59
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addUnitInEvent($inputObject)
+{
+	_log("addUnitInEvent Started","success");
+	try 
+	{
+		_click(_link("de-icon-import_item"));
+		_selectWindow("ImportTestUnit");
+		_click(_checkbox(0,_near(_cell($inputObject.testunit))));
+		_click(_submit(" Save "));
+		_selectWindow();
+		verifyaddUnitInEvent($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addUnitInEvent Completed","success");
+}
+
+/**
+ @Function Number:61
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyaddUnitInEvent($inputObject)
+{
+	_log("verifyaddUnitInEvent Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_cell($inputObject.testunit)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyaddUnitInEvent Completed","success");
+}
+
+/**
+ @Function Number:62
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifytestunitstatusinlisting($inputObject)
+{
+	_log("verifytestunitstatusinlisting Started","success");
+	try 
+	{
+		_assertEqual(_isVisible(_cell($inputObject.status,_near(_cell($inputObject.unitName)))),true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifytestunitstatusinlisting Completed","success");
+}
+
+/**
+ @Function Number:66
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickOnSaveInExecutionWindow()
+{
+	_log("clickOnSaveInExecutionWindow Started","success");
+	try 
+	{
+		_selectWindow("EditTestUnits");
+		_click(_button("Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickOnSaveInExecutionWindow Completed","success");
+}
+
+/**
+ @Function Number:68
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function editTestUnit($inputObject)
+{
+	_log("editTestUnit Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.item))));
+		_click(_link("KEY_LABEL_Edit_Units"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editTestUnit Completed","success");
+}
+
+/**
+ @Function Number:69
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function FilterTestUnits($inputObject)
+{
+	_log("FilterTestUnits Started","success");
+	try 
+	{
+		if($inputObject.popup)
+			_selectWindow($inputObject.popup);
+
+		_click(_link("Filter"));
+		setAllFields($inputObject);
+		_click(_button(" Go "));
+
+		if($inputObject.popup)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("FilterTestUnits Completed","success");
+}
+
+/**
+ @Function Number:73
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function batchScheduleTestScript($inputObject)
+{
+	_log("batchScheduleTestScript Started","success");
+	try 
+	{
+		_check(_checkbox(0,_near(_span($inputObject.testscript))));
+		_click(_link("de-icon-add_resource"));
+		setAllFields($inputObject);
+		_click(_submit("BatchUpdate"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("batchScheduleTestScript Completed","success");
+}
+
+/**
+ @Function Number:76
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function batchScheduleTestUnitInExecutionPopup($inputObject)
+{
+	_log("batchScheduleTestUnitInExecutionPopup Started","success");
+	try 
+	{
+		_selectWindow("EditTestUnits");
+		_click(_link("de-icon-add_resource"));
+		setAllFields($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("batchScheduleTestUnitInExecutionPopup Completed","success");
+}
+
+/**
+ @Function Number:78
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyOwnerExecutorDateAndStatusOfTestUnit($inputObject)
+{
+	_log("verifyOwnerExecutorDateAndStatusOfTestUnit Started","success");
+	try 
+	{
+		_selectWindow("EditTestUnits");
+		_assertTrue(_isVisible(_link($inputObject.testscript)));
+		verifyAllFields($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyOwnerExecutorDateAndStatusOfTestUnit Completed","success");
+}
+
+/**
+ @Function Number:79
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addscriptinevent($inputObject)
+{
+	_log("addscriptinevent Started","success");
+	try 
+	{
+		_click(_link("Import Test Scripts"));
+		_selectWindow("popup");
+		_click(_checkbox(0,_near(_cell($inputObject.testscript))));
+		_click(_submit(" Save "));
+		_selectWindow();
+		verifyaddscriptinevent($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addscriptinevent Completed","success");
+}
+
+/**
+ @Function Number:81
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyaddscriptinevent($inputObject)
+{
+	_log("verifyaddscriptinevent Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_cell($inputObject.testscript)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyaddscriptinevent Completed","success");
+}
+
+/**
+ @Function Number:82
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifytestscriptstatusinlisting ($inputObject)
+{
+	_log("verifytestscriptstatusinlisting  Started","success");
+	try 
+	{
+		
+		if($inputObject.executionStatus)
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.scriptName)),_under(_cell("Execution Status")))),$inputObject.executionStatus);
+		else
+			_assertEqual(_getText(_div(0,_near(_div($inputObject.scriptName)),_under(_div("Overall Status")))),$inputObject.status);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifytestscriptstatusinlisting  Completed","success");
+}
+
+/**
+ @Function Number:83
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyColumnExist($inputObject)
+{
+	_log("verifyColumnExist Started","success");
+	try 
+	{
+		var $columName = $inputObject.colName.split(";");
+		
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		
+		for(var $i=0; $i<$columName.length; $i++)
+		{
+			if ($inputObject.operation === "Negative")
+				_assertFalse(_exists(_cell($columName[$i])));
+			else
+				_assertTrue(_exists(_cell($columName[$i])));
+		}
+		
+		if($inputObject.winprefix)
+		{
+			_closeWindow();
+			_selectWindow();
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyColumnExist Completed","success");
+}
+
+/**
+@Function setTableViewinTestManagement
+@author:Nilesh
+@example:
+@description: This is called to set the table view in test mnangement cases.
+@param: 
+@return: 
+**/
+function setTableViewinTestManagement($inputObject)
+{
+	_log("setTableViewinTestManagement Started","success");
+	try
+	{
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		
+		setAllFields($inputObject);
+		_click(_button(" Go "));
+		
+		if($inputObject.winprefix)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTableViewinTestManagement Completed","success");
+}
+
+/**
+ * @Function verifyTableViewinTestManagement
+@author:Nilesh
+@example:
+@description:  This is called to view the table view in test mnangement cases.
+@param: 
+@return: 
+**/
+
+function verifyTableViewinTestManagement($inputObject)
+{
+	_log("verifyTableViewinTestManagement Started","success");
+	try
+	{
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+
+		verifyAllFields($inputObject);
+		
+		if($inputObject.winprefix)
+		{
+			_closeWindow();
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTableViewinTestManagement Completed","success");
+}

@@ -1,0 +1,447 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+ $gen = readDataFromCSV("Package_QAPlan_Common_00", "Package/QA_Plan");
+ $data = readDataFromCSV("Package_QAPlan_Report_03", "Package/QA_Plan");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ _log($currentDate);
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ _log($endDate);
+ 
+ var $TC = _testcase("InfyFT_sahi17_TC_BRD9_FU3_1","Check the condition for the NC/Observation creation."); 
+ $TC.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity4;//Cross DM Review 
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ $inputObject.edt_DN_ActualDateofReviewActi = $currentDate;
+ CreateInstance($inputObject)//Creating a QA plan.
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ _wait(3000);
+  
+ _assertNotVisible(_link("Findings"),"The Findings Tab is visible only for Compliance Check.");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity5;//Changing from Cross DM Review to Compliance Check.
+ $inputObject.lst_DN_Auditee = $data.Auditee4;
+ ModifyEformInstance($inputObject);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("InfyFT_sahi17_TC_BRD9_FU3_2","Check the available fields for the NC/Observation creation."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName5;
+ SelectSegment($inputObject);//Navigate to Findings. 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.lst_DN_Severity = $data.DN_Severity7;
+ $inputObject.lst_DN_Type = $data.DN_Type7;
+ $inputObject.lst_DN_CMMIProcessArea = $data.DN_CMMIProcessArea7;
+ InfyFTcreateLinkedItem($inputObject);
+ var $CreatedID1 = $inputObject.createdID;
+    
+ $inputObject = {};
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_CM_Description = "";
+ $inputObject.lst_DN_Severity = "--None--";
+ $inputObject.lst_DN_Type = "--None--";
+ $inputObject.lst_DN_CMMIProcessArea = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Type in Details tab \n• Field Details in Details tab \n• Field CMMI Process Area in Details tab \n";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = "";
+ $inputObject.lst_DN_Severity = "--None--";
+ $inputObject.lst_DN_Type = "--None--";
+ $inputObject.lst_DN_CMMIProcessArea = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type in Details tab \n• Field Details in Details tab \n• Field CMMI Process Area in Details tab";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.lst_DN_Severity = "--None--";
+ $inputObject.lst_DN_Type = "--None--";
+ $inputObject.lst_DN_CMMIProcessArea = "--None--"; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type in Details tab \n• Field CMMI Process Area in Details tab \n";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.lst_DN_Type = $data.DN_Type7;
+ $inputObject.lst_DN_Severity = "--None--";
+ $inputObject.lst_DN_CMMIProcessArea = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field CMMI Process Area in Details tab \n• Field Severity in Details tab \n";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.lst_DN_Severity = $data.DN_Severity7;
+ $inputObject.lst_DN_Type = $data.DN_Type7;
+ $inputObject.lst_DN_CMMIProcessArea = $data.DN_CMMIProcessArea7;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);//Creating a NC.
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.lst_DN_Type = $data.DN_Type8;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(5000);
+ _assertNotVisible(_cell("Severity * :"),"This field is available only when the Type is NC.")
+ 
+  //TC No 4.1
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.lst_DN_Type = $data.DN_Type7;
+ $inputObject.lst_DN_Severity = $data.DN_Severity7;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("InfyFT_sahi17_TC_BRD9_FU3_3_4_5_6_7_8_11","Check the available fields for the NC/Observation creation."); 
+ $TC.start();
+
+ $inputObject = {};
+ $inputObject.winprefix = $data.winprefix; 
+ $inputObject.lst_DN_Severity = $data.severity8;
+ $inputObject.lst_DN_Type = $data.type8;
+ $inputObject.lst_DN_CMMIProcessArea = $data.CMMIProcessArea8;
+ $inputObject.lst_DN_Status  = $data.status8;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+  
+  //checking whether the Textarea is read only.
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.textarea= $data.DN_CorrectiveAction13;//"DN_CorrectiveAction";
+ InfyFTisReadOnlyTxt($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.textarea = $data.DN_PreventiveAction13;//"DN_PreventiveAction";
+ InfyFTisReadOnlyTxt($inputObject);
+ 
+ _wait(1000)
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName4;
+ SelectSegment($inputObject);//Navigate to Details.
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName6;
+ SelectSegment($inputObject);//Navigate to Workflow.
+  
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.DN_ClosingComments7;
+ //$inputObject.msgAlert = "Routing the QA Plan will lead to routing all the linked findings to the auditee. Do you want to continue?";
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Auditee4;
+ $inputObject.edt_loginid = $data.Auditee4;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName5;
+ SelectSegment($inputObject);//Navigate to Findings. 
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.txt_DN_CorrectiveAction = $data.DN_CorrectiveAction;
+ $inputObject.txt_DN_PreventiveAction = $data.DN_PreventiveAction;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;  
+ $inputObject.segment_name = $data.segmentName6;
+ SelectSegment($inputObject);//Navigate to Workflow.
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.txt_Comments = $data.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(2000);
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username1;;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName5;
+ SelectSegment($inputObject);//Navigate to Findings.
+
+ $inputObject = {};
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+ 
+ //TC No.12.2 Rejection by SQA.
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ InfyFTClickReject($inputObject);
+ 
+ _wait(2000);
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Auditee4;
+ $inputObject.edt_loginid = $data.Auditee4;
+ $inputObject.edt_password = $data.password2;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName5;
+ SelectSegment($inputObject);//Navigate to Findings.
+
+ $inputObject = {};
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.txt_DN_CorrectiveAction = $data.DN_CorrectiveAction12;
+ $inputObject.txt_DN_PreventiveAction = $data.DN_PreventiveAction12;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;  
+ $inputObject.segment_name = $data.segmentName6;
+ SelectSegment($inputObject);//Navigate to Workflow.
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.txt_Comments = $data.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username1;;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName5;
+ SelectSegment($inputObject);//Navigate to Findings.
+
+ $inputObject = {};
+ $inputObject.item = $CreatedID1;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.lst_DN_Status = $data.DN_Status7;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the Finding:\nClosing Comments\n";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.lst_DN_Status = $data.DN_Status7;
+ $inputObject.txt_DN_ClosingComments = $data.DN_ClosingComments7;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ InfyFTReturnPopUp();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName4;
+ SelectSegment($inputObject);//Navigate to Details.
+  
+  // checking for mandatory fields for conditions, when status is closed it should give alert for Remarks/Closing.
+ $inputObject = {};
+ $inputObject.txt_DN_RemarksClosingComments = "";
+ $inputObject.edt_DN_ActualDateofReviewActi = "";
+ $inputObject.lst_DN_CMMILevel = "--None--";
+ $inputObject.lst_DN_Status = $data.DN_Status7;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nCMMI / Maturity Level\nActual Review / Activity Date\nRemarks / Closing Comments\n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status7;
+ $inputObject.txt_DN_RemarksClosingComments = $data.DN_ClosingComments7;
+ $inputObject.edt_DN_ActualDateofReviewActi = "";
+ $inputObject.lst_DN_CMMILevel = "--None--";
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nCMMI / Maturity Level\nActual Review / Activity Date\n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status7;
+ $inputObject.txt_DN_RemarksClosingComments = $data.DN_ClosingComments7; 
+ $inputObject.edt_DN_ActualDateofReviewActi = $currentDate;
+ $inputObject.lst_DN_CMMILevel = $data.CMMILevel4;
+ InfyFTModifyEformInstance($inputObject);
+
+ _wait(5000);
+ 
+ //Checking for alert message when the findings status is open and we are trying to close the QA Plan.
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity5; 
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ $inputObject.edt_DN_ActualDateofReviewActi = $currentDate;
+ CreateInstance($inputObject)//Creating a QA plan.
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName5;
+ SelectSegment($inputObject);//Navigate to Findings.
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.lst_DN_Severity = $data.DN_Severity7;
+ $inputObject.lst_DN_Type = $data.DN_Type7;
+ $inputObject.txt_DN_ClosingComments = $data.DN_ClosingComments7;
+ $inputObject.lst_DN_CMMIProcessArea = $data.DN_CMMIProcessArea7;
+ InfyFTcreateLinkedItem($inputObject);
+ var $CreatedID2 = $inputObject.createdID; 
+ 
+ //InfyFTReturnPopUp();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentName4;
+ SelectSegment($inputObject);//Navigate to Details.
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status7;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nCMMI / Maturity Level\nRemarks / Closing Comments\n\nPlease close the below linked items before closing the QA Plan:\n"+$CreatedID2;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ 
+ $TC.end();

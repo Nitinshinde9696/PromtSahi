@@ -1,0 +1,760 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+if(_getGlobal("New_UI")==="yes")
+$data = readDataFromCSV("Testing_PrjCr_Mgr_Quetionarrie_segment_06_NewUI","Testing/PrjCr_Mgr"); 
+else
+$data = readDataFromCSV("Testing_PrjCr_Mgr_Quetionarrie_segment_06","Testing/PrjCr_Mgr"); 
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Priyanka Patel
+$inputObject.edt_loginid = $data.LoginID1;//priyanka_patel01
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Project Request_home
+navigateTo($inputObject);
+
+$prnum = 2;
+
+$s = _testcase("TC_1.2"," Navigate to Request Inbox");
+$s.start();
+
+
+$s.end();
+
+$s = _testcase("TC_1.3"," Verifiy the Project Request");
+$s.start();
+
+$inputObject = {};
+$inputObject.item = $data.prjReq;
+infyFTOpenProjectRequest($inputObject);
+
+$inputObject={};
+$inputObject.lst_DN_InitiateAction = "Create";
+ModifyEformInstance($inputObject);
+
+$t = _testcase("TC_1", "Selecting the ProcessSelectionQuestionnaire"); 
+$t.start();
+
+_wait(10000);
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$t.end(); 
+$t = _testcase("TC_2", "Available fields in Process Selection Questionnaire Segment"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Field1;//Is the project managed by Infosys :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Field2;//Choose the appropriate nature of work :
+InfyFTisVisible($inputObject);
+
+$t.end();
+$t = _testcase("TC_3", "Available drop down list span_Names of  Is the project managed by infosys?"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.ddspan_Names1;//Yes...;No...
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+$t = _testcase("TC_4", "Available drop down list span_Names of  nature of work field"); 
+$t.start();
+
+_setSelected(_select("DN_IstheprojectmanagedbyI"),"Yes Infosys is responsible for managing the team and timelines");
+
+$inputObject = {};
+$inputObject.lst_DN_Choosetheappropriatena = $data.ddspan_Names2;
+verifyEformInstanceDetails($inputObject); 
+
+$t.end();
+$t = _testcase("TC_6", " Is the project managed by Infosys? ==No,then No further questions needs to be answered"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5110;//--None--
+InfyFTProcessSelectionQuestionnaire($inputObject); 
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.span_Name112;//Agile
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value = $data.span_Name112;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_7", "selecting the Process Selection Questionnaire field span_Names as None"); 
+$t.start();  
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field518;//--None--
+$inputObject.lst_DN_Choosetheappropriatena = $data.field528;//--None--
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$t.end();
+$t = _testcase("TC_8", "verifying the Suggested Process Type field span_Name is None"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject); 
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value = $data.span_Name1;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end(); 
+$t = _testcase("TC_9", "selecting Is the project managed by Infosys span_Name = No Infosys only provides resources. Client manages task assignment timelines and team"); 
+$t.start(); 
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5110;//No Infosys only provides resources. Client manages task assignment timelines and team
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$t.end();
+$t = _testcase("TC_10", "verifying the Suggested Process Type field span_Name is Customer Managed"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject); 
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.span_Name2;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end(); 
+$t = _testcase("TC_11", " Yes = Maintenance = Agile"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5211;//Maintenance
+$inputObject.lst_DN_Methodology = $data.DN_Methodology8;//Agile
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.DN_Methodology8;//Agile
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject); 
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.DN_Methodology8;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_12", " maintenance +  Waterfall or Iterative or Others + Maintenance"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5211;//Maintenance
+$inputObject.lst_DN_Methodology = $data.wio;
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.span_Name3;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject); 
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.span_Name3;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_13", "yes  = Independent Validation = Agile"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5212;//Independent Validation 
+$inputObject.lst_DN_Methodology = $data.DN_Methodology8;//Agile
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.DN_Methodology8;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.DN_Methodology8;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_14", " yes = Independent Validation = Waterfall or iterative or Others"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5212;//Independent Validation 
+$inputObject.lst_DN_Methodology = $data.wio;
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.span_Name4;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.span_Name4;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_15", " selecting Choose the appropriate nature of work span_Name = Infrastructure Management services"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5213;//Infrastructure Management Services 
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field528;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field528;//--None--
+//$inputObject.lst_value =$data.span_Name5;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_16", " selecting Choose the appropriate nature of work span_Name = Package Product Implementation"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5214;//Package Product Implementation
+$inputObject.lst_DN_Methodology = $data.DN_Methodology8;//Agile
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.DN_Methodology8;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.DN_Methodology8;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_17", " yes = Package Product Implementation = Waterfall or Iterative or Others"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5214;//Package Product Implementation
+$inputObject.lst_DN_Methodology = $data.wio;
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.span_Name6;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.span_Name6;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_18", " yes  = PLM Implementation = Agile"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5215;//PLM Implementation
+$inputObject.lst_DN_Methodology = $data.DN_Methodology8;//Agile
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.DN_Methodology8;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.DN_Methodology8;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_19", " yes = PLM Implementation = Waterfall or Iterative or Others"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5215;//PLM Implementation
+$inputObject.lst_DN_Methodology = $data.wio;
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.span_Name7;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.span_Name7;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_20", "yes = Mechanical product design support = ?"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.mpds;
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field518;
+//$inputObject.lst_value =$data.span_Name8;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field518;//--None--
+//$inputObject.lst_value =$data.span_Name8;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_21", " selecting Choose the appropriate nature of work span_Name = Consulting assignment"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5217;//Consulting assignment
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field518;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field518;//--None--
+//$inputObject.lst_value =$data.span_Name9;//--None--
+InfyFTverifyValue($inputObject);
+
+
+$t.end();
+$t = _testcase("TC_22", " yes = Hardware design or installation = ?"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5218;//Hardware design or installation
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field518;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field518;//--None--
+//$inputObject.lst_value =$data.span_Name10;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_23", " yes = Embedded software design & development or maintenance = ? "); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5219;//Embedded software design & development or maintenance
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field518;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field518;//--None--
+//$inputObject.lst_value =$data.span_Name10;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_24", " yes = PACS = ? "); 
+$t.start();
+
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5220;//PACS
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field518;
+//$inputObject.lst_value =$data.span_Name10;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field518;//--None--
+//$inputObject.lst_value =$data.span_Name10;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_25", "yes = Others = ?"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.field5221;//Others
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field518;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field518;//--None--
+//$inputObject.lst_value =$data.span_Name10;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_26", "yes = New Development = Waterfall or Iterative or Others = Development"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.nd;
+$inputObject.lst_DN_Methodology  = $data.DN_Methodology22;//Waterfall iterative
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.span_Name5221;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.span_Name5221;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+$t = _testcase("TC_27", " yes = New Development = Agile = Agile"); 
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name5;//Process Selection Questionnaire
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_IstheprojectmanagedbyI = $data.field5111;//Yes
+$inputObject.lst_DN_Choosetheappropriatena = $data.nd;
+$inputObject.lst_DN_Methodology = $data.field5323;//Agile
+InfyFTProcessSelectionQuestionnaire($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.DN_SystemSuggestedProcess;
+$inputObject.cell_Name_field = $data.DN_SystemSuggestedProcessLABEL;
+$inputObject.lst_value =$data.field5323;
+InfyFTverifyValue($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Details
+SelectSegment($inputObject); 
+
+$inputObject = {};
+$inputObject.select = $data.lst_filed32;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.lst_name = $data.lst_filed32;//_select("field32")
+$inputObject.cell_Name_field = $data.cell_Name1;//_cell("Suggested Process Type :")
+$inputObject.lst_value =$data.field5323;//--None--
+InfyFTverifyValue($inputObject);
+
+$t.end();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,153 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+$data = readDataFromCSV("Agile_PrjCr_Mgr_BR2_Attachment_segment_02","Agile/PrjCr_Mgr"); 
+ 
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Priyanka Patel
+$inputObject.edt_loginid = $data.LoginID1;//priyanka_patel01
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+var $s = _testcase("TC_1.2"," Navigate to Request Inbox");
+$s.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Inbox 
+navigateTo($inputObject);
+
+$s.end();
+var $s = _testcase("TC_1.3"," Verifiy the Project Request");
+$s.start();
+
+$inputObject = {};
+$inputObject.item = $data.Project_requestName4;
+OpenEformInstance($inputObject);
+
+ _wait(5000);
+ var $t = _testcase("TC_1", "Modify the ProjectRequest"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_InitiateAction = $data.DN_InitiateAction4;//Create
+ $inputObject.txt_CM_Description = $data.Description4;  //something
+ $inputObject.lst_PROJECTTYPE = $data.PROJECTTYPE4; //Agile 
+ $inputObject.txt_DN_ReasonfornotchoosingRe = $data.Description4;  //something
+ //ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name7;//Attachments
+ SelectSegment($inputObject); 
+ 
+ InfyFTverifyRouteButton();
+
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage7;
+$inputObject.multiple_member = $data.user_skip7;
+WorkflowSet($inputObject);
+
+InfyFTverifyRouteButton();
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_2", "verify the Attachment Segment is visible "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Field1;//Attachments
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Selecting the Attachment Segment "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name5;//Attachments
+ SelectSegment($inputObject); 
+ 
+ $t.end(); 
+ 
+ _clearLastDownloadedFileName();
+ 
+ var $t = _testcase("TC_4", "Verifying no attachment files in attachment segment "); 
+ $t.start();
+ 
+ //_click(_button("RouteBtn"));
+ //_alert("ERROR: SOW is mandatory for submitting the request. Please upload the attachment!");
+ //_typeKeyCodeNative(java.awt.event.KeyEvent.VK_ENTER);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name5;//Attachments
+ SelectSegment($inputObject);
+ 
+ var $t = _testcase("TC_5", "Adding the single attachment file"); 
+ $t.start();
+ 
+ InfyADDAttachment(); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name5;//Attachments
+ SelectSegment($inputObject);
+ 
+ var $t = _testcase("TC_6", "Adding the multiple attachment files"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.attachment = $data.attachment;//Attachment1//ScreenShot.docx
+ $inputObject.attachment1 = $data.attachment1;//Attachment2//ISAgileCMAuditChecklistVer0.a.xlsx
+// InfyFTADDMAttachment($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "Submitter Downloading the attached file"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name5;//Attachments
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.fileToDownload = $data.fileToDownload6;//ISAgileCMAuditChecklistVer0.a.xlsx
+ InfyFTDownloadAttachment($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_7", "Deleting the attached file"); 
+ $t.start();
+ 
+ InfyDeleteAttachment();
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

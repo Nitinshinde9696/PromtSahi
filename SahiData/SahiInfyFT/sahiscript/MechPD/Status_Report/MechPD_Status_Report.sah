@@ -1,0 +1,63 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+var $Script1 = _testcase("MechPD_Status_Report_ProjTailoring_01.sah");
+$Script1.start();
+
+	_include("MechPD_Status_Report_ProjTailoring_01.sah");
+	
+$Script1.end();
+var $Script2 = _testcase("MechPD_Status_Report_PMPlan_02.sah");
+$Script2.start();
+
+	_include("MechPD_Status_Report_PMPlan_02.sah");
+	
+$Script2.end();
+var $Script3 = _testcase("MechPD_Status_Report_Details_Hlt_and_NeedAct_03.sah");
+$Script3.start();
+
+	_include("MechPD_Status_Report_Details_Hlt_and_NeedAct_03.sah");
+	
+$Script3.end();
+var $Script4 = _testcase("MechPD_Status_Report_Cmt_and_PrjSpcfMtrics_04.sah");
+$Script4.start();
+
+	_include("MechPD_Status_Report_Cmt_and_PrjSpcfMtrics_04.sah");
+	
+$Script4.end();
+var $Script5 = _testcase("MechPD_Status_Report_ReqEftDis_05.sah");
+$Script5.start();
+
+	_include("MechPD_Status_Report_ReqEftDis_05.sah");
+	
+$Script5.end();
+var $script6 = _testcase("MechPD_Status_Report_Risk_Issues_Compl_06.sah");    
+  $script6.start();  					
+  
+  _include("MechPD_Status_Report_Risk_Issues_Compl_06.sah");	
+  
+$script6.end();
+var $script7 = _testcase("MechPD_Status_Report_SummaryofReq_07.sah");  
+    $script7.start();  	
+	_include("MechPD_Status_Report_SummaryofReq_07.sah");	
+	$script7.end();
+	
+var $script8 = _testcase("MechPD_Status_Report_Workflow_Comments_08.sah");
+ $script8.start(); 
+ _include("MechPD_Status_Report_Workflow_Comments_08.sah"); 
+ $script8.end();
+ 
+var $script9 = _testcase("MechPD_Status_Report_pj_StatusReportFreq_09.sah");     
+ $script9.start();  			
+ _include("MechPD_Status_Report_pj_StatusReportFreq_09.sah");		
+ $script9.end();
+ 
+ var $script10 = _testcase("MechPD_Status_Report_Cmt_and_PrjSpcfMtrics_10.sah");     
+ $script10.start();  			
+ _include("MechPD_Status_Report_Cmt_and_PrjSpcfMtrics_10.sah");		
+ $script10.end();

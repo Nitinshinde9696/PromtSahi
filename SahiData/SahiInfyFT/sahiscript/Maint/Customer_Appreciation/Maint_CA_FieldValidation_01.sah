@@ -1,0 +1,385 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-7400,$dateObj);
+ var $projstartDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $DN_AppreciationReceivedDa = "1-Jan-1996";
+  
+ $data = readDataFromCSV("Maint_CA_FieldValidation_01", "Maint/Customer_Appreciation");
+ $gen = readDataFromCSV("Maint_CA_Common", "Maint/Customer_Appreciation");
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Login to digite"); //trying with wrong password
+ $t.start();
+
+ /* $inputObject = {};
+ $inputObject.user_name = $data.Username01;//Ravindra_Ganeshkar
+ $inputObject.edt_loginid = $data.LoginID01;
+ $inputObject.edt_password = $data.Password01;//1234567
+ loginIntoDigite($inputObject); */
+
+ $t.end();
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;//123456
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_Name2; //INFY000020Team_Isha_0
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to customer appreciation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /**************************************************************************************************************
+ * checking mandatory fields and date validation 
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_4", "checking mandatory fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {}; //checking mandatory fields starts
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Details in Details tab \n• Field Received From in Details tab \n• Field Received Date in Details tab \n• Field Provider Category in Details tab \n";
+ InfyFTCreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ _clearLastAlert();
+  
+ inputObject = {};
+ $inputObject.edt_DN_Appreciationreceivedfr = $data.DN_Appreciationreceivedfr4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Details in Details tab \n• Field Received Date in Details tab \n• Field Provider Category in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.lst_DN_ProviderCategory = $data.DN_Appreciationproviderca4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Details in Details tab \n• Field Received Date in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_DN_AppreciationReceivedDa = $startDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Details in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name14;
+ $inputObject.txt_DN_AppreciationDetails = $data.DN_AppreciationDetails4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+  $t.end();
+ 
+ var $t = _testcase("TC_5", "Wrong Date");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.edt_DN_AppreciationReceivedDa = $startDate ;
+ $inputObject.msgAlert = "ERROR: Appreciation Received Date cannot be a future date and cannot be before the Project Start Date (1-Jan-2010).";//Please enter date in the correct format.
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.edt_DN_AppreciationReceivedDa = $DN_AppreciationReceivedDa;
+ $inputObject.msgAlert = "ERROR: Appreciation Received Date cannot be a future date and cannot be before the Project Start Date (1-Jan-2010)."//"Please enter date in the correct format.( dd-MMM-yyyy )";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+  $t.end();
+ 
+ /*********************************************************************************************************
+ * Adding the customer appreciation and checking ID field & drop down values 
+ **********************************************************************************************************/
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TC_6", "create instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name6;
+ $inputObject.edt_DN_Appreciationreceivedfr = $data.DN_Appreciationreceivedfr6;
+ $inputObject.lst_DN_ProviderCategory = $data.DN_Appreciationproviderca6;
+ $inputObject.edt_DN_AppreciationReceivedDa = $currentDate;
+ $inputObject.txt_DN_AppreciationDetails = $data.DN_AppreciationDetails6;
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ var $IDcus = _getText(_span("CM_ItemCode"));//reading the system generated value of ID to open a instance with unique ID
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "verify instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;//verifying by unique value ID
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "ID field ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $IDcus;//system generated value 
+ $inputObject.cell_Name = $data.cell_Name4;
+ InfyFTisReadOnly($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "values of appreciation provider category");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.lst_DN_ProviderCategory = $data.values;
+ verifyEformInstanceDetails($inputObject);
+  
+ $t.end();
+ 
+ /***********************************************************************************************************
+ * Modifying the customer appreciation data 
+ ************************************************************************************************************/
+  
+ var $t = _testcase("TC_10", "modify instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Appreciationreceivedfr = $data.DN_Appreciationreceivedfr10;
+ ModifyEformInstance($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Appreciationreceivedfr = $data.DN_Appreciationreceivedfr10;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ CloseEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item= $IDcus;
+ $inputObject.operation = $data.operation;
+ verifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.clearFilterButton;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item= $IDcus;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end(); 
+ 
+ /************************************************************************************************************
+ * checking inbox of the logged on user
+ ************************************************************************************************************/
+ 
+ var $t = _testcase("TC_11", "navigate to assignee inbox"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo11;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_12", "checking inbox of logged on user");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ $inputObject.operation = $data.operation;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ 
+ /*****************************************************************
+ *Delete the instance
+ ******************************************************************/
+ 
+ var $t = _testcase("TC_13", "delete the created instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_Name2; //team isha
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.clearFilterButton;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.$IDcus;
+ InfyFTDeleteEformInstanceN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ $inputObject.operation = $data.operation;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

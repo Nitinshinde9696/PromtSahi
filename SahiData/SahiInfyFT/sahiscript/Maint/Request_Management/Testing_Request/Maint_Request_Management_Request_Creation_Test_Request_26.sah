@@ -1,0 +1,404 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+
+ $data = readDataFromCSV("Maint_Request_Management_Request_Creation_Test_Request_26","Maint/Request_Management/Testing_Request");
+ 
+  $bTN = $data.requestTitle17;//"My Testing Request";
+  $review_type = $data.Rev_type;//"Test Case Review";
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+  
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Testing Request
+ navigateTo($inputObject);
+ 
+ $navigation =$data.navigateTo5;
+
+ $inputObject = {};
+ $inputObject.span = $data.add;//_click(_span("KEY_BUTTON_Add-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name6;//_cell("ID")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name7;//_cell("Request Title")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name8;//_cell("Request Owner")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name9;//_cell("Request Description")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name10;//_cell("Complexity")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name11;//_cell("Scheduling Module Used")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name12;//_cell("Module Code")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name13;//_cell("Application Code")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name14;//_cell("Customer Request Code")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name15;//_cell("SOW")
+ InfyFTisVisible($inputObject);
+ 
+ clickReturn();
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_2.2"," Check Mandatory Fields for Testing Request");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field Request Owner in Details tab \n• Field Complexity in Details tab \n• Field LC Stage in Details tab";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle17;
+ $inputObject.txt_CM_Description ="";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Owner in Details tab \n• Field Request Description in Details tab \n• Field Complexity in Details tab \n• Field LC Stage in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle17;
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.lst_DN_RequestOwner = "--None--";
+ $inputObject.lst_DN_Complexity = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Owner in Details tab \n• Field Complexity in Details tab \n• Field LC Stage in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle17;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.txt_CM_Description ="";
+ $inputObject.lst_DN_Complexity = $data.complexity18;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Description in Details tab \n• Field LC Stage in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.edt_CM_Name = "";
+ $inputObject.lst_DN_Complexity =$data.complexity18;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field LC Stage in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.edt_CM_Name = $data.requestTitle17;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_isPackageDigiteStart = $data.pakgmodule18;
+ $inputObject.lst_DN_Complexity = $data.complexity18;//Complex
+ $inputObject.lst_DN_LCStage = "Partial LC Stage";
+ ModifyEformInstance($inputObject);
+ 
+ var $id = _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.true =1;
+ $inputObject.button =" Save ";
+ InfyFTcheckingButtons($inputObject);
+
+ clickReturn();
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_8.1"," verify fields after creation of Other Request for Maint PT");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.item =$id;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name19;//_cell("Planned Start Date")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name20;//_cell("Planned End Date")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name21;//_cell("Actual Start Date")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name22;//_cell("Actual End Date")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name23;//_cell("Status")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name24;//_cell("No Of Test Cases Prepared")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name25;//_cell("No Of Test Cases Executed")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name26;//_cell("No Of Test Units Prepared")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name27;//_cell("No Of Test Units Executed")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name28;//_cell("No Of Defects Reported")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name29;//_cell("No Of Defects Rejected By Client")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name30;//_cell("No Of AT Defects Detected")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name31;//_cell("Remarks")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name32;//_cell("Schedule Deviation")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name33;//_cell("Effort Deviation")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name34;//_cell("Current Baseline Set On")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name35;//_cell("Current Baseline Set By")
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.span_Name36;//_cell("Last Push to Timesheet")
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.span_Name37;//_cell("Last Fetch from Timesheet")
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.span_Name38;//_cell("Type of Data")
+ InfyFTisVisible($inputObject);
+  
+ $s4.end();
+ 
+ var $s5 = _testcase("TC_7.2"," verify fields are enabled after creation of testing Request");
+ $s5.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfTestCasesPrepared40;//DN_NoOfTestCasesPrepared 
+ InfyFTverifyEnabledFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfTestCasesExecuted41;//DN_NoOfTestCasesExecuted
+ InfyFTverifyEnabledFields($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfTestUnitsPrepared42;//DN_NoOfTestUnitsPrepared
+ InfyFTverifyEnabledFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfTestUnitsExecuted43;//DN_NoOfTestUnitsExecuted
+ InfyFTverifyEnabledFields($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfDefectsReported44;//DN_NoOfDefectsReported
+ InfyFTverifyEnabledFields($inputObject); 
+
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfDefectsRejectedByC45;//DN_NoOfDefectsRejectedByC
+ InfyFTverifyEnabledFields($inputObject); 
+
+ $inputObject = {};
+ $inputObject.edt_field_Name = $data.DN_NoOfATDefectsDetected46;//DN_NoOfATDefectsDetected
+ InfyFTverifyEnabledFields($inputObject); 
+
+ $inputObject = {};
+ $inputObject.btn_field_Name = " Save ";
+ InfyFTverifyEnabledFields($inputObject); 
+ 
+ $s5.end();
+
+  
+ var $s6 = _testcase("TC_8.1"," Verify Reuse Tracking Segment");
+ $s6.start();
+ 
+  _include("Maint_Request_Management_Reuse_Tracking_Positive_Test_Request_27.sah");
+  _include("Maint_Request_Management_Reuse_Tracking_Negative_Test_Request_28.sah");
+ 
+ $s6.end();
+ 
+ var $s7 = _testcase("TC_Request Summery Seg"," Verify Request Summery Segment");
+ $s7.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Summary";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Schedule Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Effort Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Defect Summary";
+ InfyFTisVisible($inputObject);
+
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Reuse and Tools Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Declaration";
+ InfyFTisVisible($inputObject);
+
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Type of Data";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Reason for Bad Data";
+ $inputObject.operation = "Negative";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Closure Comments";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Confirm Review of Request Summary along Request Performance ( Quality , Productivity , Schedule Adherence etc )";$data.span_Name56;//_span("Confirm Review of Request Summary along Request Performance ( Quality , Productivity , Schedule Adherence etc ) and reasons for deviation.")
+ InfyFTisVisible($inputObject);
+ 
+  $s7.end();
+ 
+ var $s8 = _testcase("Request Summary Segment"," Verify Request summery segment");
+ $s8.start()
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Summary";//$data.span_Name33;
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = "Declaration";
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "1_lst";
+ $inputObject.fieldValues = "--None--#Bad Data#Normal";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Declaration";
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "1_lst";
+ $inputObject.fieldValues = "Bad Data";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  _wait(5000);
+ 
+ _mouseOver(_div("More_MenuItems_Segment"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Workflow";
+ InfyFTisVisible($inputObject);
+ 
+ 
+  $inputObject = {};
+ $inputObject.tableName = "Declaration";
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "1_lst";
+ $inputObject.fieldValues = "Normal";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.operation = "Negative";
+ $inputObject.span_Name = "Workflow";
+ InfyFTisVisible($inputObject);
+ 
+  $s8.end();
+ 
+ var $s9 = _testcase("Print-Icon"," Check Printing the Request");
+ $s9.start();
+ 
+ InfyFTprint();
+
+  _include("Maint_Request_Management_Request_Closure_Test_Request_30.sah");
+  
+  _include("Maint_Request_Management_Request_Summary_Test_Request_29.sah");
+	
+ $s9.end();
+
+ 
+ 

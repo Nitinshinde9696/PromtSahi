@@ -1,0 +1,55 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+var $Script1 = _testcase("Dev_Tools_Reuse_Data_Creation_09.sah");
+$Script1.start();
+
+	_include("Dev_Tools_Reuse_Data_Creation_09.sah");
+	
+$Script1.end();
+var $Script2 = _testcase("Dev_Tools_Reuse_ToolsPlanning_Development_01.sah");
+$Script2.start();
+
+	_include("Dev_Tools_Reuse_ToolsPlanning_Development_01.sah");
+	
+$Script2.end();
+var $Script3 = _testcase("Dev_Tools_Reuse_FLW527_ToolsPlanning_addTools_02.sah");
+$Script3.start();
+
+	_include("Dev_Tools_Reuse_FLW527_ToolsPlanning_addTools_02.sah");
+	
+$Script3.end();
+var $Script4 = _testcase("Dev_Tools_Reuse_FLW516_ToolsTracking_addTools_03.sah");
+$Script4.start();
+
+	_include("Dev_Tools_Reuse_FLW516_ToolsTracking_addTools_03.sah");
+	
+$Script4.end();
+var $Script5 = _testcase("Dev_Tools_Reuse_FLW516_ToolsTracking_addPlanned_04.sah");
+$Script5.start();
+
+	_include("Dev_Tools_Reuse_FLW516_ToolsTracking_addPlanned_04.sah");
+	
+$Script5.end();
+var $script6 = _testcase("Dev_Tools_Reuse_Tracking_Negative_05.sah");    
+  $script6.start();  					
+  
+  _include("Dev_Tools_Reuse_Tracking_Negative_05.sah");	
+  
+$script6.end();
+
+var $script7 = _testcase("Dev_Tools_Reuse_Tracking_Positive_06.sah");  
+    $script7.start();  	
+	_include("Dev_Tools_Reuse_Tracking_Positive_06.sah");	
+	$script7.end();
+	
+var $script8 = _testcase("Dev_Tools_Reuse_Planning_Positive_07.sah");
+ $script8.start(); 
+ _include("Dev_Tools_Reuse_Planning_Positive_07.sah"); 
+ $script8.end();
+ 

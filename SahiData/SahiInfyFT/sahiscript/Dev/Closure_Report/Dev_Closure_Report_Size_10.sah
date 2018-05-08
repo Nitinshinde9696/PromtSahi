@@ -1,0 +1,218 @@
+
+
+
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Dev_Closure_Report_Generic_00","Dev/Closure_Report");
+ $data = readDataFromCSV("Dev_Closure_Report_Size_10","Dev/Closure_Report");
+ 
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Closure Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Ricky_Wang
+ $inputObject.edt_loginid = $generic.LoginID1;// Ricky_Wang
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Verifying the Applicable Sizing Technique table with Project Tailoring");
+ $t.start();
+ 
+ _wait(40000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment5;//Size
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.theader1;//Applicable Sizing Technique
+ InfyFTisVisible($inputObject);
+/* 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment18;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowname2;//Primary Language
+ $inputObject.colNo = $data.colname1;//Sizing Technique*_lbl
+ InfyFTGetSwiftFormData($inputObject);
+ */
+ var $sizetech = $inputObject.Value;
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $generic.report1;//MTR1
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment5;//Size
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowno2;//1
+ $inputObject.colNo = $data.colno1;//0_lbl
+ $inputObject.fieldValues = $sizetech;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ /*
+ var $t = _testcase("TC_3", "Verifying the Language list as per PM Plan table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table2;//Language List as per PM Plan
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.rowNo = $data.rowno1;//0
+ $inputObject.colNo = $data.colno3;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl
+ $inputObject.fieldValues = $data.theader2;//Language|Added LOC|Modified or Deleted LOC|Total Output LOC|LOC Per FP|FP
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//PM Plan
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeicon1;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//Language Settings
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table3;//Language
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname2;//Language*_lst
+ InfyFTGetSwiftFormData($inputObject);
+ 
+ var $language = $inputObject.Value;
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment5;//Size
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname3;//Language_lbl
+ $inputObject.fieldValues = $language;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname4;//Added LOC_edt|Modified or Deleted LOC_edt
+ $inputObject.fieldValues = $data.locvalues1;//6|8
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Verifying Add Additional Languages table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table4;//Add Additional Languages
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//Add Additional Languages
+ $inputObject.rowNo = $data.rowno1;//0
+ $inputObject.colNo = $data.colno4;//2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl
+ $inputObject.fieldValues = $data.theader3;//Language[2]|Added LOC[2]|Modified or Deleted LOC[2]|Total Output LOC[2]|LOC Per FP[2]|FP[2]
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;//Add Rows
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table4;//Add Additional Languages
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname5;//Language[2]_lst|Added LOC[2]_edt|Modified or Deleted LOC[2]_edt
+ $inputObject.fieldValues = $data.locvalues2;//BRIO|7|9
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Deleting Added Additional Languages ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//Add Additional Languages
+ $inputObject.rowNo = $data.rowno2;//1
+ $inputObject.colNo = $data.colno5;//1_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link3;//Delete Rows
+ InfyFTclick($inputObject);
+
+ $t.end();
+ */
+ 
+ 
+ 
+ 
+ 

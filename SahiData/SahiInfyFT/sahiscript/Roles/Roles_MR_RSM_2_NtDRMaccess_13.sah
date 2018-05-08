@@ -1,0 +1,59 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+
+
+$data = readDataFromCSV("Roles_MR_RSM_2_NtDRMaccess_13","Roles");
+
+ var $t = _testcase("TC_3", "Login with who does not have DRM admin access"); 
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //user_name1 : Nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+ $inputObject.edt_password = $data.Password1;//Password1 :123456
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Risk Manager
+ navigateTo($inputObject);
+ 
+ clearFilterSettings();
+ 
+ var $t = _testcase("TC_3.2", "Verifying the present of RSM assignments"); 
+ $t.start();
+ 
+ //_log(""+ _getText(_div("x-toolbar-text pagingCountDisplayText x-box-item x-toolbar-item x-toolbar-text-default")) +"");
+ _log(""+_getText(_div("x-toolbar-text pagingCountDisplayText x-box-item x-toolbar-item x-toolbar-text-default displayItem-paginationCls"))+"");
+ $t.end();
+ var $t = _testcase("TC_3.3", "Verifying the Export button availability"); 
+ $t.start();
+ 
+ _assertFalse(_span("KEY_TOOLTIP_Export-btnIconEl").disabled);//Export button is enabled/Available
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3.4", "Verifying the Active status is read only"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//DN_STATUS
+ $inputObject.Status = $data.status1;//Active
+ setFilter($inputObject); 
+
+ _click(_div("14"));
+ 
+/*  $inputObject = {};
+ $inputObject.lbl_DN_Status = $data.span_Name1;//Active
+ verifyAllFields($inputObject);   */
+ 
+ _assert(_radio("DN_Status").checked);
+ 
+ $t.end();
+ clickReturn(); 
+ 
+ clearFilterSettings(); 

@@ -1,0 +1,309 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/Filter.sah")
+_include("../../sahisource/Business/EformListing.sah");
+
+
+$data = readDataFromCSV("Roles_Manage_Roles_SQA_PQMRad_39","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1;//user_name1 : Siddharth Kale
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : siddharth_kale	
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//CREATE UQH WITH ONE UNIT // 
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;
+CreateInstance($inputObject);
+
+var $UQH= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+
+//Navigate To AQM // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+//CREATE PQM WITH SAME UNIT //
+
+$inputObject = {};
+$inputObject.rdg_DN_CombineAs = $data.BasedOn6;
+$inputObject.lst_DN_Unit = $data.Unit6; // IS// 
+$inputObject.lst_DN_PU = $data.PU6;   // Practice Unit : "IS;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchUser6; //siddharth_kale
+CreateInstance($inputObject);
+
+var $PQM= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+//Navigate To SQA // 
+$inputObject = {};
+$inputObject.user_name = $data.user_name1;//user_name1 : Siddharth Kale
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : siddharth_kale	
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//SELECT THE FIRST SQA : PQM//
+clickAddIcon($inputObject);
+
+_wait(1000);
+if(_isVisible(_span("PQM")))
+{
+_wait(5000);
+clickReturn();
+$inputObject = {};
+$inputObject.lst_DN_UnitPQM = $data.unit3; //MANDATORY FIELD
+$inputObject.lst_DN_PUPQM = $data.PU3;
+//$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);
+}
+else
+{
+  clickReturn();
+  $inputObject = {};
+  $inputObject.rdg_DN_LoginAs = $data.MyRole3; //PQM
+  $inputObject.lst_DN_UnitPQM = $data.unit3; //MANDATORY FIELD
+  $inputObject.lst_DN_PUPQM = $data.PU3; 
+  //$inputObject.lst_DN_DU = $unit; 
+  //$inputObject.lst_DN_Location = $data.Location3;
+  $inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+  CreateInstance($inputObject);
+} 
+
+var $SQA= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+clickReturn();
+
+
+_setValue(_textbox("searchTextBox-inputEl"),$SQA);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.item = $SQA;
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $SQA;// Open Created SQA
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.txt_New_Comment = $data.Comments7;//Comments //
+addComment($inputObject);
+
+//SELECT SEGMENT PREVIOUS VERSION//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; // Previous Versions
+SelectSegment($inputObject);
+
+
+
+if(_isVisible(_table("QTP_versionlog")))
+{
+_highlight(_table("QTP_versionlog"));
+_wait(500);
+}
+
+//SELECT SEGMENT ACTIVITY LOGS//
+
+$inputObject = {};
+$inputObject.segment_name = "Activity Log";//$data.segment_name35; // Activity log
+SelectSegment($inputObject);
+
+//VERIFY COMMENTS ARE BEING LOGGED//
+
+
+$inputObject = {};
+var $activitylog = 0;
+if(_isVisible(_row("RowOdd")))
+	{
+		$activitylog = _getText(_row("RowOdd"));
+		_highlight(_row("RowOdd"));
+		$inputObject.Comments = $activitylog;
+		verifyActivityLogComments($inputObject);
+	}
+	
+
+//SELECT SEGMENT DETAILS//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name4; // Details
+SelectSegment($inputObject);
+
+$inputObject ={};
+clickAddIcon($inputObject);
+_wait(3000);
+
+//CREATE SQA CHECK CONDITIONS//
+if(_isVisible(_span("PQM")))
+{
+_wait(2000);
+clickReturn();
+$inputObject = {};
+//$inputObject.rdg_DN_LoginAs = $data.MyRole3; //SQA
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);
+
+_assertEqual("Please enter Mandatory field PU", _lastAlert());
+
+
+}
+else
+{
+
+_wait(2000);
+clickReturn();
+$inputObject = {};
+$inputObject.rdg_DN_LoginAs = $data.MyRole3; //SQA
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);
+
+_assertEqual("Please enter Mandatory field PU", _lastAlert());
+
+}
+_wait(2000);
+clickReturn();
+// CHECKING WITH INVALID EMAIL ADDRESS//
+
+$inputObject ={};
+clickAddIcon($inputObject);
+_wait(3000);
+
+if(_isVisible(_span("PQM")))
+{
+_wait(2000);
+clickReturn();
+$inputObject = {};
+//$inputObject.rdg_DN_LoginAs = $data.MyRole3; //PQM
+$inputObject.lst_DN_UnitPQM = $data.unit3; //MANDATORY FIELD
+$inputObject.lst_DN_PUPQM = $data.PU3;
+//$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.Status16;
+CreateInstance($inputObject);
+
+//_assertEqual("Value must be set for the following mandatory field(s):\n• User\n", _lastAlert());
+_assertEqual("Please enter valid User.", _lastAlert());
+
+}
+else
+{
+
+_wait(2000);
+clickReturn();
+$inputObject = {};
+$inputObject.rdg_DN_LoginAs = $data.MyRole3; //PQM
+$inputObject.lst_DN_UnitPQM = $data.unit3; //MANDATORY FIELD
+$inputObject.lst_DN_PUPQM = $data.PU3;
+//$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.Status16;
+CreateInstance($inputObject);
+
+//_assertEqual("Value must be set for the following mandatory field(s):\n• User\n", _lastAlert());
+_assertEqual("Please enter valid User.", _lastAlert());
+
+}
+
+_wait(2000);
+clickReturn();
+
+
+_setValue(_textbox("searchTextBox-inputEl"),$SQA);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $SQA;// Open Created SQA
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_User = $data.user7;//"Navdeep_Ghotra";
+$inputObject.rdg_InActive = $data.Inactive6;//"InActive";
+ModifyEformInstance($inputObject);
+
+//_assertEqual("Inactive assignments will no longer be accessible for replacement. If you wish to replace the user please select the assignment and change the user and save. Do you wish to continue inactivating the assignment ?", _lastConfirm());
+_assertEqual("Old SQA will be replaced and inbox items will be moved to the inbox of new SQA", _lastConfirm());
+
+$inputObject = {};
+$inputObject.lbl_DN_Status = $data.InActiveChk; //_isVisible(_span("Inactive"));
+verifyEformInstanceDetails($inputObject);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles AQM
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$PQM);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $PQM;// Open Created SQA
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive7;//"Inactive PQM";
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles UQH
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $UQH;// Open Created SQA
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive7;//"Inactive UQH";
+ModifyEformInstance($inputObject);
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,98 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU5_1_to_2_18", "Maint/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1); 
+
+ var $TC = _testcase("TC_BRD37_FU5_1","Checking for condition in Fields Impact and Probability(Probability < 0.7 and Impact < 7)."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;  
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4; 
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact5;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Cost of Risk Mitigation (USD) in Details tab \n• Field Contingency Plan in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact5;
+ $inputObject.txt_DN_ContingencyPlan = $data.field45;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Cost of Risk Mitigation (USD) in Details tab \n";
+ InfyFTModifyEformInstance($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact5;
+ $inputObject.txt_DN_ContingencyPlan = $data.field45;
+ $inputObject.edt_DN_CostofRiskMitigationUS = $data.cstOfRiskMatigation5;
+ $inputObject.msgAlert = "Please fill either Cost impact due to schedule impact (USD) or Other cost of Risk (USD) when Probability is >= 0.7 or Impact is >= 7";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact5;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpDueToRisk5;
+ $inputObject.edt_DN_OtherCostofRiskUSD = $data.otherCstOfRisk5;
+ $inputObject.txt_DN_ContingencyPlan = $data.field45;
+ $inputObject.edt_DN_CostofRiskMitigationUS = $data.cstOfRiskMatigation5;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $TC.end();
+ 
+ 
+ 
+
+ 
+
+
+
+ 
+ 

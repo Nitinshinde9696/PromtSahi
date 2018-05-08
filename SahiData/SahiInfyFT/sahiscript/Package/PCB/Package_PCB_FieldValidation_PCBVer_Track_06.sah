@@ -1,0 +1,372 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+
+
+ $data = readDataFromCSV("Package_PCB_FieldValidation_PCBVer_Track_06", "Package/PCB");
+ $data1 = readDataFromCSV("Package_PCB_common_csv", "Package/PCB");
+ var $t = _testcase("TC_1", "Login to digite");
+
+ $t.start();
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data1.Username;//dushyant
+ $inputObject.edt_loginid = $data1.LoginID;
+ $inputObject.edt_password = $data1.Password;
+ loginIntoDigite($inputObject);
+ $t.end();
+
+ var $t = _testcase("TC_2", "select project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data1.Project_name; //*give correct project code
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to pm plan and verify current and latest pcb tables under pcb setting");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclickS($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addbutton;
+ InfyFTclickS($inputObject); 
+
+ $inputObject = {};
+ $inputObject.item = $ID;
+ OpenEformInstance($inputObject);
+  
+ _selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+ SelectSegment($inputObject);
+ 
+ var $s = _getText(_cell(_table("TableData_1_0"), 1, 1));
+ var $j = _getText(_cell(_table("TableData_1_1"), 1, 1));      
+ var $z = parseFloat($s);
+ var $a = parseFloat($j);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.active;//give correct value
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Current_PCBSetting;//give correct value
+ InfyFTisVisibleN($inputObject);
+
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.packageupgrade;//give correct value
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.packageupgrade1;//give correct value
+ InfyFTisVisibleN($inputObject);
+ _assertVisible(_span($j));
+ _assertVisible(_span("NA"));
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.Others;//give correct value
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.Others1;//give correct value
+ InfyFTisVisibleN($inputObject);
+
+
+ 
+
+ 
+ $t.end();
+
+var $t = _testcase("TC_4", "go to pcb report and verify tables and values which are flowing from pcb version");
+ 
+ $t.start();
+ $inputObject = {};
+ $inputObject.segment_name = $data.summary;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table;
+ $inputObject.rowNo = $data.six;
+ $inputObject.colNo = $data.colNo515;
+ $inputObject.fieldValues = $data.msg;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ambercolor;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCBSetting;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldvalue7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  _wait(50000);
+  _wait(20000);  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goal;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Basis;
+ $inputObject.rowNo = $data.rowNo500;
+ $inputObject.colNo = $data.ONE;
+ $inputObject.fieldValues = $data.basisofgoals;
+ verifySwiftFormDataPCB($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+ SelectSegment($inputObject);
+ 
+ var $m = _getText(_cell(_table("TableData_1_1"), 1, 1));
+ var $version4 = parseFloat($m);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goal;
+ SelectSegment($inputObject);
+ 
+ _click(_link(/$version4/, _near(_cell("PCB Report:"))));
+ _selectWindow("openLinkedItem");//give correct value
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.activeversion;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.TechnologyGroup_Others;//FOR TECHNOLOGY GROUP:JAVA
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.TrackMetricsDetails4;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lcstage;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.activeversion;
+ InfyFTisVisibleN($inputObject);
+ 
+
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Details;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.newcolNo;
+ $inputObject.fieldValues = $data.newfield;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.lcstage;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.newcolNo1;
+ $inputObject.fieldValues = $data.newfield2;
+ verifySwiftFormData($inputObject);
+ _click(_button("Return[1]"));
+	
+ var $t = _testcase("TC_05", "verify whether mean values set in pcb version are flown to iteration goals section");
+ $t.start();
+	
+
+   
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goal;
+SelectSegment($inputObject);
+   
+ $inputObject = {};
+ $inputObject.tableName = $data.Iteration_Goal1;
+ $inputObject.rowNo = $data.rowno4;
+ $inputObject.colNo = $data.colNo517;
+ $inputObject.fieldValues = $data.fieldValues501;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Iteration_Goal1;
+ $inputObject.rowNo = $data.eighteen;
+ $inputObject.colNo = $data.colNo517;
+ $inputObject.fieldValues = $data.fieldValues501;
+ verifySwiftFormData($inputObject);
+ 
+ _click(_button("Return"));
+ _selectWindow();
+
+ $t.end();
+  
+ 
+ var $t = _testcase("TC_06", "go to pcb version and remove all values and check in pcb report");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo1;//process governance
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data1.package;							
+ OpenEformInstance($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo3;//pcb  version
+ navigateTo($inputObject); 
+ //selecting active from pcb
+
+ _click(_div(/$version4/, _near(_div("/test/"))));
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.track;
+ $inputObject.rowNo = $data.rowno3;
+ $inputObject.colNo = $data.colNo601;
+ $inputObject.fieldValues = $data.fieldValues601;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.fieldValues601;
+ $inputObject.colNo = $data.colNo602;
+ $inputObject.fieldValues = $data.fieldValues602;
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.tableName = $data.track;
+ $inputObject.rowNo = $data.SEVEN;
+ $inputObject.colNo = $data.colno7_edt;
+ $inputObject.fieldValues = $data.fieldValues603;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.track;
+ $inputObject.rowNo = $data.NINE;
+ $inputObject.colNo = $data.colno7_edt;
+ $inputObject.fieldValues = $data.fieldValues603;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(50000);
+ _wait(20000);  
+ $inputObject = {};
+ $inputObject.projectname = $data1.Project_name; 
+ selectProject($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data1.pmplan; 
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclickS($inputObject);
+
+
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addbutton;
+ InfyFTclickS($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.item = $ID;
+ OpenEformInstance($inputObject);
+  
+ _selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goal;
+ SelectSegment($inputObject);
+ 
+ _click(_link(/$version4/, _near(_cell("PCB Report:"))));
+ _selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.segment_name = $data.NORECORD;
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data.NORECORD1;
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.lcstage;
+ InfyFTisVisibleN($inputObject);
+ 
+ _popup("openLinkedItem")._click(_button("Return"));
+  _selectWindow();
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo1;//process governance
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data1.package;							
+ OpenEformInstance($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo3;//pcb  version
+ navigateTo($inputObject); 
+ //selecting active from pcb
+
+ _click(_div(/$version4/, _near(_div("/test/"))));
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.track;
+ $inputObject.rowNo = $data.rowno3;
+ $inputObject.colNo = $data.colNo604;
+ $inputObject.fieldValues = $data.fieldvalues606;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.fieldValues601;
+ $inputObject.colNo = $data.colN602;
+ $inputObject.fieldValues = $data.fieldvalues606;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(50000);
+
+
+ 

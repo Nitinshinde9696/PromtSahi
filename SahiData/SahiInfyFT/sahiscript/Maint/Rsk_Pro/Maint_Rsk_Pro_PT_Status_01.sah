@@ -1,0 +1,57 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TestManagement.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Pro_PT_Status_01", "Maint\Rsk_Pro");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ CreateInstance($inputObject);
+  
+ var $TC = _testcase("TC_13.1","Checking for the Status Pending with PM."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.field199;
+ $inputObject.value = $data.field199Value;//Pending With PM
+ InfyFTisGetValue($inputObject);
+ 
+ $TC.end();
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+
+
+ 
+ 

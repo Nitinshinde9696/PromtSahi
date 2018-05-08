@@ -1,0 +1,148 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Maint_Tools_Reuse_TP_TP_AvailblStnrdPtool_11","Maint/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1;// subhashini_k03
+$inputObject.edt_loginid = $data.LoginID1;// subhashini_k03	
+$inputObject.edt_password = $data.Password1;// 111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects_home ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the MainPT project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//PRAL_BUF
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating the Tools Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Navigating to Tools Tracking section through Major/Minor Enhancement ");
+$t.start();
+
+$inputObject={};
+$inputObject.item = $data.TPname1;//Tools Plan for Minor Enhancement
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.navigateTo6;//Tools Planning[2]
+SelectSegment($inputObject);
+
+_wait(5000); 
+
+$t.end();
+
+var $t = _testcase("TC_6", "Adding the asset from Available Standard Tools ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Available Standard Tools
+SelectSegment($inputObject);
+
+_wait(2000); 
+
+$inputObject = {};
+$inputObject.lst_DN_LCStage = $data.LCStage8;//Acceptance and Installation
+$inputObject.lst_DN_Technology = $data.Technology8;//Adobe Flash 
+ModifyEformInstance($inputObject);
+_wait(1000); 
+ 
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;//Search Output
+SelectSegment($inputObject);
+ 
+_wait(1000);
+$t.end();
+ 
+var $t = _testcase("TC_7", "Verifying the asset in Search Output");
+$t.start();
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1]
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;//Notepad
+$inputObject.colNo = $data.colName8;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Notepad
+verifySwiftFormData($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Selecting the asset from Search Output");
+$t.start(); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1] 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+$inputObject ={}; saveSwiftForm($inputObject);
+ 
+clickReturn();
+
+$t.end();
+_wait(5000);
+
+var $t = _testcase("TC_9", "Verifying the asset in Planned Tools list");
+$t.start(); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName10;//Planned Tools list
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;//Notepad
+$inputObject.colNo = $data.colName8;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Notepad
+verifySwiftFormData($inputObject);
+ 
+$t.end(); 
+_wait(1000);
+ 
+var $t = _testcase("TC_9", "deleting the asset from Planned Tools list");
+$t.start();
+
+/* $inputObject = {};
+$inputObject.tableName = $data.tableName10;//Planned Tools list 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+$inputObject ={};
+
+ saveSwiftForm($inputObject);
+ */
+ 
+$inputObject = {};
+$inputObject.tblname = $data.tableName10;
+$inputObject.row_id = 2;
+$inputObject.col_id = 1;
+$inputObject.btnSave = true;
+InfyFTDeleteRows($inputObject);
+
+$t.end();

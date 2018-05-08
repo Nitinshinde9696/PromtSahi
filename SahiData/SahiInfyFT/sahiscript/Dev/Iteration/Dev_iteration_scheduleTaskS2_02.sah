@@ -1,0 +1,102 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ //_include("InfyFT_BR49_Dev_iteration_scheduleTaskS1_01.sah"); //calling script 2 & 1 for navigation purpose 
+ 
+ /***********************************************************************
+ *Navigating to Task Report for verification
+ *Deleting created task
+ *Navigating to Task Report for verification after deletion *
+ ************************************************************************/
+ 
+ /*************************schedule task ********************************/
+ 
+ $data1 = readDataFromCSV("Dev_iteration_scheduleTask1_01", "Dev/Iteration");
+ $data = readDataFromCSV("Dev_iteration_scheduleTask0_00", "Dev/Iteration"); 
+ 
+ var $t = _testcase("TC_14", "get values in ST and Navigating to Task Report");
+ $t.start();
+ 
+ InfyFTgettingValueforIDCheck($inputObject);
+ var $LinkMain = $inputObject.linktaskM;
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data1.newListing;
+ InfyFTclickReturnInAddItemPopup();
+ _wait(1000);
+ 
+ clickReturn();
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $ID;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $ID; //existing
+ OpenEformInstance($inputObject); 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.TaskReport;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.subtaskname;
+ $inputObject.cell_Name = $LinkMain;
+ InfyFTassertExists($inputObject); 
+ 
+ $t.end();
+ 
+ /***************Deleting created task****************************/
+ 
+ var $t = _testcase("TC_15", "Deleting created task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SubProjects;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name1;
+ OpenEformInstance($inputObject);  
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.ScheduledTasks;//_click(_link("Scheduled Tasks"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+  _wait(5000); 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name;//_doubleClick(_div($data1.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.deletebutton;//_click(_span("deleteTaskButton-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span = $data1.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data1.openedpopup;
+ InfyFTclickReturnInAddItemPopup();
+ _wait(1000);
+   
+ $t.end();
+ 

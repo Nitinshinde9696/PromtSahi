@@ -1,0 +1,385 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data12 = readDataFromCSV("Maint_PM_Plan_Normal_check_details_page_engneering_mertics_validating_testbox_14","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_1,5.4", "check whether the details page are available and the current stage of the project are in steady state");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data12.navigateTo3;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data12.segment_name1;//Details
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.value = $data12.steadyState;
+ $inputObject.span_Name = $data12.curntStage;
+ InfyFTisGetValue($inputObject) 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_3,5.4", "Check the mapping of engineering metrics to sub services scope");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.Overview;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.typeOfapp;
+ $inputObject.fieldValues=$data12.fieldValueDMBI;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colsubService;
+ $inputObject.fieldValues=$data12.fieldValueSS1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data12.navigateTo4;//PM Plan
+ navigateTo($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data12.tableSummary;
+ $inputObject.rowNo = $data12.engMetric;
+ $inputObject.colNo = $data12.colSummary;
+ $inputObject.fieldValues = "Engineering Metrics Goal setup is Optional.";
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon11;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.linkEngineering;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data12.dataIntegration;
+ InfyFTValuesVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.Overview;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colsubService;
+ $inputObject.fieldValues=$data12.fieldValueSS2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon11;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.linkEngineering;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data12.MDM;
+ InfyFTValuesVisible($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.Overview;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colsubService;
+ $inputObject.fieldValues=$data12.fieldValueSS3;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon11;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.linkEngineering;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data12.dataQuality;
+ InfyFTValuesVisible($inputObject);
+ 
+ _wait(2000);  
+  
+ /*$inputObject = {};
+ $inputObject.image = $data12.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.Overview;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colsubService;
+ $inputObject.fieldValues=$data12.fieldValueSS2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon11;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.linkEngineering;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data12.dataQuality;
+ InfyFTValuesVisible($inputObject);
+ 
+ _wait(2000); 
+
+*/ 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.Overview;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.typeOfapp;
+ $inputObject.fieldValues=$data12.fieldValueBi;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colsubService;
+ $inputObject.fieldValues=$data12.fieldValueSS4;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon11;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.linkEngineering;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data12.dashboardReporting;
+ InfyFTValuesVisible($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.Overview;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colsubService;
+ $inputObject.fieldValues=$data12.fieldValueSS5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.ovrTechnology;
+ $inputObject.fieldValues=$data12.fieldTechno;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colSizing;
+ $inputObject.fieldValues=$data12.fieldValueStandard;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableSizing;
+ $inputObject.rowNo=$data12.rowName1;
+ $inputObject.colNo=$data12.colReason;
+ $inputObject.fieldValues=$data12.fieldValueTest;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.image = $data12.nodeIcon11;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data12.linkEngineering;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data12.visualization;
+ InfyFTValuesVisible($inputObject);
+ 
+ _wait(2000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_3,5.4", "Validating textboxes in engineering metrics field");
+ $t.start();  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableEngMetrics;
+ $inputObject.rowNo=$data12.rowColor;
+ $inputObject.colNo=$data12.colGoal;
+ $inputObject.fieldValues= "abc"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.msgAlert = "Error : Please enter valid number. Minimum value allowed is 0.";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableEngMetrics;
+ $inputObject.rowNo=$data12.rowColor;
+ $inputObject.colNo=$data12.colGoal;
+ $inputObject.fieldValues= "101"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.msgAlert = "Error : Please enter valid number. Minimum value allowed is 0.";
+ InfyFTsaveSwiftForm($inputObject);  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data12.tableEngMetrics;
+ $inputObject.rowNo=$data12.rowColor;
+ $inputObject.colNo=$data12.colGoal;
+ $inputObject.fieldValues= "20"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data12.navigateTo4;//PM Plan
+ navigateTo($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data12.tableSummary;
+ $inputObject.rowNo = $data12.engMetric;
+ $inputObject.colNo = $data12.colSummary;
+ $inputObject.fieldValues = "Engineering Metrics Goals are filled.";
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+
+ _wait(2000);
+ 
+ $t.end();

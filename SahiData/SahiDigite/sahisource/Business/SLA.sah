@@ -1,0 +1,145 @@
+
+/**
+ @author: Harshit
+ @example:  activateSLA();
+ @description: Activates the SLA 
+ @param: {String} None
+ @return: None
+ **/
+
+function activateSLA()
+{
+	_log("activateSLA Started","success");
+	try 
+	{
+		_click(_button("SLAActivateDeactivate"));
+		_expectConfirm("Do you wish to apply modified SLA norms to existing open items as well?", true);		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("activateSLA Completed","success");
+}
+
+/*************************************************************************
+* @author: Harshit
+* @example: addSLAMetrics({ "lst_MetricItemType" : "Defect" ,  "edt_AddMetricShortName" : "TTR" ,  "edt_AddMetricName" : "Total Time for Resolution", "edt_AddMetricDescription" : "Time taken for the resolution of the defect " });
+* @description: To add the SLA metrics field
+* @param: {String} None
+* @return: {String} None
+*************************************************************************/
+
+function addSLAMetrics($inputObject)
+{
+	_log("addSLAMetrics Started","success");
+	try 
+	{
+			setAllFields($inputObject);
+			_click(_link("de-icon-add[1]"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addSLAMetrics Completed","success");
+}
+
+/**
+ @author:Harshit
+ @example: setSLAWorkflowMapping({ "chk_0_0" : "Yes","chk_0_1" : "Yes","chk_0_2" : "Yes","chk_0_3" : "Yes" });
+ @description:  Selecting the workflow mapping stages 
+ @param: {String} None 
+ @return: None
+ **/
+
+function setSLAWorkflowMapping($inputObject)
+{
+	_log("setSLAWorkflowMapping Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setSLAWorkflowMapping Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: addConditionToSLA({ "edt_filtername" : "SLANorm Critical" ,  "lst_FieldName1" : "Priority" ,  "lst_Operator1" : "=" ,  "img_select" : "Critical" });
+ @description: Adding SLA Conditions
+ @param: {String} None
+ @return: None
+ **/
+
+function addConditionToSLA($inputObject)
+{
+	_log("addConditionToSLA Started","success");
+	try 
+	{
+		_click(_link("Add Condition"));
+		_selectWindow("Filter");
+		_setSelected(_select("LeftBrace1"), "{");
+		setAllFields($inputObject);
+		_setSelected(_select("RightBrace1"), "}");
+		_click(_button("Save"));
+		_selectWindow();
+		_wait(2000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addConditionToSLA Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:setSLANorms({"edt_Goal_0_0" : "45"});
+ @description: Adding SLA norms
+ @param: {String} None
+ @return: None
+ **/
+
+function setSLANorms($inputObject)
+{
+	_log("setSLANorms Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setSLANorms Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:setSLANotification({ "slb_selectFrom" : "Chetan Phanse" });
+ @description: to select the item from left side to right side
+ @param: {String} None
+ @return: None
+ **/
+
+function setSLANotification($inputObject)
+{
+	_log("setSLANotification Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_wait(5000, _button(" Save ").disabled);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setSLANotification Completed","success");
+}

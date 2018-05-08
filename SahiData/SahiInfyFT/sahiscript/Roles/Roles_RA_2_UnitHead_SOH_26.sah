@@ -1,0 +1,251 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+$data = readDataFromCSV("Roles_RA_2_UnitHead_SOH_26","Roles"); 
+ 
+ /**********************************************************************
+ LOGINNG WITH Unit Head (UH)
+ **********************************************************************/
+
+ var $t = _testcase("TC_1", "Unit Head login");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Anand_Arkalgud
+ $inputObject.edt_loginid = $data.LoginID1;//Anand_Arkalgud
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.OAProjects;//$data.OAProjects;// _InfyFTclick(_link("x-btn-icon-el de-icon-project_plr"));
+ InfyFTclick($inputObject);
+ 
+ var $t = _testcase("TC_2", "Selecting the particular Unit which is assigned for UH by current user  ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status1;//RCL
+ $inputObject.status = $data.status1;//RCL
+ InfyFTsearchBoxSetFilter($inputObject); 
+ 
+ $t.end();
+ 
+ /*$inputObject = {};
+ $inputObject.projectname = $data.Project_name4;//BBESPSIC
+ selectProject($inputObject);*/
+ 
+ if(_isVisible(_div("BBESPSIC")))
+ {
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_name3;//BBESPSIC
+ OpenEformInstance($inputObject);
+ 
+ var $t = _testcase("TC_3", "verifying the read only access to the project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName1;// --None-- 
+ $inputObject.cell_Name = $data.cName1;//ELF Status :
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName2;// --None--  
+ $inputObject.cell_Name = $data.cName2;//SQA :
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_4", "logging the customer complaint "); 
+ $t.start();
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",1,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",10,$dateObj3);
+ var $CloseDate3 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Customer Complaint
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_RaisedBy = $data.RaisedBy; //subhashini_k03
+ $inputObject.edt_CM_Name = $data.Name1; //MANDATORY FIELD//CC2
+ $inputObject.txt_CM_Description = $data.Description1; //MANDATORY FIELD
+ $inputObject.lst_DN_ComplaintCategory = $data.ComplaintCategory; //Others
+ $inputObject.lst_DN_Severity = $data.Severity;//Critical
+ //$inputObject.lst_DN_Status = $data.Status;//Open
+ $inputObject.edt_DN_ComplaintRaisedDate = $StartDate1;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $EndDate2;
+ //$inputObject.edt_DN_ComplaintClosedOn = $CloseDate3;
+ $inputObject.lst_DN_RepeatComplaint = $data.RepeatComplaint;//No
+ CreateInstance($inputObject);
+ 
+ $t.end();
+ 
+ } 
+  else
+ {
+   _log(" BBESPSIC is not found under RCL Unit/No Records found.");
+ 
+ }
+ 
+ var $t = _testcase("TC_5", "Verifying the current user does not have access for other Unit(s)");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.OAProjects;//$data.OAProjects;// _InfyFTclick(_link("x-btn-icon-el de-icon-project_plr"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status2;//ALLY
+ $inputObject.status = $data.status2;//ALLY
+ InfyFTsearchBoxSetFilter($inputObject);
+ 
+ _log("No Records Found.");
+ 
+ $t.end();
+ 
+ /**********************************************************************
+ LOGINNG WITH Service offering head (SOH)
+ **********************************************************************/
+
+ var $t = _testcase("TC_1", "Unit Service Offering Head login");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//anirban_majumder
+ $inputObject.edt_loginid = $data.LoginID2;//anirban_majumder
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span = $data.OAProjects;//$data.OAProjects;// _InfyFTclick(_link("x-btn-icon-el de-icon-project_plr"));
+ InfyFTclick($inputObject);
+ 
+ var $t = _testcase("TC_2", "Selecting the particular Unit which is assigned for UH by current user  ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status1;//RCL
+ $inputObject.status = $data.status1;//RCL
+ InfyFTsearchBoxSetFilter($inputObject);
+ 
+ if(_isVisible(_div("PGATTOPS"))) 
+ { 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_name3;//BBESPSIC
+ OpenEformInstance($inputObject);
+ 
+ var $t = _testcase("TC_3", "verifying the read only access to the project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName1;// --None-- 
+ $inputObject.cell_Name = $data.cName1;//ELF Status :
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName2;// --None--  
+ $inputObject.cell_Name = $data.cName2;//SQA :
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "logging the customer complaint "); 
+ $t.start();
+ 
+ var $dateObj1 = new Date();
+ var $StartDate4 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",1,$dateObj2);
+ var $EndDate5 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",10,$dateObj3);
+ var $CloseDate6 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Customer Complaint
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_RaisedBy = $data.RaisedBy; //subhashini_k03
+ $inputObject.edt_CM_Name = $data.Name2; //MANDATORY FIELD//CC2
+ $inputObject.txt_CM_Description = $data.Description1; //MANDATORY FIELD
+ $inputObject.lst_DN_ComplaintCategory = $data.ComplaintCategory; //Others
+ $inputObject.lst_DN_Severity = $data.Severity;//Critical
+ //$inputObject.lst_DN_Status = $data.Status;//Open
+ $inputObject.edt_DN_ComplaintRaisedDate = $StartDate4;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $EndDate5;
+ //$inputObject.edt_DN_ComplaintClosedOn = $CloseDate6;
+ $inputObject.lst_DN_RepeatComplaint = $data.RepeatComplaint;//Yes
+ CreateInstance($inputObject);
+ 
+ $t.end();
+ 
+ }
+ 
+else
+ {
+  _log(" PGATTOPS is not found under RCL Unit/No Records found.");
+
+}
+ 
+ var $t = _testcase("TC_5", "Verifying the current user does not have access for other Unit(s)");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.OAProjects;//$data.OAProjects;// _InfyFTclick(_link("x-btn-icon-el de-icon-project_plr"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status2;//ALLY
+ $inputObject.status = $data.status2;//ALLY
+ InfyFTsearchBoxSetFilter($inputObject);
+ 
+ _log("No Records Found.");
+ 
+ $t.end(); 
+ 

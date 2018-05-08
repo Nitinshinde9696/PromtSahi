@@ -1,0 +1,418 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceSnehal.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_Internal_Seg_SLAEnabledTAT_Verification_SS_Proj_07", "IMS/Performance_Scorecard");
+ $gen = readDataFromCSV("IMS_PSC_Common", "IMS/Performance_Scorecard");
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject); 
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSC_ID;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName41;//Internal Efficiency
+ SelectSegment($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.span_Name = $data.LinkProvideActuals6;//Click Here
+ InfyFTClickButtonS($inputObject); */
+ 
+ _click(_link("/Click Here/"));
+ 
+ /*****************************************************************************
+ *  TestCase_25  : Check For Applicable Services in PSC **Verify All Fields**
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_29_TS_01","Check Status field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo501;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues500;//Status
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_02","Check ITIL Process field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo502;//2_lbl
+ $inputObject.fieldValues = $data.fieldValues501;//ITIL Process
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_03","Check Metric Name field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo503;//3_lbl
+ $inputObject.fieldValues = $data.fieldValues502;//Metric Name
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_04","Check UOM field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo504;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues503;//UOM
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_05","Check Priority field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo505;//9_lbl
+ $inputObject.fieldValues = $data.fieldValues504;//Priority
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_06","Check Goal field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo506;//10_lbl
+ $inputObject.fieldValues = $data.fieldValues505;//Goal
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_07","Check Base Measure - Numerator* field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo507;//11_lbl
+ $inputObject.fieldValues = $data.fieldValues506;//Base Measure - Numerator*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_08","Check Base Measure - Denominator* field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo508;//12_lbl
+ $inputObject.fieldValues = $data.fieldValues507;//Base Measure - Denominator*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_09","Check Actual Performance* field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo509;//13_lbl
+ $inputObject.fieldValues = $data.fieldValues508;//Actual Performance*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_10","Check Base Measure and Formula Help field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo510;//14_lbl
+ $inputObject.fieldValues = $data.fieldValues509;//Base Measure and Formula Help
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_11","Check Deviation between goal and actual field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo511;//15_lbl
+ $inputObject.fieldValues = $data.fieldValues510;//Deviation between goal and actual
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_29_TS_12","Check Reason for deviation field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo512;//16_lbl
+ $inputObject.fieldValues = $data.fieldValues511;//Reason for deviation
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_13","Check KPI field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo513;//17_lbl
+ $inputObject.fieldValues = $data.fieldValues512;//KPI
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_14","Check TAT Goal field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo514;//18_lbl
+ $inputObject.fieldValues = $data.fieldValues520;//TAT Goal
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_15","Check TAT UOM field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo515;//19_lbl
+ $inputObject.fieldValues = $data.fieldValues521;//TAT UOM
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_16","Check TAT Actual* field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo516;//20_lbl
+ $inputObject.fieldValues = $data.fieldValues522;//TAT Actual*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_17","Check ITIL Process Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//2_lbl
+ $inputObject.fieldValues = $data.fieldValues513;//Incident Management
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_18","Check Metric Name Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo503;//3_lbl
+ $inputObject.fieldValues = $data.fieldValues514;//Average Resolution Time - Incident
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_19","Check UOM Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo504;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues515;//Percentage
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_20","Check Priority Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo505;//9_lbl
+ $inputObject.fieldValues = $data.fieldValues516;//High
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_29_TS_21","Check Goal Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo506;//16_lbl
+ $inputObject.fieldValues = $data.fieldValues517;//17
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_22","Check KPI Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo513;//17_lbl
+ $inputObject.fieldValues = $data.fieldValues519;//Yes
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_29_TS_23","Check TAT Goal Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo514;//18_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//1
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_29_TS_24","Check TAT UOM Value field is in Internal TAT Goals Table in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo515;//19_lbl
+ $inputObject.fieldValues = $data.fieldValues524;//Hour
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ 
+ /*****************************************************************************
+ *  TestCase_30  : Check Fields in Internal Efficiency
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_30_TS_01","Check Fields in Internal Efficiency");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName53;//Applicable Services
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo500;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues525;//Service
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName53;//Applicable Services
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo501;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues526;//Sub-Service
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName53;//Applicable Services
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo502;//2_lbl
+ $inputObject.fieldValues = $data.fieldValues527;//Provide Actuals
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_30_TS_02","Check Values in Applicable Services");
+ 
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName53;//Applicable Services
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo500;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues528;//End-user Compute
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ /*****************************************************************************
+ *  TestCase_31  : Check Fields in Internal Efficiency
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_31_TS_01","Check Values in Applicable Services");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName53;//Applicable Services
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues529;//Desktop Services
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+ 
+ clickReturn();

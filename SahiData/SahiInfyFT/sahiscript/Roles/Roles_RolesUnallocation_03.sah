@@ -1,0 +1,260 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/ResourceManagement.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+ $data = readDataFromCSV("Roles_RolesUnallocation_03","Roles");
+ 
+ var $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;//subhashini_k03
+ $inputObject.edt_loginid = $data.LoginID1;//subhashini_k03
+ $inputObject.edt_password =$data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1.2"," Navigation");
+ $t.start();
+
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//INbox
+ //navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//TJCSTMEP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Team Members
+ navigateTo($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_2.1"," SDM UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id6;//Sudipta_300499
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+
+if(_isVisible(_link($data.Link)))
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_2.2"," GPM UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id7;//lohith_krishnarao
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject); 
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)))
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_2.3"," SPM UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id8;//SPM
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+ clickReturn();
+ $t.end();
+ var $t = _testcase("TC_2.4"," PM UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id9;//PM//Praween_300493
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+ clickReturn();
+ $t.end();
+ var $t = _testcase("TC_2.5"," PM UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id10;//PM//Jyotika_Gulati01
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+
+clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_2.6"," TA UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id11;//Shalika_Katial
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+
+clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_2.7"," SE UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id12;//
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+
+_click(_link($data.Link));
+
+}
+}
+
+clickReturn();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_2.8"," DP prime UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id14;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{  
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+_click(_link($data.Link));
+}
+}
+
+clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2.9"," Reviewer UnAllocation ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id15;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Link)));
+{ 
+ 
+while(_isVisible(_link($data.Link))) //"Delete[1]"
+{
+_click(_link($data.Link));
+}
+}
+clickReturn(); 
+ $t.end();

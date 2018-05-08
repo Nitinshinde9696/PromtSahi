@@ -1,0 +1,353 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data3 = readDataFromCSV("Maint_PM_Plan_Normal_data_ setup","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 27", "TC_9_62_63_64_66");
+ $t.start();
+
+ //---------------Major Enhancement Metrics link----------------//
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName3;
+ $inputObject.rowNo=$data3.rowName1;
+ $inputObject.colNo=$data3.colName1;
+ $inputObject.fieldValues=$data3.fieldvaluenew1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data3.rowDefect;
+ $inputObject.colNo = $data3.colSelect;
+ $inputObject.fieldValues = $data3.fieldValues8;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ InfyFTReturn();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName3;
+ $inputObject.rowNo=$data3.rowName2;
+ $inputObject.colNo=$data3.colName1;
+ $inputObject.fieldValues=$data3.fieldvaluenew1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data3.rowEffort;
+ $inputObject.colNo = $data3.colSelect;
+ $inputObject.fieldValues = $data3.fieldValues8;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn(); 
+ 
+//---------------Minor Enhancement Metrics Link----------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName5;
+ $inputObject.rowNo=$data3.rowName1_1;
+ $inputObject.colNo=$data3.colName1_1;
+ $inputObject.fieldValues=$data3.fieldvaluenew1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data3.rowDefect;
+ $inputObject.colNo = $data3.colSelect;
+ $inputObject.fieldValues = $data3.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName5;
+ $inputObject.rowNo=$data3.rowName2_1;
+ $inputObject.colNo=$data3.colName1_1;
+ $inputObject.fieldValues=$data3.fieldvaluenew1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data3.rowEffort;
+ $inputObject.colNo = $data3.colSelect;
+ $inputObject.fieldValues = $data3.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn(); 
+ 
+ //---------------End----------------
+ 
+ //---------------Major Enhancement-------------------
+  
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1;//3
+ $inputObject.colNo = $data3.colNo9;//4_edt
+ $inputObject.fieldValues = $data3.fieldValues5;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1;//3
+ $inputObject.colNo = $data3.colNo5;//5_edt
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1;//3
+ $inputObject.colNo = $data3.colNo10;//7_lst
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2;//4
+ $inputObject.colNo = $data3.colNo9;
+ $inputObject.fieldValues = $data3.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2;//4
+ $inputObject.colNo = $data3.colNo5;
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2;//4
+ $inputObject.colNo = $data3.colNo10;
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ //---------------Minor Enhancement--------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1_1;//2
+ $inputObject.colNo = $data3.colNo9_1;
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1_1;//2
+ $inputObject.colNo = $data3.colNo5_1;
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1_1;//2
+ $inputObject.colNo = $data3.colNo10_1;
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2_1;//6
+ $inputObject.colNo = $data3.colNo9_1;
+ $inputObject.fieldValues = $data3.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2_1;//6
+ $inputObject.colNo = $data3.colNo5_1;
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2_1;//6
+ $inputObject.colNo = $data3.colNo10_1;
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ //------------Bug Fix Goals----------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes"; 
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo2;//1
+ $inputObject.colNo = $data3.colNo20;//3_edt
+ $inputObject.fieldValues = $data3.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo2;//1
+ $inputObject.colNo = $data3.colNo29;//4_edt
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo2;//1
+ $inputObject.colNo = $data3.colNo14_1;
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo1;//2
+ $inputObject.colNo = $data3.colNo20;
+ $inputObject.fieldValues = $data3.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo1;//2
+ $inputObject.colNo = $data3.colNo29;
+ $inputObject.fieldValues = $data3.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo1;//2
+ $inputObject.colNo = $data3.colNo14_1;
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data3.rowNo21;//1
+ $inputObject.colNo = $data3.colNo28;//4_edt
+ $inputObject.fieldValues = $data3.fieldValues14;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data3.rowNo21;//1
+ $inputObject.colNo = $data3.colNo21;//5_lst
+ $inputObject.fieldValues = $data3.fieldValues7;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data3.rowNo21;//1
+ $inputObject.colNo = $data3.colNo23;
+ $inputObject.fieldValues = $data3.field1;
+ setSwiftFormData($inputObject);  
+  
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1;
+ $inputObject.colNo = $data3.colNo12;
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName3;//Major Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2;
+ $inputObject.colNo = $data3.colNo12;
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName1_1;
+ $inputObject.colNo = $data3.colNo12_1;
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName5;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data3.rowName2_1;
+ $inputObject.colNo = $data3.colNo12_1;
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo2;
+ $inputObject.colNo = $data3.colNo15;
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName6;//Bug Fix Goals.
+ $inputObject.rowNo = $data3.rowNo1;
+ $inputObject.colNo = $data3.colNo15;
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject);
+   
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data3.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data3.rowNo21;//1
+ $inputObject.colNo = $data3.colNo22;//6_edt
+ $inputObject.fieldValues = $data3.fieldValues11;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);
+
+ $t.end();
+ 

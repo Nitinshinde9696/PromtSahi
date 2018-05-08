@@ -1,0 +1,241 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Testing_Reviews_Defects_performance_testing_dropDownValues_reviewerAbilityToAssignDefect_15", "Testing/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1; 
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name;
+ SelectSegment($inputObject);
+ 
+ _wait(5000); 
+ 
+ var $TC = _testcase("DFr 2.2","Check the drop down values for drop down fields in review and defect form")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.LoginID1;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup;
+ $inputObject.span_Name = $data.Keylink;
+ InfyFTclickPopup($inputObject); 
+ 
+_wait(5000);
+
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_DN_DefectType = $data.defecttypes;
+ verifyEformInstanceDetails($inputObject);
+ 
+ InfyFTReturnPopUp(); 
+ 
+ _wait(5000);
+
+ $TC.end(); 
+ 
+ var $TC = _testcase("DFr 2.2","Check the drop down values for drop down fields in review and defect form")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.LoginID1;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup;
+ $inputObject.span_Name = $data.Keylink;
+ InfyFTclickPopup($inputObject); 
+ 
+_wait(5000);
+
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_DN_DefectType = $data.defecttypes;
+ verifyEformInstanceDetails($inputObject);
+ 
+ InfyFTReturnPopUp(); 
+ 
+ _wait(5000);
+
+ $TC.end(); 
+ 
+  var $TC = _testcase("TC_BRD10_FU_25","Check whether the reviewer is able to assign defect to a member of project.")
+ $TC.start();  
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;
+ $inputObject.edt_loginid = $data.LoginID2;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToTeam;
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+if(_isVisible(_link("UserName")))
+		{
+		  var $userID =  _getText(_link("UserName"));
+		   $inputObject = {};
+           $inputObject.item = $userID;
+           OpenEformInstance($inputObject); 
+		   
+		   _wait(2000);
+		}
+		else
+		{
+		  var $userID = _getText(_div("ellipsis"));
+		  var $ReviewerID = $userID + "[1]";  
+		  
+		  $inputObject = {};
+          $inputObject.item = $ReviewerID;
+          OpenEformInstance($inputObject); 
+		  
+		  _wait(2000);
+		  
+		}
+		
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.Reviewer;
+ $inputObject.value = $data.Value;
+ InfyFTisGetValue($inputObject);  
+ 
+ _wait(1000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.txt_CM_Description = $data.Description;
+ $inputObject.lst_DN_DefectDetectedBy = $data.detected;
+ $inputObject.lst_DN_Severity = $data.severity;
+ $inputObject.lst_PhaseDetected = $data.phase;
+ $inputObject.lst_DN_Owner = $data.owner;
+ InfyFTcreateLinkedItemForDefect($inputObject);   
+ 
+ _wait(2000);
+ 
+ InfyFTReturnPopUp();
+
+ $TC.end();    
+ 

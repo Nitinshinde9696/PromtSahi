@@ -1,0 +1,120 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Reviews_Defects_bugF_checkingExport_import_reviews_defects_06", "Maint/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+
+ var $TC = _testcase("TC_38.1_38.5","Checking for Export/Import Review/Defects."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.defect = "yes";
+ $inputObject.type = $data.revType;
+ $inputObject.item = $data.revItem;
+ //$inputObject.chk_ChildChkbox = $data.defChkbox; //This is commented because to upload it is taking so much time.
+ InfyFTexportEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ $TC.end();
+ 
+ _wait(5000);
+ 
+  var $TC = _testcase("TC_39_45","Checking for Export/Import Review/Defects."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {}; 
+ $inputObject.file_file = $data.filePath;
+ $inputObject.items = $data.revItem;
+ InfyFTimportEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();  
+ 
+
+ 
+ 
+ 
+ 
+  
+ 
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+
+
+ 
+ 

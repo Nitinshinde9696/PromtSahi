@@ -1,0 +1,137 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/Inbox.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Package_StatusReport_Highlights_Commitments_02", "Package/Status_Report");
+ $nav = readDataFromCSV("Package_StatusReport_navigation_00", "Package/Status_Report");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ _log($endDate);
+  
+ /*Testcase-1*/ 
+ 
+ var $t = _testcase("TC_1", "Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $nav.Username1;
+ $inputObject.edt_loginid = $nav.LoginID1;
+ $inputObject.edt_password = $nav.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $nav.Project_name2;//IMS_Project
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $nav.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $nav.StatusReport;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segments;//Details;Highlights and Needs Attention;Commitments and Project Specific Metrics;Milestone status;Summary of Iterations;Summary of Iterations;Risks Issues and Complaints;LCStageWise Effort Distribution;Comments;Workflow;Attachments;Activity Log
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Details;//ID :;Name * :;Current Workflow Stage :;Report Start Date :;Report End Date :;Report Generation Date :
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue;
+ $inputObject.edt_CM_Name = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Name in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Highlights");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName41;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segment51;//Highlights of the reporting period :;Needs Attention items :
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = $data.TestData;
+ $inputObject.txt_DN_NeedsAttentionitems = $data.TestData;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = "";
+ $inputObject.txt_DN_NeedsAttentionitems = "";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = $data.TestData;
+ $inputObject.txt_DN_NeedsAttentionitems = $data.TestData;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Commitments");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName42;//Commitments and Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segment52;//Client Commitments;Value add to client;Project Specific Metric
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName61;//Client Commitments
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo60;//1_lbl|2_lbl|3_lbl|6_lbl
+ $inputObject.fieldValues = $data.fieldValues60;//Commitment Description|Due date|RYG Status|Remarks/ Details
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName62;//Project Specific Metric
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo61;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.fieldValues61;//Metric Name|Goal|Actual|Deviation|Reason for Deviation
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Milestone");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName43;//Milestone status
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segment53;//Format;Performance Summary
+ InfyFTisVisibleS($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName64;//Performance Summary
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo63;//1_lbl|2_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = $data.fieldValues63;//Milestone id|PWC|SubPflag|MAX BE|AED|SysDate|milestoneEndDate|AssignedDate|Number of Days Slipped|RYG|Reason
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();

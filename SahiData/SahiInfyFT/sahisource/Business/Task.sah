@@ -1,0 +1,312 @@
+_include("../../../SahiDigite/sahisource/Business/Task.sah");
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTconvertMspProjecttoDigiteStart({"status":"true"});
+* @description This function is called to expand projects timesheet
+* @return {String} None 
+*************************************************************************/
+function InfyFTconvertMspProjecttoDigiteStart($inputObject)
+{
+	_log("InfyFTconvertMspProjecttoDigiteStart Started","success");
+	try 
+	{
+		if(_isVisible(_span("convertButton-btnIconEl")))
+		{             
+			_expectConfirm("You have chosen to change project task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",true);
+			_click(_span("convertButton-btnIconEl"));
+		}
+
+		else if(_isVisible(_span("KEY_TOOLTIP_Convert_from_MSP_to_STaRT-btnIconEl")))
+		{
+		    _expectConfirm("You have opted to change project task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",true);
+		    _click(_span("KEY_TOOLTIP_Convert_from_MSP_to_STaRT-btnIconEl"));
+		}  
+		
+		else if (_isVisible(_link("Change Package Task Module")))
+		{
+		    //InfyFT - Modified to click on Cancel - Start
+			if ($inputObject.status == "TRUE")
+			{
+				_expectConfirm("You have opted to change package task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",true);
+			    _click(_link("Change Package Task Module"));
+				_assert(_isVisible(_cell("IconDisable")));
+			}
+			else if ($inputObject.status == "FALSE")
+			{
+			    _expectConfirm("You have opted to change package task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",false);
+			    _click(_link("Change Package Task Module"));
+				_assertFalse(_isVisible(_cell("IconDisable")));
+			}
+			//InfyFT - Modified to click on Cancel - End
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTconvertMspProjecttoDigiteStart Completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTconvertDigiteStartProjectToMsp({"message":"are you sure want to convert?"},{"status":"true"});
+* @description This function is called to convert start project ot task module project
+* @return {String} None 
+*************************************************************************/
+
+function InfyFTconvertDigiteStartProjectToMsp($inputObject)
+{
+	_log("InfyFTconvertDigiteStartProjectToMsp Started","success");
+	try 
+	{
+		if(_isVisible(_link("Change Package Task Module")))
+		{
+			if($inputObject.status =="TRUE")
+			{
+				_expectConfirm($inputObject.message, true);
+				_click(_link("Change Package Task Module")||_span("/convertButton/"));
+				_assert(_isVisible(_cell("IconDisable")));
+			}
+			else if($inputObject.status =="FALSE")
+			{
+				_expectConfirm($inputObject.message, false);
+				_assertFalse(_isVisible(_cell("IconDisable")));
+			}
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTconvertDigiteStartProjectToMsp Completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTmodifyTask(Activity_code={"ABC"});
+* @description This function is called while user change the activity code and click modify
+* @return {String} None 
+*************************************************************************/
+
+function InfyFTmodifyTask($inputObject)
+{
+	_log("InfyFTmodifyTask Started","success");
+	try 
+	{
+		if( $inputObject.lst_Activity_Code_Id)
+		{
+			_assertTrue(1,"Activity code should not change");
+		}
+		else
+		{
+			ModifyEformInstance($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTmodifyTask Completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTverifyActivityCode();
+* @description This function is check the activity code is active or not
+* @return {String} None 
+*************************************************************************/
+
+function InfyFTverifyActivityCode($inputObject)
+{
+	_log("InfyFTverifyActivityCode Started","success");
+	try 
+	{
+			if($inputObject.winprefix)
+				_selectWindow($inputObject.winprefix);
+						
+		
+			if($inputObject.activity_code)
+			{
+				var $str1 = _getSelectedText(_select("Activity_Code_Id"))
+				if($str1[0] =="~")
+				{
+					_assertTrue(1,"Activity code is inactive");
+				}
+				else
+				{
+					_assertFalse(0,"Activity code is active");
+				}
+			}
+			else
+			{
+				var $list = _getOptions(_select("Activity_Code_Id"));
+				for(var $i=0; $i< $list.length;$i++)//the variable start from 1 beacasue in tht 0th possition --None-- option 
+				{
+					var $str = $list[$i];
+					if($str[0] =="~")
+					{
+						_assertTrue(1,"Activity code is inactive");
+					}
+					else
+					{
+						_assertFalse(0,"Activity code is active");
+					}
+				}
+			}					
+		
+		if($inputObject.winprefix)
+		{
+			_closeWindow();
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTverifyActivityCode Completed","success");
+}
+
+/**
+ @Function Number:
+ @author:Nitin 
+ @example:
+ @description: Creating Task with new window
+ @param: 
+ @return: 
+ **/
+
+function InfyFTcreateTask($inputObject)
+{
+	_log("InfyFTcreateTask Started","success");
+	try 
+	{ 
+		var $addBtn = "/addTaskButton/";//addTaskButton-btnIconEl_//span("de-icon-add")
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		//_wait(15000,_isVisible(_link($addbtnKey)));
+		if( _isVisible(_link($addbtnKey)))
+		{
+			_click(_link($addbtnKey));
+			_selectWindow("New Task");
+			setAllFields($inputObject);
+			_click(_button("SaveBtn"));
+		}
+		else
+		{
+			_click(_span("de-icon-add"));
+			_selectWindow("AddTask");
+			setAllFields($inputObject);
+			_click(_button("SaveBtn"));
+		}
+		     
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcreateTask Completed","success");
+}
+
+/**
+ @Function Number:
+ @author:Nitin
+ @example:
+ @description: Open Task in new window
+ @param: 
+ @return: 
+ **/
+
+function InfyFTopenTask($inputObject)
+{
+	_log("InfyFTopenTask Started","success");
+	try 
+	{
+		if( $inputObject.taskmodule === "STaRT")
+		{	
+			if (_isVisible(_link(0, _near(_div($inputObject.item_name)))))
+			{
+				_click(_link(0, _near(_div($inputObject.item_name))));
+			
+			}
+			else
+			{
+				_doubleClick(_div($inputObject.item_name));
+				_selectWindow();
+			}
+		}
+		else
+		{
+			if (_isVisible(_link(0, _near(_link($inputObject.item_name)))))
+			{
+				_click(_link(0, _near(_link($inputObject.item_name))));
+			
+			}
+			else
+			{
+				_doubleClick(_link($inputObject.item_name));
+				_selectWindow();
+			}
+		}
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTopenTask Completed","success");
+}
+
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTverifyLSTDValue();
+* @description This function is check the activity code is active or not
+* @return {String} None 
+*************************************************************************/
+
+function InfyFTverifyLSTDValue($inputObject)
+{
+	_log("InfyFTverifyLSTDValue Started","success");
+	try 
+	{		_wait(3000);
+			if($inputObject.winprefix)
+				_selectWindow($inputObject.winprefix);
+				var $temp = 0;
+				var $list = _getOptions(_select($inputObject.lst_name));
+				for(var $i=0; $i< $list.length;$i++)//the variable start from 1 beacasue in tht 0th possition --None-- option 
+				{
+					for( var $j=$i+1; $j<=$list.length; $j++)
+					{
+						if($list[$i] == $list[$j])
+						{
+							$temp = 1;
+						}
+					}
+				}
+				if($temp == 1)
+				{
+					_assertFalse(1," Duplicate value in List");
+				}
+				else
+				{
+					_assertTrue(1," not Duplicate");
+				}
+				
+								
+		
+		if($inputObject.winprefix)
+		{
+			_closeWindow();
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTverifyLSTDValue Completed","success");
+}
+

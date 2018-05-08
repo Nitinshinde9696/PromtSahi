@@ -1,0 +1,278 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Package_PMPlan_Small_Gen","Package/PMPlan_Small");
+ $data3 = readDataFromCSV("Package_PMPlan_Small_Iteration_Planning","Package/PMPlan_Small"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+  var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ var $endCurrent = new java.text.SimpleDateFormat("yyyy-MM-dd").format($dateObj1); 
+ 
+ var $d = new Date();
+ $d = $d.setDate($d.getDate() - 1);
+ var $yesterdayDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($d);
+ var $newCurrent = new java.text.SimpleDateFormat("yyyy-MM-dd").format($d);
+ 
+/* 
+ 
+ var $t = _testcase("Login with Correct ID");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject); 
+ 
+ _wait(2000);
+ 
+ */
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("Iteration Planning", "Creating an Iteration for PM Plan sections");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = $yesterdayDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $createdID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Milestones and Deliverables", "Checking Iteration PLanning summary and Creating Milestones");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.lblMilestone;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.mileReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segMilestone;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.edt_CM_Name = $data3.milName;
+ $inputObject.edt_DN_MilestoneEndDate = $endDate;
+ InfyFTcreateLinkedItemForDeliverables($inputObject);
+ 
+ var $mileID = $inputObject.createdID;
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Milestones and Deliverables", "Date Validations of Milestone");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.item = $mileID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_DN_MilestoneEndDate = $yesterdayDate;
+ $inputObject.msgAlert = "Milestone End Date cannot be a past date.";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_DN_MilestoneEndDate = $data3.dueDate;
+ $inputObject.msgAlert = "Please enter the date within Iteration Planned Start Date ("+$newCurrent+") and Iteration Planned End Date ("+$endCurrent+") .";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_DN_MilestoneEndDate = $endDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.span_Name = $data3.Deliverable;
+ InfyFTisVisiblePopup($inputObject);
+ 
+ _wait(1000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Deliverables", "Creating a Deliverable");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.segment_name = $data3.Deliverable;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_CM_Name = $data3.delName;
+ $inputObject.edt_CM_DUEDATE = $currentDate;
+ $inputObject.chk_DN_GatingbySrMgmt = $data3.fieldValuesYes;
+ $inputObject.chk_DN_SignOff = $data3.fieldValuesYes;
+ InfyFTcreateLinkedItemForDeliverables($inputObject);
+ 
+ var $delID = $inputObject.createdID;
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.item = $delID;
+ OpenEformInstance($inputObject);
+
+ _wait(2000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Deliverables", "Checking whether Actual delivery date is editable/Non-editable");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst_DN_Status = $data3.status1;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+
+ _textbox("DN_ActualDeliveryDate").readOnly; 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst_DN_Status = $data3.status1;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+
+ _textbox("DN_ActualDeliveryDate").readOnly;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst_DN_Status = $data3.status3;
+ $inputObject.edt_DN_ActualDeliveryDate = $currentDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+
+ $t.end();
+ 
+ var $t = _testcase("Deliverables", "Actual Delivery date cannot be Future date");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.edt_DN_ActualDeliveryDate = $endDate;
+ $inputObject.msgAlert = "Actual Delivery Date cannot be a future date.";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.edt_DN_ActualDeliveryDate = $currentDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTReturnPopUpPara($inputObject);
+
+ _wait(2000);
+ 
+ _popup("openLinkedItem__1")._closeWindow();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.lblMilestone;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.mileReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(1000); 
+ 
+ $t.end(); 

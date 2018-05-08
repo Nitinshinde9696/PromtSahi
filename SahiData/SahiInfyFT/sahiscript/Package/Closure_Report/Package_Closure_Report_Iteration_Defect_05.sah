@@ -1,0 +1,372 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ var $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ var $data = readDataFromCSV("Package_Closure_Report_Iteration_Defect_05","Package/Closure_Report");
+ 
+ var $T = _testcase("TC_BRD10_FU2.2","CHECK FOR THE MANDATORY FIELDS IN THE REVIEW FORM"); 
+ $T.start();
+ /*
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = "ALFPPEDO";
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = "Iterations";
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR6";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $T.end();
+*/
+ var $TC1 = _testcase("REVIEW OF PROJECT OR PHASE SCOPE","REVIEW FOR REVIEW OF PROJECT OR PHASE SCOPE"); 
+ $TC1.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment12;//Reviews
+ SelectSegment($inputObject);
+ 
+ _wait(10000);
+ 
+ 
+ //******CREATING A REVIEW - REVIEW OF PROJECT OR PHASE SCOPE*****//
+
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data.rev_name1;//Review1
+ $inputObject.lst_DN_ReviewMode = $data.Revmode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data.revType1;//Review of project or phase scope
+ InfyFTcreateLinkedItemPackage($inputObject);
+ 
+ var $RevID = $inputObject.createdID;
+
+ //******CREATING DEFECTS FOR REVIEW OF PROJECT OR PHASE SCOPE*****//
+
+ _wait(1000);
+   
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.item = $RevID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $generic.segment13;//Defect
+ SelectSegment($inputObject);
+
+ //*****DEFECT 1*****//
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data.def_name1;//Defect1
+ $inputObject.txt_CM_Description = $data.def_descr;//descr
+ $inputObject.lst_DN_Owner = $data.def_owner;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data.def_sev1;//Critical
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("REVIEW OF REQUIREMENTS GATHERING OUTPUTS","REVIEW FOR REVIEW OF REQUIREMENTS GATHERING OUTPUTS"); 
+ $TC2.start();
+ 
+ //******CREATING A REVIEW - REVIEW OF REQUIREMENTS GATHERING OUTPUTS*****//
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.navigateTo3;//Iterations
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $Itr_ID;;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.navigateTo3;//Iterations
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $generic.segment12;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.span = $generic.addIteration;//add review
+ InfyFTclick($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data.rev_name2;//Review2
+ $inputObject.lst_DN_ReviewMode = $data.Revmode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data.revType2;//Review of requirements gathering outputs
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $RevID = $inputObject.createdID;
+
+ //******CREATING DEFECTS FOR REVIEW OF REQUIREMENTS GATHERING OUTPUTS*****//
+ /*
+ _wait(2000);
+   
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.item = $RevID;
+ InfyFTclick($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment13;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.span = $generic.addIteration;//add defect
+ InfyFTclick($inputObject);
+
+ //*****DEFECT 1*****//
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data.def_name2;//Defect2
+ $inputObject.txt_CM_Description = $data.def_descr;//descr
+ $inputObject.lst_DN_Owner = $data.def_owner;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data.def_sev2;//Critical
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name =  $generic.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC2.end();
+
+ var $TC3 = _testcase("USER ACCEPTANCE TEST PLAN REVIEW","REVIEW FOR USER ACCEPTANCE TEST PLAN REVIEW"); 
+ $TC3.start();
+ 
+  //******CREATING A REVIEW - USER ACCEPTANCE TEST PLAN REVIEW*****//
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.span = $generic.addIteration;//add review
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data.rev_name3;//Review3
+ $inputObject.lst_DN_ReviewMode = $data.Revmode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data.revType3;//User Acceptance Test Plan Review
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $RevID = $inputObject.createdID;
+
+ //******CREATING DEFECTS FOR USER ACCEPTANCE TEST PLAN REVIEW*****//
+
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment13;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.span = $generic.addIteration;//add defect
+ InfyFTclick($inputObject);
+
+ //*****DEFECT 1*****//
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data.def_name3;//Defect3
+ $inputObject.txt_CM_Description = $data.def_descr;//descr
+ $inputObject.lst_DN_Owner = $data.def_owner;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data.def_sev3;//Critical
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name =  $generic.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC3.end();
+ 
+ var $TC4 = _testcase("REVIEW OF SYSTEM INTEGRATION TEST PLAN","REVIEW FOR REVIEW OF SYSTEM INTEGRATION TEST PLAN"); 
+ $TC4.start();
+ 
+  //******CREATING A REVIEW - REVIEW OF SYSTEM INTEGRATION TEST PLAN*****//
+_wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.span = $generic.addIteration;//add review
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data.rev_name4;//Review4
+ $inputObject.lst_DN_ReviewMode = $data.Revmode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data.revType4;//Review of System Integration Test Plan
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $RevID = $inputObject.createdID;
+ 
+ //******CREATING DEFECTS FOR REVIEW OF SYSTEM INTEGRATION TEST PLAN*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment13;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.span = $generic.addIteration;//add defect
+ InfyFTclick($inputObject);
+
+ //*****DEFECT 1*****//
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data.def_name4;//Defect4
+ $inputObject.txt_CM_Description = $data.def_descr;//descr
+ $inputObject.lst_DN_Owner = $data.def_owner;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data.def_sev4;//Critical
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name =  $generic.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC4.end();
+ 
+ var $TC5 = _testcase("REVIEW OF CONFERENCE ROOM PILOT ACTIVITIES","REVIEW FOR REVIEW OF CONFERENCE ROOM PILOT ACTIVITIES"); 
+ $TC5.start();
+ 
+ 
+  //******CREATING A REVIEW - REVIEW OF CONFERENCE ROOM PILOT ACTIVITIES*****//
+_wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.span = $generic.addIteration;//add review
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data.rev_name5;//Review5
+ $inputObject.lst_DN_ReviewMode = $data.Revmode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data.revType5;//Review of Conference Room Pilot activities
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $RevID = $inputObject.createdID;
+
+ //******CREATING DEFECTS FOR REVIEW OF CONFERENCE ROOM PILOT ACTIVITIES*****//
+
+  /*
+ _wait(2000);
+   
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name1;//openLinkedItem
+ $inputObject.item = $RevID;
+ InfyFTclick($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment13;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.span = $generic.addIteration;//add defect
+ InfyFTclick($inputObject);
+
+ //*****DEFECT 1*****//
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data.def_name5;//Defect5
+ $inputObject.txt_CM_Description = $data.def_descr;//descr
+ $inputObject.lst_DN_Owner = $data.def_owner;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data.def_sev4;//Critical
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name =  $generic.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name =  $generic.popup_name1;//openLinkedItem
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC5.end();
+ 
+
+ 
+ 
+
+	
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,91 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+ var $data = readDataFromCSV("Dev_Reviews_Defects_Generic_00","Dev/Reviews_Defects");
+ var $data1 = readDataFromCSV("Dev_Reviews_Defects_Export and Import_07","Dev/Reviews_Defects");
+ 
+ var $TC = _testcase("REVIEWS SEGMENT","NAVIGATE TO REVIEWS"); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.User_name;
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;//CORTST
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Instance;//ITR1
+ OpenEformInstance($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ $TC.end();
+
+ var $TC = _testcase("TC_38.1_38.5","Checking for Export/Import Review/Defects."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.type = $data.revType;
+ $inputObject.item = $data.revItem;
+ //$inputObject.chk_ChildChkbox = $data.defChkbox; //This is commented because to upload it is taking so much time.
+ exportEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ $TC.end();
+ 
+ _wait(5000);
+ 
+  var $TC = _testcase("TC_39_45","Checking for Export/Import Review/Defects."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {}; 
+ $inputObject.file_file = $data.filePath;
+ $inputObject.items = $data.revItem;
+ InfyFTimportEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();  
+ 

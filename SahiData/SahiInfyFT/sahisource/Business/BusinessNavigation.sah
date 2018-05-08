@@ -1,0 +1,55 @@
+_include("../../../SahiDigite/sahisource/Business/BusinessNavigation.sah");
+
+/*************************************************************************
+* @author Alpesh
+* @example InfyFTnavigateTo({"name":"Organisation"});
+* @description This function is called to navigate to a particular location
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function InfyFTnavigateTo($inputObject) 
+{
+    _log("InfyFTnavigateTo Started","success");
+    try 
+	{
+	    var $dirPath = _getGlobal("importDIR");
+		// var $dirPath = "D:/Sahi/SahiData/SahiInfyFT/sahisource/importDir/";
+	    $dirPath = $dirPath + "InfyFTSwiftMenuTraverse.csv";
+		
+	
+		var $rs1 = _readCSVFile($dirPath,",");
+		
+	    var $rowLength1 = $rs1.length;
+				
+	    for(var $j = 0; $j < $rowLength1; $j++) 
+		{  	
+			if($rs1[$j][0] === $inputObject.name)
+			{
+			   break;     
+			} 	
+		}
+		
+		var $leafNode = $rs1[$j].length-1;
+		for(var $i =1;$i<= $leafNode;$i++)
+		{		  
+			if($i === $leafNode)
+			{
+				if($inputObject.operation === "Negative")
+				{
+					_assertFalse(_isVisible(_link($rs1[$j][$i])));
+					return;
+				}
+			}
+			_wait(5000, _isVisible(_link($rs1[$j][$i])));
+			if(_exists(_link($rs1[$j][$i])))
+				_click(_link($rs1[$j][$i]));
+			else
+				_assert(_exists(_link($rs1[$j][$i]))); // If Menu is not loaded then script should fail
+		}
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("InfyFTnavigateTo Completed","success");	
+}

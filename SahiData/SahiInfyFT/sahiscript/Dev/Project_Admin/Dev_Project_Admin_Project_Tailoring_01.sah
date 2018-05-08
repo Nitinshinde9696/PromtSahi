@@ -1,0 +1,303 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Dev_Project_Admin_Project_Tailoring","Dev/Project_Admin");
+ $data1 = readDataFromCSV("Dev_Project_Admin_Project_Tailoring_01","Dev/Project_Admin");
+
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;//projectname
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//
+ navigateTo($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_1.1.3"," Verify Segments");
+ $s.start();
+ 
+ $inputObject ={};
+ $inputObject.link = $data1.segments4;
+ verifyAllFields($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_1.1.4"," Details Segments");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Details;//Details
+ SelectSegment($inputObject);
+ 
+  $inputObject ={};
+  $inputObject.cell_Name = $data1.cell_name2;
+  $inputObject.span_Name = $data1.span_name2;
+  InfyFTisReadOnly($inputObject);
+  
+  $inputObject ={};
+  $inputObject.cell_Name = $data1.cell_name3;
+  $inputObject.span_Name = $data.projectname2+"_Project Tailoring";
+  InfyFTisReadOnly($inputObject);
+  
+ $s.end();
+ 
+ var $s = _testcase("TC_1.2"," Status Report Frequency Segments");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_SRF;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+  $inputObject ={};
+  $inputObject.span_Name = $data1.Span_name4;//Frequency :;Note :
+  InfyFTisVisible($inputObject);
+  
+  $inputObject ={};
+  $inputObject.rdg = "Not Set";
+  setAllFields($inputObject);
+  
+  $inputObject ={};
+  $inputObject.field_Name = $data1.txt_name5;//
+  $inputObject.New_value = $data1.value6;
+  InfyFTverifyField($inputObject);
+  
+  $inputObject ={};
+  $inputObject.textbox = $data1.txt_name5;
+  InfyFTisReadOnly($inputObject);
+  
+  $inputObject ={};
+  $inputObject.rdg = "Weekly";
+  setAllFields($inputObject);
+  
+  $inputObject ={};
+  $inputObject.span_Name = $data1.Span_name6;//Frequency :;Note :
+  InfyFTisVisible($inputObject);
+  
+  $inputObject ={};
+  $inputObject.field_Name = $data1.txt_name5;//
+  $inputObject.New_value = $data1.value7;
+  InfyFTverifyField($inputObject);
+  
+  $inputObject ={};
+  $inputObject.textbox = $data1.txt_name5;
+  InfyFTisReadOnly($inputObject);
+  
+  $inputObject ={};
+  $inputObject.rdg = "Fortnightly";
+  setAllFields($inputObject);
+  
+  $inputObject ={};
+  $inputObject.field_Name = $data1.txt_name5;//
+  $inputObject.New_value = $data1.value8;
+  InfyFTverifyField($inputObject);
+  
+  $inputObject ={};
+  $inputObject.textbox = $data1.txt_name5;
+  InfyFTisReadOnly($inputObject);
+  
+  $inputObject ={};
+  $inputObject.rdg = "Monthly";
+  setAllFields($inputObject);
+  
+  $inputObject ={};
+  $inputObject.field_Name = $data1.txt_name5;//
+  $inputObject.New_value = $data1.value9;
+  InfyFTverifyField($inputObject);
+  
+  $inputObject ={};
+  $inputObject.textbox = $data1.txt_name5;
+  InfyFTisReadOnly($inputObject);
+    
+ $s.end();
+ 
+ var $t = _testcase("TC_1.2","Check Project Specific metrics segment");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Psm24;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.spm25;// _span("Project Specific Metrics")
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_2.","Check Add field of Project Specific metrics segment");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Psm24;//Project Specific Metrics
+ SelectSegment($inputObject);     
+ 
+ $inputObject = {};
+ $inputObject.edt_name = 20;//;// parseInt($data.edt_name11);
+ $inputObject.edt_value = "1";//$data1.edt_value11;
+ InfyFTverifyValue($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_2.1","Check Mandatory fields of Project Specific metrics segment");
+ $t.start();
+
+  $inputObject = {};
+ $inputObject.tblname ="Metric Name";
+ $inputObject.row_id =3;
+ $inputObject.col_id=0;
+ $inputObject.btnSave = "yes";
+ InfyFTDeleteRows($inputObject);
+ 
+ _clearLastAlert();
+ 
+ _click(_link("Add Rows"));
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid41;
+ $inputObject.colNo  = $data1.chkcid42;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = $data1.lst_mtypevrfy42;//Metric Type*
+ verifySwiftFormData($inputObject);
+/*  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid41;
+ $inputObject.colNo  = $data1.chkcid43;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = "@#%#####Df)(*&^%^$@#";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a valid value in Metric Name column for row 1. Only the following characters are allowed: alphanumeric - . ? , and %";//
+ saveSwiftForm($inputObject);
+   */
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid41;
+ $inputObject.colNo  = $data1.chkcid43;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = $data1.matric_name37;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = $data1.alert;//
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid41;
+ $inputObject.colNo  = $data1.chkcid45;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = $data1.matric_value45;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = $data1.alert;//
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid41;
+ $inputObject.colNo  = $data1.chkcid46;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = $data1.matric_value46;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = $data1.alert;//
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid41;
+ $inputObject.colNo  = $data1.chkcid47;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = $data1.matric_value47;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+ var $t = _testcase("TC_3.0","Check duplicate Rows in Project Specific metrics segment");
+ $t.start();
+ 
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid48;
+ $inputObject.colNo  = $data1.chkcid47;
+ $inputObject.tableName  = $data1.tbnm41;
+ $inputObject.fieldValues = $data1.matric_value47;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.msgAlert = "There are duplicate data in conbination of Metric Name and Metric Type. Please delete or modify them.";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Psm24;//Project Specific Metrics
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tblname ="Metric Name";
+ $inputObject.row_id =3;
+ $inputObject.col_id=0;
+ $inputObject.btnSave = "yes";
+ InfyFTDeleteRows($inputObject);
+  
+ $t.end();
+
+ 
+ var $t = _testcase("Script 2","Dev_Project_Admin_Project_Tailoring_02");
+ $t.start();
+  
+  _include("Dev_Project_Admin_Project_Tailoring_02.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 3","Dev_Project_Admin_Project_Project_Tailoring_03");
+ $t.start();
+  
+  _include("Dev_Project_Admin_Project_Project_Tailoring_03.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 4","Dev_Project_Admin_Project_Tailoring_04");
+ $t.start();
+  
+  _include("Dev_Project_Admin_Project_Tailoring_04.sah");
+  
+ $t.end();
+ var $t = _testcase("Script 5","Dev_Project_Admin_Project_Tailoring_05");
+ $t.start();
+  
+  _include("Dev_Project_Admin_Project_Tailoring_05.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 6","Dev_Project_Admin_Sizing_Details_Negative_06");
+ $t.start();
+  
+  _include("Dev_Project_Admin_Sizing_Details_Negative_06.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 7","Dev_Project_Admin_Activity_Code_07");
+ $t.start();
+  
+  _include("Dev_Project_Admin_Activity_Code_07.sah");
+  
+ $t.end();
+ 
+ 
+  

@@ -1,0 +1,343 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/Task.sah");
+
+ $data = readDataFromCSV("Maint_Change_Request_01", "Maint/Change_Request");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $currentDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+  
+ $inputObject = {}; //for login Window
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Item_Name3;
+ OpenEformInstance($inputObject);
+ 
+ _click(_div("More_MenuItems_Segment"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName3;
+ SelectSegment($inputObject);
+ 
+/*************************************************************************
+*  TestCase_16  : Verifying each field in Change Request Eform
+*************************************************************************/
+
+ var $t = _testcase("TC_16_TS_01","Verifying each field in Change Request Eform");
+ 
+ $t.start();
+ /*
+ $inputObject = {};
+ $inputObject.operation = $data.Operation71;// Open
+ InfyFTclickAddIcon($inputObject);
+ */
+ 
+ _click(_span("KEY_Link_New_item-btnIconEl"));
+ _selectWindow("newListing");
+ 
+ 
+ _assertEqual(true, _button("Save & Add New").disabled);
+ _assertEqual(true, _button(" Save ").disabled);
+ _assertEqual(true, _reset("Reset").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ _assertNotExists(_button("Complete"));
+ _assertNotExists(_button("Reopen"));
+ _assertNotExists(_button("Delete"));
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.ID5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Name5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Description5;
+ InfyFTisVisibleS($inputObject);
+ 
+ /* inputObject = {};
+ $inputObject.span_Name = $data.CAStatus5;
+ InfyFTisVisibleS($inputObject); */
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.ImplementationStatus5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.RaisedDate5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.EffortImpact5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.ScheduleImpact5;
+ InfyFTisVisibleS($inputObject);
+ /*
+ inputObject = {};
+ $inputObject.span_Name = $data.DateClosed5;
+ InfyFTisVisibleS($inputObject); 
+ */
+ $t.end();
+ 
+ var $t = _testcase("TC_16_TS_02","ID should be Blank");
+ 
+ $t.start();
+ 
+ _assertEqual("", _getText(_span("CM_ItemCode")));
+  
+ $t.end();
+  
+ var $t = _testcase("TC_16_TS_03","Title should Mandatory Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Effort Impact (Phrs) in Details tab \n• Field Schedule Impact (Days) in Details tab \n";
+ //$inputObject.msgAlert = "Please enter valid Name.";
+ InfyFTModifyEformInstanceS($inputObject); 
+ 
+ _assertEqual(false, _button(" Save ").disabled);
+ _assertEqual(false, _button("Save & Add New").disabled);
+ _assertEqual(false, _reset("Reset").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ _assertNotExists(_button("Complete"));
+ _assertNotExists(_button("Reopen"));
+ _assertNotExists(_button("Delete"));
+  
+ $t.end(); 
+ 
+ var $t = _testcase("TC_16_TS_04","Description should Mandatory Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Description in Details tab \n• Field Effort Impact (Phrs) in Details tab \n• Field Schedule Impact (Days) in Details tab \n";
+ //$inputObject.msgAlert = "Please enter valid Description.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end(); 
+  
+ var $t = _testcase("TC_16_TS_07","Schedule Impact Field should Mandatory Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Effort Impact (Phrs) in Details tab \n• Field Schedule Impact (Days) in Details tab \n";
+ //$inputObject.msgAlert = "Please enter valid Schedule Impact (Days).";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_16_TS_06","Effort Impact Field should Mandatory Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_DN_EffortImpactPHrsorFTEs = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Effort Impact (Phrs) in Details tab \n";
+ //$inputObject.msgAlert = "Please enter valid Effort Impact (Phrs).";
+ InfyFTModifyEformInstanceS($inputObject); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_16_TS_05","Date should be Earlier till Today and Mandatory Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_DN_EffortImpactPHrsorFTEs = $data.EffortImpact4;
+ $inputObject.edt_CM_DATEIDENTIFIED = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised Date in Details tab \n";
+ //$inputObject.msgAlert = "Please enter valid Raised Date.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_DN_EffortImpactPHrsorFTEs = $data.EffortImpact4;
+ $inputObject.edt_CM_DATEIDENTIFIED = $currentDate1 ;
+ $inputObject.msgAlert = "Raised Date can not be greater than today, please correct it.";
+ //"Please enter Raised Date earlier than today.";
+ InfyFTModifyEformInstanceS($inputObject);
+
+ var $t = _testcase("TC_16_TS_10","Check After Filling all Fields");
+ 
+ $t.start(); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_DN_EffortImpactPHrsorFTEs = $data.EffortImpact4;
+ $inputObject.edt_CM_DATEIDENTIFIED = $currentDate;
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus41;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ var $IDchrr1 =  _getText(_span("CM_ItemCode"));
+ 
+ _assertEqual(true, _button(" Save ").disabled);
+ _assertEqual(true, _reset("Reset").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ _assertNotExists(_button("Complete"));
+ _assertNotExists(_button("Reopen"));
+ _assertNotExists(_button("Delete"));
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Reset5;
+ InfyFTisVisibleS($inputObject); 
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Return5;
+ InfyFTisVisibleS($inputObject); 
+ 
+ $t.end();  // End of TestCase 16 
+ 
+ var $t = _testcase("TC_16_TS_08","Client Approval Status Should DropDown List");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatusList6;
+ //$inputObject.lst_DN_ClientApprovalStatus = "Approved;Decision Awaited From Client;Deferred;Not Yet Submitted To Client;Rejected;Rejected As CR But To Be Implemented";
+ verifyEformInstanceDetails($inputObject);
+  
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_17  : Check All Fields
+*************************************************************************/
+
+ var $t = _testcase("TC_17_TS_01","Initially ImplementationStatus Should be Blank");
+ 
+ $t.start();
+ 
+ _assertEqual("--None--", _getSelectedText(_select("DN_ImplementationStatus")));
+  
+ $t.end();  
+
+/*************************************************************************
+*  TestCase_18  : Modify Change Request Management
+*************************************************************************/
+
+ var $t = _testcase("TC_18_TS_01","Change CAStatus Approved");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_DN_EffortImpactPHrsorFTEs = $data.EffortImpact4;
+ $inputObject.edt_CM_DATEIDENTIFIED = $currentDate;
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus41;
+ $inputObject.lst_DN_ImplementationStatus = $data.ImplementationStatus4;
+ InfyFTModifyEformInstanceS($inputObject); 
+ 
+ var $IDchrr1 =  _getText(_span("CM_ItemCode"));
+ 
+ $t.end(); // End of TestCase 18
+ 
+/*************************************************************************
+*  TestCase_21  : Change Request Management Should ReOpen
+*************************************************************************/
+ 
+ var $t = _testcase("TC_20_TS_01","Change Request Management Should ReOpen");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDchrr1;
+ InfyFTreopenInstanceS($inputObject);
+ 
+ $t.end();  // End of TestCase 20
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_DN_EffortImpactPHrsorFTEs = $data.EffortImpact4;
+ $inputObject.edt_CM_DATEIDENTIFIED = $currentDate;
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus41;
+ InfyFTModifyEformInstanceS($inputObject);
+
+ var $t = _testcase("TC_17_TS_03","Initially ImplementationStatus Should be DropDown List");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ //$inputObject.lst_DN_ImplementationStatus = "Abandoned;Completed;Deferred or On-Hold;In-progress;Not Started";
+ $inputObject.lst_DN_ImplementationStatus = $data.ImplementationStatusList6;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $t.end();
+
+/*************************************************************************
+*  TestCase_19  : Closed Change Request Management
+*************************************************************************/
+ 
+ var $t = _testcase("TC_19_TS_01","Change CAStatus Approved");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.CR_Days4;
+ $inputObject.edt_CM_DATEIDENTIFIED = $currentDate;
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus41;
+ $inputObject.lst_DN_ImplementationStatus = $data.ImplementationStatus4; 
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end(); // End of TestCase 19
+ 
+/*************************************************************************
+*  TestCase_20  : Check ReOpen Should be ReOpen 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_20_TS_01","Change Request Management Should ReOpen");
+ 
+ $t.start();
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Reopen5;
+ InfyFTisVisibleS($inputObject);
+  
+ $t.end();  // End of TestCase 19
+ 
+ _click(_button("CancelBtn"));
+_selectWindow();

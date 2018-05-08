@@ -1,0 +1,84 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Dev_Rsk_Mgmt_CR61_FieldValidation_27","Maint/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $Today = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+
+ var $s1 = _testcase("TC_1.1.1","Login");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;//Prashant_Sharma19
+ $inputObject.edt_loginid = $data.LoginID1;//Prashant_Sharma19
+ $inputObject.edt_password =$data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $s1.end();
+ 
+
+ var $s2 = _testcase("TC_1.1.2","Navigation");
+ $s2.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname;//"BARRABS"
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigation;//"Alert Management";
+ navigateTo($inputObject);
+ 
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_BRD37_FU10_9","CHECK THE VALUES FOR 2 NEW FIELDS");
+ $s3.start();
+ /*
+ $inputObject = {};
+ $inputObject.lbl_DN_PreviousRiskLevelchang = $data.Initial_status1;//"NA";
+ $inputObject.lbl_DN_PreviousRiskLevelofthe = $data.Initial_status2;//"NA";
+ verifyEformInstanceDetails($inputObject);
+*/// Commenting as only during the initial alert change the value will be NA
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_BRD37_FU10_10","CHANGE THE VALUE OF THE FIELD RISK LEVEL");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.risklevel1;//"Critical";
+ $inputObject.lst_DN_IsLegalReviewdone = $data.riskvalue;//"Done";
+ $inputObject.lst_DN_IsFinancialProvisionin = $data.riskvalue;//"Done";"Done";
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.risk_reason1;//"Reason1";
+ $inputObject.txt_DN_Actiontomovetheproject = $data.risk_reason2;//"Reason2";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof =  $data.risklevel2;//"Not High Risk";
+ $inputObject.lst_DN_IsLegalReviewdone = $data.riskvalue;//"Done";
+ $inputObject.lst_DN_IsFinancialProvisionin = $data.riskvalue;//"Done";
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.risk_reason1;//"Reason1";
+ $inputObject.txt_DN_Actiontomovetheproject = $data.risk_reason2;//"Reason2";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $s4.end();
+ 
+ var $s5 = _testcase("TC_BRD37_FU10_11","VERIFY THE REFLECTION OF TWO FIELDS ");
+ $s5.start();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lbl_DN_PreviousRiskLevelchang = $Today;
+ $inputObject.lbl_DN_PreviousRiskLevelofthe = $data.risklevel1;//"Critical";
+ verifyEformInstanceDetails($inputObject);
+
+ $s5.end();

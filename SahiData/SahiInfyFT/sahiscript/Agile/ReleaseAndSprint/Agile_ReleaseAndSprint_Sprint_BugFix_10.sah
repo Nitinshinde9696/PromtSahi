@@ -1,0 +1,126 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_BugFix_10","Agile/ReleaseAndSprint");
+$data1 = readDataFromCSV("Agile_ReleaseAndSprint_SprintDetailPage_02","Agile/ReleaseAndSprint");
+$data2 = readDataFromCSV("Agile_ReleaseAndSprint_ReleaseDetailPage_01","Agile/ReleaseAndSprint");
+
+var $name = new Date(); 
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",7,$dateObj1);
+var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to PM Plan");
+$t.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.Project_name2;
+selectProject($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "navigate to sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data1.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "creation of sprint and checking release start date while mapping");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = $data.icon;
+clickAddIcon($inputObject);
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $name;
+$inputObject.lst_DN_TypeOfWork = $data.Bugfix;
+$inputObject.lst_DN_TypeofSprint1 = $data1.Initiation;
+$inputObject.lst_CM_Release = "Duplicate";//$data2.CM_Name;
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate;
+$inputObject.msgAlert = "Sprint Date must be within the Release Start Date(8-Jun-2017) and Release Planned End(15-Jun-2017).";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "closing the instance");
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_CM_Release = $data.CM_Name;
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data1.DN_Status;
+$inputObject.edt_DN_ActualStartDate = $currentDate;
+$inputObject.edt_DN_ActualEndDate = $startDate;
+$inputObject.txt_DN_Remarks = $data1.DN_StatusA;
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "sprint performance summary");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data1.sprintSegment;
+InfyFTclick($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo7;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo8;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo10;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo11;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$t.end();

@@ -1,0 +1,638 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+ $data = readDataFromCSV("IMS_SIT_CreateSIT_01", "IMS/SIT");
+  
+ /**********************************************************************************************************
+ * Login to swiftALM , select project and navigate to SIT
+ **********************************************************************************************************/ 
+ 
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //isha
+ selectProject($inputObject);
+ 
+ _wait(300);
+ 
+ var $ProjectStartDate = _getText(_span("STARTDATE")); 
+ var $ProjectEndDate = _getText(_span("ENDDATE"));
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SIT");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /***********************************************************************************************************
+ * checking mandatory fields and whether fields are presented in the e-form 
+ ************************************************************************************************************/
+ 
+ var $t = _testcase("TC_4", "checking mandatory fields of SIT");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ _wait(9000);
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ID;//
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name;//Name * :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ServiceDomain;//Sub Service * :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ITILProcess;//ITIL Process * :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PlannedStartDate;//Planned Start Date :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PlannedEndDate;//Planned End Date :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ActualStartDate;//Actual Start Date :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ActualEndDate;//Actual End Date :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ImprovementArea;//Improvement Area/Business Processes Impacted :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ActualImprovement;//Actual Improvement Description :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.SourceofPlan;//Source of Plan : 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Strategy;//Strategy / Action Plan :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PlannedImpact;//Planned Impact (In USD) :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ActualImpact;//Actual Impact (In USD) ^ :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Quarter;//Quarter :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Year;//Year :
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.Status;//Status :
+ InfyFTisVisibleN($inputObject);
+   
+ clickReturn(); 
+ 
+ _wait(2000);
+ 
+ //$data = readDataFromCSV("InfyFT_sahi2_checking_create_SIT", "InfyFTSahi/SIT");
+ 
+ $inputObject = {};  //checking for NAME field
+ $inputObject.txt_DN_ActualImprovementDescr = $data.DN_ActualImprovementDescr;//good
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Name in Details tab \n•  Field Sub Service in Details tab \n•  Field ITIL Process in Details tab";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Sub Service in Details tab \n•  Field ITIL Process in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field ITIL Process in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+  
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {}; //checking for negative value in actual impact field
+ $inputObject.lst_DN_SubService = $data.SubService;
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars2;//-30
+ $inputObject.msgAlert = "Please enter value within the range for the following fields-\nActual Impact (In USD)  : Range 0.1 - To 9.9999999E7";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ /***********************************************************************************************************
+ * checking date validation
+ ************************************************************************************************************/ 
+ 
+ var $PlannedStartDate = "01-Oct-2008";
+ var $PlannedEndDate = "14-Mar-2029";
+  
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",2,$dateObj);
+ var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $closeDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-1,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $t = _testcase("TC_5", "Date Validation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $PlannedStartDate;
+ $inputObject.msgAlert = "Planned Start Date cannot be earlier than the Project Start Date (1-Feb-2013).";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedEndDate = $PlannedEndDate;
+ $inputObject.msgAlert = "Planned Start Date cannot be earlier than the Project Start Date (1-Feb-2013).";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $startDate;
+ $inputObject.edt_DN_PlannedEndDate = $PlannedEndDate;
+ $inputObject.msgAlert = "Planned End Date cannot be later than or equal to Project End Date ("+$ProjectEndDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $startDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.msgAlert = "Planned End Date cannot be earlier than or equal to Planned Start Date ("+$startDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.msgAlert = "Planned End Date cannot be earlier than or equal to Planned Start Date ("+$currentDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $startDate;
+ $inputObject.edt_DN_PlannedEndDate = $closeDate;
+ $inputObject.edt_DN_ActualStartDate = $currentDate;
+ $inputObject.msgAlert = "Actual Start Date cannot be earlier than the Planned Start Date ("+$startDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $startDate;
+ $inputObject.edt_DN_ActualStartDate = $startDate;
+ $inputObject.msgAlert = "Actual Start Date cannot be later than Todays Date ("+$currentDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $startDate;
+ $inputObject.edt_DN_ActualStartDate = $currentDate;
+ $inputObject.edt_DN_ActualEndDate = $currentDate;
+ $inputObject.msgAlert = "Actual End Date cannot be earlier than or equal to Actual Start Date ("+$currentDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_ActualEndDate = $PlannedEndDate;
+ $inputObject.msgAlert = "Actual End Date cannot be later than or equal to Project End Date ("+$ProjectEndDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ /**************************************************************************************************************************
+ * creating SIT and checking status values and attaching .xls file
+ ***************************************************************************************************************************/
+ 
+ var $t = _testcase("TC_6", "create SIT");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name2;//SIT3
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_PlannedStartDate = $endDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.edt_DN_ActualStartDate = $endDate;
+ $inputObject.edt_DN_ActualEndDate = $currentDate;
+ ModifyEformInstance($inputObject);
+ 
+ _wait(1000);
+ _assertVisible(_link("Attachments"));
+ _assertNotExists(_link("Workflow"));
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+  
+ var $IDsit =  _getText(_span("CM_ItemCode"));
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "checking actual impact field when status is closed");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars1;//
+ $inputObject.lst_DN_Status = $data.DN_Status1;//Closed
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Planned Impact (In USD) in Details tab \n•  Field Strategy / Action Plan in Details tab \n•  Field Actual Improvement Description in Details tab \n•  Field Source of Plan in Details tab \n•  Field Quarter in Details tab \n•  Field Improvement Area/Business Processes Impacted in Details tab \n•  Field Actual Impact (In USD) in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars1;//
+ $inputObject.txt_DN_ImprovementAreaBusines = $data.TextData;//
+ $inputObject.txt_DN_ActualImprovementDescr = $data.TextData;//
+ $inputObject.txt_DN_SourceofPlan = $data.TextData;//
+ $inputObject.txt_DN_StrategyActionPlan = $data.TextData;//
+ $inputObject.edt_DN_PlannedImpactInDollars = $data.DN_PlannedImpactInDollars;//
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars;//
+ $inputObject.lst_DN_Quarter = $data.DN_Quarter;//
+ $inputObject.lst_DN_Year = $data.DN_Year;//
+ $inputObject.lst_DN_Status = $data.DN_Status1;//Closed
+ $inputObject.msgAlert = "Attachment is mandatory when closing the Service Improvement. The attachment can be in email/ Word/ Excel/ PDF that serve as evidence of implementing the service improvement and showcasing its benefits to the client.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars;//
+ $inputObject.msgAlert = "Attachment is mandatory when closing the Service Improvement. The attachment can be in email/ Word/ Excel/ PDF that serve as evidence of implementing the service improvement and showcasing its benefits to the client.";
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status;//In-Progress
+ $inputObject.edt_DN_PlannedStartDate = $endDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.edt_DN_ActualStartDate = $currentDate;
+ $inputObject.edt_DN_ActualEndDate = $startDate;
+ ModifyEformInstance($inputObject);  
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "checking status values");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDsit;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDsit; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status_value;//Abandoned;Closed;In-Progress;Not Started;On-Hold
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "ID field");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $IDsit;//system generated value 
+ $inputObject.cell_Name = $data.cell_Name;//ID :
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.SubService;//DN_ITILProcess1;//Desktop Services
+ $inputObject.lst_DN_ITILProcess = $data.DN_ITILProcess;//Access Management
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars1;//
+ $inputObject.txt_DN_ImprovementAreaBusines = $data.TextData;//
+ $inputObject.txt_DN_ActualImprovementDescr = $data.TextData;//
+ $inputObject.txt_DN_SourceofPlan = $data.TextData;//
+ $inputObject.txt_DN_StrategyActionPlan = $data.TextData;//
+ $inputObject.edt_DN_PlannedImpactInDollars = $data.DN_PlannedImpactInDollars;//
+ $inputObject.edt_DN_ActualImpactInDollars = $data.DN_ActualImpactInDollars;//
+ $inputObject.lst_DN_Quarter = $data.DN_Quarter;//
+ $inputObject.lst_DN_Year = $data.DN_Year;//
+ InfyFTModifyEformInstance1($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "select segment attachment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name;//Attachments
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.attfilename = $data.attfilename2;//BR2Final.xlsx
+ InfyMyADDAttachment($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "close the instance and reopen it");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name1;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.reopen;//reopen
+ InfyFTcheckingButtons($inputObject);
+ 
+ _wait(6000);  
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Year = $data.DN_Year;//2015
+ $inputObject.lst_DN_Status = $data.DN_Status1;//Closed
+ ModifyEformInstance($inputObject);
+ 
+ _wait(6000);
+
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.reopen;//reopen
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ InfyFTreopenInstance();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status_value1;//In-Progress
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status2;//Abandoned
+ ModifyEformInstance($inputObject);
+ 
+ InfyFTreopenInstance();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status_value1;//In-Progress
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(500);
+ clickReturn();
+ 
+ $t.end();
+ 
+ /**************************************************************************************************************
+ *checking inbox of the logged on user 
+ ***************************************************************************************************************/
+ 
+ var $t = _testcase("TC_12", "navigate to assignee inbox");
+ $t.start();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo11;//All Items
+ navigateTo($inputObject);
+ 
+ //_click(_image("DownArrow.png[4]"));
+ //_click(_link("View My Inbox"));
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "checking inbox of logged on user");
+ $t.start();
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.item = $IDsit;
+ $inputObject.operation = $data.operation;//Delete
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ /**************************************************************************************************************
+ *checking instance is non-editable or not to the user who having 'SE' role  
+ ***************************************************************************************************************/
+ 
+ var $t = _testcase("TC_14", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//Swaroop Prakash
+ $inputObject.edt_loginid = $data.LoginID2;//Swaroop.Prakash
+ $inputObject.edt_password = $data.Password2;//123456
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ //$data = readDataFromCSV("InfyFT_sahi1_create_SIT", "InfyFTSahi/SIT");
+ 
+ var $t = _testcase("TC_15", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_16", "navigate to SIT");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_17", "opening last created instance.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDsit;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDsit; 
+ OpenEformInstance($inputObject); 
+
+ if(_isVisible(_link($data.Username1)))
+ {
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ }
+ else
+ {
+$inputObject = {};
+ $inputObject.notExists = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject); 
+ }
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject); */
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

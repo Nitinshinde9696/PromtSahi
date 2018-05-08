@@ -1,0 +1,79 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Status_Report_SummaryofReq_06","Maint/Status_Report"); 
+ 
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+ 
+ 
+ var $t = _testcase("TC_7", "Check for Summary of Requests segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment4;//Summary of Requests
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1;//"Request Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table2;//Open Request Summary
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.table3;//Closed Request Summary
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table4;//Major Enhancement Trend
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table5;//Minor Enhancement Trend
+ InfyFTisVisible($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.theaders1;//"Request Type;No. of Open Requests at start of reporting period;No. of Requests Closed;No. of Requests Abandoned;No. of Requests On-Hold;No. of Open and On-Hold Requests at the end of reporting period;Remarks";
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Request Summary";
+ $inputObject.rowNo = $data.rowno1;//"1|2|3|4|5";
+ $inputObject.colNo = $data.colno1;//"0_lbl";
+ $inputObject.fieldValues = $data.value1;//"Major Enhancement|Minor Enhancement|Analysis and Research|Other Request|Testing Request";
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();

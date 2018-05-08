@@ -1,0 +1,314 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Dev_PMPlan_Small_Gen","Dev/PMPlan_Small");
+ $data = readDataFromCSV("Dev_PMPlan_Small_Overview_01","Dev/PMPlan_Small"); 
+ 
+ var $t = _testcase("TC_1.2", "Login with In-Correct ID");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.inCorrectUser;
+ $inputObject.edt_loginid = $data.inCorrectId;
+ $inputObject.edt_password = $data.inCorrectId;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1_1.3", "Login with PM/SPM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;//
+ $inputObject.edt_loginid = $gen.LoginID1;//
+ $inputObject.edt_password = $gen.Password1;//
+ loginIntoDigite($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(2000);
+ 
+ _assertExists(_link("Overview"));
+ 
+ _log("Overview is visible by Default");
+ 
+ var $projectStartDate = _getText(_span("STARTDATE"));
+ var $projectEndDate = _getText(_span("ENDDATE"));
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2.1.2.3.4.5.6.7.8.9", "PM Plan Overview section");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.segment1; //Overview
+ InfyFTclick($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.tableName1;//_link("Overview")
+ InfyFTassertVisible($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_1;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_1;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_1;//Project Code|Project Start Date|Customer Code|Contract Type|Service Offering|Project Type|Unit|PU|DM|Primary Industry|Tertiary Industry|Unit of Work Pricing
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_2;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_2;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_2;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_3;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_3;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_3;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_4;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_4;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_4;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_5;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_5;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_5;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_6;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_6;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_6;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_7;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_7;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_7;
+ verifySwiftFormData($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1_8;//$data.rowNo1;//0|1|2|3|4|5|6|7|8|9|10|11|12
+ $inputObject.colNo = $data.colName1_8;//$data.colNo1;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues1_8;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1;//Part of Large Deal/Program
+ $inputObject.colNo = $data.projectCode;//
+ $inputObject.fieldValues = $data.fieldValues2;//No|Yes
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = $data.rowName2;
+ $inputObject.colNo = $data.projectCode;
+ $inputObject.fieldValues = $data.fieldValues3;
+ setSwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "Yes";
+ $inputObject.rowNo = $data.rowName2_1;
+ $inputObject.colNo = $data.masterCode;
+ $inputObject.fieldValues = $data.fieldValues3_1;
+ setSwiftFormData($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {}; 
+ $inputObject.date1 = $projectStartDate;
+ $inputObject.date2 = $projectEndDate;
+ dateDifference($inputObject);
+ 
+ _log("The difference between"+$projectStartDate+"and"+$projectEndDate+"is"+$inputObject.dateDifference+"and is >=365");
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.nearLRP;//LRP(long running project)
+ $inputObject.colNo = $data.projectlbl;//_lbl
+ $inputObject.fieldValues = $data.fieldValues4;//Yes
+ verifySwiftFormData($inputObject);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Overview[1]
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.fieldValues5;
+ verifySwiftFormData($inputObject);
+ */
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ _wait(2000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1_New Changes", "The field DevOps Applicability should be available as a multi-select field in the Overview section.");
+ $t.start(); 
+ 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableOverview1;
+ $inputObject.rowNo = $data.devOps;
+ $inputObject.colNo = $data.underProject;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ //Checking for the Drop down Values of DevOps
+ 
+ _wait(2000);
+ 
+ _setSelected(_select(9), "CD");
+ 
+ _setSelected(_select(9), "--All--");
+ 
+ _wait(2000);
+ 
+ _assertEqual("CD,CI", _getSelectedText(_select(9)));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply;
+ InfyFTclick($inputObject)
+ 
+ _wait(5000);
+ 
+ //Checking Whether the DevOps section is mandatory
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableOverview1;
+ $inputObject.rowNo = $data.devOps;
+ $inputObject.colNo = $data.underProject;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+
+ _wait(2000); 
+
+ _setSelected(_select(9), "--None--");
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply;
+ InfyFTclick($inputObject)
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+ 
+ $t.end();  
+ 
+
+ var $t = _testcase("Dev_PMPlan_Small_scopeDescription_clientCommitment_02");
+
+$t.start();
+ 
+ _include("Dev_PMPlan_Small_scopeDescription_clientCommitment_02.sah");
+
+ $t.end();
+ 
+ var $t = _testcase("Dev_PMPlan_Small_mileStones_Assumptions_03");
+ $t.start();
+ 
+ _include("Dev_PMPlan_Small_mileStones_Assumptions_03.sah");
+
+ $t.end();
+ 
+ var $t = _testcase("Dev_PMPlan_Small_Language_Goalss_4_1");
+ $t.start();
+ 
+ _include("Dev_PMPlan_Small_Language_Goalss_4_1.sah");
+
+ $t.end();
+ 
+ var $t = _testcase("Dev_PMPlan_Small_LCStages_SLAPenalty__4_2");
+ $t.start();
+ 
+ _include("Dev_PMPlan_Small_LCStages_SLAPenalty__4_2.sah");
+
+ $t.end();
+ /*
+ var $t = _testcase("Dev_PMPlan_Small_LTrackwise_RCM_4_3");
+ $t.start();
+ 
+ _include("Dev_PMPlan_Small_LTrackwise_RCM_4_3.sah");
+
+ $t.end();
+ */
+ var $t = _testcase("Dev_PMPlan_Small_DataSetup_EngineeringGoals_05");
+ $t.start();
+ 
+ _include("Dev_PMPlan_Small_DataSetup_EngineeringGoals_05.sah");
+
+ $t.end();

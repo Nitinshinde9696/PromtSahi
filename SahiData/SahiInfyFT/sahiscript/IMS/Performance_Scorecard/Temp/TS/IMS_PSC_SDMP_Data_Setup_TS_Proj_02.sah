@@ -1,0 +1,261 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceSnehal.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_SDMP_Data_Setup_TS_Proj_02", "IMS/Performance_Scorecard");
+  
+ $inputObject = {}; //
+ $inputObject.user_name = $data.Username11;//Ravindra_Ganeshkar
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ _wait(500);
+ 
+ InfyFTreopenInstanceS();
+ 
+ _wait(300);
+ 
+ _click(_image("nodeIcon11")); 
+ 
+ _wait(500);
+
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName43;//Goals
+ SelectSegment($inputObject);
+ 
+ /*****************Fill Value in SDMP-Goal***********************/
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName71;//Project Level Metrics
+ $inputObject.rowNo = $data.rowNo701;//1
+ $inputObject.colNo = $data.colNo71;//3_edt|4_lst|5_edt|6_edt|7_lst|8_txt
+ $inputObject.fieldValues = $data.fieldValues71;//8|Internal|8|4|Hour|In Process
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _click(_link("Setup Goals"));
+ _wait(300);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo701;//1
+ $inputObject.colNo = $data.colNo72;//
+ $inputObject.fieldValues = $data.fieldValues72;//TRUE|5|internal|45|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo702;//2
+ $inputObject.colNo = $data.colNo72;//
+ $inputObject.fieldValues = $data.fieldValues73;//TRUE|3|SLA|81|2|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo703;//3
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues74;//TRUE|5|SLA with Financial Impact|93|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo704;//4
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues75;//TRUE|11|Internal|3|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo705;//5
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues76;//TRUE|45|SLA|5|2|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo706;//6
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues77;//TRUE|93|SLA with Financial Impact|5|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo707;//7
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues78;//TRUE|17|Internal|3|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo708;//8
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues79;//TRUE|5|SLA|93|2|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo709;//9
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues80;//TRUE|5|SLA with Financial Impact|71|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo710;//10
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues81;//TRUE|5|Internal|45|1|Hour|Working 
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo711;//11
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues82;//TRUE|81|SLA|3|2|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo712;//12
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues83;//TRUE|17|SLA with Financial Impact|3|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo713;//13
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues84;//TRUE|45|Internal|7|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo714;//14
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues85;//TRUE|81|Internal|7|2|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo715;//15
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues86;//TRUE|4|Internal|67|1|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName72;//Goal Selection
+ $inputObject.rowNo = $data.rowNo716;//16
+ $inputObject.colNo = $data.colNo72;
+ $inputObject.fieldValues = $data.fieldValues87;//TRUE|5|SLA|45|1|Hour|Working
+ setSwiftFormData($inputObject);
+  
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(300);
+  
+ clickReturn();
+  
+ /***********************Routing In SDMP***************************/
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName45;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name100; 
+ $inputObject.multiple_member = $data.Team_member10;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name101; 
+ $inputObject.multiple_member = $data.Team_member11;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name102; 
+ $inputObject.multiple_member = $data.Team_member12;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments10;
+ ClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ $inputObject = {}; //
+ $inputObject.user_name = $data.Username12;//Ravindra_Ganeshkar
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ wait(300);
+ 
+ _click(_image("nodeIcon11")); 
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName43;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments10;
+ ClickRoutewithComments($inputObject);  
+ 
+ logOut();
+ 
+ $inputObject = {}; //
+ $inputObject.user_name = $data.Username13;//nitin_shinde05
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ wait(300);
+ 
+ _click(_image("nodeIcon11")); 
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName43;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments10;
+ ClickRoutewithComments($inputObject); 
+ 
+ _wait(300);

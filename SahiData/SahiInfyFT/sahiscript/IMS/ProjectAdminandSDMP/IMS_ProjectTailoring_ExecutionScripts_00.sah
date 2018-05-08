@@ -1,0 +1,25 @@
+﻿
+ var $t = _testcase("IMS_projectadmin_Details_01.sah");
+ $t.start(); 
+ _include("IMS_projectadmin_Details_01.sah");
+ $t.end();
+
+ var $t = _testcase("IMS_projectadmin_service_Flow_03.sah");
+ $t.start(); 
+ _include("IMS_projectadmin_service_Flow_03.sah");
+ $t.end();
+
+ var $t = _testcase("IMS_projectadmin_SLA_05.sah");
+ $t.start(); 
+ _include("IMS_projectadmin_SLA_05.sah");
+ $t.end();
+
+ var $t = _testcase("IMS_projectadmin_route_sdmp_wthoutRiskProfiler_06.sah");
+ $t.start(); 
+ _include("IMS_projectadmin_route_sdmp_wthoutRiskProfiler_06.sah");
+ $t.end();
+
+ var $t = _testcase("IMS_projectadmin_Actvty_07.sah");
+ $t.start(); 
+ _include("IMS_projectadmin_Actvty_07.sah");
+ $t.end(); 

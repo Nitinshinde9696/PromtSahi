@@ -1,0 +1,672 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Dev_Iteration_Defect_Report_01","Dev/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $Review_Type1 = "Requirements Specifications Review";
+ var $Review_Type2 = "Acceptance Test Plan Review";//"Acceptance Test";
+  
+ /* var $t = _testcase("Step_1","Login");
+ $t.start(); */
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ /* $t.end();
+ 
+ var $t = _testcase("Step_2","Select Project");
+ 
+ $t.start(); */
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectName;//projectname//"SYAMCHCH";//
+ selectProject($inputObject);
+ 
+ /* $t.end();
+ 
+ var $t = _testcase("Step_3","Navigate to Iteration");
+ 
+ $t.start(); */
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo;//Iteration
+ navigateTo($inputObject);
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.ITR_Name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ InfyFTCreateInstanceS($inputObject);
+ 
+ _wait(500); 
+  
+ var $Created_IterId = $inputObject.CreatedId; 
+  
+ //$t.end();
+ 
+ clickReturn();
+   
+ _wait(500);
+ 
+/*  var $s = _testcase("Step_4","Navigate to Review");
+ $s.start(); */
+
+ $inputObject = {};
+ $inputObject.item = $Created_IterId;//"ITR200";//
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Reviews;
+ SelectSegment($inputObject);
+ 
+ /* $s.end();
+ 
+ var $s = _testcase("Step_5","Create new Review");
+ 
+ $s.start(); */
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Review_Name;
+ $inputObject.lst_DN_ReviewMode  =$data.Review_Mode;//
+ $inputObject.lst_DN_Reviewer = $data.Reviewer;//
+ $inputObject.txt_DN_ArtifactName = $data.Artifact_Name;
+ $inputObject.lst_reviewtype = $Review_Type1;//
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $createdRID1 = $inputObject.createdID;
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_6","Navigate to Created Review");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.item = $createdRID1;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_7","Navigate to Defect Segment");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.seg_Defect;
+ SelectSegment($inputObject);
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_8","Create Defect with Critical Severity");
+ 
+ $s.start(); */ 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity1;//Critical
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ $inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Requirements Analysis
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID1 = $inputObject.createdID;
+ 
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_9","Create Defect with Major Severity");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity2;//Major
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ $inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID2 = $inputObject.createdID;
+  
+ _wait(10000);
+ 
+ /* $s.end();
+  
+ var $s = _testcase("Step_10","Create Defect with Minor Severity");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity3;//Minor
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ $inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID3 = $inputObject.createdID;
+  
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_11","Create Defect with Cosmetic Severity");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity4;//Cosmetic
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ $inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID4 = $inputObject.createdID;
+ 
+ //$s.end();
+  
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.popupname = "openLinkedItem";//$data.newListing;//"newListing";
+ InfyFTclickReturnInAddItemPopup();
+ 
+ _wait(500);
+ 
+/*  var $s = _testcase("Step_12","Navigate to Review");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Reviews;
+ SelectSegment($inputObject);
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_13","Create New Review");
+ 
+ $s.start(); */
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Review_Name;
+ $inputObject.lst_DN_ReviewMode  =$data.Review_Mode;//
+ $inputObject.lst_DN_Reviewer = $data.Reviewer;//
+ $inputObject.txt_DN_ArtifactName = $data.Artifact_Name;
+ $inputObject.lst_reviewtype = $Review_Type2;//
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $createdRID2 = $inputObject.createdID;
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_14","Navigate to Created Review");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.item = $createdRID2;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_15","Navigate to Defect Segment");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.seg_Defect;
+ SelectSegment($inputObject);
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_16","Create Defect with Critical Severity");
+ 
+ $s.start(); */
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity1;//Critical
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ //$inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID5 = $inputObject.createdID;
+  
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_17","Create Defect with Major Severity");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity2;//Major
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ //$inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID6 = $inputObject.createdID;
+  
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_18","Create Defect with Minor Severity");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity3;//Minor
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ //$inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID7 = $inputObject.createdID;
+  
+ //$s.end();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_19","Create Defect with Cosmetic Severity");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detected_by;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Def_injected_by;//Arjun.R02
+ $inputObject.lst_DN_Owner = $data.Def_owner;
+ $inputObject.lst_DN_Severity = $data.Def_severity4;//Cosmetic
+ $inputObject.txt_CM_Description = $data.Def_desc;
+ //$inputObject.lst_PhaseDetected = $data.Def_LCStageDetected;
+ //$inputObject.lst_PhaseInjected = $data.Def_LCStageInjected;//Analyse
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID8 = $inputObject.createdID;
+  
+ //$s.end(); 
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.popupname = "openLinkedItem";//$data.newListing;//"newListing";
+ InfyFTclickReturnInAddItemPopup();
+ 
+ _wait(10000);
+ 
+ /* var $s = _testcase("Step_20","Navigate to Defect Report");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Def_Rep;
+ SelectSegment($inputObject);
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_21","Verify the Defect Report Table for 0th Row");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo0;//0
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = $data.fieldValues0;
+ verifySwiftFormData($inputObject);
+  
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_22","Verify the Defect Report Table for 1st Row");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo1;//1
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo1;//1
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues2;//Critical
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo1;//1
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID1+"|"+$createdRID1+"|"+$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ //$s.end();
+ 
+ /*************Row No 2*************/
+ 
+ /* var $s = _testcase("Step_23","Verify the Defect Report Table for 2nd Row");
+ 
+ $s.start(); */ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo2;//2
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo2;//2
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues3;//Major
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo2;//2
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID2+"|"+$createdRID1+"|"+$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ //$s.end();
+ 
+ /*************Row No 3*************/ 
+ 
+ /* var $s = _testcase("Step_24","Verify the Defect Report Table for 3rd Row");
+ 
+ $s.start(); */ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo3;//2
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo3;//2
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues4;//Minor
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo3;//2
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID3+"|"+$createdRID1+"|"+$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ //$s.end();
+ 
+ /*************Row No 4*************/ 
+ 
+ /* var $s = _testcase("Step_25","Verify the Defect Report Table for 4th Row");
+ 
+ $s.start(); */ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo4;//2
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo4;//2
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues5;//Cosmetic
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo4;//2
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID4+"|"+$createdRID1+"|"+$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ //$s.end();
+ 
+ /*************Row No 5*************/ 
+ 
+/*  var $s = _testcase("Step_26","Verify the Defect Report Table for 5th Row");
+ 
+ $s.start(); */ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo5;//5
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo5;//5
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues2;//Critical
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo5;//5
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID5+"|"+$createdRID2+"|"+$Review_Type2;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ //$s.end();
+ 
+ /*************Row No 6*************/ 
+ 
+ /* var $s = _testcase("Step_27","Verify the Defect Report Table for 6th Row");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo6;//6
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo6;//6
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues3;//Major
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo6;//6
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID6+"|"+$createdRID2+"|"+$Review_Type2;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ //$s.end();
+ 
+ /*************Row No 7*************/ 
+ 
+ /* var $s = _testcase("Step_28","Verify the Defect Report Table for 7th Row");
+ 
+ $s.start(); */
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo7;//7
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo7;//7
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues4;//Minor
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo7;//7
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID7+"|"+$createdRID2+"|"+$Review_Type2;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ //$s.end();
+ 
+ /*************Row No 8*************/
+ 
+ /* var $s = _testcase("Step_29","Verify the Defect Report Table for 8th Row");
+ 
+ $s.start(); */ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo8;//8
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;//"My Def|Def_desc|--None--|Requirements Analysis|--None--|Jyothi_Rajan|Arjun.R02|Open|My Review";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo8;//8
+ $inputObject.colNo = $data.colNo2;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues5;//Cosmetic
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//Name
+ $inputObject.rowNo = $data.rowNo8;//8
+ $inputObject.colNo = $data.colNo3;//2_lbl|11_lbl|13_lbl
+ $inputObject.fieldValues = $createdDefID8+"|"+$createdRID2+"|"+$Review_Type2;
+ verifySwiftFormData($inputObject);
+ 
+ clickReturn();
+ 
+ //$s.end();
+ 
+ _wait(2000);
+ 
+ /* var $s = _testcase("Step_30","Navigate to Iteration");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Iteration_Summary;//"Iteration Summary"
+ SelectSegment($inputObject);
+ 
+ $s.end();
+ 
+ _wait(2000);
+ 
+ var $s = _testcase("TC_4.1","Verifying Column Names in the Defect Summary Table");
+ 
+ $s.start(); 
+ 
+ /* $inputObject = {};
+ $inputObject.tableName = "Defect Summary";//$data.TableName4
+ $inputObject.rowNo = "0";//$data.rowNo100
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl";//$data.colNo103
+ $inputObject.fieldValues = "Defect category|Critical|Major|Minor|Cosmetic|Total";//$data.fieldValues103
+ verifySwiftFormData($inputObject); 
+
+ $s.end(); */
+ 
+ _include("Dev_Iteration_Iteration_summary_02.sah");

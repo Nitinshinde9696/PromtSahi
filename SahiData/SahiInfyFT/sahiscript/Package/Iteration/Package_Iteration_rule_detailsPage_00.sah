@@ -1,0 +1,447 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Package_Iteration_rule_detailsPage_05", "Package/Iteration");
+ $data1 = readDataFromCSV("Package_iteration_scheduleTask0_00", "Package/Iteration");  
+ $data2 = readDataFromCSV("Package_navigation_iteration_04", "Package/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",6,$dateObj);
+ var $DN_PlannedEndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ /********************************************************************************************************
+ * Login to swiftAlm
+ *********************************************************************************************************/ 
+ var $t = _testcase("TC_1", "START>>Login to SwiftALM"); 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data2.Username1; //jyothi_rajan
+ $inputObject.edt_loginid = $data2.LoginID1;
+ $inputObject.edt_password = $data2.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data2.Project_name3; //1300
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to PM_Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ /************Nature of work-->Single site & Implementation is package*****************************/
+ 
+ var $t = _testcase("TC_4", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType1;//"Package Implementation;Package Implementation - ORC";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+ 
+ $t.end();
+ 
+ /************Nature of work-->Single site & Implementation is PLM *****************************/
+ 
+ var $t = _testcase("TC_6", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData2;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType2;//"PLM Implementation";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+ 
+ $t.end();
+ 
+ /************Nature of work-->Multi site & Implementation is Package *****************************/
+ 
+ var $t = _testcase("TC_8", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData3;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType3;//"Global rollout;Local Rollout";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+ 
+ $t.end();
+ 
+ /************Nature of work-->Multi site & Implementation is PLM *****************************/
+ 
+ var $t = _testcase("TC_10", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData4;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType2;//"PLM Implementation";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+  
+ $t.end();
+ 
+ /************Nature of work-->Upgrade & Implementation is Package/PLM *****************************/
+ 
+ var $t = _testcase("TC_12", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData5;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType4;//"Package Upgrade;PLM Upgrade";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+  
+ $t.end();
+ 
+ /************Nature of work-->Implementation/ RollOut plus upgrade & Implementation is PLM *****************************/
+ 
+  var $t = _testcase("TC_14", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData6;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_15", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType5;//"PLM Implementation;Package Upgrade;PLM Upgrade";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+ 
+ $t.end();
+ 
+  /************Nature of work-->Implementation/ RollOut plus upgrade & Implementation is Package *****************************/
+ 
+  var $t = _testcase("TC_16", "Navigating to Project Tailoring");
+ $t.start(); 
+ 
+ _selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName  = $data.tbnm1; 
+ $inputObject.rowNo = $data.row2;
+ $inputObject.colNo  = $data.values1;
+ $inputObject.fieldValues = $data.PackageData7;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_17", "Navigating to PM Plan Iteration and checking status value");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = "KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType6;//"Global rollout;Local Rollout;Package Implementation;Package Implementation - ORC;Package Upgrade;PLM Upgrade";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+ _selectWindow();
+ 
+ $t.end();

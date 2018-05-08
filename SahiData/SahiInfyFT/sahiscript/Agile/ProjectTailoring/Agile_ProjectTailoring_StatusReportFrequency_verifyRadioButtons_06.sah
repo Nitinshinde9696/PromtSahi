@@ -1,0 +1,120 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data2 = readDataFromCSV("Agile_ProjectTailoring_StatusReportFrequency","Agile/ProjectTailoring"); 
+ 
+ var $t = _testcase("TC_01", "Test step 1:Go to Project Tailoring and then Select the Status Report Frequency segment");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data2.sectionStatusReport;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.frequencyRadioButton;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Test step 2:To check the functionality of Not Set radio button");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.rdg_DN_Frequency = $data2.radioNotSet;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data2.statusReportNote;
+ InfyFTverifyEformInstanceDetails($inputObject)
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Test step 3:To check the functionality of Weekly radio button");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data2.radioWeekly;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.weeklyRadioButton;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_01", "Test step 4:To check the note for the weekly status report");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data2.statusReportNote2;
+ InfyFTverifyEformInstanceDetails($inputObject)
+ 
+ _wait(2000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Test step 5:To check the default day selected for the Weekly status report");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.radio_Name = $data2.radioMonday;
+ radioButtonIsChecked($inputObject);
+ 
+ _wait(5000);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Test step 6:To check the functionality of Fortnightly radio button");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.rdg_Fortnightly = $data2.radioFortnightly;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data2.statusReportNote3;
+ InfyFTverifyEformInstanceDetails($inputObject)
+ 
+ _wait(2000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_01", "Test step 7:To check the functionality of monthly radio button");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.rdg_Monthly = $data2.radioMonthly;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data2.statusReportNote4;
+ InfyFTverifyEformInstanceDetails($inputObject)
+ 
+ _wait(2000);  
+ 
+ $t.end();

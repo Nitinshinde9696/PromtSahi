@@ -1,0 +1,204 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/TaskGrid.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Iteration_ToolsAndReuse_03","Package/Closure_Report");
+ 
+  /*
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Iteration");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "BGGSZ199";//$generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR1";//$data.iter1;//ITR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ */
+ 
+ /*
+ var $t = _testcase("TC_2", "Adding Tool in Tools Tracking");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment16;//Tools Tracking
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.link = $data.link1;//Add Planned Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $data.tsegment1;//Search Output
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.tableName = $data.table1;//Add[1] 
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname1;//Add[1]_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ clickReturn();
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.tableName = $data.table2;//Tools Summary
+ $inputObject.rowNo = $data.trowno1;//1
+ $inputObject.colNo = $data.tcolno1;//3_edt
+ $inputObject.fieldValues = $data.tval1;//5.00
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ */
+ var $t = _testcase("TC_3", "Adding Reuse in Reuse Tracking");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment17;//Reuse Tracking
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.link = $data.link2;//Add Rows
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "Name*_edt";
+ $inputObject.fieldValues = $Itr_ID;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "Asset Version*_edt";
+ $inputObject.fieldValues = "1234";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "Asset Type*_lst";
+ $inputObject.fieldValues = "Package";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "License Type/Source*_lst";
+ $inputObject.fieldValues = "Open Source";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "Unit of Measure*_lst";
+ $inputObject.fieldValues = "Lines Of Code";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "Size*_edt";
+ $inputObject.fieldValues = "20";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.table3;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = "Estimated Effort Saving (P hrs)*_edt|Usage Status_lst|Savings Factored in Estimates_lst";
+ $inputObject.fieldValues = "50.00|Used with Major modification|Y";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.tableName = $data.table4;//Actual
+ $inputObject.rowNo = $data.Arow3;//0
+ $inputObject.colNo = $data.Acol3;//1_edt
+ $inputObject.fieldValues = $data.Aval3
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ InfyFTsaveSwiftForm($inputObject);
+  
+ $t.end();
+ 
+ 
+ 

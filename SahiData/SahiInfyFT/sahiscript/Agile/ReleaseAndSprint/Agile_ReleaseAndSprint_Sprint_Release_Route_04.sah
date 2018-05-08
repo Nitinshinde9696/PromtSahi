@@ -1,0 +1,295 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_Release_Route_04","Agile/ReleaseAndSprint");
+$data1 = readDataFromCSV("Agile_ReleaseAndSprint_SprintPerformancePage_03","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Routing Sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.Details;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.txt_Comments = $data.fieldValues22;
+$inputObject.alert = $data.fieldValues7;
+ClickRoutewithComments($inputObject);
+ 
+$inputObject = {};
+$inputObject.txt_Comments = $data.fieldValues22;
+$inputObject.alert = $data.fieldValues7;
+ClickRoutewithComments($inputObject);
+ 
+$inputObject = {};
+$inputObject.txt_Comments = $data.fieldValues22;
+$inputObject.alert = $data.fieldValues7;
+ClickRoutewithComments($inputObject);
+
+$inputObject = {};
+$inputObject.true = "0";
+$inputObject.button = $data.Reopen;
+InfyFTcheckingButtons($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "navigating to Release");
+$t.start();
+
+var $RelID = _getText(_span("CM_Release"));
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $RelID;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.value = $currentDate;
+$inputObject.span_name = $data.DN_ActualStartDate;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_StatusA;
+$inputObject.msgAlert = "Following sprint(s) is/are tagged to this release :- "+$nameSprint+". Please remap the sprint(s) with other open releases or abandon them before abandoning the Release .";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_StatusC;
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "There are Metrics in Release Performance Summary section where significant deviation is present. Please provide reasons for deviation for metrics marked in red.";
+InfyFTClickRoutewithCommentsN($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Release performance Table");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.ReleasePTable;
+InfyFTclick($inputObject);
+
+_wait(1000);
+$inputObject = {};
+$inputObject.span = $SprintID;//Defect
+InfyFTclick($inputObject);
+
+_wait(1500);
+_selectWindow("Sprint : Details ("+$SprintID+"-"+$nameSprint+")");
+_click(_button("Return"));
+_selectWindow();
+
+/* $inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.DefectDensityT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.DefectDensityT;
+setSwiftFormData($inputObject); */
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.DIR;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.DIR;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.EV;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.EV;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.ProdT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.ProdT;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.ResidualQLT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.ResidualQLT;
+setSwiftFormData($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.residualSP;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.residualSP;
+setSwiftFormData($inputObject);  */
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameRelease; 
+$inputObject.rowNo = $data.storypoint;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.storypoint;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data1.tableNameOptionalS; 
+$inputObject.rowNo = $data1.TestingQuality;
+$inputObject.colNo = $data1.TestingQualityC;
+$inputObject.fieldValues = $data1.rowNo7;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data1.tableNameprjS; 
+$inputObject.rowNo = $data1.testProjectspfcGoals;
+$inputObject.colNo = $data1.TestingQualityC;
+$inputObject.fieldValues = $data1.rowNo7;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "There are Metrics in Release Performance Summary section where significant deviation is present. Please provide reasons for deviation for metrics marked in red.";
+InfyFTClickRoutewithCommentsN($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data1.tableNameOptionalS; 
+$inputObject.rowNo = $data1.TestingQuality;
+$inputObject.colNo = $data1.DefectDensityC;
+$inputObject.fieldValues = $data1.velocity;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data1.tableNameprjS; 
+$inputObject.rowNo = $data1.testProjectspfcGoals;
+$inputObject.colNo = $data1.DefectDensityC;
+$inputObject.fieldValues = $data1.velocity;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.DefectDensityT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.DefectDensityT;
+setSwiftFormData($inputObject); */
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.DIR;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.DIR;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.EV;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.EV;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.ProdT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.ProdT;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.ResidualQLT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.ResidualQLT;
+setSwiftFormData($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.residualSP;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.residualSP;
+setSwiftFormData($inputObject);  */
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameReleaseforTesting; 
+$inputObject.rowNo = $data.storypoint;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.storypoint;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+_include("Agile_ReleaseAndSprint_Release_ReleasePerformance_Summary_08.sah");
+
+$t.end();
+
+var $t = _testcase("TC_4", "Routing Release at closed status");
+$t.start();
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_Release_Route_04","Agile/ReleaseAndSprint");
+$data1 = readDataFromCSV("Agile_ReleaseAndSprint_SprintPerformancePage_03","Agile/ReleaseAndSprint");
+
+$inputObject = {};
+$inputObject.txt_Comments = $data.fieldValues22;
+$inputObject.alert = $data.fieldValues7;
+ClickRoutewithComments($inputObject);
+ 
+$inputObject = {};
+$inputObject.txt_Comments = $data.fieldValues22;
+$inputObject.alert = $data.fieldValues7;
+ClickRoutewithComments($inputObject);
+ 
+$inputObject = {};
+$inputObject.txt_Comments = $data.fieldValues22;
+$inputObject.alert = $data.fieldValues7;
+ClickRoutewithComments($inputObject);
+
+$inputObject = {};
+$inputObject.true = "0";
+$inputObject.button = $data.Reopen;
+InfyFTcheckingButtons($inputObject);
+
+$t.end();
+
+var $t = _testcase("Agile_ReleaseAndSprint_Sprint_NegativeCheck_Route_05");
+$t.start();
+
+_include("Agile_ReleaseAndSprint_Sprint_NegativeCheck_Route_05.sah");
+
+$t.end();

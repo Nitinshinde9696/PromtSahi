@@ -1,0 +1,84 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+$data = readDataFromCSV("Roles_PrjLvl_6_SQA_23","Roles"); 
+
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",5,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+/*  $inputObject = {};
+ $inputObject.user_name = $data.UserName;//siddharth_kale
+ $inputObject.edt_loginid = $data.LoginID;//siddharth_kale
+ $inputObject.edt_password = $data.Password;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home//Projects
+ navigateTo($inputObject);
+ 
+ if(_isVisible(_div("INFY000029PrjM")))
+ 
+ {
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//INFY000029PrjM
+ selectProject($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Team members
+ navigateTo($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id3;//pari_r
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles3;//SQA
+ //$inputObject.edt_startdateInput = $StartDate1;
+ //$inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject); 
+ }  */
+ 
+ /**********************************************************************
+ LOGINNG WITH SQA TEST CASE 11 & 12// ALTSBF10
+ **********************************************************************/ 
+ 
+ var $t = _testcase("TC_1", "SQA login  ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username3;//pari_r	
+ $inputObject.edt_loginid = $data.LoginID3;//pari_r
+ $inputObject.edt_password = $data.Password3;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home//Projects
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name4;//ALTSBF10
+ selectProject($inputObject); 
+ 
+ var $t = _testcase("TC_2", "marking project as not high risk/high/high2/critical"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo13;//ALERT
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.RiskLevel;//High 
+ ModifyEformInstance($inputObject); 
+ 
+ $t.end(); 
+  

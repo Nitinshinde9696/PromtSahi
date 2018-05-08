@@ -1,0 +1,666 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah"); 
+_include("../../../sahisource/Business/Filter.sah");
+
+ $data = readDataFromCSV("Maint_Issue_01", "Maint/Issue_Tracking");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",-2,$dateObj2);
+ var $ClosureDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $T0 = false;
+ var $T1 = true;
+ 
+/*************************************************************************
+*  TestStep_1  : login Window using wrong ID/Password
+*************************************************************************/
+
+ var $t = _testcase("TC_1","Login");
+ 
+ $t.start();
+/*
+ $inputObject = {}; //login Window using wrong ID/Password
+ $inputObject.user_name = $data.Username112;
+ $inputObject.edt_loginid = $data.LoginID112;
+ $inputObject.edt_password = $data.Password112;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ logOut();
+ */
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(1500);
+ 
+ var $PSD = _getText(_span("STARTDATE"));
+ var $PED = _getText(_span("ENDDATE"));
+ 
+ _wait(1500);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_2  : Create Issue 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_2_TS_1_2_3","Open Issue List");
+ 
+ $t.start();
+ 
+ $inputObject = {}; // giving the path for Monitor - Issue
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation51; // Opening Blank Eform of Issue
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;//true
+ $inputObject.button = $data.Save_Add_New;//Save & Add New
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;//true
+ $inputObject.button = $data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_3  : Check Available Fields on Issue 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_3_TS_1","Check Fields on Issue");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation91;
+ clickAddIcon($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.ID5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Name5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Description5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.RaisedBy5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Assignee5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.IssueSeverity5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.ExpectedResolutioDate5;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Status51;
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.IssueClosureDate5;
+ InfyFTisVisibleS($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_4 : Check Fields in Issue 
+*  Explanation : Check whether Fields are mandatory field or not 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_4.5", "Check Name Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};	
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Assignee in Details tab \n• Field Issue Severity in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4.7", "Check Description Field");
+ 
+ $t.start(); 
+  
+ $inputObject = {};	
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Description in Details tab \n• Field Assignee in Details tab \n• Field Issue Severity in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+
+ $t.end(); 
+
+ var $t = _testcase("TC_4.9", "Check Raised By Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_RaisedBy = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised By in Details tab \n• Field Assignee in Details tab \n• Field Issue Severity in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_4.10", "Check Assignee Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_RaisedBy = $data.RaisedBy4;
+ $inputObject.lst_DN_Assignee = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Assignee in Details tab \n• Field Issue Severity in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_4 : Check Issue Saverity 
+*  Explanation : Check whether Issue Saverity is mandatory field or not 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_4.14", "Check Issue Saverity");
+ 
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_Assignee = $data.Assignee42;
+ $inputObject.edt_DN_ExpectedResolutionDate = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Issue Severity in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+   
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_5  : Create Issue 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_5","Create Issue");
+ 
+ $t.start();
+ 
+ $inputObject = {};// Add Issue
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_Assignee = $data.Assignee42;
+ $inputObject.lst_DN_IssueSeverity = $data.IssueSeverity4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ var $IDiss =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.button = $data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_10  : Check Issue for Closed Date 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_10","Check Expected Resolution Date and Closed Date");
+ 
+ $t.start();
+ 
+ $inputObject = {};// Add Issue
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_Assignee = $data.Assignee42;
+ $inputObject.edt_DN_ExpectedResolutionDate = $currentDate;
+ $inputObject.lst_DN_Status = $data.Status42;
+ $inputObject.edt_DN_Issueclosuredate = $endDate;
+ //$inputObject.msgAlert = "Issue closure date should be between Project Start Date (1-Apr-1996) and Project End Date (17-Jul-2018) and cannot be future Date.";
+ $inputObject.msgAlert = "Issue closure date should be between Project Start Date ("+$PSD+") and Project End Date ("+$PED+") and cannot be future Date.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};// Add Issue
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_Assignee = $data.Assignee42;
+ $inputObject.edt_DN_ExpectedResolutionDate = $currentDate;
+ $inputObject.lst_DN_Status = $data.Status41;
+ $inputObject.edt_DN_Issueclosuredate = $endDate;
+ $inputObject.msgAlert = "Issue closure date should be between Project Start Date ("+$PSD+") and Project End Date ("+$PED+") and cannot be future Date.";
+ //"Issue closure date should be between Project Start Date ("+$PSD+") and Project End Date ("+$PED+") and cannot be future Date.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_4 : Verify Drop Down List of Severity 
+*  Explanation : Verify drop down list by displaying all names present in the list 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_4.3", "Verify Drop Down List of Severity");
+ 
+ $t.start();
+ 
+ $inputObject = {}; // to check drop down list of Saverity
+ $inputObject.lst_DN_IssueSeverity = $data.SaverityList8;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_4 : Check Status Field 
+*  Explanation : Verify drop down list by displaying all names present in the list 
+*************************************************************************/
+ 
+ var $t = _testcase("TC_4.8", "Check Status Field");
+ 
+ $t.start(); 
+  
+ $inputObject = {}; 
+ $inputObject.lst_DN_Status = $data.StatusList8;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_10  : Verify Drop Down List of Assignee 
+*  Explanation : Verify drop down list by displaying all names present in the list 
+*************************************************************************/
+
+ var $t = _testcase("TC_4.11", "Verify Drop Down List of Assignee");
+ 
+ $t.start();
+ 
+ $inputObject = {};// to check drop down list of Assignee
+ $inputObject.lst_DN_Assignee = $data.AssigneeList8;
+ verifyEformInstanceDetails($inputObject);
+ 
+ logOut();
+ 
+ _wait(3000);
+   
+ $t.end();
+ 
+ /*************************************************************************
+*  TestCase_7  : Check Assignee 
+*  Explanation : Create an Check Assignee by adding Same Assignee
+*************************************************************************/
+ 
+ var $t = _testcase("TC_7","Check Assignee");
+ 
+ $t.start();
+ 
+ $inputObject = {}; //for login Window
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo32;
+ navigateTo($inputObject);
+ 
+ $inputObject = {}; // ckecing Inbox for Issue
+ $inputObject.item = $IDiss;
+ verifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDiss;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.button = $data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_Assignee = $data.Assignee41;//Snehal
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ logOut();
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_8  : Check Assignee 
+*  Explanation : Create an Check Assignee by adding Same Assignee
+*************************************************************************/
+ 
+ var $t = _testcase("TC_8","Check Assignee");
+ 
+ $t.start();
+ 
+ $inputObject = {}; //for Pawan
+ $inputObject.user_name = $data.Username13;
+ $inputObject.edt_loginid = $data.LoginID13;
+ $inputObject.edt_password = $data.Password13;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDiss;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.lst_DN_Assignee = $data.Assignee43;//Pawan
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ logOut();
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_9  : Check Assignee 
+*  Explanation : Create an Check Assignee by adding Same Assignee
+*************************************************************************/
+ 
+ var $t = _testcase("TC_9","Check Assignee");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo32;
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ /* $inputObject = {}; // ckecing Inbox for Issue
+ $inputObject.item = $IDiss;
+ $inputObject.operation=$data.operation52;
+ verifyInstanceInListing($inputObject);  */
+ 
+ logOut();
+  
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_10 : Check Closure Date 
+*  Explanation : Status of the Issue should be changed to close
+*************************************************************************/
+ 
+ var $t = _testcase("TC_10","Status of the Issue should be changed to close");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ _wait(2000);
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDiss;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Issueclosuredate = $ClosureDate1;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.Status52//Status * :
+ $inputObject.span_Name = $data.Status42//Closed
+ InfyFTisReadOnlyS($inputObject);
+ 
+ //logOut();
+ 
+ $t.end();
+ 
+ /*************************************************************************
+ *  TestCase_11  : Create Risk and Linked to Issue
+ *************************************************************************/
+
+ var $t = _testcase("TC_11.1", "DFR-Select Project"); 
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo33;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name6;
+ $inputObject.txt_CM_Description = $data.CM_Description6;
+ $inputObject.lst_DN_RiskCategory = $data.RiskCategory6;
+ $inputObject.lst_DN_Probability = $data.Probability6;
+ $inputObject.lst_DN_Impact = $data.Impact6;
+ //$inputObject.edt_DN_ScheduleImpactDays = $data.Impact6;
+ $inputObject.txt_DN_MitigationPlan = $data.MitigationPlan6;
+ $inputObject.edt_DN_RiskOwner = $data.RiskOwner6;
+ $inputObject.lst_DN_ImpactTo = $data.ImpactTo6;
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.button = $data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName7;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_ItemCode = $IDiss;
+ $inputObject.existingItems = $IDiss;
+ InfyFTlinkExistingItemsInLinkedItemSegmentSnehal($inputObject); 
+ 
+ _wait(3000);
+ /*
+ $inputObject = {};
+ $inputObject.ItemName = $data.Name4;
+ $inputObject.existingItems = "";
+ $inputObject.alert = "Please select a work-item.";
+ InfyFTlinkExistingItemsInLinkedItemSegmentSnehal($inputObject);
+ */
+ $t.end();
+ 
+ /*************************************************************************
+ *  TestCase_13  : click on the Re-open button on the Issues eform
+ *************************************************************************/
+
+ var $t = _testcase("TC_13", "click on the Re-open button on the Issues eform"); 
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ClrFltr;
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDiss;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ InfyFTreopenInstanceS();
+ 
+ $inputObject = {};// Add Issue
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.lst_DN_Assignee = $data.Username12;//Nethravathi
+ $inputObject.lst_DN_IssueSeverity = $data.IssueSeverity4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {}; //for login Window
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ClrFltr;
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDiss;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};	
+ $inputObject.lst_DN_Assignee = $data.Username13;//Pawan
+ $inputObject.edt_DN_Issueclosuredate = $ClosureDate1;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ logOut();
+ 
+ /*************************************************************************
+ *  TestCase_14  : click on the Re-open button on the Issues eform
+ *************************************************************************/
+
+ var $t = _testcase("TC_14", "click on the Re-open button on the Issues eform"); 
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.ClrFltr;
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDiss;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ InfyFTreopenInstanceS();
+ 
+ $t.end();

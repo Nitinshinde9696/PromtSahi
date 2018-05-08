@@ -1,0 +1,30 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+
+$data = readDataFromCSV("Roles_MR_AQM_2_NtUQH_FAUnit_05","Roles");   
+ 
+ var $t = _testcase("TC_4.1", "Login with not a UQH for any Unit "); 
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Alex_Nathan
+ $inputObject.edt_loginid = $data.LoginID1;//Alex_Nathan	
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//AQM
+ InfyFTnavigateTo($inputObject);
+ 
+ var $t = _testcase("TC_4.1.1", "verifying Unit field does not have values "); 
+ $t.start(); 
+ 
+ _assertFalse(_span("KEY_TOOLTIP_Export-btnIconEl").disabled); 
+ 
+ $t.end();
+ 

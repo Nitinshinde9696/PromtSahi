@@ -1,0 +1,17 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+ $data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_Duplicate_06","Agile/ReleaseAndSprint");
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.SprintswithinRelease;
+ $inputObject.rowNo = $data.rowIndexLeft;
+ $inputObject.colNo = $data.metricNameLst;
+ $inputObject.fieldValues = $data.optionalFieldValues;
+ verifySwiftFormData($inputObject) 

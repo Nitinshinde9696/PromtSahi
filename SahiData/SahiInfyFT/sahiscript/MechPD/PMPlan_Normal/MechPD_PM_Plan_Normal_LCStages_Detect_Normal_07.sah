@@ -1,0 +1,402 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+
+ $data = readDataFromCSV("MechPD_PM_Plan_Normal_LCStages_Detect_Normal_07","MechPD/PMPlan_Normal"); 
+
+ var $t = _testcase("System", "Login");
+ $t.start();
+
+ $inputObject = {};              
+ $inputObject.user_name = $data.user_name1;//subhashini_k03
+ $inputObject.edt_loginid = $data.LoginID1;//subhashini_k03
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Navigate", "PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//HEFPSHL1
+ selectProject($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_3", "Navigate to Product Design Request and creating the PDR");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo9;//Product Design
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "verifying the review type of Review in Product Design Request");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "PDRQ1"; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name11;//Reviews
+ SelectSegment($inputObject);
+ 
+ _click(_span("KEY_Link_New_item-btnIconEl")); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix =  $data.popup_name1;//"newListing";
+ $inputObject.lst_reviewtype = $data.DDValue1;//Customer Acceptance Review;Design or Analysis Review;Engineering Specifications Review;Product Design Requirements Review;Validation Review
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(1000);
+ 
+ clickReturn();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5", "Creating the Reviews  ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo9;//Product Design
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "PDRQ1"; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name11;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name8;//Review1 
+ $inputObject.lst_DN_ReviewMode = "One Person Review";//$data.reviewmode8;//Group Review/One Person Review
+ $inputObject.lst_DN_Reviewer = $data.user_name1;//
+ $inputObject.txt_DN_ArtifactName = $data.artifatName8;//Creating the review
+ $inputObject.lst_reviewtype = $data.testingof8;//Customer Acceptance Review
+ InfyFTcreateLinkedItem2($inputObject);
+
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_6", "Verifying the Defect Management available functionalities");
+ $t.start();
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//"openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;// "newListing";
+ $inputObject.lst_PhaseInjected = $data.DDValue10;//Analysis of Product Design Requirements / Specifications;Design(Modeling Analysis Verification);Product Design Requirements / Specifications
+ InfyFTOpenPopupOfPopupVerify($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+  $inputObject.winprefix = $data.popup_name1; //"newListing";
+ $inputObject.lst_PhaseDetected = $data.DDValue4;//Validation and Delivery
+ $inputObject.lst_PhaseInjected = $data.DDValue5;//Product Design Requirements / Specifications;Analysis of Product Design Requirements / Specifications;Design(Modeling Analysis Verification)
+ InfyFTOpenPopupOfPopupVerify($inputObject);
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1; //"newListing";
+ $inputObject.lst_DN_DefectType = $data.Detectedby;
+ InfyFTOpenPopupOfPopupVerify($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_reviewtype = $data.testingOf13;//Design or Analysis Review
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//"openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//"openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1; //"newListing";
+ $inputObject.lst_PhaseDetected = $data.testingOf13;//Design or Analysis Review
+ $inputObject.lst_PhaseInjected = $data.DDValue5;//Product Design Requirements / Specifications;Analysis of Product Design Requirements / Specifications;Design(Modeling Analysis Verification)
+ InfyFTOpenPopupOfPopupVerify($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_reviewtype = $data.testingOf14;//Product Design Requirements Review
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//"openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1; //"newListing";
+ $inputObject.lst_PhaseDetected = $data.testingOf14;//Product Design Requirements Review
+ $inputObject.lst_PhaseInjected = $data.testingOf14;//Product Design Requirements Review
+ InfyFTOpenPopupOfPopupVerify($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_reviewtype = $data.testingOf15;//Validation Review
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//"openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//"newListing";
+ $inputObject.lst_PhaseDetected = $data.testingOf15;//Validation Review
+ $inputObject.lst_PhaseInjected = $data.DDValue5;//Product Design Requirements / Specifications;Analysis of Product Design Requirements / Specifications;Design(Modeling Analysis Verification)
+ InfyFTOpenPopupOfPopupVerify($inputObject);
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ 
+
+ 
+ $t.end();
+ 
+ /*var $t = _testcase("TC_7", "verifying the review type of Review in Product Design Request");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo9; //Product Design
+ InfyFTnavigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "PDRQ1";//$pdr1; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name11;//Reviews
+ SelectSegment($inputObject); 
+
+ _click(_span("KEY_Link_New_item-btnIconEl")); 
+ 
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_reviewtype = $data.DDValue2;//Engineering Specifications Review;Review of QFD or Customer Requirements
+ verifyEformInstanceDetails($inputObject);
+ 
+ clickReturn();
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "Navigating to Applicable LC Stages to select remain stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ InfyFTclickNodeIcon12or13();  
+ 
+ $inputObject = {};
+ $inputObject.name = $data.AName; //Applicable LC Stages
+ InfyFTassertVisible($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_9", "Selecting 'Design,Optimize,Validation' stages in Applicable LC Stage ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.link = $data.AName;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//Applicable LC Stages for Product Design Request
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName10;//Design(Modeling Analysis Verification)|Optimize|Validation and Delivery
+ $inputObject.colNo = $data.colName8;//Applicable_chk
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ infyFTsaveSwiftForm();
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "verifying the review type of Review in Product Design Request");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo9; //Product Design Request
+ InfyFTnavigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "PDRQ1";//$pdr1; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name11;//Reviews
+ SelectSegment($inputObject);
+
+ _click(_span("KEY_Link_New_item-btnIconEl")); 
+ 
+ $inputObject = {};
+ $inputObject.winprefix = "newListing";
+ $inputObject.lst_reviewtype = $data.DDValue3;//Acceptance Review;Engineering Specifications Review;Final Review of Engineering Design;Initial Review of Engineering Design;Review of QFD or Customer Requirements
+ verifyEformInstanceDetails($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item = "PDRQ1";//$pdr1; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name11;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.RName12;//ReviewLCS1 
+ $inputObject.lst_DN_ReviewMode = $data.Reviewmode12;//One Person Review 
+ $inputObject.lst_DN_Reviewer = $data.Reviewer12;//subhashini_k03 
+ $inputObject.txt_DN_ArtifactName = $data.ArtifactName12;//creating review 
+ $inputObject.lst_reviewtype = $data.Reviewtype12;//Acceptance Review 
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $rID = $inputObject.createdID;
+ 
+ $t.end();
+ 
+ if(_isVisible(_span("x-btn-icon-el x-tbar-page-last ")))
+{_click(_span("x-btn-icon-el x-tbar-page-last "));}
+ 
+ $inputObject = {};
+ $inputObject.item = $rID; 
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = "openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+ 
+ /*_selectWindow("openLinkedItem"); 
+ _click(_span("KEY_Link_New_item-btnIconEl"));
+ //_unSelectWindow();*/
+ 
+ /*_wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = "openLinkedItem";
+ //_selectWindow("newListing");
+ $inputObject.edt_CM_Name = $data.RName13;//Defect1 
+ $inputObject.txt_CM_Description = $data.Description13;//creating defect 
+ $inputObject.lst_DN_DefectDetectedBy = $data.DefectBy13;//subhashini_k03 
+ $inputObject.lst_DN_Owner = $data.Owner13;// subhashini_k03
+ $inputObject.lst_DN_Severity = $data.Severity13;//Major
+ //ModifyEformInstance($inputObject);
+ InfyFTcreateLinkedItem2($inputObject);
+ 
+ /*var $dID = $inputObject.createdID;
+
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = "openLinkedItem";
+ $inputObject.item = $dID;  
+ OpenEformInstance($inputObject);*/
+ 
+ /*_wait(2000);
+ 
+ $inputObject = {};
+ _selectWindow("newListing");
+ $inputObject.lst_DN_Status = $data.Status14;//Closed
+ $inputObject.msgAlert = $data.Error;
+ ModifyEformInstance($inputObject);
+ //Please fill the following fields:  Defect Type,   Defect Injected By,   LC Stage Injected,  Number of instances,   Closing Comments,  before closing the Defect.
+ _wait(500);
+ $inputObject = {};
+ $inputObject.popup_name = "newListing";
+ $inputObject.lst_PhaseDetected = $data.DDValue4;//Validation and Delivery
+ $inputObject.lst_PhaseInjected = $data.DDValue5;//Product Design Requirements / Specifications;Analysis of Product Design Requirements / Specifications;Design(Modeling Analysis Verification)
+ verifyEformInstanceDetails($inputObject);
+
+
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Status15;//Open 
+ ModifyEformInstance($inputObject); 
+ 
+ //_closeWindow();
+ 
+ _selectWindow("newListing");
+ clickReturn();
+ _wait(1000);
+ 
+ _selectWindow("openLinkedItem");
+ _wait(500);
+ clickReturn(); 
+ 
+ /*var $t = _testcase("TC_7", "Verifying the Created the Assumption ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.RName9;//Assum2
+ verifyLinkedItem($inputObject);
+ 
+ $t.end();*/ 
+ 

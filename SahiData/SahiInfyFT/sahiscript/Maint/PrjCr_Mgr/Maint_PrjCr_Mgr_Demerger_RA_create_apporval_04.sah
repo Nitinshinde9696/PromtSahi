@@ -1,0 +1,246 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+
+$data = readDataFromCSV("Maint_PrjCr_Mgr_Demerger_RA_create_apporval_04","Maint/PrjCr_Mgr");
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $nitin = _testcase("For ","InfyFT_sahi1_BR2_Demerger_without_apporval");
+ $nitin.start();
+ 
+ var $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end(); 
+ var $s = _testcase("TC_1.4"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ //clearFilterSettings($inputObject);
+  
+ _setValue(_textbox("searchTextBox-inputEl"),$data.Project_requestid);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ var $s = _testcase("TC_2.1"," verify Request");
+ $s.start();
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+infyFTverifyProjectRequestInstanceInListing($inputObject);
+  
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+
+_wait(5000);
+var $t = _testcase("End Date"," Catching Project request End date");
+ $t.start();
+ $Project_req_end_date = _getText(_textbox("ENDDATE"));
+ $t.end();
+ 
+ var $t = _testcase("Master Project End Date"," Catching Master Project End date");
+ $t.start();
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname19;//projectname//TJCSTIVP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = "Profile_usp";
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Overview";
+ SelectSegment($inputObject);
+ 
+ $Master_Prj_end_date = _getText(_span("ENDDATE"));
+ $t.end();
+ var $t = _testcase("TC_5.1"," Project request Workflow");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+
+ _setValue(_textbox("searchTextBox-inputEl"),$data.Project_requestid);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+
+ var $t = _testcase("TC_5.1"," Project request Workflow");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.field12;//_select("DN_InitiateAction")//Merge
+ $inputObject.txt_CM_Description = $data.rom12;
+ $inputObject.txt_DN_ReasonfornotchoosingRe =  $data.rom12;
+  $inputObject.lst_DN_PeakTeamSize = $data.teamsize12;
+ ModifyEformInstance($inputObject);
+  
+_assertVisible(_select("DN_ExecutionProjectCodeLi"));
+_assertVisible(_cell("Execution Project Code List :"));  
+
+ $inputObject={}; 
+ $inputObject.lst_DN_ExecutionProjectCodeLi = $data.epcl13;//
+ $inputObject.txt_DN_ReasonfornotchoosingRe= $data.rom12;
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+
+     $inputObject = {};
+	 $inputObject.segment_name = $data.segment_name15;
+	 SelectSegment($inputObject);
+	  
+	 _wait(5000);
+	 $inputObject = {};
+	 $inputObject.workflow_stage = $data.stage29;//1
+	 $inputObject.multiple_member = $data.user_skipset1;//anilp
+	 WorkflowSet($inputObject);
+	    
+	 $inputObject = {};
+	 $inputObject.txt_Comments = $data.Comments18;
+	 InfyFTClickRoutewithComments($inputObject);	
+
+_wait(5000);
+	
+	var string = $data.Project_requestid+ ":Merge Request with "+$data.epcl13;
+	
+	logOut();
+	var $t = _testcase("TC_1.1","Login Reviewer");
+	$t.start();
+ 
+	 $inputObject = {};
+	 $inputObject.user_name = $data.user_skipset1;
+	 $inputObject.edt_loginid = $data.user_skipset1;
+	 $inputObject.edt_password =$data.Password1;
+	 loginIntoDigite($inputObject);
+	 
+	 $t.end();
+	 
+	 
+	var $s = _testcase("TC_2.1"," Open Request");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo4;//
+	navigateTo($inputObject);
+ 
+	$inputObject = {};
+	$inputObject.item = $data.Project_requestid;//"AGLAGIS_Prdm134" ;
+	infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+	$inputObject = {};
+	$inputObject.item = $data.Project_requestid;//"AGLAGIS_Prdm133";//$data.Project_requestid4;
+	infyFTOpenProjectRequest($inputObject);
+ 
+	$s.end();
+ 
+	var $s = _testcase("TC_15.5"," Route request");
+	$s.start();
+ 
+	$inputObject = {};
+	$inputObject.segment_name = $data.segment_name15;
+	SelectSegment($inputObject);
+	 
+	$inputObject = {};
+	$inputObject.txt_Comments = $data.Comments18;
+	InfyFTClickRoutewithComments($inputObject);
+	
+	_wait(5000);
+	logOut();
+	$s.end();
+var $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end(); 
+ var $s = _testcase("TC_1.4"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ //clearFilterSettings($inputObject);
+  
+ _setValue(_textbox("searchTextBox-inputEl"),$data.Project_requestid);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ 	 
+	$inputObject = {};
+	$inputObject.projectname = $data.projectname19;//projectname//TJCSTIVP
+	selectProject($inputObject);
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo20;//Profile_usp
+	navigateTo($inputObject);
+	
+	var $t = _testcase("Verifying End Date"," End Date should change");
+	 $t.start();
+	
+	_assertEqual($Project_req_end_date, _getText(_span("ENDDATE")));
+		
+	$t.end();
+	
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.segment_name21;//_link("Linked Projects")
+	SelectSegment($inputObject);
+	
+	$inputObject = {};
+	$inputObject.span_Name = $data.span_Name22;//_span("Merged Projects")
+	InfyFTisVisible($inputObject);
+	
+	$inputObject = {};
+	$inputObject.span_Name = $data.span_Name23;//_span("ABBDBIMS_JUNK")
+	InfyFTisVisible($inputObject);
+ 
+	
+ $MasterProject = $data.projectname19;
+ $MergedReqID = $data.span_Name23;
+ $baseUser = $data.user_name1;
+ 
+ $nitin.end();
+ var $t = _testcase("For "," Maint_PrjCr_Mgr_Demerger_Merge_03");
+ $t.start();
+ _include("Maint_PrjCr_Mgr_Demerger_Merge_03.sah");
+ $t.end();
+ 
+  var $t = _testcase("For "," Maint_PrjCr_Mgr_Demerger_Create_02");
+  $t.start();
+ _include("Maint_PrjCr_Mgr_Demerger_Create_02.sah");
+ $t.end();
+ 
+ var $t = _testcase("For ","Maint_PrjCr_Mgr_Delete_Project_Demerger_01");
+  $t.start();
+ _include("Maint_PrjCr_Mgr_Delete_Project_Demerger_01.sah");
+  $t.end();

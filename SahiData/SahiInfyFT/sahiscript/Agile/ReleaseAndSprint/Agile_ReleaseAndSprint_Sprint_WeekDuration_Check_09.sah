@@ -1,0 +1,88 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_WeekDuration_Check_09","Agile/ReleaseAndSprint");
+$data1 = readDataFromCSV("Agile_ReleaseAndSprint_SprintDetailPage_02","Agile/ReleaseAndSprint");
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",30,$dateObj1);
+var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to PM Plan");
+$t.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.Project_name2;
+selectProject($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Navigate to PM Plan");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.PMPlan;
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Select Overview");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.Overview;
+InfyFTclick($inputObject);
+
+var $no = _getValue(_select("metric_comp_70018701#70093679#75779927#field2", _near(_span("Are you planning to have sprints with duration more than 4 weeks?"))));//_getValue(_select("disabledSelect", _near(_span("Are you planning to have sprints with duration more than 4 weeks?"))));
+
+_assertEqual($data.No, $no);
+
+$t.end();
+
+var $t = _testcase("TC_5", "navigate to sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data1.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Checking duration message");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = $data.icon;
+clickAddIcon($inputObject);
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.CM_Name;
+$inputObject.lst_DN_TypeOfWork = $data1.testing;
+$inputObject.lst_DN_TypeofSprint1 = $data1.Initiation;
+$inputObject.lst_CM_Release = "New Ui testing";
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate;
+$inputObject.msgAlert = "The sprint duration is more than 4 weeks. Sprint more than 4 weeks may lead to non-agile behavior of teams and reduce benefits derived from agile. The recommended maximum sprint duration is 4 weeks. Please consult a coach to optimize your agile process. If you still want to continue,please get approval from DM and attach the same in the attachments section in PM plan and rebaseline the plan.";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();

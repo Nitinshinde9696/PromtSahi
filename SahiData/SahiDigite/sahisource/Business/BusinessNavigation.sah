@@ -1,0 +1,404 @@
+
+/*************************************************************************
+* @author Alpesh
+* @example navigateTo({"name":"Organisation"});
+* @description This function is called to navigate to a particular location
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function navigateTo($inputObject) 
+{
+    _log("navigateTo Started","success");
+    try 
+	{
+	   var $dirPath = _getGlobal("importDIR");
+		 //var $dirPath = "D:/sahi/SahiData/SahiInfyFT/sahisource/importDir/";
+		
+		/*var $newUI = _getGlobal("New_UI");
+		_navigateTo($URL,true);
+		
+		var $home = $inputObject.name;
+		
+		 _log("old UI "+$home);
+		
+		if($newUI ==="yes")
+		{	
+			//_alert("New UI");
+			$fileName = "NewUI_Users.csv";
+			var $dirPath = _getGlobal("datatDIR")+$fileName;
+			var $rs1 = _readCSVFile($dirPath,",");
+			var $rowLength1 = $rs1.length;
+			for(var $j = 0; $j < $rowLength1; $j++)
+			{
+				var $w_key = $rs1[$j];
+				$j++;
+				var  $w_value = $rs1[$j];
+				
+			}
+		} */
+		
+		
+		
+	    $dirPath = $dirPath + "SwiftMenuTraverse.csv";
+
+		var $rs1 = _readCSVFile($dirPath,",");
+	    var $rowLength1 = $rs1.length;
+				
+	    for(var $j = 0; $j < $rowLength1; $j++) 
+		{  	
+			if($rs1[$j][0] === $inputObject.name)
+			{
+			   break;     
+			} 	
+		}
+		
+		var $leafNode = $rs1[$j].length-1;
+		for(var $i =1;$i<= $leafNode;$i++)
+		{		  
+			if($i === $leafNode)
+			{
+				if($inputObject.operation === "Negative")
+				{
+					_assertFalse(_isVisible(_link($rs1[$j][$i])));
+					return;
+				}
+			}
+				//New UI Home Navigation Started
+				$temp =_getGlobal("New_UI");
+				if($temp === "yes")
+				{
+					if($rs1[$j][$i] === "LOCK_Home")
+					{
+							$rs1[$j][$i]= "My Workspace";
+					}				
+				}
+				//New UI Home Navigation Ended
+			
+			_wait(5000, _isVisible(_link($rs1[$j][$i])));
+			if(_exists(_link($rs1[$j][$i])))
+			{
+				
+				_click(_link($rs1[$j][$i]));
+			}	
+			else
+				_assert(_exists(_link($rs1[$j][$i]))); // If Menu is not loaded then script should fail
+		}
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("navigateTo Completed","success");	
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToSkillSearchAtOrg($inputObject)
+{
+	_log("navigateToSkillSearchAtOrg Started","success");
+	try 
+	{
+		var $Btn = "KEY_LABEL_Skill_Search";
+		var $extJsId = ""; 	
+		var $BtnKey = $Btn + $extJsId;		
+		_click(_link($BtnKey));	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToSkillSearchAtOrg Completed","success");
+}
+
+/**
+ @Function Number:42
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToPLF_Admin()
+{
+	_log("navigateToPLF_Admin Started","success");
+	try 
+	{
+		_click(_link("de-icon-field"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToPLF_Admin Completed","success");
+}
+
+/**
+ @Function Number:44
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToPLF_Project($inputObject)
+{
+	_log("navigateToPLF_Project Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_link("de-icon-field")));
+		}
+		else
+			_click(_link("de-icon-field"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToPLF_Project Completed","success");
+}
+
+/**
+ @Function Number:60
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToDocumentSets()
+{
+	_log("navigateToDocumentSets Started","success");
+	try 
+	{
+		var $documentSetBtn = "KEY_LABEL_Document_Sets";
+		var $extJsId = ""; 	
+		var $documentSetBtnKey = $documentSetBtn + $extJsId;		
+		_click(_link($documentSetBtnKey));		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToDocumentSets Completed","success");
+}
+
+/**
+ @Function Number:62
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToTeamMembersHierachy()
+{
+	_log("navigateToTeamMembersHierachy  Started","success");
+	try 
+	{
+		var $teamMemHierachyBtn = "KEY_BUTTON_Team_Member_Hierarchy";
+		var $extJsId = ""; 	
+		var $teamMemHierachyBtnKey = $teamMemHierachyBtn + $extJsId;
+		
+		_click(_link($teamMemHierachyBtnKey));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToTeamMembersHierachy  Completed","success");
+}
+
+/**
+ @Function Number:74
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToUserOrganizationRelationship()
+{
+	_log("navigateToUserOrganizationRelationship Started","success");
+	try 
+	{
+		var $addBtn = "KEY_LABEL_User_Org_RelationShip";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		_click(_link($addbtnKey));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToUserOrganizationRelationship Completed","success");
+}
+
+/**
+ @Function Number:75
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToProjectOrganizationRelationship()
+{
+	_log("navigateToProjectOrganizationRelationship Started","success");
+	try 
+	{
+		_click(_link("KEY_BUTTON_Prj_Org_Relationship"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToProjectOrganizationRelationship Completed","success");
+}
+
+/**
+ @Function Number:77
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToProjectAttributes()
+{
+	_log("navigateToProjectAttributes Started","success");
+	try 
+	{
+		_click(_link("KEY_BUTTON_Project_Attribute"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToProjectAttributes Completed","success");
+}
+
+/**
+ @Function Number:78
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToResourceAttributes()
+{
+	_log("navigateToResourceAttributes Started","success");
+	try 
+	{
+		var $applyBtn = "KEY_LABEL_Resource_Attributes";
+		var $extJsId = ""; 	
+		var $applyBtnKey = $applyBtn + $extJsId;
+		_click(_link($applyBtnKey));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToResourceAttributes Completed","success");
+}
+
+/**
+ @Function Number:89
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToUserHierarchy()
+{
+	_log("navigateToUserHierarchy Started","success");
+	try 
+	{
+		var $userHierarchyBtn = "KEY_LABEL_User_Hierarchy";
+		var $extJsId = ""; 	
+		var $userHierarchyBtnKey = $userHierarchyBtn + $extJsId;		
+		_click(_link($userHierarchyBtnKey));	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToUserHierarchy Completed","success");
+}
+
+/**
+ @Function Number:100
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToExportHistory()
+{
+	_log("navigateToExportHistory Started","success");
+	try 
+	{
+		var $exportHistoryBtn = "KEY_LABEL_Export_History";
+		var $extJsId = ""; 	
+		var $exportHistoryBtnKey = $exportHistoryBtn + $extJsId;
+		_wait(15000,_isVisible(_link($exportHistoryBtnKey)));
+		if(_exists(_link($exportHistoryBtnKey)))
+		{	
+			_click(_link($exportHistoryBtnKey));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToExportHistory Completed","success");
+}
+
+/**
+@Function Number:139
+@author:shashank
+@example:
+@description: 
+@param: 
+@return: 
+**/
+
+function navigateToUserAccess($inputObject)
+{
+	_log("navigateToUserAccess Started","success");
+	try 
+	{
+		if($inputObject.operation==="Negative")
+			_assertFalse(_isVisible(_link("KEY_LABEL_User_Access")));
+		else
+			_click(_link("KEY_LABEL_User_Access"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToUserAccess Completed","success");
+}

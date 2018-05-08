@@ -1,0 +1,117 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Common/Common.sah");
+
+ $data = readDataFromCSV("Package_StatusReport_StatusReportFreq_01","Package/Status_Report"); 
+ 
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//Sreya_Chatterjee
+ $inputObject.edt_loginid = $data.LoginID2;
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Project Tailoring
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_DN_Frequency1 = $data.radio1;//Not set//+";"+$data.radio2+";"+$data.radio3+";"+$data.radio4
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.radio2;//Weekly
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Fortnightly = $data.radio3;//Fortnightly
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Monthly = $data.radio4;//Monthly
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_2", "Check frequencies that PM can generate the status report");
+  
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.rdgwk1;//Weekly
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.dayLbl1+";"+$data.noteLbl1;//Day of Week :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data.note1;//Status Report will be auto-generated on the selected day of week
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.rdgfn1;//Fortnightly
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data.note2;//Status Report will be auto-generated on 1st and 16th of every month.
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.rdgmnt1;//Monthly
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data.note3;//Status Report will be auto-generated on 1st of every month.
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Check for default when Prodn support is enabled");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rdg_Monthly = $data.radio4;
+ ModifyEformInstance($inputObject);
+  
+ _assertTrue(_radio("Monthly").checked);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Check for regeneration of Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep3
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.regenerate1;//de-icon-refresh
+ InfyFTisVisible($inputObject);
+ 
+ clickReturn();
+ $t.end();
+ 
+ 
+ 
+ 

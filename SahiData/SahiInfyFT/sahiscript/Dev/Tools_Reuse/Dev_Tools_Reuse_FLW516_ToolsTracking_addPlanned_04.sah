@@ -1,0 +1,284 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ 
+ $generic = readDataFromCSV("Dev_genericcsv_ToolsPlanning_ToolsTracking","Dev/Tools_Reuse");
+ $data = readDataFromCSV("Dev_Tools_Reuse_FLW516_ToolsTracking_addPlanned_04","Dev/Tools_Reuse");
+
+/*  var $t = _testcase("TC_1", "Logging with valid user ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.Username1; // Aman_Mukhija
+ $inputObject.edt_loginid = $generic.LoginID1;// Aman_Mukhija	
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_2", "Navigating to Tools planning for a Dev PT project ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.Projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+  
+
+ 
+ $t.end();
+ */
+ var $t = _testcase("TC_3", "Navigating to Tools Plan for Iterations");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Tools Planning
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.topl1;//Tools plan for Iterations
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment2;//Tools Planning[2]
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Adding a tool");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = $data.lcstage3;//Coding
+ $inputObject.lst_DN_Technology = $data.tech2;//Billing
+ ModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment5;//Search Output
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Add[1] 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname6;//Add[1]_lbl
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ _wait(1000);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Navigating to Tools Tracking and adding planned tools");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+	$inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "ITR";
+  infyFTGetValueFromExcel($inputObject);
+  $ITR_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $ITR_Id;
+OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name= $generic.tlsegment6;//Tools Tracking
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link3;//Add Planned Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Add[1] 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname6;//Add[1]_lbl
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Verifying the added tool");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname1;//Tool Name_lbl
+ $inputObject.fieldValues = $data.toolname1;//Quest Code Tester
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "Trying to delete tool from Tools Planning");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Tools Planning
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.topl1;//Tools plan for Iterations
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment2;//Tools Planning[2]
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Planned Tools List
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname7;//Delete_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ $inputObject.msgAlert = "Error :" + $data.toolname1 + " used in requests. Hence cannot be deleted. Only tools not used in any of the requests can be deleted from the plan.";
+ setSwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "Inactivating Tool in Tools Planning");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Planned Tools List
+ $inputObject.byColRowName = $data.bycolrow1;//Yes 
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname10;//Inactive_chk
+ $inputObject.fieldValues = $data.true1;//Y//
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "Checking on Add Planned tools in Tools tracking");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//Iterations
+ InfyFTnavigateTo($inputObject);
+  
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "ITR";
+  infyFTGetValueFromExcel($inputObject);
+  $ITR_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $ITR_Id;
+OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment6;//Tools Tracking
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link3;//Add Planned Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.oper1;//Negative
+ $inputObject.span_Name = $data.toolname1;//Quest Code Tester
+ InfyFTisVisible($inputObject); 
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "Deleting the added tool from Tools Tracking");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname7;//Delete_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "Deleting the added tool from Tools Planning");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Tools Planning
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.topl1;//Tools plan for Iterations
+ OpenEformInstance($inputObject);
+ 
+  _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment2;//Tools Planning[2]
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Planned Tools List
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname7;//Delete_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+ 

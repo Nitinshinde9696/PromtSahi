@@ -1,0 +1,248 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data6 = readDataFromCSV("Maint_PM_Plan_Normal_project_details_maintanence_template_content_management_05","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 32", "TC 22, 23, 24");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data6.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+  /*
+ var $t = _testcase("TC_22,23,24", "Following field should be auto-populate as per the OMS,as per project details,CIARA master list.");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.image = $data6.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));//Data are not flowing from OMS to Project Profile -> Overview-> OMS team has to push data into the project
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data6.tableName;//Overview
+ $inputObject.rowNo = $data6.rowNos;// row from 0 to 10
+ $inputObject.colNo = $data6.colNos;//2_lbl|3_lbl
+ $inputObject.fieldValues = $data6.fieldValues;
+ verifySwiftFormData($inputObject);
+
+ $t.end();
+  */
+ var $t = _testcase("TC_26", "Sizing Details/Maintenance Template");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data6.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.TypeOfAppMaint;//_cell("Type of Application Maintained*")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryLang;//_cell("Primary Language")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.SizingTechForEnh;//_cell("Sizing Technique For Enhancement")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colNo2_1;
+ $inputObject.fieldValues = $data6.fieldValues2_1;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.DetailsForOtherSizingTech;//_cell("Details of other sizing techniques used")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colNo2_1;
+ $inputObject.fieldValues = $data6.fieldValues2_1_2;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.NotUsingSizingTech;//_cell("Reason for Not Using Standard sizing techniques")
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_27", "Mapping Sizing Details/Maintanance Template");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.TypeOfAppMaint;//_cell("Type of Application Maintained*")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryLang;//_cell("Primary Language :")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_1;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryEAI;//_cell("Primary EAI")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_2;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryETLTool;//_cell("Primary ETL tool")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_3;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryETLTool;//_cell("Primary Reporting tool")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_4;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryETLTool;//_cell("Primary ETL tool")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_5;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryTech;//_cell("Primary Technology")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.TypePortalDev;//_cell("Type of Portal Development")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";     
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_6;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.PrimaryPackage;//_cell("Primary Package")
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_28", "verify Portal or content management site");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";      
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = $data6.fieldValues2_2_5;
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data6.TypePortalDev;//_cell("Type of Portal Development")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";      
+ $inputObject.tableName = $data6.tableName1;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colNo6;
+ $inputObject.fieldValues = $data6.fieldValues11;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data6.tableName1;
+ $inputObject.rowNo = $data6.rowName2;
+ $inputObject.colNo = $data6.colNo6;
+ $inputObject.fieldValues = $data6.fieldValues11_1;
+ setSwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+  
+ 
+ 

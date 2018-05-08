@@ -1,0 +1,2955 @@
+
+/**
+ @Function Number:1
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function UndeployPT()
+{
+	_log("UndeployPT Started","success");
+	try 
+	{
+		_click(_button("Undeploy"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("UndeployPT Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function firstTimeLoginIntoDigite($inputObject)
+{
+	_log("firstTimeLoginIntoDigite Started","success");
+	try 
+	{
+	    var $loginId = $inputObject.edt_loginid;
+	
+        _setValue(_textbox("loginId"), $inputObject.edt_loginid);
+        _setValue(_password("password"), $inputObject.edt_password);
+        _click(_submit("Login"));
+        
+		_log("loginIntoDigite Verification Started","success");
+		
+		_assertTrue(_getText(_cell($loginId,_near(_cell("LoginId:")))) ===$loginId);
+		
+		_log("loginIntoDigite Verification Completed","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("firstTimeLoginIntoDigite Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example logOut();
+* @description This function is for log out from application
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function logOut()
+{
+	_log("logOut Started","success");
+	try 
+	{
+	    // if (_isVisible( _link("UserName")|| _div("ellipsis")))
+		// {
+	        // _mouseOver( _link("UserName")|| _div("ellipsis"));
+		    // _click(_link("Logout"));
+            // _expectConfirm("Are you sure you want to log out?", true);
+		// }
+		if (_isVisible(_div("ellipsis")))
+		{
+	        _mouseOver( _div("ellipsis"));
+		    _click(_link("Logout"));
+            _expectConfirm("Are you sure you want to log out?", true);
+		}
+		else if (_isVisible(_link("Logout"))) //For SiteAdmin Logout
+		    _click(_link("Logout"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("logOut Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example loginToDigiteAsAdmin({"user_name":"SAVITHA THAKKAR","edt_loginid":"HRD","edt_password":"111111"});
+* @description This function is called to login in Digite as admin
+* @param {String} user_name, User Name
+* @return {String} None 
+*************************************************************************/
+
+function loginToDigiteAsAdmin($inputObject)
+{
+	_log("loginToDigiteAsAdmin Started","success");
+	try 
+	{
+		var $adminURL = _getGlobal("ADMINURL");
+	    
+	    _navigateTo($adminURL,true);
+        _setValue(_textbox("loginId"), $inputObject.edt_loginid);
+        _setValue(_password("password"), $inputObject.edt_password);        
+        
+        _click(_submit("Login"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("loginToDigiteAsAdmin Completed","success");
+}
+
+/**
+ @Function Number:
+ @author: hbhuva
+ @example: 
+ @description: deleting project instance 
+ @param: None
+ @return: None
+ **/
+
+function deleteProject()
+{
+	_log("deleteProject Started","success");
+	try 
+	{
+		$inputObject = {};
+		$inputObject.type = "Prj";
+		DeleteEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteProject Completed","success");
+}
+
+/**
+@Function Number:
+@author: Harshit
+@example: 
+@description: deleting pt
+@param: None
+@return: None
+**/
+
+function deletePT()
+{
+	_log("deletePT Started","success");
+	try 
+	{
+		DeleteEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deletePT Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example closeProject({"edt_actualStartDate" : "01-Feb-2012" , "edt_actualEndDate" : "08-Feb-2012" , 
+* 							"txt_closureComments" : "Project Completed"});
+* @description This function is called to create Project
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function closeProject($inputObject)
+{
+	_log("closeProject Started","success");
+	try 
+	{
+		_click(_button("CloseProject"));
+
+    	_selectWindow("Close Project");
+
+    	setAllFields($inputObject);
+    	 
+    	_click(_submit("CloseProject"));
+    	
+    	_selectWindow(); 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeProject Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example loginIntoDigite({"user_name":"SAVITHA THAKKAR","edt_loginid":"HRD","edt_password":"111111"});
+* @description This function is called to login in Digite
+* @param {String} user_name, User Name
+* @return {String} None 
+*************************************************************************/
+
+function loginIntoDigite($inputObject) 
+{
+    _log("loginIntoDigite Started","success");
+    try 
+	{
+    	var $URL = _getGlobal("URL_ENV");
+		
+		var $newUI = _getGlobal("New_UI");
+		_navigateTo($URL,true);
+		
+		var $userName = $inputObject.user_name;
+		_log("old UI User"+$userName);
+		if($newUI ==="yes")
+		{	
+			//_alert("New UI");
+			$fileName = "NewUI_Users.csv";
+			var $dirPath = _getGlobal("datatDIR")+$fileName;
+			var $rs1 = _readCSVFile($dirPath,",");
+			var $rowLength1 = $rs1.length;
+			for(var $j = 0; $j < $rowLength1; $j++)
+			{
+				var $w_key = $rs1[$j];
+				$j++;
+				var  $w_value = $rs1[$j];
+				
+			}
+
+			var $jsonObj = {};
+			for(var $j = 0; $j < $w_key.length; $j++)
+			{
+				$jsonObj[$w_key[$j]] = $w_value[$j];
+			} 
+			
+			var $tests = $inputObject.user_name;
+			$userName = $jsonObj[$tests];
+				
+			
+		}
+		       
+	    _setValue(_textbox("loginId"), $userName);
+        //_setValue(_textbox("loginId"), $inputObject.edt_loginid);//old UI
+		
+        _setValue(_password("password"), $inputObject.edt_password);
+        _click(_submit("Login"));
+        _wait(1000);
+		_log("loginIntoDigite Verification Started","success");
+		if(_isVisible(_link("UserName")))
+		{
+			_assertEqual($userName, _getText(_link("UserName")));
+		}
+		else
+		{
+			_assertEqual($userName, _getText(_div("ellipsis")));
+		}
+					
+		_log("loginIntoDigite Verification Completed","success");
+	}
+	catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("loginIntoDigite Completed","success");	
+}
+
+/**
+ @Function Number:10
+ @author:hsalvi
+ @example:loginToKarina({"edt_username":"SAVITHA THAKKAR","edt_password":"111111"});
+ @description: This function is called to login to mail servr specified in gloabl constant
+ @param: user name, password
+ @return: none 
+ **/
+
+function loginToKarina($inputObject)
+{
+	_log("loginToKarina Started","success");
+	try 
+	{
+		var $mailURL = _getGlobal("MAILURL");
+	    _navigateTo($mailURL,true);
+	    _setValue(_textbox("username"), $inputObject.edt_username);
+        _setValue(_password("ipwd"), $inputObject.edt_password);        
+        _click(_submit("Login"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("loginToKarina Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function failedLoginToDigite($inputObject)
+{
+	_log("failedLoginToDigite Started","success");
+	try 
+	{	
+		for (var $i=0; $i<=$inputObject.attempt; $i++)
+		{	
+			_setValue(_textbox("loginId"), $inputObject.edt_loginid);
+	        _setValue(_password("password"), $inputObject.edt_password);
+	        _click(_submit("Login"));
+		}
+		_assertEqual($inputObject.message,_getText(_label("loginError")),"Done");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("failedLoginToDigite Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example selectProject({"projectname":"Digite Vr 4.2"});
+* @description This function is called to select project from project listing
+* @param {String} projectname, Project Name to be selected
+* @return {String}   None 
+*************************************************************************/
+
+function selectProject($inputObject)
+{
+	_log("selectProject Started","success");
+	try 
+	{
+		var $projectName = $inputObject.projectname;
+		//parameter send from csv file VerifyOtherAccesibleprojectname = TRUE
+		//Nitin--New UI
+				
+		if(_isVisible(_link("nav_icon icon-Menu dropdown-toggle js-activated")))
+		{
+			_mouseOver(_link("nav_icon icon-Menu dropdown-toggle js-activated"));
+			//_click(_link("View My Projects"));
+		}	
+		//New UI changes
+		if($inputObject.VerifyOtherAccesibleprojectname)
+		{
+			_click(_div($projectName, _in(_div("extGridDiv"))));
+		}
+		else
+		{
+			if($inputObject.navigateTo)
+				navigateTo({ "name" : $inputObject.navigateTo });
+			else
+				navigateTo({ "name" : "Projects_home" });
+			
+			if($inputObject.operation === "Negative")
+			{
+				_assertFalse(_isVisible(_div($projectName, _in(_div("extGridDiv")))));
+			}
+			else
+			{
+				if($inputObject.status)
+				{
+					setFilter($inputObject);
+					_wait(2000, _exists(_div($projectName, _in(_div("extGridDiv")))));
+				}
+
+				//removed _link($projectName) as in the my work project listing we will
+				//find only _div($projectName).Other accessible and org project listing
+				//will also be Extjs list (To be fixed)
+				//#WAIT#
+				var $wait = 121000;
+				var $reloadPeriod = 10000;
+				var $counter = 0;
+				while (($counter< $wait) && !(_exists(_div($projectName, _in(_div("extGridDiv"))))))
+				{
+					_wait($reloadPeriod, _exists(_div($projectName, _in(_div("extGridDiv")))));
+					$counter = $counter + $reloadPeriod;
+					if($inputObject.navigateTo)
+						navigateTo({ "name" : $inputObject.navigateTo });
+					else
+						navigateTo({ "name" : "Projects_home" });
+					_wait(2000, _exists(_div($projectName, _in(_div("extGridDiv")))));
+				}
+				if($inputObject.instanceVerify === "Yes") // Parameter added for project request as it is just need to be verified
+					_assertTrue(_isVisible(_div($projectName, _in(_div("extGridDiv")))));
+				else 
+					_click(_div($projectName, _in(_div("extGridDiv"))));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectProject Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author: Hrishi
+ @example: setFeatureSetting({lst_QTP_select2 : "Org admin", Parameter : "Resume Approvers", Value : "ON"})
+ @description: set the access in feature setting tab for given parameter based on value
+ @param: {lst_QTP_select2 : "Org admin", Parameter : "Resume Approvers", Value : "ON"}
+ @return: none
+ **/
+
+function setFeatureSetting($inputObject)
+{
+	_log("setFeatureSetting Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_link("QTP_KEY_LINK_Feature_Settings"));
+		if($inputObject.Value == "OFF" )
+			_uncheck(_checkbox(0,_near(_cell($inputObject.Parameter))));
+		else
+			_check(_checkbox(0,_near(_cell($inputObject.Parameter))));
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setFeatureSetting Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createProject({"edt_ProjectCode" : "001SahiPrj" , "edt_ProjectName" : "001SahiProject" , 
+    		"edt_StartDate" : "01-Jan-2010" , "edt_EndDate" : "31-Dec-2014" , 
+    		"lst_ProjectType" : "Advanced Planning Systems" , "txt_Description" : "Test Sahi Project Creation"});
+* @description This function is called to create Project
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function createProject($inputObject)
+{
+	_log("createProject  Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		if($inputObject.operation === "Disabled")
+		{
+		    var $addButtonClassName;
+			_set($addButtonClassName, _link($addbtnKey).className);
+            var $isButtonDisabled = $addButtonClassName.indexOf("disabled");
+			if ($isButtonDisabled !== -1)
+			    _log("Given Button Disabled","success");
+			else
+			    _log("Given Button not Disabled","failure");
+		}
+		else
+		{
+		    _wait(5000, _isVisible(_link($addbtnKey)));
+			if(_isVisible(_link($addbtnKey)))
+			{	
+				_wait(15000,_isVisible(_link($addbtnKey)));
+				_click(_link($addbtnKey));
+			}
+			else if (_isVisible(_link("de-icon-add")))
+			{
+				_wait(10000, _isVisible(_link("de-icon-add")));
+				_click(_link("de-icon-add"));
+			}
+			_selectWindow("Project Setup");
+	    	setAllFields($inputObject);
+	    	_click(_button("Finish"));
+	    	
+	    	if($inputObject.operation === "Negative")
+	    	{
+	    		if($inputObject.alertType === "ProjectType")
+	    			_assertEqual("Please select Project Type.",_lastAlert());
+	    		else if($inputObject.alertType === "DescLength")
+	    			_assertEqual("Description length should be less than500",_lastAlert());
+	    		
+	    		_assertTrue(_isVisible(_button("Finish")));
+	    		_closeWindow();
+	    		_selectWindow();
+	        }
+	    	else
+	    	{	
+	    		_click(_button("Close This Window"));
+	    		_selectWindow();
+	        }
+	    	navigateTo({ "name" : "Projects_home" });
+		}		
+    
+    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createProject  Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createProgram($inputObject)
+{
+	_log("createProgram Started","success");
+	try 
+	{
+		createProject($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createProgram Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createprojectcopiedfromtemplate({"edt_actualStartDate" : "01-Feb-2012" , "edt_actualEndDate" : "08-Feb-2012" , 
+* 							"txt_closureComments" : "Project Completed"});
+* @description This function is called to createprojectcopiedfromtemplate
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function createprojectcopiedfromtemplate($inputObject)
+{
+	_log("createprojectcopiedfromtemplate Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		if(_exists(_link($addbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($addbtnKey)));
+			_click(_link($addbtnKey));
+		}
+		else
+		{
+			_wait(15000,_isVisible(_link("de-icon-add")));
+			_click(_link("de-icon-add"));
+		}
+    	_selectWindow("Project Setup");
+    	if($inputObject.operation === "TemplateValueNotPresent")
+    	{
+    		_assertFalse(_containsText(_select("CopyFromProjectId"), $inputObject.lst_CopyFromProjectId));
+    		_click(_button("Cancel"));
+    		_selectWindow();
+    	}
+    	else
+    	{
+    		setAllFields($inputObject);
+        	_click(_button("next"));
+
+        	if($inputObject.operation === "Negative")
+        	{
+        		if($inputObject.alertType === "ProjectType")
+        		{
+        			_assertEqual("Please select Project Type.",_lastAlert());
+            		_assertTrue(_isVisible(_button("next")));
+        		}    		
+        		_closeWindow();
+        		_selectWindow();
+        	}	
+        	else
+        	{	
+        		_check(_checkbox("selAllChk"));
+        		if($inputObject.advanced_item_name && $inputObject.advanced_item_properties)
+        		{
+        			var $values = $inputObject.advanced_item_properties.split(";");
+        			_click(_button("AdvancedSelection"));
+            		_selectWindow("popup3");
+            		for(var $i=0; $i< $values.length; $i++)
+            		{
+            			_check(_checkbox(0,_near(_cell($inputObject.advanced_item_name),_under(_cell($values[$i])))));
+            		} 
+            		_click(_submit("Submit"));
+            		_selectWindow("Project Setup");
+        		}
+        	
+        		_click(_submit("Finish"));
+        		_click(_button("Close This Window"));
+        		_selectWindow();
+        		_wait(120000,_exists(_div($inputObject.edt_ProjectName)));
+        	}	
+    	}
+    	
+	
+    	navigateTo({ "name" : "Projects_home" });
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createprojectcopiedfromtemplate Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example cancelProject({"edt_actualStartDate" : "01-Feb-2012" , "edt_actualEndDate" : "08-Feb-2012" , 
+* 							"txt_closureComments" : "Project Completed"});
+* @description This function is called to cancelProject
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function cancelProject($inputObject)
+{
+	_log("cancelProject Started","success");
+	try 
+	{
+		_click(_button("CancelProject"));
+
+    	_selectWindow("popup2");
+
+    	setAllFields($inputObject);
+    	 
+    	_click(_submit("CloseProject"));
+    	
+    	_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("cancelProject Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example cancelUnapprovedProject({"edt_actualStartDate" : "01-Feb-2012" , "edt_actualEndDate" : "08-Feb-2012" , 
+* 							"txt_closureComments" : "Project Completed"});
+* @description This function is called to cancelUnapprovedProject
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function cancelUnapprovedProject($inputObject)
+{
+	_log("cancelUnapprovedProject Started","success");
+	try 
+	{
+		_click(_button("CancelProject"));
+
+    	_selectWindow("popup2");
+
+    	setAllFields($inputObject);
+    	 
+    	_click(_submit("CloseProject"));
+    	
+    	_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("cancelUnapprovedProject Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example addjournaldescription
+* @description This function is called to addjournaldescription
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function addjournaldescription($inputObject)
+{
+	_log("addjournaldescription Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addjournaldescription Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example changeprojectname
+* @description This function is called to change project name
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+
+function changeprojectname($inputObject)
+{
+	_log("changeprojectname Started","success");
+	try 
+	{
+		if(_assertEqual(_getSelectedText(_select("Priority")),"--None--"))
+		{
+			_setSelected(_select("Priority"), "Medium");
+		}
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changeprojectname Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createProjectFromPT({"edt_ProjectCode" : "001PTPrj" , "edt_ProjectName" : "001PTSahiPrj" , 
+	"edt_StartDate" : "01-Jan-2010" , "edt_EndDate" : "31-Dec-2014" , 
+	"lst_ProjectType" : "Advanced Planning Systems" , "lst_ProcessTemplate" : "PT1" , 
+	"txt_Description" : "Test Sahi Project Creation" , "tailoring_questions" : "Y"});
+* If Tailoring Questions are Present then pass an extra Parameter
+* to  createProjectFromPT  "tailoring_questions" : "Y" (This Runs when there are no question to answer).
+* @description This function is called to create Project From PT
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function createProjectFromPT($inputObject)
+{
+	_log("createProjectFromPT Started","success");
+	try 
+	{
+		if($inputObject.tailoring_questions === "Y")
+	    {
+			var $extJsId = "";
+			var $buttonName = "KEY_BUTTON_Add";
+			var $buttonKey = $buttonName + $extJsId;
+			_click(_link($buttonKey));
+			_selectWindow("Project Setup");
+		    setAllFields($inputObject);
+	    	_click(_button("Next"));
+	    	_selectWindow("Add Project");
+	    	_click(_button("Finish"));
+	    	_wait(10000);
+	    	_selectWindow("Project Setup");
+	    	_click(_button("Close This Window"));
+	        _selectWindow(); 
+	    }
+	   	else
+	   	{
+	   		var $addBtn = "KEY_BUTTON_Add";
+			var $extJsId = ""; 	
+			var $addbtnKey = $addBtn + $extJsId;
+			_wait(10000, _isVisible(_link($addbtnKey)));
+			if(_exists(_link($addbtnKey)))
+			{	
+				_wait(10000,_isVisible(_link($addbtnKey)));
+				_click(_link($addbtnKey));
+			}
+			else
+			{
+				_wait(10000,_isVisible(_link("de-icon-add")));
+				_click(_link("de-icon-add"));
+			}
+	   		_selectWindow("Project Setup");
+	   		
+	   		var $isPTPresent = true;
+	   		
+	   		if($inputObject.checkPT)
+	   		{
+	   			_setSelected(_select("ProjectType"), $inputObject.lst_ProjectType);
+	   			$isPTPresent = _containsText(_select("ProcessTemplate"),$inputObject.lst_ProcessTemplate);
+	   		}
+	   		if($isPTPresent)
+	   		{
+			    setAllFields($inputObject);
+		    	_click(_button("Finish"));
+		    	_wait(10000,_exists(_button("Close This Window")));
+		    	_click(_button("Close This Window"));
+	   		}
+	   		else
+	   		{
+	   			_click(_button("Cancel"));
+	   		}
+	   	  _selectWindow();
+	    }	
+		
+	    navigateTo({ "name" : "Projects_home" });
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createProjectFromPT Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createUnderApprovalProjectFromPT
+* @description This function is called to createUnderApprovalProjectFromPT
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function createUnderApprovalProjectFromPT($inputObject)
+{
+	_log("createUnderApprovalProjectFromPT Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		if(_exists(_link($addbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($addbtnKey)));
+			_click(_link($addbtnKey));
+		}
+		else
+		{
+			_wait(15000,_isVisible(_link("de-icon-add")));
+			_click(_link("de-icon-add"));
+		}
+		_selectWindow("Project Setup");
+		_setValue(_textbox("ProjectCode"),$inputObject.ProjectCode);
+		_setValue(_textbox("ProjectName"), $inputObject.ProjectName);
+		_setValue(_textbox("StartDate"),$inputObject.StartDate);
+		_setValue(_textbox("EndDate"),$inputObject.EndDate);
+		_setSelected(_select("ProjectType"),$inputObject.ProjectType);
+		_setSelected(_select("ProcessTemplate"),$inputObject.ProcessTemplate);
+		
+		_click(_button("Next"));
+		_selectWindow("Add Project");
+		if($inputObject.ScenarioAnswers)
+		{
+			var $multipleAns = $inputObject.ScenarioAnswers.split(";");
+			for (var $i=0; $i< $multipleAns.length; $i++)
+			{
+				_check(_radio(0, _near(_cell($multipleAns[$i]))));
+			}
+		}
+		setAllFields($inputObject);
+		_click(_button("Finish"));
+		_selectWindow("Project Setup");
+		_click(_button("Close This Window"));
+    	_selectWindow(); 
+    	_wait(120000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createUnderApprovalProjectFromPT Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example createPT({ "edt_projectCode" : "16.0" ,  "edt_projectName" : "Su_pt3" ,  "lst_projectType" : "Customization" });
+* @description This function is called to create Project
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function createPT($inputObject)
+{
+	_log("createPT Started","success");
+	try 
+	{  
+		_wait(2000);
+		var $extJsId = "";
+		var $buttonName = "KEY_BUTTON_Add";
+		var $buttonKey = $buttonName + $extJsId;
+    	_click(_link($buttonKey));
+		_selectWindow("Process Template Setup");
+    	setAllFields($inputObject);
+    	_click(_submit("Finish"));
+    	
+    	if($inputObject.specialCharacterAlert === "Yes")
+    	{	
+    		_click(_button("Cancel"));
+    		_selectWindow();
+    	}
+    	else
+    	{
+	    	_wait(10000, _isVisible(_button("Close This Window")));
+	    	_click(_button("Close This Window"));
+	       	_selectWindow();
+       	}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createPT Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example  selectProjectFromApprovelList
+* @description This function is called to verify Project
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function selectProjectFromApprovelList($inputObject)
+{
+	_log("selectProjectFromApprovelList Started","success");
+	try 
+	{
+		_wait(5000,_exists(_link("KEY_LINK_Projects_Under_Approval")));
+		_click(_link("KEY_LINK_Projects_Under_Approval"));
+		
+		var $wait = 121000;
+		var $reloadPeriod = 10000;
+		var $counter = 0;
+		while (($counter< $wait) && !(_exists(_link($inputObject.item))))
+		{
+			_wait($reloadPeriod, _exists(_link($inputObject.item)));
+			$counter = $counter + $reloadPeriod;
+			
+			navigateTo({ "name" : "Projects_home" });
+			_wait(5000,_exists(_link("KEY_LINK_Projects_Under_Approval")));
+			_click(_link("KEY_LINK_Projects_Under_Approval"));
+			
+			_wait(2000, _exists(_link($inputObject.item)));
+		}
+		if($inputObject.instanceVerify === "Yes") // Parameter added for project request as it is just need to be verified
+			_assertTrue(_isVisible(_div($projectName)));
+		else 
+			_click(_link($inputObject.item));
+		
+		
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectProjectFromApprovelList Completed","success");
+}
+
+/**
+ @Function Number:26
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setPersonalPreference($inputObject)
+{
+	_log("setPersonalPreference Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setPersonalPreference Completed","success");
+}
+
+/**
+ @Function Number:27
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setProjectOverViewDetails($inputObject)
+{
+	_log("setProjectOverViewDetails Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setProjectOverViewDetails Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author:
+ @example:
+ @description: 
+ @param: 	
+ @return: 
+ **/
+
+function openPT($inputObject)
+{
+	_log("openPT Started","success");
+	try 
+	{
+		//wait added for the navigation issue in many scripts 
+		_wait(3000);
+		_wait(5000,_isVisible(_div($inputObject.ProjectName)));
+		
+		var $projectName = $inputObject.ProjectName;
+		var $wait = 121000;
+		var $reloadPeriod = 10000;
+		var $counter = 0;
+		while ($counter< $wait && !_exists(_div($projectName)))
+		{
+			_wait($reloadPeriod);
+			$counter = $counter + $reloadPeriod;
+			navigateTo({ "name" : "Process Templates" });
+			_wait(2000,_exists(_div($projectName)));
+		}
+		_click(_div($projectName));
+		
+		//wait added for the navigation issue in many scripts
+		_wait(3000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openPT Completed","success");
+}
+
+/**
+ @Function Number:34
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTrailFrame($inputObject)
+{
+	_log("verifyTrailFrame Started","success");
+	try 
+	{
+		var $navigation = replaceAllStr($inputObject.content,">","");
+		$navigation = replaceAllStr($navigation," ","");
+		var $actualNavigation = replaceAllStr(_getText(_list("ux-menu-ul[6]"))," ","");
+		_assertEqual($navigation, $actualNavigation);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTrailFrame Completed","success");
+}
+
+/**
+ @Function Number:35
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function commonSearch($inputObject)
+{
+	_log("commonSearch  Started","success");
+	try 
+	{
+	    if ($inputObject.edt_searchPhrase)
+		{
+		    _click(_div("advanceSearchButtonIcon"));
+		    setAllFields($inputObject);
+		    _click(_button("Search"));
+		    _assert(_isVisible(_div("Displaying Project Search Results...")));
+		}
+		else
+		{
+		    if ($inputObject.lst_DocType)
+			{
+			    _setSelected(_select("DocType"), $inputObject.lst_DocType);
+				_click(_button(" Go "));
+				delete $inputObject.lst_DocType;
+			}
+		    setAllFields($inputObject);
+		    _click(_submit("Submit"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("commonSearch  Completed","success");
+}
+
+/**
+ @Function Number:39
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySearch($inputObject)
+{
+	_log("verifySearch  Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete")
+    		_assertFalse(_isVisible(_link("/" + $inputObject.item + "/")));
+    	else 
+    		_assertTrue(_isVisible(_link("/" + $inputObject.item + "/")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySearch  Completed","success");
+}
+
+/**
+ @Function verifyEnhancedTailoringNotes
+ @author:shashank
+ @example:{"question" : "Q 1." , "Answer" : "val1", "Action Taken":"Action Taken:"}
+ @description: the function would check for the values in the enhance tailoring notes section.
+ @param: 
+ @return: 
+ **/
+
+function verifyEnhancedTailoringNotes($inputObject)
+{
+	_log("verifyEnhancedTailoringNotes Started","success");
+	try 
+	{
+	    _wait(5000, _isVisible(_link("de-icon-process_framework")));
+	    if (_isVisible(_link("de-icon-process_framework")))
+		    _click(_link("de-icon-process_framework"));
+			
+		_wait(5000, _isVisible(_link("de-icon-tailoring_guidelines")));
+		setAllFields($inputObject);
+		
+		if ($inputObject.operation === 'Negative')
+		{
+			_assertFalse(_isVisible(_cell($inputObject.TaskName)));
+		}
+		else
+		{
+			if($inputObject.lst_Mode === "Task")
+			{
+				_assertEqual($inputObject.StdCode,_getText(_cell(0,_near(_cell($inputObject.TaskName)),_under(_cell("Standard Code")))));
+				_assertEqual($inputObject.ActionTaken,_getText(_cell(0,_near(_cell($inputObject.TaskName)),_under(_cell("Action Taken")))));
+				
+			}
+			else
+			if($inputObject.lst_Mode === "Eform")
+			{
+				_assertTrue(_isVisible(_cell($inputObject.EformName),_in(_table("QTP_ListTable"))));
+				
+				if($inputObject.ActionTaken === "Added")
+				{
+					_assertEqual($inputObject.ActionTaken,_getText(_cell(0,_near(_cell($inputObject.EformName)),_under(_cell("Action Taken")))));
+				}
+				else
+				{
+				    _click(_link("/Modified/", _rightOf(_cell($inputObject.EformName))));
+					_wait(3000);
+					_selectWindow("WorkflowDifference");
+					_assertTrue(_isVisible(_cell($inputObject.StageName,_in(_table("QTP_ListTable")))));
+					
+					if($inputObject.StageRole)
+					_assertEqual($inputObject.StageRole,_getText(_cell(0,_in(_parentRow(_cell($inputObject.StageName))),_under(_cell("Differences")))));
+					
+					if($inputObject.InitialSTDCode)
+					_assertEqual($inputObject.InitialSTDCode,_getText(_cell(0,_in(_parentRow(_cell($inputObject.StageName)).nextElementSibling),_under(_cell("Differences")))));
+					
+					if($inputObject.NextSTDCode)
+					_assertEqual($inputObject.NextSTDCode,_getText(_cell(0,_in(_parentRow(_cell($inputObject.StageName)).nextElementSibling.nextElementSibling),_under(_cell("Differences")))));
+					
+					if($inputObject.CanSkip)
+					_assertEqual($inputObject.CanSkip,_getText(_cell(0,_in(_parentRow(_cell($inputObject.StageName)).nextElementSibling.nextElementSibling.nextElementSibling),_under(_cell("Differences")))));						
+					
+					_click(_button("QTP_KEY_BUTTON_Cancel"));
+					_selectWindow();
+				}
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEnhancedTailoringNotes Completed","success");
+}
+
+/*************************************************************************
+* @author deployPT
+* @example deployPT
+* @description This function is called to deployPT
+* @param None
+* @return {String}   None 
+*************************************************************************/
+
+function deployPT()
+{
+	_log("deployPT Started","success");
+	try 
+	{
+		_wait(10000,_exists(_button("Deploy")));
+		if(_exists(_button("Deploy")))
+		{
+			_assertTrue(_exists(_button("Deploy")));
+			_click(_button("Deploy"));
+			_wait(2000);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deployPT Completed","success");
+}
+
+/**
+ @Function Number:42
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function exportPT($inputObject)
+{
+	_log("exportPT Started","success");
+	try 
+	{
+		_click(_link("de-icon-export_project"));
+		_selectWindow("Process Template Export");
+		if($inputObject.ExternalExportType === "Skeleton")
+		{
+			_click(_radio(0, _near(_cell($inputObject.ExternalExportType))));
+			_click(_submit("//s*OK/s*/"));
+			_wait(5000,null);
+			_selectWindow("Template Confirmation");
+			_click(_button("Close"));
+		}
+		else
+		{
+			_click(_radio(0, _near(_cell($inputObject.ExternalExportType))));
+			_click(_submit("//s*OK/s*/"));
+			_wait(5000,null);
+			_selectWindow("Export Template");
+			setAllFields($inputObject);
+			_click(_submit(""));
+			_selectWindow("Template Confirmation");
+			_click(_button("Close"));
+		}
+		_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("exportPT Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function downloadPT($inputObject)
+{
+	_log("downloadPT Started","success");
+	try 
+	{
+		var $buttonName = "KEY_LINK_Export_Process_Template_List";
+		var $extJsId = ""; 	
+		var $buttonKey = $buttonName + $extJsId;
+		_click(_link($buttonKey));
+		var $tableId = _table("List");
+		_wait(5000,null);
+		//#WAIT#
+		var $wait = 100001;
+		var $reloadPeriod = 10000;
+		var $counter = 0;
+		while ($counter< $wait &&  !(_isVisible(_cell($inputObject.projectname, _in($tableId)))))
+		{
+			_wait($reloadPeriod);
+			$counter = $counter + $reloadPeriod;
+			navigateTo({"name" : "Process Templates"});
+			_click(_link($buttonKey));
+		}
+		//_click(_link($inputObject.projectname));
+		_click(_link(0,_near(_cell($inputObject.projectname, _in($tableId)))));
+		
+		var $downloadPath = _getGlobal("importDIR");
+		_saveDownloadedAs($downloadPath+""+$inputObject.SaveAs);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("downloadPT Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example importPT
+* @description This function is called to importPT
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function importPT($inputObject)
+{
+	_log("importPT Started","success");
+	try 
+	{
+		var $importPTBtn = "KEY_BUTTON_Import_Process_Template";
+		var $extJsId = ""; 	
+		var $importPTBtnKey = $importPTBtn + $extJsId;		
+		_click(_link($importPTBtnKey));
+		
+		_selectWindow("popup");
+		setAllFields($inputObject);
+
+		var $importDIR = _getGlobal("importDIR");
+		
+		var $importDirFile = $importDIR + $inputObject.uploadfile;
+		_setFile(_file("uploadfile12"),$importDirFile);
+		_call(_file("uploadfile12").type = "text");
+		_setValue(_textbox("uploadfile12"),$inputObject.uploadfile);
+		
+		_click(_submit("Upload"));
+		_wait(2000,null);
+		_click(_button("QTP_KEY_BUTTON_Ok"));
+		_selectWindow();
+		_wait(90000,null);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importPT Completed","success");
+}
+
+/**
+ @Function Number:46
+ @author: Shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addOrganizationTemplate($inputObject)
+{
+	_log("addOrganizationTemplate Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("popup");
+		_setValue(_textbox("SearchPhrase"), $inputObject.edt_SearchPhrase);
+		_click(_button("Go"));
+		
+		if($inputObject.edt_SearchPhrase == '')
+		{
+			_assertEqual(_lastAlert(),"Please enter valid Search Phrase");
+			_click(_submit("QTP_Cancel"));
+		}
+		else
+		{
+			//#WAIT#
+			var $wait = 121000;
+			var $reloadPeriod = 10000;
+			var $counter = 0;
+			while ($counter< $wait &&  !(_isVisible(_cell($inputObject.item))))
+			{
+				_wait($reloadPeriod);
+				$counter = $counter + $reloadPeriod;
+				_click(_button("Go"));
+			}
+			
+			_click(_checkbox(0, _near(_cell($inputObject.item))));
+			_click(_submit("Add"));
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addOrganizationTemplate Completed","success");
+}
+
+/**
+ @Function Number:47
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addOrganizationTemplate_negative($inputObject)
+{
+	_log("addOrganizationTemplate_negative Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("Add Organization Template");
+		_setValue(_textbox("SearchPhrase"), $inputObject.edt_SearchPhrase);
+		_click(_button("Go"));
+		_assertFalse(_isVisible(_cell($inputObject.item)));
+		_click(_submit("QTP_Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addOrganizationTemplate_negative Completed","success");
+}
+
+/**
+ @Function Number:48
+ @author:Shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+function openOrgTemplate($inputObject)
+{
+	_log("openOrgTemplate Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_isVisible(_link($inputObject.item) || _div($inputObject.item)));
+		}
+		else
+		{
+			if(_isVisible(_cell($inputObject.item)))
+			{
+				_click(_link($inputObject.item));
+			}
+			else
+			{
+				_wait(5000,_isVisible(_cell($inputObject.item)));
+				
+				var $templateName = $inputObject.item;
+				var $wait = 121000;
+				var $reloadPeriod = 10000;
+				var $counter = 0;
+				while ($counter< $wait && !_exists(_link($templateName)))
+				{
+					_wait($reloadPeriod);
+					$counter = $counter + $reloadPeriod;
+					navigateTo({ "name" : "Organization Templates" });
+					_wait(2000,_exists(_link($templateName)));
+				}
+				_click(_link($templateName));
+			}
+			
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openOrgTemplate Completed","success");
+}
+/**
+ @Function Number:49
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function copyFromTemplate($inputObject)
+{
+	_log("copyFromTemplate Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_containsText(_select("selectTemplate"),$inputObject.selectTemplate));
+		}
+		else
+		{
+			_setSelected(_select("selectTemplate"), $inputObject.selectTemplate);
+			_click(_link("de-icon-copy_from_template"));
+			_selectWindow("Copy From Template");
+			if($inputObject.selAllChk === 'ON')
+			{
+				_click(_checkbox("selAllChk"));
+			}
+			_click(_submit(""));
+			_selectWindow("Project Confirmation");
+			_click(_button("Close This Window"));
+			_selectWindow();	
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyFromTemplate Completed","success");
+}
+
+/**
+ @Function Number:50
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteOrgTemplate($inputObject)
+{
+	_log("deleteOrgTemplate Started","success");
+	try 
+	{
+		_click(_link(0,_near(_cell( $inputObject.item))));
+		DeleteEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteOrgTemplate Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example saveAsProjectTemplate({"edt_TemplateCode" : "TestTemp" , "edt_TemplateName" : "002SahiTemplate"});
+* @description This function is called to create Project
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function saveProjectAsTemplate($inputObject)
+{
+	_log("saveProjectAsTemplate Started","success");
+	try 
+	{
+		var $FailCounter = false; 
+		_click(_link("de-icon-save_as_template"));
+    	_selectWindow("Save As New Template");
+    	
+    	if($inputObject.item_name)
+    	{
+    		var $values = $inputObject.item_name.split(";");
+    		for (var $i=0; $i<$values.length; $i++)
+    		{
+    			if($inputObject.operation === "Negative")
+    	    	{
+    				_assertFalse(_exists(_cell($values[$i])));
+    				$FailCounter = true;
+    				_log($values[$i]+ "Copy Option not Present");
+    			}
+    			else
+    				_check(_checkbox(0,_near(_cell($values[$i]))));
+    		}
+    	}
+    	
+    	setAllFields($inputObject);
+
+    	if($FailCounter)
+    	{
+    		_click(_button("QTP_CancelAction"));
+    		_selectWindow();  
+    	}
+    	else
+    	{
+    		_click(_submit(""));
+    		if($inputObject.winprefix1)
+        		_selectWindow($inputObject.winprefix1);
+        	else
+        		_selectWindow("Project Confirmation");
+           	_click(_button("Close This Window"));
+        	_selectWindow();  
+    	}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveProjectAsTemplate Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyTemplateExistence({ "item" : "002SahiTemplate" , "operation" : "Delete" })
+* @description This function is called to check if the item passed is present in listing table.
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifyTemplateExistence($inputObject)
+{
+	_log("verifyTemplateExistence Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_Personal_Template");
+		
+    	if($inputObject.operation === "Delete")
+    		_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+    	else
+    	{
+    		//#WAIT#
+    		navigateTo({ "name" : "Personal Templates" });
+    		var $wait = 121000;
+    		var $reloadPeriod = 10000;
+    		var $counter = 0;
+    		var $itemVisible;
+    		_set($itemVisible,_isVisible(_cell($inputObject.item, _in($tableId))) || _isVisible(_link($inputObject.item, _in($tableId))));
+    		while ($counter< $wait &&  !$itemVisible)
+    		{
+    			_set($itemVisible,_isVisible(_cell($inputObject.item, _in($tableId))) || _isVisible(_link($inputObject.item, _in($tableId))));
+    			_wait($reloadPeriod);
+    			$counter = $counter + $reloadPeriod;
+    			navigateTo({ "name" : "Personal Templates" });
+    		}
+    		 if(_exists(_table("QTP_Personal_Template")))
+    			 _assertTrue(_isVisible(_cell($inputObject.item, _in($tableId))) || _isVisible(_link($inputObject.item, _in($tableId))));
+    		 else
+    			 _assertTrue(_isVisible(_cell($inputObject.item)) || _isVisible(_link($inputObject.item)));
+    	}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTemplateExistence Completed","success");
+}
+
+/**
+ @author: hbhuva
+ @example: IMP :  please provide "file1" as input not "file"
+ @description: Adding attachment in the attachment segment
+ @param: 
+ @return: 
+ **/
+
+function addEditAttachment($inputObject)
+{
+	_log("addEditAttachment Started","success");
+	try 
+	{
+		_click(_link("QTP_Link_Add_Edit_Attachments"));
+		_selectWindow("Note");
+		
+		var $importDIR;
+		_set($importDIR,_getGlobal("importDIR")+$inputObject.file1);
+		
+		_setFile(_file("file1"), $importDIR);
+		_call(_file("file1").type = "text");
+		_setValue(_textbox("file1"),$inputObject.file1);
+		
+		setAllFields($inputObject);
+		_click(_button("QTP_Add_Attachment"));
+		var $alertMsg = "A file with the specified name already exists in the current item. Either use a different filename or use the Overwrite Existing Attachment option to continue with the current name."
+		if(_lastAlert() === $alertMsg)
+		{
+			_log("This file is already uploaded please select another file");
+			_expectConfirm($alertMsg, false);
+			_click(_button("QTP_Close_this_Window"));
+			_selectWindow();
+			return;
+		}
+		_wait(3000, _exists(_button("QTP_Close_this_Window")));
+		_click(_button("QTP_Close_this_Window"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addEditAttachment Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example 1. For Skeleton Export
+* 				 exportProject({"ExternalExportType" : "Skeleton"}); 
+* 			2. For Full Export - Select the CheckBox needed by addind an extra parameter as given below
+* 				exportProject({"ExternalExportType" : "Full" , "chk_selAllChk" : "Yes"});
+* @description This function is called to exportProject
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function exportProject($inputObject)
+{
+	_log("exportProject Started","success");
+	try 
+	{
+		_click(_link("de-icon-export_project"));
+		_selectWindow("Project Export");
+		if($inputObject.ExternalExportType === "Skeleton")
+		{
+			_click(_radio(0, _near(_cell($inputObject.ExternalExportType))));
+			_click(_submit("//s*OK/s*/"));
+			_wait(5000,null);
+			_selectWindow("Project Confirmation");
+			_click(_button("Close"));
+		}
+		else
+		{
+			_click(_radio(0, _near(_cell($inputObject.ExternalExportType))));
+			_click(_submit("//s*OK/s*/"));
+			_wait(5000,null);
+			_selectWindow("Export Project");
+			setAllFields($inputObject);
+			_click(_submit(""));
+			_selectWindow("Project Confirmation");
+			_click(_button("Close"));
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("exportProject Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example downloadProject({ "project_name" : "DeleteDefect"});
+* @description This function is called to download Project
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function downloadProject($inputObject)
+{
+	_log("downloadProject Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Exported_Project"));
+		var $tableId = _table("List");
+
+		//#WAIT#
+		var $wait = 121000;
+		var $reloadPeriod = 10000;
+		var $counter = 0;
+		while ($counter< $wait &&  !(_isVisible(_cell($inputObject.projectname, _in($tableId)))))
+		{
+			_wait($reloadPeriod);
+			$counter = $counter + $reloadPeriod;
+			navigateTo({"name" : "Projects_home"});
+			_click(_button($exportHistoryBtnKey));
+		}
+		//_click(_link($inputObject.projectname));
+		_click(_link(0,_near(_cell($inputObject.projectname, _in($tableId)))));
+		
+		var $downloadPath = _getGlobal("importDIR");
+		
+		if($inputObject.SaveAs)
+			_saveDownloadedAs($downloadPath+""+$inputObject.SaveAs);
+		else
+			_saveDownloadedAs($downloadPath+""+$inputObject.projectname+".zip");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("downloadProject Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example importProject({ "project_name" : "DeleteDefect"});
+* @description This function is called to import Project
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+
+function importProject($inputObject)
+{
+	_log("importProject Started","success");
+	try 
+	{
+		var $importPTBtn = "KEY_BUTTON_Import_Project";
+		var $extJsId = ""; 	
+		var $importPTBtnKey = $importPTBtn + $extJsId;		
+		_click(_link($importPTBtnKey));
+		
+		_selectWindow("popup");
+		setAllFields($inputObject);
+
+		var $importDIR;
+		_set($importDIR, _getGlobal("importDIR")+$inputObject.uploadfile) // done this because this works with sahi pro also
+		
+		_setFile(_file("uploadfile12"), $importDIR);
+		_call(_file("uploadfile12").type = "text");
+		_setValue(_textbox("uploadfile12"),$inputObject.uploadfile);
+		
+		_click(_submit("Upload"));
+		_wait(2000,null);
+		_click(_button("QTP_KEY_BUTTON_Ok"));
+		_selectWindow();
+		_wait(60000,null);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importProject Completed","success");
+}
+
+/**
+ @Function Number:59
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openItemFromSearchResult($inputObject)
+{
+	_log("openItemFromSearchResult Started","success");
+	try 
+	{
+		_click(_link("/" + $inputObject.item + "/"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openItemFromSearchResult Completed","success");
+}
+
+/**
+ @Function Number:60
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToProjectAdvanceListing()
+{
+	_log("navigateToProjectAdvanceListing Started","success");
+	try 
+	{
+		_click(_link("KEY_BUTTON_AdvanceListing"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToProjectAdvanceListing Completed","success");
+}
+
+/**
+ @Function Number:61
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectAccessibleProject($inputObject)
+{
+	_log("selectAccessibleProject Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Other_Accessible_Projects"));
+		$inputObject.item = $inputObject.projectname; 
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectAccessibleProject Completed","success");
+}
+
+/**
+ @Function Number:87
+ @author: Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyProject ($inputObject)
+{
+	_log("verifyProject  Started","success");
+	try 
+	{
+		/* deleted this call verifyInstanceInListing($inputObject);
+		 because this will fail if the program takes time to create.
+		 so after program created successfully then only verify
+		*/
+		var $projectName = $inputObject.item;
+		
+		if($inputObject.navigateTo)
+			navigateTo({ "name" : $inputObject.navigateTo });
+		else
+			navigateTo({ "name" : "Projects_home" });
+		
+		if($inputObject.status)
+		{
+			setFilter($inputObject);
+			_wait(2000,_exists(_div($projectName)));
+		}
+		if($inputObject.operation == "Negative")
+		{
+			_assertFalse(_isVisible(_div($projectName)));
+			return;
+		}
+
+		//#WAIT#
+		var $wait = 121000;
+		var $reloadPeriod = 10000;
+		var $counter = 0;
+		
+		while (($counter< $wait && !(_exists(_div($projectName)))))
+		{
+			_wait($reloadPeriod, _exists(_div($projectName)));
+			$counter = $counter + $reloadPeriod;
+			if($inputObject.navigateTo)
+				navigateTo({ "name" : $inputObject.navigateTo });
+			else
+				navigateTo({ "name" : "Projects_home" });
+			
+			_wait(2000,_exists(_div($projectName)));
+		}
+		_assertTrue(_isVisible(_div($projectName)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProject  Completed","success");
+}
+
+/**
+ @Function Number:88
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyImportPTBrowser()
+{
+	_log("verifyImportPTBrowser Started","success");
+	try 
+	{
+		var $importPTBtn = "KEY_BUTTON_Import_Process_Template";
+		var $extJsId = ""; 	
+		var $importPTBtnKey = $importPTBtn + $extJsId;		
+		_click(_link($importPTBtnKey));
+		_selectWindow("popup");
+		_click(_button("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyImportPTBrowser Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.template_name = "abc"
+ @description:  Verifies Personal template at My Work > Personal Template
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function verifyTemplateListing($inputObject)
+{
+	_log("verifyTemplateListing Started","success");
+	try 
+	{
+		$json = {};
+		$json.item = $inputObject.template_name;
+		verifyTemplateExistence($json);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTemplateListing Completed","success");
+}
+
+/**
+ @Function Number:93
+ @author: Hrishi
+ @example: verifyaddEditAttachment("edt_filename":"tem.doc")
+ @description: Cheks file attachment depending on operation.
+ @param: file name
+ @return: none
+ **/
+
+function verifyaddEditAttachment($inputObject)
+{
+	_log("verifyaddEditAttachment Started","success");
+	try 
+	{
+		_selectWindow("Note");
+		if($inputObject.operation == "Negative")
+			_assertFalse(_isVisible(_option($inputObject.edt_file)));
+		else
+			_assertTrue(_isVisible(_option($inputObject.edt_file)));
+		_click(_button("QTP_Close_this_Window"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyaddEditAttachment Completed","success");
+}
+
+/**
+ @Function Number:97
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function to_loginIntoDigite($inputObject)
+{
+	_log("to_loginIntoDigite Started","success");
+	try 
+	{
+		   
+			var $URL = _getGlobal("URL_ENV");
+	        _navigateTo($URL,true);
+		    var $userName = $inputObject.user_name;
+			_setValue(_textbox("loginId"), $inputObject.edt_loginid);
+	        _setValue(_password("password"), $inputObject.edt_password);
+	        _click(_submit("Login"));
+	        	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_loginIntoDigite Completed","success");
+}
+
+/**
+ @Function Number:105
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifysetPersonalPreference($inputObject)
+{
+	_log("verifysetPersonalPreference Started","success");
+	try 
+	{
+		if($inputObject.lst_DateFormat)
+		{
+			_assertEqual($inputObject.lst_DateFormat, _getSelectedText(_select("DateFormat")));	
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifysetPersonalPreference Completed","success");
+}
+
+/**
+ @Function Number:107
+ @author: Hrishi
+ @example: verifyOtherAccessibleProjects({"item":"Project_name"})
+ @description: Verify the project is present on listing based on operation
+ @param: Json object cotaining project name
+ @return: none 
+ **/
+
+function verifyOtherAccessibleProjects($inputObject)
+{
+	_log("verifyOtherAccessibleProjects Started","success");
+	try 
+	{
+		 var $buttonKey = "KEY_LABEL_Other_Accessible_Projects";
+		 var $extJsId = ""; 
+		 var $buttonName = $buttonKey + $extJsId;
+		 
+		if($inputObject.operation === "BtnNotPresent")
+		{
+			_assertFalse(_exists(_button($buttonName)));
+		}
+		else
+		{
+			_click(_link($buttonName));
+			
+			if($inputObject.search)
+			{
+			    _setValue(_textbox("/searchTextBox/"), $inputObject.item);
+		        _keyPress(_textbox("/searchTextBox/"),[13,13]);
+			}
+			
+			verifyInstanceInListing($inputObject);
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyOtherAccessibleProjects Completed","success");
+}
+
+/**
+ @Function Number:110
+ @author: rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySideMenuUserListLink()
+{
+	_log("verifySideMenuUserListLink Started","success");
+	try 
+	{
+		_assertFalse(_exists(_div("User List",_in(_div("navigation-bar jquerycssmenu")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySideMenuUserListLink Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  verifySaveAsTemplateIcon
+* @description This function is called to verify SaveAsTemplate Icon 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifySaveAsTemplateIcon($inputObject)
+{
+	_log("verifySaveAsTemplateIcon Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_isVisible(_link("de-icon-save_as_template")));
+		}
+		else
+		{
+			_assertTrue(_isVisible(_link("de-icon-save_as_template")));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySaveAsTemplateIcon Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example  verifyProjectApprovalIcon({ "name" : "Projects" ,"item" : "checkApproval","status" : "Under Approval" });
+* @description This function is called to verify Project Approval Icon 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifyProjectApprovalIcon($inputObject)
+{
+	_log("verifyProjectApprovalIcon Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_exists(_image("KEY_LINK_Projects_Under_Approval")));
+		else
+			_assertTrue(_exists(_image("KEY_LINK_Projects_Under_Approval")));
+				
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectApprovalIcon Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  searchProjectInApprovalList
+* @description This function is called to searchProjectInApprovalList 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function searchProjectInApprovalList($inputObject)
+{
+	_log("searchProjectInApprovalList Started","success");
+	try 
+	{
+		clearFilterSettings($inputObject);
+		var $tempJson = {};
+		$tempJson.TextSearchStr = $inputObject["ProjectName"];
+		AdvancedFilterSearchTextInListing($tempJson);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchProjectInApprovalList Completed","success");
+}
+
+/**
+ @Function Number:115
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createProjectUnderApproval($inputObject)
+{
+	_log("createProjectUnderApproval  Started","success");
+	try 
+	{
+		createProject($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createProjectUnderApproval  Completed","success");
+}
+
+/*************************************************************************
+* @author rmahant
+* @example  deleteMail
+* @description This function is called to delete a Mail 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function deleteMail($inputObject)
+{
+	_log("deleteMail Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_exists(_div("lnk5")));
+		else
+		_click(_div("lnk5"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteMail Completed","success");
+}
+
+/**
+ @Function Number:117
+ @author:hsalvi
+ @example: openMailInInbox({"from":"kpis@digite.com","subject":"[TEST SERVER] Notification change"})
+ @description: This function is called to open inbox item from inbox listing of mail server.
+ 			   If subject is passed it will open the inbox instance else it wil open inbox listing
+ @param: Subject, From email id
+ @return: none
+ **/
+
+function openMailInInbox($inputObject)
+{
+	_log("openMailInInbox Started","success");
+	try 
+	{
+        _click(_link("/Inbox.*/"));
+        
+        if($inputObject.operation == 'Negative')
+        {
+        	_assertFalse(_isVisible(_cell($inputObject.subject)),"Mail Send to Incorrect Recipient");	
+        }
+        else
+        {
+        	if($inputObject.subject != null)
+			{
+			    _wait(5000, _cell($inputObject.from, _near(_cell($inputObject.subject))));
+            	_click(_cell($inputObject.from, _near(_cell($inputObject.subject))));
+			}
+        }
+    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openMailInInbox Completed","success");
+}
+
+/*************************************************************************
+ @author: hsalvi
+ @example: deleteAllMailitem($inputObject)
+ @description:This function will delete all the mail items form karina mail server for logged in user
+ @param: none
+ @return: none 
+*************************************************************************/
+
+function deleteAllMailitem()
+{
+	_log("deleteAllMailitem Started","success");
+	try 
+	{
+	    if (!_isVisible(_link("/Inbox.*/")))
+		    _click(_image("plus.gif", _near(_span("/Mail/"))));
+		_click(_link("/Inbox.*/"));
+		_wait(1000);
+		_click(_image("folderops.gif", _near(_div("Folder"))));
+		_click(_div("Empty folder", _near(_image("delete.gif"))));
+		_expectConfirm("Are you sure that you want to empty this folder ? All emails will be deleted IMMEDIATELY. You cannot undo this action.", true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteAllMailitem Completed","success");
+}
+
+/**
+ @Function Number:120
+ @author:hsalvi
+ @example:verifyMailContent({"from":"kpis@digite.com","subject":"Subject: [TEST SERVER] : You have been allocated to "NYor000003ENOTI: Email Notification"",
+ 					mail_text:"Dear sonu kumar You have been allocated to the project "Email Notification" by new york"})
+ @description: This function is called to check the mail comntent fo recived mail.
+ @param: from email id, mail subject, mail content
+ @return: none
+ **/
+
+function verifyMailContent($inputObject)
+{
+	_log("verifyMailContent Started","success");
+	try 
+	{
+		if($inputObject.from)
+			_assertTrue(_isVisible(_span("<"+$inputObject.from+">", _near(_bold("From:")))),"From  mail id is wrong");
+		
+		if($inputObject.subject)
+			_assertTrue(_isVisible(_cell($inputObject.subject)));
+		
+		if($inputObject.mail_text)
+		{
+		    _wait(5000, _isVisible(_div("dn[2]")));
+			_assertTrue(_containsText(_div("dn[2]"), $inputObject.mail_text));
+		}
+		
+		if($inputObject.notification_title)
+			_assertTrue(_isVisible(_cell($inputObject.notification_title, _near(_div("dn[2]")))));
+		
+		if($inputObject.project_name)
+		{
+			if($inputObject.frequency_type === "Daily")
+				_assertTrue(_isVisible(_cell($inputObject.project_name,_under(_cell("Project Name")))));
+			else
+				_assertTrue(_isVisible(_row("Project Name"+$inputObject.project_name, _near(_div("dn[2]")))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMailContent Completed","success");
+}
+
+/**
+ @Function Number:122
+ @author: Hrishi
+ @example: logoutFromKarina($inputObject)
+ @description: This funtion will logout the logged in user from karina mail server account.
+ @param: none
+ @return: none
+ **/
+
+function logoutFromKarina()
+{
+	_log("logoutFromKarina Started","success");
+	try 
+	{
+		_click(_image("logout.gif",_in(_cell("Logout"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("logoutFromKarina Completed","success");
+}
+
+/**
+ @Function Number:124
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyfieldvalueofitemininbox($inputObject)
+{
+	_log("verifyfieldvalueofitemininbox Started","success");
+	try 
+	{
+		if(_assertTrue(_isVisible(_div($inputObject.item))))
+		_assertTrue(_isVisible(_div($inputObject.value),_under(_span($inputObject.field))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyfieldvalueofitemininbox Completed","success");
+}
+
+/**
+ @Function Number:126
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTimesheetItemFromInbox($inputObject)
+{
+	_log("openTimesheetItemFromInbox Started","success");
+	try 
+	{
+	    var $status;
+		_wait(2000, _isVisible(_div("/" + $inputObject.item + "/")));
+		_set($status, _isVisible(_div("/" + $inputObject.item + "/")));
+		
+		if($status)
+		    _click(_div("/" + $inputObject.item + "/"));
+		else
+			_click(_span("/" + $inputObject.item + "/"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimesheetItemFromInbox Completed","success");
+}
+
+/**
+ @Function Number:127
+ @author: Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyUserHeader($inputObject)
+{
+	_log("verifyUserHeader Started","success");
+	try 
+	{
+		_assertTrue(_containsText(_link("UserName"),$inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserHeader Completed","success");
+}
+
+/**
+ @Function Number:128
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyItemValueInInbox($inputObject)
+{
+	_log("verifyItemValueInInbox Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_assertEqual(_getText(_div(0,_near(_div($inputObject.item)),_under(_div($inputObject.header)))),$inputObject.value));
+		else
+		{
+			_assertEqual(_getText(_div(0,_rightOf(_div($inputObject.item)),_under(_div($inputObject.header)))),$inputObject.value);
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyItemValueInInbox Completed","success");
+}
+
+/**
+ @Function Number:129
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyHighlightedTab($inputObject)
+{
+	_log("verifyHighlightedTab Started","success");
+	try 
+	{
+		_assertTrue(_containsText(_list("ux-menu-ul[6]"),$inputObject.TabName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyHighlightedTab Completed","success");
+}
+
+/**
+ @Function Number:130
+ @author: Vaishali
+ @example: verifyHighlightedMenu({"menuName":"Overview"});
+ @description: This function is for verifying selected menu.if index is 0 then that menu is selected.
+ @param:     $inputObject.menuName  
+ @return: 
+ **/
+
+function verifyHighlightedMenu($inputObject)
+{
+	_log("verifyHighlightedMenu Started","success");
+	try 
+	{
+		_assertTrue(_containsText(_list("ux-menu-ul[6]"),$inputObject.menuName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyHighlightedMenu Completed","success");
+}
+
+/**
+ @Function Number:132
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyAfterLoginSelection($inputObject)
+{
+	_log("verifyAfterLoginSelection Started","success");
+	try 
+	{
+		var $afterLoginArr = $inputObject.optionList.split(";");
+		
+		for(var $i =0; $i < $afterLoginArr.length; $i++)
+		{
+			_assertTrue(_containsText(_select("AfterLogin"),$afterLoginArr[$i]));	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAfterLoginSelection Completed","success");
+}
+
+/**
+ @Function Number:135
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyLocaleDetails($inputObject)
+{
+	_log("verifyLocaleDetails Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyLocaleDetails Completed","success");
+}
+
+/**
+ @Function Number:136
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyModulesOuterText($inputObject)
+{
+	_log("verifyModulesOuterText Started","success");
+	try 
+	{
+		var $key;
+		
+		for ($key in $inputObject)
+		{
+			var $arrKeySet = $inputObject[$key].split("|");
+
+			for (var $i = 0; $i < $arrKeySet.length; $i++)
+            {
+				_containsText(_div("navbar"),$arrKeySet[$i]);
+            }
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyModulesOuterText Completed","success");
+}
+
+/**
+ @Function Number:137
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setLocales($inputObject)
+{
+	_log("setLocales Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setLocales Completed","success");
+}
+
+/**
+ @Function Number:139
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function BrowserRefresh()
+{
+	_log("BrowserRefresh Started","success");
+	try 
+	{
+		navigateTo({"name" : "Organization"});
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("BrowserRefresh Completed","success");
+}
+
+/**
+ @Function Number:140
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDropDownListForLocaleDetail($inputObject)
+{
+	_log("verifyDropDownListForLocaleDetail Started","success");
+	try 
+	{
+		
+		var $key;
+				
+		for ($key in $inputObject)
+		{
+			var $arrKeySet = $inputObject[$key].split(";");
+
+			for (var $i = 0; $i < $arrKeySet.length; $i++)
+            {
+				if($inputObject[$key] === $inputObject.lst_PrimaryLocale)
+            		_assertTrue(_containsText(_select("PRIMARYLOCALE"),$arrKeySet[$i]));
+            	
+            	if($inputObject[$key] === $inputObject.lst_TextLocale)
+            		_assertTrue(_containsText(_select("LOCALETEXT"),$arrKeySet[$i]));
+            	
+            	if($inputObject[$key] === $inputObject.lst_DateLocale)
+            		_assertTrue(_containsText(_select("LOCALEDATE"),$arrKeySet[$i]));
+            	
+            	if($inputObject[$key] === $inputObject.lst_NumberLocale)
+            		_assertTrue(_containsText(_select("LOCALENUMBER"),$arrKeySet[$i]));
+        		
+            	if($inputObject[$key] === $inputObject.lst_TimeZoneLocale)
+            		_assertTrue(_containsText(_select("ZONEDATETIME"),$arrKeySet[$i]));
+            }	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDropDownListForLocaleDetail Completed","success");
+}
+
+/**
+ @Function Number:148
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function itemtrace($inputObject)
+{
+	_log("itemtrace Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("GoButton"));
+		_wait(2000);
+		_setValue(_textbox("SearchPhrase"), $inputObject.item);
+		_click(_submit("Go"));
+		if(_containsText((_table("QTP_List")),$inputObject.item))
+		{	
+			_click(_checkbox(0,_near(_cell($inputObject.item))));
+			_click(_button("AddLink"));
+			_wait(5000);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("itemtrace Completed","success");
+}
+
+/**
+ @Function Number:153
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ClickExportHistory()
+{
+	_log("ClickExportHistory Started","success");
+	try 
+	{
+		var $Btn = "KEY_LABEL_Export_History";
+		var $extJsId = ""; 	
+		var $btnKey = $Btn + $extJsId;
+		_click(_link($btnKey));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ClickExportHistory Completed","success");
+}
+
+/**
+ @Function Number:154
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickAddEditAttachment()
+{
+	_log("clickAddEditAttachment Started","success");
+	try 
+	{
+		_click(_link("QTP_Link_Add_Edit_Attachments"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickAddEditAttachment Completed","success");
+}
+
+function closeWindow($inputObject)
+{
+	_log("closeWindow Started","success");
+	try
+	{
+		_selectWindow($inputObject.windowName);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeWindow Completed","success");
+}
+
+/**
+ @Function Number:155
+ @author: hbhuva
+ @example: openPersonalTemplate ($inputObject.templatename)
+ @description: opens Personal Templates Item
+ @param: String 
+ @return: 
+ **/
+
+function openPersonalTemplate($inputObject)
+{
+	_log("openPersonalTemplate Started","success");
+	try
+	{
+		navigateTo({ "name" : "Personal Templates" });
+		_wait(5000,_isVisible(_link($inputObject.templatename) || _div($inputObject.templatename)));
+		
+		var $templateName = $inputObject.templatename;
+		var $wait = 121000;
+		var $reloadPeriod = 15000;
+		var $counter = 0;
+		while ($counter< $wait && !_exists(_link($templateName) || _div($templateName)))
+		{
+			_wait($reloadPeriod);
+			$counter = $counter + $reloadPeriod;
+			navigateTo({ "name" : "Personal Templates" });
+			_wait(2000,_exists(_link($templateName) || _div($templateName)));
+		}
+		_click(_link($templateName,_in(_table("QTP_Personal_Template"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openPersonalTemplate Completed","success");	
+}
+
+
+/**
+@Function Number:155
+@author: hsalvi
+@example: openPersonalTemplate ($inputObject)
+@description: go to specified page no
+@param: pageNo  
+@return: 
+**/
+
+function gotoPage($inputObject)
+{
+	_log("gotoPage Started","success");
+	try
+	{
+		_click(_link($inputObject.pageNo,_in(_table("pagination"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("gotoPage Completed","success");	
+}
+
+/*************************************************************************
+* @author Sheetal Dindorkar
+* @example  verifyLoginPage
+* @description This function is called to verifyLoginPage 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifyLoginPage()
+{
+	_log("verifyLoginPage Started","success");
+	try 
+	{
+		_assertTrue(_exists(_div("login-logo")));
+		_assertTrue(_exists(_div("release-title help-img"))); //might change to link
+		_assertTrue(_exists(_div("release-title swift-alm-community"))); //might change to link
+		_assertTrue(_exists(_div("release-title youtube-alm"))); //might change to link
+		_assertTrue(_exists(_div("release-title feedback"))); //might change to link
+		_assertTrue(_exists(_link("| www.digite.com")));
+		_assertTrue(_exists(_link("Terms and Conditions")));
+		_assertTrue(_exists(_link("| Privacy Policy")));
+		_assertTrue(_exists(_link("Support")));
+	}
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyLoginPage Completed","success");
+}

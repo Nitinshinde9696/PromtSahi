@@ -1,0 +1,273 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+ _include("../../../sahisource/Business/TaskGrid.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Schedule_08","Package/Closure_Report");
+ /*
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Closure Report");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "CRep58";// $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ */
+
+ var $t = _testcase("TC_2", "Verifying the field visibility of Schedule table");
+ $t.start();
+ 
+ _wait(40000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment3;//Schedule
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1;//Schedule
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowheaders1;//Estimated Date;Actual Date;Deviation(Days);Remarks;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colheaders1;//Start Date;End Date
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Verifying the field visibility of Overall deviation table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table2;//Overall Deviation
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colheaders2;//Deviation(%);Remarks[2]
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+/*
+ var $t = _testcase("TC_4", "Taking the actual and estimated dates from iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.navigateTo3;//Iterations
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $Itr_ID;;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ var $actStart = _getValue(_textbox("DN_ActualStartDate"));
+ var $actEnd =  _getValue(_textbox("DN_ActualEndDate"));
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.isegment1;//Sub Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.sub1;//SubP1
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1;//newListing
+ $inputObject.segment_name = $data.isegment2;//Scheduled Tasks
+ SelectSegment($inputObject);
+ 
+ _wait(3000);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ var $estStart = _getText(_div("x-grid-cell-inner [18]", _near(_span("Baseline Start"))));
+ var $estEnd = _getText(_div("x-grid-cell-inner [19]", _near(_span("Baseline Finish"))));
+
+ _log($estStart);
+ _log($estEnd);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1;//newListing
+ InfyFTReturnPopUp($inputObject)
+
+ $t.end();
+ */
+ var $t = _testcase("TC_5", "Verifying the actual and Estimated dates in Closure report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//Start Date
+ $inputObject.colNo = $data.colname1;//Estimated Date_lbl
+ $inputObject.fieldValues = $StartDate;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//Start Date
+ $inputObject.colNo = $data.colname2;//Actual Date_lbl
+ $inputObject.fieldValues = $StartDate;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname2;//End Date
+ $inputObject.colNo = $data.colname1;//Estimated Date_lbl
+ $inputObject.fieldValues = $EndDate;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname2;//End Date
+ $inputObject.colNo = $data.colname2;//Actual Date_lbl
+ $inputObject.fieldValues = $StartDate;
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Verifying the Deviation values");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.date1 = $StartDate;
+ $inputObject.date2 = $StartDate;
+ InfyFTdateDiff($inputObject);
+ 
+ var $startDev = $inputObject.difference;
+ $startDevStr = $startDev.toString();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.rowNo = $data.rowname1;//Start Date
+ $inputObject.colNo = $data.colname3;//Deviation(Days)_lbl
+ $inputObject.fieldValues = "1";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.date1 = $EndDate;
+ $inputObject.date2 = $StartDate;
+ InfyFTdateDiff($inputObject);
+ 
+ var $devEnd = $inputObject.difference;
+ $devEndStr = $devEnd.toString();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.rowNo = $data.rowname2;//End Date
+ $inputObject.colNo = $data.colname3;//Deviation(Days)_lbl
+ $inputObject.fieldValues = "-3";
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "Verifying the Remarks fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.rowNo = $data.rowname1;//Start Date
+ $inputObject.colNo = $data.colname4;//
+ $inputObject.fieldValues = $data.testdata;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table1;//Schedule
+ $inputObject.rowNo = $data.rowname2;//End Date
+ $inputObject.colNo = $data.colname4;//Remarks_txt
+ $inputObject.fieldValues = $data.testdata;
+ setSwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "Verifying Overall deviation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.date1 = $EndDate;
+ $inputObject.date2 = $StartDate;
+ InfyFTdateDiff($inputObject);
+ 
+ var $estDiff = $inputObject.difference;
+ 
+ $inputObject = {};
+ $inputObject.devEnd = $devEnd;
+ $inputObject.estDiff = $estDiff;
+ InftFTcalculateOverallDeviation($inputObject);
+ 
+ var $overallDev = $inputObject.overallDev;
+ var $overallDevStr = $overallDev.toString();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Overall Deviation
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno1;//1_lbl
+ $inputObject.fieldValues = "-100.00";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Overall Deviation
+ $inputObject.rowNo = $data.rowno1;//0
+ $inputObject.colNo = $data.colno2;//2_txt
+ $inputObject.fieldValues = $data.testdata;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 

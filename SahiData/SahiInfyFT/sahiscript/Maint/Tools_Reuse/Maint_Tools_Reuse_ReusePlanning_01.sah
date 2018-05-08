@@ -1,0 +1,502 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Maint_Tools_Reuse_ReusePlanning_01","Maint/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects_home ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//CSXHYIMS
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+/************Deleting**************************/
+_wait(2000);
+if(_isVisible(_div($data.Name5)))//_isVisible(_div("Jonnyyy"))
+{
+$inputObject = {};
+$inputObject.item = $data.Name5;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+clearFilterSettings();
+}
+_wait(2000);
+if(_isVisible(_div($data.Name6)))
+{
+$inputObject = {};
+$inputObject.item = $data.Name6;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+}
+_click(_span("KEY_BUTTON_Add-btnIconEl"));
+
+var $t = _testcase("TC_3", "Available fields in create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Field1;//Name * :
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_4", "Verifying the mandatory fields of create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Asset Name in Details tab \n• Field Asset Type in Details tab \n• Field License Type/Source in Details tab \n• Field Unit of Measure in Details tab \n• Field Estimated Effort Saving (P hrs) in Details tab \n• Field Size in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_5", "Create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;//aaa
+$inputObject.lst_DN_Technology = $data.Technology5;//Billing
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;//Open Source
+$inputObject.lst_DN_Domain = $data.Domain5;//Mobility
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;//Agents
+$inputObject.lst_DN_UnitofMeasure = $data.Unit5;//Others
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;//15
+$inputObject.lst_DN_AssetType = $data.AssetType5;//Business
+CreateInstance($inputObject);
+
+var $name1 = _getText(_span("CM_Name"));
+
+$t.end();
+
+var $t = _testcase("TC_6", "Verifying the 'Activity Log' in newly created asset ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//Activity Log
+SelectSegment($inputObject);
+
+var $activitylog = _getText(_row(17));
+
+_log( $activitylog );
+
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_7", "Verifying the created Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+clearFilterSettings();
+
+$t.end();
+
+var $t = _testcase("TC_8", "Create Reuse Planning with same name(should not accept) ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data.Technology5;//Billing
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data.Domain5;//Mobility
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;//15
+$inputObject.lst_DN_AssetType = $data.AssetType5;//Business
+$inputObject.msgAlert = " "+ $name1 + " already exists with same version number." + "";
+CreateInstance($inputObject);
+
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_9", "Create Reuse Planning with other name ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name6;//bbb
+$inputObject.lst_DN_Technology = $data.Technology51;//Billing
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data.Domain51;//Mobility
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data.Unit51;//Unit1
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;//15
+$inputObject.lst_DN_AssetType = $data.AssetType5;//Business
+CreateInstance($inputObject);
+
+var $name2 = _getText(_span("CM_Name"));
+
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_10", "Verifying the second created Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $name2;
+InfyFTverifyInstanceInListing($inputObject);
+clearFilterSettings();
+
+$t.end();
+
+var $t = _testcase("TC_11", "Verifying the Reuse Planning name are UNIQUE ");
+$t.start();
+
+
+if ($name1 != $name2)
+{
+  _log(" Asset names are unique");
+}
+
+$t.end();
+
+var $t = _testcase("TC_12", "Verifying the created unplanned assets presents in other Request Types ");
+$t.start();
+
+_log("***********Enhancements************");
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5;//Enhancements
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "Enh";
+  infyFTGetValueFromExcel($inputObject);
+  $Enh_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $Enh_Id;
+OpenEformInstance($inputObject);
+
+_wait(10000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Reuse Tracking
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;//Add From Reuse Plan
+SelectSegment($inputObject);
+
+_wait(2000);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name5;//Jonny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name5;//Jonny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name5;//Jonny
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name6;//Sunny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name6;//Sunny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name6;//Sunny
+verifySwiftFormData($inputObject);
+
+clickReturn();
+_wait(3000);
+
+clickReturn();
+_wait(3000);
+
+/***********Bug Fixes**********************/
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;//Bug Fixes
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcelBF = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcelBF.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "BF";
+  infyFTGetValueFromExcel($inputObject);
+  $BF_Id  = $value;
+ 
+ $GetExcelBF.end();
+
+$inputObject = {};
+$inputObject.item = $BF_Id;
+OpenEformInstance($inputObject);
+
+_wait(10000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Reuse Tracking
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;//Add From Reuse Plan
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name5;//Jonny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name5;//Jonny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name5;//Jonny
+verifySwiftFormData($inputObject);
+
+_wait(2000);
+$inputObject = {};
+$inputObject.tableName = $data.Name6;//Sunny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name6;//Sunny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name6;//Sunny
+verifySwiftFormData($inputObject);
+
+clickReturn();
+_wait(1000);
+clickReturn();
+_wait(3000);
+
+/***********Testing Request**********************/
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo7;//Testing Request
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcelTR = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcelTR.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "TR";
+  infyFTGetValueFromExcel($inputObject);
+  $TR_Id  = $value;
+ 
+ $GetExcelTR.end();
+
+$inputObject = {};
+$inputObject.item = $TR_Id;
+OpenEformInstance($inputObject);
+
+_wait(10000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Reuse Tracking
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;//Add From Reuse Plan
+SelectSegment($inputObject);
+
+/* $inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Available Reuse Assets
+SelectSegment($inputObject); */
+
+$inputObject = {};
+$inputObject.tableName = $data.Name5;//Jonny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name5;//Jonny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name5;//Jonny
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name6;//Sunny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name6;//Sunny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name6;//Sunny
+verifySwiftFormData($inputObject);
+
+clickReturn();
+_wait(1000);
+clickReturn();
+_wait(3000);
+
+/***********Analysis and Research**********************/
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo8;//Analysis and Research
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcelAnR = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcelAnR.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "AnR";
+  infyFTGetValueFromExcel($inputObject);
+  $AnR_Id  = $value;
+ 
+ $GetExcelAnR.end();
+
+$inputObject = {};
+$inputObject.item = $AnR_Id;
+OpenEformInstance($inputObject);
+
+_wait(10000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Reuse Tracking
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;//Add From Reuse Plan
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name5;//Jonny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name5;//Jonny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name5;//Jonny
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name6;//Sunny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name6;//Sunny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name6;//Sunny
+verifySwiftFormData($inputObject);
+
+clickReturn();
+_wait(1000);
+clickReturn();
+_wait(3000);
+
+/***********Other Request**********************/
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo9;//Other Request
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcelOR = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcelOR.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "OR";
+  infyFTGetValueFromExcel($inputObject);
+  $OR_Id  = $value;
+ 
+ $GetExcelOR.end();
+
+$inputObject = {};
+$inputObject.item = $OR_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Reuse Tracking
+SelectSegment($inputObject);
+_wait(5000)
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;//Add From Reuse Plan
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name5;//Jonny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name5;//Jonny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name5;//Jonny
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.Name6;//Sunny
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.Name6;//Sunny
+$inputObject.colNo = $data.colName1;//Asset Name[1]_lbl
+$inputObject.fieldValues = $data.Name6;//Sunny
+verifySwiftFormData($inputObject);
+
+clickReturn();
+_wait(1000);
+clickReturn();
+_wait(3000);
+
+$t.end();
+
+var $t = _testcase("TC_13", "To repeat the script execution ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject["edt_searchTextBox-inputEl"] = $name2;//"rule";
+setAllFields($inputObject);
+ 
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $name2;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+clearFilterSettings();
+
+$inputObject = {};
+$inputObject["edt_searchTextBox-inputEl"] = $name1;//"rule";
+setAllFields($inputObject);
+ 
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $name1;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+
+$t.end();
+
+
+
+
+
+

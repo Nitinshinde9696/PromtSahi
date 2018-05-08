@@ -1,0 +1,42 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ $data = readDataFromCSV("IMS_SDMP_workflow_04", "IMS/ProjectAdminandSDMP");
+ 
+ /***********************************************************
+ * workflowset for sdmp
+ ************************************************************/
+ 
+ var $t = _testcase("TC_5", "workflowset");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage0;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members1;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members2;
+ $inputObject.workflow_stage = $data.workflow_stage2;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error: SDMP can be submitted only when all the sections are in Green.";
+ InfyFTClickRoutewithCommentsN($inputObject);
+ _wait(5000);
+ 
+ $t.end();
+ 
+ 

@@ -1,0 +1,1013 @@
+
+/**
+ @Function Number:1
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  verifyInboxSummary($inputObject)
+{
+	_log(" verifyInboxSummary Started","success");
+	try 
+	{
+		_assertTrue(_getText(_cell(2,_near(_link("Open Items"))))>= $inputObject.openitemcount);
+		_assertTrue(_getText(_cell(2,_near(_link("QTP_Past_Due_Items"))))>= $inputObject.pastdueitemcount);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyInboxSummary Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example selectProjectFromFavoriteProjectList({"projectname":"Digite Vr 4.2"});
+* @description This function is called to select project from faviourite project
+* @param {String} projectname, Project Name to be selected
+* @return {String}   None 
+*************************************************************************/
+
+function  selectProjectFromFavoriteProjectList($inputObject)
+{
+	_log(" selectProjectFromFavoriteProjectList Started","success");
+	try 
+	{
+		_link("Projects_Menu");
+		_click(_link($inputObject.projectname));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" selectProjectFromFavoriteProjectList Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  addNotiFication($inputObject)
+{
+	_log(" addNotiFication Started","success");
+	try
+	{
+		if($inputObject.setNotification === 'Y') // if want to set any notification then pass this input
+		{
+			_wait(15000,_isVisible(_link("de-icon-add")));
+			_click(_link("de-icon-add"));
+			setAllFields($inputObject);
+			_click(_link("Notification Events"));
+			var $triggerName = replaceAllStr($inputObject.triggerName, ";", ",");
+			_check(_checkbox(0,_near(_cell($triggerName))),_in(_div("sectiontab2")));
+			
+			var $key =  "KEY";
+			var $itemtype = $inputObject.itemtype; // Pass by first seeing in the UI,here for defect it id "Defects"
+			var $eventName = $inputObject.eventName; // eg. On Event,Daily etc.
+			var $label = "label";
+			var $fullKey = $key + "_" + $itemtype + "_" + $eventName + "_" + $label; // will look like "KEY_Defects_On Event_label"
+			
+			_click(_radio(0,_near(_cell($fullKey))));
+			_click(_submit("\"QTP_\"+Save"));
+		}
+		else
+			CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" addNotiFication Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  verifyaddNotiFication($inputObject)
+{
+	_log(" verifyaddNotiFication Started","success");
+	try 
+	{
+		var $items = $inputObject.item.split(";");
+		for (var $i = 0; $i < $items.length; $i ++)
+		{
+			_assertTrue(_exists(_link($items[$i])));
+		}		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyaddNotiFication Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickOnHomeSearch()
+{
+	_log("clickOnHomeSearch Started","success");
+	try 
+	{
+		_click(QTP_Search);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickOnHomeSearch Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+here after clicking on the Edit icon we need to call enterTimelog function
+Modified By Arindam
+ **/
+
+function  enterTimeLogFromInbox($inputObject)
+{
+	_log(" enterTimeLogFromInbox Started","success");
+	try 
+	{
+        var $itemName=$inputObject.itemName;
+        var $itemType=$inputObject.itemType;
+
+		if(_isVisible(_div($itemName,_under(_div($itemType)))))
+        { 
+        	_click(_div($inputObject.itemName));
+
+           _click(_button("Edit"));
+        }
+         
+
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" enterTimeLogFromInbox Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  selectNextItemInSplitScreen()
+{
+	_log(" selectNextItemInSplitScreen Started","success");
+	try 
+	{
+		_click(_image("QTP_Next_Item_Img"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" selectNextItemInSplitScreen Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  selectPreviousItemSplitScreen()
+{
+	_log(" selectPreviousItemSplitScreen Started","success");
+	try 
+	{
+		_click(_image("QTP_Previous_Item_Img"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" selectPreviousItemSplitScreen Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  closeSplitScreens()
+{
+	_log(" closeSplitScreens Started","success");
+	try 
+	{
+		_click(_image("QTP_Close_Img"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" closeSplitScreens Completed","success");
+}
+
+/**
+ @author: Harshit 
+ @example: Will bulk route/reject items from the inbox listing
+ @description: Pass in input as  $inputObject.items = "items to be selected usually name of item",
+ 			   $inputObject.readUnread = "Route/Reject Option" please see setActionForInboxItem($inputObject) for inputs
+ 			   $inputObject.action = "Route or Reject" base on this Route/Reject radio button will be selected
+ @param: $inputObject.items,$inputObject.readUnread,$inputObject.action
+ @return: 
+ **/
+
+function  Bulkupdate($inputObject)
+{
+	_log(" Bulkupdate Started","success");
+	try 
+	{
+		var $action;
+		var $items = $inputObject.item.split(";");
+		
+		for (var $i = 0; $i < $items.length; $i++)
+		{	//_alert($items[i]);
+			_check(_div("x-grid-row-checker",_near(_div($items[$i]))));
+		}	
+		_click(_xy(_link("Action"), -5, 5));
+		
+		if($inputObject.action === "Read")
+			$action = "Mark as read";
+		else if($inputObject.action === "UnRead")
+			$action = "Mark as unread";
+		else if($inputObject.action === "Route")
+			$action = "Route";
+		else if($inputObject.action === "Reject")
+			$action = "Reject";
+			
+		_click(_link($action));
+		if($inputObject.msgAltFail)
+		{
+			_assertVisible(_div($inputObject.Item_code, _near(_div($inputObject.Item_type, _near(_div("Fail", _near(_listItem($inputObject.msgAltFail))))))));
+			//_assertVisible(_div($inputObject.Item_code2, _near(_div($inputObject.Item_type, _near(_div("Fail", _near(_listItem($inputObject.msgAltFail))))))));//_assertVisible(_div("QAP107", _near(_div("QA Plan", _near(_div("Fail", _near(_listItem("Cannot Reject from the Initial Workflow Stage"))))))));
+		}
+		
+		_click(_link("Close"));
+		
+		if($inputObject.verifyUnRead)
+			verifyReadUnRead($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" Bulkupdate Completed","success");
+}
+
+/**
+ @Function Number:22
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectAllItem()
+{
+	_log("selectAllItem Started","success");
+	try 
+	{
+		_click(_span("x-column-header-text"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectAllItem Completed","success");
+}
+
+/**
+@Function Number:26
+@author:shashank
+@example:
+@description: 
+@param: 
+@return: 
+**/
+
+function navigateToCustomEform($inputObject)
+{
+	_log("navigateToCustomEform Started","success");
+	try 
+	{
+		$inputObject.name = $inputObject.eformname;
+		navigateTo($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToCustomEform Completed","success");
+}
+
+/**
+@author:Harshit
+@example: setInboxView($inputObject)
+@description: It takes $inputObject.action which will have action to be performed on Inbox Listing.
+@param: String {$inputObject.action}
+@return: None
+**/
+
+function setInboxView($inputObject)
+{
+	_log("setInboxView Started","success");
+	try 
+	{
+		var $actionInInbox;
+
+		_click(_xy(_link("Views"), -5, 5));
+		if($inputObject.action === "Today's")
+			$actionInInbox = "Today's Items";
+		else if($inputObject.action === "Last7days")
+			$actionInInbox = "Last 7 days items";
+		else if($inputObject.action === "PastDue")
+			$actionInInbox = "Past Due Items";
+		else if($inputObject.action === "Open")
+			$actionInInbox = "Open Items";
+		else if($inputObject.action === "All")
+			$actionInInbox = "All Items";
+		_click(_span($actionInInbox));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setInboxView Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyMenu($inputObject)
+@description: It takes $inputObject.item which will have menu name to be view eg. "LOCK_Dashboard".
+@param: String {$inputObject.item}
+@return: None
+**/
+
+function verifyMenu($inputObject)
+{
+	_log("verifyMenu Started","success");
+	try 
+	{
+		verifySubmenu($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMenu Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifySubmenu($inputObject)
+@description: It takes $inputObject.item which will have submenu name to be view eg. "LOCK_Dashboard;LOCK_Personal_Dashboard",send semicolon seperated navigation
+			  for submenu.
+@param: String {$inputObject.item}
+@return: None 
+**/
+function verifySubmenu($inputObject)
+{
+	_log("verifySubmenu Started","success");
+	try 
+	{
+		var $navigateUpto;
+		$navigateUpto = $inputObject.item.split(";");
+		var $leafNode = $navigateUpto.length-1;
+		if ($leafNode.length == 0 )
+			_assertTrue(_isVisible(_link($navigateUpto[0])));
+		else
+		{
+			for(var $i = 0; $i < $navigateUpto.length; $i++)
+			{
+				if($i == $leafNode)
+					_assertTrue(_isVisible(_link($navigateUpto[$i])));
+				else
+					_click(_link($navigateUpto[$i]));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySubmenu Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyPreferenceValues($inputObject)
+@description: Pass the $inputObject as eg. $inputObject.lst_AfterLogin = "Inbox;Project List........." etc.
+@param: String {$inputObject.item}
+@return: 
+**/
+
+function verifyPreferenceValues($inputObject)
+{
+	_log("verifyPreferenceValues Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPreferenceValues Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyDefaultPage()
+@description: No Input is passed
+@param: String {}
+@return: None 
+**/
+
+function verifyDefaultPage()
+{
+	_log("verifyDefaultPage Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_link("The Default Page")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDefaultPage Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyIconsInDashboard()
+@description: No Input is passed
+@param: String {}
+@return: None 
+**/
+
+function verifyIconsInDashboard()
+{
+	_log("verifyIconsInDashboard Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_image("QTP_KEY_LABEL_Add_a_New_Page")));
+		_assertTrue(_isVisible(_image("QTP_KEY_LABEL_Organize_Pages")));
+		_assertTrue(_isVisible(_image("QTP_KEY_LABEL_Edit_Current_Page")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyIconsInDashboard Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyUserCalender($inputObject)
+@description: No Input is passed
+@param: String {}
+@return: None 
+**/
+
+// TODO : PENDING 
+function verifyUserCalender($inputObject)
+{
+	_log("verifyUserCalender Started","success");
+	try 
+	{	
+		if ($inputObject.action === "Default") // this is passed for verifying default User's Calender 
+		{
+			_assertTrue(_checkbox(chk_isworking2).checked); // Mon
+			_assertTrue(_checkbox(chk_isworking3).checked); // Tue
+			_assertTrue(_checkbox(chk_isworking4).checked); // Wed
+			_assertTrue(_checkbox(chk_isworking5).checked); // Thu
+			_assertTrue(_checkbox(chk_isworking6).checked); // Fri
+			_assertFalse(_checkbox(chk_isworking7).checked); // Sat
+			_assertFalse(_checkbox(chk_isworking1).checked); // Sun
+		}
+		else if ($inputObject.action === "Check")
+		{
+			
+		}
+		else if ($inputObject.action === "UnCheck")
+		{
+			
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserCalender Completed","success");
+}
+
+/**
+@author:Harshit
+@example: modifyUserCalendar($inputObject)
+@description: Input will be like this $inputObject.action = "Check/UnCheck" and $inputObject.name = "Fri#UnCheck;Thu#Check"
+@param: String {$inputObject.action,$inputObject.name}
+@return: None 
+**/
+
+//TODO : PENDING
+function modifyUserCalendar($inputObject)
+{
+	_log("modifyUserCalendar Started","success");
+	try 
+	{	
+		var $value,$dayName,$from,$to,$indexNo;
+		$value = $inputObject.name.split(";");
+		for (var $i = 0; $i < $value.length; $i ++)
+		{
+			$dayName = $value[$i].split("#");
+			_click(_checkbox(0,_under(_cell($dayName[0]))))
+			_set($indexNo,_checkbox(0,_under(_cell("Fri"))).name);
+			
+			_cell(0,_under(_cell("Thu")))
+			//if()
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyUserCalendar Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyUserProfile($inputObject)
+@description:  Takes input as $inputObject.edt_firstName and $inputObject.edt_lastName
+@param: 
+@return: None 
+**/
+
+function verifyUserProfile($inputObject)
+{
+	_log("verifyUserProfile Started","success");
+	try 
+	{	
+		_assertTrue(_isVisible(_link("Name and Address")));
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserProfile Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyResumeDetails($inputObject)
+@description:  Takes input as $inputObject.link_name = "Personal Information;IT Skills;Soft Skills"
+@param: 
+@return: None 
+**/
+
+function verifyResumeDetails($inputObject)
+{
+	_log("verifyResumeDetails Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyResumeDetails Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyChangePasswordScreen($inputObject)
+@description:  Takes input as $inputObject.name = "Personal Information;IT Skills;Soft Skills"
+@param: 
+@return: None 
+**/
+
+function verifyChangePasswordScreen($inputObject)
+{
+	_log("verifyChangePasswordScreen Started","success");
+	try 
+	{	
+		_assertTrue(_isVisible(_cell("LoginId:")));
+		_assertTrue(_isVisible(_cell("Enter Old Password:")));
+		_assertTrue(_isVisible(_cell("Enter New Password:")));
+		_assertTrue(_isVisible(_cell("Re-Enter New Password:")));
+		_assertTrue(_isVisible(_cell("Password Recall Question:")));
+		_assertTrue(_isVisible(_cell("Password Recall Answer:")));		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyChangePasswordScreen Completed","success");
+}
+
+/**
+@author:Harshit
+@example: invokeResumeFromProfile()
+@description: No Input
+@param: 
+@return: None 
+**/
+
+function invokeResumeFromProfile()
+{
+	_log("invokeResumeFromProfile Started","success");
+	try 
+	{	
+		_click(_link("de-icon-resume_artifacts"));	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("invokeResumeFromProfile Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyPrimaryLocaleOptions($inputObject)
+@description: Pass the input as $inputObject.lst_PRIMARYLOCALE = English;German,Chinese etc.
+@param: 
+@return: None 
+**/
+
+function verifyPrimaryLocaleOptions($inputObject)
+{
+	_log("verifyPrimaryLocaleOptions Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPrimaryLocaleOptions Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyNumberLocaleOptions($inputObject)
+@description: Pass the input as $inputObject.lst_LOCALENUMBER = Chinese China;English United States;French France  etc.
+@param: 
+@return: None 
+**/
+
+function verifyNumberLocaleOptions($inputObject)
+{
+	_log("verifyNumberLocaleOptions Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyNumberLocaleOptions Completed","success");
+}
+
+
+/**
+@author:Harshit
+@example: verifyDateLocaleOptions($inputObject)
+@description: Pass the input as $inputObject.lst_LOCALEDATE = Chinese China;English United States;French France  etc.
+@param: 
+@return: None 
+**/
+
+function verifyDateLocaleOptions($inputObject)
+{
+	_log("verifyDateLocaleOptions Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDateLocaleOptions Completed","success");
+}
+
+
+
+/**
+@author:Harshit
+@example: verifyDateTimeZoneOptions($inputObject)
+@description: Pass the input as $inputObject.lst_ZONEDATETIME = America/Mexico_City;GMT;IST  etc.
+@param: 
+@return: None 
+**/
+
+function verifyDateTimeZoneOptions($inputObject)
+{
+	_log("verifyDateTimeZoneOptions Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDateTimeZoneOptions Completed","success");
+}
+
+
+/**
+@author:Harshit
+@example: verifyTextLocaleOptions($inputObject)
+@description: Pass the input as $inputObject.lst_LOCALETEXT = Chinese China;English United States;French France  etc.
+@param: 
+@return: None 
+**/
+
+function verifyTextLocaleOptions($inputObject)
+{
+	_log("verifyTextLocaleOptions Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTextLocaleOptions Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyWorkspaceName($inputObject)
+@description: pass the input as $inputObject.content = Administration > eForm Configuration > Eforms
+@param: 
+@return:
+**/
+
+function verifyWorkspaceName($inputObject)
+{
+	_log("verifyWorkspaceName Started","success");
+	try 
+	{	
+		verifyTrailFrame($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWorkspaceName Completed","success");
+}
+
+/**
+@author:Harshit
+@example: setTextLocale($inputObject)
+@description: Pass the input as $inputObject.lst_LOCALETEXT = German Germany.
+@param: 
+@return:
+**/
+
+function setTextLocale($inputObject)
+{
+	_log("setTextLocale Started","success");
+	try 
+	{	
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTextLocale Completed","success");
+}
+
+/**
+@author:Harshit
+@example: setDateLocale($inputObject)
+@description: Pass the input as $inputObject.lst_LOCALEDATE = German Germany. 
+@param: 
+@return:
+**/
+
+function setDateLocale($inputObject)
+{
+	_log("setDateLocale Started","success");
+	try 
+	{	
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setDateLocale Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyTimeLogIconInInbox($inputObject)
+@description:  $inputObject.item = "Defect 1 added"
+@param: 
+@return:
+**/
+
+function verifyTimeLogIconInInbox($inputObject)
+{
+	_log("verifyTimeLogIconInInbox Started","success");
+	try 
+	{	
+		if ($inputObject.operation === "Negative")
+			_assertFalse(_contains(_div(5,_near(_div( $inputObject.item))),_image("Enter Time")));
+		else
+			_assertTrue(_contains(_div(5,_near(_div( $inputObject.item))),_image("Enter Time")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimeLogIconInInbox Completed","success");
+}
+
+/**
+@author:Harshit
+@example: addPersonalTemplateAsProjectTemplate($inputObject)
+@description: Pass the input as $inputObject.templateName = temp. 
+@param: 
+@return:
+**/
+
+function addPersonalTemplateAsProjectTemplate($inputObject)
+{
+	_log("addPersonalTemplateAsProjectTemplate Started","success");
+	try 
+	{	
+		_click(_image("Add Organization Template"));
+		_selectWindow("popup");
+		_check(_checkbox(0,_near(_cell($inputObject.templateName))));
+		_click(_submit("QTP_Add"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPersonalTemplateAsProjectTemplate Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifyBulkUpdateStatus($inputObject)
+@description:  $inputObject.item = "DEF1;DEF2;DEF3",$inputObject.value = "Pass;Fail;Pass"
+@param: $inputObject.item,$inputObject.value,$inputObject.field
+@return:
+**/
+function verifyBulkUpdateStatus($inputObject)
+{
+	_log("verifyBulkUpdateStatus Started","success");
+	try 
+	{	
+		_selectWindow("inboxRouteReject");
+		var $items = $inputObject.item.split(";");
+		var $values = $inputObject.value.split(";");
+		_log("$values : "+$values);
+		for (var $i = 0; $i <$items.length; $i ++)
+		{
+			_assertEqual(_getText(_cell(0,_near(_cell($items[$i])),_under(_cell("Status")))),$values[$i]);
+		}
+		_button("Close")
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBulkUpdateStatus Completed","success");
+}
+
+/**
+@author:Harshit
+@example: verifySectionsInMenuConfiguration($inputObject)
+@description: Takes the input as inputObject.lst_section = Home;Portfolio etc.
+@param: 
+@return:
+**/
+
+function verifySectionsInMenuConfiguration($inputObject)
+{
+	_log("verifySectionsInMenuConfiguration Started","success");
+	try 
+	{	
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySectionsInMenuConfiguration Completed","success");
+}
+
+/**
+@author:Harshit
+@example: searchItem($inputObject)
+@description: Takes the input as inputObject.txt_item = "checkout".
+@param: 
+@return:
+**/
+
+function searchItem($inputObject)
+{
+	_log("searchItem Started","success");
+	try 
+	{	
+		AdvancedFilterSearchTextInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchItem Completed","success");
+}
+
+
+/**
+@author:Harshit
+@example: verifyReadUnRead($inputObject)
+@description: Takes the input as inputObject.txt_item = "checkout".
+@param: 
+@return:
+**/
+
+function verifyReadUnRead($inputObject)
+{
+	_log("verifyReadUnRead Started","success");
+	try 
+	{	
+		var $item;
+		var $className = _parentRow(_div($inputObject.item)).className;
+			_set($item,$className);
+		if($inputObject.verifyUnRead == "UnRead")
+			_contains($item,"InboxListRowBold");
+		else if($inputObject.verifyUnRead == "Read")
+			_contains($item,"InboxListDefault");
+			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReadUnRead Completed","success");
+}
+
+_parentRow(_div("Anushree Joshi")).className
+

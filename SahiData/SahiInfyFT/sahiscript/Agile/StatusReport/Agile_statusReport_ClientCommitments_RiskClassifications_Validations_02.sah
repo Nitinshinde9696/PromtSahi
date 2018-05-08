@@ -1,0 +1,335 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ var $Date1 = new Date();
+ var $presentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($Date1);
+ 
+ $data = readDataFromCSV("Agile_statusReport_ClientCommitments_RiskClassifications_Validations_02", "Agile/StatusReport");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance2;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ var $TC4 = _testcase("TC 4.1 to 4.6","Commitment to client validations"); 
+ $TC4.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segamentCommitments;//Commitments
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tableClientCommitments;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.NavigateToPmPlan;
+ navigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkCommitment;//Client Commitment
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldValueText;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ /*
+ if(_isVisible(_checkbox("false[1]")))
+ {
+ 
+ _click(_checkbox("on"));
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ }
+ 
+ $inputObject = {};
+ $inputObject.link = $data.addRows;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableClientCommitments;
+ $inputObject.rowNo = $data.rowDelete;
+ $inputObject.colNo = $data.colCommitments;
+ $inputObject.fieldValues = $data.fieldValueText;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000);  
+ 
+ */
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segamentCommitments;//Commitments
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldValueText;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableClientCommitments;
+ $inputObject.rowNo = $data.fieldValueText;
+ $inputObject.colNo = $data.colDueDate;
+ $inputObject.fieldValues = $presentDate;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableClientCommitments;
+ $inputObject.rowNo = $data.fieldValueText;
+ $inputObject.colNo = $data.colRYGStatus;
+ $inputObject.fieldValues = $data.fieldValueGreen;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableClientCommitments;
+ $inputObject.rowNo = $data.fieldValueText;
+ $inputObject.colNo = $data.colRemarks;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ $TC4.end(); 
+ 
+ var $TC5 = _testcase("TC 5.1 and 5.2","Value add to client field validations"); 
+ $TC5.start(); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.tableValueAdd;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableValueAdd;
+ $inputObject.rowNo = $data.rowZero;
+ $inputObject.colNo = $data.colZero;
+ $inputObject.fieldValues = "";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableValueAdd;
+ $inputObject.rowNo = $data.rowZero;
+ $inputObject.colNo = $data.colZero;
+ $inputObject.fieldValues = $data.fieldvalueclient;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ $TC5.end(); 
+ 
+ var $TC6 = _testcase("TC 6.1 and 6.8","Risk Issues and Complaints Validations"); 
+ $TC6.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance2;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblRiskClasssification;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToAlert;
+ navigateTo($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.Proactive;
+ $inputObject.lst_DN_IsLegalReviewdone = $data.done;
+ $inputObject.lst_DN_IsFinancialProvisionin = $data.done;
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.fieldValueTest;
+ $inputObject.txt_DN_Actiontomovetheproject = $data.fieldValueTest;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Proactive;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskClassification;
+ $inputObject.rowNo = $data.rowhighLevel;
+ $inputObject.colNo = $data.colProactive;
+ $inputObject.fieldValues = $data.fieldValueNA;
+ verifySwiftFormData($inputObject) 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToAlert;
+ navigateTo($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.fieldValueCritical;
+ $inputObject.lst_DN_IsLegalReviewdone = $data.done;
+ $inputObject.lst_DN_IsFinancialProvisionin = $data.done;
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.fieldValueTest;
+ $inputObject.txt_DN_Actiontomovetheproject = $data.fieldValueTest;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskClassification;
+ $inputObject.rowNo = $data.rowhighLevel;
+ $inputObject.colNo = $data.colCritical;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskClassification;
+ $inputObject.rowNo = $data.rowReasonClassifying;
+ $inputObject.colNo = $data.colCritical;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ verifySwiftFormData($inputObject) 
+ 
+ _wait(2000);
+ 
+ $TC6.end();

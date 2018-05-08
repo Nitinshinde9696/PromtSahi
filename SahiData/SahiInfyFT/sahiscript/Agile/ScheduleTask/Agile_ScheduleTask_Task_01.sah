@@ -1,0 +1,132 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ /***********************************************************************
+ *Navigating to Task Report for verification
+ *Deleting created task
+ *Navigating to Task Report for verification after deletion *
+ ************************************************************************/
+ 
+ /*************************schedule task ********************************/
+ 
+ $data = readDataFromCSV("Agile_ScheduleTask_Complete_flow_00", "Agile/ScheduleTask");  
+ 
+ var $t = _testcase("TC_10", "get values in ST and Navigating to Task Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.TaskReport;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tablename1;
+ $inputObject.rowNo = $data.rowIndexLeft;
+ $inputObject.colNo = $data.metricNameLst1;
+ $inputObject.fieldValues = $data.optionalFieldValues1;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tablename3;
+ $inputObject.rowNo = $data.rowIndexLeft;
+ $inputObject.colNo = $data.metricNameLst3;
+ $inputObject.fieldValues = $data.optionalFieldValues3;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tablename4;
+ $inputObject.rowNo = $data.rowIndexLeft;
+ $inputObject.colNo = $data.metricNameLst4;
+ $inputObject.fieldValues = $data.optionalFieldValues4;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tablename5;
+ $inputObject.rowNo = $data.rowIndexLeft;
+ $inputObject.colNo = $data.metricNameLst5;
+ $inputObject.fieldValues = $data.optionalFieldValues5;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tablename6;
+ $inputObject.rowNo = $data.rowIndexLeft;
+ $inputObject.colNo = $data.metricNameLst6;
+ $inputObject.fieldValues = $data.optionalFieldValues6;
+ verifySwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.span_Name = $BE;
+ $inputObject.cell_Name = $data.rowIndexLeft;
+ InfyFTassertExists($inputObject);
+ 
+ $t.end();
+ 
+ /***************Deleting created task****************************/
+ 
+ var $t = _testcase("TC_11", "Deleting created task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.ScheduledTasks;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.iconsCheck1;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.iconsCheck;
+ InfyFTisVisibleN($inputObject); 
+ 
+  _wait(5000); 
+ $inputObject = {};
+ $inputObject.item_name = $data.item_name;//_doubleClick(_div($data.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.deletebutton;//_click(_span("deleteTaskButton-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span = $data.SaveandCheckin;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject); 
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $ID;
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $ID; //existing
+ OpenEformInstance($inputObject); 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.TaskReport;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.norecords;
+ InfyFTisVisibleN($inputObject);
+ 
+ $t.end();
+ 

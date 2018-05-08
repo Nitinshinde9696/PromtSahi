@@ -1,0 +1,330 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+ $gen = readDataFromCSV("Package_QAPlan_Common_00", "Package/QA_Plan");
+ $data = readDataFromCSV("Package_QAPlan_Create_01", "Package/QA_Plan");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ _log($currentDate);
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ _log($endDate); 
+ 
+ 
+ var $backDateFromProjectStartDate5 = "12-Dec-1993";
+ var $frontDateFromProjectEndDate5 = "08-Aug-2021";
+ var $pastDateFromcurrentDate5 = "01-Jan-2015";
+ var $PlannedDateofReviewAct5 = "11-Nov-2014";
+ var $PlannedDateofReviewAct6 = "12-Dec-2015"; 
+ 
+ 
+ var $TC = _testcase("Script_1","InfyFT_sahi15_TC_BRD9_FU2_1_to_11","Creating QA PLan and Checking Mandatory Fields."); 
+ $TC.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ //Date Start.....
+ var $projectStartDate = _getText(_span("STARTDATE"));
+ var $projectEndDate = _getText(_span("ENDDATE"));
+ //Date End..... 
+ 
+ //_assertEqual("Level 2", _getText(_span("INFY_CMMIMaturityLevel")));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity4;
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ $inputObject.lst_DN_Auditee = $data.Username12;
+ CreateInstance($inputObject);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ //Planned Date Of Review Activity.
+ $inputObject = {};
+ $inputObject.edt_DN_PlannedDateofReviewAct = $backDateFromProjectStartDate5;//checking for Date Less than or equal to Project start Date.
+ $inputObject.msgAlert = "Planned Date cannot be in the past. Please select a valid date.\nPlanned Review Date is not within Project Duration. Please select a valid date.\nProject Start Date: 1-Jun-2016\nProject End Date: 10-Dec-2019";
+ //$inputObject.msgAlert = "Planned Date cannot be in the past. Please select a valid date.\nPlanned Review Date is not within Project Duration. Please select a valid date.\nProject Start Date: "+$projectStartDate+"\nProject End Date: "+$projectEndDate;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_PlannedDateofReviewAct = $frontDateFromProjectEndDate5;//checking for Date greater than or equal to Project end Date.
+ $inputObject.msgAlert = "Planned Review Date is not within Project Duration. Please select a valid date.\nProject Start Date: 1-Jun-2016\nProject End Date: 10-Dec-2019";
+ //$inputObject.msgAlert = "Planned Review Date is not within Project Duration. Please select a valid date.\nProject Start Date: "+$projectStartDate+"\nProject End Date: "+$projectEndDate;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_PlannedDateofReviewAct = $pastDateFromcurrentDate5;//checking for Past Date than current Date.
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _click(_reset("Reset"));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity6;//checking for Cross DM Review
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ActionItem;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity7;//changing from Cross DM Review to Compliance Check
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Findings;
+ InfyFTisVisible($inputObject);
+ 
+ _setSelected(_select("DN_Auditee"), ["SolomonDeepak_AI", "nitin_shinde05"]);//checking for multiple auditee.
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name6;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity4;
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ CreateInstance($inputObject) // creating QA plan without auditee, by default it select PM.
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CMMILevel = $data.CMMILevel4;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.itemName = $data.itemName;// Get the auditee by default
+ InfyFTgetText($inputObject);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.button_Name = $data.Routebutton;
+ InfyFTisVisibleButton($inputObject);
+  
+ $inputObject = {};
+ $inputObject.lst_DN_TypeofReviewActivity = $data.typeOfReviewActivity;
+ $inputObject.lst_DN_Auditee = $data.Username13;
+ $inputObject.lst_DN_CMMILevel = $data.CMMILevel;
+ $inputObject.lst_DN_Status = $data.status5;
+ verifyEformInstanceDetails($inputObject);
+ 
+ // checking for mandatory fields for conditions, when status is closed it should give alert for Remarks/Closing.
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nActual Review / Activity Date\nRemarks / Closing Comments\n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;
+ $inputObject.txt_DN_RemarksClosingComments = $data.RemarksClosingComments4;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nActual Review / Activity Date\n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;
+ $inputObject.txt_DN_RemarksClosingComments = $data.RemarksClosingComments4;
+ $inputObject.edt_DN_ActualDateofReviewActi = $backDateFromProjectStartDate5;//checking for Date Less than or equal to Project start Date.
+ $inputObject.msgAlert = "Actual Review Date is not within Project Duration. Please select a valid date.\nProject Start Date: 1-Jun-2016\nProject End Date: 10-Dec-2019";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;
+ $inputObject.txt_DN_RemarksClosingComments = $data.RemarksClosingComments4;
+ $inputObject.edt_DN_ActualDateofReviewActi = $endDate;//checking for Date greater than current Date.
+ $inputObject.msgAlert = "Actual Review Date cannot be a future date. Please select a valid date.\n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;
+ $inputObject.txt_DN_RemarksClosingComments = $data.RemarksClosingComments4; 
+ $inputObject.edt_DN_ActualDateofReviewActi = $pastDateFromcurrentDate5;//checking for Past Date than current Date.
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ _click(_span("clearFilterButton-btnIconEl"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTverifyEformListing($inputObject);
+ 
+ _wait(5000);
+
+ _click(_span("KEY_BUTTON_Add-btnIconEl"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.DN_StatusLABEL;
+ $inputObject.span_Name = $data.DN_Status;
+ InfyFTisReadOnly($inputObject);// Checking for status field as readonly. TC No. 11.2
+ 
+ //TC No 12/
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name8;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity6;
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ $inputObject.edt_DN_ActualDateofReviewActi = $currentDate;
+ //$inputObject.txt_DN_RemarksClosingComments = $data.RemarksClosingComments4; 
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.button_Name = $data.Savebutton;
+ InfyFTisVisibleButton($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button_Name = $data.Resetbutton;
+ InfyFTisVisibleButton($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button_Name = $data.Returnbutton;
+ InfyFTisVisibleButton($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name1;//Selecting segment Action Item
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.edt_CM_DUEDATE = $endDate;
+ $inputObject.lst_DN_Assignee = $gen.LoginID1;
+ InfyFTcreateLinkedItem($inputObject);
+ var $CreatedLinkedItemID =  $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name2;//Selecting segment Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nRemarks / Closing Comments\n\nPlease close the below linked items before closing the QA Plan:\n"+$CreatedLinkedItemID;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name1;//Selecting segment Action Item
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name7;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix; 
+ $inputObject.lst_DN_Status = $data.status10;//Closing the Action Item setting status completed.
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ InfyFTReturnPopUp();
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name2;//Selecting segment Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_RemarksClosingComments = "";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status9;//Status is Closed.
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nRemarks / Closing Comments\n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_RemarksClosingComments = $data.RemarksClosingComments4; 
+ $inputObject.lst_DN_Status = $data.status9;//Status is Closed.
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+
+ $TC.end();
+ 
+ var $TC = _testcase("Script_2","InfyFT_sahi17_TC_BRD9_FU3_1_PackPT"); 
+ $TC.start();
+ 
+ _include("Package_QAPlan_Workflow_02.sah");
+ 
+ $TC.end();
+  
+ var $TC = _testcase("Script_3","InfyFT_sahi15_TC_BRD9_FU2_1_to_11_PackPT_statusChange"); 
+ $TC.start();
+  
+ _include("Package_QAPlan_Report_03.sah");
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("Script_4","New CR Changes"); 
+ $TC.start();
+ 
+ _include("Package_QAPlan_CR_Changes_04.sah");
+ 
+ $TC.end();

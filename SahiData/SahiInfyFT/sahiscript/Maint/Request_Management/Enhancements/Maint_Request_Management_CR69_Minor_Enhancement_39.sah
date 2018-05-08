@@ -1,0 +1,178 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_CR69_Minor_Enhancement_39","Maint/Request_Management/Enhancements");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ 
+ $s1.end();
+
+ var $s2 = _testcase("TC32.3","CHECKING PRODUCTIVITY-MINOR ENHANCEMENTS");
+ $s2.start();
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.lst_DN_RequestOwner = $data.reqowner16;
+ $inputObject.lst_DN_Complexity = $data.complexity17;//Simple
+ $inputObject.lst_DN_RequestType = $data.reqtype20;//"Minor";
+ $inputObject.lst_DN_LCStage = "Partial LC Stage";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Request Performance";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.row1;//"Metric Name";
+ $inputObject.colNo = $data.col1;//"Metric Name_lbl";
+ $inputObject.fieldValues = $data.val1;//"Productivity - Minor Enhancements";
+ verifySwiftFormData($inputObject);
+
+ $s2.end();
+ 
+ var $s3 = _testcase("TC32.3","CHECKING PRODUCTIVITY - NESMA FP");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.sizinDetails;//"Sizing Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Details";
+ $inputObject.rowNo = $data.row2;//"1";
+ $inputObject.colNo = $data.col2;//"0_lst|1_lst|8_lst";
+ $inputObject.fieldValues = $data.siz_val1;//"Custom Application|C|Nesma FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma;//"Nesma FP";
+ $inputObject.rowNo = $data.row2;//"1";
+ $inputObject.colNo = $data.col_nes;//"0_edt|1_edt";
+ $inputObject.fieldValues = $data.Val_Nes;//"10|15";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Request Performance";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.row1;//"Metric Name";
+ $inputObject.colNo = $data.col1;//"Metric Name_lbl";
+ $inputObject.fieldValues = $data.val2;//"Productivity - Nesma FP";
+ verifySwiftFormData($inputObject);
+ 
+ $s3.end();
+ 
+ var $s4 = _testcase("TC32.3","CHECKING PRODUCTIVITY - IFPUG FP");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.sizinDetails;//"Sizing Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Details";
+ $inputObject.rowNo = $data.row2;//"1";
+ $inputObject.colNo = $data.col2;//"0_lst|1_lst|8_lst";
+ $inputObject.fieldValues = $data.siz_val2;//"Custom Application|C|IFPUG FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG;//"IFPUG FP";
+ $inputObject.rowNo = $data.row_IF;//"0";
+ $inputObject.colNo = $data.col_IF;//"1_edt";
+ $inputObject.fieldValues = $data.val_IF;//"10";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Request Performance";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.row1;//"Metric Name";
+ $inputObject.colNo = $data.col1;//"Metric Name_lbl";
+ $inputObject.fieldValues = $data.val3;//"Productivity - IFPUG FP";
+ verifySwiftFormData($inputObject);
+ 
+ $s4.end();
+ 
+ var $s5 = _testcase("TC32.3","CHECKING NO STANDARD SIZING TECHNIQUE APPLICABLE");
+ $s5.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.sizinDetails;//"Sizing Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Details";
+ $inputObject.rowNo = $data.row2;//"1";
+ $inputObject.colNo = $data.col2;//"0_lst|1_lst|8_lst";
+ $inputObject.fieldValues = $data.siz_val3;//"Custom Application|C|No Standard Sizing Technique Applicable";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Request Performance";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.row1;//"Metric Name";
+ $inputObject.colNo = $data.col1;//"Metric Name_lbl";
+ $inputObject.fieldValues = $data.val4;//"Productivity - Minor Enhancements";
+ verifySwiftFormData($inputObject);
+ 
+ $s5.end();

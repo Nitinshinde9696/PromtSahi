@@ -1,0 +1,347 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data9 = readDataFromCSV("Maint_PMPlan_Small_Project_MaintPT_fill_penality_and_reward_details_help_section_08","Maint/PMPlan_Small"); 
+ 
+ var $t = _testcase("Script 35", "TC 71, 72, 73, 75");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data9.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_71", "Check the condition to enable the SLA Penalty and Reward Details.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data9.nodeIcon11;//  _image("nodeIcon11")
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data9.goals;//  _link("Goals")
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowProductivity ;//2
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowQuality;//4
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowNesma;//8
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowSchedule;
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowtestingProductivity;
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowProductivity ;//2
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowQuality;//3
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowNesma;//6
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowSchedule;
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowtestingProductivity;
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName3;//Bud Fix Goals.
+ $inputObject.rowNo = $data9.rowProductivity1;
+ $inputObject.colNo = $data9.colMin3;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName3;//Bug Fix Goals.
+ $inputObject.rowNo = $data9.rowQuality1;
+ $inputObject.colNo = $data9.colMin3;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data9.rowMajor;
+ $inputObject.colNo = $data9.colMin4;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.SLAPenaltyAndReward;//_link("SLAPenaltyAndReward")
+ InfyFTassertNotVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data9.goals;//  _link("Goals")
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowProductivity ;//2
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowQuality;//4
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowNesma;//8
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowSchedule;
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName1;//Major Enhancement Goals.
+ $inputObject.rowNo = $data9.rowtestingProductivity;
+ $inputObject.colNo = $data9.colMin1;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowProductivity ;//2
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowQuality;//3
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowNesma;//6
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowSchedule;
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName2;//Minor Enhancement Goals.
+ $inputObject.rowNo = $data9.rowtestingProductivity;
+ $inputObject.colNo = $data9.colMin2;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName3;//Bud Fix Goals.
+ $inputObject.rowNo = $data9.rowProductivity1;
+ $inputObject.colNo = $data9.colMin3;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName3;//Bug Fix Goals.
+ $inputObject.rowNo = $data9.rowQuality1;
+ $inputObject.colNo = $data9.colMin3;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data9.rowMajor;
+ $inputObject.colNo = $data9.colMin4;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.SLAPenaltyAndReward;//_link("SLAPenaltyAndReward")
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_72", "Checking the fields available for SLA Penalty and Reward Details.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data9.SLAPenaltyAndReward;// _InfyFTclick(_link("SLAPenaltyAndReward"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.atRisk;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.poolPercentage;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.measurementOfPeriod;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.currency;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.earnback;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.SLAResp;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.PenaltyFarmwork;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_73", "Checking the available options in the penalty framework");
+ $t.start();
+ 
+ $inputObject = {}
+ $inputObject.lst_DN_PenaltyFramework = $data9.fieldValues2;
+ InfyFTverifyEformInstanceDetails($inputObject);
+ 
+ $t.end();  
+ 
+ 
+ var $t = _testcase("TC_75", "Help section should display the definition of At Risk%, Pool %, Penalty framework.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.iconInfo;
+ InfyFTclick($inputObject);//_span("de-icon-info")
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.iconInfo;
+ InfyFTclick($inputObject);//_span("de-icon-info")
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data9.viewDef;
+ InfyFTclick($inputObject);//_span("View Definitions")
+ 
+ _wait(1000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("", "Filling all data of SLA Penalty and Rewards Details");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data9.DN_AtRisk;
+ $inputObject.edt_DN_PoolPercentage = $data9.DN_PoolPercentage;
+ $inputObject.lst_DN_MeasurementPeriod = $data9.DN_MeasurementPeriod;
+ $inputObject.edt_DN_Currency = $data9.DN_Currency;
+ $inputObject.lst_DN_Subjecttoearnback = $data9.DN_Subjecttoearnback;
+ $inputObject.lst_DN_SLAresponsibilityshare = $data9.DN_SLAresponsibilityshare;
+ $inputObject.lst_DN_PenaltyFramework = $data9.DN_PenaltyFramework;
+ InfyFTsaveInstance($inputObject);
+ 
+ $t.end();

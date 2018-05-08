@@ -1,0 +1,232 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $data = readDataFromCSV("Package_Reviews_Defects_Generic_00","Package/Reviews_Defects");
+ var $data1 = readDataFromCSV("Package_Reviews_Defects_Review_Mapping_Global_LocalRollout_06","Package/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC1 = _testcase("PROJECT TAILORING VALUES","SETTING PROJECT TAILORING VALUES"); 
+ $TC1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.User_name;//Sreya_Chatterjee
+ $inputObject.edt_loginid = $data.LoginID;//Sreya_Chatterjee
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;//LFGHHHHH
+ selectProject($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment7;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.sizerow1;// "1"
+ $inputObject.colNo  = $data1.sizecol;//0_lst|1_lst|2_lst|4_edt|5_edt|7_lst
+ $inputObject.tableName  = $data1.table1;//"Sizing Details"; 
+ $inputObject.fieldValues = $data1.values1;// Package|Single site Implementation|Eclipse|10|test|IFPUG FP
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+*/
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//PM Plan
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//Iterations
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addIteration;//KEY_Link_New_item-btnIconEl
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.ITR_name;//Global Rollout Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ $inputObject.lst_DN_IterationType = $data1.ITR_type;//Global rollout
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $Itr_ID = $inputObject.createdID;
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("GLOBAL ROLLOUT","MAPPING OF REVIEW OF/TESTING FIELD"); 
+ $TC2.start();
+ 
+ //SETTING THE LC STAGE VALUES
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment9;//Applicable LC Stages
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw1;//Global Template Planning|Global Template Design
+ $inputObject.colNo = $data1.appcol2;//Applicable_chk
+ $inputObject.fieldValues = $data1.appval;//Y
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw2;//Global Template Implementation
+ $inputObject.colNo = $data1.appcol3;//Applicable_unchk
+ $inputObject.fieldValues = $data1.appval;//Y
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //CREATING NEW REVIEW TO CHECK THE MAPPING
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data1.rev_name01;//Review1
+ $inputObject.lst_DN_ReviewMode = $data1.Rev_mode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data1.revType;//User Acceptance Test Plan Review
+ InfyFTcreateLinkedItemPackage($inputObject);
+ 
+ var $ReviewID = $inputObject.createdID;
+ 
+ //*****VALIDATING THE LIST VALUES IN REVIEWS/TESTING OF FIELD*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name1;//openLinkedItem
+ $inputObject.lst_reviewtype = $data1.review_types;//--None--;Global Business Blueprint Review;Review Global template integration test plan;Review Global template regression test plan;Review Global Template Unit Test Plan;Review of AS-IS process documentation;Review of Project or Phase scope;Review of TO-BE process documentation
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ _wait(2000);
+ 
+ $TC2.end();
+ 
+ var $TC3 = _testcase("LOCAL ROLLOUT","MAPPING OF REVIEW OF/TESTING FIELD"); 
+ $TC3.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addIteration;//KEY_Link_New_item-btnIconEl
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.ITR_name1;//Local Rollout Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ $inputObject.lst_DN_IterationType = $data1.ITR_type1;//Local Rollout
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $Itr_ID = $inputObject.createdID;
+
+ 
+ //SETTING THE LC STAGE VALUES
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment9;//Applicable LC Stages
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw3;//Local Rollout Planning and Validation|Local Rollout Solution Definition
+ $inputObject.colNo = $data1.appcol2;//Applicable_chk
+ $inputObject.fieldValues = $data1.appval;//Y
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw4;//Local Rollout Configuration and Development|Local Rollout Testing and Deployment|Local Rollout Go- Live and Support
+ $inputObject.colNo = $data1.appcol3;//Applicable_unchk
+ $inputObject.fieldValues = $data1.appval;//Y
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //CREATING NEW REVIEW TO CHECK THE MAPPING
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data1.rev_name02;//Review1
+ $inputObject.lst_DN_ReviewMode = $data1.Rev_mode;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer;//Sreya_Chatterjee
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name;//Descr
+ $inputObject.lst_reviewtype = $data1.revType2;//Review Integration test plan and strategy
+ InfyFTcreateLinkedItemPackage($inputObject);
+ 
+ var $ReviewID = $inputObject.createdID;
+ 
+ //*****VALIDATING THE LIST VALUES IN REVIEWS/TESTING OF FIELD*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name1;//openLinkedItem
+ $inputObject.lst_reviewtype = $data1.review_types2;//--None--;Review Business Solution and Approach;Review Integration test plan and strategy;Review of Unit Test plans;Review of Solution Design and data templates;Review System test plan and strategy
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC3.end();

@@ -1,0 +1,445 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ //$generic = readDataFromCSV("InfyFT_genericcsv_ToolsPlanning_ToolsTracking","Phase2/Tools_Planning_PackagePT");
+ $data = readDataFromCSV("Package_Tools_Reuse_FLW527_ToolsPlanning_Tool_04","Package/Tools_Reuse");
+
+ /* var $t = _testcase("TC_1", "Logging with valid user ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.Username1; 
+ $inputObject.edt_loginid = $generic.LoginID1;
+ $inputObject.edt_password = $generic.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigating to Tools planning for a package project ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.Projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+  $t.end();
+  */
+ 
+ 
+
+ 
+ var $t = _testcase("TC_3", "verify the Tools Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Tools Planning
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Tools_plan_list;//Tools Plan For Global rollOut;Tools Plan For Local RollOut;Tools Plan For Package Implementation;Tools Plan For Package Implementation - ORC;Tools Plan For Package Upgrade;Tools Plan For PLM Implementation;Tools Plan For PLM Upgrade
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_4", "verify the  Tools Plan For Global rollOut");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For Global rollOut";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ //$inputObject.lst_DN_IterationType = "Tools Plan For Global rollOut";
+ $inputObject.lbl_CM_ItemCode = "TOPL1";
+ $inputObject.edt_CM_Name = "Tools Plan For Global rollOut";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List;Planned Tools List;Sr. No.;Delete;Tool Name;LC Stage;Purpose;Effort Savings;Tool Type;Inactive";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Prerequisite - Activity codes in Schdeule>>Tasks should be added inorder to get tools. Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For Global rollOut_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = "Global Template Planning";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Technology in Search Criteria tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = "Global Template Planning";
+ $inputObject.lst_DN_Technology = "BiZTalk";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Search Output";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Tool Name";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Actuate Suite";
+ $inputObject.colNo = "Tool Name_lbl|LC Stage_lbl|Purpose_lbl|Technology_lbl|Effort Saving_lbl";
+ $inputObject.fieldValues = "Actuate Suite|Global Template Planning|Test|BiZTalk|2";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Tool Name";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Actuate Suite";
+ $inputObject.colNo = "Add_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+   
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Planned Tools List";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Actuate Suite";
+ $inputObject.colNo = "Tool Name_lbl|LC Stage_lbl|Purpose_lbl|Effort Savingslbl|Tool Type_lbl";
+ $inputObject.fieldValues = "Actuate Suite|Global Template Planning|Test|2.00%|OrgWide";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = "Global Template Planning";
+ $inputObject.lst_DN_Technology = "BiZTalk";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Search Output";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Tool Name";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Actuate Suite";
+ $inputObject.colNo = "Add_chk";
+ $inputObject.disable = true;
+ verifySwiftFormFieldDisability($inputObject);
+ 
+ clickReturn(); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Planned Tools List";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Actuate Suite";
+ $inputObject.colNo = "Delete_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ $t.end();
+  
+ var $t = _testcase("TC_5", "verify the  Tools Plan For Local RollOut");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For Local RollOut";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = "Tools Plan For Local RollOut";
+ $inputObject.edt_CM_Name = "Tools Plan For Local RollOut";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :;Iteration Type :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For Local RollOut_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = "Global Template Planning;Global Template Design;Global Template Implementation";//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ clickReturn();
+ $t.end();
+ var $t = _testcase("TC_6", "verify the  Tools Plan For Package Implementation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For Package Implementation";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = "Tools Plan For Package Implementation";
+ $inputObject.edt_CM_Name = "Tools Plan For Package Implementation";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :;Iteration Type :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Prerequisite - Activity codes in Schdeule>>Tasks should be added inorder to get tools. Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For Package Implementation_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ clickReturn();
+ $t.end();
+ var $t = _testcase("TC_7", "verify the  Tools Plan For Package Implementation - ORC");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For Package Implementation - ORC";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = "Tools Plan For Package Implementation - ORC";
+ $inputObject.edt_CM_Name = "Tools Plan For Package Implementation - ORC";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :;Iteration Type :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Prerequisite - Activity codes in Schdeule>>Tasks should be added inorder to get tools. Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For Package Implementation - ORC_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ clickReturn();
+ $t.end(); 
+ var $t = _testcase("TC_8", "verify the  Tools Plan For Package Upgrade");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For Package Upgrade";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = "Tools Plan For Package Upgrade";
+ $inputObject.edt_CM_Name = "Tools Plan For Package Upgrade";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :;Iteration Type :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Prerequisite - Activity codes in Schdeule>>Tasks should be added inorder to get tools. Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For Package Upgrade_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ clickReturn();
+ $t.end(); 
+ var $t = _testcase("TC_9", "verify the  Tools Plan For PLM Implementation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For PLM Implementation";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = "Tools Plan For PLM Implementation";
+ $inputObject.edt_CM_Name = "Tools Plan For PLM Implementation";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :;Iteration Type :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Prerequisite - Activity codes in Schdeule>>Tasks should be added inorder to get tools. Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For PLM Implementation_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ clickReturn();
+ $t.end();var $t = _testcase("TC_10", "verify the  Tools Plan For PLM Upgrade");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = "Tools Plan For PLM Upgrade";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Details;Tools Planning[2];Activity Log";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = "Tools Plan For PLM Upgrade";
+ $inputObject.edt_CM_Name = "Tools Plan For PLM Upgrade";
+ verifyAllFields($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "ID :;Tools Index :;Name :;Iteration Type :";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Tools Planning[2]";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add from PRIME;Add Standard Tools;Planned Tools List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Search Criteria;Search Output;ID :;Name :;LC Stage * :;Technology :;Note : Prerequisite - Activity codes in Schdeule>>Tasks should be added inorder to get tools. Select the LC Stage and Technology and click on Save to search for tools.";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name ="Tools Plan For PLM Upgrade_Tools Planning_PrimeButtonConfig_1_LinkedTools";
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Requirements Analysis;High Level Design;Coding
+ verifyAllFields($inputObject);
+ 
+ clickReturn();
+ $t.end();
+ 
+ 

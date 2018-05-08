@@ -1,0 +1,122 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformListing.sah");
+
+
+$data = readDataFromCSV("Roles_Manage_Roles_AQM_Version_Validation_31","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password1;//Password1 :123456
+loginIntoDigite($inputObject);
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//CREATE UQH//
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;//BIZP
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser4;
+CreateInstance($inputObject);
+
+var $UQH= _getText(_span("CM_ItemCode"));
+_wait(1000);
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2; //user_name1 : Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID2; //LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password2;//Password1 :123456
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles ->PQM
+navigateTo($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.Unit65;
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode6;
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode6;
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;
+CreateInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_user = $data.user7;//"Navdeep_Ghotra";
+ModifyEformInstance($inputObject);
+
+_wait(1000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; // Previous Version
+SelectSegment($inputObject);
+
+
+$inputObject = {};
+$inputObject.chk_chkbox = "True";//"Navdeep_Ghotra";
+$inputObject.chk_Version1 = "True";
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.link = $data.link1;//"Version Difference";
+InfyFTclick($inputObject);
+
+_selectWindow("VersionDifference");
+
+_wait(2000);
+
+$inputObject = {};
+$inputObject.ele_snehal_ghodeswar = $data.changename1;
+$inputObject.ele_nitin_shinde05 = $data.changename2;
+verifyEformInstanceDetails($inputObject);
+
+_closeWindow();
+_selectWindow();
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name3; // Details
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;//Inactive
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password1;//Password1 :123456
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.item = $UQH; 
+OpenEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;
+ModifyEformInstance($inputObject);
+
+
+
+

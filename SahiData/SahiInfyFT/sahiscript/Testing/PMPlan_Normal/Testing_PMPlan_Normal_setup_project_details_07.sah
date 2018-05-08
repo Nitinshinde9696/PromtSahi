@@ -1,0 +1,176 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data6 = readDataFromCSV("Testing_PMPlan_Normal_setup_project_details_07","Testing/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 32", "TC 22, 23, 24");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data6.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ $t.end(); 
+ 
+ var $t = _testcase("TC_22,23,24", "Following field should be auto-populate as per the OMS,as per project details and as per CIARA master list.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data6.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(3000);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data6.tableName;//Overview
+ $inputObject.rowNo = $data6.rowNos;// row from 0 to 10
+ $inputObject.colNo = $data6.colNos;//1_lbl|3_lbl
+ $inputObject.fieldValues = $data6.fieldValues;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data6.tableName;//Overview
+ $inputObject.rowNo = $data6.rowNos1;// row from 10 to 11
+ $inputObject.colNo = $data6.colNos1;//3_lbl
+ $inputObject.fieldValues = "--None--|No";
+ InfyFTverifySwiftFormData($inputObject);
+*/
+ $t.end();
+ 
+ var $t = _testcase("TC_35", "Following fields should be available for Testing PT.");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName1;//10
+ $inputObject.colNo = $data6.colName1;//1_lst
+ $inputObject.fieldValues = $data6.fieldValues1_1;//Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName2;//11
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = $data6.fieldValues1;//FLC
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName3;//12
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = $data6.fieldValues1_2;//Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName4;//12
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = "";//Project code
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName5;//13
+ $inputObject.colNo = $data6.colName1;//1_lst
+ $inputObject.fieldValues = $data6.fieldValues1_2;//Yes
+ setSwiftFormData($inputObject);
+   
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName6;
+ $inputObject.colNo = $data6.colName2;//3_edt
+ $inputObject.fieldValues = "";//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName7;
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = $data6.fieldValues1_3;//Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.Overview;
+ $inputObject.colNo = $data6.reasonLbl;
+ $inputObject.fieldValues = $data6.reason7;//Reason 7
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName6;//13
+ $inputObject.colNo = $data6.colName2;//3_edt
+ $inputObject.fieldValues = $data6.fieldValues1_4;//Test
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data6.tableName;
+ $inputObject.rowNo = $data6.rowName4;//12
+ $inputObject.colNo = $data6.colName2;//3_edt
+ $inputObject.fieldValues = $data6.fieldValues1_5;//Project code
+ setSwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ _click(_span("de-icon-search SearchIcon"));
+
+ _wait(1000);
+ 
+ //_click(_listItem("TJCPZMEP"));
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.link = $data6.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName2;
+ $inputObject.rowNo = $data6.Overview;
+ $inputObject.colNo = $data6.reasonLbl;
+ $inputObject.fieldValues = $data6.reason8;//Reason 8
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ $t.end(); 
+ 

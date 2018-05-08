@@ -1,0 +1,389 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",7,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Maint_ZDP_CR99_Common_SubmitZDtoDMfor", "Maint/ZDP");
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_42;//Plan Approval
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(500);
+ 
+ /**********************************************************************
+ * Execution segment
+ ***********************************************************************/
+ 
+ /**********************************************************************
+ * Execution segment
+ ***********************************************************************/
+ 
+ var $t = _testcase("TC_BRD48_FU1_58", "Submit ZD to DM for is selected as Plan Approval");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_33;//Planning
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IsZD_IdeaAutomation4;//Submit ZD to DM for :
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //textarea of left side //Details
+ $inputObject.rowNo = $data.rowNo5025;//0|2|5
+ $inputObject.colNo = $data.colNo51;//1_txt
+ $inputObject.fieldValues = $data.fieldValues51;//Test|Test|Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //check box left side
+ $inputObject.rowNo = $data.rowNo51;//rowNo6;//1
+ $inputObject.colNo = $data.colNo55;//1_chk
+ $inputObject.fieldValues = $data.fieldValues54;//1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //textarea of right side
+ $inputObject.rowNo = $data.rowNo50134;//0|1|3|4
+ $inputObject.colNo = $data.colNo52;//3_txt
+ $inputObject.fieldValues = $data.fieldValues52;//Test|Test|Test|Test
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //textbox of left side
+ $inputObject.rowNo = $data.rowNo53;//3
+ $inputObject.colNo = $data.colNo53;//1_edt
+ $inputObject.fieldValues = $data.fieldValues53;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //textbox of left side
+ $inputObject.rowNo = $data.rowNo54;//4
+ $inputObject.colNo = $data.colNo53;//1_edt
+ $inputObject.fieldValues = $data.fieldValues53;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //listBox
+ $inputObject.rowNo = $data.rowNo56;//6
+ $inputObject.colNo = $data.colNo54;//1_lst
+ $inputObject.fieldValues = $data.fieldValues56;//No
+  setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //list box rgt side
+ $inputObject.rowNo = $data.rowNo55;//5
+ $inputObject.colNo = $data.colNo56;//3_lst
+ $inputObject.fieldValues = $data.fieldValues55;//Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //date filed
+ $inputObject.rowNo = $data.rowNo57;//7
+ $inputObject.colNo = $data.colNo53;//1_edt
+ $inputObject.fieldValues = $startDate;//
+ setSwiftFormData($inputObject);
+
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //date filed
+ $inputObject.rowNo = $data.rowNo58;//8
+ $inputObject.colNo = $data.colNo54;//1_lst
+ $inputObject.fieldValues = $data.fieldValues55;//Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+  _wait(5000); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51; //textarea of right side
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo52;//3_txt
+ $inputObject.fieldValues = $data.fieldValues57;//Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+ 
+ /**********************************************************************
+ * Execution segment
+ ***********************************************************************/
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_34;//Execution
+ SelectSegment($inputObject);
+ 
+ var $t = _testcase("TC_10", "filling values in Execution segment");
+ $t.start();
+ 
+ _wait(2000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52; //text box of right side
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo53;//1_edt
+ $inputObject.fieldValues = $data.fieldValues53;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52; //text box of right side
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo52;//3_txt
+ $inputObject.fieldValues = $data.fieldValues57;//Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52; //text area 
+ $inputObject.rowNo = $data.rowNo52;//2
+ $inputObject.colNo = $data.colNo51;//1_txt
+ $inputObject.fieldValues = $data.fieldValues57;//Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52; //text area 
+ $inputObject.rowNo = $data.rowNo54;//1
+ $inputObject.colNo = $data.colNo52;//3_txt
+ $inputObject.fieldValues = $data.fieldValues57;//Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52; //text area 
+ $inputObject.rowNo = $data.rowNo52;//2
+ $inputObject.colNo = $data.colNo57;//3_edt
+ $inputObject.fieldValues = $data.fieldValues57;//Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52; //date filed
+ $inputObject.rowNo = $data.rowNo53;//3
+ $inputObject.colNo = $data.colNo57;//3_edt
+ $inputObject.fieldValues = $startDate;//
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /****************************************************
+ *routing ZD to DM Approval
+ *****************************************************/
+ 
+ var $t = _testcase("TC_11", "Routing ZD to DM");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_32;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Team_member41;
+ $inputObject.workflow_stage = $data.stage_name41;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+   
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_58_TS_1", "Check the Workflow status field after routing to DM");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_31;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Plan submitted to DM for approval";//$data.WorkflowStatusValue44;
+ $inputObject.cell_Name = "Workflow Status :";//$data.WorkflowStatus4;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_58_TS_4", "Check the Workflow status field after PM Recall the ZD");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RecallButton4;//"Recall";
+ InfyFTClickButtonS($inputObject);
+ 
+ //_assertExists(_cell("Workflow Status :"), _near(_span("")));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_42;//Plan Approval
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_58_TS_2", "Check the Workflow status field after DM Rejects the ZD");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ _wait(500);
+ 
+ ClickReject();
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Plan rejected by DM";//$data.WorkflowStatusValue45;
+ $inputObject.cell_Name = "Workflow Status :";//$data.WorkflowStatus4;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_58_TS_3", "Check the Workflow status field after DM Approves the ZD");
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments5;
+ ClickRoutewithComments($inputObject); */
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;//Prashanth_Ballal
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_42;//Plan Approval
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username12;//sunitha_muthukumar
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Plan approved by DM";//$data.WorkflowStatusValue46;
+ $inputObject.cell_Name = "Workflow Status :";//$data.WorkflowStatus4;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();

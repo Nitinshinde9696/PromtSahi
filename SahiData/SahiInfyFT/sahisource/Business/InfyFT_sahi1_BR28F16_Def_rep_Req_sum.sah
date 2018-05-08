@@ -1,0 +1,59 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("InfyFT_sahi1_BR28F16_Def_rep_Req_sum","InfyFTSahi/BR28");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+  
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+ $s.start();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Testing Request
+ navigateTo($inputObject);
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.item = "Enh12";//$id;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Defect Report";//$data.segment_Def_rep6;//_link("Defect Report")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tblname = "Severity";
+ $inputObject.colid = "2";
+ $inputObject.fieldValue ="Major";
+ calculate_Count($inputObject);

@@ -1,0 +1,363 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformInstanceKunal.sah");
+
+$data = readDataFromCSV("Roles_MR_AQM_3_Create_06","Roles"); 
+
+ /*********************************************************************
+ DATA CREATION
+ *********************************************************************/  
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID1;//Nethravathi_r02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);  
+  
+ var $t = _testcase("TC_1", "Data creation for AQM(Creating a UQH) ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//UQH
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.DN_Unit3;//IS 
+ $inputObject.edt_SearchCriteria_DN_user = $data.UQHuserName3;//Arjun.R02
+ CreateInstance($inputObject);
+ 
+ var $uqhID = _getText(_span("CM_ItemCode"));
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $uqhID;//"AQM60";//
+ InfyFTverifyInstanceInListing($inputObject); 
+
+ clearFilterSettings(); 
+ 
+ $t.end();
+ 
+ /*********************************************************************
+ DATA CREATION DONE
+ *********************************************************************/ 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID2;//Arjun.R02
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject); 
+ 
+ var $t = _testcase("TC_1.1", "Selecting the AQM Role");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo21;//AQM
+ InfyFTnavigateTo($inputObject); 
+ 
+ $t.end();
+ 
+ //_wait(1000);  
+ var $t = _testcase("TC_3.3", "Creating a AQM Assignment"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.Unit3;//BIZP
+ $inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode3;//AIRTELIN 
+ $inputObject.lst_DN_CustomerCode = $data.MasterCustomerCode3;
+ $inputObject.edt_SearchCriteria_DN_user = $data.AQHuserName3;//Navdeep_Ghotra
+ CreateInstance($inputObject); 
+ 
+ var $aqmID = _getText(_span("CM_ItemCode"));
+ clickReturn();
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_3.3.1", "Verifying the newly created AQM Assignment in AQM listing"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $aqmID;//"AQM60";//
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username3;//Niharika Karingula	
+ $inputObject.edt_loginid = $data.LoginID3;//Niharika.Karingula
+ $inputObject.edt_password = $data.Password3;//111111
+ loginIntoDigite($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject);
+ 
+ _click(_span("KEY_LABEL_Other_Accessible_Projects-btnIconEl"));
+ /*$inputObject = {};
+ $inputObject.span = $data.OAProjects;// _InfyFTclick(_link("x-btn-icon-el de-icon-project_plr"));
+ InfyFTclick($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status1;//BIZP
+ $inputObject.status = $data.status1;//BIZP
+ InfyFTsearchBoxSetFilter($inputObject);
+ 
+ if(_isVisible(_div("1")))
+ {  
+ _click(_div("1"));  
+  
+ var $t = _testcase("TC_7.2", "verifying the AQM assignee have read only access across the project  "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lbl_ProjectName = $data.ProjectName4;//BIZMWSTP
+ $inputObject.lbl_PROJECTTYPE = $data.ProcessType4;//Mech PD
+ $inputObject.lbl_INFY_CurrentStageoftheProje = $data.PrjStage4;//--None--
+ verifyAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName1;// --None--  
+ $inputObject.cell_Name = $data.cName1;//ELF Mode :
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName2;// --None-- 
+ $inputObject.cell_Name = $data.cName2;//SQA :
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end(); 
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",5,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",10,$dateObj3);
+ var $CloseDate3 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ var $t = _testcase("TC_7.5", "logging the customer complaint "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Customer Complaint
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_RaisedBy = $data.RaisedBy; //Niha
+ $inputObject.edt_CM_Name = $data.Name; //MANDATORY FIELD//CC1
+ $inputObject.txt_CM_Description = $data.Description1; //MANDATORY FIELD
+ $inputObject.lst_DN_ComplaintCategory = $data.ComplaintCategory; //Others
+ $inputObject.lst_DN_Severity = $data.Severity;//Critical
+ //$inputObject.lst_DN_Status = $data.Status;//Open
+ $inputObject.edt_DN_ComplaintRaisedDate = $StartDate1;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $EndDate2;
+ //$inputObject.edt_DN_ComplaintClosedOn = $CloseDate3;
+ $inputObject.lst_DN_RepeatComplaint = $data.RepeatComplaint;//Yes
+ CreateInstance($inputObject); 
+ 
+ 
+ //var $aqmID = _getText(_span("CM_ItemCode"));
+ 
+ 
+ clickReturn(); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7.6", "Marking project status as Not a high risk/high/Critical "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Alert Management
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(1000);
+ 
+ /*$inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.ddValues;//--None--;Not High Risk;High;Critical
+ verifyEformInstanceDetails($inputObject);*/
+ 
+ $inputObject = {}; 
+ $inputObject.lst_DN_Classifytherisklevelof = $data.RiskLevel;//Critical 
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.RiskLevel;
+ ModifyEformInstance($inputObject);
+  
+ $t.end();  
+ 
+var $t = _testcase("TC_7.7", "Invite an SQA role to an employee "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject);
+ 
+ clearFilterSettings();
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status1;//BIZP
+ $inputObject.status = $data.status1;//BIZP
+ InfyFTsearchBoxSetFilter($inputObject);
+ 
+ if(_isVisible(_div("1")))
+ {
+ _click(_div("1"));
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo7;//Team Members
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id6;//anilp and JL 7A
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles6;//SQA
+ $inputObject.edt_startdateInput = $StartDate1;
+ $inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject);
+ 
+/*  $inputObject = {};
+ $inputObject.item = $data.Invitee_id6;//anilp
+ verifyInstanceInListing($inputObject); */
+ 
+ }
+ }  
+ 
+ $t.end(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//Arjun.R02	
+ $inputObject.edt_loginid = $data.LoginID2;//Arjun.r02
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject); 
+ 
+ 
+ var $t = _testcase("TC_10.1", "Open newly created AQM Assignment"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo21;//AQM
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $aqmID;//"AQM60";//
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $aqmID;//"AQM616";"AQM83";//
+ OpenEformInstance($inputObject);
+ //InfyFTsearchFile($inputObject);
+ 
+var $olduname = _getText(_textbox("SearchCriteria_DN_user"));
+
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10.2", "Changing the user name of AQM assignment with valid user"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_SearchCriteria_DN_user = $data.newUserName1;//Niharika.karingula to pari_r
+ ModifyEformInstance($inputObject);
+ 
+ //_assertEqual("Old Risk Manager will be replaced and inbox items will be moved to the inbox of new Risk Manager" , _lastAlert())
+ 
+ $t.end(); 
+ 
+ var $newuname = _getText(_textbox("SearchCriteria_DN_user")); 
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_10.2.1", "Verifying the changed user name of AQM assignment"); 
+ $t.start();
+ 
+ if ($olduname != $newuname)
+ {
+ 
+   _log("User Name has been changed."); 
+ 
+ }
+ 
+ else
+ {
+   _log("User Name has not been changed."); 
+ 
+ }
+ 
+ $t.end();
+ 
+ clickReturn(); 
+ 
+ /*******************************************************
+ To repeat the execution
+**********************************************************/
+ 
+ var $t = _testcase("TC_11", "Making the status as Inactive & verifying of AQM Assignment"); 
+ $t.start();
+ 
+ /*$inputObject = {};
+ $inputObject.user_name = $data.Username2;//subhashini_k03
+ $inputObject.edt_loginid = $data.LoginID2;//subhashini_k03
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject); */ 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo21;//AQM
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $aqmID;//"AQM60";//
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $aqmID;//"109";//"AQM60";"AQM83";//
+ OpenEformInstance($inputObject);
+ 
+ //InfyFTChangeStatusInactive();
+ 
+ $inputObject = {};
+ $inputObject.rdg_Inactive = $data.Inactive;//Navdeep_Ghotra to pari_r
+ ModifyEformInstance($inputObject); 
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID1;//nethravathi_r02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);  
+  
+ var $t = _testcase("TC_12", "Making the status as Inactive & verifying of UQH Assignment ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//UQH
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $uqhID;
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $uqhID;//UQH 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Inactive = $data.Inactive;//Navdeep_Ghotra to pari_r
+ ModifyEformInstance($inputObject); 
+ 
+ clickReturn();
+ 
+ $t.end();  
+ 
+ 

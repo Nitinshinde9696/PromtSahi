@@ -1,0 +1,259 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Dev_Project_Admin_Project_Tailoring_05","Dev/Project_Admin");
+ $data1 = readDataFromCSV("Dev_Project_Admin_Project_Project_Tailoring_03","Dev/Project_Admin");
+  var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;//projectname
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//
+ navigateTo($inputObject);
+ 
+ $s.end();
+ 
+var $t = _testcase("TC_3.4","verify DM");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid1;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = "DM and BI";
+ setSwiftFormData($inputObject); 
+ 
+ 
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid2;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.Tow2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid7;;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.ST;//
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.DM_SubServiceTableHeaders;// 
+ InfyFTisVisible($inputObject);
+  
+
+ $t.end();
+var $t = _testcase("TC_3.4.1"," DM Sub-Service Selection");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridubservice2;
+ $inputObject.colNo  = $data1.chkcidubservice2;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.DM_SubService;
+ verifySwiftFormData($inputObject);
+ 
+ _click(_link("Select Technology[2]"));
+ 
+/*  $inputObject = {};
+ $inputObject.span_Name = $data1.Subserviceverify;
+ InfyFTisVisible($inputObject);
+   */
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridtechnology2;
+ $inputObject.colNo  = $data1.chkcidtechnology2;
+ $inputObject.tableName  = $data1.tbnm3;
+ $inputObject.fieldValues = $data1.DM_Technology2;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridtechnology2;
+ $inputObject.colNo  = $data1.chkcidselecttechnology2;
+ $inputObject.tableName  = $data1.tbnm3;
+ $inputObject.fieldValues = $data1.DM_Technology2;
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+/* 
+var $str = $data1.DM_Technology2;
+var $res = $str.replaceAll("|", ","); */
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSubservice2;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;//
+ verifySwiftFormData($inputObject);
+ /* 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSelectedsubservice1;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSelectedsubserviceUnchk1;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert ="Please select SubService Scope/Technology Selected for the below SubService Scopes : \nBig Data";// $data1.alert3;
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSelectedsubservice1;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+   */
+ $inputObject = {};
+ $inputObject.segment_name = $data.Summary;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Summery_headers;
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Summery1_val;
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Summery1_Note;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ $data1 = readDataFromCSV("Dev_Project_Admin_Project_Tailoring_04","Dev/Project_Admin");
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ var $t = _testcase("TC_3.4.1"," BI Sub-Service Selection");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridubservice2;
+ $inputObject.colNo  = $data1.chkcidubservice2;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.BI_SubService;
+ verifySwiftFormData($inputObject);
+ 
+ _click(_link("Select Technology[11]"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Subserviceverify;
+ InfyFTisVisible($inputObject);
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridtechnology2;
+ $inputObject.colNo  = $data1.chkcidtechnology2;
+ $inputObject.tableName  = $data1.tbnm3;
+ $inputObject.fieldValues = $data1.BI_Technology2;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridtechnology2;
+ $inputObject.colNo  = $data1.chkcidselecttechnology2;
+ $inputObject.tableName  = $data1.tbnm3;
+ $inputObject.fieldValues = $data1.BI_Technology2;
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+/* 
+var $str = $data1.BI_Technology2;
+var $res = $str.replaceAll("|", ","); */
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSubservice2;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;//
+ verifySwiftFormData($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSelectedsubservice1;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;//$data1.BI_Technology2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSelectedsubserviceUnchk1;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;//$data1.BI_Technology2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Please select SubService Scope/Technology Selected for the below SubService Scopes : \nData Mining";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkridSubservice2;
+ $inputObject.colNo  = $data1.chkcidSelectedsubservice1;
+ $inputObject.tableName  = $data1.tbnm2;
+ $inputObject.fieldValues = $data1.res;//$data1.BI_Technology2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+   */
+ $inputObject = {};
+ $inputObject.segment_name = $data.Summary;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Summery_headers;
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Summery1_val;
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Summery1_Note;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();

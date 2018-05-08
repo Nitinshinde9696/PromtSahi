@@ -1,0 +1,102 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Dev_Act_Item_Export_03", "Dev/Action_Item");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM/START");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_isha; //INFY000020Team_Isha_0
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to customer appreciation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ /**************************************************************************************************************
+ * export functionality 
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_4", "export functionality for skeletal");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_name = $data.key; 
+ $inputObject.chk_name = $data.Skeletal;//"Skeletal";
+ InfyFTexportN($inputObject);
+
+ $t.end();
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("TC_5", "export functionality for Zip");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_name = $data.key;
+ $inputObject.chk_name = $data.ZipOutput; //"ZipOutput";
+ InfyFTexportN($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "export functionality");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_name = $data.key;
+ InfyFTexportN($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "export functionality ChildChkbox");
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.span_name = $data.key;
+ $inputObject.chk_name = $data.ChildChkbox; //"ChildChkbox";
+ InfyFTexportN($inputObject); */
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "export functionality for lstView/END");
+ $t.start();
+ 
+ _setValue(_textbox("searchTextBox-inputEl"), "rule");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.key1;//"gridcolumn-1038-textEl";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = $data.key;
+ $inputObject.chk_name = $data.ListView;//"ListView";
+ InfyFTexportN($inputObject);
+
+ $t.end(); 
+

@@ -1,0 +1,106 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data5 = readDataFromCSV("Maint_PMPlan_Small_Project_MaintPT_Risk_logs_verify_fields_04","Maint/PMPlan_Small"); 
+  
+ var $t = _testcase("Script 31", "TC 18, 19, 91, 21");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data5.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_18", "Risk Log");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowName14;//9
+ $inputObject.colNo = $data5.colName17;
+ $inputObject.fieldValues = $data5.reason6;//Reason 6
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data5.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.RiskLog;// _InfyFTclick(_link("Risk Log"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data5.RiskID;// _InfyFTclick(_link("RiskID"));
+ verifyEformListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data5.navigateTo4; //Risk
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data5.RiskID; 
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data5.CM_Name4;
+ $inputObject.lst_DN_RiskCategory = $data5.riskCategory4;
+ $inputObject.lst_DN_Probability = $data5.probability4;
+ $inputObject.lst_DN_Impact = $data5.impact4;
+ $inputObject.txt_DN_MitigationPlan = $data5.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data5.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data5.impactTo4;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data5.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowName14;//17
+ $inputObject.colNo = $data5.colName17;
+ $inputObject.fieldValues = $data5.reason7;//Reason 7
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+   
+ $t.end();
+ 
+ var $t = _testcase("TC_21", "Verify Fields");
+ $t.start();
+ 
+
+ $inputObject = {};
+ $inputObject.link = $data5.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data5.tableName;//Overview
+ $inputObject.rowNo = $data5.rowNos;// row from 0 to 10
+ $inputObject.colNo = $data5.colNos;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data5.fieldValues;
+ InfyFTverifySwiftFormData($inputObject);
+
+ _wait(5000);
+ 
+ $t.end();
+ 
+ 

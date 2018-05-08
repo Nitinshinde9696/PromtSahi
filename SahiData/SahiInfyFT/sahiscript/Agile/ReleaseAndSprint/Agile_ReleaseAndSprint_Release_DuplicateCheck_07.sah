@@ -1,0 +1,74 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+var $projectbeyondStart = "1-Jan-2014"; //	30-Oct-2015   	30-Oct-2019  
+var $projectbeyondEnd = "1-Jan-2020";
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",2,$dateObj1);
+var $EndDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",7,$dateObj1);
+var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+/* Release*/
+$data = readDataFromCSV("Agile_ReleaseAndSprint_ReleaseDetailPage_01","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to PM Plan");
+$t.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.Project_name2;
+selectProject($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Navigating to Releases");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "checking field visibility and default status check");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = $data.icon;
+clickAddIcon($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Mandatory field check");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.CM_Name;
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate;
+$inputObject.msgAlert = "Release "+$data.CM_Name+" (Name) is already present.Please add release with a different name";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();

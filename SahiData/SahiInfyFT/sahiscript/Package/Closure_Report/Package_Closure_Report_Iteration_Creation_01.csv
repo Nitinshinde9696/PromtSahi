@@ -1,0 +1,2 @@
+node,sizerow1,sizecol,table1,values1,name,ITR_Name,Itrtype,tableApplicable,approw1,appcol2,appval,approw2,appcol3
+nodeIcon10,1,0_lst|1_lst|2_lst|4_edt|5_edt|7_lst,Sizing Details,Package|Implementation or Rollout plus upgrade|Eclipse|10|test|IFPUG FP,Yes,Closure Iteration,Package Implementation,Applicable LC Stages,Project Scoping|Requirements Gathering|To-Be Design|Package Configuration,Applicable_chk,Y,Custom Development|Testing|User Acceptance|Cut-Over|Post Implementation Support,Applicable_unchk

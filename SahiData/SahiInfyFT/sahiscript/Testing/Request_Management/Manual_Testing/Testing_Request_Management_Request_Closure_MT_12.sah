@@ -1,0 +1,162 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceSiddharth.sah");
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Closure_MT_12","Testing/Request_Management/Manual_Testing");  
+
+
+var $dateObj = new Date();
+var $dateidenf1 = new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format($dateObj);
+
+var $dateObj2 = new Date();
+var $dateidenf3 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",7,$dateObj1);
+var $dateidenf2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+/*
+
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Ricky_Wang		
+$inputObject.edt_loginid = $data.LoginID1;//Ricky_Wang
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+/*
+// CLICK ON THE CREATE TAB //
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+
+$inputObject = {};
+$inputObject.item = "MtSt12";
+OpenEformInstance($inputObject);
+*/
+var $t = _testcase("TC-5.1 & 5.2", "CHECK THE FIELDS DURING EXECUTION/ CLOSURE IN MANUAL/AUTOMATED  TESTING");
+
+$t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment01;
+ SelectSegment($inputObject);
+ 
+$inputObject = {};
+$inputObject.ele_DN_RemarksLABEL = $data.C_Remarks;//"Remarks :";
+$inputObject.txt_DN_Remarks = "";
+$inputObject.ele_DN_StatusLABEL = $data.C_Status;//"Status :";  
+$inputObject.ele_DN_CurrentBaselineSetByLABEL =  $data.CBSB;//"Current Baseline Set By :";
+$inputObject.ele_DN_CurrentBaselineSetOnLABEL = $data.CBSO;//"Current Baseline Set On :";
+$inputObject.ele_DN_LastPushtoTimesheetLABEL = $data.LPTT;//"Last Push to Timesheet :";
+$inputObject.ele_DN_LastfetchfromTimesheetLABEL = $data.LFFT;//"Last Fetch from Timesheet :";
+$inputObject.ele_DN_UATProductiondataexistLABEL = $data.UAT;//"UAT/ Production data exists :";
+$inputObject.ele_DN_UATProductiondefectcouLABEL = $data.UAT1;//"UAT/ Production defect count :";
+$inputObject.ele_DN_TypeofDataLABEL = $data.TofData;//"Type of Data :";
+$inputObject.ele_DN_ReasonforBadDataLABEL = $data.Reason;//"Reason for Bad Data :";
+$inputObject.ele_DN_ActualStartDateLABEL = $data.Astart;//"Actual Start Date :"; 
+$inputObject.ele_DN_ActualEndDateLABEL = $data.Aend;//"Actual End Date :";
+$inputObject.ele_DN_ScheduleDeviationLABEL = $data.R_SD;//"Schedule Deviation :";
+$inputObject.ele_DN_EffortDeviationLABEL = $data.ED;//"Effort Deviation :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UATProductiondataexist = $data.Dropdown1;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UATProductiondataexist = $data.Dropdown2;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UATProductiondataexist = $data.Dropdown3;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+
+var $t = _testcase("TC-5.3", "CHECK THE STATUS FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown4;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown5;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown6;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown7;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+/*
+$inputObject = {};
+$inputObject.item = "MtSt12"; 
+InfyFTOpenEformInstanceForLastPage($inputObject);
+*/
+
+var $t = _testcase("TC-5.12", "CHECK EFFORT DEVIATION FIELD & CHECK SCHEDULE DEVIATION FIELD");
+$t.start();
+
+// SCHEDULE DEVIATION // 
+$inputObject = {};
+$inputObject.status = "";
+$inputObject.RYGname = $data.RYGname;
+InfyVerifyRYGStatus($inputObject);
+
+
+// EFFORT DEVIATION //
+$inputObject = {};
+$inputObject.status = "";
+$inputObject.RYGname = $data.RYGname;
+InfyVerifyRYGStatus($inputObject);
+
+
+
+$t.end();
+
+
+var $t = _testcase("TC-5.4 To TC-5.11", "CHECKING ALL FIELDS AND VERIFYING");
+$t.start();
+
+$inputObject = {};
+//$inputObject.edt_DN_CurrentBaselineSetOn = $dateidenf1;
+//$inputObject.edt_DN_LastPushtoTimesheet = $dateidenf1;
+//$inputObject.edt_DN_LastfetchfromTimesheet = $dateidenf1;
+//$inputObject.edt_SearchCriteria_DN_CurrentBaselineSetBy = $data.User1;
+//$inputObject.txt_DN_ReasonforBadData = $data.data20;
+$inputObject.edt_DN_ActualStartDate = $dateidenf3;
+$inputObject.edt_DN_ActualEndDate = $dateidenf2;
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+//$inputObject.edt_DN_CurrentBaselineSetOn = $dateidenf1;
+//$inputObject.edt_DN_LastPushtoTimesheet = $dateidenf1;
+//$inputObject.edt_DN_LastfetchfromTimesheet = $dateidenf1;
+//$inputObject.edt_SearchCriteria_DN_CurrentBaselineSetBy = $data.User1;
+$inputObject.edt_DN_ActualStartDate = $dateidenf3;
+$inputObject.edt_DN_ActualEndDate = $dateidenf2;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();

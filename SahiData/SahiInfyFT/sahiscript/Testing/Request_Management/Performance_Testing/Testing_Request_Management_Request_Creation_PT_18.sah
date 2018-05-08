@@ -1,0 +1,173 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Creation_PT_18","Testing/Request_Management/Performance_Testing"); 
+
+ $bTN = $data.Name;//"Performance Testing";
+ $review_type = $data.rev_type;//"Requirements Specifications Review";
+ $Def_type = $data.def_type;//"Test Requirements Gathering and Analysis";
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+ 
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Ricky_Wang	
+$inputObject.edt_loginid = $data.LoginID1;//Ricky_Wang
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+
+var $t = _testcase("TC-2.2", "CHECK THE MANDATORY FIELDS FOR CREATING A PERFORMANCE TESTING TASK");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+var $t = _testcase("TC-2.1", "CHECK THE FIELDS AVAILABLE WHILE CREATING A PERFORMANCE TESTING TASK ");
+
+_wait(100000);
+
+$t.start();
+$inputObject = {};
+$inputObject.ele_CM_NameLABEL = $data.Title;//"Request Title * :";
+$inputObject.ele_CM_DescriptionLABEL = $data.R_Descr;//"Request Description * :";
+$inputObject.ele_DN_ComplexityLABEL = $data.R_Complexity;//"Complexity * :";
+$inputObject.ele_DN_ApplicationCodeLABEL = $data.R_Acode;//"Application Code :";
+$inputObject.ele_DN_ModuleCodeLABEL = $data.R_Mcode;//"Module Code :";
+$inputObject.ele_DN_TechnologyofApplicatioLABEL = $data.R_ApplbnTestd;//"Technology Category of Application being tested * :";
+$inputObject.ele_DN_PackageToolVersionLABEL = $data.R_pckg_tool;//"Package/Tool Version :" ; 
+$inputObject.ele_DN_ERPNonERPLABEL = $data.R_ERP;//"ERP\non ERP :"; 
+$inputObject.ele_DN_AssociatedDevelopmentPLABEL = $data.R_ADP;//"Associated Development Project :";
+$inputObject.ele_DN_AssociatedEnhancementRLABEL = $data.R_AER;//"Associated Enhancement Request :"; 
+$inputObject.ele_DN_CustomerRequestCodeLABEL = $data.R_CRC;//"Customer Request Code :";
+$inputObject.ele_DN_RequestOwnerLABEL = $data.R_OWNER;//"Request Owner * :"; 
+$inputObject.ele_DN_SOWLABEL = $data.R_SOW;//"SOW :"; 
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+ 
+$inputObject={};
+$inputObject.txt_CM_Description = $data.Desc2;
+ModifyEformInstance($inputObject);
+
+_assertEqual("Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field Request Owner in Details tab \n• Field Complexity in Details tab \n• Field Type of Testing in Details tab \n• Field Technology Category of Application being tested in Details tab \n• Field LC Stage in Details tab", _lastAlert());
+$t.end();
+
+//clickReturn();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name;
+$inputObject.txt_CM_Description = $data.Desc2;
+$inputObject.lst_DN_RequestOwner = $data.Owner2;
+$inputObject.lst_DN_Complexity =  $data.Complexity2;
+$inputObject.lst_DN_TypeofTesting = $data.typtes2;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.lst_DN_TechnologyofApplicatio =$data.PTNo;//"Package or Product";
+ModifyEformInstance($inputObject);
+ 
+var $ID = _getText(_span("CM_ItemCode"));
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.closed;//"Closed";
+$inputObject.msgAlert = "Error : \nFollowing fields in Details section are mandatory :\n* Total No Of Bottlenecks In The Business Logic Layer\n* No Of Total No Of Bottlenecks In The Presentation Logic Layer\n* Total No Of Bottlenecks In The Persistence Logic Layer\n* Total No Of Critical Transactions Covered\n* Total No Of Critical Transactions Identified\n* Total No Of Transactions\n* Number of SLA (specifications)s\n* Number of SLA (specifications)s met\n\nFollowing fields in Request Summary section are mandatory :\n* Type of Data\n* Closure Comments\n* Confirm Review of Request Summary Along Request Performance";
+ModifyEformInstance($inputObject);
+
+//_assertEqual("Error : \nFollowing fields in Details section are mandatory :\n* Total No Of Bottlenecks In The Business Logic Layer\n* No Of Total No Of Bottlenecks In The Presentation Logic Layer\n* Total No Of Bottlenecks In The Persistence Logic Layer\n* Total No Of Critical Transactions Covered\n* Total No Of Critical Transactions Identified\n* Total No Of Transactions\n* Number of SLA (specifications)s\n* Number of SLA (specifications)s met\n\nFollowing fields in Request Summary section are mandatory :\n* Type of Data\n* Closure Comments\n* Confirm Review of Request Summary Along Request Performance", _lastAlert());
+
+clickReturn();
+
+// CLICK ON THE CREATE TAB //
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTOpenEformInstanceForLastPage($inputObject);
+
+var $s1 = _testcase("Print-Icon"," Check Printing the Request");
+$s1.start();
+ 
+ InfyFTprint();
+ 
+$s1.end();
+
+
+var $t = _testcase("REUSE TRACKING", "CHECK THE REUSE TRACKING SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Reuse_Tracking_Positive_PT_20.sah");
+
+$t.end();
+
+var $t = _testcase("SIZING DETAILS", "CHECK THE SIZING DETAILS SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Sizing_Details_PT_21.sah");
+
+$t.end();
+
+
+var $t = _testcase("SCHEDULE TASK", "CHECK THE SCHEDULE TASK SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Scheduled_Task_Report_PT_19.sah");
+
+$t.end();
+
+var $t = _testcase("REVIEWS", "CHECK THE REVIEWS SEGMENT");
+
+$t.start();
+
+_include("/../Testing_Request_Management_Rev_Def_Common_34.sah");
+
+$t.end();
+
+var $t = _testcase("REQUEST CLOSURE SEGMENT", "CHECK THE REQUEST CLOSURE SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Request_Closure_PT_24.sah");
+
+$t.end();
+
+var $t = _testcase("REQUEST SUMMARY SEGMENT", "CHECK THE REQUEST SUMMARY SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Req_Summary_PT_23.sah");
+
+$t.end();
+
+$t.end();
+
+ var $s2 = _testcase("TC_Tools Tracking"," Verify Tools Tracking Segment");
+ $s2.start();
+ 
+ //_include("Testing_Request_Management_Tools_Tracking_PT_22.sah");
+ 
+ $s2.end();
+ 
+
+
+

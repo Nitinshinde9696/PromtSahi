@@ -1,0 +1,74 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+
+$data = readDataFromCSV("Roles_MR_AQM_4_Export_07","Roles"); 
+ 
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//AQM
+ InfyFTnavigateTo($inputObject);
+
+ var $t = _testcase("TC_1", "Available buttons in Export e form"); 
+ $t.start();
+
+ _click(_span("KEY_TOOLTIP_Export-btnIconEl"));
+ _selectWindow("ExportItem");
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Excel1; //_isVisible(_span("Excel"));//Excel
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.ZipFile2; //_isVisible(_span("Zip Output File"));
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.SExport3; //_isVisible(_span("Skeletal Export"))
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Lcolumns4; //_isVisible(_span("Export only the listed columns"));
+ InfyFTvalueisVisible($inputObject);
+ 	
+ $inputObject = {};
+ $inputObject.value = $data.Reset6; //_isVisible(_reset("Reset"));
+ InfyFTvalueisVisible($inputObject);		
+
+ $inputObject = {};
+ $inputObject.value = $data.Return6; //_isVisible(_button("< Return"));
+ InfyFTvalueisVisible($inputObject); 
+ 
+ _selectWindow();
+ 
+ $t.end();  
+ 
+ var $t = _testcase("TC_2", "Exporting the AQM list in Excel Format ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rdg_ExportFormat = $data.extntype1;//"ExportFormat[1]";
+ $inputObject.type = $data.fileName1;//"AQM.xls";
+ exportEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "Exporting the single AQM from list in Excel Format ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.requiredfor = "Specific";
+ $inputObject.item = $data.AQMname;//AQM38
+ $inputObject.rdg_ExportFormat = $data.extntype1;//"ExportFormat[1]";
+ $inputObject.type = $data.fileName2;//"AQM1.xls";
+ exportEformInstance($inputObject); 
+ 
+ $t.end(); 

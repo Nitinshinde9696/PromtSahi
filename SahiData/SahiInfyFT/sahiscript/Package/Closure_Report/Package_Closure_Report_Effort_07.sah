@@ -1,0 +1,239 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Effort_07","Package/Closure_Report");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+     $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ /*
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Closure Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $generic.projectname1;//AKANSH33
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "CRep58";// $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+
+ 
+ $t.end();
+ */
+ var $t = _testcase("TC_2", "Verifying the field visibility of Engineering Effort Table");
+ $t.start();
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment2;//Effort
+ SelectSegment($inputObject);
+ 
+ _wait(90000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1;//Engineering Effort
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowheaders1;//LC Stage;Activity Effort;Activity Effort;Total Effort;Estimated Effort from Project plan;Deviation(Estimated vs Actual);Reason for Deviation;Actual effort from Timesheet;Deviation(Timesheet vs actual);Reason for Timesheet Deviation
+ InfyFTisVisible($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colheaders1;//Requirements - Acceptance Test Plan;Requirements - Requirements;HLD - Integration Test Plan;HLD - HLD;DLD - DLD;DLD - Unit Test Plan;Build - Coding;Coding;Build - Unit Testing;Integration Test;System Test;Acceptance and Installation;Post Implementation;Others - Engineering
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Verifying the field visibility of Non-Engineering Effort Table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table2;//Engineering Effort
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowheaders2;//Management Track;Actual Effort;Estimated Effort from Project plan[2];Deviation;Reason for Deviation[2];Actual effort from timesheet;Deviation (Timesheet vs Actual);Reason for Deviation for timesheet
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colheaders2;//PM and CM Effort;Training, DP and other Preventive COQ effort;Miscellaneous
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_4", "Verifying the field visibility of Effort Summary Table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table3;//Effort Summary
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowheaders3;//Effort Type;Activity Effort[2];Review Effort[2];Rework Effort[2];Total Effort[2];Estimated Effort;Deviation[2];Reason for Deviation[4];Actual effort from timesheet[2];Deviation(Timesheet vs Actual);Reason for Deviation for timesheet[2]
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colheaders3;//Engineering effort;Non engineering effort;Total Effort (Person Hours);Total Effort (Person Months)
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Verifying the field visibility of Functional and Technical Effort Details");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table4;//Functional and Technical Effort Details
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowheaders4;//Track;Functional Effort;Technical Effort;Total;Actual Efforts in PHrs
+ InfyFTisVisible($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table6;//Functional and Technical Effort Details
+ $inputObject.rowNo = $data.rowname3;//Functional Effort|Technical Effort
+ $inputObject.colNo = $data.colname3;//Actual Efforts in PHrs_edt
+ $inputObject.fieldValues = "30|50";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ _wait(10000);
+ 
+ var $t = _testcase("TC_6", "Verifying the field visibility of Total Effort Saving due to Tools and Reuse Table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table5;//Total Effort Saving due to Tools and Reuse
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowheaders5;//Parameters;Effort Savings;% Effort Savings
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colheaders5;//Tools;Reuse
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Verifying the Savings effort value for Tools and Reuse");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table5;//Total Effort Saving due to Tools and Reuse
+ $inputObject.rowNo = $data.rowname1;//Tools
+ $inputObject.colNo = $data.colname1;//Effort Savings_lbl
+ $inputObject.fieldValues = "3.00";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.tableName = $data.table5;//Total Effort Saving due to Tools and Reuse
+ $inputObject.rowNo = $data.rowname2;//Reuse
+ $inputObject.colNo = $data.colname1;//Effort Savings_lbl
+ $inputObject.fieldValues = "3.00";
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+ 
+ var $t = _testcase("TC_3,4,5", "Verifying the Activity Effort, Review effort, Rework Effort editable in manual mode");
+ $t.start();
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment1;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ReportMode = "Manual";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment2;//Effort
+ SelectSegment($inputObject);
+ 
+  _wait(90000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = "Engineering Effort";
+ $inputObject.rowNo = "Package Evaluation|Project Scoping|Requirements Gathering|Requirements Gathering - Acceptance Test Plan|Requirements Gathering - System Test Plan|To-Be Design|Package Configuration|Custom Development - Coding|Custom Development - Detailed Design|User Acceptance - Testing|Custom Development - Unit Testing|Custom Development - Unit Test Plan|Testing|User Acceptance|Cut-Over|Post Implementation Support"
+ $inputObject.colNo = "Activity Effort_edt|Review Effort_edt|Rework Effort_edt";
+ $inputObject.fieldValues = "10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25";
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = "Engineering Effort";
+ $inputObject.rowNo = "Package Evaluation|Project Scoping|Requirements Gathering|Requirements Gathering - Acceptance Test Plan|Requirements Gathering - System Test Plan|To-Be Design|Package Configuration|Custom Development - Coding|Custom Development - Detailed Design|User Acceptance - Testing|Custom Development - Unit Testing|Custom Development - Unit Test Plan|Testing|User Acceptance|Cut-Over|Post Implementation Support"
+ $inputObject.colNo = "Reason for Deviation_txt|Reason for Timesheet Deviation_txt";
+ $inputObject.fieldValues = "Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2|Deviation3|Deviation1|Deviation2";
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = "Non Engineering Effort";
+ $inputObject.rowNo = "PM and CM Effort|Training, DP and other Preventive COQ effort|Miscellaneous"
+ $inputObject.colNo = "Activity Effort_edt|Reason for Deviation[2]_txt";
+ $inputObject.fieldValues = "1|actual1|2|actua2|3|actual3";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = "Non Engineering Effort";
+ $inputObject.rowNo = "PM and CM Effort|Training, DP and other Preventive COQ effort|Miscellaneous"
+ $inputObject.colNo = "Reason for Deviation for Timesheet_txt";
+ $inputObject.fieldValues = "Deviation1|Deviation2|Deviation3";
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment1;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ReportMode = "Automatic";
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 
+
+ 
+ 

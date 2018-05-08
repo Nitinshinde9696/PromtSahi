@@ -1,0 +1,86 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+
+
+$data = readDataFromCSV("Roles_MR_RSM_4_Export_15","Roles");
+
+ // COMMENTS :LOGIN INTO SWIFT ALM// 
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1; //Navdeep_ghotra
+ $inputObject.edt_loginid = $data.LoginID1;//Navdeep_ghotra
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ //Navigate To DRM // 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Navigate To2 :RSM
+ InfyFTnavigateTo($inputObject);
+
+ var $t = _testcase("TC_13.1 & 13.2", "Available buttons in Export e form"); 
+ $t.start();
+ 
+ _click(_span("KEY_TOOLTIP_Export-btnIconEl"));
+ 
+ _selectWindow("ExportItem");
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Excel1; //_isVisible(_span("Excel"));//Excel
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.ZipFile2; //_isVisible(_span("Zip Output File"));
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.SExport3; //_isVisible(_span("Skeletal Export"))
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Lcolumns4; //_isVisible(_span("Export only the listed columns"));
+ InfyFTvalueisVisible($inputObject);
+	
+ $inputObject = {};
+ $inputObject.value = $data.Reset6; //_isVisible(_reset("Reset"));
+ InfyFTvalueisVisible($inputObject);		
+
+ $inputObject = {};
+ $inputObject.value = $data.Return6; //_isVisible(_button("< Return"));
+ InfyFTvalueisVisible($inputObject); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_13.3", "Exporting the Active&Inactive assignments in Excel Format ");
+ $t.start();
+ 
+ _popup("ExportItem"). _click(_button("Return"));
+ _selectWindow();
+ 
+ $inputObject = {};
+ $inputObject.rdg_ExportFormat = $data.extntype1;//"ExportFormat";//"XLS"; //$data.filetype3;
+ $inputObject.chk_ListView = $data.ListView;//"ListView";
+ $inputObject.type = $data.fileName1;//"RSM.xls";
+ exportEformInstance($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13.3.1", "Exporting the selecting RSM assignments from the list in EXCEL Format");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.requiredfor = "Specific";//RSM25
+ $inputObject.item = $data.RSMname;//RSM25
+ $inputObject.rdg_ExportFormat = $data.extntype1;//"CSV";//"ExportFormat[1]";
+ $inputObject.type = $data.fileName3;//"RSM1.xls";
+ exportEformInstance($inputObject);
+ 
+ $t.end(); 
+ 
+ 
+ 
+ 
+ 

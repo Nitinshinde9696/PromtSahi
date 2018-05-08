@@ -1,0 +1,118 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Details_06","Package/Closure_Report");
+
+
+ var $t = _testcase("TC_2", "Logging with valid user");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1;//Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;//Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_3", "Navigate to Closure report for Dev PT project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $generic.projectname1;//AKANSH33
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item =   $Itr_ID +" Closure Report";//"Closure1";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_Workflow", "Making Current user as a submitter in workflow");
+ $t.start();
+  
+  _wait(40000);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment9;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_selectsingleuser0 = $generic.LoginID1;
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_4", "Verifying the details segment in Closure Report");
+ $t.start(); 
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment1;//Details
+ SelectSegment($inputObject);
+ 
+ _wait(9000);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.crsegments1;//Details;Effort;Schedule;Defects;Size;Quality And Productivity;Closure Checks;Comments;Workflow;Previous Versions;Activity Log;Attachments
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $Itr_ID;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fields1;//ID :;Status :;Quality of data :;Full / Partial LC :;MTR Name * :;Report Mode :;Reason for bad data / abandoned project :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lbl_DN_Status = $data.status1;//In Process
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lbl_DN_Qualityofdata = $data.quality1;//--None--
+ verifyEformInstanceDetails($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_FullPartialLC = $data.fullpartLC1;//Partial LC Stage
+ verifyEformInstanceDetails($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Reasonforbaddataabando = $data.reason1;//test
+ $inputObject.edt_CM_Name = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Closure Report Name in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.mtrname1;//test
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ReportMode = $data.reportmode1;//Manual;Automatic
+ verifyAllFields($inputObject);
+ 
+ /*
+   _include("Package_Closure_Report_Effort_07.sah");
+   _include("Package_Closure_Report_Schedule_08.sah");
+   _include("Package_Closure_Report_Defects_09.sah");
+   _include("Package_Closure_Report_Size_10.sah");
+   _include("Package_Closure_Report_QandP_11.sah");
+   */
+  
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,144 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+
+$data = readDataFromCSV("Roles_Manage_Roles_UnitHead_RSM_44","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM BY RSM ROLE // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; // Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles -> RSM
+navigateTo($inputObject);
+
+//Create RSM by Unit Head //
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchUser5; // snehal_ghodeswar
+CreateInstance($inputObject);
+
+
+var $RSM= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+logOut();
+
+//LOGIN BY UNIT HEAD ID//
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2;  // snehal_ghodeswa
+$inputObject.edt_loginid = $data.LoginID2;
+$inputObject.edt_password = $data.Password2;
+loginIntoDigite($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Navigate To2 :Projects
+navigateTo($inputObject);
+
+//click other accessible projects //
+
+$inputObject = {};
+$inputObject.span = $data.OAccProj3;
+InfyFTclick($inputObject);
+
+
+$inputObject = {};
+$inputObject.item = $data.Project1;
+InfyFTVerifyProjectinListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project2;
+InfyFTVerifyProjectinListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project3;
+InfyFTVerifyProjectinListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project4;
+InfyFTVerifyProjectinListing($inputObject);
+
+/*$inputObject = {};
+$inputObject.item = $data.Project5;
+InfyFTVerifyProjectinListing($inputObject);*/
+
+logOut();
+
+// LOGIN BY THE USER RSM // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //subhashini_k03
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+ 
+ 
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles -> RSM
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$RSM);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+ 
+$inputObject = {};
+$inputObject.item = $RSM;// Open Created 
+OpenEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.rdg_InActive =$data.Inactive6;//"Inactive";
+ModifyEformInstance($inputObject);
+
+logOut();
+ 
+ 
+// LOGIN BY THE USER RSM // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2;
+$inputObject.edt_loginid = $data.LoginID2;
+$inputObject.edt_password = $data.Password2;
+loginIntoDigite($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Navigate To2 :Projects
+navigateTo($inputObject);
+
+//click other accessible projects //
+
+$inputObject = {};
+$inputObject.span = $data.OAccProj3;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project1;
+InfyFTVerifyProjectinListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project2;
+InfyFTVerifyProjectinListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project3;
+InfyFTVerifyProjectinListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Project4;
+InfyFTVerifyProjectinListing($inputObject);
+
+/*$inputObject = {};
+$inputObject.item = $data.Project5;
+InfyFTVerifyProjectinListing($inputObject);*/

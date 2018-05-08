@@ -1,0 +1,306 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_PCM_Summary_Common_35","Maint/Request_Management");
+ 
+
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ 
+ var $s1 = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+ 
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $s1.end();
+  
+ var $s2 = _testcase("TC_ Project Specific Metrics","  Project Specific Metrics");
+ 
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_PCM;//_link("Project Specific Metrics")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "0";
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl";
+ $inputObject.fieldValues = $data.values1;//Delete|Track|Metric Name|Metric Type|Expressed as|Metric UOM|Metric Description
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tblname ="Project Specific Metrics";
+ $inputObject.row_id =2;
+ $inputObject.col_id=0;
+ $inputObject.btnSave = "yes";
+ InfyFTDeleteRows($inputObject);
+ 
+ // Minor Enhancement
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Minor Enhancement|MinEnh|Positive|Number|Minor";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //Major Enhancement
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "3";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Major Enhancement|MajEnh|Negative|Percentage|Major";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //Bug Fix
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "4";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Bug Fix|BFix|Positive|Number|Fix";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //Project Level
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "5";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Project Level|ProjLevel|Negative|Percentage|Level";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //Other Request
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "6";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Other Request|ORequest|Positive|Number|Request";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //Testing Request
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "7";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Testing Request|TRequest|Positive|Number|Testing";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //Analysis and Research
+ $inputObject ={};
+ $inputObject.icon="Add Rows";//_click(_link("Add Rows"));
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Project Specific Metrics
+ $inputObject.rowNo = "8";
+ $inputObject.colNo = "1_lst|2_edt|3_lst|4_lst|5_edt";
+ $inputObject.fieldValues = "Analysis and Research|Analysis|Positive|Number|Research";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ 
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_Baseline PM Plan");
+  
+ $s3.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_PM;//_link("PM Plan")
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject = {};
+ $inputObject.link = $data.Wflow;// (_link("Workflow");
+ InfyFTclick($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username12;//Himanshu_Bhayana
+ $inputObject.workflow_stage = $data.flow_stage0;//0
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.user_name2;//Arjun.R02
+ $inputObject.workflow_stage = $data.flow_stage1;//1
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.user_name3;//Arjun.R02
+ $inputObject.workflow_stage = $data.flow_stage2;//2
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Comments1;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ $s3.end();
+  
+ var $t1 = _testcase("TC_Login As Reviewer and Route");
+ 
+ $t1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name2;//Niharika Karingula
+ $inputObject.edt_loginid = $data.LoginID2;//Niharika.Karingula
+ $inputObject.edt_password =$data.Password2;//111111
+ loginIntoDigite($inputObject);
+   
+ $inputObject = {};
+ $inputObject.item = $data.projectname4;//projectname
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Comments1;//Test1
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ $t1.end();
+ 
+ var $t2 = _testcase("TC_Login As Approver and Route");
+ 
+ $t2.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name3;//Hariprasad_BK
+ $inputObject.edt_loginid = $data.LoginID3;//Hariprasad_BK
+ $inputObject.edt_password =$data.Password3;//111111
+ loginIntoDigite($inputObject);
+   
+ $inputObject = {};
+ $inputObject.item = $data.projectname4;//projectname
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Comments2;//Test1
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ $t2.end();
+ 
+/* var $t = _testcase("TC_Verify in Request summary- Project Specific Metrics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_Enh;//Enhancements
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "Enh2";//$id;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_rs01;//"Request Summary"
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";
+ $inputObject.rowNo = "0";
+ $inputObject.colNo = "0_cell|1_cell|2_cell|3_cell|4_cell|5_cell";
+ $inputObject.fieldValues = "MetricName|UOM|Goal|Actual|% Deviation|Reason for deviation";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "0_lbl|1_lbl";
+ $inputObject.fieldValues = "MinEnh|Minor";
+ InfyFTverifySwiftFormData($inputObject);
+
+
+ 
+ $s.end();
+ 
+*/
+ 
+
+
+ 

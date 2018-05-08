@@ -1,0 +1,211 @@
+_include("../../../SahiDigite/sahisource/Business/EformListing.sah");
+
+/*************************************************************************************************
+@Function InfyFTaddExistingTraceability
+@author: Snehal
+@description: Add Existing traceability
+@return: None
+****************************************************************************************************/
+function InfyFTaddExistingTraceability($inputObject)
+{
+	_log("InfyFTaddExistingTraceability Started","success");
+	try 
+	{
+		_setSelected(_select("NewExisting"),"Existing");
+		_setSelected(_select("Items"), $inputObject.ItemType);
+		_click(_button("gobutton"));
+		setAllFields($inputObject);
+		_click(_submit("Go"));
+		//Modified to handle Alert - Please select link to be Added
+		if ($inputObject.ItemIds)
+		{
+		    _check(_checkbox(0, _near(_cell($inputObject.ItemIds))));
+            _click(_button("AddLink"));
+		}
+		else
+		{
+		    _click(_button("AddLink"));
+		    _assertEqual("Please select the Link(s) to be added.", _lastAlert());			
+		}
+		_wait(6000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTaddExistingTraceability Completed","success");
+}
+
+
+/*************************************************************************************************
+@Function InfyFTimportEformInstance
+@author: Kunal Gajbhiye
+@description: To importEformInstance
+@return: None
+TODO:RMAHANT Correct this Function
+****************************************************************************************************/
+
+function InfyFTimportEformInstance($inputObject)
+{
+	_log("InfyFTimportEformInstance Started","success");
+	try 
+	{
+		var $importBtn = "KEY_LABEL_Import";
+		var $extJsId = ""; 	
+		var $importbtnKey = $importBtn + $extJsId;
+		if($inputObject.type === "Negative")
+		{
+			_log("Cannot Import");
+			_assertFalse(_exists(_link($importbtnKey)));
+		}
+		else
+		{
+			_click(_link($importbtnKey));
+			
+			_selectWindow("newListing");
+			
+
+			if($inputObject.type === "FileNotSelected")
+			{	
+				if($inputObject.file_file === "" || $inputObject.file_file === undefined)
+				{
+					_click(_submit("QTP_KEY_BUTTON_Upload"));
+					_assertEqual("Please select the file to be uploaded.",_lastAlert());
+					_click(_button("QTP_KEY_BUTTON_Close"));
+					_selectWindow();
+				}
+			}	
+			else
+			{			
+				var $importDIR;
+				_set($importDIR, _getGlobal("importDIR")+$inputObject.file_file);
+				_setFile(_file("file"), $importDIR);
+				_call(_file("file").type = "text");
+				_setValue(_textbox("file"),$importDIR);			
+				if($inputObject.chk_SyncAsync === "SyncAsync" || $inputObject.chk_SyncAsync === "on")
+				{
+					_check(_checkbox("SyncAsync"));
+				}
+				_click(_submit("QTP_KEY_BUTTON_Upload"));
+				_wait(10000,null);
+				
+				if($inputObject.type === "WrongFileName")
+				{
+					_assertEqual("Please ensure that the file '"+$inputObject.eform+".csv/"+$inputObject.eform+".xls' exists and is not empty.",_lastAlert());
+					_click(_button("QTP_KEY_BUTTON_Close"));
+					_selectWindow();
+				}
+				else
+				{	
+					var $errorMsg = null;
+					_set($errorMsg,$inputObject.error);
+					
+					if($errorMsg === "" || $errorMsg === null)
+					{
+						_click(_button("QTP_Close"));
+						_selectWindow();
+						//verifyInstanceInListing($inputObject);	
+					}
+					else
+					{
+						_assertTrue(_containsText(_table("QTP_EformSection2"),$inputObject.error));
+						_click(_button("QTP_Close"));
+						_selectWindow();
+					}	
+				}
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTimportEformInstance Completed","success");
+}
+
+
+/**
+ @Function Number:InfyFTRemoveLinkInLinkedItemSegment
+ @author:Nitin
+ @example:
+ @description: InfyFTRemoveLinkInLinkedItemSegment
+ @param: 
+ @return: 
+ **/
+
+function InfyFTRemoveLinkInLinkedItemSegment($inputObject)
+{
+	_log("InfyFTRemoveLinkInLinkedItemSegment Started","success");
+	try 
+	{
+		//_check(_div("x-grid-row-checker",_near(_div($inputObject.item))));
+		_check(_checkbox(0, _near(_cell($inputObject.item))));
+		_click(_button("Remove Links"));
+	    _expectConfirm("The link(s) will no longer be available", true);
+	    _log("deleteLinkInLinkedItemSegment Verification Started","success");
+		_assertFalse(_isVisible(_div($inputObject.item)));
+		_log("deleteLinkInLinkedItemSegment Verification Complete","success");
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTRemoveLinkInLinkedItemSegment Completed","success");
+}
+
+/*************************************************************************
+* @author Vishnu
+* @example: 1. To Export only one selected item :
+* 					exportEformInstance({"type" : "Issues" , "requiredfor" : "Specific" , 
+* 											"item" : "Issue2" ,	"lst_ExportFormat" : "Excel"});
+* 			2. To Export All the items :
+* 					exportEformInstance({"type" : "Issues" , "requiredfor" : "All" ,
+* 											"lst_ExportFormat" : "Excel"});
+            3. To export Defect :
+			         $inputObject.defect
+* @description This function is called to Export Items Such as 
+* 					Issue, Defect, ChangeRequest, etc...
+* 				The Parameter "type" is used to name the File according to the Eform Instance that is downloaded.
+* 				To Export Only One Selected Item pass the Parameters as in Example 1.
+* 				To Export All the Items pass the Parameters as in Example 2.
+* @param {String} Pass the item to select from the listing and to set the fields in the pop up.
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTexportEformInstance($inputObject)
+{
+	_log("InfyFTexportEformInstance Started","success");
+	try 
+	{
+		var $downloadPath = _getGlobal("DOWNLOAD");
+		var $exportBtn = "KEY_TOOLTIP_Export";
+		var $extJsId = ""; 	
+		var $exportbtnKey = $exportBtn + $extJsId;
+		
+		if($inputObject.requiredfor === "Specific")
+		{
+			_check(_div("x-grid-row-checker",_near(_div($inputObject.item))));
+		}
+
+		_click(_link($exportbtnKey));
+		_selectWindow("Export");
+        setAllFields($inputObject);
+		if($inputObject.defect)
+        {
+		_popup("ExportItem")._click(_checkbox("ChildChkbox"));
+		_wait(2000);
+        }	
+		_click(_button("QTP_KEY_BUTTON_Ok"));
+		_wait(5000,null);
+		_click(_button("QTP_KEY_BUTTON_Close"));
+		_selectWindow();
+		_saveDownloadedAs($downloadPath+""+$inputObject.type);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTexportEformInstance Completed","success");
+}
+

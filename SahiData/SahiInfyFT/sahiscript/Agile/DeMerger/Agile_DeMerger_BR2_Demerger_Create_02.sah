@@ -1,0 +1,187 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+ 
+ $data = readDataFromCSV("Agile_DeMerger_BR2_Demerger_Create_02","Agile/DeMerger");
+ 
+ 	$inputObject = {};
+	$inputObject.name = $data.navigateTo23;//Project Dermerger
+	navigateTo($inputObject);
+	
+	$inputObject = {};
+	$inputObject.span = "KEY_BUTTON_Add-btnIconEl";//_span("KEY_BUTTON_Add-btnIconEl")
+	InfyFTclick($inputObject);
+	
+	
+	$inputObject = {};
+	$inputObject.lst_DN_PreviousExecutionProje =$newproject;// $data.projectname19;//_select("DN_PreviousExecutionProje")
+	$inputObject.lst_DN_Projecttobedemerged = $MergedReqID;//$data.span_Name23;//_select("DN_Projecttobedemerged")
+	$inputObject.txt_DN_ReasonforDemerger = $data.rfd24;//
+	$inputObject.lst_DN_Actionthatwillbetakena = $data.field12; //_select("DN_Actionthatwillbetakena")
+	setAllFields($inputObject);
+	
+	$inputObject = {};
+	$inputObject.lst_DN_ProcessType = $data.Process_type;
+	setAllFields($inputObject);
+	
+	$inputObject = {};
+	$inputObject.button = "SaveBtn";//_button("SaveBtn")
+	InfyFTclick($inputObject);
+	
+	//var $demid=  _getText(_span("bCrumbSpanText[1]"));
+	//$demid.replace('Edit : ,'');
+	var str = _getText(_span("bCrumbSpanText[1]"));
+	var $demid = str.replace("Edit : ", "");
+	
+	$inputObject = {};
+	$inputObject.span_Name = $data.span_Name26+";"+$data.span_Name28+";"+ $data.span_Name29;//_link("More Details")
+	InfyFTisVisible($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.span_Name28;
+	SelectSegment($inputObject);
+	_wait(5000);
+	 $inputObject = {};
+	 $inputObject.workflow_stage = $data.stage29;//1
+	 $inputObject.multiple_member = $data.user_skip29;//
+	 WorkflowSet($inputObject);
+	_wait(5000);
+	 $inputObject = {};
+	 $inputObject.workflow_stage = $data.stage30;//1
+	 $inputObject.multiple_member = $data.user_skip30;//
+	 WorkflowSet($inputObject);
+	_wait(5000);
+	$inputObject = {};
+	$inputObject.txt_Comments = $data.Comments31;
+	InfyFTClickRoutewithComments($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_segment;//_link("Details")
+	SelectSegment($inputObject);
+	
+	$inputObject = {};
+	$inputObject.select = "DN_PreviousExecutionProje";
+	InfyFTisReadOnly($inputObject);
+	
+	$inputObject = {};
+	$inputObject.select = "DN_Projecttobedemerged";
+	InfyFTisReadOnly($inputObject);
+	
+	$inputObject = {};
+	$inputObject.select = "DN_Actionthatwillbetakena";
+	InfyFTisReadOnly($inputObject);
+	
+	$inputObject = {};
+	$inputObject.select = "DN_MainProjectCodeList1";
+	InfyFTisReadOnly($inputObject);
+	
+	_wait(5000);
+	
+	logOut();
+	var $t = _testcase("TC_1.1","Login Reviewer");
+	$t.start();
+ 
+	 $inputObject = {};
+	 $inputObject.user_name = $data.user_skip29;
+	 $inputObject.edt_loginid = $data.user_skip29;
+	 $inputObject.edt_password =$data.Password1;
+	 loginIntoDigite($inputObject);
+	 
+	 $t.end();
+	 _wait(5000);
+	 
+	var $s = _testcase("TC_2.1"," Open Request");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo32;//
+	navigateTo($inputObject);
+ 
+	$inputObject = {};
+	$inputObject.item = $demid;//"AGLAGIS_Prdm134" ;
+	infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+	$inputObject = {};
+	$inputObject.item = $demid;//"AGLAGIS_Prdm133";//$data.Project_requestid4;
+	infyFTOpenProjectRequest($inputObject);
+ 
+	$s.end();
+ 
+	var $s = _testcase("TC_15.5"," Route request");
+	$s.start();
+ 
+	$inputObject = {};
+	$inputObject.segment_name = $data.span_Name28;
+	SelectSegment($inputObject);
+	 
+	$inputObject = {};
+	$inputObject.txt_Comments = $data.Comments18;
+	InfyFTClickRoutewithComments($inputObject);
+		
+	_wait(5000);
+	
+	logOut();
+	
+	
+	var $t = _testcase("TC_1.1","Login Approver");
+	$t.start();
+ 
+	 $inputObject = {};
+	 $inputObject.user_name = $data.user_skip30;
+	 $inputObject.edt_loginid = $data.user_skip30;
+	 $inputObject.edt_password =$data.Password1;
+	 loginIntoDigite($inputObject);
+	 
+	 $t.end();
+	 _wait(5000);
+	 
+	var $s = _testcase("TC_2.1"," Open Request");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo32;//
+	navigateTo($inputObject);
+ 
+	$inputObject = {};
+	$inputObject.item = $demid;//"AGLAGIS_Prdm134" ;
+	infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+	$inputObject = {};
+	$inputObject.item = $demid;//"AGLAGIS_Prdm133";//$data.Project_requestid4;
+	infyFTOpenProjectRequest($inputObject);
+ 
+	$s.end();
+ 
+	var $s = _testcase("TC_15.5"," Route request");
+	$s.start();
+ 
+	$inputObject = {};
+	$inputObject.segment_name = $data.span_Name28;
+	SelectSegment($inputObject);
+	 
+	$inputObject = {};
+	$inputObject.txt_Comments = $data.Comments18;
+	InfyFTClickRoutewithComments($inputObject);
+	
+	_wait(5000);
+	
+	logOut();
+	
+	
+	var $t = _testcase("TC_1.1","Login P Manager");
+	$t.start();
+ 
+	 $inputObject = {};
+	 $inputObject.user_name = $baseUser;
+	 $inputObject.edt_loginid = $baseUser;
+	 $inputObject.edt_password =$data.Password1;
+	 loginIntoDigite($inputObject);
+	 
+	 $t.end();
+		
+	$inputObject = {};
+	$inputObject.projectname = $MergedReqID;//PGASIOPS - PG-TPMS- ASIA - STEADY STATE
+	selectProject($inputObject);
+ 
+	

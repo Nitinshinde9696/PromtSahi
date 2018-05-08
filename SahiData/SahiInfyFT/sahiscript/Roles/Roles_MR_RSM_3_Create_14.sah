@@ -1,0 +1,347 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+
+$data = readDataFromCSV("Roles_MR_RSM_3_Create_14","Roles");
+
+ // COMMENTS :LOGIN INTO SWIFT ALM// 
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Navdeep_Ghotra
+ $inputObject.edt_loginid = $data.LoginID1;//Navdeep_Ghotra
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ //Navigate To RSM // 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Risk Manager
+ InfyFTnavigateTo($inputObject); 
+
+ var $t = _testcase("TC_4.3", "Creating the RSM assignment"); 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.Unit3;//BPOHR
+ $inputObject.edt_SearchCriteria_DN_User = $data.SearchUser3;//Daisy_thomas
+ CreateInstance($inputObject);
+
+ var $rm1 = _getText(_span("CM_ItemCode"));
+
+ clickReturn();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_4.3.1", "Verifying the newly created RSM assignment in listing"); 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $rm1;
+ InfyFTverifyInstanceInListing($inputObject);  
+ 
+ $t.end(); 
+ 
+ clearFilterSettings();
+ 
+ var $t = _testcase("TC_5.1", "Verifying for same unit can invite by another team member"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.Unit3;//BPOBITS1
+ $inputObject.edt_SearchCriteria_DN_User = $data.SearchUser4a;//Sunitha.Muthukumar
+ CreateInstance($inputObject);
+ 
+ $t.end(); 
+ 
+ var $rm2 =_getText(_span("CM_ItemCode"));
+ 
+ clickReturn(); 
+ 
+ var $t = _testcase("TC_5.1.1", "Verifying the RSM assignment in listing"); 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $rm2;
+ InfyFTverifyInstanceInListing($inputObject);  
+ 
+ $t.end();
+ 
+ clearFilterSettings();
+ 
+ var $t = _testcase("TC_5.2", "Verifying not to take same combination of values in RSM Assignment"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.Unit3;//BIZP
+ $inputObject.edt_SearchCriteria_DN_User = $data.SearchUser3;//subhashini_k03
+ $inputObject.msgAlert = "Selected User is already set up as a Risk Manager for this Unit";
+ CreateInstance($inputObject);  
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6.1", "Login with who has invited for RSM"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2; //Daisy_thomas
+ $inputObject.edt_loginid = $data.LoginID2;//Daisy_thomas
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//risk Manager
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6.2", "View all projects from in box ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject); 
+ 
+ $t.end();
+ 
+ _wait(5000); 
+ _click(_span("KEY_LABEL_Other_Accessible_Projects-btnIconEl"));
+ 
+ /*$inputObject = {};
+ $inputObject.span = $data.OAProjects;// _InfyFTclick(_link("x-btn-icon-el de-icon-project_plr"));
+ InfyFTclick($inputObject);*/
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status3;//BPOHR
+ $inputObject.status = $data.status;//BPOHR
+ InfyFTsearchBoxSetFilter($inputObject); 
+ 
+ if(_isVisible(_div("1")))
+ {
+ _click(_div("1"));
+ 
+ var $t = _testcase("TC_9.3", "Verifying the read access of RSM under the selected unit project(s)"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment3;//Project Health
+ SelectSegment($inputObject); 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment4;//Linked Projects
+ SelectSegment($inputObject); 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment5;//Project Request Comments
+ SelectSegment($inputObject);
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment6;//UPF
+ SelectSegment($inputObject);
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment7;//Activity Log
+ SelectSegment($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6.4", "Changing the risk status ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//ALERT
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_div("1")))
+ {
+ _click(_div("1"));
+ 
+ $inputObject = {}; 
+ $inputObject.lst_DN_Classifytherisklevelof = $data.RiskLevel;//High//CM_Name
+ ModifyEformInstance($inputObject);
+ 
+ clickReturn();
+ 
+ } 
+ 
+ }
+ else{_log("Project not found under the selected unit");}
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Navdeep_Ghotra
+ $inputObject.edt_loginid = $data.LoginID1;//Navdeep_Ghotra
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Risk Manager
+ InfyFTnavigateTo($inputObject);
+ 
+ var $t = _testcase("TC_7.2", "Open newly created RSM Assignment"); 
+ $t.start();
+ 
+ _wait(5000);
+ 
+ 
+ $inputObject = {};
+ $inputObject.item = $rm1;
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $rm1;//"RMS22";//ID
+ OpenEformInstance($inputObject); 
+ 
+ _wait(3000);
+ 
+ var $olduname = _getText(_textbox("SearchCriteria_DN_User"));//_getValue(_textbox("de-icon-inlineSpanWithRightPaddedImage "));
+ 
+ $t.end();
+
+//SELECT SEGMENT DETAILS//
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment1; // Details
+ SelectSegment($inputObject);
+ 
+ var $t = _testcase("TC_7.3", "Changing the user name of RSM assignment with invalid user"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_SearchCriteria_DN_User = $data.newUserName;//nit@infosys.com 
+ $inputObject.msgAlert = "Please enter valid User.";
+ ModifyEformInstance($inputObject);
+ 
+ //_assertEqual("Value must be set for the following mandatory field(s):\n• User\n", _lastAlert());
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7.4", "Changing the user name of RSM assignment with valid user"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_SearchCriteria_DN_User = $data.newUserName1;//Navdeep_Ghotra to pari_r
+ ModifyEformInstance($inputObject);
+ 
+ //_assertEqual("Old Risk Manager will be replaced and inbox items will be moved to the inbox of new Risk Manager" , _lastAlert())
+ 
+ $t.end(); 
+ 
+ var $newuname = _getText(_textbox("SearchCriteria_DN_User")); 
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_7.4.1", "Verifying the changed user name of RSM assignment"); 
+ $t.start();
+ 
+ if ($olduname != $newuname)
+ {
+ 
+   _log("User Name has been changed."); 
+ 
+ }
+ 
+ else
+ {
+   _log("User Name has not been changed."); 
+ 
+ }
+ 
+ $t.end();
+ 
+ clickReturn();
+ 
+ 
+ var $t = _testcase("TC_7.5", "Making the status as Inactive & verifying of RSM Assignment"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $rm1;
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $rm1;//"RMS22";//ID
+ OpenEformInstance($inputObject); 
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.rdg_InActive = $data.InActive;//
+ ModifyEformInstance($inputObject);
+ 
+ //InfyFTChangeStatusInactive(); //changed user name subhashini_k03 to siddharth_kale
+ clickReturn();
+ $t.end(); 
+ 
+
+ 
+ var $t = _testcase("TC_12.1 & 12.2", "Verifying after un-assignment also user can invite RSM with active status"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.Unit3;//
+ $inputObject.edt_SearchCriteria_DN_User = $data.SearchUser4;//Sunitha.Muthukumar
+ CreateInstance($inputObject);
+ 
+ var $rm3 = _getText(_span("CM_ItemCode"));
+ 
+ clickReturn(); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Making the status as Inactive to repeat execution"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $rm3;
+ InfyFTverifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $rm3;//"RMS22";//ID
+ OpenEformInstance($inputObject);
+ 
+ //InfyFTChangeStatusInactive();
+ $inputObject = {};
+ $inputObject.rdg_InActive = $data.InActive;//
+ ModifyEformInstance($inputObject); 
+ 
+ _wait(500);
+ 
+ clickReturn();
+ clearFilterSettings();
+ 
+ $inputObject = {};
+ $inputObject.item = $rm2;
+ InfyFTverifyInstanceInListing($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $rm2;//"RMS22";//ID
+ OpenEformInstance($inputObject);
+ 
+ _wait(3000);
+ 
+ //InfyFTChangeStatusInactive();
+ $inputObject = {};
+ $inputObject.rdg_InActive = $data.InActive;//
+ ModifyEformInstance($inputObject); 
+ 
+ //clickReturn();
+
+ $t.end(); 

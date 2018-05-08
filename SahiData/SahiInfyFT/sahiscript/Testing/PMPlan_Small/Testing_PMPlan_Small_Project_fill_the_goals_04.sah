@@ -1,0 +1,1148 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+
+ $data1 = readDataFromCSV("Testing_PMPlan_Small_Project_fill_the_goals_04","Testing/PMPlan_Small"); 
+ 
+ var $t = _testcase("Script 29", "Goals");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_Project_Tailoring_10.sah");
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_9_62_63_64_66", "Goals");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.link = $data1.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName2;
+ $inputObject.rowNo = $data1.Goals;
+ $inputObject.colNo = $data1.Reasonlbl;
+ $inputObject.fieldValues = $data1.reason9;//Reason 9
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;//_image("nodeIcon10")
+ infyFTClickForPmPlan($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data1.link39;//  _link("Goals")
+ InfyFTclick($inputObject);
+ 
+ //---------------Verification of Metrics Name----------------//
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowNos;//2|3|4|5
+ $inputObject.colNo = $data1.colNos1;//
+ $inputObject.fieldValues = $data1.fieldManualTesting;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowNos2_1;//2|3|4
+ $inputObject.colNo = $data1.colNo20;//1_lbl
+ $inputObject.fieldValues = "Testing Effectiveness|Productivity - test script preparation|Schedule Adherence";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowNos2;//1|2|3
+ $inputObject.colNo = $data1.colNos1;//1_lbl
+ $inputObject.fieldValues = "Schedule Adherence|Test Case Scripting Quality|Productivity - test case scripting";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowNos1_1;//2|3
+ $inputObject.colNo = $data1.colNo20;//1_lbl
+ $inputObject.fieldValues = "Schedule Adherence|Productivity - test script generated or completed";
+ verifySwiftFormData($inputObject); 
+ */
+ //------------End of Verification--------//
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName3;
+ $inputObject.rowNo = $data1.rowName1;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNo2;//1
+ $inputObject.colNo = $data1.colLabel;//select leading metrics_lbl
+ $inputObject.fieldValues = $data1.fieldValues20;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;//1
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName3;
+ $inputObject.rowNo = $data1.rowName2;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNos0;//1|2|3|4|5
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = "Effort savings through accelerators|ARC|Productivity – Test Case Execution|Effort deviation|Productivity – Test Case Preparation";//$data.fieldValues20_1;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowARC;//
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowARC;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName3;
+ $inputObject.rowNo = $data1.rowOverProdTest;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowARC;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName3;
+ $inputObject.rowNo = $data1.rowName1_2;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowTestCovPerc;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName3;
+ $inputObject.rowNo = $data1.rowName3;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNos1;//1|2
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20_2;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowTest;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowTest;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ _wait(5000);
+ 
+ //---------------Automated Testing Goals----------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName5;
+ $inputObject.rowNo = $data1.rowName4;
+ $inputObject.colNo = $data1.colName1_1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNos2_2;//1|2|3
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20_3;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowsavings;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowsavings;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName5;
+ $inputObject.rowNo = $data1.rowName5;
+ $inputObject.colNo = $data1.colName1_1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNo3;//1
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20_4;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowDefect;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowDefect;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName5;
+ $inputObject.rowNo = $data1.rowName6;
+ $inputObject.colNo = $data1.colName1_1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNo3;//1
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ //----------Test Automation Goals------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName6;
+ $inputObject.rowNo = $data1.rowName7;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNo3;//1
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20_5;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowDIR;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowDIR;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ InfyFTReturn();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName6;
+ $inputObject.rowNo = $data1.rowName8;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNo3;//1
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName6;
+ $inputObject.rowNo = $data1.rowName9;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNos2_2;//1|2|3
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues ="Effort savings through accelerators|Effort deviation|ARC";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+  
+ //---------------End----------------
+ 
+ //-----------Performance Testing Goal----------------//
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName9;
+ $inputObject.rowNo = $data1.rowName10;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNos2_2;//1|2|3
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20_7;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowRework;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowRework;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ InfyFTReturn();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName9;
+ $inputObject.rowNo = $data1.rowName8;
+ $inputObject.colNo = $data1.colName1;
+ $inputObject.fieldValues = $data1.fieldValues21;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.LeadMet;// _InfyFTclick(_link("Leading Metrics"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;
+ $inputObject.rowNo = $data1.rowNo3;//1
+ $inputObject.colNo = $data1.colLabel;//1_lbl
+ $inputObject.fieldValues = $data1.fieldValues20;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading1;
+ $inputObject.fieldValues = $data1.fieldValues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Choose atleast one Leading Metric";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableName4;//Applicable Leading Metrics
+ $inputObject.rowNo = $data1.rowEffort;
+ $inputObject.colNo = $data1.colLeading;
+ $inputObject.fieldValues = $data1.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ InfyFTReturn();
+ 
+ //-----------End-----------------
+ 
+ //---------------Manual Testing Goals-------------------
+ 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName2;//1
+ $inputObject.colNo = $data1.colName2_1;//3_edt
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName2;//1
+ $inputObject.colNo = $data1.colName2_2;//4_edt
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName2;//1
+ $inputObject.colNo = $data1.colName2_3;//6_lst
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowOverProdTest;//1
+ $inputObject.colNo = $data1.colName2_1;//3_edt
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowOverProdTest;//1
+ $inputObject.colNo = $data1.colName2_2;//4_edt
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowOverProdTest;//1
+ $inputObject.colNo = $data1.colName2_3;//6_lst
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_2;//2
+ $inputObject.colNo = $data1.colName2_1;
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_2;//2
+ $inputObject.colNo = $data1.colName2_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_2;//2
+ $inputObject.colNo = $data1.colName2_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_3;//3
+ $inputObject.colNo = $data1.colName2_1;
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_3;//3
+ $inputObject.colNo = $data1.colName2_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_3;//3
+ $inputObject.colNo = $data1.colName2_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;//4
+ $inputObject.colNo = $data1.colName2_1;
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;//4
+ $inputObject.colNo = $data1.colName2_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;//4
+ $inputObject.colNo = $data1.colName2_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject); 
+ 
+ //---------------Automated Testing Goals--------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName2_1;//2
+ $inputObject.colNo = $data1.colName3_1;//4_edt
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName2_1;//2
+ $inputObject.colNo = $data1.colName3_2;//5_edt
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName2_1;//2
+ $inputObject.colNo = $data1.colName3_3;//7_lst
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName1_3;//3
+ $inputObject.colNo = $data1.colName3_1;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName1_3;
+ $inputObject.colNo = $data1.colName3_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName1_3;
+ $inputObject.colNo = $data1.colName3_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;
+ $inputObject.colNo = $data1.colName3_1;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;
+ $inputObject.colNo = $data1.colName3_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;
+ $inputObject.colNo = $data1.colName3_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ //------------Test Automation Goals----------------
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName3_1;//1
+ $inputObject.colNo = $data1.colName4_1;//3_edt
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName3_1;//1
+ $inputObject.colNo = $data1.colName4_2;//4_edt
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName3_1;//1
+ $inputObject.colNo = $data1.colName4_3;//6_lst
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName1_4;//2
+ $inputObject.colNo = $data1.colName4_1;
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName1_4;//2
+ $inputObject.colNo = $data1.colName4_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName1_4;//2
+ $inputObject.colNo = $data1.colName4_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName3_2;//3
+ $inputObject.colNo = $data1.colName4_1;
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName3_2;//3
+ $inputObject.colNo = $data1.colName4_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals
+ $inputObject.rowNo = $data1.rowName3_2;//3
+ $inputObject.colNo = $data1.colName4_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject); 
+ 
+ //---------Performance Testing Goals------------//
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowName4_1;//2
+ $inputObject.colNo = $data1.colName5_1;//4_edt
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowName4_1;//2
+ $inputObject.colNo = $data1.colName5_2;//5_edt
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowName4_1;//2
+ $inputObject.colNo = $data1.colName5_3;//7_lst
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;//3
+ $inputObject.colNo = $data1.colName5_1;
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;//3
+ $inputObject.colNo = $data1.colName5_2;
+ $inputObject.fieldValues = $data1.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals
+ $inputObject.rowNo = $data1.rowName1_4;//3
+ $inputObject.colNo = $data1.colName5_3;
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject); 
+ 
+ //----------Project Specific Goals------------//
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName8;//Project Specific Goals
+ $inputObject.rowNo = $data1.rowName5_1;//1
+ $inputObject.colNo = $data1.colName6_1;//4_edt
+ $inputObject.fieldValues = $data1.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName8;//Project Specific Goals
+ $inputObject.rowNo = $data1.rowName5_1;//1
+ $inputObject.colNo = $data1.colName6_2;//5_lst
+ $inputObject.fieldValues = $data1.fieldValues7;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName8;//Project Specific Goals
+ $inputObject.rowNo = $data1.rowName5_1;//1
+ $inputObject.colNo = $data1.colName6_4;//7_txt
+ $inputObject.fieldValues = $data1.fieldValuesTXT;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data1.tableName2;
+ $inputObject.rowNo = $data1.Goals;
+ $inputObject.colNo = $data1.Reasonlbl;
+ $inputObject.fieldValues = $data1.goalsSummary;//reason9_2
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;//  _image("nodeIcon10")
+ infyFTClickForPmPlan($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data1.link39;//  _link("Goals")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName3;//Manual Testing Goals
+ $inputObject.rowNo = $data1.rowNames1;//1|2|3|4
+ $inputObject.colNo = $data1.colName2_4;//7_edt
+ $inputObject.fieldValues = $data1.fieldValues11_1;//
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName5;//Automated Testing Goals.
+ $inputObject.rowNo = $data1.rowNames2;//2|3|4
+ $inputObject.colNo = $data1.colName3_4;//8_edt
+ $inputObject.fieldValues = $data1.fieldValues11_2;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName6;//Test Automation Goals.
+ $inputObject.rowNo = $data1.rowNames3;//1|2|3
+ $inputObject.colNo = $data1.colName4_4;//
+ $inputObject.fieldValues = $data1.fieldValues11_2;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName9;//Performance Testing Goals.
+ $inputObject.rowNo = $data1.rowNames4;//2|3
+ $inputObject.colNo = $data1.colName5_4;//8_edt
+ $inputObject.fieldValues = $data1.fieldValues11_3;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName8;//Project Specific Goals.
+ $inputObject.rowNo = $data1.rowNames5;//1
+ $inputObject.colNo = $data1.colName6_3;//6_edt
+ $inputObject.fieldValues = $data1.fieldValues11;
+ setSwiftFormData($inputObject);  
+  
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data1.tableName2;
+ $inputObject.rowNo = $data1.Goals;
+ $inputObject.colNo = $data1.Reasonlbl;
+ $inputObject.fieldValues = $data1.reason9_2;//reason9_2
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon10;//  _image("nodeIcon10")
+ infyFTClickForPmPlan($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data1.link39;//  _link("Goals")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data1.tableName19;
+ $inputObject.rowNo = $data1.rowBasis;
+ $inputObject.colNo = $data1.colGoals;
+ $inputObject.fieldValues = $data1.fieldValues15;// basis of goals
+ InfyFTsetSwiftFormDataForGoals($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Strategies;//TC No 66
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data1.Strategies;
+ $inputObject.rowCount = $data1.AddRows;
+ InfyFTaddRowInSwiftFormForStrategies($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data1.Strategies;//Strategies
+ $inputObject.rowNo = $data1.rowNo1;//2
+ $inputObject.colNo = $data1.colNo18;
+ $inputObject.fieldValues = $data1.field1;
+ InfyFTsetSwiftFormDataForGoals($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data1.tableName2;
+ $inputObject.rowNo = $data1.Goals;
+ $inputObject.colNo = $data1.Reasonlbl;
+ $inputObject.fieldValues = $data1.reason9_3;//reason9_3
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+
+ $t.end();
+ 

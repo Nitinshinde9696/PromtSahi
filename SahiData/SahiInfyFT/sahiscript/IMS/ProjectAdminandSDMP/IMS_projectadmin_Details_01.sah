@@ -1,0 +1,242 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "START-Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; // Niklesh_Wankhade
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to Project Tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ /*******************************************************************************************************
+ * setting values at DETAILS segment
+ ********************************************************************************************************/
+ 
+ var $t = _testcase("TC_4", "Field visibility");
+ $t.start();
+ 
+ _wait(6000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Details; //Details Segment
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ID;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Ticket_Data_Source;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Current_Stage_of_the_Project;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Start_of_Steady_State;
+ InfyFTisVisibleN($inputObject);
+ 
+ $t.end();
+ 
+ /************************************************************************************
+ * Checking ID and Name Field and drop down values
+ ************************************************************************************/
+ 
+ var $t = _testcase("TC_5", "ID and Name field are read only fields");
+ $t.start();
+ 
+ var $IDp = _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $IDp; //ID value is auto-populated one
+ $inputObject.cell_Name = $data.cell_id;
+ InfyFTisReadOnly($inputObject);
+ 
+ var $name = _getText(_span("CM_Name"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $name; //NAME value is auto-populated one
+ $inputObject.cell_Name = $data.cell_Name;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", " Checking values for TicketDataSource and CurrentStage fields ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TicketDataSource = $data.DN_TicketDataSource; //checking values 
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.DN_CurrentStageoftheProje;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ /*******************************************************************************************************
+ * Checking Mandatory fields
+ ********************************************************************************************************/
+ 
+ var $t = _testcase("TC_7", "Checking Mandatory fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStageoftheProje;//--None--
+ $inputObject.edt_DN_StartofSteadyState = $data.StartofSteadyState; //--NULL--
+ $inputObject.lst_DN_TicketDataSource = $data.TicketDataSource;//--None--
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Ticket Data Source in Details tab \n• Field Current Stage of the Project in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.lst_DN_TicketDataSource = $data.Ticket;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Current Stage of the Project in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ _wait(8000);
+ 
+ $t.end();
+  
+ /*******************************************************************************************************
+ * setting values for all segments
+ ********************************************************************************************************/ 
+ 
+ var $t = _testcase("TC_8", "Checking Stage");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStage;
+ $inputObject.masgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Start of Steady State in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ _wait(6000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_StartofSteadyState = $startDate;
+ ModifyEformInstance($inputObject);
+ _wait(8000);
+ 
+ $inputObject = {}; //stage is set as STEADY STATE
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStage1;
+ $inputObject.msgAlert = "Error: The current stage is set to Steady State. Start date of Steady State cannot be set in the future. Please change the start date to a past date.";
+ InfyFTModifyEformInstance1($inputObject);
+ _wait(6000);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_9", "Date validation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStage;
+ $inputObject.edt_DN_StartofSteadyState = $data.wrongdate;
+ $inputObject.msgAlert = "Please enter date in the correct format.( dd-MMM-yyyy )"
+ InfyFTModifyEformInstance1($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStage;
+ $inputObject.edt_DN_StartofSteadyState = $data.aprstart;
+ $inputObject.msgAlert = "Error: The current stage is set to Transition. Start date of Steady State cannot be set in the past. Please change the start date to today or a future date.";
+ InfyFTModifyEformInstance1($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_StartofSteadyState = $data.aprend;
+ $inputObject.msgAlert = "Error: Steady Start Date should be less than Project End Date";
+ InfyFTModifyEformInstance1($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStage;
+ $inputObject.edt_DN_StartofSteadyState = $currentDate;
+ ModifyEformInstance($inputObject);
+ _wait(8000);
+ 
+ var $steadydate = _getValue(_textbox("DN_StartofSteadyState"));
+ 
+ $t.end();
+ 
+ /*********************************************************************************************
+ * checking details in Home Profile
+ **********************************************************************************************/
+ 
+ var $t = _testcase("TC_10", "checking Details in Home profile");
+ $t.start();
+ _wait(3000);
+ 
+if(_isVisible(_link("Niklesh_Wankhade")))
+ {
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateToHome; 
+ InfyFTnavigateTo($inputObject);
+ 
+ _assertEqual($data.CurrentStage, _getText(_span(("INFY_CurrentStageoftheProje"), _near(_cell("Current Stage of the Project :")))));
+ _assertEqual($steadydate, _getText(_span("field16")));
+ }
+ else
+ {
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.link = $data.navigateToHome1; 
+ InfyFTclick($inputObject);
+ 
+ _assertEqual($data.CurrentStage, _getText(_span(("INFY_CurrentStageoftheProje"))));
+ _assertEqual($steadydate, _getText(_span("field16")));
+ }
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ 

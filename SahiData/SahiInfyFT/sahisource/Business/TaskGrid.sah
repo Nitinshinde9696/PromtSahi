@@ -1,0 +1,819 @@
+_include("../../../SahiDigite/sahisource/Business/TaskGrid.sah");
+
+
+/**
+ @Function Number:4
+ @author: Kunal Gajbhiye
+ @example: InfyFTcheckInProjectFromGrid ({"checkinDate":"", "error":"start date cannot be earlier than project start date"})
+ @description: currently $inputObject is empty. Functionality expected to pass on date. This api clicks on checkin icon in the grid and verifies grid has disappeared.
+ @param: checkin-date
+ @return: None
+ **/
+
+function InfyFTcheckInProjectFromGrid($inputObject)
+{
+	_log("InfyFTcheckInProjectFromGrid Started","success");
+	try 
+	{
+		InfyFTto_checkInProjectFromGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcheckInProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author: Kunal Gajbhiye
+ @example:to_checkInProjectFromGrid
+ @description: private api to be called from checkInProjectFromGrid. clicks on checkin icon present in the grid. 
+ @param: checkin-date
+ @return: None
+ **/
+
+function  InfyFTto_checkInProjectFromGrid($inputObject)
+{
+	_log(" InfyFTto_checkInProjectFromGrid Started","success");
+	try 
+	{
+		_click(_span("Save and Checkin")); //After DB refresh this button executes the below scenario
+		
+		_wait(2000);//NitinModified
+		if(_isVisible(_div("Plan is not baselined. Do you want to Baseline the plan on checkin?")))//if PM Plan not baselined
+		{
+			_click(_span("Yes"));
+		}
+		
+		if ($inputObject !== undefined && $inputObject.error !== undefined)
+			_assertExists(_span($inputObject.error, _in(_div("/messagebox/"))));
+		else
+			_assertExists(_span("Checkin Successful"));
+		
+		_click(_span("OK"));
+		
+		if ($inputObject !== undefined && $inputObject.LinkedTask !==undefined && ($inputObject.LinkedTask.toString().toUpperCase() == "TRUE"))
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" InfyFTto_checkInProjectFromGrid Completed","success");
+}
+
+
+
+/**
+ @Function Number:
+ @author: Kunal Gajbhiye
+ @example:InfyFTcheckOutProjectInGrid({"LinkedTask":true}) 
+ @description: Checks out project from task eform listing by clicking checkout icon or from linked task section by passing parameter LinkedTask=true
+ @param: None
+ @return: None
+ **/
+
+function InfyFTcheckOutProjectInGrid($inputObject)
+{
+	_log("InfyFTcheckOutProjectInGrid Started","success");
+	try 
+	{
+	    if(_isVisible(_span("Undo")))
+		{
+		    _wait(5000);
+			_click(_span("Undo"));
+			_wait(5000);
+     		to_checkOutProjectInGrid($inputObject);
+			verifycheckOutProjectInGrid($inputObject);
+		}
+        else
+		{
+			to_checkOutProjectInGrid($inputObject);
+			verifycheckOutProjectInGrid($inputObject);
+		}  			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcheckOutProjectInGrid Completed","success");
+}
+
+
+
+
+/**
+ @Function Number:39
+ @author: SIDDHARTH
+ @example: verifyTaskGridData ({"ID":"TSK1", 
+ @description: This api verifies task parameters in the task grid. It basically asserts existence of input parameters on grid for a given task.
+ @param: ID and Name are mandatory, rest all parameters are optional with name as seen in column headers
+ @return: None
+ **/
+
+function verifyTaskGridData($inputObject)
+{
+	_log("verifyTaskGridData Started","success");
+	try 
+	{
+	
+	if ($inputObject.TableName == "Name")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Name")))));  
+            }
+			
+	if ($inputObject.TableName == "Planned Start")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Planned Start")))));  
+            }		
+			
+	if ($inputObject.TableName == "Planned Finish")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Planned Finish")))));  
+            }		
+		
+	if ($inputObject.TableName == "Resources:")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Resources:")))));  
+            }	
+	if ($inputObject.TableName == "Planned Duration")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Planned Duration")))));  
+            }
+			
+	if ($inputObject.TableName == "Predecessor")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Predecessor")))));  
+            }		
+
+	if ($inputObject.TableName == "Activity Code")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Activity Code")))));  
+            }				
+
+	if ($inputObject.TableName == "Percent Work Complete")
+			{
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Percent Work Complete")))));  
+            }			
+
+    if ($inputObject.TableName == "TS Actual Work")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("TS Actual Work")))));  
+			
+            }	
+    if ($inputObject.TableName == "TS First Entry Date")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("TS First Entry Date")))));  
+			
+            }		
+    if ($inputObject.TableName == "TS Last Entry Date")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("TS Last Entry Date")))));  
+			
+            }	
+    if ($inputObject.TableName == "TS Remaining Work")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("TS Remaining Work")))));  
+			
+            }	
+    if ($inputObject.TableName == "Remaining Effort")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Remaining Effort")))));  
+			
+            }
+    if ($inputObject.TableName == "Actual Effort")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Actual Effort")))));  
+			
+            }	
+    if ($inputObject.TableName == "Actual Start")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Actual Start")))));  
+			
+            }
+    if ($inputObject.TableName == "Actual Finish")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Actual Finish")))));  
+			
+            }				
+    if ($inputObject.TableName == "Module Code")
+			{
+			
+            _assertExists(_div($inputObject.value, _near(_div($inputObject.baseID), _under(_span("Module Code")))));  
+			
+            }		
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskGridData Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author: Nitin Shinde
+ @example: to_addTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: This api is the main implementation of addTaskInGrid and it adds a new task in the task grid by invoking right click menu.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ **/
+
+function  verifyActivityCodeInTaskInGrid($inputObject)
+{
+	_log("verifyActivityCodeInTaskInGrid Started","success");
+	try 
+	{   
+		 _click(_span("ganttViewToggleButton-btnIconEl",_in(_span("ganttViewToggleButton-btnEl"))));
+		$inputObject.menu = "Add";
+		__invokeQuickMenu($inputObject);
+		
+		var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+
+		delete $inputObject.menu;
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		if ($inputObject.LinkedTask) delete $inputObject.LinkedTask;
+		
+		_wait(2000);
+
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+                
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div("/x-grid-cell-inner.*/",_near(_div($baseTaskId, _in(_div(/treeview/)))), _under(_div($key1, _in(_div(/headercontainer/))),5));
+			_click(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible($baseTask));
+			_doubleClick(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible(_textbox(0, _under(_div($key1)))));
+				
+			if ($arrKey[0] === "edt")
+			{
+				_setValue(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)), $inputValue);
+			}
+			else if ($arrKey[0] === "lst")
+			{                
+			  _click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+
+				_click(_div(1, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+					
+					$Name =  $inputValue.split(";");
+				for (var $i = 0; $i < $Name.length; $i++)
+				{
+				 _assertVisible( _listItem($Name[$i]));
+				}
+				_click(_listItem($Name[0]));  
+			}  
+			_click(_div("/TSK0/", _in(_div("/treeview/"),5)));
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		
+		}	
+		_click(_div("Name"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyActivityCodeInTaskInGrid Completed","success");
+}
+
+
+/**
+ @Function Number:15
+ @author: Ashwini Lalit
+ @example: ModifyTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: adds a new task in the task grid by clicking the 'Add' in the right click menu. Right clicks over base task.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ **/
+
+function ModifyTaskInGrid($inputObject)
+{
+	_log("ModifyTaskInGrid Started","success");
+	try 
+	{
+		to_ModifyTaskInGrid($inputObject);
+		//verifyTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ModifyTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author: Ashwini Lalit
+ @example: to_addTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: This api is the main implementation of addTaskInGrid and it adds a new task in the task grid by invoking right click menu.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ **/
+
+function  to_ModifyTaskInGrid($inputObject)
+{
+	_log("to_ModifyTaskInGrid Started","success");
+	try 
+	{
+
+
+	         
+		 _click(_span("ganttViewToggleButton-btnIconEl",_in(_span("ganttViewToggleButton-btnEl"))));
+
+
+		//$inputObject.menu = "Add";
+		//__invokeQuickMenu($inputObject);
+		
+		var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+
+		delete $inputObject.menu;
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		if ($inputObject.LinkedTask) delete $inputObject.LinkedTask;
+		
+		_wait(2000);
+
+		
+
+
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+                
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div("/x-grid-cell-inner.*/",_near(_div($baseTaskId, _in(_div(/treeview/)))), _under(_div($key1, _in(_div(/headercontainer/))),5));
+			_click(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible($baseTask));
+			_doubleClick(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible(_textbox(0, _under(_div($key1)))));
+				
+			if ($arrKey[0] === "edt")
+			{
+				_setValue(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)), $inputValue);
+			}
+			else if ($arrKey[0] === "lst")
+			{
+
+			if($inputValue==="High"||$inputValue==="Critical"||$inputValue==="Low"||$inputValue==="Medium")
+			{
+				_click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+
+				_click(_div(0, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+                                 
+				  _click(_listItem($inputValue));
+	                  }
+			  else
+			  {
+                              
+			  _click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+
+				_click(_div(1, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+                                 
+				  _click(_listItem($inputValue));
+
+			  }
+
+
+				  
+			}
+
+                        _click(_div("/TSK0/", _in(_div("/treeview/"),5)));
+
+			
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		}
+			
+		_click(_div("Name"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_ModifyTaskInGrid Completed","success");
+}
+
+
+/**
+ @Function Number:15
+ @author: Kunal Gajbhiye
+ @example: InfyFTaddTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: adds a new task in the task grid by clicking the 'Add' in the right click menu. Right clicks over base task.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ 
+ **/
+
+function InfyFTaddTaskInGrid($inputObject)
+{
+	_log("InfyFTaddTaskInGrid Started","success");
+	try 
+	{
+	 if($inputObject.popup_name)
+	  {
+		_selectWindow($inputObject.popup_name);
+		InfyFTto_addTaskInGrid($inputObject);
+		InfyFTverifyTaskInGridForPopup($inputObject);
+	  }
+	  else
+	  {
+	    InfyFTto_addTaskInGrid($inputObject);
+		verifyTaskInGrid($inputObject);
+	  }	
+	  
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTaddTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author: Kunal Gajbhiye
+ @example: InfyFTto_addTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: This api is the main implementation of addTaskInGrid and it adds a new task in the task grid by invoking right click menu.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ @Modified : Commented if($inputValue==="High"||$inputValue==="Critical"||$inputValue==="Low"||$inputValue==="Medium")
+ **/
+
+function  InfyFTto_addTaskInGrid($inputObject)
+{
+	_log("InfyFTto_addTaskInGrid Started","success");
+	try 
+	{
+	  if($inputObject.popup_name)
+	  {
+		_selectWindow($inputObject.popup_name);
+	  }	
+        
+		_click(_span("ganttViewToggleButton-btnIconEl",_in(_span("ganttViewToggleButton-btnEl"))));
+
+
+		$inputObject.menu = "Add";
+		__invokeQuickMenu($inputObject);
+		
+		var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+
+		delete $inputObject.menu;
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		if ($inputObject.LinkedTask) delete $inputObject.LinkedTask;
+		
+		_wait(2000);
+
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+                
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div("/x-grid-cell-inner.*/",_near(_div($baseTaskId, _in(_div(/treeview/)))), _under(_div($key1, _in(_div(/headercontainer/))),5));
+			_click(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible($baseTask));
+			_doubleClick(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible(_textbox(0, _under(_div($key1)))));
+				
+			if ($arrKey[0] === "edt")
+			{
+				_setValue(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)), $inputValue);
+			}
+			else if($arrKey[0] === "lst")
+			{
+
+				_click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+
+				_click(_div(0, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+					 
+				_click(_listItem($inputValue));
+			}				  
+		
+
+            _click(_div("/TSK0/", _in(_div("/treeview/"),5)));
+
+			
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		}
+			
+		_click(_div("Name"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTto_addTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author: Ashwini Lalit
+ @example: to_checkOutProjectInGrid({"LinkedTask":true})
+ @description: private api to be called form checkOutProjectInGrid({"LinkedTask":true})
+ @param: None
+ @return: None
+ **/
+
+function  InfyFTto_checkOutProjectInGridForPopup($inputObject)
+{
+	_log(" to_checkOutProjectInGrid Started","success");
+	try 
+	{
+				_selectWindow($inputObject.popup_name);
+				_wait(5000);
+
+	        if($inputObject && $inputObject.type === "negative")
+            {	
+		    if (_span("Edit").disabled)
+			{
+				_log("according to the access configuration the icon should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "even after the acces configuration is set to no the icon is still enabled","failure";
+			}
+            }
+			_assertExists(_span("Edit"));
+			_set($enabledStatus, _span("Edit").className);
+			$enabledStatus = ($enabledStatus.search("disabled")!=-1)?false:true;
+			_assertEqual(true, $enabledStatus, "CheckOut button should be enabled");
+			_wait(2000,_isVisible(_span("Edit")));
+			_click(_span("Edit"));
+		
+		
+		_wait(1000,_isVisible(_image("x-tree-elbow-end", _in(_parentRow(_div(0, _near(_div("/TSK0/"))))))));
+		
+		if (_isVisible(_image("/x-tree.*-plus/", _parentNode(_parentNode(_div("/TSK0/",_in(_table("/x-grid-table/", _in(_div(/treeview/))))))))))
+			_assertExists(_image("/x-tree.*-plus/", _parentNode(_parentNode(_div("/TSK0/",_in(_table("/x-grid-table/", _in(_div(/treeview/)))))))));
+			
+		//For handling Closed task edit alert(as of now keeping this validation on hold)--Arindam 11/11/2013
+		if (_isVisible(_span("This is a closed task and cannot be edited")))
+		    _click(_button("OK"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_checkOutProjectInGrid Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author: Ashwini Lalit
+ @example: verifycheckOutProjectInGrid($inputObject)
+ @description: public api, called from checkOutProjectInGrid(). It can also be called publicly called from script.
+ @param: None
+ @return: None
+ **/
+
+function InfyFTverifycheckOutProjectInGridForPopup($inputObject)
+{
+	_log("verifycheckOutProjectInGrid Started","success");
+	try 
+	{
+	  _selectWindow($inputObject.popup_name);
+	  _wait(5000);
+	 
+	if($inputObject && $inputObject.type === "negative")
+	{
+	__verifyTaskGridExists({"existence":false});
+	}
+	else
+		__verifyTaskGridExists({"existence":true});
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifycheckOutProjectInGrid Completed","success");
+}
+
+/**
+ @Function Number:39
+ @author: Ashwini Lalit
+ @example: verifyTaskInGrid ({"ID":"TSK1", "Name":"hhas", "Overall Status":"Open", "Planned Finish":"30-Jul-2011", "Planned Start":"20-Jul-2011", "Remaining Effort":"235", "Planned Effort":"256", "WBS Code":"0"})
+ @description: This api verifies task parameters in the task grid. It basically asserts existence of input parameters on grid for a given task.
+ @param: ID and Name are mandatory, rest all parameters are optional with name as seen in column headers
+ @return: None
+ **/
+
+function InfyFTverifyTaskInGridForPopup($inputObject)
+{
+	_log("verifyTaskInGrid Started","success");
+	try 
+	{
+	  if($inputObject.popup_name)
+	  {
+		_selectWindow($inputObject.popup_name);
+	  }	
+		var $firstKey;
+		var $percomp;
+		
+		if ($inputObject.ID)
+
+			{
+				$firstKey = $inputObject.ID;	
+				//verifyTaskInGantt({"ID":$inputObject.ID});
+					
+			}
+		if ($inputObject.Name)
+			{
+				$firstKey = $inputObject.Name;
+				//verifyTaskInGantt({"taskname":$inputObject.Name});
+				delete $inputObject.Name;
+			}
+		if ($inputObject.baseTaskName)
+			{$firstKey = $inputObject.baseTaskName;delete $inputObject.baseTaskName;}
+		if ($inputObject.baseTaskID)
+			{$firstKey = $inputObject.baseTaskID; delete $inputObject.baseTaskID;}
+        if ($inputObject.percentComplete)
+		{
+			$inputValue = $inputObject.percentComplete;
+			_assertEqual(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Percent Work Complete/", _in(_div("/headercontainer/"))),5)).firstChild.firstChild.getAttribute("percentvalue"), $inputValue , "Value is same");
+             delete $inputObject.percentComplete;
+        }
+        if ($inputObject.Priority)
+		{
+			$exptValue = _div(0, _near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Priority/", _in(_div("/headercontainer/"))),5)).parentNode.getAttribute("data-qtip");
+	        _assertEqual($exptValue, $inputObject.Priority , "Value is same");
+            delete $inputObject.Priority;
+        } 
+
+	if($inputObject.Predecessor)
+	{
+	delete $inputObject.Predecessor;
+	}
+
+		for ($key in $inputObject)
+		 {
+			var $inputValue = ""+$inputObject[$key];
+			_assertExists(_div($inputValue,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/"+$key+"/", _in(_div("/headercontainer/"))),5)));
+		 }
+         
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:
+ @author:Arjun.R02
+ @example:dateDiff({"strdate":"08-Jul-2008","endate":"18-Jul-2008"});
+ @description: to find difference between task start date and task end date
+ @param: 
+ @return: 
+ **/
+
+function InfyFTdateDiff($inputObject)
+	 {		
+			var $one_day=86400000;
+		
+  			var $date1_ms =  java.util.Date.parse($inputObject.date1);
+		
+ 		 	var $date2_ms =  java.util.Date.parse($inputObject.date2);
+		
+ 		 // Calculate the difference in milliseconds
+		 	var $difference_ms = parseInt($date2_ms - $date1_ms);
+		// Convert back to days and return
+  		
+            var $difference_dy = Math.round($difference_ms/$one_day) ; 
+			
+			$inputObject.difference = $difference_dy;
+	}
+	
+
+/**
+ @Function Number:
+ @author: Kunal Gajbhiye
+ @example:InfyFTcheckOutProjectInGrid({"LinkedTask":true}) 
+ @description: Checks out project from task eform listing by clicking checkout icon or from linked task section by passing parameter LinkedTask=true
+ @param: None
+ @return: None
+ **/
+
+function InfyFTcheckOutProjectInGridForPopup($inputObject)
+{
+	_log("InfyFTcheckOutProjectInGridForPopup Started","success");
+	try 
+	{
+	    if($inputObject.popup_name)
+	    {
+		  _selectWindow($inputObject.popup_name);
+		  if(_isVisible(_span("Undo")))
+		  {
+		    _wait(5000);
+			_click(_span("Undo"));
+			_wait(5000);
+     		InfyFTto_checkOutProjectInGridForPopup($inputObject);
+			InfyFTverifycheckOutProjectInGridForPopup($inputObject);
+		  }
+		  else
+		  {
+			InfyFTto_checkOutProjectInGridForPopup($inputObject);
+			InfyFTverifycheckOutProjectInGridForPopup($inputObject);
+		  }  		
+	    }
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcheckOutProjectInGridForPopup Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author: Kunal Gajbhiye
+ @example: InfyFTcheckInProjectFromGrid ({"checkinDate":"", "error":"start date cannot be earlier than project start date"})
+ @description: currently $inputObject is empty. Functionality expected to pass on date. This api clicks on checkin icon in the grid and verifies grid has disappeared.
+ @param: checkin-date
+ @return: None
+ **/
+
+function InfyFTcheckInProjectFromGridForPopup($inputObject)
+{
+	_log("InfyFTcheckInProjectFromGridForPopup Started","success");
+	try 
+	{
+		_selectWindow($inputObject.popup_name);
+		
+		InfyFTto_checkInProjectFromGridForPopup($inputObject);
+		
+		_selectWindow();
+	 }
+
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcheckInProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author: Kunal Gajbhiye
+ @example:to_checkInProjectFromGrid
+ @description: private api to be called from checkInProjectFromGrid. clicks on checkin icon present in the grid. 
+ @param: checkin-date
+ @return: None
+ **/
+
+function  InfyFTto_checkInProjectFromGridForPopup($inputObject)
+{
+	_log(" InfyFTto_checkInProjectFromGridForPopup Started","success");
+	try 
+	{
+	   _selectWindow($inputObject.popup_name);
+	  
+		_click(_span("Save and Checkin")); //After DB refresh this button executes the below scenario
+		
+		_wait(2000);//NitinModified
+		if(_isVisible(_div("Plan is not baselined. Do you want to Baseline the plan on checkin?")))//if PM Plan not baselined
+		{
+			_click(_span("Yes"));
+		}
+		
+		if ($inputObject !== undefined && $inputObject.error !== undefined)
+			_assertExists(_span($inputObject.error, _in(_div("/messagebox/"))));
+		else
+			_assertExists(_span("Checkin Successful"));
+		
+		_click(_span("OK"));
+		
+		if ($inputObject !== undefined && $inputObject.LinkedTask !==undefined && ($inputObject.LinkedTask.toString().toUpperCase() == "TRUE"))
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" InfyFTto_checkInProjectFromGridForPopup Completed","success");
+}

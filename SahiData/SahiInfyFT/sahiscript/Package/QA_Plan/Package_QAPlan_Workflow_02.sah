@@ -1,0 +1,204 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+ $gen = readDataFromCSV("Package_QAPlan_Common_00", "Package/QA_Plan");
+ $data = readDataFromCSV("Package_QAPlan_Workflow_02", "Package/QA_Plan");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ _log($currentDate);
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ _log($endDate); 
+ 
+ var $TC = _testcase("InfyFT_sahi15_TC_BRD9_FU2_1_to_11","Creating QA PLan and Checking Mandatory Fields."); 
+ $TC.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ //Date Start.....
+ var $projectStartDate = _getText(_span("STARTDATE"));
+ var $projectEndDate = _getText(_span("ENDDATE"));
+ //Date End..... 
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("Complaince Check","Creating QA PLan and Checking the Overall-status When status is Abandoned."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name7;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity4;
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ CreateInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ var $QAplanID =  _getText(_span("CM_ItemCode"));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.Findings;//Selecting segment Findings
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name17;
+ $inputObject.txt_CM_Description = $data.CM_Description17;
+ $inputObject.lst_DN_Severity = $data.DN_Severity17;
+ $inputObject.lst_DN_Type = $data.DN_Type17;
+ $inputObject.lst_DN_CMMIProcessArea = $data.DN_CMMIProcessArea17;
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $FindID =  $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name2;//Selecting segment Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status13;//Status is Abandoned.
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.findings = "Are you sure you want to abandon this QA Plan instance? All linked findings will be abandoned too.";
+ InfyFTConfirmExpect1($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ clearFilterSettings($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $QAplanID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.Findings;//Selecting segment Findings
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ clearFilterSettings($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $FindID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.winprefix;
+ $inputObject.lbl_DN_Status = $data.status13;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(2000);
+ 
+ /*_wait(2000);
+ 
+ _assertEqual("Closed", _getText(_div("Closed")));//Checking the overall status "Closed" 
+ 
+ _wait(2000);
+ */
+ $TC.end();
+
+ var $TC = _testcase("Non-Complaince Check","Creating QA PLan and Checking the Overall-status When status is Abandoned with ActionItem."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name7;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity6;
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ CreateInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ var $QAplanID1 =  _getText(_span("CM_ItemCode"));
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name1;//Selecting segment Action Item
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name7;
+ $inputObject.txt_CM_Description = $data.CM_Description7;
+ $inputObject.edt_CM_DUEDATE = $endDate;
+ $inputObject.lst_DN_Assignee = $gen.LoginID1;
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $ActID =  $inputObject.createdID;
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name2;//Selecting segment Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status13;//Status is Abandoned.
+ InfyFTModifyEformInstance($inputObject);
+  
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.actions = "Are you sure you want to abandon this QA Plan instance? All linked action items will be deferred too.";
+ InfyFTConfirmExpect1($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ clearFilterSettings($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $QAplanID1;
+ InfyFTOpenEformInstanceForLastPage($inputObject);  
+  
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment_name1;//Selecting segment Action Item
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ clearFilterSettings($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ActID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.winprefix;
+ $inputObject.lbl_DN_Status = $data.status14;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(2000);
+ 
+ _assertEqual("Closed", _getText(_div("Closed")));//Checking the overall status "Closed" 
+ 
+ _wait(2000);
+ 
+ $TC.end();

@@ -1,0 +1,156 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("Testing_Tools_Reuse_TP_Ttracking_StnrdPtool_06","Testing/Tools_Reuse");
+
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer //subhashini_k03
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer //subhashini_k03	
+$inputObject.edt_password = $data.Password1;//Allahu@1 //111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+//navigate To PQM // 
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Testing PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//3IPEROPS
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Tool Planning through Manual Testing request form ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5;//Manual Testing
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $GetExcel = _testcase("GetExcel"," Getting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "M_T";
+  infyFTGetValueFromExcel($inputObject);
+  $M_T_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $M_T_Id;
+OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_name6;//Tools Tracking
+ SelectSegment($inputObject);
+
+var $t = _testcase("TC_5", "Available Links in Tools Tracking section ");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link1;//Add from PRIME
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link2;//Add Standard Tools
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link3;//Add Planned Tools
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Opening the Available Standard Tools ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Add Standard Tools
+SelectSegment($inputObject);
+
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = $data.LCStage8;//Acceptance and Installation
+ $inputObject.lst_DN_Technology = $data.Technology8;//Adobe Flash 
+ ModifyEformInstance($inputObject);
+
+_wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_name8;//Search Output
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ $t.end();
+
+
+var $t = _testcase("TC_7", "Verifying the asset in Search Standard Tool");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Add[1]
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName8;//notepad
+ $inputObject.colNo = $data.colName8;//Tool Name_lbl
+ $inputObject.fieldValues = $data.LCStage9;//notepad
+ verifySwiftFormData($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_8", "Selecting the asset in Search Standard Tool");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Add[1] 
+ $inputObject.rowNo = $data.rowNo8;//1
+ $inputObject.colNo = $data.colNo8;//1_chk
+ $inputObject.fieldValues = "true";//$data.LCStage9;/\notepad
+ setSwiftFormData($inputObject);
+ $inputObject = {};  saveSwiftForm($inputObject);
+ 
+ clickReturn();
+
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "Available Links in Tools Tracking section ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name9;//Add Planned Tools
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name8;//Search Output
+SelectSegment($inputObject);
+
+$t.end();
+
+
+

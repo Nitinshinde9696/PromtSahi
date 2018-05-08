@@ -1,0 +1,171 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Agile_Reuse_ReusePlanning_CompleteFlow_01","Agile/ReusePlan");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects_home & select Reuse Planning");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//CSXHYIMS
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Creating a Reuse Plan - Business");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;
+$inputObject.lst_DN_AssetType = $data.AssetType5; // Business
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;
+$inputObject.lst_DN_Unit = $data.Unit5;
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;
+$inputObject.edt_DN_Size = $data.Size5;
+$inputObject.lst_DN_Technology = $data.Technology5;
+$inputObject.lst_DN_SecurityLevel = $data.SecurityLevel5;
+$inputObject.lst_DN_Domain = $data.Domain5;
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;
+CreateInstance($inputObject);
+ 
+$t.end();
+
+var $t = _testcase("TC_4", "checking Visibility of others fields when Asset Type is Business");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.extraFields;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTDeleteEformInstanceN($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Creating a Reuse Plan - Technical");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;
+$inputObject.lst_DN_AssetType = $data.AssetType6; // Technical
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;
+$inputObject.lst_DN_Unit = $data.Unit5;
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;
+$inputObject.edt_DN_Size = $data.Size5;
+$inputObject.lst_DN_Technology = $data.Technology5;
+$inputObject.lst_DN_SecurityLevel = $data.SecurityLevel5;
+$inputObject.lst_DN_Domain = $data.Domain5;
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;
+CreateInstance($inputObject);
+ 
+$t.end();
+
+var $t = _testcase("TC_6", "checking Visibility of others fields when Asset Type is Technical");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.extraFields;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTDeleteEformInstanceN($inputObject);
+
+$t.end(); 
+
+var $t = _testcase("TC_7", "Creating a Reuse Plan - Package");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;
+$inputObject.lst_DN_AssetType = $data.AssetType7; // Package
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;
+$inputObject.lst_DN_Unit = $data.Unit5;
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;
+$inputObject.edt_DN_Size = $data.Size5;
+$inputObject.lst_DN_Technology = $data.Technology5;
+$inputObject.lst_DN_SecurityLevel = $data.SecurityLevel5;
+$inputObject.lst_DN_Domain = $data.Domain5;
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;
+CreateInstance($inputObject);
+
+_wait(1000);
+InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID = $inputObject.eformID;
+ 
+ var $name1 = _getText(_span("CM_Name"));
+ 
+$t.end();
+
+var $t = _testcase("TC_8", "checking Visibility of others fields when Asset Type is Package");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.otherFields;
+InfyFTisVisible($inputObject);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;
+$inputObject.lst_DN_AssetType = $data.AssetType7; // Package
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;
+$inputObject.lst_DN_Unit = $data.Unit5;
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;
+$inputObject.edt_DN_Size = $data.Size5;
+$inputObject.lst_DN_Technology = $data.Technology5;
+$inputObject.lst_DN_SecurityLevel = $data.SecurityLevel5;
+$inputObject.lst_DN_Domain = $data.Domain5;
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;
+$inputObject.msgAlert = ""+ $name1 + " already exists with same version number."+"";
+CreateInstance($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $ID;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTDeleteEformInstanceN($inputObject);
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Asset Type in Details tab \n•  Field Asset Version in Details tab \n•  Field License Type in Details tab \n•  Field Unit of Measure in Details tab \n•  Field Estimated Effort Saving (P hrs) in Details tab \n•  Field Size in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+
+

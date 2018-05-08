@@ -1,0 +1,468 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("ProductionScenarios","Production_Performance_Scripts/Sheet2"); 
+ 
+ /*
+ var $t = _testcase("System", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ $t.end();
+ */
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("SDMP", "Open");
+ $t.start();
+ 
+ _mouseOver(_link("Plan"));
+ _click(_link("SDMP"));
+ 
+ var $startTime = new Date().getTime();
+ 
+ _assertExists(_span("Section Wise Summary"));
+ 
+ var $finishTime = new Date().getTime();
+ var $loadTime = $finishTime - $startTime;
+ var $time = parseInt($loadTime);
+ $time = $time/1000;
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ _log("SDMP opens at " + $time + " secs");
+ 
+ var $t = _testcase("SDMP", "Save");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link3;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ _setSelected(_select("selectsingleuser1"), "Vishal_Gera01");
+
+ _wait(1000);
+ 
+ _setSelected(_select("selectsingleuser0"), "Vishnu.A03");
+ _setSelected(_select("selectsingleuser1"), "Zorawar_Saini");
+
+ _click(_button(" Save ")); 
+ var $saveStart = new Date().getTime();
+ 
+ _assertExists(_button("ScrnButtonDis"));
+ var $saveEnd = new Date().getTime();
+ var $saveTime = $saveEnd - $saveStart;
+ var $final = parseInt($saveTime);
+ $final = $final/1000;
+ 
+ $t.end(); 
+
+ _log("SDMP saves at " + $final + " secs");
+  
+ var $t = _testcase("SDMP", "Route");
+ $t.start(); 
+ 
+ _wait(5000);
+ 
+ _click(_button("RouteBtn"));
+ 
+ _wait(1000);
+ 
+ _popup("RouteReject")._setValue(_textarea("Comments"), "Ok");
+ _popup("RouteReject")._click(_submit(" OK "));
+ var $clickRoute = new Date().getTime();
+ _wait(1000);
+ 
+ _assertExists(_cell("Members"));
+ var $clickRoute1 = new Date().getTime();
+ var $route = $clickRoute1 - $clickRoute;
+ var $routeTiming = parseInt($route);
+     $routeTiming = $routeTiming/1000;
+	 
+  _click(_button("Recall"));
+ _wait(5000);
+ 
+ $t.end();  
+ 
+ _log("SDMP Routes in " + $routeTiming + " secs");
+ 
+ var $t = _testcase("Risk", "Open");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ _click(_div("RSK3"));
+ 
+ var $clickTime = new Date().getTime();
+ 
+ _assertExists(_cell("Risk Description * :"));
+ 
+ var $openTime = new Date().getTime();
+ var $totalTime = $openTime - $clickTime;
+ var $time = parseInt($totalTime);
+     $time = $time/1000;
+ 
+ $t.end();
+ 
+ _log("RISK opens at " + $time + " secs");
+ 
+ var $t = _testcase("Risk", "Save");
+ $t.start(); 
+ 
+ _setValue(_textarea("CM_Description"), "Test");
+ _click(_button("SaveBtn"));
+ 
+ var $saveStart = new Date().getTime();
+ 
+ _assertExists(_button("ScrnButtonDis"));
+ 
+ var $saveFinish = new Date().getTime();
+ var $saveTime = $saveFinish - $saveStart;
+ var $risk = parseInt($saveTime);
+     $risk = $risk/1000;
+	 
+ $t.end();
+ 
+ _log("RISK gets saves at " + $risk + " secs");
+ 
+ var $t = _testcase("ZDP", "Open");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+ 
+ _click(_div("ZDP29"));
+ 
+ var $zdpClick = new Date().getTime();
+ 
+ _assertExists(_cell("Submit ZD to DM for :"));
+ 
+ var $zdpOpen = new Date().getTime();
+ 
+ var $Total = $zdpOpen - $zdpClick;
+ var $zdp = parseInt($Total);
+     $zdp = $zdp/1000;
+	 
+ $t.end();
+ 
+ _log("ZDP opens at " + $zdp + " secs"); 
+ 
+ var $t = _testcase("ZDP", "Save");
+ $t.start();  
+ 
+ _setSelected(_select("DN_SubmitZDtoDMfor"), "--None--");
+ _setSelected(_select("DN_SubmitZDtoDMfor"), "Plan Approval");
+ _click(_button("SaveBtn"));
+ var $zdpSave1 = new Date().getTime();
+ 
+ _assertExists(_button("ScrnButtonDis"));
+ 
+ var $zdpSave2 = new Date().getTime();
+ var $saveTime = $zdpSave2 - $zdpSave1;
+ var $zdpSave = parseInt($saveTime);
+     $zdpSave = $zdpSave/1000;
+	 
+_wait(5000); 
+	 
+ $t.end();
+ 
+  
+_log("ZDP gets saved at " + $zdpSave + " secs");
+ 
+ ///////////////Maintenance Project\\\\\\\\\\\\\\\
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.enhancement;
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.enhInst;
+ OpenEformInstance($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentReviews;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Review", "Open");
+ $t.start();
+ 
+ _click(_div("REV1"));
+ 
+ var $revOpen1 = new Date().getTime();
+ 
+ _popup("openLinkedItem")._assertExists(_cell("Review Mode :"));
+ 
+ var $revOpen2 = new Date().getTime();
+ var $revTime = $revOpen2 - $revOpen1;
+ var $review = parseInt($revTime);
+     $review = $review/1000;
+	 
+ $t.end();
+ 
+ _log("Review Eform opens at " + $review + " secs"); 
+ 
+ var $t = _testcase("Review", "Save");
+ $t.start();
+ 
+ _popup("openLinkedItem")._setValue(_textarea("DN_ArtifactName"), "test");
+ 
+ _wait(1000);
+ 
+ _popup("openLinkedItem")._click(_button("SaveBtn"));
+ 
+ var $saveStart1 = new Date().getTime();
+ 
+ _popup("openLinkedItem")._assertExists(_button("ScrnButtonDis"));
+ 
+ var $saveStart2 = new Date().getTime();
+ var $saveTime = $saveStart2 - $saveStart1;
+ var $totalSave = parseInt($saveTime);
+     $totalSave = $totalSave/1000;
+	 
+ $t.end();
+
+ _log("Review Eform gets saved at " + $totalSave + " secs");
+ 
+ var $t = _testcase("Defect", "Open");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segmentDefects;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ _popup("openLinkedItem")._click(_div("DEF20"));
+ 
+ var $defectOpen1 = new Date().getTime();
+ 
+ _popup("openLinkedItem__1")._assertExists(_cell("Defect Type ^ :"));
+ 
+ var $defectOpen2 = new Date().getTime();
+ var $defectTotal = $defectOpen2 - $defectOpen1;
+ var $defect = parseInt($defectTotal);
+     $defect = $defect/1000;
+	 
+ $t.end(); 
+ 
+ _log("Defect Eform opens at " + $defect + " secs");
+ 
+ var $t = _testcase("Defect", "Save");
+ $t.start();
+  
+ _popup("openLinkedItem__1")._setSelected(_select("DN_Severity"), "Cosmetic");
+ _popup("openLinkedItem__1")._click(_button("SaveBtn"));
+  
+ var $defSave1 = new Date().getTime();
+  
+ _popup("openLinkedItem__1")._assertExists(_button("ScrnButtonDis"));
+  
+ var $defSave2 = new Date().getTime();
+ var $defSaveTime = $defSave2 - $defSave1;
+ var $defTotal = parseInt($defSaveTime);
+      $defTotal =  $defTotal/1000;
+	  
+ _popup("openLinkedItem__1")._click(_button("CancelBtn"));
+ 
+ _wait(3000);
+ 
+ _popup("openLinkedItem")._click(_button("CancelBtn"));
+ 
+ _wait(3000);
+ 
+ $t.end(); 
+ 
+ _log("Defect Eform gets saved at " + $defTotal + " secs"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.toolsPlanning;
+ InfyFTnavigateTo($inputObject); 
+ 
+ _wait(5000);
+   
+ var $t = _testcase("Tools Planning", "Tools Planning Open list");
+ $t.start();
+ 
+ _click(_div("TOPL2"));
+ 
+ var $toolsOpen1 = new Date().getTime();
+ 
+ _wait(50000, _isVisible(_cell("Microsoft VSTS")));
+ 
+ var $toolsOpen2 = new Date().getTime();
+ var $toolsTime = $toolsOpen2 - $toolsOpen1;
+ var $tools = parseInt($toolsTime);
+     $tools = $tools/1000;
+	 
+ _wait(10000);
+ 
+ $t.end();
+ 
+ _log("Tools planning Eform opens at " + $tools + " secs");	 
+ 
+ if(_isVisible(_span("Microsoft VSTS")))
+ {
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data.tablePlannedTools;
+ $inputObject.rowNo = $data.rowXML;
+ $inputObject.colNo = $data.colDel;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ setSwiftFormData($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ }
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Tools Planning", "Tools planning > Add standard tools > Search output Open");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkAddStandard;
+ InfyFTclick($inputObject);
+ 
+ _wait(50000, _isVisible(_cell("LC Stage * :")));
+ 
+ _setSelected(_select("DN_LCStage"), "Coding");
+ 
+ _wait(5000);
+ 
+ _setSelected(_select("DN_Technology"), "Microsoft .Net");
+ _click(_button("SaveBtn"));
+ 
+ _wait(5000);
+ 
+ _click(_link("Search Output"));
+ 
+ var $searchOut1 = new Date().getTime();
+ 
+ _assertExists(_strong("Note : Select the tools and click on Save to add the tools to Tools Plan."));
+ 
+ var $searchOut2 = new Date().getTime();
+ var $searchTotal = $searchOut2 - $searchOut1;
+ var $totalSearchTime = parseInt($searchTotal);
+     $totalSearchTime = $totalSearchTime/1000;
+	 
+ _wait(5000);
+	 
+ $t.end();
+ 
+ _log("Search output screen appears at " + $totalSearchTime + " secs"); 
+ 
+ var $t = _testcase("Tools Planning", "Tools Planning > Add standard tools Save");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data.toolTableName;
+ $inputObject.rowNo = $data.rowTwo;
+ $inputObject.colNo = $data.colAdd;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000);
+ 
+ _click(_button("SaveBtn"));
+ 
+ var $saveTime1 = new Date().getTime();
+ 
+ _assertExists(_button("ScrnButtonDis"));
+ 
+ var $saveTime2 = new Date().getTime();
+ var $totalSaveTime = $saveTime2 - $saveTime1;
+ var $toolsSaveTime = parseInt($totalSaveTime);
+     $toolsSaveTime = $toolsSaveTime/1000;
+	 
+ InfyFTReturn()
+ 
+ _wait(5000);
+
+ $t.end(); 
+ 
+ _log("Add standard tools page gets saved at " + $toolsSaveTime + " secs"); 
+ 
+ var $t = _testcase("Reuse Planning", "Reuse Planning Open");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.reusePlanning;
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ _click(_div("REPL6"));
+ 
+ var $reuseOpen1 = new Date().getTime();
+ 
+ _assertExists(_cell("License Type * :"));
+ 
+ var $reuseOpen2 = new Date().getTime();
+ var $totalReuseTime = $reuseOpen2 - $reuseOpen1;
+ var $ReuseOpenTime = parseInt($totalReuseTime);
+     $ReuseOpenTime = $ReuseOpenTime/1000;
+	 
+ _wait(5000);
+
+ $t.end(); 
+ 
+ _log("Reuse Planning opens at " + $ReuseOpenTime + " secs");
+ 
+ var $t = _testcase("Reuse Planning", "Reuse Planning Save");
+ $t.start();
+ 
+ _setValue(_textarea("DN_AssetDescription"), "Test");
+ 
+ _click(_button("SaveBtn"));
+ 
+ var $reuseSave1 = new Date().getTime();
+ 
+ _assertExists(_button("ScrnButtonDis"));
+ 
+ var $reuseSave2 = new Date().getTime();
+ var $reuseSaveTotal = $reuseSave2 - $reuseSave1;
+ var $reuseSaveTime = parseInt($reuseSaveTotal);
+     $reuseSaveTotal = $reuseSaveTotal/1000;
+	 
+ $t.end();  
+ 
+ _log("Reuse Planning gets Saved at " + $reuseSaveTotal + " secs");	  

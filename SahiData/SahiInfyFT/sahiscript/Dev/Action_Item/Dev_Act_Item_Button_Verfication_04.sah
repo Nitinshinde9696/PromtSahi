@@ -1,0 +1,210 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ $data = readDataFromCSV("Dev_Act_Item_Button_Verfication_04", "Dev/Action_Item"); 
+ 
+ /**********************************************************************************************************
+ * Login with rite userID and password 
+ **********************************************************************************************************/ 
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Nethra
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //TeamIsha
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to action item");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Buttons visibility");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $t.end();
+ 
+ /***************************************************************************************************
+ * checking mandatory fields
+ ****************************************************************************************************/
+ 
+ var $t = _testcase("TC_5", "checking mandatory fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Description in Details tab \n• Field Due Date in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+
+ $t.end();
+  
+ /*****************************************************************************************************
+ * creating Action Item
+ ******************************************************************************************************/
+ 
+ var $t = _testcase("TC_7", "create action item");  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.Desc;
+ $inputObject.edt_CM_DUEDATE = $endDate; 
+ ModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ /*$inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.block;//block
+ InfyFTcheckingButtons($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Source = $data.souce_value; 
+ $inputObject.lst_DN_Assignee = $data.Assignee_value;
+ ModifyEformInstance($inputObject);
+  
+ $t.end();
+ 
+ /***********************************************************
+ * when instance closed
+ ************************************************************/
+ 
+ var $t = _testcase("TC_9", "checking for status and percentage complete field");  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status =  $data.status3_value; //"Completed";deferred changed to completed...
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.reopen;//reopen
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//reopen
+ InfyFTcheckingButtons($inputObject);
+  
+ InfyFTreopenInstance();
+ 
+ /*$inputObject = {};
+ $inputObject.button = $data.block;
+ $inputObject.valueBlock = $data.Desc;
+ InfyFTBlockFunctionality($inputObject);*/
+ 
+/* $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.unblock;//unblock
+ InfyFTcheckingButtons($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ /*$inputObject = {};
+ $inputObject.button = $data.unblock;
+ $inputObject.valueBlock = $data.Desc;
+ InfyFTBlockFunctionality($inputObject);*/
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+                                                  

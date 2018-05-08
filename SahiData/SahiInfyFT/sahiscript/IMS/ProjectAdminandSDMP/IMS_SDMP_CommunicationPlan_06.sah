@@ -1,0 +1,172 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //team isha
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /*****************************************************************
+ * communication plan
+ *****************************************************************/
+  
+ var $t = _testcase("TC_4", "set values for communication plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.commuPlan; //_click(_link("Communication Plan"));
+ SelectSegment($inputObject);
+ 
+ _wait(3500);
+ $inputObject = {};
+ $inputObject.Keyall =$data.keyall;
+ $inputObject.item = $data.Cmp;
+ $inputObject.delete = $data.delete;
+ InfyFTsdmpDelete($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link("Niklesh_Wankhade")))
+ { 
+ _highlight(_span(65));
+ var $commPlan = _getText(_span(66));
+ _assertEqual($commPlan, _getText(_span("At least one communication plan must be added. Please add a communication plan.", _near(_span(64)))));
+ }
+ else
+ {
+ _highlight(_span(93));
+ var $commPlan = _getText(_span(94));
+ _assertEqual($commPlan, _getText(_span("At least one communication plan must be added. Please add a communication plan.", _near(_span(92)))));
+ }
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.commuPlan; //_click(_link("Communication Plan"));
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.key;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.ProjectCharter;//"dgsdhad";
+ $inputObject.msgAlert = "Value must be set for the following mandatory field(s):\n• Communication Type\n• Report/ Meeting Name\n• Frequency\n• Stakeholder Type\n• Report Mode Format\n• Contractual Commitment";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_CommunicationType = $data.DN_CommunicationType;//"dgsdhad";
+ $inputObject.msgAlert = "Value must be set for the following mandatory field(s):\n• Report/ Meeting Name\n• Frequency\n• Stakeholder Type\n• Report Mode Format\n• Contractual Commitment\n";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ReportMeetingName = $data.DN_ReportMeetingName;//"dgsdhad";
+ $inputObject.msgAlert = "Value must be set for the following mandatory field(s):\n• Frequency\n• Stakeholder Type\n• Report Mode Format\n• Contractual Commitment\n";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Frequency = $data.DN_ReportMeetingName;//"dgsdhad";
+ $inputObject.msgAlert = "Value must be set for the following mandatory field(s):\n• Stakeholder Type\n• Report Mode Format\n• Contractual Commitment\n";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_StakeholderType = $data.DN_StakeholderType;//"dgsdhad";
+ $inputObject.msgAlert = "Value must be set for the following mandatory field(s):\n• Report Mode Format\n• Contractual Commitment\n";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ReportModeFormat = $data.DN_ReportMeetingName;//"dgsdhad";
+ $inputObject.msgAlert = "Value must be set for the following mandatory field(s):\n• Contractual Commitment\n";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ContractualCommitment = $data.DN_ContractualCommitment;//"dgsdhad";
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "verify values of communication plan");
+ $t.start();
+ 
+ _selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.lst_DN_CommunicationType = $data.CommunicationType;
+ $inputObject.lst_DN_StakeholderType = $data.StakeholderType;
+ $inputObject.lst_DN_ContractualCommitment = $data.ContractualCommitment;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _popup("newListing")._closeWindow();
+ _selectWindow();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+
+ if(_isVisible(_link("Niklesh_Wankhade")))
+ { 
+ _highlight(_span(65));
+ var $commPlan1 = _getText(_span(66));
+ _assertNotEqual($commPlan1, $commPlan);
+ }
+ else
+ {
+ _highlight(_span(93));
+ var $commPlan1 = _getText(_span(94));
+ _assertNotEqual($commPlan1, $commPlan);
+ }
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 

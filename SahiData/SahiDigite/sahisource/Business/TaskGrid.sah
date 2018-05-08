@@ -1,0 +1,2180 @@
+
+/**
+ @Function Number:1
+ @author: Ashwini Lalit
+ @example:checkOutProjectInGrid({"LinkedTask":true}) 
+ @description: Checks out project from task eform listing by clicking checkout icon or from linked task section by passing parameter LinkedTask=true
+ @param: None
+ @return: None
+ **/
+
+function checkOutProjectInGrid($inputObject)
+{
+	_log("checkOutProjectInGrid Started","success");
+	try 
+	{
+		 to_checkOutProjectInGrid($inputObject);
+		 verifycheckOutProjectInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkOutProjectInGrid Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author: Ashwini Lalit
+ @example: to_checkOutProjectInGrid({"LinkedTask":true})
+ @description: private api to be called form checkOutProjectInGrid({"LinkedTask":true})
+ @param: None
+ @return: None
+ **/
+
+function  to_checkOutProjectInGrid($inputObject)
+{
+	_log(" to_checkOutProjectInGrid Started","success");
+	try 
+	{
+                _wait(5000);
+
+	        if($inputObject && $inputObject.type === "negative")
+                  {	
+		    if (_span("Edit").disabled)
+			{
+				_log("according to the access configuration the icon should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "even after the acces configuration is set to no the icon is still enabled","failure";
+			}
+                        }
+		if ($inputObject !== undefined && ($inputObject.LinkedTask.toString().toUpperCase() == "TRUE")){
+			//Initialize Segment
+			_set($segmentId, _link("Linked Tasks", _in(_list("segmentMenu"))).id);
+			$segmentId = $segmentId.split("_")[1];
+			$iframeObj =  _iframe($segmentId);
+			_wait(2000,_isVisible(_span("Edit")));
+			_click(_span("Edit"));
+			
+			
+		}else{
+			
+			_assertExists(_span("Edit"));
+			_set($enabledStatus, _span("Edit").className);
+			$enabledStatus = ($enabledStatus.search("disabled")!=-1)?false:true;
+			_assertEqual(true, $enabledStatus, "CheckOut button should be enabled");
+			_wait(2000,_isVisible(_span("Edit")));
+			_click(_span("Edit"));
+		}
+		
+		_wait(1000,_isVisible(_image("x-tree-elbow-end", _in(_parentRow(_div(0, _near(_div("/TSK0/"))))))));
+		
+		if (_isVisible(_image("/x-tree.*-plus/", _parentNode(_parentNode(_div("/TSK0/",_in(_table("/x-grid-table/", _in(_div(/treeview/))))))))))
+			_assertExists(_image("/x-tree.*-plus/", _parentNode(_parentNode(_div("/TSK0/",_in(_table("/x-grid-table/", _in(_div(/treeview/)))))))));
+			
+		//For handling Closed task edit alert(as of now keeping this validation on hold)--Arindam 11/11/2013
+		if (_isVisible(_span("This is a closed task and cannot be edited")))
+		    _click(_button("OK"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_checkOutProjectInGrid Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author: Ashwini Lalit
+ @example: verifycheckOutProjectInGrid($inputObject)
+ @description: public api, called from checkOutProjectInGrid(). It can also be called publicly called from script.
+ @param: None
+ @return: None
+ **/
+
+function verifycheckOutProjectInGrid($inputObject)
+{
+	_log("verifycheckOutProjectInGrid Started","success");
+	try 
+	{
+
+	if($inputObject && $inputObject.type === "negative")
+	{
+	__verifyTaskGridExists({"existence":false});
+	}
+	else
+		__verifyTaskGridExists({"existence":true});
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifycheckOutProjectInGrid Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author: Ashwini Lalit
+ @example: checkInProjectFromGrid ({"checkinDate":"", "error":"start date cannot be earlier than project start date"})
+ @description: currently $inputObject is empty. Functionality expected to pass on date. This api clicks on checkin icon in the grid and verifies grid has disappeared.
+ @param: checkin-date
+ @return: None
+ **/
+
+function checkInProjectFromGrid($inputObject)
+{
+	_log("checkInProjectFromGrid Started","success");
+	try 
+	{
+		to_checkInProjectFromGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkInProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author: Ashwini Lalit
+ @example:to_checkInProjectFromGrid
+ @description: private api to be called from checkInProjectFromGrid. clicks on checkin icon present in the grid. 
+ @param: checkin-date
+ @return: None
+ **/
+
+function  to_checkInProjectFromGrid($inputObject)
+{
+	_log(" to_checkInProjectFromGrid Started","success");
+	try 
+	{
+		_click(_span("Save"));
+		
+		if ($inputObject !== undefined && $inputObject.error !== undefined)
+			_assertExists(_span($inputObject.error, _in(_div("/messagebox/"))));
+		else
+			_assertExists(_span("Checkin Successful"));
+		
+		_click(_span("OK"));
+		
+		if ($inputObject !== undefined && $inputObject.LinkedTask !==undefined && ($inputObject.LinkedTask.toString().toUpperCase() == "TRUE"))
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_checkInProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author: Ashwini Lalit
+ @example: verifycheckInProjectFromGrid($inputObject)
+ @description: verifies task grid has disappeared. Verify checkin date pending.
+ @param: $inputObject (not used currently)
+ @return: None
+ **/
+
+function verifycheckInProjectFromGrid($inputObject)
+{
+	_log("verifycheckInProjectFromGrid Started","success");
+	try 
+	{
+		if ($inputObject !== undefined && $inputObject.error !== undefined)
+			__verifyTaskGridExists({"existence":true});
+		else
+		{
+			__verifyTaskGridExists({"existence":false});
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifycheckInProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:10
+ @author: Ashwini Lalit
+ @example:undochekOutProjectFromGrid()
+ @description: click on undocheckout icon in task grid. Verify task grid has disappeared.
+ @param: None
+ @return: None
+ **/
+
+function undochekOutProjectFromGrid()
+{
+	_log("undochekOutProjectFromGrid Started","success");
+	try 
+	{
+		to_undochekOutProjectFromGrid();
+		verifyundochekOutProjectFromGrid();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("undochekOutProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author: Ashwini Lalit
+ @example:to_undochekOutProjectFromGrid
+ @description: private api called from undochekOutProjectFromGrid. It clicks undocheckout icon in task grid.
+ @param: None
+ @return:None 
+ **/
+
+function  to_undochekOutProjectFromGrid()
+{
+	_log(" to_undochekOutProjectFromGrid Started","success");
+	try 
+	{
+		_assertExists(_span("Undo"));
+		_click(_span("Undo"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_undochekOutProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:12
+ @author:Ashwini Lalit
+ @example:verifyundochekOutProjectFromGrid
+ @description: it verifies 
+ @param: 
+ @return: 
+ **/
+
+function verifyundochekOutProjectFromGrid()
+{
+	_log("verifyundochekOutProjectFromGrid Started","success");
+	try 
+	{
+		__verifyTaskGridExists({"existence":false});
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyundochekOutProjectFromGrid Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author: Ashwini Lalit
+ @example: modifyTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: modifiy any attribute in task grid 
+ @param: baseTaskID/baseTaskName are mandatory. Rest of the parameters as displayed in column headers of task grid
+ @return: None
+ **/
+
+function modifyTaskInGrid($inputObject)
+{
+	_log("modifyTaskInGrid Started","success");
+	try 
+	{
+		to_modifyTaskInGrid($inputObject);
+		verifyTaskInGrid($inputObject);
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author: Ashwini Lalit
+ @example: to_modifyTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: main implementation of modifyTaskInGrid 
+ @param: baseTaskID/baseTaskName are mandatory. Rest of the parameters as displayed in column headers of task grid
+ @return: None
+ **/
+
+function  to_modifyTaskInGrid($inputObject)
+{
+	_log("to_modifyTaskInGrid Started","success");
+	try 
+	{
+            if(_isVisible(_div("ganttContainer")))
+	{
+	_click(_span("ganttViewToggleButton-btnIconEl",_in(_span("ganttViewToggleButton-btnEl"))));
+
+	}
+
+
+	           if ($inputObject.negative)
+			return;
+	  var $errMsg;
+	  if ($inputObject !== undefined || $inputObject.error !== undefined)
+	  {
+              $errMsg = $inputObject.errormsg;
+	      delete $inputObject.errormsg;
+	  }
+
+          var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+          $baseTaskName = $inputObject.baseTaskName;
+        
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+				
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div(0,_near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))),5));
+                       
+			var $scrolllength = "/treeview/";
+			var $scrolllength1;
+			_set($scrolllength1,customScroll($baseTask));
+
+             
+			_wait(2000, _isVisible($baseTask));
+			_click($baseTask);
+			_doubleClick($baseTask);
+			
+			
+				
+			if ($arrKey[0] === "edt")
+			{
+				_wait(2000, _isVisible(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5))));
+			 
+		      _setValue(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)), $inputValue);
+
+			}
+			else if ($arrKey[0] === "lst")
+			{
+				
+			 
+			   if($inputValue==="High"||$inputValue==="Critical"||$inputValue==="Low"||$inputValue==="Medium")
+			{
+				_click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+
+				_click(_div(0, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+                                 
+				  _click(_listItem($inputValue));
+	                  }
+			  else
+			  {
+
+			  _click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+
+				_click(_div(1, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+                                 
+				  _click(_listItem($inputValue));
+
+			  }
+			   
+			}
+				
+
+				_click(_div("/TSK0/", _in(_div("/treeview/"),5)));
+			
+			
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		}
+		          
+			 _wait(5000);
+			  if ($errMsg)
+			  {
+		             _assert(_isVisible(_span($errMsg)));
+			     _click(_span("OK"));
+			  }
+
+                          _click(_div("/TSK0/", _in(_div("/headercontainer/"),5)));
+			  $inputObject.baseTaskID = $baseTaskId;
+		          $inputObject.baseTaskName = $baseTaskName;
+               }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_modifyTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author: Ashwini Lalit
+ @example: addTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: adds a new task in the task grid by clicking the 'Add' in the right click menu. Right clicks over base task.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ **/
+
+function addTaskInGrid($inputObject)
+{
+	_log("addTaskInGrid Started","success");
+	try 
+	{
+		to_addTaskInGrid($inputObject);
+		verifyTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author: Ashwini Lalit
+ @example: to_addTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas","edt_Name":"pqr","edt_Planned Start":"20-Jul-2012","edt_Planned Finish":"30-Jul-2012","lst_Priority":"Critical"});
+ @description: This api is the main implementation of addTaskInGrid and it adds a new task in the task grid by invoking right click menu.
+ @param: baseTaskID/baseTaskName, Name are mandatory, rest all parameters as per task grid column headers
+ @return: None
+ **/
+
+function  to_addTaskInGrid($inputObject)
+{
+	_log("to_addTaskInGrid Started","success");
+	try 
+	{
+
+
+	         
+		 _click(_span("ganttViewToggleButton-btnIconEl",_in(_span("ganttViewToggleButton-btnEl"))));
+
+
+		$inputObject.menu = "Add";
+		__invokeQuickMenu($inputObject);
+		
+		var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+
+		delete $inputObject.menu;
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		if ($inputObject.LinkedTask) delete $inputObject.LinkedTask;
+		
+		_wait(2000);
+
+		
+
+
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+                
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div("/x-grid-cell-inner.*/",_near(_div($baseTaskId, _in(_div(/treeview/)))), _under(_div($key1, _in(_div(/headercontainer/))),6));//Modified by Sunitha as Scope has changed to 6 for New UI
+			_click(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible($baseTask));
+			_doubleClick(_div("/x-grid-cell-inner.*/", _under($baseTask)));
+			_wait(2000, _isVisible(_textbox(0, _under(_div($key1)))));
+				
+			if ($arrKey[0] === "edt")
+			{
+				_setValue(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 6)), $inputValue);//Modified by Sunitha as Scope has changed to 6 for New UI
+			}
+			else if ($arrKey[0] === "lst")
+			{
+
+			if($inputValue==="High"||$inputValue==="Critical"||$inputValue==="Low"||$inputValue==="Medium")
+			{
+				_click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 6)));//Modified by Sunitha as Scope has changed to 6 for New UI
+
+				_click(_div(0, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+                                 
+				  _click(_listItem($inputValue));
+	                  }
+			  else
+			  {
+                              
+			  _click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 6)));//Modified by Sunitha as Scope has changed to 6 for New UI
+
+				_click(_div(1, _rightOf(_textbox("x-form-field x-form-text x-form-focus x-field-form-focus x-field-default-form-focus"))));
+                                 
+				  _click(_listItem($inputValue));
+
+			  }
+
+
+				  
+			}
+
+                        _click(_div("/TSK0/", _in(_div("/treeview/"),5)));
+
+			
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		}
+			
+		_click(_div("Name"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_addTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author: Ashwini Lalit
+ @example: IndentTaskInGrid({"parentTask":"X", "taskToIndent":"A|B|C"})
+ @description: Indents the specified tasks in Grid, and verifies the heirarchy
+ @param: parent and child tasks to be indented
+ @return: None
+ **/
+
+function IndentTaskInGrid($inputObject)
+{
+	_log("IndentTaskInGrid Started","success");
+	try 
+	{
+		to_IndentTaskInGrid($inputObject);
+		
+		
+ _click(_image("/x-tree.*-plus/", _parentNode(_parentNode(_div($inputObject.parentTask,_in(_table("/x-grid-table/", _in(_div(/treeview/)))))))));
+	
+		  _assertFalse(_isVisible(_div($inputObject.taskToIndent)));
+
+		}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("IndentTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author: Ashwini Lalit
+ @example:  to_IndentTaskInGrid({"parentTask":"X", "taskToIndent":"A|B|C"})
+ @description: rightClick on all the childTask to indent below the parent. 
+ @param: parentTask and childTask-ID or name whichever is unique
+ @return: None
+ **/
+
+function  to_IndentTaskInGrid($inputObject)
+{
+	_log(" to_IndentTaskInGrid Started","success");
+	try 
+	{
+
+	  var $errMsg;
+	  if ($inputObject !== undefined || $inputObject.error !== undefined)
+	  {
+              $errMsg = $inputObject.errormsg;
+	      delete $inputObject.errormsg;
+	  }
+
+		$inputObject.menu = "Indent";
+		$childTask = $inputObject.taskToIndent.split("|");
+
+		for (var $i=0; $i < $childTask.length; $i++)
+		{
+			$inputObject.baseTaskName = $childTask[$i];
+			_click(_div("/x-grid-cell-inner.*/",_near(_div($inputObject.baseTaskName, _in(_div(/treeview/))))));
+			_keyPress(_div("/x-grid-cell-inner.*/",_near(_div($inputObject.baseTaskName, _in(_div(/treeview/))))),"Esc");
+			__invokeQuickMenu($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_IndentTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author: Ashwini Lalit
+ @example: OutdentTaskInGrid({"taskToOutdent":"A|B|C", "error":"Task cannot be outdented further"})
+ @description: Outdents the specified tasks in Grid, and verifies the heirarchy
+ @param: child tasks to be indented
+ @return: None 
+ **/
+
+function OutdentTaskInGrid($inputObject)
+{
+	_log("OutdentTaskInGrid Started","success");
+	try 
+	{
+		to_OutdentTaskInGrid($inputObject);
+		$inputObject.childTasks = $inputObject.taskToOutdent;
+		//verifyIndentTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("OutdentTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author: Ashwini Lalit
+ @example: OutdentTaskInGrid({ "taskTooutdent":"A|B|C", "error":"Task cannot be outdented further"})
+ @description: outdents all the child tasks
+ @param: taskToOutdent
+ @return: None
+ **/
+
+function  to_OutdentTaskInGrid($inputObject)
+{
+	_log(" to_OutdentTaskInGrid Started","success");
+	try 
+	{
+		$inputObject.menu = "Outdent";
+		$childTask = $inputObject.taskTooutdent.split("|");
+
+		for (var $i=0; $i < $childTask.length; $i++)
+		{
+			$inputObject.baseTaskName = $childTask[$i];
+                      _click(_div("/x-grid-cell-inner.*/",_near(_div($inputObject.baseTaskName, _in(_div(/treeview/))))));
+
+			
+			_keyPress(_div("/x-grid-cell-inner.*/",_near(_div($inputObject.baseTaskName, _in(_div(/treeview/))))),"Esc");
+			__invokeQuickMenu($inputObject);
+		}
+		if ($inputObject.error !== undefined)
+		{
+			_assertExists(_span($inputObject.error, _in(_div("messagebox-1001"))));
+			_click(_span("OK"));
+		}
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_OutdentTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:21
+ @author: Ashwini Lalit
+ @example:assignResourceToTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"}]})
+ @description: assigns a resource to a task and verifies it all the parameters are set as per input parameters
+ @param: taskName and resource array. resource array is array of resource object. Resource object has parameters as per column headers as seen on resource allocation screen.
+ date format for planned start and planned finish is 'dd-mmm-yyy'
+ @return: None
+ **/
+
+function assignResourceToTaskInGrid($inputObject)
+{
+	_log("assignResourceToTaskInGrid Started","success");
+	try 
+	{
+		to_assignResourceToTaskInGrid($inputObject);
+		//verifyResourceOfTaskInGrid($inputObject); Not required as it is called from 
+		//to_assignResourceToTaskInGrid>>modifyResourceAllocationOfTaskInGrid($inputObject);>>verifymodifyResourceAllocationOfTaskInGrid($inputObject);>>verifyResourceOfTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("assignResourceToTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:22
+ @author:Ashwini Lalit
+ @example:to_assignResourceToTaskInGrid({"taskName":"hhas", "Resources":{{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"}}})
+ @description: main implementation body for assignResourceToTaskInGrid
+ @param: taskName and Resource Objects. Resource Object has parameters-values that are column headers as seen on resource allocation screen
+ @return: None
+ **/
+
+function  to_assignResourceToTaskInGrid($inputObject)
+{
+	_log(" to_assignResourceToTaskInGrid Started","success");
+	try 
+	{
+		if ($inputObject.negative)
+			return;
+
+		var $resource = $inputObject.resource;
+		var $task = $inputObject.task;
+		delete $inputObject.resource;
+		delete $inputObject.task;
+
+		for ($key in $inputObject){
+			_log("1","success");
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+			_log($key1,"success");
+			
+                        _doubleClick(_div(0,_near(_div($task, _in(_div("/treeview/")))), _under(_div("/Resource/", _in(_div("/headercontainer/"))),6)));
+			_wait(4000, _isVisible(_textbox("RESOURCES[1]")));
+			_click(_div("/x-trigger/", _rightOf(_textbox("RESOURCES[1]"))));
+			_click(_div("/x-grid-row-checker/", _near(_div($resource))));
+			delete $inputObject[$key];
+		}
+		_click(_span("Close"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_assignResourceToTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:23
+ @author:Ashwini Lalit
+ @example:verifyResourceOfTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true}]}) 
+ @description: This api verifies resource details for a given task.
+ @param:taskname and resource object array. Resource object has parameters-value as per resource grid column names.
+ @return:None
+ **/
+
+function verifyResourceOfTaskInGrid($inputObject)
+{
+	_log("verifyResourceOfTaskInGrid Started","success");
+	try 
+	{
+		//DOUBLE CLICK ON THE RESOURCE CELL FOR THE SPECIFIED TASK AND LAUNCH THE RESOURCE GRID
+		
+		clickResourceTabOnGrid($inputObject);
+		if ($inputObject.negative)
+		{
+			_assertExists(_span("This is a closed task and cannot be edited"));
+			_click(_span("OK"));
+			return;
+		}
+		$resources = $inputObject.Resources;
+		
+		for ($res = 0; $res<$resources.length; $res++)
+		{
+			$currentResource = $resources[$res];
+
+			_set($selectedStatus,_parentRow(_div("/x-grid-row-checker/", _near(_div($currentResource.Name), _in(_div("/gridpanel/"))))).className);
+			$selectedStatus = ($selectedStatus.search("selected")==-1)?false:true;
+			_assertEqual($currentResource.selected.toString(), $selectedStatus.toString(), "Check Resource Row Selection for "+$currentResource.Name.toUpperCase());
+
+			delete $currentResource.selected;
+			
+			for ($key in $currentResource)
+			 {
+				var $inputValue = ""+$currentResource[$key];
+				
+				_set($uiValue, _getText(_div(0, _near(_div($currentResource.Name, _in(_div(/gridpanel/)))), _under(_div($key, _in(_div("/headercontainer-/", _in(_div("/gridpanel/")))))))));
+				
+				_assertEqual($inputValue.toString(), $uiValue.toString(), "Compare Resource <"+ $key.toUpperCase()+"> Parameters for resource named <"+$currentResource.Name.toUpperCase()+">");	
+			 }
+			
+		}			
+		
+		_click(_span("/button-.*-btnEl/", _in(_parentNode(_div($currentResource.Name), "DIV",5))));
+
+		//_assert task grid resource cell value pending.
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyResourceOfTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:24
+ @author:Ashwini Lalit
+ @example:clickResourceTabOnGrid({"taskName":"hhas"})
+ @description: Launch the resource allocation grid for the specified task
+ @param: taskName
+ @return: None
+ **/
+
+function clickResourceTabOnGrid($inputObject)
+{
+	_log("clickResourceTabOnGrid Started","success");
+	try 
+	{
+		to_clickResourceTabOnGrid($inputObject);
+		verifyclickResourceTabOnGrid();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickResourceTabOnGrid Completed","success");
+}
+
+/**
+ @Function Number:25
+ @author:Ashwini Lalit
+ @example:to_clickResourceTabOnGrid({"taskName":"hhas"})
+ @description: doubleclicks on the resource cell for a given task row in the task grid.
+ @param: taskName
+ @return: None
+ **/
+
+function  to_clickResourceTabOnGrid($inputObject)
+{
+	_log(" to_clickResourceTabOnGrid Started","success");
+	try 
+	{
+		//DOUBLE CLICK ON THE RESOURCE CELL FOR THE SPECIFIED TASK AND LAUNCH THE RESOURCE GRID
+		
+		_click(_div("/x-grid-cell/",_near(_div($inputObject.taskName, _in(_div("/treeview/")))), _under(_div("/Resource/", _in(_div("/headercontainer/"))),5)));
+		if ($inputObject.negative)
+		{
+			_assertExists(_span("This is a closed task and cannot be edited"));
+			_click(_span("OK"));
+			return;
+		}
+		_click(_div("/combobox-.*-triggerWrap/",_near(_div($inputObject.taskName, _in(_div("/treeview/")))), _under(_div("/Resource/", _in(_div("/headercontainer/"))),5)).childNodes[0]);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_clickResourceTabOnGrid Completed","success");
+}
+
+/**
+ @Function Number:26
+ @author: Ashwini Lalit
+ @example: verifyclickResourceTabOnGrid
+ @description: verifies if resource grid is visible
+ @param: None
+ @return: None
+ **/
+
+function verifyclickResourceTabOnGrid()
+{
+	_log("verifyclickResourceTabOnGrid Started","success");
+	try 
+	{
+		if ($inputObject.negative)
+			return;
+		else
+		_assertEqual(true, _isVisible(_span("/gridcolumn-.*-textEl/", _in(_div("/gridpanel/")))), "resource panel is visible");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyclickResourceTabOnGrid Completed","success");
+}
+
+/**
+ @Function Number:30
+ @author: Ashwini Lalit
+ @example: deleteTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas"});
+ @description: deletes given task after checkout in task grid
+ @param: baseTaskID and baseTaskName are mandatory
+ @return: None
+ **/
+
+function deleteTaskInGrid($inputObject)
+{
+	_log("deleteTaskInGrid Started","success");
+	try 
+	{
+		to_deleteTaskInGrid($inputObject);
+		verifydeleteTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author: Ashwini Lalit
+ @example: to_deleteTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas"});
+ @description: main implementation body of deleteTaskInGrid. It deletes given task after checkout in task grid
+ @param: baseTaskID and baseTaskName are mandatory
+ @return: None 
+ **/
+
+function  to_deleteTaskInGrid($inputObject)
+{
+	_log(" to_deleteTaskInGrid Started","success");
+	try 
+	{
+		$inputObject.menu = "Delete";
+		__invokeQuickMenu($inputObject);
+
+        if ($inputObject !== undefined && $inputObject.error !== undefined)
+		{
+		    _assertExists(_span($inputObject.error));
+			_click(_span("OK"));
+		}
+	    else
+			_log("Delete TaskInGrid Success","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_deleteTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:32
+ @author: Ashwini Lalit
+ @example: verifydeleteTaskInGrid({"baseTaskID":"TSK1","baseTaskName":"hhas"});
+ @description: verification for deleteTaskInGrid. It asserts that deleted task not present in the  task grid.
+ @param: baseTaskID and baseTaskName are mandatory
+ @return: None
+  **/
+
+function verifydeleteTaskInGrid($inputObject)
+{
+	_log("verifydeleteTaskInGrid Started","success");
+	try 
+	{
+        if($inputObject.type === "negative")
+        {	
+            if(_assertExists(_div($inputObject.baseTaskName, _in(_div("/treeview/"))), _under(_div("/Name/", _in(_div("/headercontainer/"))),5)))
+			{
+				_log("As the actual is posted task cannot be deleted","success");
+				return;
+			}
+			else
+			{
+				_log("Actual posted task is deleted","failure");
+				return;
+			}
+        }
+		_assertNotExists(_div($inputObject.baseTaskName, _in(_div("/treeview/"))), _under(_div("/Name/", _in(_div("/headercontainer/"))),5));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifydeleteTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author:Ashwini Lalit
+ @example:removeResourceFromTaskInGrid({"taskName":"hhas", "Resources":"Vinay Sharma|Admin Test"})
+ @description:unassigns resource from task. 
+ @param: taskname and resource names
+ @return: None
+ **/
+
+function removeResourceFromTaskInGrid($inputObject)
+{
+	_log("removeResourceFromTaskInGrid Started","success");
+	try 
+	{
+		
+		if ($inputObject.negative)
+			return;
+
+		var $resource = $inputObject.resource;
+		var $task = $inputObject.task;
+		delete $inputObject.resource;
+		delete $inputObject.task;
+
+		for ($key in $inputObject)
+		    {
+			_log("1","success");
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+			_log($key1,"success");
+			
+		
+             _doubleClick(_div(0,_near(_div($task, _in(_div("/treeview/")))), _under(_div("/Resource/", _in(_div("/headercontainer/"))),5)));
+			_wait(4000, _isVisible(_textbox("RESOURCES[1]")));
+			_click(_div(0, _rightOf(_textbox("RESOURCES[1]"))));
+			_click(_div("/x-grid-row-checker/", _near(_div($resource))));
+			delete $inputObject[$key];
+
+	                    }
+
+		_click(_span("Close"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("removeResourceFromTaskInGrid Completed","success");
+}
+
+
+/**
+ @Function Number:35
+ @author: Ashwini Lalit
+ @example:verifyremoveResourceFromTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true}]})
+ @description: this is verification api of removeResourceFromTaskInGrid. It calls verifyResourceOfTaskInGrid. 
+ @param: modified $inputObject as expected by verifyResourceOfTaskInGrid. ie taskname and resource object array. Resource object has parameters-value as per resource grid column names.
+ @return: None
+ **/
+
+function verifyremoveResourceFromTaskInGrid($inputObject)
+{
+	_log("verifyremoveResourceFromTaskInGrid Started","success");
+	try 
+	{
+		verifyResourceOfTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyremoveResourceFromTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:36
+ @author:Ashwini Lalit
+ @example:modifyResourceAllocationOfTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true}]})
+ @description: modify resource parameters for the given task. 
+ @param: taskname and resource object. resource object params as on resource allocation screen column headers and selection status. "selected" parameter for resource is mandatory.
+ @return: None
+ **/
+
+function modifyResourceAllocationOfTaskInGrid($inputObject)
+{
+	_log("modifyResourceAllocationOfTaskInGrid Started","success");
+	try 
+	{
+		to_modifyResourceAllocationOfTaskInGrid($inputObject);
+		//verifymodifyResourceAllocationOfTaskInGrid($inputObject);	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyResourceAllocationOfTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:37
+ @author: Ashwini Lalit
+ @example:to_modifyResourceAllocationOfTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true}]})
+ @description: main implementation of modifyResourceAllcoationOfTaskInGrid. It sets the values of resource parameters in the resource allocation screen for the specified task. 
+ @param: taskname and resource object. Each resource object is set of parameter-values. Parameters as column names seen on the resource allocation screen.
+ @return: None 
+ **/
+
+function  to_modifyResourceAllocationOfTaskInGrid($inputObject)
+{
+	_log(" to_modifyResourceAllocationOfTaskInGrid Started","success");
+	try 
+	{
+                      if ($inputObject.negative)
+			return;
+
+		var $resources = $inputObject.Resources;
+		
+		//FOR EVERY RESOURCE MODIFY ROW SELECTION AND SET THE PARAMETERS
+		
+		for ($res = 0; $res<$resources.length; $res++)
+		{
+			var $currentResource = $resources[$res];
+			
+
+			for ($key in $currentResource)
+			 {
+				if ($key == "selected")
+				{
+					//SELECT RESOURCE ROW
+					
+					_set($selectedStatus,_parentRow(_div("/x-grid-cell/", _near(_div($currentResource.Name), _in(_div("/taskGrid/"))))).className);
+					$selectedStatus = ($selectedStatus.search("selected")==-1)?false:true;
+					
+					if (($currentResource.selected.toString().toUpperCase() == "TRUE" && $selectedStatus.toString().toUpperCase() == "FALSE")||($currentResource.selected.toString().toUpperCase() == "FALSE" && $selectedStatus.toString().toUpperCase() == "TRUE"))
+						_click(_div("/x-grid-row-checker/", _near(_div($currentResource.Name), _in(_div("/taskGrid/")))));
+					
+				
+				}else if ($key !== "Name") 
+				{
+					//SET RESOURCE PARAMETERS
+					var $inputValue = ""+$currentResource[$key];
+		
+					
+					_doubleClick(_div("/x-grid-cell/", _near(_div($task, _in(_div("/taskGrid/")))), _under(_div($key1, _in(_div(/taskGrid/))))));
+					_wait(1000, _isVisible(_textbox(0, _near(_div($currentResource.Name, _in(_div("/taskGrid/")))), _under(_div($key, _in(_div("/headercontainer-/", _in(_div("/taskGrid/")))))))));				
+					_setValue(_textbox(0, _near(_div($currentResource.Name, _in(_div("/taskGrid/")))), _under(_div($key, _in(_div("/headercontainer-/", _in(_div("/taskGrid/"))))))), $inputValue);
+					_click(_div(0, _near(_div($currentResource.Name, _in(_div("/taskGrid/")))), _under(_div("Name", _in(_div("/headercontainer-/", _in(_div("/taskGrid/"))))))));
+				
+				}
+			}
+		}			
+		
+		//CLOSE THE RESOURCE GRID
+		_click(_span("/span-.*-btnEl/", _in(_parentNode(_div($currentResource.Name), "DIV",5))));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_modifyResourceAllocationOfTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:38
+ @author: Ashwini Lalit
+ @example:verifymodifyResourceAllocationOfTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true}]})
+ @description: This api calls verifyResourceOfTaskInGrid.
+ @param:taskname and resource object. Each resource object is set of parameter-values. Parameters as column names seen on the resource allocation screen. 
+ @return:None 
+ **/
+
+function verifymodifyResourceAllocationOfTaskInGrid($inputObject)
+{
+	_log("verifymodifyResourceAllocationOfTaskInGrid Started","success");
+	try 
+	{
+		verifyResourceOfTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifymodifyResourceAllocationOfTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:39
+ @author: Ashwini Lalit
+ @example: verifyTaskInGrid ({"ID":"TSK1", "Name":"hhas", "Overall Status":"Open", "Planned Finish":"30-Jul-2011", "Planned Start":"20-Jul-2011", "Remaining Effort":"235", "Planned Effort":"256", "WBS Code":"0"})
+ @description: This api verifies task parameters in the task grid. It basically asserts existence of input parameters on grid for a given task.
+ @param: ID and Name are mandatory, rest all parameters are optional with name as seen in column headers
+ @return: None
+ **/
+
+function verifyTaskInGrid($inputObject)
+{
+	_log("verifyTaskInGrid Started","success");
+	try 
+	{
+		var $firstKey;
+		var $percomp;
+		
+		if ($inputObject.ID)
+
+			{
+				$firstKey = $inputObject.ID;	
+				//verifyTaskInGantt({"ID":$inputObject.ID});
+					
+			}
+		if ($inputObject.Name)
+			{
+				$firstKey = $inputObject.Name;
+				//verifyTaskInGantt({"taskname":$inputObject.Name});
+				delete $inputObject.Name;
+			}
+		if ($inputObject.baseTaskName)
+			{$firstKey = $inputObject.baseTaskName;delete $inputObject.baseTaskName;}
+		if ($inputObject.baseTaskID)
+			{$firstKey = $inputObject.baseTaskID; delete $inputObject.baseTaskID;}
+        if ($inputObject.percentComplete)
+		{
+			$inputValue = $inputObject.percentComplete;
+			_assertEqual(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Percent Work Complete/", _in(_div("/headercontainer/"))),6)).firstChild.firstChild.getAttribute("percentvalue"), $inputValue , "Value is same");
+             delete $inputObject.percentComplete;
+        }
+        if ($inputObject.Priority)
+		{
+			$exptValue = _div(0, _near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Priority/", _in(_div("/headercontainer/"))),6)).parentNode.getAttribute("data-qtip");
+	        _assertEqual($exptValue, $inputObject.Priority , "Value is same");
+            delete $inputObject.Priority;
+        } 
+
+	if($inputObject.Predecessor)
+	{
+	delete $inputObject.Predecessor;
+	}
+
+		for ($key in $inputObject)
+		 {
+			var $inputValue = ""+$inputObject[$key];
+			_assertExists(_div($inputValue,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/"+$key+"/", _in(_div("/headercontainer/"))),6)));
+		 }
+         
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:41
+ @author: Ashwini Lalit
+ @example: verifyChildTasks({"parentTask":"x", "childTasks":"A|B|C"})
+ @description: This api does positional verification and icon verification to verify if the hierarchy is in place as given in parameters. It does indentation checks.
+ @param: parent and child tasks. order of child tasks is important. 
+ @return: None
+ **/
+
+function verifyChildTasks($inputObject)
+{
+	_log("verifychildTasks Started","success");
+	try 
+	{
+
+		$parentTask = _div("/TSK/",_near(_div($inputObject.parentTask, _in(_div("/treeview/")))), _under(_div("/ID/", _in(_div("/headercontainer/"))),5));
+		_click($parentTask);
+		_set($pos, _position($parentTask));
+		$parentYPosition = $pos[1];
+		_set($height,$parentTask.scrollHeight);
+		$height = parseInt($height)+1;
+		
+		_log("$parentYPosition="+$parentYPosition+" height="+$height);
+		
+		_set($classValue, $parentTask.lastChild.previousSibling.className);
+		_assertEqual("x-tree-icon x-tree-icon-parent", $classValue, "Parent Node ClassName Verification");
+		
+		$childTasks = $inputObject.childTasks.split("|");
+
+		for (var $i=0; $i < $childTasks.length; $i++)
+		{
+			
+			$childTask = _div("/TSK/",_near(_div($childTasks[$i], _in(_div("/treeview/")))), _under(_div("/ID/", _in(_div("/headercontainer/"))),5));
+
+			_set($nodeLength, $childTask.childNodes.length);
+			$nodeLength = parseInt($nodeLength) - 2;
+			_set($node, $childTask.childNodes[$nodeLength].className);
+			_log("$node=>"+$node);
+			
+			if ($node == "x-tree-icon x-tree-icon-leaf")
+			{
+				_assertEqual("x-tree-icon x-tree-icon-leaf",$node, "Child Node ClassName Verification" );
+			}
+			else if ($node == "x-tree-icon x-tree-icon-parent")
+				{
+					$nodeLength = $nodeLength - 1;
+					_set($classValue, $childTask.childNodes[$nodeLength].className);
+					_assertEqual("x-tree-elbow-end-plus x-tree-expander", $classValue, "Child Node ClassName Verification");
+				}
+			
+			_set($pos, _position($childTask));
+			$childYPosition = $pos[1];
+			$YPosition = $parentYPosition + ($height*($i+1));
+			_assertEqual($childYPosition, $YPosition, "Pixel Position Verification");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifychildTasks Completed","success");
+}
+
+/**
+ @Function Number:47
+ @author: Ashwini Lalit
+ @example:setDate("Planned Start","25/08/2010"); setDate("Planned Finish","25/08/2010");
+ @description:invokes date picker for date fields in the grid 
+ @param: param1=date field Name as in the column header of the task grid, param2=date
+ @return: None
+ **/
+
+function setDate($inputObject)
+{
+	_log("setdate Started","success");
+	try 
+	{
+	    var $arrUserDate;
+        var $diffMonth;
+        var $diffYear;
+		var $fieldstr;
+        var $todayDate;
+        var $todayMonth;
+	    var $todayYear;
+	    var $userDay;
+	    var $userMonth;
+	    var $userYear;
+	 
+	    $inputDate = $inputObject.inputDate;
+	    $row = $inputObject.task; //ID or name
+	    $column = "/"+$inputObject.dateField+"/";//planned start or planned finish
+	    
+	    $todayDate = new Date();
+		$arrUserDate = $inputDate.split("/");
+		
+	    $userDay = Number($arrUserDate[0]);
+		$userDay = String($userDay);
+	    $userMonth = Number($arrUserDate[1]);
+	    $userYear = Number($arrUserDate[2]);
+	
+	    $userMonth = $userMonth - 1; //Since Date Object has Month as 0 to 11
+		
+	    $todayMonth = $todayDate.getMonth();
+        $todayYear = $todayDate.getFullYear();
+
+	    $diffMonth = $todayMonth - $userMonth;
+	    $diffYear = $todayYear - $userYear;
+
+	    _wait(1000, _isVisible(_div(0, _near(_div($row), _under(_div($column), 5)))));
+	    _click(_cell(0, _near(_div($row), _under(_div($column), 5))));
+	    _wait(1000, _isVisible(_div("/datefield-.*-triggerWrap/", _near(_div($row), _under(_div($column), 5))).childNodes[0]));
+		_click(_div("/datefield-.*-triggerWrap/", _near(_div($row), _under(_div($column), 5))).childNodes[0]);
+		
+	    $fieldstr = "/datepicker-/";//"/.*" + $fieldName + "/"
+	    
+	    _click(_span("Today", _in(_div($fieldstr))));
+	    
+	    //Selecting Year
+	    if ($diffYear <= 0) {
+	        $diffYear = Math.abs($diffYear);
+
+	        for (var $i=1; $i<=$diffYear*12; $i++) {
+	            _click(_link("/Next Month (.*)/", _in(_div($fieldstr))));
+	        }
+	    } else if ($diffYear > 0) {
+		    for (var $i=1; $i<=$diffYear*12; $i++) {
+	            _click(_link("/Previous Month (.*)/", _in(_div($fieldstr))));
+	        }
+	    }
+	
+	    //Selecting Month
+	    if ($diffMonth < 0) {
+	        $diffMonth = Math.abs($diffMonth);
+	        
+	        for (var $i=1; $i<=$diffMonth; $i++) {
+	        	_click(_link("/Next Month (.*)/", _in(_div($fieldstr))));
+	        }
+	    } else if ($diffMonth > 0) {
+		    for (var $i=1; $i<=$diffMonth; $i++) {
+		    	_click(_link("/Previous Month (.*)/", _in(_div($fieldstr))));
+	        }
+	    }
+	
+	    _click(_link($userDay, _in(_div("/datepicker-/"))));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setdate Completed","success");
+}
+
+/**
+@Function Number:48
+@author: Ashwini Lalit
+@example: __verifyTaskGridExists($inputObject)
+@description: verifies task grid's existence
+@param: $inputObject (not used currently)
+@return: None
+**/
+
+function __verifyTaskGridExists($inputObject)
+{
+	_log("__verifyTaskGridExists Started","success");
+	try 
+	{
+		if ($inputObject.existence)
+			_assert(_isVisible(_span("Undo")));
+		else
+			_assertFalse(_isVisible(_span("Undo")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("__verifyTaskGridExists Completed","success");
+}
+
+
+/**
+@Function Number:49
+@author: Ashwini Lalit
+@example: __invokeQuickMenu($inputObject)
+@description: rightClick on base task in the task grid
+@param: baseTaskID or baseTaskName, one of the parameter is mandatory. "menu" - is the right click menu to be clicked.
+@return: None
+**/
+
+function __invokeQuickMenu($inputObject)
+{
+	_log("__invokeQuickMenu Started","success");
+
+	try{
+		_wait(1000);
+		
+		if ($inputObject.baseTaskName !== undefined && $inputObject.baseTaskName !== null)
+		{
+			_rightClick(_xy(_div(0,_near(_div($inputObject.baseTaskName, _in(_div("/treeview/")))), _under(_div("/Name/", _in(_div("/headercontainer/"))),6)),15,15));
+		}
+		else if ($inputObject.baseTaskID !== undefined && $inputObject.baseTaskID !== null)
+		{
+			_rightClick(_xy(_div(0,_near(_div($inputObject.baseTaskID, _in(_div("/treeview/")))), _under(_div("/ID/", _in(_div("/headercontainer/"))),6)),15,15));//Modified by Sunitha --> the scope to 6 for New UI 
+		}
+		
+		_wait(1000);
+		_click(_span("/"+$inputObject.menu+"/", _in(_div("add-node").parentNode.lastChild)));
+		_wait(1000);
+
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("__invokeQuickMenu Completed","success");
+
+}function __invokeQuickMenu($inputObject)
+{
+                _log("__invokeQuickMenu Started","success");
+
+                try{
+                                _wait(1000);
+                                
+                                if ($inputObject.baseTaskName !== undefined && $inputObject.baseTaskName !== null)
+                                {
+                                                _rightClick(_xy(_div(0,_near(_div($inputObject.baseTaskName, _in(_div("/treeview/")))), _under(_div("/Name/", _in(_div("/headercontainer/"))),6)),15,15));
+                                }
+                                else if ($inputObject.baseTaskID !== undefined && $inputObject.baseTaskID !== null)
+                                {
+                                                _rightClick(_xy(_div(0,_near(_div($inputObject.baseTaskID, _in(_div("/treeview/")))), _under(_div("/ID/", _in(_div("/headercontainer/"))),6)),15,15));
+                                }
+                                
+                                _wait(1000);
+                                _click(_link($inputObject.menu)); //InfyFT modification
+                                _wait(1000);
+
+                }catch(e){
+                                handleFailure(e);
+                }
+                _log("__invokeQuickMenu Completed","success");
+
+}
+
+
+/**
+@Function Number:50
+@author: Ashwini Lalit
+@example:expandSummaryTask({"task":"TSK0"});
+@description: expands the task tree for given summary task id
+@param: TSKID 
+@return: None
+**/
+
+function expandSummaryTask($inputObject)
+{
+	_log("expandSummaryTask Started","success");
+
+	try{
+		
+		$row = _parentNode(_parentNode(_div($inputObject.task,_in(_table("/x-grid-table/", _in(_div(/treeview/)))))));
+                          _click(_image("/x-tree.*-plus/", _in($row)));
+		
+		
+		if (_isVisible(_span("This is a closed task and cannot be edited")))
+		    _click(_span("OK"));
+			
+		_assertExists(_image("/x-tree-elbow-img x-tree-elbow/", _near(_div($inputObject.task))));
+
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("expandSummaryTask Completed","success");
+
+}
+
+/**
+@Function Number:50
+@author: Ashwini Lalit
+@example:verifyIndentTaskInGrid({"task":"TSK2"});
+@description: expands the task tree for given summary task id
+@param: TSKID 
+@return: None
+**/
+
+function verifyIndentTaskInGrid($inputObject)
+{
+	_log("verifyIndentTaskInGrid Started","success");
+
+	try{
+		
+		verifyChildTasks($inputObject);
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("verifyIndentTaskInGrid Completed","success");
+
+}
+
+/**
+@Function Number:51
+@author: Ashwini Lalit
+@example:setOutLineLevel({"level":"All Tasks"});
+@description: set the outline on the task grid
+@param: outline level
+@return: None
+**/
+
+function setOutLineLevel($inputObject)
+{
+	_log("setOutLineLevel Started","success");		
+
+	try{
+		_wait(1000, _isVisible(_div("displayLevel-triggerWrap",_near( _div("displayLevel")), _in(_div("taskTreeGrid"))).childNodes[0]));
+		_click(_div("displayLevel-triggerWrap",_near( _div("displayLevel")), _in(_div("taskTreeGrid"))).childNodes[0]);
+		_wait(1000, _isVisible(_list(0, _in(_div("/boundlist-/", _under(_div("displayLevel"),5))))));
+		
+		$outList = _list(0, _in(_div("/boundlist-/", _under(_div("displayLevel"),5))));
+
+		_click(_listItem($inputObject.level, _in($outList)));	
+		_set($value, _textbox(/ext-gen/, _near(_div("displayLevel"))).value);
+		
+		_assertEqual($inputObject.level, $value, "OutLine Level Selected Values should match");
+		
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("setOutLineLevel Completed","success");
+
+}
+
+
+/**
+@Function Number:52
+@author: Ashwini Lalit
+@example:copyTask({"baseTaskName":"hhas"});
+@description: right click specified task and click copy menu
+@param: taskname
+@return: None
+**/
+
+function copyTask($inputObject)
+{
+	_log("copyTask Started","success");		
+
+	try{
+			$inputObject.menu = "Copy";
+			__invokeQuickMenu($inputObject);
+			
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("copyTask Completed","success");
+
+}
+
+/**
+@Function Number:53
+@author: Ashwini Lalit
+@example:pasteOnTask({"baseTaskName":"hhas"});
+@description: right click specified task and click paste menu
+@param: taskname
+@return: None
+**/
+
+
+
+
+
+function pasteOnTask($inputObject)
+{
+	_log("pasteOnTask Started","success");		
+
+	try{
+
+	                  var $errMsg;
+
+	                   if ($inputObject !== undefined || $inputObject.error !== undefined)
+	                   {
+                           $errMsg = $inputObject.errormsg;
+	                   delete $inputObject.errormsg;
+	                   }
+			   $inputObject.menu = "Paste";
+			__invokeQuickMenu($inputObject);
+			
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("PasteOnTask Completed","success");
+
+}
+
+/**
+@Function Number:
+@author: Arindam
+@example:to_modifyResourceAllocationOfTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012", "selected":true}]})
+@description: main implementation of modifyResourceAllcoationOfTaskInGrid. It sets the values of resource parameters in the resource allocation screen for the specified task. 
+@param: taskname and resource object. Each resource object is set of parameter-values. Parameters as column names seen on the resource allocation screen.
+@return: None 
+**/
+
+
+
+
+function  modifyTaskInGridforsummarytak($inputObject)
+{
+	_log("modifyTaskInGridforsummarytak Started","success");
+	try 
+	{
+
+	            if ($inputObject.negative)
+			return;
+        var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+				
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div(0,_near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))),5));
+			_click($baseTask);
+				
+			if ($arrKey[0] === "edt")
+			{
+				_setValue(_textbox(0, _under(_div($key1,_in(_div("/headercontainer/"))))),$inputValue);
+			}
+			else if ($arrKey[0] === "lst")
+			{
+				_click(_textbox(0, _near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))), 5)));
+			    _click(_listItem($inputValue));
+			}
+				
+
+			_click(_div("/TSK0/", _in(_div("/treeview/"),5)));
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		}
+		
+		
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTaskInGridforsummarytak Completed","success");
+}
+
+////@Function Number:
+///@author: Arindam
+// The API select task in grid view
+
+
+
+
+function selectTaskInGrid($inputObject)
+{
+	_log("selectTaskIngrid Started","success");
+	try 
+	{
+           
+        
+        var $baseTaskId = ($inputObject.baseTaskID == undefined)?$inputObject.baseTaskName:$inputObject.baseTaskID;
+
+		delete $inputObject.baseTaskID;
+		delete $inputObject.baseTaskName;
+		
+		
+		for ($key in $inputObject)
+		{
+			var $inputValue = ""+$inputObject[$key];
+				
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+				
+			$baseTask = _div(0,_near(_div($baseTaskId, _in(_div("/treeview/")))), _under(_div($key1, _in(_div("/headercontainer/"))),5));
+			_click($baseTask);
+			
+			
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		
+		
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectTaskInGrid Completed","success");
+}
+
+////@Function Number:
+///@author: Arindam
+// clcik toggle span in Task list
+
+function clickToggleButton($inputObject)
+{
+	_log("clickTogglespan Started","success");
+	try 
+	{
+	
+		if($inputObject && $inputObject.type === "negative")
+        {	
+		    if (_span("resourcePanelTogglespan-btnEl").disabled)
+			{
+				_log("according to the access configuration the icon should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "even after the acces configuration is set to no the icon is still enabled","failure";
+			}
+        }
+
+             
+           
+		_click(_span("/resourcePanelToggleButton/"));
+            
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickTogglespan Completed","success");
+}
+////new API
+//@author: Arindam
+function  modifyResourceAssignmentOfTaskInGrid($inputObject)
+{
+	_log(" modifyResourceAssignmentOfTaskInGrid Started","success");
+	try 
+	{
+		var	$resource = $inputObject.resource;
+		delete $inputObject.resource;
+		//FOR EVERY RESOURCE MODIFY ROW SELECTION ANDe SET THE PARAMETERS
+		for ($key in $inputObject)
+		{
+			_log("1","success");
+			var $inputValue = ""+$inputObject[$key];
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+			_click(_div("/x-grid-cell/", _near(_div($resource, _in(_div("/assignedResourceGrid/")))), _under(_div($key1, _in(_div("/assignedResourceGrid/"))),5)));
+		        _log("Key one is:" + $key1);
+
+			if ($arrKey[0] === "edt")
+                          {
+			  if($key1==="/% Work Complete/"||$key1==="/Units (%)/"||$key1==="/Planned Effort/")
+			  {
+		var $input1 = $inputValue;
+		_log("ParseInt value is1"+ $input1);
+			    
+				
+          _setValue(_textbox(0, _near(_div($resource, _in(_div("/assignedResourceGrid/")))), _under(_div($key1, _in(_div("/assignedResourceGrid/"))),5)),$input1);
+	                      
+	_blur(_textbox(0, _near(_div($resource, _in(_div("/assignedResourceGrid/")))), _under(_div($key1, _in(_div("/assignedResourceGrid/"))),5)));
+			
+				
+         _click(_div("/treeview/"));
+			   }
+
+			  if ($key1==="/Planned Start/"||$key1==="/Planned Finish/")
+			   {
+
+			       var $input1 = $inputValue;
+		        
+			    
+				
+                        _setValue(_textbox(0, _near(_div($resource, _in(_div("/assignedResourceGrid/")))), _under(_div($key1, _in(_div("/assignedResourceGrid/"))),5)),$input1);
+	                      
+	                 _blur(_textbox(0, _near(_div($resource, _in(_div("/assignedResourceGrid/")))), _under(_div($key1, _in(_div("/assignedResourceGrid/"))),5)));
+			
+				
+                          _click(_div("/treeview/"));
+
+                             }
+
+	
+			}
+			$inputObject[$arrKey[1]] = $inputObject[$key];
+			delete $inputObject[$key];
+		}
+		//$inputObject.baseTaskName = $baseTaskName;
+
+		$inputObject.resource = $resource;
+	}catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyResourceAssignmentOfTaskInGrid Completed","success");
+}
+
+
+/**
+ @Function Number:
+ @author:Roma Mulchandani
+ @example:dateDiff({"strdate":"08-Jul-2008","endate":"18-Jul-2008"});
+ @description: to find difference between task start date and task end date
+ @param: 
+ @return: 
+ **/
+
+function dateDiff( date1,date2)
+	 {		
+			var one_day=86400000;
+		
+  			var date1_ms =  java.util.Date.parse(date1);
+		
+ 		 	var date2_ms =  java.util.Date.parse(date2);
+		
+ 		 // Calculate the difference in milliseconds
+		 	var difference_ms = parseInt(date2_ms - date1_ms);
+		// Convert back to days and return
+  		
+		return Math.round(difference_ms/one_day)+1 ; 
+	}
+
+
+
+/**
+ @Function Number:
+ @author:Roma Mulchandani
+ @example:verifyTaskInGantt({"ID":"WPKG2_TSK3"});
+ @example:verifyTaskInGantt({"ID":"TSK1"});
+ @example:verifyTaskInGantt({"taskname":"Abc"});
+ @description: to verify task in Gantt
+ @param: taskID or taskname
+ @return: none
+ **/
+
+function verifyTaskInGantt($inputObject)
+{
+	_log("verifyTaskInGantt Started","success");
+
+
+
+	if(_assertFalse(_isVisible(_div("ganttContainer"))))
+	{
+	_click(_span("ganttViewToggleButton-btnIconEl",_in(_span("ganttViewToggleButton-btnEl"))));
+
+	}
+
+				var $taskInfo = getDataOfTask($inputObject);
+				var $ganttItemInUI;
+				_set($ganttItemInUI ,getGanttItemABC($taskInfo));
+
+			_log("tooltip verification Starts");
+
+				var $a=new String("Name:"+$taskInfo.taskname+" ");
+				var $b=new String("Start Date:"+$taskInfo.strtdate+" ");
+				var $c=new String("Finish Date:"+$taskInfo.endate);
+				var $dataTootip =$a+$b+$c;
+				var $UITooltip;
+				
+				_wait(1000, _isVisible(_div("tooltip"+$taskInfo["tskId"])));
+				$UITooltip=_getText(_div("tooltip"+$taskInfo["tskId"]));
+				_assertEqual(""+$dataTootip,""+$UITooltip,"Verifying gantt item tooltip");
+
+				_log("tooltip verification Ends");
+			
+			_log("Verifying attributes of GANTTITEM painted on canvas");
+			
+					var $fillAsInUI = $ganttItemInUI["fill"];
+					var $shapeAsInUI = $ganttItemInUI["tagName"];
+					
+					if ($taskInfo["tasktype"]=="mile")
+					{
+						_assertEqual("polygon",""+$shapeAsInUI,"Verifying shape of milestone is polygon");
+						_assertEqual("black",""+$fillAsInUI, "Verifying color of polygon is black");
+					
+					}else if ($taskInfo["tasktype"]=="summ" || $taskInfo["tasktype"]=="norm")
+					{
+						var $fillAsInData = ($taskInfo["tasktype"]=="summ")?"black":"#868DF7";//blue
+						
+						var $noofdays=parseInt(dateDiff(new String($taskInfo.strtdate),new String($taskInfo.endate)));
+						var $noofcells = ($taskInfo.noofusers==0 || $taskInfo.plndeffrt==0)? noofcells = 1:parseInt($taskInfo.plndeffrt / (8  * $taskInfo.noofusers));
+						
+						var $widthAsInData =($noofdays==$noofcells)?parseInt($noofcells * 20) : parseInt(($noofcells + parseInt($noofdays - $noofcells)) * 20);
+						var $widthAsInUI =$ganttItemInUI["width"];
+
+						
+						_assertEqual(""+$fillAsInData.toUpperCase(),""+$fillAsInUI.toUpperCase(), "Verifying color of rect is"+$fillAsInData);
+						_assertEqual("rect",""+$shapeAsInUI,"Verifying shape of task is rect");
+						_assertEqual(parseInt($widthAsInData),parseInt($widthAsInUI), "Verifying width of task")	
+					}
+			_log("Verifying attributes of GANTTITEM painted on canvas Ends");
+
+			_log("row position verification of Gantt against Grid for the same task item");	//first expand all tasks
+				var $row;
+				_set($row,_parentNode(_parentNode(_div($taskInfo.taskname,_in(_table("/x-grid-table/", _in(_div(/treeview/))))))).getAttribute("data-recordindex"));
+				var $rowInGrid = ($taskInfo["tasktype"]=="mile")?parseInt($row)*25+14:parseInt($row)*25+10;
+				var $rowInGantt = $ganttItemInUI["y"];
+				_assertEqual(parseInt($rowInGrid),parseInt($rowInGantt),"Checking y cooridnates of task item in Grid vs Gantt");	
+			_log("row position verification of Gantt against Grid for the same task item ...Ends");
+
+
+		_log("verify Task In Gantt Completed","success");
+	}
+
+
+/**
+ @Function Number:
+ @author:Arindam
+ @example:Give Task ID for any Task this API wil return All the Value related to that TASK ID
+ @description: to verify task in Gantt
+ @param: 
+ @return: 
+ **/
+
+
+	
+function getDataOfTask($inputObject)
+{
+	_log("getDataOfTask started","success");
+	
+		_wait(1000, _isVisible(_div("taskGridDiv")));
+		_wait(1000, _isVisible(_div("ganttChartDiv")));
+	
+		var $taskRec = {};
+		
+		$firstKey = ($inputObject.ID)? $inputObject.ID : _getText(_link(0, _near(_div($inputObject.taskname))));
+
+		$taskRec["tskId"] = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/ID/", _in(_div("/headercontainer/"))),5)));
+		$taskRec["taskname"] = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Name/", _in(_div("/headercontainer/"))),5)));
+		$taskRec["tskqtipname"] = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Name/", _in(_div("/headercontainer/"))),5)));
+		$taskRec["strtdate"] = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Planned Start/", _in(_div("/headercontainer/"))),5)));
+		$taskRec["endate"] = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Planned Finish/", _in(_div("/headercontainer/"))),5)));
+		$taskRec["plndeffrt"] = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Planned Effort/", _in(_div("/headercontainer/"))),5)));
+
+	    var $res = _getText(_div(0,_near(_div($firstKey, _in(_div("/treeview/")))), _under(_div("/Resource/", _in(_div("/headercontainer/"))),5)));
+		$taskRec["noofusers"] = ($res=="" || $res==null)?0:$res.split(",").length;
+
+		_set($taskRec["tasktype"], gettaskTypeABC($firstKey));
+
+		for( var $key in $taskRec ) 
+		{
+			_log($key+">>>="+$taskRec[$key]);
+		}
+		return $taskRec;
+
+	_log("getDataOfTask Ended","success");
+
+}
+
+
+//norm, mile, summ
+<browser>
+function gettaskTypeABC($taskID)
+{
+	var taskType, rootItem, task;
+	var segmentId = getIframe($taskID);
+	rootItem=_iframe(segmentId).contentDocument.defaultView.ROOTITEM;
+	task=_iframe(segmentId).contentDocument.defaultView.DE.APP.task.TaskGrid.getGridObject().getTask($taskID,rootItem);
+	taskType=task.data.ACT_TYPE;
+	return taskType;
+}
+
+function getIframe($taskID)
+{
+	var segmentId = new String();
+	
+	if($taskID.search("_TSK")==-1)
+		segmentId = "contentframe";
+	else{
+		segmentId=_link("Linked Tasks").id;
+		segmentId = segmentId.substring(parseInt(segmentId.indexOf("_"))+1,segmentId.length);
+	}
+	return segmentId;
+}
+
+function getGanttItemABC($taskInfo)
+{
+	var outputObject = {};
+	var searchString1 = ($taskInfo["tasktype"]=="mile")?"polygon":"rect";
+	var rect1 = _div("ganttContainer").getElementsByTagName(searchString1);
+		for (var i=0; i<rect1.length;i++)
+		{
+			var id1 = rect1[i].id;
+			if (id1==$taskInfo["tskId"]){
+				_click(rect1[i]);
+				outputObject["fill"]=rect1[i].getAttribute("fill");
+				outputObject["tagName"]=rect1[i].tagName;
+				outputObject["width"]=rect1[i].getAttribute("width");
+				outputObject["y"]=rect1[i].getAttribute("y");
+				return outputObject;
+			}
+		}
+	return outputObject;
+}
+
+ function customScroll($baseTask)
+ {
+			
+                        _div("/treeview/").scrollLeft = parseInt(_position($baseTask)[0]);
+			return "";
+}
+
+</browser>
+
+/**
+ @Function Number: MultiAddition of task
+ @author:Arindam
+ @example:Give Task ID on which multiadd needs to be performed and enter the i/p of number tasks need to be added
+ @description: to verify task in Gantt
+ @param: 
+ @return: 
+ **/
+
+function multiAddOnTask($inputObject)
+{
+	_log("multiAddOnTask Started","success");		
+
+	try{
+
+            var $numOfTask = $inputObject.numberofTask;
+
+	    _wait(1000);
+		
+		if ($inputObject.baseTaskName !== undefined && $inputObject.baseTaskName !== null)
+		{
+			_rightClick(_xy(_div(0,_near(_div($inputObject.baseTaskName, _in(_div("/treeview/")))), _under(_div("/Name/", _in(_div("/headercontainer/"))),5)),15,15));
+		}
+		else if ($inputObject.baseTaskID !== undefined && $inputObject.baseTaskID !== null)
+		{
+			_rightClick(_xy(_div(0,_near(_div($inputObject.baseTaskID, _in(_div("/treeview/")))), _under(_div("/ID/", _in(_div("/headercontainer/"))),5)),15,15));
+		}
+
+	    
+             _setValue(_textbox("multilineTextbox-inputEl"), $numOfTask);
+
+			_click(_span("Multiline Add"));
+
+			
+			
+			
+	}catch(e){
+		handleFailure(e);
+	}
+	_log("multiAddOnTask Completed","success");
+
+}
+/**
+ @Function Number: MultiAddition of task
+ @author:Arindam
+ @example:Give Task ID on which multiadd needs to be performed and enter the i/p of number tasks need to be added
+ @description: to verify task in Gantt
+ @param: 
+ @return: 
+ **/
+function verifyResourceAssignmentOfTaskInGrid($inputObject)
+{
+
+        _log("verifyResourceAssignmentOfTaskInGrid Started","success");		
+
+	     try
+	         {
+
+		 var $resource = $inputObject.resource;
+		delete $inputObject.resource;
+		//FOR EVERY RESOURCE MODIFY ROW SELECTION ANDe SET THE PARAMETERS
+		for ($key in $inputObject)
+		{
+			_log("1","success");
+			var $inputValue = ""+$inputObject[$key];
+			$arrKey = $key.split("_");
+			$key1 = "/" + $arrKey[1] + "/";
+			
+		        _log("Key one is:" + $key1);
+
+			
+
+                       if($key1 ==="/Planned Start/")
+		       {
+		       _assertEqual($inputObject.PlannedStart, _getText(_div(0,_rightOf(_div($resource)))));
+		       }
+                       
+		       if($key1 ==="/Planned Finish/")
+		       {
+		       _assertEqual($inputObject.Finish, _getText(_div(1,_rightOf(_div($resource)))));
+		       }
+
+		       if($key1 ==="/Units (%)/")
+		       {
+		       _assertEqual($inputObject.unit, _getText(_div(2,_rightOf(_div($resource)))));
+		       }
+                       if($key1 ==="/Planned Effort/")
+		       {
+		       _assertEqual($inputObject.PlannedEffort, _getText(_div(3,_rightOf(_div($resource)))));
+		       }
+                      if($key1 ==="/Actual Start/")
+		       {
+		       _assertEqual($inputObject.ActualStart, _getText(_div(4,_rightOf(_div($resource)))));
+		       }
+		       if($key1 ==="/Actual Finish/")
+		       {
+		       _assertEqual($inputObject.ActualFinish, _getText(_div(5,_rightOf(_div($resource)))));
+		       }
+		      if($key1 ==="/Actual Effort/")
+		       {
+		       _assertEqual($inputObject.ActualEffort, _getText(_div(6,_rightOf(_div($resource)))));
+		       }
+		       if($key1 ==="/% Work Complete/")
+		       {
+		       _assertEqual($inputObject.WorkComplete, _getText(_div(7,_rightOf(_div($resource)))));
+		       }
+	               if($key1 ==="/Status/")
+		       {
+		       _assertEqual($inputObject.Status, _getText(_div(8,_rightOf(_div($resource)))));
+		       }
+
+		       
+
+		   }
+
+		   $inputObject[$arrKey[1]] = $inputObject[$key];
+		   delete $inputObject[$key];
+			
+	         }
+	
+	catch(e)
+	
+	{
+		handleFailure(e);
+	}
+	_log("verifyResourceAssignmentOfTaskInGrid Completed","success");
+
+}
+
+/**
+ @Function Number: Delinking a task
+ @author:Arindam
+ @example: click on delink button
+ @description: 
+ @param: 
+ @return: 
+ **/
+ function deLink()
+ {
+ _log("Delink started","Success");
+ try
+ {
+ _wait(2000,_isVisible(_span("delinkButton-btnIconEl")));
+
+ _click(_span("delinkButton-btnIconEl"));
+
+ }
+ catch(e)
+ {
+ handleFailure(e);
+ }
+ _log("Delink Completed","Success");
+ }
+
+/**
+ @Function Description: Batch edit a task
+ @author:Arindam
+ @example: click on delink button
+ @description: 
+ @param: 
+ @return: 
+ **/

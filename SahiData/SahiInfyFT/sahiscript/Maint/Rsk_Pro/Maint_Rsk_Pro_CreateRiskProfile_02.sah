@@ -1,0 +1,316 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TestManagement.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Pro_CreateRiskProfile_02", "Maint\Rsk_Pro");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ var $TC = _testcase("TC_1_and_4","Checking for the availability of Risk Profiler."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name0;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_2.2","Checking for the Work-flow Tab."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_5.1","Enter valid Non-Zero Response and description."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name0;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.editbtn = $data.editbtn;
+ $inputObject.lst_ctl00_cphContent1_drpLCStage = $data.LCStage;
+ $inputObject.edt_ctl00_cphContent1_tbProjectValue = $data.Revenue;
+ InfyFTCheckingForEditBtnRiskProfiler($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName1;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl02_DashBoardMetricRow1_rbQualitativeResponse_2 = $data.rdg1;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.txt_ctl00_cphContent1_GridView1_ctl02_DashBoardMetricRow1_tbRemarks = $data.desc1;
+ InfyFTverifyEformInstanceDetailsForRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName2;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl03_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg2;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName3;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl04_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg3;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName4;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl05_DashBoardMetricRow1_rbUserDefined_0 = $data.rdg4;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+   
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName5;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl05_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg5;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName6;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl06_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg6;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName7;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl07_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg7;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName8;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl08_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg8;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName9;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl09_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg9;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName11;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl11_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg11;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName12;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl12_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg12;
+ $inputObject.alert = "Data saved successfully; but the profile is not complete, request you to answer the questions highlighted in Red !!";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.image = $data.imageName13;
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.rdg_ctl00_cphContent1_GridView1_ctl13_DashBoardMetricRow1_rbQualitativeResponse_0 = $data.rdg13;
+ $inputObject.alert = "Please choose to Submit the Profiler or answer the extended set.";
+ InfyFTsaveInstanceRiskProfiler($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.link = $data.link2;//Go to Extended Set
+ InfyFTclickRiskProfiler($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.noTimes = $data.noTimes;
+ InfyFTSaveEform($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.link = $data.link3;//Freeze Response
+ $inputObject.successMsg = "You have completed the Risk Profiling for Project : PGATTOPS";
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.value = $data.ScoreValue;
+ $inputObject.span_Name = $data.lblScore;
+ InfyFTisGetValueForDomain($inputObject);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_8","Click on Preview to check for category level score and overall level score."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.link = $data.link4//Preview; 
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.popup = $data.popup;
+ $inputObject.span_Name = $data.span_Name;//Risk Trend
+ InfyFTclickPopup($inputObject); 
+ 
+ _wait(2000);
+ 
+ _popup("Support")._assertEqual("Risk Score1.1311.045.42", _getText(_row(205)));
+ 
+ _popup("Support")._assertEqual("Client Relationship 0.006.688.66", _getText(_row(211)));
+ 
+ _popup("Support")._assertEqual("Project Profile 0.700.322.11", _getText(_row(217)));
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup;
+ InfyFTcloseWin($inputObject); 
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_16","Check the status of Risk Profiler in RMS."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.value = $data.statusValue;
+ $inputObject.span_Name = $data.lblStatus;
+ InfyFTisGetValueForDomain($inputObject)
+ 
+ $TC.end();
+  
+ var $TC = _testcase("TC_8","Checking the Risk score in score tab."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;//Score Tab
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.valueRskTrend0;
+ InfyFTisVisible1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.valueRskTrend1;
+ InfyFTisVisible1($inputObject); 
+ 
+
+ _wait(1000);
+ $TC.end(); 
+ 
+ 
+ 
+
+ 
+
+ 
+ 
+
+
+
+ 
+ 

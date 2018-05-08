@@ -1,0 +1,149 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Creation_OR_13","Testing/Request_Management/Other_Request"); 
+
+ $bTN = $data.Name;
+ $review_type = $data.rev_type;//"Others";
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ 
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Siddharth Kale	
+$inputObject.edt_loginid = $data.LoginID1;//siddharth_kale
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+var $t = _testcase("TC-3.2", "CHECK THE MANDATORY FIELDS FOR CREATING A OTHERS TASK");
+
+
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+_wait(100000);
+
+var $t = _testcase("TC-3.1", "CHECK THE FIELDS AVAILABLE WHILE CREATING A OTHERS TASK ");
+$t.start();
+$inputObject = {};
+$inputObject.ele_CM_NameLABEL = $data.Title;//"Request Title * :";
+$inputObject.ele_CM_DescriptionLABEL = $data.R_Descr;//"Request Description * :";
+$inputObject.ele_DN_RequestOwnerLABEL = $data.R_OWNER;//"Request Owner * :"; 
+$inputObject.ele_DN_SOWLABEL = $data.R_SOW;//"SOW :"; 
+$inputObject.ele_DN_ComplexityLABEL = $data.R_Complexity;//"Complexity * :";
+$inputObject.ele_DN_ModuleCodeLABEL = $data.R_Mcode;//"Module Code :";
+$inputObject.ele_DN_ApplicationCodeLABEL = $data.R_Acode;//" Application Code :";
+$inputObject.ele_DN_TypeofWorkLABEL = $data.TypOfWork;//"Type Of Work :";
+$inputObject.ele_DN_CustomerRequestCodeLABEL = $data.R_CRC;//" Customer Request Code :";
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+ 
+$inputObject={};
+$inputObject.txt_CM_Description = $data.Desc2;
+ModifyEformInstance($inputObject);
+
+_assertEqual("Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field Request Owner in Details tab \n• Field Complexity in Details tab", _lastAlert());
+$t.end();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name;
+$inputObject.lst_DN_RequestOwner = $data.Owner2;
+$inputObject.lst_DN_Complexity =  $data.Complexity2;
+ModifyEformInstance($inputObject);
+ 
+var $ID = _getText(_span("CM_ItemCode"));
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTOpenEformInstanceForLastPage($inputObject);
+
+ var $s1 = _testcase("Print-Icon"," Check Printing the Request");
+ $s1.start();
+ 
+ InfyFTprint();
+ 
+ $s1.end();
+
+/*
+var $t = _testcase("COMMENTS", "ADDING COMMENTS IN THE COMMENTS SEGMENT");
+
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name ="Comments";
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.span = "de-icon-add_comment"; 
+InfyFTclick($inputObject);
+
+ 
+$inputObject={};
+$inputObject.txt_addCommentTextArea = "Comments Segment";
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+saveSwiftForm($inputObject);
+
+$t.end();
+*/
+
+var $t = _testcase("REUSE TRACKING", "CHECK THE REUSE TRACKING SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Reuse_Tracking_Positive_OR_16.sah");
+
+$t.end();
+
+var $t = _testcase("SCHEDULE TASK", "CHECK THE SCHEDULE TASK SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Scheduled_Task_Report_OR_14.sah");
+
+$t.end();
+
+
+var $t = _testcase("REQUEST SUMMARY SEGMENT", "CHECK THE REQUEST SUMMARY SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Req_Summary_OR_17.sah");
+
+$t.end();
+
+var $t = _testcase("REVIEWS", "CHECK THE REVIEWS SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Rev_Def_OR_15.sah");
+
+$t.end();
+
+
+
+

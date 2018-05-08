@@ -1,0 +1,221 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceSnehal.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("IMS_PSC_CreatePSC_Validation_AfterProjEndDate_TS_Proj_01", "IMS/Performance_Scorecard");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-1,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+  
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name21;
+ selectProject($inputObject);
+ 
+ /* $inputObject = {}; // giving the path for SetUp - Project Tailoring
+ $inputObject.name = $data.navigateTo32; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName40;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TicketDataSource = $data.TicketDataSource9;
+ //$inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStageOfProject92;// Steady state
+ $inputObject.edt_DN_StartofSteadyState = $endDate;
+ InfyFTModifyEformInstanceS($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+
+ /*****************************************************************************
+ *  TestCase_14  : project end date is before the autofilled From date
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_14","project end date is before the autofilled From date");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "Card_1";
+ $inputObject.edt_DN_FromDate = "21-Oct-2016";
+ $inputObject.edt_DN_ToDate = "20-Jan-2017";
+ InfyFTCreateInstanceS($inputObject);
+ 
+ var $PSC_ID = $inputObject.CreatedId;
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "Card_2";
+ $inputObject.edt_DN_FromDate = "21-Jan-2017";
+ $inputObject.edt_DN_ToDate = "20-Mar-2017";
+ $inputObject.msgAlert = "Error: Current scorecard To Date (20-Mar-2017) cannot be greater than Project End Date (30-Jan-2017)";
+ CreateInstance($inputObject);
+ 
+ _wait(500);
+ 
+ clickReturn();
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = $PSC_ID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $PSC_ID;
+ DeleteEformInstance($inputObject);
+ 
+ _wait(500);
+ 
+ //clickReturn();
+ 
+ $t.end();
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name22;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSCName4;
+ OpenEformInstance($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName41;//SLA Performance
+ SelectSegment($inputObject);
+ 
+ _click(_link("Click Here"));
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues555;//93
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Error: Numerator cannot be greater than denominator if UOM is percentage. ";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues556;//1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+ _wait(3000);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53; //SLA TAT Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues557;//93
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Error: Numerator cannot be greater than denominator if UOM is percentage. ";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53; //SLA TAT Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues558;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(3000);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName42;//Internal Efficiency
+ SelectSegment($inputObject);
+_click(_link("Click Here[1]"));
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54; //internal Goals
+ $inputObject.rowNo = $data.rowNo505;//4
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues550;//93
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Error: Numerator cannot be greater than denominator if UOM is percentage. ";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54; //internal Goals
+ $inputObject.rowNo = $data.rowNo505;//4
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues551;//1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+ _wait(3000); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55; //internal TAT Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues550;//99
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Error: Numerator cannot be greater than denominator if UOM is percentage. ";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55; //internal TAT Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues551;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);

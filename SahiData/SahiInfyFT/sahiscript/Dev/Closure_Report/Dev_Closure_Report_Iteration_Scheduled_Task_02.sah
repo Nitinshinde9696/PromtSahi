@@ -1,0 +1,109 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+ _include("../../../sahisource/Business/TaskGrid.sah");
+
+ $generic = readDataFromCSV("Dev_Closure_Report_Generic_00","Dev/Closure_Report");
+ $data = readDataFromCSV("Dev_Closure_Report_Iteration_Scheduled_Task_02","Dev/Closure_Report");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Ricky_Wang
+ $inputObject.edt_loginid = $generic.LoginID1;// Ricky_Wang
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "BGGSZ199";$generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR3";//$data.iter1;//ITR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Adding scheduled task from sub project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment14;//Sub Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1;//newListing
+ $inputObject.edt_CM_Name = $data.subname1;//subtest
+ $inputObject.lst_isPackageDigiteStart = $data.schedmode1;//STaRT
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $subId = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $subId;
+ OpenEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup2;//openLinkedItem 
+ $inputObject.segment_name = $generic.segment15;//Scheduled Tasks
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup2;//openLinkedItem
+ InfyFTcheckOutProjectInGridForPopup($inputObject);
+ 
+ _wait(1000);
+ 
+ var $baseTaskID = $subId+"_TSK1";
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup2;//openLinkedItem 
+ $inputObject.LinkedTask = $data.linkedtask1;//True
+ $inputObject.baseTaskID = $baseTaskID;
+ $inputObject.baseTaskName = $data.subname1;//subtest
+ $inputObject.edt_Name = $data.taskname1;//CRep
+ $inputObject["edt_Planned Finish"] ="08-Aug-2016";//$EndDate;
+ $inputObject["edt_Planned Start"] = "08-Aug-2016";//$StartDate;
+ $inputObject["edt_Activity Code"] = $data.actcode1;//PCD
+ InfyFTaddTaskInGrid($inputObject); 
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

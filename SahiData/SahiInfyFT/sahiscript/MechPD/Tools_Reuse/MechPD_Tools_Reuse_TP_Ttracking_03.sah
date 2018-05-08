@@ -1,0 +1,282 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("MechPD_Tools_Reuse_TP_Ttracking_03","MechPD/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer//Arjun R02
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer//anantha_sankaran
+$inputObject.edt_password = $data.Password1;//Allahu@1//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Mech PD Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Tools Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Navigating to Product Design Request ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;//Product Design
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $GetExcel = _testcase("GetExcel"," Getting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "P_D";
+  infyFTGetValueFromExcel($inputObject);
+  $P_D_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $P_D_Id;
+OpenEformInstance($inputObject);
+
+var $t = _testcase("TC_6", "Navigating to Tools Tracking through Product Design Request ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Tools Tracking
+SelectSegment($inputObject);
+
+$t.end();
+
+_wait(500);
+
+var $t = _testcase("TC_7", "Available Links in Tools Tracking section ");
+$t.start();
+
+$inputObject = {};
+$inputObject.value = $data.Link1;//Add from PRIME
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Link2;//Add Standard Tools
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Link3;//Add Planned Tools
+InfyFTvalueisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Opening the Available Standard Tools link ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name8;//Add Standard Tools
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_LCStage = $data.LCStage8;//Product Design Requirements / Specifications
+$inputObject.lst_DN_Technology = $data.Technology8;//Administrator 
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name9;//Search Output
+SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_9", "Verifying the asset in Search Output section");
+$t.start();
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1]
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;//Notepad
+$inputObject.colNo = $data.colName8;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Notepad
+verifySwiftFormData($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_10", "Selecting the asset in Search Output section");
+$t.start(); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1] 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+infyFTsaveSwiftForm();
+ 
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_11", "Verifying the asset in Tools Tracking Section");
+$t.start(); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.Segment_name7;//Tools Tracking
+$inputObject.rowNo = $data.rowNo;//"3";
+$inputObject.colNo = $data.colNo;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Eclipse
+verifySwiftFormData($inputObject);
+ 
+$t.end();
+ 
+_wait(1000); 
+clickReturn();
+
+var $t = _testcase("TC_12", "Verifying the asset in listing of Tools Planning Section ");
+$t.start();
+ 
+//_click(_link("Tools Planning"));
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4a;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+_wait(1000); 
+ 
+$inputObject = {};
+$inputObject.item = $data.TOPL1;//"Tools Plan for Product Design";
+OpenEformInstance($inputObject);
+  
+_wait(500);
+
+$inputObject = {};
+$inputObject.segment_name = $data.navigateTo5;//Tools Planning[2]
+SelectSegment($inputObject); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName9;//Planned Tools List
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;//Eclipse
+$inputObject.colNo = $data.colName8;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Eclipse
+verifySwiftFormData($inputObject);
+ 
+$t.end();
+
+var $t = _testcase("TC_13", "Trying to DELETE the asset from the listing of Tools Planning Section ");
+$t.start();
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName9;//Planned Tools List 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Eclipse
+$inputObject.msgAlert = "Error :" + $data.LCStage9 + " used in requests. Hence cannot be deleted. Only tools not used in any of the requests can be deleted from the plan.";
+setSwiftFormData($inputObject);  
+ 
+$t.end();
+ 
+var $t = _testcase("TC_14", "Making the asset status as INACTIVE of Tools Planning Section asset ");
+$t.start();
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName9;//Planned Tools List
+$inputObject.byColRowName = "yes"; 
+$inputObject.rowNo = $data.rowName8;//Eclipse
+$inputObject.colNo = $data.colName9;//In Active_chk
+$inputObject.fieldValues = "true";//
+setSwiftFormData($inputObject);
+infyFTsaveSwiftForm();
+
+$t.end(); 
+ 
+clickReturn();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;//Product Design
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $GetExcel = _testcase("GetExcel"," Getting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "P_D";
+  infyFTGetValueFromExcel($inputObject);
+  $P_D_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $P_D_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Tools Tracking
+SelectSegment($inputObject);
+
+
+var $t = _testcase("TC_15", " Opening the Add Planned Tools link ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name10;//Add Planned Tools
+SelectSegment($inputObject);
+
+_wait(3000);
+
+//_highlight(_table("DataTableClass"));
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_16", "Deleting the asset in Tools Tracking Section");
+$t.start(); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.Segment_name7;//Tools Tracking[1] 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+infyFTsaveSwiftForm();
+
+$t.end();
+
+
+
+
+
+

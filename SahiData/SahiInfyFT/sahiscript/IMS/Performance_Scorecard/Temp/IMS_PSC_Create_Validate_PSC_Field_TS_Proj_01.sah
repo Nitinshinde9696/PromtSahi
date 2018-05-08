@@ -1,0 +1,12 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah")
+
+$data = readDataFromCSV("IMS_PSC_Create_Validate_PSC_Field_TS_Proj_01", "IMS/Performance_Scorecard");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);

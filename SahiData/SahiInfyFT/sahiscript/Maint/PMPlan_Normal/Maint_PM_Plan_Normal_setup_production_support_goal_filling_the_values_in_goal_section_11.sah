@@ -1,0 +1,119 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data11 = readDataFromCSV("Maint_PM_Plan_Normal_setup_production_support_goal_filling_the_values_in_goal_section_11","Maint/PMPlan_Normal"); 
+ 
+ 
+ var $t = _testcase("Navigate", "Navigate");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data11.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data11.nodeIcon11;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.link1;// _InfyFTclick(_link("Production Support Goals"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_68", "Production Support Goals");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.link2;// _InfyFTclick(_link("setup goals"));
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data11.LblNames;
+ InfyFTassertVisible($inputObject);
+ 
+ var $t = _testcase("TC_69", "Filling the values in Goal selection");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.segment_name=$data11.segment_name1;
+ SelectSegment($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableName11;//Goal selection
+ $inputObject.rowNo=$data11.rowNo1;//1
+ $inputObject.colNo=$data11.colNo10;//10_edt
+ $inputObject.fieldValues=$data11.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableName11;
+ $inputObject.rowNo=$data11.rowNo1;
+ $inputObject.colNo=$data11.colNo11;//11_lst
+ $inputObject.fieldValues=$data11.fieldValues2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableName11;//Goal selection
+ $inputObject.rowNo=$data11.rowNo1;//1
+ $inputObject.colNo=$data11.colNo12;//12_edt
+ $inputObject.fieldValues=$data11.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableName11;//Goal selection
+ $inputObject.rowNo=$data11.rowNo1;//1
+ $inputObject.colNo=$data11.colNo15;//15_txt
+ $inputObject.fieldValues=$data11.fieldValues3;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableName11;//Goal selection
+ $inputObject.rowNo=$data11.rowNo1;//1
+ $inputObject.colNo=$data11.colNo1;//1_chk
+ $inputObject.fieldValues=$data11.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ InfyFTReturn();
+ 
+ _wait(5000);
+ 
+ _assertVisible(_span("/de-icon-red_signal/"));
+  
+ $inputObject = {};
+ $inputObject.image = $data11.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data11.tableName2;
+ $inputObject.rowNo = $data11.link39;//production suppport
+ $inputObject.colNo = $data11.colNo17;//Reason_lbl
+ $inputObject.fieldValues = "Production Support Goals section is completely filled.";
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $t.end();
+ 
+ 

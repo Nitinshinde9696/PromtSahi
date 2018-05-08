@@ -1,0 +1,177 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data3 = readDataFromCSV("Testing_PMPlan_Small_Project_Risk_logs_verify_fields_06","Testing/PMPlan_Small"); 
+
+ var $t = _testcase("Script 31", "TC 18, 19, 91, 21");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4; //Risk
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_18", "Risk Log");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data3.tableName2;
+ $inputObject.rowNo = $data3.Risk;//9
+ $inputObject.colNo = $data3.ReasonLbl;
+ $inputObject.fieldValues = $data3.reason6;//Reason 6
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon13;// _InfyFTclick(_image("nodeIcon16"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.RiskLog;// _InfyFTclick(_link("Risk Log"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data3.RiskID;
+ verifyEformListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4; //Risk
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data3.RiskID; 
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.CM_Name4;
+ $inputObject.lst_DN_RiskCategory = $data3.riskCategory4;
+ $inputObject.txt_CM_Description = $data3.mitigationPlan4;
+ $inputObject.lst_DN_Probability = $data3.probability4;
+ $inputObject.lst_DN_Impact = $data3.impact4;
+ //$inputObject.edt_field5 = $data3.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data3.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data3.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data3.impactTo4;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data3.tableName2;
+ $inputObject.rowNo = $data3.Risk;//10
+ $inputObject.colNo = $data3.ReasonLbl;
+ $inputObject.fieldValues = $data3.reason7;//Reason 7
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+  
+ $t.end();
+ 
+ /*
+ var $t = _testcase("TC_20", "Checking for corresponding section in the PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data3.tableName2;
+ $inputObject.rowNo = $data3.rowNo0;
+ $inputObject.colNo = $data3.colNo17_0;
+ $inputObject.fieldValues = $data3.RedSignal;//Reason 18
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ */
+
+ var $t = _testcase("TC_21", "Verify Fields");
+ $t.start();
+ 
+
+ $inputObject = {};
+ $inputObject.link = $data3.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data3.tableName;//Overview
+ $inputObject.rowNo = $data3.rowNos;// row from 0 to 13
+ $inputObject.colNo = $data3.colNos;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data3.fieldValues;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data3.tableName;//Overview
+ $inputObject.rowNo = $data3.rowNos_1;// row 14
+ $inputObject.colNo = $data3.colNos_1;//0_lbl
+ $inputObject.fieldValues = $data3.RskTestAdop32;
+ InfyFTverifySwiftFormData($inputObject);
+*/
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_CR CHANGES", "VERIFYING IPR AND CONFIDENTIALITY FIELDS OF OVERVIEW SECTION");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data3.overview;//"Overview[1]";
+ $inputObject.rowNo = $data3.conf;//"Confidentiality";
+ $inputObject.colNo = $data3.Proj1;//"TJCMZMEP_lst";
+ $inputObject.fieldValues = $data3.Conf_values;//"NOT OK to use any form of case study of this project#--None--#OK to use case study only without name of client#OK to use case study with client name only on explicit permission from Account Manager/BDM#OK to use case study with client name only on explicit permission from Client#OK to use case study with client name without any further permission";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data3.overview;//"Overview[1]";
+ $inputObject.rowNo = $data3.conf;//"Confidentiality";
+ $inputObject.colNo = $data3.Proj1;//"TJCMZMEP_lst";
+ $inputObject.fieldValues = $data3.Conf_setval;//"NOT OK to use any form of case study of this project";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data3.overview;//"Overview[1]";
+ $inputObject.rowNo = $data3.IPR;//"IPR";
+ $inputObject.colNo = $data3.Proj2;//"TJCMZMEP[1]_chk";
+ $inputObject.fieldValues = "Y";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ 
+ $t.end();
+ 
+ 
+ 
+ 

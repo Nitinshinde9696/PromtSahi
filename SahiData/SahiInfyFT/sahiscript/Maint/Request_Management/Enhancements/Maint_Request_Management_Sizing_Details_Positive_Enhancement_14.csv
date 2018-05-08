@@ -1,0 +1,2 @@
+segment_sizing_details,segment_req_summery,details,row1,col1,val1,Nesma,col2,val2,val3,row2,col3,Size_Summary
+Sizing Details,Request Summary,Details,2,0_lst|1_lst|8_lst,Custom Application|C++|Nesma FP,Nesma FP,0_edt|1_edt,64|54,UOM of Size|Nesma FP|Enhancement Size|64.00|Testing Size|54.00,2|3|4,0_lbl|1_lbl,Size Summary

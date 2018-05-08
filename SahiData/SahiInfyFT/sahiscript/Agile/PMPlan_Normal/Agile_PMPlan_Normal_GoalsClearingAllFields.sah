@@ -1,0 +1,142 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("Agile_PMPlan_Normal_Goals_SLAPenalty_RewardDetails","Agile/PMPlan_Normal"); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Project tailoirng
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentProject;
+ SelectSegment($inputObject);
+ 
+ _wait(5000); 
+ 
+ 
+ if(_isVisible(_checkbox("false[1]")))
+ {
+  _click(_checkbox("on"));
+  
+  _wait(1000);
+ 
+ }
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkGoals; //Goals
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowProductivity;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowDefectInjection;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowResidualDefectQuality;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowStoryPoint;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowVelocity;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowResidualDefectDensity;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowEffortVariance;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject); 
+ 
+ /*
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableGoals;
+ $inputObject.rowNo = $data.rowDefectDensity;
+ $inputObject.colNo = $data.goalsColumns;
+ $inputObject.fieldValues = " | | ";
+ setSwiftFormData($inputObject);
+ */
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);
+ 
+ _setSelected(_select(8), "--None--");
+ 
+if(_isVisible(_checkbox("false[1]")))
+{
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableStrategies;
+ $inputObject.rowNo = $data.tableStrategies;
+ $inputObject.colNo = $data.colDelete;
+ $inputObject.fieldValues = $data.fieldValueY;
+ setSwiftFormData($inputObject); 
+
+} 
+
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);

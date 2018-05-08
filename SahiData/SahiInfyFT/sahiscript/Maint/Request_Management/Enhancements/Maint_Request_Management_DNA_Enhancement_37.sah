@@ -1,0 +1,431 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_DNA_Enhancement_37","Maint/Request_Management/Enhancements");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s1.end();
+ var $s2 = _testcase("TC_1.1.3"," Check the Fields");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ _click(_span("KEY_BUTTON_Add-btnIconEl"));
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name4+";"+$data.span_Name5+";"+$data.span_Name6+";"+$data.span_Name7+";"+$data.span_Name8+";"+$data.span_Name9+";"+$data.span_Name10+";"+$data.span_Name11+";"+$data.span_Name12+";"+$data.span_Name13+";"+$data.span_Name14+";"+$data.span_Name15;//_cell("ID")
+ InfyFTisVisible($inputObject);
+
+ clickReturn();
+ $s2.end();
+
+ var $s3 = _testcase("TC_1.2"," Check Mandatory the Fields");
+ $s3.start();
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.lst_DN_RequestOwner = $data.reqowner16;
+ $inputObject.lst_DN_Complexity = $data.complexity17;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ $inputObject.lst_DN_LCStage = "Partial LC Stage";
+ $inputObject.msgAlert =  "Value is not set for the below fields. Please enter the values and save:\n• Field Request Type in Details tab";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_RequestType = $data.req_type_list16;//--None--;Major;Minor
+ verifyEformInstanceDetails($inputObject);
+ 
+ $s3.end();
+ 
+  var $s4 = _testcase("TC_2"," DM-Major Enhancement");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_RequestType = $data.MajrEnh;//"DM-Major Enhancement";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Technology in Details tab \n•  Field Sub Service in Details tab \n•  Field Services in Details tab";
+ ModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.sections;//"Services * :;Technology * :;Sub Service * :";
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.DNServics;//"DM;--None--;Both DM & BI";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tvalues;//"Ab Initio;--None--;. NET;Actuate;Alteryx;AWS;Azure IntellegentServices;Azure ML;Birst;Business Objects;Cassandra;Chukwa;Cloudera;Cloudera Oryx;CloverETL;Cognos;Cognos Rave;COGNOS TM;COIN-OR;Composite;Cosmos;CouchBase;Data Factory;Data flux;Data Meer;Datastage;DB2;Denedo;DocumentDB;DOMO;Drill;Dynamo DB;ElasticSearch;EMR;Essbase;Exadata;Exalytics;Excel;Excelsios;Flume;Graph DBs;Greenplum;Gurobi;Hadoop;Hbase;HD Insights;Hive;Hortonworks;Hyperion;Hyperion DRM;Hyperion ESSBASE;Hyperion FR;Hyperion planning;IBM Big Insights;IBM DB2;IBM MDM;IBM PIM;IBM SPSS Data Collection;IBM SPSS Modeler;IBM SPSS Statistics;IBM Watson;IIP;Informatica;Informatica DQ;Informatica MDM;Informatica PIM;Information builder;Jaspersoft;Java;Java Script;Kafka;Kalido MDM;Kibana;Kinesis;KNIME;Logstash;Map Reduce;MapR;Marklogic;Matlab;MemchaceD;Microsoft Azure;MicroStrategy;MiniTab;Mlib;MongoDB;MS BI;MS Power BI;MS PowerView;MS SSAS;MS SSIS;MS SSRS;MYSQL;Neo4j;Netezza;OBIEE;ODW;Oozie;Oracle;Oracle Data Integrator;Oracle MDM;Oracle ODI;Oracle PBCS;Oracle PL/SQL;Oracle Warehouse Builder - OWB;Orchestra Network;Others;OWB;Paxata;Pentaho;Pig;Platfora;Power BI;Power view;Presto;Python;Qlikview;R;Redis;Redshift;RELTIO MDM;Revolution R;Riversand;SAP BI;SAP BO;SAP BODS;SAP BPC;SAP BW;SAP Crystal Reports;SAP HANA;SAP Lumira;SAP MDM;SAP Xcelcius;SAS;SAS DI studio;Scala;Scoop;Siebel;Simulink;Solr;SpagoBI;Spark;Spark Streaming;Splunk;Spotfire;SQL Server;SQL Warehouse;Sqoop;SSIS;SSRS;Stibo MDM;Storm;Sybase ETL Developer;Tableau;Tactic;Talend;Teradata;Teradata Aster;TIBCO MDM;TIBCO SPOTFIRE;Trillium;Vertica;Web focus;Weka;Zookeeper";
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.DM;//"DM";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Technology in Details tab \n•  Field Sub Service in Details tab";
+ ModifyEformInstance($inputObject); 
+  
+ $s4.end();
+ 
+  var $s5 = _testcase("TC_2"," DM-Service");
+ $s5.start();  
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.DNsub;//"MDM;Data Quality;--None--;Big Data;Data Consolidation;Data Integration;Metadata Management;Migration";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.MDM;//"MDM";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech1;//"Kalido MDM;Stibo MDM;Informatica MDM;SAP MDM;Informatica PIM;Orchestra Network;IBM MDM;TIBCO MDM;IBM PIM;RELTIO MDM;Others;Oracle MDM;Riversand";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.DQ;//"Data Quality";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech2;//"Informatica DQ;Others;Trillium;Data flux";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.BD;//"Big Data";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech3;//"Hortonworks;Spark Streaming;Pig;Cassandra;Marklogic;MapR;Chukwa;Java;Drill;Paxata;Hadoop;Scala;MemchaceD;Oozie;Hbase;Storm;Cloudera;IIP;Neo4j;DocumentDB;Cosmos;Sqoop;Kibana;Solr;Microsoft Azure;Data Meer;Vertica;Graph DBs;MongoDB;CouchBase;Kafka;Teradata Aster;Greenplum;Data Factory;Redis;Redshift;Splunk;Presto;Others;Kinesis;Platfora;Flume;EMR;Logstash;Alteryx;HD Insights;SQL Warehouse;ElasticSearch;AWS;Zookeeper;Map Reduce;Dynamo DB;Hive;Spark;IBM Big Insights";
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.DC;//"Data Consolidation";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech4;//"Oracle ODI;Datastage;Ab Initio;MYSQL;SAS DI studio;Netezza;SAP BODS;Exadata;Talend;Informatica;SQL Server;Teradata;DB2;Oracle;Others;ODW;Denedo;Composite;Pentaho";
+ verifyEformInstanceDetails($inputObject); 
+  
+  $inputObject = {}; 
+  $inputObject.lst_DN_SubService = $data.DI;//"Data Integration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech5;//"Oracle ODI;Exadata;Others;Pentaho;DB2;Teradata;Informatica;MYSQL;Talend;Composite;Netezza;SQL Server;ODW;SAS DI studio;Ab Initio;SAP BODS;Datastage;Denedo;Oracle";
+ verifyEformInstanceDetails($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.meta;//"Metadata Management";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech6;//"Composite;Oracle;Talend;ODW;Datastage;DB2;Netezza;Teradata;MYSQL;SAS DI studio;Informatica;SQL Server;Pentaho;Exadata;SAP BODS;Denedo;Others;Ab Initio;Oracle ODI";
+ verifyEformInstanceDetails($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.migration;//"Migration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech7;//"ODW;Teradata;Oracle;Denedo;Oracle ODI;DB2;Talend;Pentaho;SQL Server;Exadata;SAS DI studio;Ab Initio;Informatica;SAP BODS;MYSQL;Datastage;Netezza;Others;Composite";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $s5.end();
+  var $s6 = _testcase("TC_3"," Both DM & BI-Service");
+ $s6.start(); 
+  
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.dmbi;//"Both DM & BI";
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.ser_dmbi;//"--None--;Dashboard & Reporting;MDM;In-Memory;Data Quality;Migration;EPM;Data Mining & Analytics;Metadata Management;Self-Service BI;Data Consolidation;Data Integration;Visualization;Big Data";
+ verifyEformInstanceDetails($inputObject);
+ 
+ 
+  $inputObject = {};
+ $inputObject.lst_DN_Services = $data.dmbi;//"Both DM & BI";
+ $inputObject.lst_DN_SubService = $data.migration;//"Migration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech8;//"Ab Initio;Actuate;--None--;. NET;Alteryx;AWS;Azure IntellegentServices;Azure ML;Birst;Business Objects;Cassandra;Chukwa;Cloudera;Cloudera Oryx;CloverETL;Cognos;Cognos Rave;COGNOS TM;COIN-OR;Composite;Cosmos;CouchBase;Data Factory;Data flux;Data Meer;Datastage;DB2;Denedo;DocumentDB;DOMO;Drill;Dynamo DB;ElasticSearch;EMR;Essbase;Exadata;Exalytics;Excel;Excelsios;Flume;Graph DBs;Greenplum;Gurobi;Hadoop;Hbase;HD Insights;Hive;Hortonworks;Hyperion;Hyperion DRM;Hyperion ESSBASE;Hyperion FR;Hyperion planning;IBM Big Insights;IBM DB2;IBM MDM;IBM PIM;IBM SPSS Data Collection;IBM SPSS Modeler;IBM SPSS Statistics;IBM Watson;IIP;Informatica;Informatica DQ;Informatica MDM;Informatica PIM;Information builder;Jaspersoft;Java;Java Script;Kafka;Kalido MDM;Kibana;Kinesis;KNIME;Logstash;Map Reduce;MapR;Marklogic;Matlab;MemchaceD;Microsoft Azure;MicroStrategy;MiniTab;Mlib;MongoDB;MS BI;MS Power BI;MS PowerView;MS SSAS;MS SSIS;MS SSRS;MYSQL;Neo4j;Netezza;OBIEE;ODW;Oozie;Oracle;Oracle Data Integrator;Oracle MDM;Oracle ODI;Oracle PBCS;Oracle PL/SQL;Oracle Warehouse Builder - OWB;Orchestra Network;Others;OWB;Paxata;Pentaho;Pig;Platfora;Power BI;Power view;Presto;Python;Qlikview;R;Redis;Redshift;RELTIO MDM;Revolution R;Riversand;SAP BI;SAP BO;SAP BODS;SAP BPC;SAP BW;SAP Crystal Reports;SAP HANA;SAP Lumira;SAP MDM;SAP Xcelcius;SAS;SAS DI studio;Scala;Scoop;Siebel;Simulink;Solr;SpagoBI;Spark;Spark Streaming;Splunk;Spotfire;SQL Server;SQL Warehouse;Sqoop;SSIS;SSRS;Stibo MDM;Storm;Sybase ETL Developer;Tableau;Tactic;Talend;Teradata;Teradata Aster;TIBCO MDM;TIBCO SPOTFIRE;Trillium;Vertica;Web focus;Weka;Zookeeper";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $s6.end();
+ var $s7 = _testcase("TC_4"," DM-Minor Enhancement");
+ $s7.start();
+ 
+  
+ $inputObject = {};
+ $inputObject.lst_DN_RequestType = $data.Mi_Enh;//"DM-Minor Enhancement"
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Services in Details tab";
+ ModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.sections;//"Services * :;Technology * :;Sub Service * :";
+ InfyFTisVisible($inputObject); 
+   
+ $inputObject = {};
+ $inputObject.lst_DN_Services =  $data.DNServics;//"DM;--None--;Both DM & BI";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech9;//"Ab Initio;--None--;. NET;Actuate;Alteryx;AWS;Azure IntellegentServices;Azure ML;Birst;Business Objects;Cassandra;Chukwa;Cloudera;Cloudera Oryx;CloverETL;Cognos;Cognos Rave;COGNOS TM;COIN-OR;Composite;Cosmos;CouchBase;Data Factory;Data flux;Data Meer;Datastage;DB2;Denedo;DocumentDB;DOMO;Drill;Dynamo DB;ElasticSearch;EMR;Essbase;Exadata;Exalytics;Excel;Excelsios;Flume;Graph DBs;Greenplum;Gurobi;Hadoop;Hbase;HD Insights;Hive;Hortonworks;Hyperion;Hyperion DRM;Hyperion ESSBASE;Hyperion FR;Hyperion planning;IBM Big Insights;IBM DB2;IBM MDM;IBM PIM;IBM SPSS Data Collection;IBM SPSS Modeler;IBM SPSS Statistics;IBM Watson;IIP;Informatica;Informatica DQ;Informatica MDM;Informatica PIM;Information builder;Jaspersoft;Java;Java Script;Kafka;Kalido MDM;Kibana;Kinesis;KNIME;Logstash;Map Reduce;MapR;Marklogic;Matlab;MemchaceD;Microsoft Azure;MicroStrategy;MiniTab;Mlib;MongoDB;MS BI;MS Power BI;MS PowerView;MS SSAS;MS SSIS;MS SSRS;MYSQL;Neo4j;Netezza;OBIEE;ODW;Oozie;Oracle;Oracle Data Integrator;Oracle MDM;Oracle ODI;Oracle PBCS;Oracle PL/SQL;Oracle Warehouse Builder - OWB;Orchestra Network;Others;OWB;Paxata;Pentaho;Pig;Platfora;Power BI;Power view;Presto;Python;Qlikview;R;Redis;Redshift;RELTIO MDM;Revolution R;Riversand;SAP BI;SAP BO;SAP BODS;SAP BPC;SAP BW;SAP Crystal Reports;SAP HANA;SAP Lumira;SAP MDM;SAP Xcelcius;SAS;SAS DI studio;Scala;Scoop;Siebel;Simulink;Solr;SpagoBI;Spark;Spark Streaming;Splunk;Spotfire;SQL Server;SQL Warehouse;Sqoop;SSIS;SSRS;Stibo MDM;Storm;Sybase ETL Developer;Tableau;Tactic;Talend;Teradata;Teradata Aster;TIBCO MDM;TIBCO SPOTFIRE;Trillium;Vertica;Web focus;Weka;Zookeeper";
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.DM;//"DM";;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Sub Service in Details tab";
+ ModifyEformInstance($inputObject); 
+  
+ $s7.end();
+  var $s8 = _testcase("TC_5"," DM-Minor Service");
+ $s.start();  
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =  $data.DNsub;//"MDM;Data Quality;--None--;Big Data;Data Consolidation;Data Integration;Metadata Management;Migration";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =$data.MDM;//"MDM";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech10;//"Kalido MDM;Stibo MDM;Informatica MDM;SAP MDM;Informatica PIM;Orchestra Network;IBM MDM;TIBCO MDM;IBM PIM;RELTIO MDM;Others;Oracle MDM;Riversand";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =  $data.DQ;//"Data Quality";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech11;//"Informatica DQ;Others;Trillium;Data flux";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.BD;//"Big Data";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech12;//"Hortonworks;Spark Streaming;Pig;Cassandra;Marklogic;MapR;Chukwa;Java;Drill;Paxata;Hadoop;Scala;MemchaceD;Oozie;Hbase;Storm;Cloudera;IIP;Neo4j;DocumentDB;Cosmos;Sqoop;Kibana;Solr;Microsoft Azure;Data Meer;Vertica;Graph DBs;MongoDB;CouchBase;Kafka;Teradata Aster;Greenplum;Data Factory;Redis;Redshift;Splunk;Presto;Others;Kinesis;Platfora;Flume;EMR;Logstash;Alteryx;HD Insights;SQL Warehouse;ElasticSearch;AWS;Zookeeper;Map Reduce;Dynamo DB;Hive;Spark;IBM Big Insights";
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.DC;//"Data Consolidation";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech13;//"Oracle ODI;Datastage;Ab Initio;MYSQL;SAS DI studio;Netezza;SAP BODS;Exadata;Talend;Informatica;SQL Server;Teradata;DB2;Oracle;Others;ODW;Denedo;Composite;Pentaho";
+ verifyEformInstanceDetails($inputObject); 
+   
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =$data.DI;//"Data Integration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech14;//"Oracle ODI;Exadata;Others;Pentaho;DB2;Teradata;Informatica;MYSQL;Talend;Composite;Netezza;SQL Server;ODW;SAS DI studio;Ab Initio;SAP BODS;Datastage;Denedo;Oracle";
+ verifyEformInstanceDetails($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.meta;//"Metadata Management";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech15;//"Composite;Oracle;Talend;ODW;Datastage;DB2;Netezza;Teradata;MYSQL;SAS DI studio;Informatica;SQL Server;Pentaho;Exadata;SAP BODS;Denedo;Others;Ab Initio;Oracle ODI";
+ verifyEformInstanceDetails($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =  $data.migration;//"Migration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.Tech16;//"ODW;Teradata;Oracle;Denedo;Oracle ODI;DB2;Talend;Pentaho;SQL Server;Exadata;SAS DI studio;Ab Initio;Informatica;SAP BODS;MYSQL;Datastage;Netezza;Others;Composite";
+ verifyEformInstanceDetails($inputObject); 
+ 
+  $s8.end();
+  var $s9 = _testcase("TC_6"," Both DM & BI-Service");
+ $s9.start(); 
+  
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.dmbi;//"Both DM & BI";
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.sub_dmbi;//"--None--;Dashboard & Reporting;MDM;In-Memory;Data Quality;Migration;EPM;Data Mining & Analytics;Metadata Management;Self-Service BI;Data Consolidation;Data Integration;Visualization;Big Data";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =  $data.migration;//"Migration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech17;//"Ab Initio;Actuate;--None--;. NET;Alteryx;AWS;Azure IntellegentServices;Azure ML;Birst;Business Objects;Cassandra;Chukwa;Cloudera;Cloudera Oryx;CloverETL;Cognos;Cognos Rave;COGNOS TM;COIN-OR;Composite;Cosmos;CouchBase;Data Factory;Data flux;Data Meer;Datastage;DB2;Denedo;DocumentDB;DOMO;Drill;Dynamo DB;ElasticSearch;EMR;Essbase;Exadata;Exalytics;Excel;Excelsios;Flume;Graph DBs;Greenplum;Gurobi;Hadoop;Hbase;HD Insights;Hive;Hortonworks;Hyperion;Hyperion DRM;Hyperion ESSBASE;Hyperion FR;Hyperion planning;IBM Big Insights;IBM DB2;IBM MDM;IBM PIM;IBM SPSS Data Collection;IBM SPSS Modeler;IBM SPSS Statistics;IBM Watson;IIP;Informatica;Informatica DQ;Informatica MDM;Informatica PIM;Information builder;Jaspersoft;Java;Java Script;Kafka;Kalido MDM;Kibana;Kinesis;KNIME;Logstash;Map Reduce;MapR;Marklogic;Matlab;MemchaceD;Microsoft Azure;MicroStrategy;MiniTab;Mlib;MongoDB;MS BI;MS Power BI;MS PowerView;MS SSAS;MS SSIS;MS SSRS;MYSQL;Neo4j;Netezza;OBIEE;ODW;Oozie;Oracle;Oracle Data Integrator;Oracle MDM;Oracle ODI;Oracle PBCS;Oracle PL/SQL;Oracle Warehouse Builder - OWB;Orchestra Network;Others;OWB;Paxata;Pentaho;Pig;Platfora;Power BI;Power view;Presto;Python;Qlikview;R;Redis;Redshift;RELTIO MDM;Revolution R;Riversand;SAP BI;SAP BO;SAP BODS;SAP BPC;SAP BW;SAP Crystal Reports;SAP HANA;SAP Lumira;SAP MDM;SAP Xcelcius;SAS;SAS DI studio;Scala;Scoop;Siebel;Simulink;Solr;SpagoBI;Spark;Spark Streaming;Splunk;Spotfire;SQL Server;SQL Warehouse;Sqoop;SSIS;SSRS;Stibo MDM;Storm;Sybase ETL Developer;Tableau;Tactic;Talend;Teradata;Teradata Aster;TIBCO MDM;TIBCO SPOTFIRE;Trillium;Vertica;Web focus;Weka;Zookeeper";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $s9.end();
+ var $s10 = _testcase("TC_7"," BI-Minor Enhancement Service");
+ $s10.start();  
+  
+    
+ $inputObject = {};
+ $inputObject.lst_DN_RequestType = $data.BI_Min;//"BI-Minor Enhancement"
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Services in Details tab";
+ ModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.sections;
+ InfyFTisVisible($inputObject);  
+  
+  $inputObject = {};
+ $inputObject.lst_DN_Services = $data.ser_bimin;//"BI;--None--;Both DM & BI";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech18;//"Ab Initio;--None--;. NET;Actuate;Alteryx;AWS;Azure IntellegentServices;Azure ML;Birst;Business Objects;Cassandra;Chukwa;Cloudera;Cloudera Oryx;CloverETL;Cognos;Cognos Rave;COGNOS TM;COIN-OR;Composite;Cosmos;CouchBase;Data Factory;Data flux;Data Meer;Datastage;DB2;Denedo;DocumentDB;DOMO;Drill;Dynamo DB;ElasticSearch;EMR;Essbase;Exadata;Exalytics;Excel;Excelsios;Flume;Graph DBs;Greenplum;Gurobi;Hadoop;Hbase;HD Insights;Hive;Hortonworks;Hyperion;Hyperion DRM;Hyperion ESSBASE;Hyperion FR;Hyperion planning;IBM Big Insights;IBM DB2;IBM MDM;IBM PIM;IBM SPSS Data Collection;IBM SPSS Modeler;IBM SPSS Statistics;IBM Watson;IIP;Informatica;Informatica DQ;Informatica MDM;Informatica PIM;Information builder;Jaspersoft;Java;Java Script;Kafka;Kalido MDM;Kibana;Kinesis;KNIME;Logstash;Map Reduce;MapR;Marklogic;Matlab;MemchaceD;Microsoft Azure;MicroStrategy;MiniTab;Mlib;MongoDB;MS BI;MS Power BI;MS PowerView;MS SSAS;MS SSIS;MS SSRS;MYSQL;Neo4j;Netezza;OBIEE;ODW;Oozie;Oracle;Oracle Data Integrator;Oracle MDM;Oracle ODI;Oracle PBCS;Oracle PL/SQL;Oracle Warehouse Builder - OWB;Orchestra Network;Others;OWB;Paxata;Pentaho;Pig;Platfora;Power BI;Power view;Presto;Python;Qlikview;R;Redis;Redshift;RELTIO MDM;Revolution R;Riversand;SAP BI;SAP BO;SAP BODS;SAP BPC;SAP BW;SAP Crystal Reports;SAP HANA;SAP Lumira;SAP MDM;SAP Xcelcius;SAS;SAS DI studio;Scala;Scoop;Siebel;Simulink;Solr;SpagoBI;Spark;Spark Streaming;Splunk;Spotfire;SQL Server;SQL Warehouse;Sqoop;SSIS;SSRS;Stibo MDM;Storm;Sybase ETL Developer;Tableau;Tactic;Talend;Teradata;Teradata Aster;TIBCO MDM;TIBCO SPOTFIRE;Trillium;Vertica;Web focus;Weka;Zookeeper";
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.bi;//"BI";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Sub Service in Details tab";
+ ModifyEformInstance($inputObject); 
+  
+ $s10.end();
+ 
+  var $s11 = _testcase("TC_8"," BI-Minor Service");
+ $s.start();  
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.sub_minor;//"Migration;--None--;In-Memory;Dashboard & Reporting;Self-Service BI;Visualization;Data Mining & Analytics;EPM";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.sub1;//"In-Memory";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech19;//"SAP HANA;Exalytics";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =  $data.migration;//"Migration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech20;//"Simulink;SAP HANA;Cognos;Web focus;Exalytics;Gurobi;Hyperion DRM;MiniTab;Weka;MicroStrategy;SAP Lumira;Mlib;SAP BO;COIN-OR;COGNOS TM;OBIEE;SAS;SAP Xcelcius;SAP BW;Hyperion FR;Excelsios;TIBCO SPOTFIRE;Azure IntellegentServices;Excel;SSRS;KNIME;Hyperion ESSBASE;Azure ML;Matlab;Cloudera Oryx;SSIS;Cognos Rave;Power BI;Hyperion planning;. NET;SAP Crystal Reports;MS BI;Qlikview;Power view;DOMO;IBM Watson;IBM SPSS Statistics;Actuate;Oracle PBCS;Tableau;Python;MS Power BI;IBM SPSS Modeler;Birst;SAP BPC;IBM SPSS Data Collection;Others;R;Revolution R;Java Script";
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.sub2;//"Dashboard & Reporting";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech21;//"Web focus;SAP BO;Others;MicroStrategy;SAP BW;SAP Crystal Reports;Actuate;SSIS;SSRS;. NET;Cognos;Birst;OBIEEWeb focus;SAP BO;Others;MicroStrategy;SAP BW;SAP Crystal Reports;Actuate;SSIS;SSRS;. NET;Cognos;Birst;OBIEE";
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_SubService =$data.sub3;// "Self-Service BI";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech22;//"TIBCO SPOTFIRE;DOMO;Tableau;Qlikview;SAP BO;MS BI;Cognos;Others;MS Power BITIBCO SPOTFIRE;DOMO;Tableau;Qlikview;SAP BO;MS BI;Cognos;Others;MS Power BI";
+ verifyEformInstanceDetails($inputObject); 
+   
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.visual;//"Visualization";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech23;//"Others;DOMO;SAP Xcelcius;Power view;Cognos Rave;Qlikview;SAP Lumira;Java Script;Tableau;Power BI;TIBCO SPOTFIRE";
+ verifyEformInstanceDetails($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.tech24;//"Data Mining & Analytics";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech25;//"IBM SPSS Data Collection;MiniTab;Weka;Gurobi;SAS;COIN-OR;Excelsios;Mlib;Excel;KNIME;Cloudera Oryx;Others;Matlab;IBM SPSS Statistics;R;Azure ML;IBM Watson;Azure IntellegentServices;Python;Revolution R;IBM SPSS Modeler;Simulink";
+ verifyEformInstanceDetails($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.EPM;//"EPM";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.tech26;//"Hyperion ESSBASE;Hyperion DRM;Hyperion planning;Hyperion FR;Oracle PBCS;SAP BPC;Others;COGNOS TM";
+ verifyEformInstanceDetails($inputObject); 
+ 
+  $s11.end();
+  
+  var $s12 = _testcase("TC_9"," Both DM & BI-Service");
+ $s12.start(); 
+  
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.dmbi;//"Both DM & BI";
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubService = $data.sub4;//"--None--;Dashboard & Reporting;MDM;In-Memory;Data Quality;Migration;EPM;Data Mining & Analytics;Metadata Management;Self-Service BI;Data Consolidation;Data Integration;Visualization;Big Data";
+ verifyEformInstanceDetails($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.lst_DN_Services = $data.dmbi;//"Both DM & BI";
+ $inputObject.lst_DN_SubService =  $data.migration;//"Migration";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Technology = $data.sub5;//"Ab Initio;Actuate;--None--;. NET;Alteryx;AWS;Azure IntellegentServices;Azure ML;Birst;Business Objects;Cassandra;Chukwa;Cloudera;Cloudera Oryx;CloverETL;Cognos;Cognos Rave;COGNOS TM;COIN-OR;Composite;Cosmos;CouchBase;Data Factory;Data flux;Data Meer;Datastage;DB2;Denedo;DocumentDB;DOMO;Drill;Dynamo DB;ElasticSearch;EMR;Essbase;Exadata;Exalytics;Excel;Excelsios;Flume;Graph DBs;Greenplum;Gurobi;Hadoop;Hbase;HD Insights;Hive;Hortonworks;Hyperion;Hyperion DRM;Hyperion ESSBASE;Hyperion FR;Hyperion planning;IBM Big Insights;IBM DB2;IBM MDM;IBM PIM;IBM SPSS Data Collection;IBM SPSS Modeler;IBM SPSS Statistics;IBM Watson;IIP;Informatica;Informatica DQ;Informatica MDM;Informatica PIM;Information builder;Jaspersoft;Java;Java Script;Kafka;Kalido MDM;Kibana;Kinesis;KNIME;Logstash;Map Reduce;MapR;Marklogic;Matlab;MemchaceD;Microsoft Azure;MicroStrategy;MiniTab;Mlib;MongoDB;MS BI;MS Power BI;MS PowerView;MS SSAS;MS SSIS;MS SSRS;MYSQL;Neo4j;Netezza;OBIEE;ODW;Oozie;Oracle;Oracle Data Integrator;Oracle MDM;Oracle ODI;Oracle PBCS;Oracle PL/SQL;Oracle Warehouse Builder - OWB;Orchestra Network;Others;OWB;Paxata;Pentaho;Pig;Platfora;Power BI;Power view;Presto;Python;Qlikview;R;Redis;Redshift;RELTIO MDM;Revolution R;Riversand;SAP BI;SAP BO;SAP BODS;SAP BPC;SAP BW;SAP Crystal Reports;SAP HANA;SAP Lumira;SAP MDM;SAP Xcelcius;SAS;SAS DI studio;Scala;Scoop;Siebel;Simulink;Solr;SpagoBI;Spark;Spark Streaming;Splunk;Spotfire;SQL Server;SQL Warehouse;Sqoop;SSIS;SSRS;Stibo MDM;Storm;Sybase ETL Developer;Tableau;Tactic;Talend;Teradata;Teradata Aster;TIBCO MDM;TIBCO SPOTFIRE;Trillium;Vertica;Web focus;Weka;Zookeeper";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Services = $data.dmbi;//"Both DM & BI";
+ $inputObject.lst_DN_SubService =  $data.migration;//"Migration";
+ ModifyEformInstance($inputObject); 
+ 
+  $inputObject = {};
+  $inputObject.lst_DN_Technology = $data.tech27;//"Hyperion DRM";
+  ModifyEformInstance($inputObject); 
+ 
+ $s12.end(); 
+ 
+ var $s13 = _testcase("TC_10"," Verify value in Sizing Details segments");
+ $s13.start(); 
+  
+ $inputObject = {};
+ $inputObject.segment_name =$data.size;//"Sizing Details";
+ SelectSegment($inputObject); 
+ 
+  $inputObject = {};
+  $inputObject.span_Name = $data.span;//"Both DM & BI;Type of Application;Sub Service;Migration;Technology;Hyperion ESSBASE";
+  InfyFTisVisible($inputObject);
+
+ $s13.end();
+ 
+ 

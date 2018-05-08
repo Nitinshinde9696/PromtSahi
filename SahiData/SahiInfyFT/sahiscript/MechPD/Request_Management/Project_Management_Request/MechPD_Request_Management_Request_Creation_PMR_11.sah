@@ -1,0 +1,115 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+
+ $data = readDataFromCSV("MechPD_Request_Management_Request_Creation_PMR_11","MechPD/Request_Management/Project_Management_Request");
+
+ var  $review_type= "Others";
+  
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ 
+  
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//BHBSSMN2
+ selectProject($inputObject);
+
+ $s1.end();
+ var $s2 = _testcase("TC_1.1.3"," Check the Fields");
+ $s2.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Project Management Request
+ navigateTo($inputObject);
+
+ _click(_span("KEY_BUTTON_Add-btnIconEl"));
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name5;
+ InfyFTisVisible($inputObject);
+ 
+ clickReturn();
+  
+ $s2.end();
+
+ var $s3 = _testcase("TC_1.2"," Check Mandatory the Fields");
+ $s3.start();
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.descr;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab";
+ CreateInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle13;
+ ModifyEformInstance($inputObject);
+ 
+ var $id = _getText(_span("CM_ItemCode"));
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.segments;
+ InfyFTisVisible($inputObject);
+ 
+ 
+ $s3.end();
+ 
+ /*
+ var $s = _testcase("Print-Icon"," Check Printing the Request");
+ $s.start();
+ 
+ InfyFTprint();
+ 
+ $s.end();
+*/
+ 
+_include("/../MechPD_Request_Management_Scheduled_Task_Report_Common_14.sah");
+_include("MechPD_Request_Management_Rev_Def_PMR_12.sah");
+ /*
+ var $st = _testcase("CLOSING THE REQUEST", "CLOSING PMR REQUEST");
+
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = "Closed";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.cell_Name = "Status :";
+ $inputObject.span_Name = "Closed";
+ $inputObject.operation = $data.operation;
+ InfyFTisReadOnly($inputObject);
+
+ _wait(1000);
+
+ $inputObject = {};
+ $inputObject.segment_name = "Scheduled Tasks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Edit";
+ InfyFTisVisible($inputObject);
+
+ $st.end();
+ */

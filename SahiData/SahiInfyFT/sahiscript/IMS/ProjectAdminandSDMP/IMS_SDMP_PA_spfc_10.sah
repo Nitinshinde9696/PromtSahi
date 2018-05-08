@@ -1,0 +1,300 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_PA_spfc_10", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //AVDGESTP
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //SDMP
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /*************************************************
+ * Goals
+ *************************************************/ 
+ 
+ var $t = _testcase("TC_4", "Goals");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.tableName = $data.LevelMetric
+ $inputObject.visible = $data.rowNo1;
+ verifyECRTableVisiblility($inputObject);
+ 
+ _isVisible(_span("1"));
+ _wait(5000);
+ 
+ $t.end();
+
+ /**********Project Tailoring*****************/
+ 
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ _wait(5000);
+ var $t = _testcase("TC_5", "Level metric for SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.specific_metrix1;
+ SelectSegment($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoD;
+ $inputObject.fieldValues = $data.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+/*  _click(_span("Delete[1]"));
+ _assertEqual("This row will no longer be available", _lastConfirm()); */
+ _wait(8000);
+ 
+ /*********************SDMP****************************/
+ 
+ $data = readDataFromCSV("IMS_SDMP_PA_spfc_10", "IMS/ProjectAdminandSDMP");
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //SDMP
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ _wait(10000);
+ _isVisible(_cell("No Records Found"));
+ 
+ /***************Project Tailoring*****************/
+ 
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.specific_metrix1;
+ SelectSegment($inputObject); 
+ 
+ _click(_link("Add Rows[1]"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $data.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo8L;
+ $inputObject.fieldValues = $data.fieldValues8L;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+ $t.end();
+ 
+ /**********Project Level Metrics SDMP*****************/
+ 
+ $data = readDataFromCSV("IMS_SDMP_PA_spfc_10", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_6", "Level metric in SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //SDMP
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //SDMP
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(2000);
+ if(_isVisible(_link($data.Username1)))
+ {  
+ _highlight(_span(47));// red colour indicates here
+ var $G = _getText(_span(48));
+ _assertEqual($G,"Following conditions should be satisfied if project is in Steady State: 1. At least one metric should be selected for each Service Sub-service in Project Tailoring. 2. Goal must be defined for at least one metric for each Service Sub-service. 3. Goals must be defined for project level metrics.");
+ }
+ else
+ {
+  _highlight(_span(75));// red colour indicates here
+ var $G = _getText(_span(76));
+ _assertEqual($G,"Following conditions should be satisfied if project is in Steady State: 1. At least one metric should be selected for each Service Sub-service in Project Tailoring. 2. Goal must be defined for at least one metric for each Service Sub-service. 3. Goals must be defined for project level metrics.");
+ }
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ _wait(10000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.LevelMetric; 
+ $inputObject.rowNo = $data.rowNo2; 
+ $inputObject.colNo = $data.colNoL;
+ $inputObject.fieldValues = $data.fieldValuesL; 
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP"); 
+ 
+ var $t = _testcase("TC_7", "SLA penalty reward");
+ $t.start();
+ 
+ _click(_image("nodeIcon11"));  
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.penalty; //_click(_link("SLA Penalty and Reward"));
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.fieldValuesE1; 
+ $inputObject.edt_DN_PoolPercentage = $data.fieldValuesE1;  
+ $inputObject.lst_DN_SLAResponsibilityShare = $data.fieldValuesE; 
+ $inputObject.lst_DN_PenaltyFramework = $data.fieldValuesE; 
+ $inputObject.lst_DN_SubjecttoEarnBack = $data.fieldValuesE; 
+ $inputObject.msgAlert = "Error: \n->At-Risk cannot be less than or equal to 0\n->Pool Percentage cannot be less than or equal to 0\n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.DN_AtRisk1; 
+ $inputObject.edt_DN_PoolPercentage = $data.DN_PoolPercentage;  
+ $inputObject.lst_DN_SLAResponsibilityShare = $data.DN_SLAResponsibilityShare; 
+ $inputObject.lst_DN_PenaltyFramework = $data.DN_PenaltyFramework; 
+ $inputObject.lst_DN_SubjecttoEarnBack = $data.DN_SubjecttoEarnBack; 
+ ModifyEformInstance($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.negative; 
+ $inputObject.msgAlert = "Error: \n->At-Risk cannot be less than or equal to 0\n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.DN_AtRisk1; 
+ $inputObject.edt_DN_PoolPercentage = $data.negative; 
+ $inputObject.msgAlert = "Error: \n->Pool Percentage cannot be less than or equal to 0\n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.greaterNo; 
+ $inputObject.edt_DN_PoolPercentage = $data.greaterNo; 
+ $inputObject.msgAlert = "Error: \n->At-Risk cannot be greater than 100\n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.DN_AtRisk1; 
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(47));// red colour indicates here
+ var $G1 = _getText(_span(48));
+ _assertNotEqual($G,$G1);
+ }
+ else
+ {
+ _highlight(_span(75));// red colour indicates here
+ var $G1 = _getText(_span(76));
+ _assertNotEqual($G,$G1); 
+ }
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ 
+ 

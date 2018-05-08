@@ -1,0 +1,363 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ var $Date1 = new Date();
+ var $presentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($Date1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",30,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Agile_statusReport_IssueList_ComplaintList_Regenerate_04", "Agile/StatusReport");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+  
+ var $TC10 = _testcase("TC 10.1 to 10.6","Issue List validations"); 
+ $TC10.start();  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tableissueList;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.issueLabels;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.naviagateToissue;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.issueAdd;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.issueName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_RaisedBy = $data.Username1;
+ $inputObject.lst_DN_Assignee = $data.Username1;
+ $inputObject.lst_DN_IssueSeverity = $data.severity;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableissueList;
+ $inputObject.rowNo = $data.issueName;
+ $inputObject.colNo = $data.colDesc;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableissueList;
+ $inputObject.rowNo = $data.issueName;
+ $inputObject.colNo = $data.colRaised;
+ $inputObject.fieldValues = $data.Username1;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableissueList;
+ $inputObject.rowNo = $data.issueName;
+ $inputObject.colNo = $data.colShowDM;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ logOut();
+ 
+ _wait(5000);
+ 
+ $TC10.end(); 
+ 
+ var $TC11 = _testcase("TC 11.1 to 11.3","Issue List DM validations"); 
+ $TC11.start();   
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.UserNameDM;
+ $inputObject.edt_loginid = $data.LoginDM;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.issueName;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000); 
+ 
+ logOut();
+ 
+ _wait(5000); 
+ 
+ $TC11.end(); 
+ 
+ var $TC12 = _testcase("TC 12.1 to 12.3","Customer complaint List validations"); 
+ $TC12.start();  
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tableCustomerComplaint;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CustomerComplaintLabel;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navgateToCustomerComp;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ if(_isVisible(_div("Complaint for Status Report")))
+ {
+  _click(_div("Complaint for Status Report"));
+  
+  _wait(5000);
+  
+  var $complaintStart = _getText(_textbox("DN_ComplaintRaisedDate"))
+  var $complaintend   = _getText(_textbox("DN_AgreedExpectedDateofCl"))
+  
+  _wait(2000);
+ }
+ else
+ {
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.complaintadd;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.compName;
+ $inputObject.txt_CM_Description = $data.compName;
+ $inputObject.edt_DN_RaisedBy = $data.Username1;
+ $inputObject.lst_DN_ComplaintCategory = $data.compCategory;
+ $inputObject.lst_DN_Severity = $data.compSeverity;
+ $inputObject.edt_DN_ComplaintRaisedDate = $presentDate;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $EndDate;
+ $inputObject.edt_DN_RepeatComplaint = $data.fieldYes;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+  var $complaintStart = _getText(_textbox("DN_ComplaintRaisedDate"))
+  var $complaintend   = _getText(_textbox("DN_AgreedExpectedDateofCl"))
+ 
+ }
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableCustomerComplaint;
+ $inputObject.rowNo = $data.compName;
+ $inputObject.colNo = $data.colRaisedDate;
+ $inputObject.fieldValues = $complaintStart;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableCustomerComplaint;
+ $inputObject.rowNo = $data.compName;
+ $inputObject.colNo = $data.colAgreedDate;
+ $inputObject.fieldValues = $complaintend;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableCustomerComplaint;
+ $inputObject.rowNo = $data.compName;
+ $inputObject.colNo = $data.colUpdatedAction;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ $TC11.end(); 
+ 
+ var $TC13 = _testcase("TC 13.1 to 13.2","Checking Re- Generate button with PM and DM"); 
+ $TC13.start();  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.regenerate;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.UserNameDM;
+ $inputObject.edt_loginid = $data.LoginDM;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.regenerate;
+ InfyFTassertNotVisible($inputObject);
+ 
+ $TC13.end();  

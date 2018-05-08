@@ -1,0 +1,89 @@
+
+/*************************************************************************
+* @author Ram
+* @example addSite
+* @description This function is called to addSite
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addSite($inputObject)
+{
+	_log("addSite Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addSite Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example openSite
+* @description This function is called to open Site
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function openSite($inputObject)
+{
+	_log("openSite Started","success");
+	try 
+	{
+		_click(_link($inputObject.site_name));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openSite Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifySite
+* @description This function is called to modify Site
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function modifySite($inputObject)
+{
+	_log("modifySite Started","success");
+	try 
+	{
+		setAllFields();
+		_click(_submit("QTP_Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifySite Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example deleteSite
+* @description This function is called to delete Site
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function deleteSite()
+{
+	_log("deleteSite Started","success");
+	try 
+	{
+		_click(_submit("QTP_Delete"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteSite Completed","success");
+}

@@ -1,0 +1,261 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah")
+
+$data = readDataFromCSV("Agile_Merger_BR2F9_Merge_SOEPSegment_03","Agile/Merger");
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : 
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : 
+$inputObject.edt_password = $data.Password1;//Password1 :
+loginIntoDigite($inputObject);
+
+var $s1 = _testcase("TC_1.4"," verify Request");
+ $s1.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+ 
+ _setValue(_textbox("searchTextBox-inputEl"),$data.Project_code4);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_2.1"," verify Request");
+ $s2.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_3.1"," Modify Project Request");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_InitiateAction = $data.IA;
+ $inputObject.lst_DN_PeakTeamSize = $data.tps10;
+ $inputObject.txt_CM_Description = $data.desc;
+ $inputObject.lst_DN_ExecutionProjectCodeLi = $data.MPCL;
+ $inputObject.txt_DN_ReasonfornotchoosingRe = "TEST";
+ ModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.link_test = $data.segment_list;
+ verifyAllFields($inputObject);
+ 
+ $s3.end();
+
+ var $s4 = _testcase("TC_5.1"," SET workflow");
+ $s4.start();
+ 
+$inputObject = {};
+$inputObject.segment_name = $data.workflow_Segment7;// _link("Workflow")
+SelectSegment($inputObject);
+
+_assertEqual(_getText(_cell("CurrentWorkflowStage")),"Submitter");
+ 
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage8;
+$inputObject.multiple_member = $data.user_name9;
+WorkflowSet($inputObject);
+
+$s4.end();
+ var $s5 = _testcase("TC_6.1"," verify Search Other Execution Project segment");
+ $s5.start();
+ 
+$inputObject = {};
+$inputObject.segment_name = $data.SOEP_Segment7;// _link("Search Other Execution Project")
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name =  $data.smp8;//_span("Search Main Project")
+InfyFTisVisible($inputObject);
+
+var $smpCell_value = "I want to merge "+ $data.Project_code4 +" with:"
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid1;
+ $inputObject.tableName  = $data.smp8;//_span("Search Main Project")
+ $inputObject.fieldValues = $smpCell_value;//Track value
+ verifySwiftFormData($inputObject);
+ 
+$inputObject = {};
+$inputObject.span_Name =  $data.span1;//_span("Conditions for Listing the Project Code in Execution Project Code List:")
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name =  $data.span2;//_span("* Projects must belong to same Master Customer Code.")
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name =  $data.span3;//_span("* Execution Project should be either Open or Closed in last 90 days.")
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name =  $data.span4;//_span("Note: Please click on Save after entering the project code in Search Main project for further action.")
+InfyFTisVisible($inputObject);
+
+$s5.end();
+ var $s6 = _testcase("TC_7.1"," Check Search Other Execution Project segment with negative value");
+ $s6.start();
+
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid2;
+ $inputObject.tableName  = $data.smp8;//_span("Search Main Project")
+ $inputObject.fieldValues = "test";//Track value
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ //clickSaveButton($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ErrMsg1;//_span("Message")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid1;
+ $inputObject.tableName  = $data.ErrMsg1;//_span("Search Main Project")
+ $inputObject.fieldValues = $data.smpErrMsg9;//The execution project code entered has not been created or is currently under creation.
+ verifySwiftFormData($inputObject);
+ 
+ $s6.end();
+ var $s7 = _testcase("TC_8.1"," Check Search Other Execution Project segment with wrong condition value");
+ $s7.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid2;
+ $inputObject.tableName  = $data.smp8;//_span("Search Main Project")
+ $inputObject.fieldValues = $data.wrongPid;//EDSSMLR
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ //clickSaveButton($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ErrMsg1;//_span("Message")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid1;
+ $inputObject.tableName  = $data.ErrMsg1;//_span("Message")
+ $inputObject.fieldValues = $data.smpErrMsg10;//_span("The execution project code entered is not listed due to below reason.")
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Search_Result;//_span("Search Result")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.serachRid1;
+ $inputObject.colNo  = $data.searchcid1;
+ $inputObject.tableName  = $data.Search_Result;//_span("Search Result")
+ $inputObject.fieldValues = $data.search_resultHeader;//_span("Condition")
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.serachRid2;
+ $inputObject.colNo  = $data.searchcid0;
+ $inputObject.tableName  = $data.Search_Result;//_span("Search Result")
+ $inputObject.fieldValues = $data.search_resultrow;//_span("Is Master Customer Code same?")
+ verifySwiftFormData($inputObject);
+ 
+ InfyFTverifyMergeCondition();
+ 
+ 
+ $s7.end();
+ var $s8 = _testcase("TC_8.1"," Check Search Other Execution Project segment with wrong condition value");
+ $s8.start();
+
+ var $pid = $data.MPCL.split("-");
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid2;
+ $inputObject.tableName  = $data.smp8;//_span("Search Main Project")
+ $inputObject.fieldValues = $pid[0];
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ //clickSaveButton($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ErrMsg1;//_span("Message")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.smprid1;
+ $inputObject.colNo  = $data.smpcid1;
+ $inputObject.tableName  = $data.ErrMsg1;//_span("Message")
+ $inputObject.fieldValues = $data.smpErrMsg11;//_span("The execution project code entered is already listed in the Execution Project Code list.")
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Search_Result;//_span("Search Result")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.serachRid1;
+ $inputObject.colNo  = $data.searchcid1;
+ $inputObject.tableName  = $data.Search_Result;//_span("Search Result")
+ $inputObject.fieldValues = $data.search_resultHeader;//_span("Condition")
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.serachRid2;
+ $inputObject.colNo  = $data.searchcid0;
+ $inputObject.tableName  = $data.Search_Result;//_span("Search Result")
+ $inputObject.fieldValues = $data.search_resultrow;//_span("Is Master Customer Code same?")
+ verifySwiftFormData($inputObject);
+ 
+ //InfyFTverifyMergeCondition();
+ $s8.end();
+ 
+ 
+$inputObject = {};
+$inputObject.segment_name = $data.workflow_Segment7;// _link("Workflow")
+SelectSegment($inputObject);
+
+_assertEqual(_getText(_cell("CurrentWorkflowStage")),"Submitter");
+ 
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage8;
+$inputObject.multiple_member = "UnAssigned";
+WorkflowSet($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Details_Segment8;// _link("Details")
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.txt_DN_ReasonfornotchoosingRe = "";
+ $inputObject.txt_CM_Description = "";
+$inputObject.lst_DN_InitiateAction = "--None--";
+$inputObject.lst_DN_PeakTeamSize ="--None--";
+ModifyEformInstance($inputObject);

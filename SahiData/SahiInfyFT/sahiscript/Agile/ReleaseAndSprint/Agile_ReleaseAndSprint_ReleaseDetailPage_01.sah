@@ -1,0 +1,206 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+var $projectbeyondStart = "1-Jan-2011"; //	30-Oct-2015   	30-Oct-2019  
+var $projectbeyondEnd = "1-Jan-2021";
+
+var $name = new Date(); 
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",2,$dateObj1);
+var $EndDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",7,$dateObj1);
+var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+/* Release*/
+$data = readDataFromCSV("Agile_ReleaseAndSprint_ReleaseDetailPage_01","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to PM Plan");
+$t.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.Project_name2;
+selectProject($inputObject);
+
+$t.end();
+
+/*var $t = _testcase("TC_3", "checking PM is baseline or not");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;
+navigateTo($inputObject);
+
+_wait(1000);
+$inputObject = {};
+$inputObject.button = $data.reopen;//"Reopen";
+$inputObject.true = $data.workflow_stage0;
+InfyFTcheckingButtons($inputObject);
+ 
+$t.end(); */
+
+var $t = _testcase("TC_3", "Navigating to Releases");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "checking field visibility and default status check");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = $data.icon;
+clickAddIcon($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Fields;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DStatus;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Mandatory field check");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $name;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Planned Start Date in Details tab \n•  Field Planned End Date in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Date validation");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $projectbeyondStart;
+$inputObject.edt_DN_PlannedEndDate = $EndDate;
+$inputObject.msgAlert = "Planned Start Date should be within Project Start Date (1-Jun-2015) and Project End Date (31-Dec-2019).";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $currentDate;
+$inputObject.msgAlert = "Minimum duration between Planned Start Date and Planned End Date should be 7 Days.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $EndDate;
+$inputObject.msgAlert = "Minimum duration between Planned Start Date and Planned End Date should be 7 Days.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {}; 
+$inputObject.edt_DN_PlannedStartDate = $EndDate;
+$inputObject.edt_DN_PlannedEndDate = $projectbeyondEnd;
+$inputObject.msgAlert = "Planned End Date should be within Project Start Date (1-Jun-2015) and Project End Date (31-Dec-2019).";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Release Creation");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $name;
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate;
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_Status;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Actual End Date in Details tab \n• Field Remarks in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.txt_DN_Remarks = $name;
+$inputObject.edt_DN_ActualReleaseDate = $startDate;
+$inputObject.msgAlert = "Please associate at least one sprint with the release before closing it.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_StatusA;
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Workflow");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.workflow;
+SelectSegment($inputObject);
+ 
+$inputObject = {};
+$inputObject.multiple_member = $data.Multiple_members;
+$inputObject.workflow_stage = $data.workflow_stage0;
+WorkflowSet($inputObject);
+ 
+$inputObject = {};
+$inputObject.multiple_member = $data.Multiple_members;
+$inputObject.workflow_stage = $data.workflow_stage1;
+WorkflowSet($inputObject);
+ 
+$inputObject = {};
+$inputObject.multiple_member = $data.Multiple_members;
+$inputObject.workflow_stage = $data.workflow_stage2;
+WorkflowSet($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_9", "navigate to details page and set status as Open");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.Details;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_StatusO;
+InfyFTModifyEformInstance1($inputObject);
+
+InfyFTgettingValueforIDCheck($inputObject); 
+var $ReleaseID = $inputObject.eformID;
+
+var $NameRel = _getText(_textbox("CM_Name"));
+
+$inputObject = {};
+$inputObject.true = $data.workflow_stage1;//"1";
+$inputObject.button = $data.RouteBtn;//$data.Route;
+InfyFTcheckingButtons($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_10", "Agile_ReleaseAndSprint_SprintDetailPage_02");
+$t.start();
+
+_include("Agile_ReleaseAndSprint_SprintDetailPage_02.sah");
+
+$t.end();

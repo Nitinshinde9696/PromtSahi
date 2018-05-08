@@ -1,0 +1,91 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ var $Date1 = new Date();
+ var $presentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($Date1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",30,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Agile_statusReport_WorkFlow_Routing_Reopening_Sprints_05", "Agile/StatusReport");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentWorkflow;//WorkFlow
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ var $TC14 = _testcase("TC 14","Routing the Status Report"); 
+ $TC14.start();  
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.submitter; 
+ $inputObject.multiple_member = $data.Username1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.Approver; 
+ $inputObject.multiple_member = $data.Username2;
+ WorkflowSet($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValueTest;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(5000);
+ 
+ $TC14.end(); 
+ 
+ var $TC15 = _testcase("TC 15","Recall Button is visible for PM"); 
+ $TC15.start();  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.buttonRecall;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(5000);
+ 
+ $TC15.end();
+ 
+ var $TC16 = _testcase("TC 16.2","Recalling the routed Status report instance"); 
+ $TC16.start();
+
+ if(_isVisible(_button("Recall"))) 
+ {
+ _click(_button("Recall"));
+ 
+ _wait(10000)
+
+ }
+
+ $TC16.end();

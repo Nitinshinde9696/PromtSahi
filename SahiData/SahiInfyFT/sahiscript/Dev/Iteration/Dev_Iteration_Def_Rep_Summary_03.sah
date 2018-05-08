@@ -1,0 +1,123 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Dev_Iteration_Def_Rep_Summary_03","Dev/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $Review_Type1 ="Requirements Review - DM";
+ var $Review_Type2 ="Acceptance Testing - DM";
+  
+ var $t = _testcase("Step_1","Login");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $s = _testcase("Step_2","Select Project");
+ 
+ $s.start();
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectName;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("Step_3","Navigate to Iteration");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo;//Testing Request
+ navigateTo($inputObject);
+ 
+ _wait(10000);
+ 
+ _setValue(_textbox("searchTextBox-inputEl"), "ITR242"); //$Created_IterId
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+ $inputObject = {};
+ $inputObject.item = "ITR242";//$Created_IterId
+ OpenEformInstance($inputObject);
+ 
+ var $s = _testcase("TC_4.3","Check the Defect Summary");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Iteration_Summary;//"Iteration Summary"
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ var $s = _testcase("TC_4.1","Verifying Column Names in the Defect Summary Table");
+ 
+ $s.start(); 
+ 
+ /* $inputObject = {};
+ $inputObject.tableName = "Defect Summary";//$data.TableName4
+ $inputObject.rowNo = "0";//$data.rowNo100
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl";//$data.colNo103
+ $inputObject.fieldValues = "Defect category|Critical|Major|Minor|Cosmetic|Total";//$data.fieldValues103
+ verifySwiftFormData($inputObject); */
+
+ $s.end();
+
+ var $s = _testcase("TC_4.2","Verifying Row Names in the Defect Summary Table");
+ 
+ $s.start(); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Defect Summary";//$data.TableName4
+ $inputObject.rowNo = "1|2|3";//$data.rowNo100
+ $inputObject.colNo = "0_lbl";//$data.colNo102
+ $inputObject.fieldValues = "In process defects|Acceptance test defects|Total Defects";//$data.fieldValues103
+ verifySwiftFormData($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_4.5,4.6,4.7","Check the defect segment grid ");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Defect Summary";//$data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo1;//1
+ $inputObject.colNo = "1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";//$data.colNo104;//4_lbl
+ $inputObject.fieldValues = "1|1|1|1|4";//$data.Def_serverity;//"Critical"
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Defect Summary";//$data.TableName1;//"Name"
+ $inputObject.rowNo = "2";//$data.rowNo1;//1
+ $inputObject.colNo = "1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";//$data.colNo104;//4_lbl
+ $inputObject.fieldValues = "1|1|1|1|4";//$data.Def_serverity;//"Critical"
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Defect Summary";//$data.TableName1;//"Name"
+ $inputObject.rowNo = "3";//$data.rowNo1;//1
+ $inputObject.colNo = "1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";//$data.colNo104;//4_lbl
+ $inputObject.fieldValues = "2|2|2|2|8";//$data.Def_serverity;//"Critical"
+ verifySwiftFormData($inputObject);
+ 
+ $s.end();

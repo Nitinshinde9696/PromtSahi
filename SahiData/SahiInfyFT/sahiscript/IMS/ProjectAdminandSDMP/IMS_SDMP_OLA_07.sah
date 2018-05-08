@@ -1,0 +1,207 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //Team isha
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /*********************************************************
+ *OLA/ Underpinning Contract Details
+ **********************************************************/
+ $data = readDataFromCSV("IMS_SDMP_OperationalSegment_02", "IMS/ProjectAdminandSDMP");
+  
+ var $t = _testcase("TC_4", "OLA/ Underpinning Contract Details");
+ $t.start();
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.span = $data.listprop;// _click(_span("de-iconshow_listprop collapseTreeMenu[1]"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.X14;//_click(_link("X-14[1]"));
+ InfyFTclick($inputObject);
+ }
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.OLA; //Scope Description
+ SelectSegment($inputObject);
+ 
+ _wait(3580);
+ $inputObject = {};
+ $inputObject.Keyall =$data.keyall;
+ $inputObject.item = $data.OLAC1;
+ $inputObject.delete = $data.delete;
+ InfyFTsdmpDelete($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(56));//green colour will indicate there 43,44
+ var $ola = _getText(_span(57));
+ _assertEqual($ola, _getText(_span("It is optional to add an OLA/ Underpinning Contract. If an OLA/ Underpinning Contract is added, attachment is mandatory.", _near(_span(55))))); 
+ 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ }
+ else
+ {
+  _highlight(_span(84));//green colour will indicate there 43,44
+ var $ola = _getText(_span(85));
+ _assertEqual($ola, _getText(_span("It is optional to add an OLA/ Underpinning Contract. If an OLA/ Underpinning Contract is added, attachment is mandatory.", _near(_span(83))))); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.listprop;// _click(_span("de-iconshow_listprop collapseTreeMenu[1]"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.X14;//_click(_link("X-14[1]"));
+ InfyFTclick($inputObject);
+ }
+  
+ $inputObject = {};
+ $inputObject.segment_name =  $data.OLA; 
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.key;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ _popup("newListing")._click(_button("Return"));
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(56));//red colour will indicate there 
+ var $ola1 = _getText(_span(57));
+ _assertNotEqual($ola1,$ola); 
+ 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ }
+ else
+ {
+ _highlight(_span(84));//red colour will indicate there 
+ var $ola1 = _getText(_span(85));
+ _assertNotEqual($ola1,$ola); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.listprop;// _click(_span("de-iconshow_listprop collapseTreeMenu[1]"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.X14;//_click(_link("X-14[1]"));
+ InfyFTclick($inputObject);
+ }
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.OLA; 
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.OLAC1;
+ OpenEformInstance($inputObject);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.attachment; //Scope Description
+ SelectSegment($inputObject);
+ 
+ _wait(5800);
+ $inputObject = {}; 
+ $inputObject.attfilename = $data.attfilename2;//BR2final
+ InfyMyADDAttachment($inputObject);
+ _wait(9580);
+ 
+ _wait(5800);
+ _popup("openLinkedItem")._closeWindow();
+ _selectWindow();
+ 
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+  if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(56));//green colour will indicate there 
+ var $ola2 = _getText(_span(57));
+ _assertNotEqual($ola2, $ola1); 
+ }
+ else
+ {
+ _highlight(_span(84));//red colour will indicate there 
+ var $ola2 = _getText(_span(85));
+  _assertNotEqual($ola2, $ola1); 
+ }
+ 
+ $t.end();	
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 

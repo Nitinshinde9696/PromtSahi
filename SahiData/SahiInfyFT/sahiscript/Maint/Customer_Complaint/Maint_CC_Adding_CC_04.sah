@@ -1,0 +1,474 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-2,$dateObj1);
+ var $endDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Maint_CC_Adding_CC_04", "Maint/Customer_Complaint");
+ //
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+
+ 
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Navdeep_Ghotra
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end(); 
+
+ var $t = _testcase("TC_2", "select Project");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to customer complaint");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //CC
+ InfyFTnavigateTo($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "ADD icon");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $t.end(); 
+ 
+ //$data = readDataFromCSV("InfyFT_sahi2_individual_check", "InfyFTSahi/CC");
+
+ /********************************************************************************
+  * adding a new customer complaint  
+ *********************************************************************************/
+ 
+ var $t = _testcase("TC_5", "create customer complaint");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name61;
+ $inputObject.txt_CM_Description = $data.CM_Description6;
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.edt_DN_RaisedBy = $data.DN_RaisedBy6; 
+ $inputObject.lst_DN_Severity = $data.DN_Severity6; 
+ $inputObject.lst_DN_AssignedTo = $data.DN_AssignedTo6;
+ $inputObject.lst_DN_ComplaintCategory = $data.DN_ComplaintCategory6; 
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $endDate; 
+ $inputObject.lst_DN_RepeatComplaint = $data.DN_RepeatComplaint6; 
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Status;// "--None--;Open;Closed;Abandoned";
+ verifyEformInstanceDetails($inputObject);
+ 
+ _assertEqual(true, _button(" Save ").disabled); 
+ 
+ var $IDcus =  _getText(_span("CM_ItemCode"));
+ 
+ clickReturn();
+
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "staus field values/ID field");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(9500);
+ $inputObject = {};
+ $inputObject.span_Name = $IDcus;
+ $inputObject.cell_Name = $data.cell_Name4;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ /*********************************************************************************************************************
+ * close the instance when status is closed/abandoned 
+ **********************************************************************************************************************/
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ //$data = readDataFromCSV("InfyFT_sahi4_action item_root", "InfyFTSahi/CC");
+ 
+ var $t = _testcase("TC_7", "checking action item(closed)");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Complaint Closed On in Details tab \n• Field Root Cause in Details tab \n• Field Action Taken/ Reason for Abandoned in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken14;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Complaint Closed On in Details tab \n• Field Root Cause in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken14;
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Root Cause in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken14;
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause14; 
+ $inputObject.edt_DN_ComplaintClosedOn = $startDate1;
+ $inputObject.msgAlert = "Complaint Closed On should be greater than equal to Complaint Raised Date (" + $currentDate + ") and less than equal to Todays Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken14;
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause14; 
+ $inputObject.edt_DN_ComplaintClosedOn = $endDate;
+ $inputObject.msgAlert = "Complaint Closed On should be greater than equal to Complaint Raised Date (" + $currentDate + ") and less than equal to Todays Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "checking action item(abandoned)");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(9500);
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status24;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Action Taken/ Reason for Abandoned in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ /*******************************************************************************************************************
+  * Close the Instance (status-closed)  
+ ********************************************************************************************************************/
+ 
+ var $t = _testcase("TC_9", "modify and close the instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken14;
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause14; 
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate;
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ /************************************************************************************************************************
+ * Re-Open the closed instance  (reopen is not found)
+ *************************************************************************************************************************/
+ 
+ var $t = _testcase("TC_10", "reopen complaint for closed/abandoned status");
+ $t.start();
+ 
+ InfyFTreopenInstance();
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken4; 
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause4;   
+ ModifyEformInstance($inputObject);
+
+ $t.end();
+ 
+ /***************************************************************************************************************************
+ * Close the complaint by setting status as Abandoned 
+ ****************************************************************************************************************************/
+ 
+ var $t = _testcase("TC_11", "modify and close the instance");
+ $t.start();
+ 
+ _assertNotExists(_button("Reopen"));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status24;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken24;
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate;
+ ModifyEformInstance($inputObject);
+ 
+ _assertExists(_button("Reopen"));
+
+ $t.end();
+
+ /************************************************************************************************************************
+ * Re-Open the closed instance 
+ *************************************************************************************************************************/
+ 
+ var $t = _testcase("TC_12", "reopen complaint for closed/abandoned status");
+ $t.start();
+ 
+ clickReturn();
+  
+ _wait(5000);
+ $inputObject = {};//clearFilterButton-btnIconEl
+ $inputObject.span = $data.clearfilter;
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(9500); 
+ InfyFTreopenInstance();
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken4; 
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause4;   
+ ModifyEformInstance($inputObject);
+ 
+ _assertNotExists(_button("Reopen"));
+ 
+ $t.end();
+
+ /**************************************************************************************************************************
+ * check the assignee field 
+ ***************************************************************************************************************************/
+ 
+ //$data = readDataFromCSV("InfyFT_sahi5_assignedTo_customer_complaint", "InfyFTSahi/CC");
+ 
+ var $t = _testcase("TC_13", "navigate to assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;
+ navigateTo($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_14", "assigned to & checking inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(9500);
+ if(_isVisible(_link($data.Username1)))
+ {
+ $inputObject = {};
+ $inputObject.DN_AssignedTo = $data.assignTo1;
+ InfyFTcheckingField($inputObject);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.DN_AssignedTo = $data.Ayush;
+ InfyFTcheckingField($inputObject);
+ }
+ 
+ clickReturn();
+
+ $inputObject = {};
+ $inputObject.item= $IDcus;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ /*****************************************************************************
+  * Change assigneeTo field   
+ ******************************************************************************/ 
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",5,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $t = _testcase("TC_15", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username27; //Prashanth_Ballal
+ $inputObject.edt_loginid = $data.LoginID27; 
+ $inputObject.edt_password = $data.Password27; 
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_16", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name;//31st jan
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_17", "navigate to customer complaint");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_18", "modifying assigned to field");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDcus;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(9500);
+ $inputObject = {};
+ $inputObject.lst_DN_AssignedTo = $data.assignedTo14; 
+ //$inputObject.msgAlert = "The complaint can be only assigned to the Logged On User.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.lst_DN_AssignedTo = $data.assignTo; 
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $startDate; 
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_19", "navigate to assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ _wait(1000);
+
+ var $t = _testcase("TC_20", "assigned to & checking inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ OpenEformInstance($inputObject);
+ 
+ _wait(9500);
+ if(_isVisible(_link($data.Username1)))
+ {
+ $inputObject = {};
+ $inputObject.DN_AssignedTo = $data.assignTo;
+ InfyFTcheckingField($inputObject);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.DN_AssignedTo = $data.shalika;
+ InfyFTcheckingField($inputObject); 
+ }
+ 
+ clickReturn();
+
+ $inputObject = {};
+ $inputObject.item= $IDcus;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ /*****************************************************************************
+  * Checking Old assignee Inbox after assignee get changed  
+ ******************************************************************************/ 
+ 
+ var $t = _testcase("TC_21", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Sreya_Chatterjee
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_22", "navigate to assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23", "assigned to & checking inbox of old assignee");
+ $t.start();
+ 
+ _wait(3000);
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ $inputObject.operation = "Negative";//$data.operation2;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

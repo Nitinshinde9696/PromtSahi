@@ -1,0 +1,364 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Reviews_Defects_Enhance_autoCreated_reviewer_program_code_injected_stage_06", "Maint/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(10000)
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ InfyFTcheckOutProjectInGrid();
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("TSK456")))
+ {
+    $inputObject = {};
+    $inputObject.baseTaskID = $data.TskName;
+	$inputObject.baseTaskName = $data.TskName;
+    to_deleteTaskInGrid($inputObject)
+	
+	_wait(2000);
+	
+    InfyFTcheckInProjectFromGrid();
+	
+	_wait(5000);
+	
+	InfyFTcheckOutProjectInGrid();
+ 
+ }
+	 _wait(5000);
+	  
+	 $inputObject = {};
+	 $inputObject.LinkedTask = "True";
+	 $inputObject.baseTaskID = $data.baseTaskID4;
+	 $inputObject.baseTaskName = $data.baseTaskID4;
+	 $inputObject.edt_Name = $data.TskName;
+	 $inputObject["lst_Activity Code"] = $data.Activity_Code_Id;
+	 $inputObject["edt_Planned Finish"] = $endDate;
+	 $inputObject["edt_Planned Start"] = $currentDate;
+	 $inputObject["edt_Program Code"] = $data.progCodeValue;
+	 $inputObject["lst_Module Code"] = $data.moduleCodeValue;
+	 //$inputObject["lst_Application Code"] = $data.appCodeValue;
+	 InfyFTaddTaskInGrid($inputObject);
+	  
+	 $inputObject = {};
+	 $inputObject.task = $data.TskName;
+	 $inputObject.resource = $data.resources4;
+	 $inputObject["edt_Resource"] = "kunal";
+	 assignResourceToTaskInGrid($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.task = $data.TskName;
+	 $inputObject.resource = $data.resources5;
+	 $inputObject["edt_Resource"] = "Sajna";
+	 assignResourceToTaskInGrid($inputObject); 
+	 
+	 _wait(5000);
+	 
+	 InfyFTcheckInProjectFromGrid();
+ 
+ _wait(5000);
+ 
+ var $TC = _testcase("TC_3,9","Checking for Auto Creation Review Name and Review/testing of."); 
+ $TC.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.TskName1;
+ verifyEformListing($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.item = $data.TskName1;
+ $inputObject.edt_CM_Name = $data.TskName;
+ $inputObject.lbl_reviewtype = $data.reviewtypelbl;
+ InfyFTverifyEformInstanceDetails($inputObject);
+  
+ $TC.end();
+
+ var $TC = _testcase("TC_21","Checking for Auto Created Reviewer ."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.TskName1;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.txt_DN_ArtifactName = $data.DefDescription;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.fieldValue = ["Rita_Ding","SolomonDeepak_AI"];
+ $inputObject.fieldName = $data.fieldName;
+ InfyFTAssertEqual($inputObject);
+ 
+ InfyFTReturnPopUp()
+ 
+ _wait(5000);
+ 
+ $TC.end();
+ 
+var $TC = _testcase("TC","Checking for new resource allocated after re check-in the task"); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ InfyFTcheckOutProjectInGrid();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.task = $data.TskName;
+ $inputObject.resource = $data.resource5;
+ $inputObject["edt_Resource"] = "Rahul";
+ assignResourceToTaskInGrid($inputObject);
+  
+ _wait(5000);
+	 
+ InfyFTcheckInProjectFromGrid();
+  
+  _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.TskName1;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.fieldValue = ["Rahul_300497","Rita_Ding","SolomonDeepak_AI"];
+ $inputObject.fieldName = $data.fieldName;
+ InfyFTAssertEqual($inputObject);
+ 
+ _wait(2000);
+ 
+ $TC.end();  
+ 
+ var $TC = _testcase("TC_13","Checking for Auto Created Review Application and Module code."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.value = $data.moduleCodeValue;
+ $inputObject.span_Name = $data.moduleCodeName;
+ InfyFTisGetValue($inputObject);
+ 
+ _wait(2000);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.value = $data.appCodeValue;
+ $inputObject.span_Name = $data.appCodeName;
+ InfyFTisGetValue($inputObject);
+ 
+ _wait(2000);
+ */
+ $TC.end();
+ 
+ var $TC = _testcase("TC_14","Checking for Auto Created Review Program code."); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.value = $data.progCodeValue;
+ $inputObject.span_Name = $data.progCodeName;
+ InfyFTisGetValue($inputObject);
+ 
+ _wait(2000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_23","Delete the Auto Created Review."); 
+ $TC.start(); 
+ 
+ //Tab Defects
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.DefName;
+ $inputObject.txt_CM_Description = $data.DefDescription;
+ //$inputObject.lst_DN_DefectDetectedBy = $data.Deffield198;
+ $inputObject.lst_DN_Owner = $data.Deffield199;
+ $inputObject.lst_DN_Severity = $data.Deffield196;
+ InfyFTcreateLinkedItem1($inputObject);
+ var $createdDefID = $inputObject.createdID;
+  
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name7;//Details
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ InfyFTgetCreatedID($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name;
+ $inputObject.item = $createdID; 
+ $inputObject.msgAlert = "Review cannot be deleted if there are Defects linked or if Review Effort is greater than zero";
+ InfyFTDeleteEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name; 
+ $inputObject.item = $createdDefID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+  
+ _wait(5000);
+ 
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.fieldValue = $data.PhaseInj;
+ $inputObject.fieldName = $data.fieldNamePD;
+ InfyFTAssertEqual($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_1.2","Checking for the value should auto populate in the injected stage."); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.lst_DN_Status = $data.NotaDefect;
+ $inputObject.lst_DN_DefectType = $data.DefType;
+ $inputObject.lst_DN_DefectInjectedBy = $data.Deffield198;
+ $inputObject.lst_PhaseInjected = $data.PhaseInj;
+ $inputObject.txt_DN_ClosingComments = $data.comment;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;
+ $inputObject.lst_PhaseInjected = $data.fieldValuePD;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(10000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ InfyFTReturnPopUpPara($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("enChPrj")))
+ {
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ }
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name;
+ $inputObject.item = $createdID; 
+ InfyFTDeleteEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();
+
+
+ 
+
+
+
+ 
+ 

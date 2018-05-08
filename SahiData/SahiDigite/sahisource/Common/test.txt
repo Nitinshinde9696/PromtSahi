@@ -1,0 +1,817 @@
+/*************************************************************************
+//Sahi Call Back Functions
+*************************************************************************/
+
+function onScriptEnd(){
+    _wait(1000);
+	if( _exists(_link("UserName")))
+	{
+		_mouseOver( _link("UserName"));
+		_click(_link("Logout"));
+        _expectConfirm("Are you sure you want to log out?", true);
+	}
+	else//infy change
+	{
+	_mouseOver( _div("ellipsis"));
+		_click(_link("Logout"));
+        _expectConfirm("Are you sure you want to log out?", true);
+	}
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example setAllFields({"edt_fields.name":"Defect1","lst_fields.priority":"Medium","dat_fields.dueDate":"25/08/2010","rte_fields.description_editor":"New Defect"});
+* @description This function is called to set all editable fields
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function setAllFields($inputObject) 
+{
+    _log("setAllFields Started","success");
+    try 
+	{
+    	if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+	
+        var $arrKeySet;
+	    var $key;
+	    var $keyValue;
+	    var $mergekey;
+	
+        for ($key in $inputObject) 
+		{
+        	$keyValue = String([$key]);
+            $arrKeySet = $keyValue.split("_");
+	        
+			if($arrKeySet.length > 2)
+            {   
+			    $mergekey = $arrKeySet[1];
+			    for (var $i = 2; $i < $arrKeySet.length; $i++) 
+				{
+                    $mergekey = $mergekey + "_" + $arrKeySet[$i];
+				}
+				$arrKeySet[1] = $mergekey;
+            }
+		
+            if ($arrKeySet[0] === "edt") 
+			{
+			
+				 $s = _getGlobal("New_UI");
+				if($s ==="yes")
+				{	
+					$temp={};
+					$temp.user_name = $inputObject[$key];
+					
+					$inputObject[$key] = getNewUIUser($temp);
+				}	
+                _setValue(_textbox($arrKeySet[1]), $inputObject[$key]);
+            }
+	        
+			if ($arrKeySet[0] === "pwd")
+			{
+                _setValue(_password($arrKeySet[1]), $inputObject[$key]);
+            }
+		
+            if ($arrKeySet[0] === "lst") 
+			{
+				if($arrKeySet[1].indexOf("_") != -1 && $inputObject.split === "Y")
+            	{
+					var $keyAndValues = $arrKeySet[1].split("_");
+					 $temp={};
+					 $s = _getGlobal("New_UI");
+					if($s ==="yes")
+					{	$temp.user_name = $inputObject[$key];
+						$inputObject[$key] = getNewUIUser($temp);
+					}
+					
+            		_setSelected(_select($keyAndValues[0]), $inputObject[$key]);
+            	}
+            	else
+            	{
+	            	if($inputObject[$key].indexOf("#")!=-1)
+	        		{
+	            		var $values = $inputObject[$key].split("#");
+	        			for(var $i = 0; $i < $values.length; $i++)
+	        			{
+	        				_setSelected(_select($arrKeySet[1]), $values[$i]);
+	        			}
+	        		}
+	            	else
+	            	{
+						$temp={};
+						$s = _getGlobal("New_UI");
+						if($s ==="yes")
+						{	$temp.user_name = $inputObject[$key];
+							$inputObject[$key] = getNewUIUser($temp);
+						}
+						//_setMultiSelect($arrKeySet[1],$inputObject[$key]);
+						_setSelected(_select($arrKeySet[1]), $inputObject[$key]);
+	            	}
+            	}
+			}
+		
+			if ($arrKeySet[0] === "chk") 
+			{
+				_check(_checkbox($arrKeySet[1]));
+			}
+		
+			// @AUTHOR : Dinesh
+			// Use this when u want to make sure that a checkbox is unchecked
+			// Pass your parameter as unchk_<CHECKBOX NAME>
+			if ($arrKeySet[0] === "unchk") 
+			{
+				_uncheck(_checkbox($arrKeySet[1]));
+			}
+		
+			if ($arrKeySet[0] === "rdg") 
+			{
+				_click(_radio($inputObject[$key]));//
+            }
+		
+			if ($arrKeySet[0] === "txt") 
+			{
+				$temp={};
+					 $s = _getGlobal("New_UI");
+					if($s ==="yes")
+					{	$temp.user_name = $inputObject[$key];
+						$inputObject[$key] = getNewUIUser($temp);
+					}
+				_setValue(_textarea($arrKeySet[1]), $inputObject[$key]);
+			}
+			// for search select box
+			if($arrKeySet[0] === "ssl")
+			{
+				_setValue(_textbox($arrKeySet[1]), $inputObject[$key]);
+				_click(__span("/de-icon-search/", _near(_textbox($arrKeySet[1]))));
+				_click(_listItem($inputObject[$key],_near(_textbox($arrKeySet[1]))));
+			}
+			// @AUTHOR : Harshit
+			// Use this when u want to add searchSelect Field at any eform 
+			// and want to assign some value to that searchSelect Field.
+			// Pass the parameter as "ssf_newValue"
+			//fieldValues
+			if ($arrKeySet[0] === "ssf")
+			{
+				if($inputObject[$key].indexOf(";")!=-1)
+        		{
+        			var $values =$inputObject[$key].split(";");
+        			for(var $i = 0 ; $i < $values.length; $i ++)
+        			{
+        				_setValue(_textbox($arrKeySet[1]), $values[$i]);
+        				_click(_button("addValue"));
+        			}
+        		}
+            	else
+            	{
+            		_setValue(_textbox($arrKeySet[1]), $inputObject[$key]);
+    				_click(_button("Add Value"));
+            	}
+			}
+			if($arrKeySet[0] === "slb")
+			{
+				//_setSelected(_option($inputObject[$key], _in(_select($arrKeySet[1]))));
+				var $values = $inputObject[$key].split(";");
+							
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					if($arrKeySet[1] === "PLRRoles")
+					{
+						$arrKeySet[1] = "PLR_Roles";
+						_log("$arrKeySet[1] : "+$arrKeySet[1]);
+					}
+					_setSelected(_select($arrKeySet[1]), $values[$k]);
+				
+					if(_isVisible(_button("Add >")))
+					{
+						if($inputObject.optional === "Y")
+							_click(_button("Add >[1]"));
+						else
+							_click(_button("Add >"));
+					}					 
+					else if (_isVisible(_link("QTP_Add_Role")))
+						_click(_link("QTP_Add_Role"));
+				}
+			}
+			if($arrKeySet[0] === "mvr")
+			{
+				var $len =0;
+				var $values = $inputObject[$key].split(";");
+				var $alreadyContainsFlag;
+				if($arrKeySet[1] === "PLRRoles")
+				{
+					_set($len,_select("PLR_Roles").length);
+				}
+				else
+				{
+					_set($len,_select("selectTo").length);
+				}
+			
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					if($len === 0)
+					{
+					
+						if($arrKeySet[1] === "PLRRoles")
+						{
+							$arrKeySet[1] = "PLR_Roles";
+						
+						}
+						_setSelected(_select($arrKeySet[1]), $values[$k]);
+						_click(_link("de-icon-next"));
+					}
+					else if($len != 0)
+					{
+						if(_exists(_select("PLR_Roles")))
+						{
+							$alreadyContainsFlag =_containsText(_select("PLR_Roles"),$values[$k]);
+						}
+						else
+						{
+							$alreadyContainsFlag =_containsText(_select("selectTo"),$values[$k]);
+						}
+						if($alreadyContainsFlag === true)
+						{
+							if($arrKeySet[1] === "PLRRoles")
+							{
+								$arrKeySet[1] = "PLR_Roles";
+							}
+							_setSelected(_select($arrKeySet[1]), $values[$k]);
+							_click(_link("de-icon-next"));
+						}
+					}
+				}
+			}
+			if($arrKeySet[0] == "img")
+			{
+				_click(_link("de-icon-open_dropdown_list"));
+				_selectWindow("AvailableValues");
+				_setSelected(_select($arrKeySet[1]), $inputObject[$key]);
+				_click(_submit("//s*Ok/s*/"));
+				_selectWindow("Filter");
+				_wait(2000);
+			}
+			if($arrKeySet[0] === "file")
+			{
+				var $uploadFromPath = _getGlobal("DOWNLOAD");
+				_setFile(_file($inputObject[$key]),$uploadFromPath);
+				_call(_file($inputObject[$key]).type = "zip");
+			}
+			if($arrKeySet[0] === "search")
+			{
+			    _setValue(_textbox($arrKeySet[1]), $inputObject[$key].substring(0,3));
+				_click(_span("Project Manager_Img"));
+				_click(_listItem($inputObject[$key]));
+			
+			}
+			if($arrKeySet[0] === "hidden")
+			{
+				_log("can not set value for this field as this is read only field");
+				return;
+			}
+			if($arrKeySet[0] === "dat")
+			{
+			    _click(_link("Select Date", _rightOf(_textbox($arrKeySet[1]))));
+				var $arrDate = $inputObject[$key].split("-");
+                _setSelected(_select("ui-datepicker-month"), $arrDate[1]);
+                _setSelected(_select("ui-datepicker-year"), $arrDate[2]);
+                _click(_link($arrDate[0]));
+			}
+		}
+        if($inputObject.winprefix)
+			_selectWindow();
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("setAllFields Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyAllFields({"edt_fields.name":"Defect1","lst_fields.priority":"Medium","txt_fields.Junit_Description":"Some description"});
+* @description This function is called to verify all set fields
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function verifyAllFields($inputObject) 
+{
+    _log("verifyAllFields Started","success");
+    try 
+	{
+        var $arrKeySet;
+	    var $key;
+	    var $keyValue;
+	    var $mergekey;
+	
+        for ($key in $inputObject) 
+		{
+            $keyValue = String([$key]);
+            $arrKeySet = $keyValue.split("_");
+	        
+			if($arrKeySet.length > 2)
+            {   
+			    $mergekey = $arrKeySet[1];
+			    for (var $i=2; $i<$arrKeySet.length; $i++) 
+				{
+                    $mergekey = $mergekey + "_" + $arrKeySet[$i];
+				}
+				$arrKeySet[1] = $mergekey;
+            }
+		
+            if ($arrKeySet[0] === "edt") 
+			{
+            	var $value;
+            	_set($value, _textbox($arrKeySet[1]).value);
+            	var $boolean = false;
+            	if(_textbox($arrKeySet[1]).value.indexOf(";") != -1)
+            	{
+            		_set($boolean, _assertEqual($inputObject[$key].replace(",",";"), $value.replace(",",";")));
+            	}
+            	else
+            		_set($boolean, _assertEqual($inputObject[$key], $value));
+				if($boolean === true)
+            	{
+            		if(_textbox($arrKeySet[1]).value.indexOf(";") != -1)
+            		{
+            			_assertEqual($inputObject[$key].replace(",",";"), $value.replace(",",";"));
+            		}
+            		else
+            			_assertEqual($inputObject[$key], $value);
+            	}
+            	else
+            	{
+            		_assertNotEqual($inputObject[$key], $value);
+            	}
+            }
+	   
+            if ($arrKeySet[0] === "lst") 
+			{
+            	if($inputObject.operation === "Negative")
+            		_assertNotEqual($inputObject[$key], _getSelectedText(_select($arrKeySet[1])));
+            	else
+            	{
+	            	var $values = $inputObject[$key].split(";");
+	        		for(var $i = 0; $i < $values.length; $i++)
+	        		{
+	        			_assertTrue(_containsText(_select($arrKeySet[1]), $values[$i]));
+	        		}
+            	}
+			}
+
+            if ($arrKeySet[0] === "txt") 
+			{
+				if($inputObject.operation === "Negative")
+					_assertNotEqual($inputObject[$key], _textarea($arrKeySet[1]).value);
+				else
+					_assertEqual($inputObject[$key], _textarea($arrKeySet[1]).value);
+			}
+		
+			if($arrKeySet[0] === "cell")
+			{
+			    if($inputObject.operation === "Negative")
+				{
+					_assertNotEqual($inputObject[$key], _getText(_cell(0, _rightOf(_cell($arrKeySet[1].replace("_"," "))))));
+				}
+				else
+			    {
+				    _assertEqual($inputObject[$key], _getText(_cell(0, _rightOf(_cell($arrKeySet[1].replace("_"," "))))));
+				}
+			}
+		
+			// To Verify if all the item passed in the CSV are Present in the ListBox.
+			if($arrKeySet[0] === "slb")
+			{
+				var $values = $inputObject[$key].split(";");
+							
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					if($arrKeySet[1] === "selectFrom")
+					{
+						_assertTrue(_containsText(_select("selectTo"), $values[$k]));
+					}
+					else
+						_assertTrue(_containsText(_select("projSelect"), $values[$k]));
+				}
+			}
+		
+			// To Verify if all the item passed in the CSV are Present in SelectFrom.
+			if($arrKeySet[0] === "sfm")
+			{
+				var $values = $inputObject[$key].split(";");
+							
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					_assertTrue(_containsText(_select("selectFrom"), $values[$k]));
+				}
+			}
+		
+			if($arrKeySet[0] === "lbl")
+			{
+				var $new_ui = _getGlobal("New_UI");
+				if($new_ui ==="yes")
+				{
+					var $Name= $inputObject[$key];
+					var $test = $Name.replace(" * :","");
+					var $test1 = test.replace(" ^ :","");
+					var $test2 = test1.replace(" * ","");
+					var $test3 = $test2.replace("*","");
+					$temp = $test3.replace(" :","");
+					$inputObject[$key] = $temp;
+				}
+				_assertEqual($inputObject[$key],_getText(_span($arrKeySet[1])));
+			}
+		
+		
+			if($arrKeySet[0] === "ele")
+			{
+				var $new_ui = _getGlobal("New_UI");
+				if($new_ui ==="yes")
+				{
+					var $Name= $inputObject[$key];
+					var $test = $Name.replace(" * :","");
+					var $test1 = test.replace(" ^ :","");
+					var $test2 = test1.replace(" * ","");
+					var $test3 = $test2.replace("*","");
+					$temp = $test3.replace(" :","");
+					$inputObject[$key] = $temp;
+				}
+				_assertEqual($inputObject[$key],(_getText(_cell($arrKeySet[1]) || _span($arrKeySet[1]))));
+			}
+			// TO check if the List only contains the provided text
+			if ($arrKeySet[0] === "con") 
+			{
+				var $values = $inputObject[$key];
+			
+				if($inputObject[$key].indexOf(";") != -1)
+				{
+					$values = $inputObject[$key].split(";");
+					for(var $k=0; $k<$values.length; $k++)
+					{
+						_assertTrue(_containsText(_select($arrKeySet[1]), $values[$k]));
+					}
+				}
+				else
+				{
+					_assertTrue(_containsText(_select($arrKeySet[1]), $values));
+				}
+			}
+			if ($arrKeySet[0] === "rdg") 
+			{
+				_assertEqual($inputObject[$key], _radio($arrKeySet[1]).value);
+			}
+		
+			if ($arrKeySet[0] === "chk") 
+			{
+				_assertTrue(_checkbox($arrKeySet[1]).checked);
+			}
+		
+			if ($arrKeySet[0] === "unchk") 
+			{
+				// this added because after global filter is checked,after save it becomes YES so for this qst if is added
+				// if u want to verify that global filter is TRUE or FALSE then pass input as this "unchk_isGlobalFilter_Yes"
+				if($arrKeySet[2] === 'Yes')
+				{
+					_assertTrue(_isVisible(_row("Global Filter: Yes"),_in(_table("FormArea"))));
+				}
+				else
+					_assertFalse(_checkbox($arrKeySet[1]).checked);
+			}
+			if ($arrKeySet[0] === "img") 
+			{
+				var $values = $inputObject[$key].split(";");
+			
+				$values = $inputObject[$key].split(";");
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					_assertTrue(_isVisible(_link($values[$k])));
+				}
+			}
+			if($arrKeySet[0] === "link") // to verify link eg.segment etc.
+			{
+				var $segmentName;
+				$segmentName =  $inputObject[$key].split(";");
+				for (var $i = 0; $i < $segmentName.length; $i ++)
+				{
+					_assertTrue(_isVisible(_link($segmentName[$i])));
+				}
+			}
+        }
+	} catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("verifyAllFields Completed","success");
+}
+
+
+/*************************************************************************
+* @author Hrishi
+* @example readDataFromCSV
+* @description 
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function readDataFromCSV($fileName, $module)
+{
+	var $dirPath = _getGlobal("datatDIR")+$module+"/";
+	_log($dirPath);
+	_log($fileName);
+	 $dirPath = $dirPath+ $fileName+".csv";
+	_log("CSVpath   "+ $dirPath);
+	
+	//_resource("../../../SahiInfyFT/sahiscript/"+$module+"/*.csv");
+		//_resource("../../../SahiInfyFT/sahiscript/Agile_PT/Sprint1/*.csv");
+		_resource("../../../SahiInfyFT/sahiscript/Agile/SPA/*.csv");
+	    _resource("../../../SahiInfyFT/sahiscript/IMS/Change_Request/*.csv"); 
+	    // _resource("../../../SahiInfyFT/sahiscript/IMS/QA_Plan/*.csv"); 
+	    // _resource("../../../SahiInfyFT/sahiscript/IMS/Issue_Tracking/*.csv"); 
+	
+//D:/Sahi/SahiData/SahiInfyFT/sahiscript/
+	var $rs1 = _readCSVFile($dirPath,",");
+	var $rowLength1 = $rs1.length;
+
+	for(var $j = 0; $j < $rowLength1; $j++)
+	{
+		var $w_key = $rs1[$j];
+		$j++;
+		var  $w_value = $rs1[$j];
+	}
+
+	var $jsonObj = {};
+	for(var $j = 0; $j < $w_key.length; $j++)
+	{
+		$jsonObj[$w_key[$j]] = $w_value[$j];
+	}
+
+	return $jsonObj;
+}
+
+function readDataFromCommonCSV($id , $module)
+{
+	var $dataDirPath = _getGlobal("sahiDataDIR");
+	var $moduleStr =  $module.split("/");
+	var $scriptType = $moduleStr[1];
+	var $fileName = $scriptType + "Data.csv";
+	$dataDirPath = $dataDirPath + $fileName;
+
+	var $rs1 = _readCSVFile($dataDirPath,",");
+	var $rowLength1 = $rs1.length;
+
+	for(var $j = 0; $j < $rowLength1; $j++)
+	{
+		var $w_key = $rs1[$j];
+		$j++;
+		var  $w_value = $rs1[$j];
+		if($w_value[0] == $id)
+		{
+			break;
+		}
+	}
+	
+	var $jsonObj = {};
+	for(var $j = 0; $j < $w_key.length; $j++)
+	{
+		$jsonObj[$w_key[$j]] = $w_value[$j];
+	}
+
+	return $jsonObj;
+}
+/*************************************************************************
+* @author Vaishali
+* @example readMultipleDataFromCSV
+* @description  Reading multiple data from csv file
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function readMultipleDataFromCSV($fileName, $module)
+{
+	var $dirPath = _getGlobal("datatDIR")+$module+"/";	
+	$dirPath = $dirPath+ $fileName+".csv";
+	var $rs1 = _readCSVFile($dirPath,",");
+	var $rowLength = $rs1.length;
+	if($rowLength > 1)
+	{
+		var $w_key = $rs1[0];
+		var  $w_value= new Array();
+		for(var $j = 1; $j < $rowLength; $j++)
+		{
+			$w_value.push($rs1[$j]);
+		}	
+		var $jsonArray = new Array();
+		for(var $j = 0; $j < $w_value.length ; $j++)
+		{
+			var $jsonObj = {};
+			for(var $k = 0; $k < $w_value[$j].length ; $k++)
+			{
+				$jsonObj[$w_key[$k]] = $w_value[$j][$k];
+			}
+			$jsonArray.push($jsonObj);
+		}		
+		return $jsonArray;
+	}
+	return [];
+}
+
+
+/*************************************************************************
+* @author Vaishali
+* @example verifyDisableButton({"button":"Delete"});
+* @description This function is called to verify all if button is disable
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function verifyDisableButton($inputObject) 
+{
+    _log("verifyDisableButton Started","success");
+    try 
+	{
+    	_assertTrue(_submit("Delete").disabled);
+    } 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("verifyDisableButton Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example replaceAllStr("AHA|HJSH|JDH","|",",");
+* @description This function is called to replace all string
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function replaceAllStr(a_str, a_target, a_replacement)
+{
+    _log("replaceAllStr Started","success");
+    try
+	{
+		while(a_str.indexOf(a_target) >= 0)
+		{
+			a_str = a_str.replace(a_target,a_replacement);
+		}
+		return a_str;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("replaceAllStr Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example mytrim(" JHDJ ");
+* @description This function is called to trim white spaces from string
+* @param {String} 
+* @return {String} string
+*************************************************************************/
+function mytrim(a_str) {
+    return a_str.replace(/^\s+|\s+$/g,"");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example $dateObj = new Date();
+  var $das = DateAdd("d",-7,$dateObj);
+* @description This function is called to replace all string
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function DateAdd($timeU,$byMany,$dateObj) 
+{
+    _log("DateAdd Started","success");
+    try
+	{
+		var $millisecond = 1;
+		var $second = $millisecond*1000;
+		var $minute = $second*60;
+		var $hour = $minute*60;
+		var $day = $hour*24;
+		var $year = $day*365;
+
+		var $newDate;
+		var $dVal = $dateObj.valueOf();
+		switch($timeU) {
+			case "ms": $newDate=new Date($dVal+$millisecond*$byMany); break;
+			case "s": $newDate=new Date($dVal+$second*$byMany); break;
+			case "mi": $newDate=new Date($dVal+$minute*$byMany); break;
+			case "h": $newDate=new Date($dVal+$hour*$byMany); break;
+			case "d": $newDate=new Date($dVal+$day*$byMany); break;
+			case "y": $newDate=new Date($dVal+$year*$byMany); break;
+		}
+		return $newDate;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("DateAdd Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyItemsInWeblist({"itemList":"Earth|Low","listName":"fields.release","type":"negative"});
+* @description This function is called to verify items in weblist
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function verifyItemsInWeblist($inputObject) 
+{
+	_log("verifyItemsInWeblist Started","success");
+	try 
+	{
+	    var $itemList = $inputObject.itemList.split("|");
+		for($i = 0; $i < $itemList.length; $i++) 
+		{
+			if ($inputObject.type === "negative")
+				_assertNotExists(_option($itemList[$i], _in(_select($inputObject.listName))));
+			else
+				_assertExists(_option($itemList[$i], _in(_select($inputObject.listName))));
+		}
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	
+	_log("verifyItemsInWeblist Completed","success");
+}
+
+/*************************************************************************
+* @author Nilesh
+* @example getDate();
+* @description This function is called to get WeekendDate
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function getDate($inputObject)
+{
+	var $dateObj=new Date();
+	var $number=parseInt($inputObject.day);
+	var $formattedDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj.setDate($dateObj.getDate()- $dateObj.getDay() + $number));
+	return $formattedDate;
+}
+
+
+function getNewUIUser($inputObject)
+{
+	try
+	{		
+		var $OldUIuserName = $inputObject.user_name;
+		var $userName = $inputObject.user_name;
+		_log("old UI User"+$userName);
+			$fileName = "NewUI_Users.csv";
+			var $dirPath = _getGlobal("datatDIR")+$fileName;
+			var $rs1 = _readCSVFile($dirPath,",");
+			var $rowLength1 = $rs1.length;
+			for(var $j = 0; $j < $rowLength1; $j++)
+			{
+				var $w_key = $rs1[$j];
+				$j++;
+				var  $w_value = $rs1[$j];
+				
+			}
+
+			var $jsonObj = {};
+			for(var $j = 0; $j < $w_key.length; $j++)
+			{
+				$jsonObj[$w_key[$j]] = $w_value[$j];
+			} 
+			
+			var $tests = $inputObject.user_name;
+			$userName = $jsonObj[$tests];
+			if($userName != null)
+			{
+				_log($userName);
+				
+				return $userName;
+			}
+			else
+			{	_log($OldUIuserName); 
+				return $OldUIuserName;
+			}
+		
+	}
+	catch( e)
+	{
+		handleFailure(e);
+	}
+}
+
+/*************************************************************************
+* @author Kunal Gajbhiye
+* @example handleFailure(e);
+* @description This function is called to handle failure and take the screen shot of the error page. 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function handleFailure(e)
+{
+	/*  _logExceptionAsFailure(e);
+	_focusWindow();
+    _takeScreenShot();
+	_fail("Script stopped due to Error."); */
+	return false;
+}

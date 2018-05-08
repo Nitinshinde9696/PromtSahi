@@ -1,0 +1,89 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("MechPD_PM_Plan_Normal_Normal_01","MechPD/PMPlan_Normal"); 
+ 
+ var $t = _testcase("TC_1", "LogIn into Digite");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;//Arjun R02
+ $inputObject.edt_loginid = $data.LoginID1;//arjun.r02
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//HEFPSHL1
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("MechPD_PM_Plan_Normal_Assertions_Normal_02");
+ 
+ $t.start();
+ 
+ _include("MechPD_PM_Plan_Normal_Assertions_Normal_02.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("MechPD_PM_Plan_Normal_ScpDescription_Normal_03");
+ 
+ $t.start();
+ 
+ _include("MechPD_PM_Plan_Normal_ScpDescription_Normal_03.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("MechPD_PM_Plan_Normal_CmtClient_Normal_04");
+ 
+ $t.start();
+ 
+ _include("MechPD_PM_Plan_Normal_CmtClient_Normal_04.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("MechPD_PM_Plan_Normal_Goals_Normal_05");
+ 
+ $t.start();
+ 
+ _include("MechPD_PM_Plan_Normal_Goals_Normal_05.sah");
+ 
+ $t.end();
+ 
+ /*var $t = _testcase("27-5", "Workflow");
+ 
+ $t.start();
+ 
+ _include("InfyFT_BR27_PM_Plan_MechPD_Workflow_Normal.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Reopening The baselined project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.button = $data.Reopenbtn13;//Reopen
+ InfyFTclick($inputObject);
+ //_isVisible(_button("Reopen"));
+ //_click(_button("Reopen")); 
+ 
+ $t.end();
+/* 
+ var $t = _testcase("TC_1", "DEFECTS");
+ 
+ $t.start();
+ 
+ _include("InfyFT_BR27_PM_Plan_MechPD_LCStages_Detect_Normal.sah"); 
+ 
+ $t.end();
+ */

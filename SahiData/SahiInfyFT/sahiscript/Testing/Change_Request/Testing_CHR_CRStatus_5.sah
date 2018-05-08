@@ -1,0 +1,364 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/Timesheet.sah");
+
+ $data = readDataFromCSV("Testing_CHR_CRStatus_5", "Testing/Change_Request");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",6,$dateObj1);
+ var $currentDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy hh:").format($dateObj1);
+
+ $inputObject = {}; //Snehal will login as a PM
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus42;
+ $inputObject.edt_DN_ClientApprovedCost = $data.CACost41;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ CreateInstance($inputObject);
+ 
+ _wait(5000); 
+ var $IDchr5 =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName61;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name71; 
+ $inputObject.multiple_member = $data.Username11;
+ WorkflowSet($inputObject);
+
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name72; 
+ $inputObject.multiple_member = $data.Username12;
+ WorkflowSet($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments8;
+ ClickRoutewithComments($inputObject);
+ 
+ _wait(5000);
+ 
+ clickReturn();
+ 
+ logOut();
+ 
+ /******************************************************************/
+ 
+ $inputObject = {}; //Sreya login as a DM
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+  
+ _setValue(_textbox("searchTextBox-inputEl"), $IDchr5);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDchr5;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus44;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(5000); 
+ var $IDchr5 =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName61;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name73; 
+ $inputObject.multiple_member = $data.Username11;
+ WorkflowSet($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments8;
+ ClickRoutewithComments($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName62;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CRStatusValue56;
+ $inputObject.cell_Name = $data.CRStatus5;
+ InfyFTisReadOnlyS($inputObject);
+  
+ var $t = _testcase("TC_10_TS_09.4","Only Pm Can ReOpen");
+  
+ $t.start();
+ 
+ InfyFTreopenInstanceS();
+ 
+ $t.end();
+ 
+ logOut(); //End of TestCase 10
+ 
+ /***********************************************************/
+ 
+ $inputObject = {}; //Snehal will login as a PM
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ _setValue(_textbox("searchTextBox-inputEl"), $IDchr5);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDchr5;
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42; 
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus45;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ $inputObject.edt_DN_ClientApprovedCost = $data.CACost42;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ var $t = _testcase("TC_11_TS_1","If BillToCust No then Check Reason");
+  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust43;
+ //$inputObject.edt_DN_ClientApprovedCost = $data.CACost41;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus45;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ InfyFTModifyEformInstanceS($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_11_TS_2","If BillToCust Yes then Check CACost");
+  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42;
+ //$inputObject.edt_DN_ClientApprovedCost = $data.CACost42;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus45;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ var $IDchr5 =  _getText(_span("CM_ItemCode"));
+
+ $t.end();
+ 
+ var $t = _testcase("TC_11_TS_3","CAStatus should not be None");
+  
+ $t.start();
+ 
+ _assertEqual("Approved", _getSelectedText(_select("DN_ClientApprovalStatus")));
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11_TS_4","CAStatus should not be None");
+  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus45;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ $inputObject.edt_DN_ClientApprovedCost = $data.CACost42;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11_TS_5","Change CAStatus and check CACost");
+  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust43;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus43;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ $inputObject.edt_DN_ClientApprovedCost = $data.CACost42;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "DN_ClientApprovedCost";
+ $inputObject.cell_Name = $data.CACost5;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ //_assertExists(_cell("Client Approved Cost :"), _near(_span("DN_ClientApprovedCost")));
+ _assertEqual(_getText(_span("DN_ClientApprovedCost")),$data.CACost42);
+ 
+ var $IDchr5 =  _getText(_span("CM_ItemCode"));
+
+ $t.end();
+ 
+ var $t = _testcase("TC_11_TS_6","Change CAStatus and check CACost");
+  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus45;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ InfyFTModifyEformInstanceS($inputObject);
+  
+ $inputObject = {};
+ $inputObject.textbox = "DN_ClientApprovedCost";
+ $inputObject.cell_Name = $data.CACost5;
+ InfyFTisReadOnlyS($inputObject);
+  
+ //_assertExists(_cell("Client Approved Cost :"), _near(_textbox("DN_ClientApprovedCost")));
+ _assertEqual(_getText(_textbox("DN_ClientApprovedCost")),$data.CACost42);
+ 
+ _wait(5000); 
+ var $IDchr5 =  _getText(_span("CM_ItemCode"));
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.txt_CM_Description = $data.Description4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_Category41;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticality4;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpact4;
+ $inputObject.edt_DN_CRCost = $data.CR_Cost4;
+ $inputObject.edt_DN_Currency = $data.Currency4;
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCust42;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedBy4; 
+ $inputObject.lst_DN_ClientApprovalStatus = $data.CAStatus45;
+ $inputObject.edt_DN_ClientApprovedCost = $data.CACost42;
+ $inputObject.txt_DN_ReasonfornotBillingPar = $data.ReasonForBilling4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName61;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments8;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName62;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDchr5;
+ DeleteEformInstance($inputObject);

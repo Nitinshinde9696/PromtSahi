@@ -1,0 +1,5841 @@
+
+_include("../Common/Common.sah");
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteDeliverable($inputObject)
+{
+	_log("deleteDeliverable Started","success");
+	try 
+	{
+		_selectWindow($inputObject.popup_name); 
+		_click(_link($inputObject.Deliverable));
+		_selectWindow("DlvEForm"); 
+		_click(_button("DeleteBtn"))|| _click(_button("Delete"));
+		_expectConfirm("You are about to delete this item, do you still want to proceed with this action?", true);
+		_click(_button("//s*Ok/s*/"));
+		_wait(5000,null);
+		_popup($inputObject.popup_name)._closeWindow();
+		_selectWindow();		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteDeliverable Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRoutingComment($inputObject)
+{
+	_log("verifyRoutingComment Started","success");
+	try 
+	{
+		 SelectSegment({"segment_name":"Comments"});
+		 _assert(_isVisible(_div($inputObject.comment, _in(_div("commentsTextDiv")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRoutingComment Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickSearchSelectIcon($inputObject)
+{
+	_log("clickSearchSelectIcon Started","success");
+	try 
+	{
+		var $img = "_Img";
+		var $imageName = $inputObject.itemName + $img;
+		_click(_span($imageName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickSearchSelectIcon Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.txt_Comments = "Routed", $inputObject.alert = "Yes"
+ @description: Clicking the route button and filling the comment
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function ClickRoutewithComments($inputObject)
+{
+	_log("ClickRoutewithComments Started","success");
+	try 
+	{
+		_click(_button("RouteBtn"));
+		
+		if($inputObject.alert == "LastStageAlert")
+		{
+			var $msg;
+			
+			_set($msg,_lastAlert());
+			_assertTrue($msg.indexOf("Please provide valid") != -1);
+		}
+		else
+		{	
+			_selectWindow("RouteReject");
+			setAllFields($inputObject);
+			_click(_submit("RouteBtn"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ClickRoutewithComments Completed","success");
+}
+
+/**
+ @author: hbhuva
+ @example:
+ @description: Used when only single instance of eform has to be created,Internally calls
+  CreateInstance  to create instance
+ @param: 
+ @return: 
+ **/
+
+function createInstanceSingleton($inputObject)
+{
+	_log("createInstanceSingleton Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("Can not add another instance of Single Instance Eform");
+			return;
+		}
+		setAllFields($inputObject);
+
+		if(_isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+		{
+			_click(_submit("SaveBtn") || _submit("//s*Save/s*/"));
+		}
+		else if(_isVisible(_button("ScrnButton")))
+		{
+			_click(_button("ScrnButton"));
+		}
+		else
+		{
+			 _click(_button("SaveBtn") || _button("//s*Save/s*/"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createInstanceSingleton Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function DeleteEformInstanceSingletonEform()
+{
+	_log("DeleteEformInstanceSingletonEform Started","success");
+	try 
+	{
+		DeleteEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("DeleteEformInstanceSingletonEform Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function linkExistingItemsInLinkedItemSegment($inputObject)
+{
+	_log("linkExistingItemsInLinkedItemSegment Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_Existing_Item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		if(_exists(_link($addbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($addbtnKey)));
+			_click(_link($addbtnKey));
+		}
+		_selectWindow("newListing");
+		_click(_submit("Submit"));
+		var $items=$inputObject.existingItems.split(";");
+		for($i=0;$i<$items.length;$i++)
+		{
+			_click(_checkbox(0,_near(_cell($items[$i]))))
+			
+		}
+		_click(_submit("QTP_Add_Link_Button"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("linkExistingItemsInLinkedItemSegment Completed","success");
+}
+
+/*************************************************************************
+* @author Nilesh
+* @example: verifylinkNewInLinkedItemSegment({ "item" : "Ophelia" , "operation" : "Negative" })
+* @description This function is called to check if the item passed is present in listing table.
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifylinkExistingItemsInLinkedItemSegment($inputObject)
+{
+	_log("verifylinkExistingItemsInLinkedItemSegment Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifylinkExistingItemsInLinkedItemSegment Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteLinkInLinkedItemSegment($inputObject)
+{
+	_log("deleteLinkInLinkedItemSegment Started","success");
+	try 
+	{
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.item))));
+		var $deleteBtn = "KEY_Delete_items";
+		var $extJsId = ""; 	
+		var $deletebtnKey = $deleteBtn + $extJsId;
+		_click(_link($deletebtnKey));
+	    _expectConfirm("The link(s) will no longer be available", true);
+	    _log("deleteLinkInLinkedItemSegment Verification Started","success");
+		_assertFalse(_isVisible(_div($inputObject.item)));
+		_log("deleteLinkInLinkedItemSegment Verification Complete","success");
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteLinkInLinkedItemSegment Completed","success");
+}
+
+/**
+ @Function Number:23
+ @author: hbhuva
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function linkNewInLinkedItemSegment($inputObject)
+{
+	_log("linkNewInLinkedItemSegment Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		_wait(15000, _isVisible(_link($addbtnKey)));
+		if(_isVisible(_link($addbtnKey)))
+		{	
+			_click(_link($addbtnKey));
+		}
+		_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("linkNewInLinkedItemSegment Completed","success");
+}
+
+/*************************************************************************
+* @author Nilesh
+* @example: verifylinkNewInLinkedItemSegment({ "item" : "Ophelia" , "operation" : "Negative" })
+* @description This function is called to check if the item passed is present in listing table.
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifylinkNewInLinkedItemSegment($inputObject)
+{
+	_log("verifylinkNewInLinkedItemSegment Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifylinkNewInLinkedItemSegment Completed","success");
+}
+
+/**
+ @Function Number:26
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function enterTimeLogAtInstance($inputObject)
+{
+	_log("enterTimeLogAtInstance Started","success");
+	try 
+	{
+		_click(_link("de-icon-add_timelog"));
+		_selectWindow("Timesheet");
+		enterTimeLogforWeekday($inputObject);
+		saveTimesheet();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enterTimeLogAtInstance Completed","success");
+}
+
+/**
+ @Function Number:27
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function checkActivityLog($inputObject)
+{
+	_log("checkActivityLog Started","success");
+	try 
+	{
+		var $tableRowCount = 0;
+		_set($tableRowCount,_table("QTP_activitylog").rows.length-1);
+		if($inputObject.count)
+			_assertEqual($inputObject.count,$tableRowCount);
+		else
+			_assertTrue($tableRowCount > 0);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkActivityLog Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: clickReturn()
+ @description:  clicking on Return Button
+ @param: None
+ @return: None
+ **/
+function clickReturn()
+{
+	_log("clickReturn Started","success");
+	try 
+	{
+		 _click(_button("< Return")|| _button("Return"));
+	}	
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickReturn Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example SelectSegment({ "segment_name" : "Action Items" ,"popup_name":"eForm"})
+* @description This function is called to create instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function SelectSegment($inputObject)
+{
+	_log("SelectSegment Started","success");
+	try 
+	{
+		var $timer = 5000;
+		if($inputObject.waitTime !== undefined) // can be anything so that just checked that if it is present in the input itself
+		{
+			$timer = parseInt($inputObject.waitTime);
+		}
+		if($inputObject.popup_name)
+		{
+			_selectWindow($inputObject.popup_name);
+			_focusWindow(); 
+		}
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists( _link($inputObject.segment_name) || _span($inputObject.segment_name) || _div($inputObject.segment_name) ));
+			if(_exists(_div("More_MenuItems_Segment")))
+			{
+				_click(_div("More_MenuItems_Segment"));
+				_assertFalse(_exists(_link($inputObject.segment_name) || _span($inputObject.segment_name) || _div($inputObject.segment_name)));
+			}
+		}
+	   // HARSHIT : _wait() written because when routing 
+	   // pt and then again selecting workflow segment takes lots of time
+		else
+		{
+			_log("$timer : "+$timer);
+			_wait($timer, _isVisible(_link($inputObject.segment_name) || _span($inputObject.segment_name)) || _exists(_div($inputObject.segment_name))); // added for script qtpt2475
+			if(_exists(_link($inputObject.segment_name) || _span($inputObject.segment_name)) || _exists(_div($inputObject.segment_name)))
+			{
+				_click(_link($inputObject.segment_name) || _span($inputObject.segment_name) || _div($inputObject.segment_name));
+			}
+			else if(_exists(_div("More_MenuItems_Segment")))
+			{
+				_click(_div("More_MenuItems_Segment"));
+				
+				if ($inputObject.negative == true)
+					_assertFalse(_exists(_link($inputObject.segment_name) || _span($inputObject.segment_name) || _div($inputObject.segment_name)));
+				else
+					_click(_link($inputObject.segment_name) || _span($inputObject.segment_name) || _div($inputObject.segment_name));
+			}
+			else 
+			{
+				_click(_link("imgListProp"));
+				_click(_link($inputObject.segment_name) || _span($inputObject.segment_name) || _div($inputObject.segment_name));
+			}
+			
+		}
+		if($inputObject.popup_name)	
+			_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SelectSegment Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example SelectCustomSegment({ "segment_name" : "Workflow" });
+* @description This function is called to select segment
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function SelectCustomSegment($inputObject)
+{
+	_log("SelectCustomSegment Started","success");
+	try 
+	{
+    	SelectSegment($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SelectCustomSegment Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function SelectCustomSegmentInSplitScreen($inputObject)
+{
+	_log("SelectCustomSegmentInSplitScreen Started","success");
+	try 
+	{
+		_selectWindow("SplitScreen");
+		_log("$inputObject.segment_name" +$inputObject.segment_name);
+		_click(_link($inputObject.segment_name));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SelectCustomSegmentInSplitScreen Completed","success");
+}
+
+/**
+ @Function Number:32
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addLinkedItem($inputObject)
+{
+	_log("addLinkedItem Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		_click(_link($addbtnKey));
+		_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addLinkedItem Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example CreateInstance({"item":"DEF2486");
+* @description This function is called to create instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function CreateInstance($inputObject)
+{
+	_log("CreateInstance Started","success");
+	try 
+	{
+		clickAddIcon($inputObject);
+			
+		saveInstance($inputObject);	
+		if($inputObject.msgAlert)
+		{
+			_assertEqual($inputObject.msgAlert, _lastAlert());
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("CreateInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example createInstanceForPopUp({"item":"DEF2486", winprefix:"AddItem"});
+* @description This function is called to create instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function createInstanceForPopUp($inputObject) 
+{
+    _log("createInstanceForPopUp Started","success");
+    
+    try 
+	{
+    	CreateInstance($inputObject);
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createInstanceForPopUp Completed","success");	
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example clickAddIcon
+* @description This function is called to click Add Icon
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function clickAddIcon($inputObject)
+{
+	_log("clickAddIcon Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = _link($addBtn + $extJsId);
+		
+		
+		if($inputObject.icon)
+		 	$addbtnKey = _link($inputObject.icon); 
+		
+		if($inputObject.operation === "DisabledButton")
+		{
+			var $addButtonClassName;
+			_set($addButtonClassName, ($addbtnKey).className);
+            var $isButtonDisabled = $addButtonClassName.indexOf("disabled");
+			if ($isButtonDisabled !== -1)
+			    _log("Given Button Disabled","success");
+			else
+			    _log("Given Button not Disabled","failure");
+		}
+		else
+		{	
+			_wait(15000, _isVisible($addbtnKey) || _isVisible(_link("de-icon-add")));
+			
+			if(_isVisible($addbtnKey))
+				_click($addbtnKey);
+			else
+				_click(_link("de-icon-add"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickAddIcon Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example saveInstance
+* @description This function is called to click Save Button
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function saveInstance($inputObject)
+{
+	_log("saveInstance Started","success");
+	try 
+	{
+		if($inputObject.operation !== "DisabledButton")
+		{
+			setAllFields($inputObject);
+
+			clickSaveButton($inputObject);
+
+			if($inputObject.alert)
+				verifyAlert($inputObject);
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example clickSaveButton
+* @description This function is called to click Save Button
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function clickSaveButton($inputObject)
+{
+	_log("clickSaveButton Started","success");
+	try 
+	{
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+			
+		if(_isVisible(_submit("SaveBtn")))
+			_click(_submit("SaveBtn"));
+		else if(_isVisible(_submit("QTP_Save")))
+			_click(_submit("QTP_Save"));
+		else if(_isVisible(_button("ScrnButton")))
+			_click(_button("ScrnButton"));
+		else if(_isVisible(_submit("Add")))
+			_click(_submit("Add"));
+		else if(_isVisible(_submit("//s*Save/s*/")))
+			_click(_submit("//s*Save/s*/"));
+		else if(_isVisible(_submit("create")))
+        	_click(_submit("create")); 
+		else
+			_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+		
+		if(!($inputObject.alert || $inputObject.alertType))
+			_wait(5000);
+			
+		if($inputObject.winprefix)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickSaveButton Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example verifyAlert
+* @description This function is called to verify the various types of alert
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function verifyAlert($inputObject)
+{
+	_log("verifyAlert Started","success");
+	try 
+	{
+		var $alertMsg = "";
+		if($inputObject.alert === "PlanEndDate")
+		{
+			_set($alertMsg,"Planned End Date should be greater than or same as Planned Start Date.");
+			_assertEqual($alertMsg, _lastAlert());
+			_click(_reset("ResetBtn"));
+			_click(_button("CancelBtn"));
+		}
+		if($inputObject.alert === "InvalidProjectId")
+		{
+			_set($alertMsg,"Please enter valid Project Id.");
+			_assertEqual($alertMsg, _lastAlert());
+			_click(_reset("ResetBtn"));
+			_click(_button("CancelBtn"));
+		}
+		if($inputObject.alert === "SpclChar")
+		{
+			_set($alertMsg,"Please do not enter special characters < or > in the  Name field");
+			_assertEqual($alertMsg, _lastAlert());
+		}
+		else if($inputObject.alert === "DueDate")
+		{
+			_set($alertMsg,"Please enter Due Date later than Date Identified.");
+			_assertEqual($alertMsg, _lastAlert());
+			_click(_reset("ResetBtn"));
+			_click(_button("CancelBtn"));
+		}
+		else if($inputObject.alert === "InvalidName")
+		{	
+			_set($alertMsg,"Please enter a valid Name.");
+			_assertEqual($alertMsg,_lastAlert());
+		}
+
+		else if($inputObject.alert === "naviagteToProfileFromCheckoutedOutSTaRT")
+		{
+			
+			_expectConfirm("The changes made to the eform will be lost if you exit without saving.",true);
+		}
+		
+		else if($inputObject.alert === "DuplicateName")
+		{
+			_set($alertMsg,"This Name already exists. Please enter a different name.");
+			_assertEqual($alertMsg,_lastAlert());
+	    }
+		else if($inputObject.alert === "SameNameInSubOrg")
+		{
+			_set($alertMsg,"This name is defined in more than one Sub-Organization. Please enter a different name.");
+			_assertEqual($alertMsg,_lastAlert());
+	    }
+		else if($inputObject.alert === "DuplicateRelationship")
+		{	
+			_set($alertMsg,"Please enter a unique Relationship Name.");
+			_assertEqual($alertMsg,_lastAlert());
+		}
+		else if($inputObject.alert === "DuplicateLoginID")
+        {
+        	_assertEqual("Login Id already exists. Please specify a unique Login Id.",_lastAlert());
+        }
+        else if($inputObject.alert === "InvalidLoginID")
+        {
+        	_assertEqual("Please enter a valid Login Id.",_lastAlert());
+        }
+        else if($inputObject.alert === "UniqueOrg")
+        {
+        	_assert(_isVisible(_span("Please specify a unique Organization name.")));
+        }
+        else if($inputObject.alertType === "emailID")
+        {
+        	var $items =  $inputObject.edt_email;
+        	var $str ="";
+        	if($items.length > 40)
+        	{
+        		$str = $items.substring(0,40);
+        	    $str = $str + " : Please enter valid emailid";
+        	   _assertEqual($str,_lastAlert());
+        	}
+        }
+        else if($inputObject.alertType === "NegativeValue")
+        {
+        	_assertEqual("Please enter a positive value.",_lastAlert());
+        }
+        else if($inputObject.alertType === "negativeNumber")
+		{
+			_assertEqual("Please enter a numeric value between 0 to 100",_lastAlert());
+		}
+		else if($inputObject.msgAlert)
+        {
+        	_assertEqual($inputObject.msgAlert, _lastAlert());
+			_click(_reset("ResetBtn"));
+			_click(_button("CancelBtn"));
+        }
+		else if($inputObject.msgError)
+		{
+	        _assertEqual($inputObject.msgError, _getText(_span("QTP_Error1")));
+     	}
+		if($inputObject.winprefix)
+		{
+			_selectWindow($inputObject.winprefix);
+			if(_exists(_button("QTP_Close")))
+				_click(_button("QTP_Close"));
+			else if(_exists(_submit("Cancel")))
+				_click(_submit("Cancel"));
+			else if(_exists(_button("QTP_Cancel")))
+				_click(_button("QTP_Cancel"));
+			_selectWindow();
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAlert Completed","success");
+}
+
+/*************************************************************************************************
+@Function AddTraceability
+@author: Ram
+@example: AddTraceability
+@description: To Add Traceability
+@param: None
+@return: None
+****************************************************************************************************/
+
+function AddTraceability($inputObject)
+{
+	_log("AddTraceability Started","success");
+	try 
+	{
+		_setSelected(_select("NewExisting"), $inputObject.NewExisting);
+		_setSelected(_select("Items"), $inputObject.Items);
+		_click(_button("GoButton"));
+		_wait(5000,null);
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("AddTraceability Completed","success");
+}
+
+/**
+ @Function Number:37
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addTraceabilityInPopup($inputObject)
+{
+	_log("addTraceabilityInPopup Started","success");
+	try 
+	{
+		_selectWindow("openLinkedItem");
+		_setSelected(_select("NewExisting"), $inputObject.NewExisting);
+		_setSelected(_select("Items"), $inputObject.Items);
+		_click(_button("GoButton"));
+		_wait(5000,null);
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTraceabilityInPopup Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function Reset($inputObject)
+{
+	_log("Reset Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_reset("ResetBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("Reset Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example  ClickRoute();
+* @description This function is called to route workflow
+* @param {String} none
+* @return {String}   None 
+*************************************************************************/
+function ClickRoute()
+{
+	_log("ClickRoute Started","success");
+	try 
+	{
+		_wait(10000, !(_button("RouteBtn").disabled));
+		if (!(_condition(_button("RouteBtn").disabled)))
+		{
+		    _click(_button("RouteBtn"));
+		    _selectWindow("RouteReject");
+	        setAllFields({"txt_Comments":"Route selected"});
+	        _click(_submit("RouteBtn"));
+	        _selectWindow();
+		}
+		_wait(5000, !(_button("< Return").disabled));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ClickRoute Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: ClickReject()
+ @description: Clicks on reject button
+ @param: {None}
+ @return: {None} 
+ **/
+
+function ClickReject()
+{
+	_log("ClickReject Started","success");
+	try 
+	{
+        _wait(10000, !(_button("RouteBtn").disabled));
+		if (!(_condition(_button("Reject").disabled)))
+		{
+			_click(_button("Reject"));
+			_selectWindow("RouteReject");
+			setAllFields({"txt_Comments":"Reject selected"});
+			_click(_submit("RejectBtn"));
+			_selectWindow();
+		}
+		_wait(5000, !(_button("< Return").disabled));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ClickReject Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.item = "Dft1"
+ @description: Search for the Item in Split screen window
+ @param: String {None}
+ @return: String {None}
+ **/
+
+function SearchLinkedItemInSplitScreen($inputObject)
+{
+	_log("SearchLinkedItemInSplitScreen Started","success");
+	try 
+	{
+		_selectWindow("SplitScreen");
+		
+		if(_isVisible(_link($inputObject.item)))
+			_assertTrue(_isVisible(_link($inputObject.item)), "Item is Present");
+		else
+			_assertFalse(_isVisible(_link($inputObject.item)), "Item is Not Present");
+		
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SearchLinkedItemInSplitScreen Completed","success");
+}
+
+/**
+ @Function Number:42
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openSplitScreenFromIFrame()
+{
+	_log("openSplitScreenFromIFrame Started","success");
+	try 
+	{
+		_click(_image("QTP_Splitscreen"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openSplitScreenFromIFrame Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example SearchInInbox
+* @description This function is called to search item in inbox 
+* @param {String} 
+* @return {String}
+*************************************************************************/
+
+function SearchInInbox($inputObject)
+{
+	_log("SearchInInbox Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+			_assertFalse(_isVisible(_div($inputObject.item)));
+		else
+			_assertTrue(_isVisible(_div($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SearchInInbox Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example  clickInInbox({ "item" : "The abstract approach"});
+* @description This function is called to select Item From inbox list
+* @param {String} item to be select
+* @return {String}   None 
+*************************************************************************/
+
+function clickInInbox($inputObject)
+{
+	_log("clickInInbox Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_isVisible(_div($inputObject.item)));
+		else
+			_click(_div($inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickInInbox Completed","success");
+}
+
+/*************************************************************************
+* @author Harshit
+* @example        $inputObject = {};
+				 $inputObject.multiple_member = $data.Multiple_members7;
+				 $inputObject.edt_estEffort = $data.Estimate7;
+				 $inputObject.edt_estStartDate = $data.Start_Date7;
+				 $inputObject.edt_estEndDate = $data.End_Date7;
+				 $inputObject.lst_initialActivityCode = $data.Initial_activity_code7;
+				 $inputObject.lst_nextActivityCode = $data.Next_activity_code7;
+				 $inputObject.workflow_stage = $data.workflow_stage7;
+				 WorkflowSet($inputObject);
+* @description This function is called to set Workflow statges
+* @param {String} multiple_member,edt_estEffort,edt_estStartDate,edt_estEndDate,lst_initialActivityCode,lst_nextActivityCode,workflow_stage
+* @return {String}   None 
+* TODO:RMAHANT Correct this function for operation and do the Impact on dependent scripts also divide the function in smaller functions
+*************************************************************************/
+function WorkflowSet($inputObject)
+{
+    _log("WorkflowSet Started","success");
+    try 
+	{
+	
+		var $newUI = _getGlobal("New_UI");
+			
+			var $userName = $inputObject.multiple_member;
+		/* _log("old UI User"+$userName);
+		if($newUI ==="yes")
+		{	
+			//_alert("New UI");
+			$fileName = "NewUI_Users.csv";
+			var $dirPath = _getGlobal("datatDIR")+$fileName;
+			var $rs1 = _readCSVFile($dirPath,",");
+			var $rowLength1 = $rs1.length;
+			for(var $j = 0; $j < $rowLength1; $j++)
+			{
+				var $w_key = $rs1[$j];
+				$j++;
+				var  $w_value = $rs1[$j];
+				
+			}
+
+			var $jsonObj = {};
+			for(var $j = 0; $j < $w_key.length; $j++)
+			{
+				$jsonObj[$w_key[$j]] = $w_value[$j];
+			} 
+			
+			var $tests = $inputObject.multiple_member;
+			$userName = $jsonObj[$tests];
+				
+			$inputObject.multiple_member = $userName;
+		}	 */
+	
+    	var $value;
+		_wait(10000, _isVisible(_link("imgListProp")));
+    	_set($value,_link("imgListProp").title);
+      	if(($value === "Show")||_isVisible(_radio("radiouser1")))
+	  	{
+		}
+		else
+		{
+			_click(_link("imgListProp")); 
+	  	}	
+	  	if($inputObject.operation === "Negative")
+	  	{
+	  		_log("can not set " + $inputObject.multiple_member + "for workflow stage");
+	  		return;
+	  	}
+    	var $key;
+	    var $keyValue;
+	    var $mergekey;
+	    var $firstJson = {};
+	    var $secondJson = {};
+	    var $isMultipleUser;
+	    var $splitValue;
+	    var $assignedEfforts = "estEffort" + $inputObject.workflow_stage;
+        var $startDate = "estStartDate" + $inputObject.workflow_stage;
+        var $endDate =  "estEndDate" + $inputObject.workflow_stage;	
+        var $initialActivityCodeDisplay = "initialActivityCodeDisplay" + $inputObject.workflow_stage;
+        var $nextActivityCodeDisplay = "nextActivityCodeDisplay" + $inputObject.workflow_stage;
+        for ($key in $inputObject) 
+		{
+            $keyValue = String([$key]);
+	        if ($keyValue === "multiple_member")
+	        {
+	        	$firstJson = $inputObject[$keyValue];
+	        	$splitValue = $firstJson.split(";");
+	        	if ($splitValue.length > 1)
+	        	{
+	        		var $multipleMember = {};
+	        	  	$multipleMember.slb_teamList = $firstJson;
+	        	  	if($inputObject.optional)
+	        	  	{
+	        	  		$multipleMember.optional = $inputObject.optional;
+	        	  	}
+	        	  	var $selectUserImage = "selectuser" + $inputObject.workflow_stage;
+	        	  	_click(_span($selectUserImage));
+	        	  	var $editBtn = $inputObject.workflow_stage + "Edit";
+	        	  	
+	        	  	
+	        	  	if(_isVisible(_button($editBtn)))
+	        	  	{
+	        	  		_click(_button($editBtn));
+	        	  	}
+	        	  	else
+	        	  	{
+	        	  		_click(_submit($editBtn));
+	        	  	}
+	        	  	_selectWindow("popup");
+	        		setAllFields($multipleMember);
+	        		_wait(3000);
+	        		_click(_button("Submit"));
+	        		_selectWindow();
+	        	}
+	        	else
+	        	{
+	        		var $singleUser = {};
+	        		_check(_radio("radiouser" + $inputObject.workflow_stage));
+	        		var $selectedUserId = "lst_selectsingleuser" + $inputObject.workflow_stage;
+	        		$singleUser[$selectedUserId] = $firstJson;
+	        		
+	        		if($inputObject.type === "Negative")
+	        		{
+	        			_assertFalse(_containsText(_select("selectsingleuser"+$inputObject.workflow_stage),$firstJson));
+	        		}
+	        		else
+	        		{
+	        			setAllFields($singleUser);
+	        		}
+	        	}
+	        }
+		}
+        if($inputObject.edt_estEffort)
+        	_setValue(_textbox($assignedEfforts), $inputObject.edt_estEffort);
+        if($inputObject.edt_estStartDate)
+        	_setValue(_textbox($startDate),$inputObject.edt_estStartDate);
+        if($inputObject.edt_estEndDate)
+        	_setValue(_textbox($endDate),$inputObject.edt_estEndDate);
+		
+		if ($inputObject.lst_initialActivityCode || $inputObject.lst_nextActivityCode)
+		{
+		    _click(_textbox($initialActivityCodeDisplay));
+            _selectWindow("ActivityCodeSelector");
+            if($inputObject.lst_initialActivityCode)
+            {
+        	    if($inputObject.operation === "initActNegative")
+        		    _assertFalse(_containsText(_select("initialActivityCode"), $inputObject.lst_initialActivityCode));
+        	    else
+        		    _setSelected(_select("initialActivityCode"), $inputObject.lst_initialActivityCode);
+            }
+            if($inputObject.lst_nextActivityCode)
+            {
+        	    if($inputObject.operation === "nextActNegative")
+        		    _assertFalse(_containsText(_select("nextActivityCode"), $inputObject.lst_nextActivityCode));
+        	    else
+        		    _setSelected(_select("nextActivityCode"), $inputObject.lst_nextActivityCode);
+            }
+            _click(_button("save"));
+            _selectWindow();
+		}
+        _click(_button("SaveBtn")); 
+        _wait(15000, _button("SaveBtn").disabled);
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("WorkflowSet Completed","success");	
+}
+
+/*************************************************************************
+* @author Harshit
+* @example  WorkflowPause({"winprefix" : "Pause/Resume Workflow", "lst_pausecode" : "Server Error" ,  "txt_comments" : "comment for pausing" });
+* @description This function is called to pause the workflow
+* @param {String} item to be select
+* @return {String}   None 
+*************************************************************************/
+
+function WorkflowPause($inputObject)
+{
+    _log("WorkflowPause Started","success");
+    try 
+	{
+    	_click(_link("Pause Workflow"));
+    	_selectWindow("Pause/Resume Workflow");
+    	setAllFields($inputObject);
+    	_click(_button("//s*Ok/s*/"));
+    	_selectWindow();
+        _wait(5000, _button("RouteBtn").disabled);
+    	_assert(_isVisible(_span("Active - Item Workflow is Paused")));
+    	SelectSegment({"segment_name":"Workflow"});
+    	_assert(_isVisible(_link("Resume Workflow")));
+    	
+    	verifyWorkflowPause();
+	}
+    catch(e)
+	{
+	    handleFailure(e);
+	}
+    _log("WorkflowPause Completed","success");
+}
+
+/*************************************************************************
+* @author Harshit
+* @example  WorkflowResume({"winprefix" : "Pause/Resume Workflow"});
+* @description This function is called to Resume the workflow
+* @param {String} item to be select
+* @return {String}   None 
+*************************************************************************/
+
+function WorkflowResume()
+{
+    _log("WorkflowResume Started","success");
+    try 
+	{
+    	_click(_link("Resume Workflow"));
+    	_selectWindow("WorkflowPauseResume");
+    	_click(_button("Ok"));  
+    	_selectWindow();
+    	_wait(6000, _exists(_link("Pause Workflow")));
+	}
+    catch(e)
+	{
+	    handleFailure(e);
+	}
+    _log("WorkflowResume Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: escalateInstance {$inputObject.lst_ChangeCategory = $data.Digite_Entity5}
+ @description: Adding escalation 
+ @param: {String} item to be select
+ @return: {String} None 
+ **/
+
+function escalateInstance($inputObject)
+{
+	_log("escalateInstance Started","success");
+	try 
+	{
+		setAllFields($inputObject);	
+		_click(_button("GoBtn"));
+		_expectConfirm(("Are you sure you want to escalate this Defect?"),true);
+		_click(_button("//s*Ok/s*/"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("escalateInstance Completed","success");
+}
+
+/*************************************************************************************************
+@Function CopyEformInstance
+@author: Ram
+@example: CopyEformInstance
+@description: To Copy Eform Instance
+@param: None
+@return: None
+****************************************************************************************************/
+
+function CopyEformInstance($inputObject)
+{
+	_log("CopyEformInstance Started","success");
+	try 
+	{
+		_click(_link("de-icon-copy"));
+		_selectWindow("Note");
+		setAllFields($inputObject);
+		_click(_submit("//s*OK/s*/"));
+		_wait(5000, null);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("CopyEformInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example OpenEformInstance({"item":"DEF2486","col_id":"5"});
+* @description This function is called to open an instance from eform instance listing
+* @param {String} item, Item Name or Item Id to be open
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+
+function OpenEformInstance($inputObject)
+{
+	_log("OpenEformInstance Started","success");
+	try 
+	{
+		if($inputObject.operation==="Negative")
+		{
+			_log("Document can not be opened because of Private rights");
+			return;
+		}
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_exists(_div($inputObject.item)));
+		}
+		else
+		{
+			if($inputObject.popup_name)	
+			{ 
+				_selectWindow($inputObject.popup_name);
+				_click(_div($inputObject.item)||_link($inputObject.item));
+			}
+			
+			if(_exists(_table("QTP_ListTable")))
+			{
+				var $tableId = _table("QTP_ListTable");
+		        _click(_link($inputObject.item, _in($tableId)) || _cell($inputObject.item, _in($tableId))|| _div($inputObject.item, _in($tableId)));		
+			}
+			else
+			{	
+				if($inputObject.filter_status && $inputObject.filterName)
+				{
+					$inputObject.status = $inputObject.filter_status;
+					setFilter($inputObject);
+				}
+				_wait(5000,_exists(_div($inputObject.item)) || _exists(_link($inputObject.item)))
+				if($inputObject.itemtype)
+					_doubleClick(_div($inputObject.item) || _link($inputObject.item));
+				else
+					_click(_div($inputObject.item) || _link($inputObject.item));
+				
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("OpenEformInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul
+* @example ModifyEformInstance({"item":"DEF2486","col_id":"5"});
+* @description This function is called to modify instance
+* @param {String} None
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+
+function ModifyEformInstance($inputObject)
+{
+	_log("ModifyEformInstance Started","success");
+	try 
+	{
+		if($inputObject.operation === "disabled")
+		{
+			// TODO : Change this 
+			/*_log("$inputObject.fieldName : "+$inputObject.fieldName);
+			_log("$inputObject.fieldName string: "+$inputObject.fieldName.toString());
+			if($inputObject.fieldName.toString().startsWith("edt_"))
+			{
+				$replacedFieldName = $inputObject.fieldName.replace("edt_","");
+				_assertFalse(_exists(_textbox($replacedFieldName)));
+			}
+			// pass
+			*/
+			_log("User has not Edit rights");
+		}
+		else
+	    {
+			setAllFields($inputObject);
+			verifyAllFields($inputObject);
+			if(_isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+			{
+				_click(_submit("SaveBtn") || _submit("//s*Save/s*/"));
+			}
+			else if(_isVisible(_button("SaveBtn")))
+			{
+				_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+			
+			}
+			if(_isVisible(_button("SaveBtn[1]")|| _button("ScrnButton[1]")))
+			{
+				_click(_button("SaveBtn[1]") || _button("ScrnButton[1]"));//Infy change [1]
+			}
+			
+			var $alertMsg = "Please do not enter special characters < or > in the  Name field";
+			if($inputObject.alert === "SpclChar")
+			{
+				_assertEqual($alertMsg, _lastAlert());
+			}
+			if($inputObject.msgAlert)
+			{
+				_assertEqual($inputObject.msgAlert, _lastAlert());
+			}		 
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ModifyEformInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example CloseEformInstance({"item":"DEF2486","col_id":"5"});
+* @description This function is called to close eform instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function CloseEformInstance($inputObject)
+{
+	_log("CloseEformInstance Started","success");
+	try 
+	{	
+		var $tableId = _table("QTP_ListTable");
+	
+		if($inputObject.alert == "LastStageAlert")
+		{
+			var $msg;			
+			_set($msg,_lastAlert());
+			_assertTrue($msg.indexOf("Please provide valid") != -1);
+		}
+		else
+		{
+			if($inputObject.operation === "Negative")
+			{
+				_assertFalse(_exists(_button("Complete")));
+			}
+			else
+			{	
+		        _click(_button("Complete"));
+		        _expectConfirm(_lastConfirm(), true);
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("CloseEformInstance Completed","success");
+}
+
+/**
+ @Function Number:53
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ReopenEformInstance($inputObject)
+{
+	_log("ReopenEformInstance Started","success");
+	try 
+	{
+
+		if($inputObject.filter_status)
+		{
+			$inputObject.status = $inputObject.filter_status; 
+			setFilter($inputObject);
+		}
+		OpenEformInstance($inputObject);
+		if($inputObject.operation === "Disabled")
+		{
+			_assertTrue(_button("Reopen").disabled);
+		}
+		else
+		{
+			_click(_button("OpenBtn"));
+	        _selectWindow("EFormReopenPopup");
+			_log("CloseEformInstance Verification Started","success");
+			_assertFalse(_isVisible(_div($inputObject.item)));
+			_click(_submit("//s*OK/s*/"));
+			_wait(3000, null);
+			_selectWindow();
+		}_click(_submit(" OK  "));
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ReopenEformInstance Completed","success");
+}
+
+/*************************************************************************************************
+ @Function reopenProject
+ @author: Ram
+ @example:reopenProject()
+ @description: To Reopen A Closed Project
+ @param: None
+ @return: None
+ ****************************************************************************************************/
+
+function reopenProject()
+{
+	_log("reopenProject Started","success");
+	try 
+	{
+		_click(_submit("Reopen"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("reopenProject Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example DeleteEformInstance({"item":"DEF2486","col_id":"5"});
+* @description This function is called to delete eform instance
+* @param {String} None
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts and divide it in smaller functions
+*************************************************************************/
+
+function DeleteEformInstance($inputObject)
+{
+	_log("DeleteEformInstance Started","success");
+	try 
+	{
+		if($inputObject.operation === "disabled")
+		{
+			_assertTrue(_button("Delete").disabled);
+		}
+		else if($inputObject.operation === "ButtonNotExists")
+		{
+			_assertFalse(_exists(_button("Delete")));
+		}
+		else
+		{
+			_click(_button("DeleteBtn") || _submit("DeleteBtn") || _button("Delete"));
+            
+	    	if($inputObject.type === "Org")
+	        {
+	    		_assertTrue(_isVisible(_div("This work-item will no longer be available.")));
+				_click(_button("//s*Ok/s*/"));
+	        }
+	        else if($inputObject.type === "Prj")
+	        {
+	        	_assertTrue(_isVisible(_div("This Project will no longer be available")));
+				_click(_button("//s*Ok/s*/"));
+	        }
+	        else if($inputObject.type === "WPKG")
+	        {
+	        	_expectConfirm("You are about to delete this item,\nDo you still want to continue?",true);
+	        }
+	        else if($inputObject.type === "Event")
+	        {
+	        	_assertTrue(_isVisible(_div("The entire Test Event will no longer be available")));
+				_click(_button("//s*Ok/s*/"));
+	        }        
+	        else if($inputObject.type === "Org" && _exists(_span("QTP_Error1")))
+	        {
+	        	_assertEqual("Organizations having projects/templates cannot be deleted.", _span("QTP_Error1").innerHTML);
+	        	_click(_submit("Back To Previous Page"));
+	        }
+	        
+	        else if($inputObject.type === "Prct" && $inputObject.operation == "Negative")
+	        {
+	        	_assertTrue(_isVisible(_span("There are one or more process templates using the practice. Remove the practice from process template(s) before deleting it")));
+	        }
+	        
+	        else if($inputObject.type === "Phs" && $inputObject.operation == "Negative")
+	        {
+	        	_assertTrue(_isVisible(_span("There are one or more process templates using the phase. Remove the phase from process template(s) before deleting it")));
+	        }
+	        else if($inputObject.operation === "UserAlreadyAssigned")
+	        {
+	        	_assertTrue(_isVisible(_span("QTP_Error1")));
+	        	_click(_submit("Back To Previous Page"));
+	        } 
+			else
+	        {	
+	        	_assertTrue(_isVisible(_div("This work-item will no longer be available.")|| _div("You are about to delete this item, do you still want to proceed with this action?")));
+				_click(_button("//s*Ok/s*/"));
+	        }
+			
+		}
+		if($inputObject.item)
+				_assertFalse(_isVisible(_div($inputObject.item)));
+		_log("DeleteEformInstance Verification Started","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("DeleteEformInstance Completed","success");
+}
+
+/**
+ @Function Number:57
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return:
+ TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+ **/
+
+function FillSearchSelectPopup($inputObject)
+{
+	_log("FillSearchSelectPopup Started","success");
+	try 
+	{
+		SetCustomField($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("FillSearchSelectPopup Completed","success");
+}
+
+/*************************************************************************************************
+@Function addComment
+@author: Ram
+@example: addComment
+@description: To add Comment
+@param: None
+@return: None
+****************************************************************************************************/
+
+function addComment($inputObject)
+{
+	_log("addComment Started","success");
+	try 
+	{
+		SelectSegment({"segment_name" : "Comments"});
+		_click(_span("de-icon-add_comment"));
+		_setValue(_textarea("addCommentTextArea"), $inputObject.txt_New_Comment);
+		_click(_submit("Add"));
+		verifyAddComment($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addComment Completed","success");
+}
+
+/**
+ @Function Number:59
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function CreateBaseline($inputObject)
+{
+	_log("CreateBaseline Started","success");
+	try 
+	{
+		_click(_link("de-icon-baseline"));
+		_selectWindow("baseline");
+		setAllFields($inputObject);
+		_click(_submit("Create"));
+		_wait(3000);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("CreateBaseline Completed","success");
+}
+
+/*************************************************************************************************
+@Function closeSplitScreen
+@author: Ram
+@example: closeSplitScreen
+@description: To closeSplitScreen
+@param: None
+@return: None
+****************************************************************************************************/
+
+function closeSplitScreen()
+{
+	_log("closeSplitScreen Started","success");
+	try 
+	{
+		_selectWindow("SplitScreen");
+		_click(_link("de-icon-close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeSplitScreen Completed","success");
+}
+
+/*************************************************************************
+* @author Harshit
+* @example  SetCustomField
+* @description This function is called to SetCustomField
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function SetCustomField($inputObject)
+{
+	_log("SetCustomField Started","success");
+	try 
+	{
+		//Case: When field added should not be visible
+		if($inputObject.field_label_operation === "Negative")
+		{
+			_assertFalse(_isVisible(_cell($inputObject.field_label)));
+		}
+		else
+		{	
+			var $fieldName;
+			var $field_label = $inputObject.field_label+" :";
+			if($inputObject.field_type === "searchselect")
+			{
+				_set($fieldName, _cell($field_label).id);
+				$fieldName = "SearchCriteria_"+ $fieldName;			
+			}
+			else
+			{
+				_set($fieldName, _cell($field_label).id);
+			}
+			$fieldName = $fieldName.substring(0, $fieldName.length - 5);
+			
+			//Case: When field value is not Present
+			if($inputObject.field_value_operation === "Negative" || $inputObject.operation === "Negative")
+			{
+				if($inputObject.field_type === "searchselect")
+				{
+					_click(_span("/de-icon-search/", _near(_textbox($fieldName))));
+					_assertFalse(_listItem($inputObject.optionToSelect,_near(_textbox($fieldName))));
+				}
+				else	
+					_assertFalse(_containsText(_select($fieldName), $inputObject.field_value));
+			}
+			else // Normal Case
+			{
+				if($inputObject.field_type === "textbox" || $inputObject.field_type === "WebEdit")
+				{
+					_setValue(_textbox($fieldName,_near(_cell($field_label))),$inputObject.field_value);
+				}
+				if($inputObject.field_type === "dropdown" || $inputObject.field_type === "WebList")
+				{
+					_setSelected(_select($fieldName,_near(_cell($field_label))),$inputObject.field_value);
+				}
+				if($inputObject.field_type === "multiselect")
+				{
+					if($inputObject.field_value.indexOf(";")!=-1)
+	        		{
+	        			var $values =$inputObject.field_value.split(";");
+	        			_setSelected(_select($fieldName,_near(_cell($field_label))), $values);
+	        		}
+	            	else
+	            	{
+		            	_setSelected(_select($fieldName,_near(_cell($field_label))),$inputObject.field_value);
+	            	}
+				}
+				if($inputObject.field_type === "searchselect")
+				{
+					_setValue(_textbox($fieldName), $inputObject.listName);
+					_click(_span("/de-icon-search/", _near(_textbox($fieldName))));
+					_click(_listItem($inputObject.optionToSelect,_near(_textbox($fieldName))));
+				}
+				
+				_click(_button("SaveBtn"));
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SetCustomField Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:  $inputObject.field_label = "Mandatory11"
+ 			$inputObject.field_type = "webEdit"
+			$inputObject.field_value = ""
+ 			$inputObject.mandatoryOnClose = "Y"
+ 			verifyCustomFiledValue($inputObject);
+ @description: Verify the values of the custom fields
+ 			If u want to verify custom field value then 
+ 			dont pass mandatoryOnClose/mandatory parameter
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function verifyCustomFiledValue($inputObject)
+{
+	_log("verifyCustomFiledValue Started","success");
+	try 
+	{
+		var $fieldName;
+		var $field_label ;
+		if($inputObject.mandatory === "Y" && $inputObject.mandatoryOnClose === "Y")
+		{
+			$field_label = $inputObject.field_label+"*^ :";
+		} 
+		else if($inputObject.mandatory === "Y")
+		{
+			$field_label = $inputObject.field_label+"* :";
+		}
+		else if($inputObject.mandatoryOnClose === "Y")
+		{
+			$field_label = $inputObject.field_label+"^ :";
+		}
+		else
+		{
+			$field_label = $inputObject.field_label+" :";
+		}	
+		
+		if($inputObject.operation === "Negative")
+		{
+			_log("Can not verify as this field is not present");
+			return;
+		}
+		_set($fieldName, _cell($field_label).id);
+		$fieldName = $fieldName.substring(0, $fieldName.length - 5);
+		
+		if($inputObject.field_type === "textbox" || $inputObject.field_type === "WebEdit")
+		{
+			var $fieldValue;
+			// to get the textbox value u have to use _set()
+			// if u use _getText() it will give u null value
+			_set($fieldValue,_textbox($fieldName).value);
+			if($fieldValue === $inputObject.field_value)
+				_assertTrue($fieldValue === $inputObject.field_value, "Field Values Are Equal");
+			else
+				_assertFalse($fieldValue === $inputObject.field_value, "Field Values Are Not Equal");
+		}		
+		if($inputObject.field_type === "WebElement")
+		{
+			_assertEqual($inputObject.field_value,_getText(_span($fieldName)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCustomFiledValue Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example openItem({"item":"DEF2486","col_id":"5"});
+* @description This function is called to open an instance from eform instance listing
+* @param {String} item, Item Name or Item Id to be open
+* @return {String}   None 
+*************************************************************************/
+
+function openItem($inputObject)
+{
+	_log("openItem Started","success");
+	try 
+	{
+    	OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openItem Completed","success");
+}
+
+/**
+ @Function Number:66
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTask($inputObject)
+{
+	_log("openTask Started","success");
+	try 
+	{
+	    if (_isVisible(_link(0, _near(_div($inputObject.item_name)))))
+		{
+	        _click(_link(0, _near(_div($inputObject.item_name))));
+		}
+		else
+		{
+		    _doubleClick(_div($inputObject.item_name));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTask Completed","success");
+}
+
+/**
+ @Function Number:67
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function checkProjectDesc($inputObject)
+{
+	_log("checkProjectDesc Started","success");
+	try 
+	{
+		_assertContainsText("....",_cell(0,_near(_cell($inputObject.projectName)),_under(_cell("Description"))),"Passed");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkProjectDesc Completed","success");
+}
+
+/**
+ @Function Number:68
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchProject($inputObject)
+{
+	_log("searchProject Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		if($inputObject.negetive === 'Y')
+			_assertFalse(_isVisible(_cell($inputObject.projectName, _in($tableId))));
+		else
+			_assertTrue(_isVisible(_cell($inputObject.projectName, _in($tableId))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchProject Completed","success");
+}
+
+/**
+ @Function Number:69
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function mapActivityToEform($inputObject)
+{
+	_log("mapActivityToEform Started","success");
+	try 
+	{	
+		if($inputObject.select_segment == "N")
+		{
+			var $buttonName = "KEY_Activity_Eform_Mapping";
+			var $extJsId = ""; 	
+			var $buttonKey = $buttonName + $extJsId;
+			_click(_link($buttonKey));
+		}
+		_click(_link("Add"));
+		
+		var $row = 0;
+		
+		_set($row,_table("mytableID").rows.length-4);
+		_setSelected(_select("actcode_" + $row),$inputObject.actcode);
+		_setSelected(_select("eformtype_" + $row),$inputObject.eformtype);
+		
+		_click(_submit("QTP_KEY_Save"));
+		
+		if($inputObject.operation == "Negative")
+			_assertEqual("Please select appropriate Activity Eform Pair before saving.",_lastAlert());
+		else
+			_wait(5000,null);
+		
+		if($inputObject.select_segment == "N")
+		{
+			_click(_button("QTP_KEY_Cancel"));
+			_wait(2000,null);
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("mapActivityToEform Completed","success");
+}
+
+/**
+ @Function Number:70
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyMappedActivity($inputObject)
+{
+	_log("modifyMappedActivity Started","success");
+	try 
+	{
+		_click(_link("Activity eForm Mapping"));
+		_setSelected(_select("eformtype_5"),$inputObject.eformtype);
+		_click(_submit("QTP_KEY_Save"));
+		_wait(3000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyMappedActivity Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  isReadOnly
+* @description This function is called to check whether it isReadOnly
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function isReadOnly($inputObject)
+{
+	_log("isReadOnly Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_span($inputObject.item,_near(_cell("Name * :")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("isReadOnly Completed","success");
+}
+
+/**
+ @Function Number:77
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function isReadWrite()
+{
+	_log("isReadWrite Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_textbox(0,_near(_cell("Name * :")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("isReadWrite Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  removeTraceability
+* @description This function is called to removeTraceability
+* @param {String
+* @return {String}   None 
+*************************************************************************/
+
+function removeTraceability($inputObject)
+{
+	_log("removeTraceability Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.item))));
+		_click(_button("removelinks"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("removeTraceability Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  searchMeetingMinutes
+* @description This function is called to searchMeetingMinutes
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function  searchMeetingMinutes($inputObject)
+{
+	_log(" searchMeetingMinutes Started","success");
+	try 
+	{
+		var $searchBtn = "KEY_TOOLTIP_Project_Search";
+		var $extJsId = ""; 
+		var $searchBtnKey = $searchBtn + $extJsId;
+		
+		_click(_link($searchBtnKey));
+		setAllFields($inputObject);
+		_click(_submit("search"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" searchMeetingMinutes Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul
+* @example  addActionItem({	"edt_CM_Name" : "actionitem", "lst_CM_Priority" : "Low", "winprefix" : "EForm" })
+* @description This function is called to addActionItem in Mom
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function  addActionItem($inputObject)
+{
+	_log(" addActionItem Started","success");
+	try 
+	{
+		_click(_link("Add Action Item", _near(_cell("EformIconbar"))));
+    	
+    	_selectWindow($inputObject.winprefix);
+		
+        setAllFields($inputObject);
+        
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+        _click(_button("SaveBtn"));
+		
+		_click(_button("CancelBtn"));
+		
+		_selectWindow();
+		
+		verifyaddActionItem($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" addActionItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  inviteTeamMember
+* @description This function is called to inviteTeamMember in Mom
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function  inviteTeamMember($inputObject)
+{
+	_log(" inviteTeamMember Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Invite"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" inviteTeamMember Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example  sendMail
+* @description This function is called to sendMail
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function  sendMail($inputObject)
+{
+	_log(" sendMail Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.name))));
+		_click(_submit("QTP_Send_Meeting_Minutes_Mail"));
+		_assertEqual("Mail has been sent successfully",_lastAlert());
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" sendMail Completed","success");
+}
+
+/**
+@author: Harshit 
+@example: checkoutInstance();
+@description:  Checkout the perticular eform Instance
+@param: String {None} 
+@return: String {None}
+**/
+
+function checkoutInstance()
+{
+	_log("checkoutInstance Started","success");
+	try 
+	{
+		_wait(2000); // added for qtpt1790
+		_click(_link("de-icon-checkout"));
+		_selectWindow("checkout");
+		_click(_submit("QTP_CheckOut"));
+		_selectWindow();
+		_wait(5000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkoutInstance Completed","success");
+}
+
+/**
+ @author: Harshit 
+ @example: checkinInstance();
+ @description:  Checkin the perticular eform Instance
+ @param: String {None}
+ @return: String {None}
+ **/
+
+function checkinInstance()
+{
+	_log("checkinInstance Started","success");
+	try 
+	{
+		_click(_link("de-icon-checkin"));
+		_selectWindow("checkin");
+		_click(_submit("QTP_CheckIn"));
+		_selectWindow();
+		_wait(5000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkinInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example saveAttachNew
+* @description This function is called to saveAttachNew
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function saveAttachNew($inputObject)
+{
+	_log("saveAttachNew Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+		
+		var $importDIR;
+		_set($importDIR,_getGlobal("importDIR")+$inputObject.fileName);
+		
+		 SelectSegment($inputObject);
+		_click(_link("Add/Edit Attachments"));
+		_selectWindow("Note");		
+		_setFile(_file("file1"), $importDIR);
+		_call(_file("file1").type = "text");
+		_setValue(_textbox("file1"), $inputObject.fileName);
+		_click(_button("QTP_Add_Attachment"));
+		_click(_button("QTP_Close_this_Window"));
+		
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAttachNew Completed","success");
+}
+
+/**
+ @Function Number:90
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewInstance($inputObject)
+{
+	_log("saveAndAddNewInstance Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		if(_isVisible(_link($addbtnKey)))
+		{
+			_click(_link($addbtnKey));
+		}
+		
+		setAllFields($inputObject);
+     	_click(_button("SaveAddNewBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewInstance Completed","success");
+}
+
+/**
+ @Function Number:91
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewPractice($inputObject)
+{
+	_log("saveAndAddNewPractice Started","success");
+	try 
+	{
+		saveAndAddNewInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewPractice Completed","success");
+}
+
+/**
+ @Function Number:93
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewPhase($inputObject)
+{
+	_log("saveAndAddNewPhase Started","success");
+	try 
+	{
+		saveAndAddNewInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewPhase Completed","success");
+}
+
+/**
+ @Function Number:94
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewActivity($inputObject)
+{
+	_log("saveAndAddNewActivity Started","success");
+	try 
+	{
+		saveAndAddNewInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewActivity Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createAccountHeads({ "edt_cm_name" : "Account" ,  "txt_cm_description" : "adding account head" ,  "lst_AccountType" : "Income" });
+* @description This function is called to create Account Heads
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function createAccountHeads($inputObject)
+{
+	_log("createAccountHeads Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createAccountHeads Completed","success");
+}
+
+/**
+ @Function Number:97
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createNonLaborResource($inputObject)
+{
+	_log("createNonLaborResource Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+		if($inputObject.operation !== "DisabledButton")
+		{
+			navigateTo({ "name" : "Non Labor Resources_enterprise" });
+			$inputObject.item = $inputObject.edt_CM_Name;
+			verifyInstanceInListing($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createNonLaborResource Completed","success");
+}
+
+/**
+ @Function Number:98
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createTask($inputObject)
+{
+	_log("createTask Started","success");
+	try 
+	{
+		var $addBtn = "/addTaskButton/";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		_wait(15000,_isVisible(_link($addbtnKey)));
+		_click(_link($addbtnKey));
+		if($inputObject.operation === "Dynamic")
+		{
+			$inputObject.lst_SUMMARYTASKID =_getText(_option(1,_select("SUMMARYTASKID")));
+		}	
+		setAllFields($inputObject);
+		if($inputObject.error !== undefined)
+		{
+			_expectConfirm($inputObject.error, true);
+		}
+		_click(_button("SaveBtn"));
+
+        if($inputObject.milestoneoperation == "Negative")
+		{
+        	_assertEqual("Milestone Task should have same Planned Start Date and Planned End Date.",_lastAlert());
+		}
+		verifyAlert($inputObject);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createTask Completed","success");
+}
+
+/**
+ @Function Number:99
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addNotificationPlan($inputObject)
+{
+	_log("addNotificationPlan Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addNotificationPlan Completed","success");
+}
+
+/**
+ @Function Number	:100
+ @author			:Vaishali	
+ @example			:
+ @description		: This function is call to set Notification Events 
+ @param				: {"trigger":"Any Plan Modifications is added, edited, routed or deleted","frequency_type":"PLMD_f_Daily"}
+  					  {"trigger":"Any action item is added, edited, routed or deleted","frequency_type":"KEY_Action_Items_Daily"}
+ @return			: None
+ **/
+
+function setNotificationEvents($inputObject)
+{
+	_log("setNotificationEvents Started","success");
+	try 
+	{
+		_click(_link("Notification Events"));
+		
+		if($inputObject.trigger)
+		{
+			if($inputObject.operation === "Unchek")
+				_uncheck(_checkbox(0,_near(_cell($inputObject.trigger))));
+			else
+				_check(_checkbox(0,_near(_cell($inputObject.trigger))));
+		}
+		if($inputObject.item_count)
+			_setValue(_textbox(0,_near(_cell($inputObject.trigger))),$inputObject.item_count);
+		
+		
+		if($inputObject.frequency_type)
+		{
+			_click(_radio($inputObject.frequency_type));
+			if(_getValue(_radio($inputObject.frequency_type)) === "On Event")
+			{
+				var $cellValue;
+				_set($cellValue,$inputObject.frequency_type+"_label");
+				if(_exists(_cell("Mail", _under(_cell($cellValue)))))
+					_check(_checkbox(0,_near(_cell("Mail", _under(_cell($cellValue))))));
+			}				
+		}	
+		
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setNotificationEvents Completed","success");
+}
+
+/**
+ @Function Number:101
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectItemFromSplitScreen($inputObject)
+{
+	_log("selectItemFromSplitScreen Started","success");
+	try 
+	{
+		_selectWindow("SplitScreen");
+		_click(_link($inputObject.item));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectItemFromSplitScreen Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example addAnalysisCycle();
+* @description This function is called to navigate to addAnalysisCycle and create an instance of it
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+
+function addAnalysisCycle($inputObject)
+{
+	_log("addAnalysisCycle Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = "";
+		var $addbtnKey = $addBtn + $extJsId;
+		_click(_link($addbtnKey));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addAnalysisCycle Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example addAnalysisMap();
+* @description This function is called to navigate to addAnalysisMap and create an instance of it
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+
+function addAnalysisMap($inputObject)
+{
+	_log("addAnalysisMap Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = "";
+		var $addbtnKey = $addBtn + $extJsId;
+		_click(_link($addbtnKey));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addAnalysisMap Completed","success");
+}
+
+/**
+ @Function Number:106
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTracedItem($inputObject)
+{
+	_log("openTracedItem Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_exists(_div($inputObject.task_name)));
+		else
+			_click(_div($inputObject.task_name)); 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTracedItem Completed","success");
+}
+
+/**
+ @Function Number:107
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickStandardCodeHelpIcon($inputObject)
+{
+	_log("clickStandardCodeHelpIcon Started","success");
+	try 
+	{
+		var $stageNo = "" ;
+		
+		if($inputObject.workflow_stage > 1)
+		{
+			$stageNo = $inputObject.workflow_stage -1;
+		}
+		var $imageId;
+		if($inputObject.iseformclosed === 'Y')
+		{
+			$imageId = "/.*de-icon-specific_help de-icon-inlineSpanWithImage.*/";
+		}
+		else
+			$imageId = "QTP_StandardCodeHelp" + $inputObject.std_code_type + $stageNo;
+		
+		_log($inputObject.operation);
+		_click(_link($imageId));
+		
+		if($inputObject.operation == "Negative")
+		{
+			_assertEqual("Please Select some activity in order to view help",_lastAlert());
+		}
+		else
+		{
+			var $windowName = "Activity : Details (" + $inputObject.activityId + "-" + $inputObject.ele_StdActivityCode + ")";
+			_selectWindow($windowName);
+			verifyAllFields($inputObject);
+			_click(_button("CancelBtn"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickStandardCodeHelpIcon Completed","success");
+}
+
+/**
+ @Function Number:108
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyWorkPackageLinkedTask($inputObject)
+{
+	_log("modifyWorkPackageLinkedTask Started","success");
+	try 
+	{
+		_selectWindow("Task : Details (Styl1_"+$inputObject.itemid+"-"+$inputObject.TaskName+")");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_selectWindow();
+		_selectWindow("Task : Details (Styl1_"+$inputObject.itemid+"-"+$inputObject.edt_Name+")");
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyWorkPackageLinkedTask Completed","success");
+}
+
+/**
+ @Function Number:
+ @author: hbhuva
+ @example:
+ @description: Importing Risk Instance from ORG to PROJECT 
+ @param: 
+ @return: 
+ **/
+
+function importOrgRisks($inputObject)
+{
+	_log("importOrgRisks Started","success");
+	try 
+	{
+		var $importOrgRskBtn = "KEY_BUTTON_Import_From_Org";
+		var $extJsId = "";
+		var $importOrgRskbtnKey = $importOrgRskBtn + $extJsId;
+		if(_exists(_link($importOrgRskbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($importOrgRskbtnKey)));
+			_click(_link($importOrgRskbtnKey));
+		}
+		_selectWindow("popup");
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.risk_names))));
+		_click(_link("KEY_LABEL_Import_Org_Risk(S)_To_Project"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importOrgRisks Completed","success");
+}
+
+
+/**
+ @Function Number:114
+ @author:hbhuva
+ @example:
+ @description: use this when we want to assign multiple member as optional and required
+ @param: 
+ @return:
+ TODO:RMAHANT Rename this function and do the Impact on dependent scripts 
+ **/
+
+function to_workflowSet($inputObject)
+{
+	_log("to_workflowSet Started","success");
+	try 
+	{	
+		var $selectUserImage = "selectuser" + $inputObject.workflow_stage;
+	  	_click(_span($selectUserImage));
+	  	var $editBtn = $inputObject.workflow_stage + "Edit";
+	  		  	
+	  	if(_isVisible(_button($editBtn)))
+	  	{
+	  		_click(_button($editBtn));
+	  	}
+	  	else
+	  	{
+	  		_click(_submit($editBtn));
+	  	}
+	  	_selectWindow("popup");
+	  	if($inputObject.lst_requiredMembers)
+	  	{
+	  		_setSelected(_select("teamList"), $inputObject.lst_requiredMembers);
+	  		if(_isVisible(_button("Add >")))
+				_click(_button("Add >"));
+	  	}
+	  	if($inputObject.lst_optionalMembers)
+	  	{
+	  		_setSelected(_select("teamList"), $inputObject.lst_optionalMembers);
+	  		if(_isVisible(_button("Add >[1]")))
+				_click(_button("Add >[1]"));
+	  	}
+		_wait(3000);
+		_click(_button("Submit"));
+		_selectWindow();
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_workflowSet Completed","success");
+}
+
+
+
+/**
+ @Function Number:157
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return:
+ TODO:RMAHANT Rename this function and do the Impact on dependent scripts 
+ **/
+
+function to_modifyEFormPopupDetails($inputObject)
+{
+	_log("to_modifyEFormPopupDetails Started","success");
+	try 
+	{	
+		_selectWindow($inputObject.popup_name);
+		
+		setAllFields($inputObject);
+		
+		if(_isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+		{
+			_click(_submit("SaveBtn") || _submit("//s*Save/s*/"));
+		}
+		else
+		{
+			_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_modifyEFormPopupDetails Completed","success");
+}
+
+/**
+ @Function Number:161
+ @author: Hrishi
+ @example: verifyTailoringNotes({"answer" : "a1" , "question" :"q1"})
+ @description: Check answer of question in tailoring Notes tab 
+ @param: Question and answer
+ @return: none
+ **/
+
+function verifyTailoringNotes($inputObject)
+{
+	_log("verifyTailoringNotes Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+			_assertFalse(_isVisible(_cell($inputObject.answer)));
+		else
+			_assertTrue(_isVisible(_cell($inputObject.answer,_under(_cell($inputObject.question)))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTailoringNotes Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul
+* @example: verifyInstanceInListing({ "item" : "Ophelia" , "operation" : "Delete" })
+* @description This function is called to check if the item passed is present in listing table.
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifyInstanceInListing($inputObject)
+{
+	_log("verifyInstanceInListing Started","success");
+	try 
+	{
+		var $items = $inputObject.item.split(";");
+		
+		_wait(5000, _isVisible(_table("QTP_ListTable")));
+		if(_exists(_table("QTP_ListTable")))
+		{
+			var $tableId = _table("QTP_ListTable");
+			
+			for(var $i = 0 ; $i < $items.length ; $i++)
+			{
+		    	if($inputObject.operation === "Delete" || $inputObject.operation === "Negative" )
+		    		_assertFalse(_isVisible(_cell($items[$i], _in($tableId))));
+		    	else 
+		    		_assertTrue(_isVisible(_cell($items[$i], _in($tableId)) || _link($items[$i], _in($tableId))|| _div($items[$i], _in($tableId))));
+			}
+		}
+		else if($inputObject.status)
+		{
+			var $splitValue = $inputObject.item.split(";"); 
+			var $splitstatus = $inputObject.status.split("#"); 
+					
+			for (var $i = 0; $i <$splitValue.length; $i++)
+			{
+				_assertEqual($splitstatus[$i], _getText(_div(0,_near(_div($splitValue[$i])),_under(_div($inputObject.filterName)))));
+			}	
+		}
+		else
+		{	
+			for(var $j = 0 ; $j < $items.length ; $j++)
+			{
+		    	if($inputObject.operation === "Delete" || $inputObject.operation === "Negative" )
+		    		_assertFalse(_isVisible(_div($items[$j])));
+		    	else 
+		    		_assertTrue(_isVisible(_div($items[$j])) || _isVisible(_link($items[$j])));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyInstanceInListing Completed","success");
+}
+
+/**
+ @Function Number:164
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyEformInstanceDetails($inputObject)
+{
+	_log("verifyEformInstanceDetails Started","success");
+	try 
+	{
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		
+		verifyAllFields($inputObject);
+		
+		if($inputObject.winprefix)
+		{
+			_closeWindow();
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformInstanceDetails Completed","success");
+}
+
+/**
+ @author: Harshit 
+ @example:  verifyTraceability($inputObject)
+ @description: To verify the taceability segment that item is added
+ @param:  String {None}
+ @return: String {None}
+ **/
+
+function verifyTraceability($inputObject)
+{
+	_log("verifyTraceability Started","success");
+	try 
+	{
+		 SelectSegment({"segment_name" : "Traceability"});
+		 var $tableId = _table("QTP_ListTable");
+		 $inputObject.name = $inputObject.edt_name;
+		 
+		 if($inputObject.operation === "Negative")
+			 _assertFalse(_isVisible(_cell($inputObject.name, _in($tableId)))); 
+		 else
+			 _assertTrue(_isVisible(_cell($inputObject.name, _in($tableId)))); 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTraceability Completed","success");
+}
+
+/**
+ @Function Number:168
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTraceabilityInPopup($inputObject)
+{
+	_log("verifyTraceabilityInPopup Started","success");
+	try 
+	{
+		_selectWindow("openLinkedItem");
+		SelectSegment({"segment_name" : "Traceability"});
+		
+		if(_exists(_table("QTP_ListTable")))
+		{
+			var $tableId = _table("QTP_ListTable");
+			_assertTrue(_isVisible(_cell($inputObject.name, _in($tableId))));
+		}
+		else
+			_assertTrue(_isVisible(_div($inputObject.name)));
+		
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTraceabilityInPopup Completed","success");
+}
+
+/**
+ @Function Number:169
+ @author:Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyWorkflowPause()
+{
+	_log("verifyWorkflowPause Started","success");
+	try 
+	{
+		_assert(_button("RouteBtn").disabled);
+		_assert(_button("RejectBtn").disabled);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWorkflowPause Completed","success");
+}
+
+/**
+ @Function Number:174
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDeleteInstance($inputObject)
+{
+	_log("verifyDeleteInstance Started","success");
+	try 
+	{
+		if(_exists(_table("QTP_ListTable")))
+		{
+			var $tableId = _table("QTP_ListTable");
+			if($inputObject.operation === "Negative")
+				_assertTrue(_isVisible(_cell($inputObject.item, _in($tableId))));
+			else
+				_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+		}
+		else
+		{
+			if($inputObject.operation === "Negative")
+				_assertTrue(_isVisible(_div($inputObject.item)));
+			else
+				_assertFalse(_isVisible(_div($inputObject.item)));
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDeleteInstance Completed","success");
+}
+
+/**
+ @Function Number:175
+ @author:Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyAddComment($inputObject)
+{
+	_log("verifyAddComment Started","success");
+	try 
+	{
+		_assert(_isVisible(_div($inputObject.txt_New_Comment, _in(_div("commentsTextDiv")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAddComment Completed","success");
+}
+
+/**
+ @Function Number:179
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDynamicList($inputObject)
+{
+	_log("verifyDynamicList Started","success");
+	try 
+	{
+		_wait(5000,null);
+		
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;			
+		var $boolean = false;
+		
+		_set($boolean,_exists(_link($addbtnKey)));
+		
+		if($boolean === true)
+		{
+			_click(_link($addbtnKey));
+			if($inputObject.type === "Negative")
+				_assertFalse(_containsText(_select($inputObject.item_type),$inputObject.item_name));
+			else
+			 	_assertTrue(_containsText(_select($inputObject.item_type),$inputObject.item_name));
+		}
+   	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDynamicList Completed","success");
+}
+
+/**
+ @Function Number:180
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyItemProcessDefinition($inputObject)
+{
+	_log("verifyItemProcessDefinition Started","success");
+	try 
+	{
+		_set($value, _textarea(0, _cell("Process Definition:")).value);
+		_assertEqual($inputObject.edt_process_definition, $value);
+		_click(_button("CancelBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyItemProcessDefinition Completed","success");
+}
+
+/**
+ @Function Number:181
+ @author: Hrishi
+ @example: verifyWebListCount({"PHASEID", "2"})
+ @description: Check the number of options available in select tag
+ @param: 
+ @return: none
+ **/
+
+function verifyWebListCount($inputObject)
+{
+	_log("verifyWebListCount Started","success");
+	try 
+	{
+		_assertEqual(_getText(_select($inputObject.weblist)).length, $inputObject.count);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWebListCount Completed","success");
+}
+
+/**
+ @Function Number:184
+ @author:hbhuva	
+ @example:
+ @description: This is use when there is a difference between version so we verify that
+ 				first that difference window is visible and then two buttons are visible
+ @param: 
+ @return: 
+ **/
+
+function verifyVersionDifferenceBrowser($inputObject)
+{
+	_log("verifyVersionDifferenceBrowser Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_link($inputObject.version1,_in(_table("QTP_versionlog"))))));
+		_click(_checkbox(0,_near(_cell($inputObject.version2,_in(_table("QTP_versionlog"))))));
+		_click(_link("de-icon-show_difference"));
+		_selectWindow("VersionDifference");
+		_assertTrue(_isVisible(_button("QTP_Print")));
+		_assertTrue(_isVisible(_submit("QTP_Cancel")));
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyVersionDifferenceBrowser Completed","success");
+}
+
+/**
+ @Function Number:185
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyVersionCount()
+{
+	_log("verifyVersionCount Started","success");
+	try 
+	{
+		var $tableRowCount = 0;
+		
+		if(_exists(_cell("No Previous Version Found.",_in(_table("QTP_versionlog")))))
+		{
+			_set($tableRowCount,"1");
+		}
+		else	
+		{
+			_set($tableRowCount,_table("QTP_versionlog").rows.length-1);
+		}
+		return $tableRowCount;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyVersionCount Completed","success");
+}
+
+/**
+ @Function Number:186
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyVersionCreation()
+{
+	_log("verifyVersionCreation Started","success");
+	try 
+	{
+		$inputObject = {};
+		$inputObject.segment_name = "Previous Versions";
+		SelectSegment($inputObject);
+	
+		var $initialCount = verifyVersionCount();
+		
+		$inputObject = {};
+		$inputObject.segment_name = "Details";
+		SelectSegment($inputObject);
+		
+		$inputObject.edt_CM_Name = "modified details";
+		ModifyEformInstance($inputObject);
+		
+		$inputObject.segment_name = "Previous Versions";
+		SelectSegment($inputObject);
+		
+		var $finalCount = verifyVersionCount();
+		
+		_assertTrue($finalCount > $initialCount);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyVersionCreation Completed","success");
+}
+
+/**
+ @Function Number:188
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRiskExposureValue($inputObject)
+{
+	_log("verifyRiskExposureValue Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRiskExposureValue Completed","success");
+}
+
+/**
+ @Function Number:190
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyaddActionItem($inputObject)
+{
+	_log("verifyaddActionItem Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		
+    	if($inputObject.operation === "Delete")
+    		_assertFalse(_isVisible(_cell($inputObject.edt_CM_Name, _in($tableId))));
+    	else 
+    		_assertTrue(_isVisible(_cell($inputObject.edt_CM_Name, _in($tableId))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyaddActionItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyPlanningAndTrackingSegmentDetails({ "PlannedDuration" : "0 Days" ,  "PlannedEffort" : "0 Hours" ,  "ActualDuration" : "0 Days" ,  "ActualEffort" : "0 Hours" ,  "PercentEffortComplete" : "0" });
+* @description This function is called to verifyPlanningAndTrackingSegmentDetails
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function verifyPlanningAndTrackingSegmentDetails($inputObject)
+{
+	_log("verifyPlanningAndTrackingSegmentDetails Started","success");
+	try 
+	{
+		if($inputObject.PlannedEffort)
+			_assertTrue(_isVisible(_cell($inputObject.PlannedEffort),_near(_cell("Planned Effort"))));
+		if($inputObject.ActualEffort)
+			_assertTrue(_isVisible(_cell($inputObject.ActualEffort),_near(_cell("Actual Effort"))));
+		if($inputObject.PlannedDuration)
+			_assertTrue(_isVisible(_cell($inputObject.PlannedDuration),_near(_cell("Planned Duration"))));
+		if($inputObject.ActualDuration)
+			_assertTrue(_isVisible(_cell($inputObject.ActualDuration),_near(_cell("Actual Duration"))));
+		if($inputObject.PlannedStartDate)
+			_assertTrue(_isVisible(_cell($inputObject.PlannedStartDate),_near(_cell("Planned Start Date"))));
+		if($inputObject.PlannedEndDate)	
+			_assertTrue(_isVisible(_cell($inputObject.PlannedEndDate),_near(_cell("Planned End Date"))));
+		if($inputObject.ActualStartDate)		
+			_assertTrue(_isVisible(_cell($inputObject.ActualStartDate),_near(_cell("Actual Start Date"))));
+		if($inputObject.ActualEndDate)
+			_assertTrue(_isVisible(_cell($inputObject.ActualEndDate),_near(_cell("Actual End Date"))));
+		if($inputObject.PercentEffortComplete)	
+			_assertEqual($inputObject.PercentEffortComplete,_getText(_cell(1, _near(_cell("Percent Effort Complete")), _under(_cell("Actuals")))));
+	}		
+    catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPlanningAndTrackingSegmentDetails Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.item = "Question1";
+ @description: Verify the checklist segment
+ @param: String {None}
+ @return: String {None}
+ TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+ **/
+
+function  verifyEformChecklistSegment($inputObject)
+{
+	_log(" verifyEformChecklistSegment Started","success");
+	try 
+	{
+		if(_isVisible(_cell($inputObject.item)))
+			_assertTrue(_isVisible(_cell($inputObject.item)),"Item Found");
+		else
+			_assertFalse(_isVisible(_cell($inputObject.item)),"Item Not Found");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyEformChecklistSegment Completed","success");
+}
+
+/**
+ @Function Number:195
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return:
+ TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+ **/
+
+function  verifyActivityEformMapping($inputObject)
+{
+	_log(" verifyActivityEformMapping Started","success");
+	try 
+	{
+		_click(_link("Activity eForm Mapping"));
+		
+		if(_isVisible(_cell($inputObject.activitycode,_under(_cell("Activity Name")))) === true)
+		{		
+			_assertTrue(_getSelectedText(_select(1,_near(_cell($inputObject.activitycode)))) ===  $inputObject.eformtype);
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyActivityEformMapping Completed","success");
+}
+
+/**
+ @Function Number:196
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyworkflowStageFields($inputObject)
+{
+	_log("verifyworkflowStageFields Started","success");
+	try 
+	{
+		_wait(9000,_exists(_link("imgListProp").title));
+    	var $value;
+    	_set($value,_link("imgListProp").title);
+      	if($value === "Show")
+	  	{
+	  		_click(_link("imgListProp"));
+	  	}	
+		 var $rowIndex = 0;
+		_set($rowIndex,_parentRow(_cell(0,_near(_cell($inputObject.stage_name)),_under(_cell("Queue")))).rowIndex);
+		
+		var $stageId  = ($rowIndex-3)/2;
+		
+		var $selectsingleuser = "selectsingleuser" + $stageId;
+		if($inputObject.lst_selectsingleuser)
+		 _assertTrue(_conatins(_select($selectsingleuser),$inputObject.lst_selectsingleuser));
+		
+		var $estEffort = "estEffort" + $stageId;
+		if($inputObject.edt_estEffort)
+			_assertEqual($inputObject.edt_estEffort,_textbox($estEffort).value);
+		
+		if($inputObject.lbl_Actual_Effort)
+			_assertEqual($inputObject.lbl_Actual_Effort,_getText(_cell(0,_near(_cell($inputObject.stage_name)),_under(_cell("Actual Effort")))));
+		
+		var $estStartDate = "estStartDate" + $stageId;
+		if($inputObject.edt_estStartDate)
+			_assertEqual($inputObject.edt_estStartDate,_textbox($estStartDate).value);
+		
+		var $estEndDate = "estEndDate" + $stageId;
+		if($inputObject.edt_estEndDate)
+			_assertEqual($inputObject.edt_estEndDate,_textbox($estEndDate).value);
+			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyworkflowStageFields Completed","success");
+}
+
+/**
+ @Function Number:200
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return:
+ TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+ **/
+
+function verifyMemberRole($inputObject)
+{
+	_log("verifyMemberRole Started","success");
+	try 
+	{
+		if(_containsText(_select("selectsingleuser"+$inputObject.stage_name_col_id),$inputObject.member2))
+			_assertTrue(_containsText(_select("selectsingleuser"+$inputObject.stage_name_col_id),$inputObject.member2));
+		else
+			_assertFalse(_containsText(_select("selectsingleuser"+$inputObject.stage_name_col_id),$inputObject.member2));
+
+		if(_containsText(_select("selectsingleuser"+$inputObject.stage_name_col_id),$inputObject.member3))
+			_assertTrue(_containsText(_select("selectsingleuser"+$inputObject.stage_name_col_id),$inputObject.member3));
+		else
+			_assertFalse(_containsText(_select("selectsingleuser"+$inputObject.stage_name_col_id),$inputObject.member3));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMemberRole Completed","success");
+}
+
+/**
+ @Function Number:201
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyLinkedItem($inputObject)
+{
+	_log("verifyLinkedItem Started","success");
+	try 
+	{
+		if(_exists(_table("QTP_List")))
+		{
+			var $tableId = _table("QTP_List");
+			if($inputObject.operation === "Delete" || $inputObject.operation === "Negative")
+				_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+	    	else 
+	    		_assertTrue(_isVisible(_cell($inputObject.item, _in($tableId))));
+		}
+		else
+		{	
+	    	if($inputObject.operation === "Delete" || $inputObject.operation === "Negative")
+	    		_assertFalse(_isVisible(_div($inputObject.item)));
+	    	else 
+	    		_assertTrue(_isVisible(_div($inputObject.item)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyLinkedItem Completed","success");
+}
+
+/**
+ @Function Number:202
+ @author:Sheetal Dindorkar
+ @example:verifyAllocatedResources($inputObject)
+ @description:  api deleted by Ashwini Lalit as it was duplicate.
+ Make use of verifyTaskAssignments in Task.sah 
+ @param: 
+ @return: 
+ **/
+
+function verifyAllocatedResources($inputObject){
+	//api deleted by Ashwini Lalit as it was duplicate.
+	// Make use of verifyTaskAssignments in Task.sah 
+	}
+
+
+/**
+ @Function Number:203
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function closeEformPopupDetails($inputObject)
+{
+	_log("closeEformPopupDetails Started","success");
+	try 
+	{
+		_selectWindow($inputObject.popup_name);
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeEformPopupDetails Completed","success");
+}
+
+/**
+ @Function Number:204
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createRiskLibrary($inputObject)
+{
+	_log("createRiskLibrary Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createRiskLibrary Completed","success");
+}
+
+/**
+ @Function Number:205
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createUserStory($inputObject)
+{
+	_log("createUserStory Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createUserStory Completed","success");
+}
+
+/**
+ @Function Number:206
+ @author: Hrishi
+ @example: createNonCompliance({"edt_cm_name":"NC1", "lst_priority":"Critical"});
+ @description: Create new non compliance log instance and set the editable fields passed from input object	
+ @param: Json object of editable fields
+ @return: none
+ **/
+
+function createNonCompliance($inputObject)
+{
+	_log("createNonCompliance Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createNonCompliance Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example createRiskmanagement({"item":"DEF2486","col_id":"5"});
+* @description This function is called to createRiskmanagement instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function createRiskManagement($inputObject)
+{
+	_log("createRiskManagement Started","success");
+	try 
+	{
+    	CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createRiskManagement Completed","success");
+}
+
+/**
+ @Function Number:208
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createDefect($inputObject)
+{
+	_log("createDefect Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createDefect Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example createWorkPackage
+* @description This function is called to createWorkPackage instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function createWorkPackage($inputObject) 
+{
+    _log("createWorkPackage Started","success");
+    try 
+	{
+    	CreateInstance($inputObject);
+	}
+	catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createWorkPackage Completed","success");	
+}
+
+/*************************************************************************
+* @author Ram
+* @example createIssueManagement({"edt_CM_Name" : "Issue3" , "lst_CM_Priority" : "Medium"});
+* @description This function is called to create new ProjectRequest
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function createIssueManagement($inputObject) 
+{
+    _log("createIssueManagement Started","success");
+    try 
+	{
+        CreateInstance($inputObject);
+        	
+	} catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createIssueManagement Completed","success");	
+}
+
+/**
+ @author: Harshit
+ @example:createActionItems({ "edt_CM_Name" : "Baka yoke" ,  "lst_CM_Priority" : "High" });
+ @description: Create Action Item
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function createActionItems($inputObject)
+{
+	_log("createActionItems Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createActionItems Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createChangeRequests({"edt_CM_Name" : "Issue3" , "lst_CM_Priority" : "Medium"});
+* @description This function is called to create new createChangeRequests
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function createChangeRequests($inputObject)
+{
+	_log("createChangeRequests Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createChangeRequests Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createDeliverables
+* @description This function is called to create Deliverables
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function createDeliverables($inputObject)
+{
+	_log("createDeliverables Started","success");
+	try 
+	{
+		_popup("PhaseEForm")._click(_link("de-icon-link_new"));
+		_selectWindow("DlvEForm");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_wait(5000,null);
+		_selectWindow($inputObject.popup_name);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createDeliverables Completed","success");
+}
+
+/**
+ @Function Number:217
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createMeetingMinutes($inputObject)
+{
+	_log("createMeetingMinutes Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createMeetingMinutes Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createDocument
+* @description This function is called to create Document
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function createDocument($inputObject)
+{
+	_log("createDocument Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createDocument Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example createActivity({"item":"DEF2486","col_id":"5"});
+* @description This function is called to create instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function createActivity($inputObject) 
+{
+    _log("createActivity Started","success");
+    try 
+	{
+        CreateInstance($inputObject);
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createActivity Completed","success");	
+}
+
+/*************************************************************************
+* @author shashank
+* @example  createPhase({ "edt_cm_name" : "introse" ,  "txt_CM_DESCRIPTION" : "description3" ,  "edt_StdPhaseCode" : "723.0" });
+* @description This function is called to create a phase 
+* @param {String} item to be select
+* @return {String}   None
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+*************************************************************************/
+
+function createPhase($inputObject) 
+{
+    _log("createPhase Started","success");
+    try 
+	{    
+    	CreateInstance($inputObject);
+    	
+    	if($inputObject.checkDuplicate)
+    	{
+    		_assert(_isVisible(_span("The Phase name or code already exists. Please enter different values.")));
+    	}
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createPhase Completed","success");	
+}
+
+/*************************************************************************
+* @author shashank
+* @example createPractice();
+* @description This function is called to navigate to Practice
+* @param {String} None
+* @return {String} None
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+*************************************************************************/
+
+function createPractice($inputObject)
+{
+	 _log("createPractice Started","success");
+	 try
+	 {
+		 CreateInstance($inputObject);
+		 
+		if($inputObject.checkDuplicate)
+	    {
+			_assert(_isVisible(_span("The Practice name or code already exists. Please enter different values.")));
+	    }
+	 }
+	 catch(e) 
+	 {
+	    handleFailure(e);
+	 }
+	_log("createPractice Completed","success");	
+}
+
+/*************************************************************************
+* @author Ram
+* @example createRelease ({"edt_CM_Name" :"Ravera" , "lst_CM_Priority" : "High"});
+* @description This function is called to create Release
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function createRelease($inputObject)
+{
+	_log("createRelease Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createRelease Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul
+* @example createSubOrganization({ "edt_name" : "DigiteDava" });
+* @description This function is called to create new sub organization
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function createSubOrganization($inputObject)
+{
+	_log("createSubOrganization Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+		if($inputObject.alert !== "UniqueOrg")
+		{
+		    _wait(10000, _button("SaveBtn").disabled);
+            verifyAllFields($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createSubOrganization Completed","success");
+}
+
+/**
+ @Function Number:224
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createTestUnit($inputObject)
+{
+	_log("createTestUnit Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createTestUnit Completed","success");
+}
+
+/**
+ @Function Number:225
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createTestScripts($inputObject)
+{
+	_log("createTestScripts Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createTestScripts Completed","success");
+}
+
+/**
+ @Function Number:226
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createTestEvents($inputObject)
+{
+	_log("createTestEvents Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createTestEvents Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example createPrioritizationTemplate();
+* @description This function is called to create Prioritization template in portfolio
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+
+function createPrioritizationTemplate($inputObject)
+{
+	 _log("createPrioritizationTemplate Started","success");
+	 try
+	 {
+		var $addBtn = "KEY_BUTTON_Add";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		_wait(15000,_isVisible(_link($addbtnKey)));
+		_click(_link($addbtnKey));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	 }
+	 catch(e) 
+	 {
+	    handleFailure(e);
+	 }
+	_log("createPrioritizationTemplate Completed","success");	
+}
+
+/**
+ @Function Number:228
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createProcessCapabilityBaseline($inputObject)
+{
+	_log("createProcessCapabilityBaseline Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createProcessCapabilityBaseline Completed","success");
+}
+
+/**
+@author: Harshit
+@example: createSLA({ "edt_cm_name" : "CustomerSupportSLA13" ,  "lst_SLACATEGORY" : "Hardware" ,  "lst_SLADOMAIN" : "HR Services" ,  "lst_SLATYPE" : "Response Time SLA" ,  "lst_GOALUNIT" : "Hours" });
+@description: Create SLA item 
+@param: {String} item to be select
+@return: None 
+**/
+
+function createSLA($inputObject)
+{
+	_log("createSLA Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createSLA Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: CreateReview({ "edt_cm_name" : "Application Specs" ,  "lst_cm_priority" : "High" ,  "edt_CM_DUEDATE" : "22-Feb-2012" ,  "lst_workproduct" : "Proposal" ,  "lst_reviewtype" : "Code Review" ,  "txt_reviewgoal" : "xyg" });
+ @description: Create Review Instance
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function CreateReview($inputObject)
+{
+	_log("createReview Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createReview Completed","success");
+}
+
+/**
+ @Function Number:231
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyRiskLibrary($inputObject)
+{
+	_log("modifyRiskLibrary Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject)
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyRiskLibrary Completed","success");
+}
+
+/**
+ @Function Number:232
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyUserStory($inputObject)
+{
+	_log("modifyUserStory Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyUserStory Completed","success");
+}
+
+/**
+ @Function Number:233
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return:
+ TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+ **/
+
+function modifyPT($inputObject)
+{
+	_log("modifyPT Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		if(_isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+		{
+			_click(_submit("SaveBtn") || _submit("//s*Save/s*/"));
+		}
+		else
+		{
+			_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPT Completed","success");
+}
+
+/**
+ @author:Harshit
+ @example: modifyDefectManagement({ "edt_CM_Name" : "modified Defect Modeling" ,  "lst_CM_Priority" : "Low" });
+ @description: Modify Defect Instance
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function modifyDefectManagement($inputObject)
+{
+	_log("modifyDefectManagement Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyDefectManagement Completed","success");
+}
+
+/**
+ @Function Number:235
+ @author: Hrishi
+ @example: ModifyEformInstance({"edt_cm_name":"NC1", "lst_priority":"Critical"});
+ @description: This function set the fields passed in parameter in open instance
+     		   and save that instance
+ @param: $inputObject Json object of editable fields anlog with id and name
+ @return: None 
+ **/
+
+function modifyNonCompliance($inputObject)
+{
+	_log("modifyNonCompliance Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyNonCompliance Completed","success");
+}
+
+/**
+ @Function Number:237
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyIssueManagement($inputObject)
+{
+	_log("modifyIssueManagement Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyIssueManagement Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: modifyActionItems({ "edt_CM_Name" : "modified Balanced plant" ,  "lst_CM_Priority" : "Low" });
+ @description: Modify Action Item Instance 
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function modifyActionItems($inputObject)
+{
+	_log("modifyActionItems Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyActionItems Completed","success");
+}
+
+/**
+ @Function Number:242
+ @author: hbhuva
+ @example:
+ @description: Modifying software requirement item
+ @param: 
+ @return: 
+ **/
+
+function modifySoftwareRequirements($inputObject)
+{
+	_log("modifySoftwareRequirements Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifySoftwareRequirements Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyMeetingminutes
+* @description This function is called to modify Meetingminutes
+* @param {String
+* @return {String}   None
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+*************************************************************************/
+
+function modifyMeetingminutes($inputObject)
+{
+	_log("modifyMeetingminutes Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyMeetingminutes Completed","success");
+}
+
+/**
+ @Function Number:247
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyActivity($inputObject)
+{
+	_log("modifyActivity Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyActivity Completed","success");
+}
+
+// HARSHIT : is this needed??? this is already written in UPF.sah
+
+/**
+ @Function Number:249
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyPractice($inputObject)
+{
+	_log("modifyPractice Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPractice Completed","success");
+}
+
+
+/*************************************************************************
+* @author Ram
+* @example modifyRelease
+* @description This function is called to modify Release
+* @param {String} None
+* @return {String}   None
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts 
+*************************************************************************/
+
+function modifyRelease($inputObject)
+{
+	_log("modifyRelease Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyRelease Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyTestunit
+* @description This function is called to modify Testunit
+* @param {String
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+
+function modifyTestunit($inputObject)
+{
+	_log("modifyTestunit Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTestunit Completed","success");
+}
+
+/**
+ @Function Number:256
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return:
+ TODO:RMAHANT Correct this function for alert and do the Impact on dependent scripts 
+ **/
+
+function modifyRiskmanagement($inputObject)
+{
+	_log("modifyRiskmanagement Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("field value can not be set as field is hidden");
+			return;
+		}
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyRiskmanagement Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyUser
+* @description This function is called to modifyUser
+* @param {String}
+* @return {String}   None 
+* TODO:RMAHANT Correct this function for alert and do the Impact on dependent scripts
+*************************************************************************/
+
+function modifyUser($inputObject)
+{
+	_log("modifyUser Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			return;
+		}
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyUser Completed","success");
+}
+
+/**
+ @Function Number:258
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyOrganization($inputObject)
+{
+	_log("modifyOrganization Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_wait(10000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyOrganization Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: 
+ @description: modify Review Eform Instance
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function modifyReview($inputObject)
+{
+	_log("modifyReview Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyReview Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyLatestActivityLog
+* @description This function is called to verifyLatestActivityLog
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyLatestActivityLog($inputObject)
+{
+	_log("verifyLatestActivityLog Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+			_assertFalse(_assertContainsText($inputObject.item,_table("QTP_activitylog")));
+		else
+			_assertTrue(_assertContainsText($inputObject.item,_table("QTP_activitylog")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyLatestActivityLog Completed","success");
+}
+
+/**
+ @Function Number:266
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyExternalTracedItem($inputObject)
+{
+	_log("verifyExternalTracedItem Started","success");
+	try 
+	{
+		_click(_link("de-icon-tracebility"));
+		var $tableId = _table("List");
+        _click(_link($inputObject.item, _in($tableId)) || _cell($inputObject.item, _in($tableId)));		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyExternalTracedItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyTeamMemberInWorkFlow 
+* 	0;1;2;3;4;5,Sabeer Batia;UnAssigned;UnAssigned;UnAssigned;UnAssigned;UnAssigned
+* @description This function is called to verifyTeamMemberInWorkFlow
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifyTeamMemberInWorkFlow($inputObject)
+{
+	_log("verifyTeamMemberInWorkFlow Started","success");
+	try 
+	{
+		var $stageName = $inputObject.stage_name.split(";");
+		var $teamMembers = $inputObject.Team_member.split(";");
+		
+		for(var $i=0; $i<$stageName.length; $i++)
+		{
+			for(var $j=0; $j<$teamMembers.length; $j++)
+			{
+				_assertTrue(_containsText(_select("selectsingleuser"+$stageName[$i]),$teamMembers[$j]));
+				$i++;
+			}
+			continue;
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTeamMemberInWorkFlow Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createProjectRequest({"edt_CM_NAME" : "SahiPrjReq" , "edt_CM_PROJECTID" : "SahiPrjReq" , 
+						"edt_CM_STARTDATE" : "01-Feb-2012" , "edt_CM_ENDDATE" : "01-Feb-2014" , 
+						"lst_CM_PROJECTTYPE" : "Advanced Planning Systems" , 
+						"ssl_SearchCriteria_PROJECTMANAGER" : "Junit Junit(Junit)" , "rdg_CM_CREATEPROJECT" : "Yes"});
+* @description This function is called to create new ProjectRequest
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function createProjectRequest($inputObject) 
+{
+    _log("createProjectRequest Started","success");
+    try 
+	{
+        CreateInstance($inputObject);
+        	
+	} catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createProjectRequest Completed","success");	
+}
+
+/**
+ @Function Number:270
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySegmentOuterText($inputObject)
+{
+	_log("verifySegmentOuterText Started","success");
+	try 
+	{
+		var $key;
+		
+		for ($key in $inputObject)
+		{
+			var $arrKeySet = $inputObject[$key].split("|");
+
+			for (var $i = 0; $i < $arrKeySet.length; $i++)
+            {
+				_containsText(_table("EformTabLevel"),$arrKeySet[$i]);
+            }
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySegmentOuterText Completed","success");
+}
+
+/**
+ @Function Number:271
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySendMaillink($inputObject)
+{
+	_log("verifySendMaillink Started","success");
+	try 
+	{
+		if($inputObject.userStatus === "false")
+			_assertFalse(_isVisible(_link("de-icon-mailf")));
+		else
+			_assertTrue(_isVisible(_link("de-icon-mailf")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySendMaillink Completed","success");
+}
+
+/**
+ @Function Number:277
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openExistingTracedItem($inputObject)
+{
+	_log("openExistingTracedItem Started","success");
+	try 
+	{
+		_click(_cell($inputObject.ItemName,_near(_cell($inputObject.ProjectName,_under(_cell("Project"))))));
+		_selectWindow("popup3");		
+		verifyAllFields($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openExistingTracedItem Completed","success");
+}
+
+/**
+ @Function Number:278
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySelectStandardCodeDetailsInWorkflow($inputObject)
+{
+	_log("verifySelectStandardCodeDetailsInWorkflow Started","success");
+	try 
+	{
+		var $initialStageId = "initialActivityCodeDisplay" + $data.workflow_stage10;
+		_assertEqual($inputObject.lst_initialActivityCode,_textbox($initialStageId).value);
+		
+		var $nextStageId = "nextActivityCodeDisplay" + $data.workflow_stage10;
+		_assertEqual($inputObject.lst_nextActivityCode,_textbox($nextStageId).value);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySelectStandardCodeDetailsInWorkflow Completed","success");
+}
+
+/**
+ @Function Number:280
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addProcessImprovementRequest($inputObject)
+{
+	_log("addProcessImprovementRequest Started","success");
+	try 
+	{
+		_selectWindow("AddPIR");
+		
+		CreateInstance($inputObject);
+		
+		_closeWindow();
+		
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addProcessImprovementRequest Completed","success");
+}
+
+/**
+ @Function Number:284
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToPIR()
+{
+	_log("navigateToPIR Started","success");
+	try 
+	{
+		_click(_link("QTP_PirAdd"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToPIR Completed","success");
+}
+
+/**
+ @Function Number:285
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addPracticeInWorkpackage($inputObject)
+{
+	_log("addPracticeInWorkpackage Started","success");
+	try 
+	{
+		_click(_link("Add Practice"));
+		_selectWindow("AddPractice");
+		_click(_radio("Custom"));	
+		_setSelected(_select("ListPractice"),$inputObject.practice_name);
+		_click(_button("Add >"));
+		_click(_submit("QTP_Add"));
+		_wait(3000);
+		_selectWindow();
+		_assertTrue(_isVisible(_cell($inputObject.practice_name)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPracticeInWorkpackage Completed","success");
+}
+
+//deleteTask defined in Task.sah
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example 	verifyActivityLogComments({"Comments":"123456")
+* 			verifyActivityLogComments({"Comments":"789456", "operation":"Negative"})
+* @description This function is called to verify the ActivityLog Comments
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifyActivityLogComments($inputObject)
+{
+	_log("verifyActivityLogComments Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertTrue(_assertNotContainsText($inputObject.Comments,_table("QTP_activitylog")));
+		else
+			_assertTrue(_assertContainsText($inputObject.Comments,_table("QTP_activitylog")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyActivityLogComments Completed","success");
+}
+
+/**
+ @Function Number:290
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteAttachment($inputObject)
+{
+	_log("deleteAttachment Started","success");
+	try 
+	{
+		_check(_checkbox("/jqg_attachmentsGridTable_/", _leftOf(_cell($inputObject.edt_file))));
+		_click(_submit("deleteFile"));
+		_expectConfirm("The selected attachment(s) will no longer be available.", true);
+		_assertFalse(_isVisible(_cell($inputObject.edt_file)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteAttachment Completed","success");
+}
+
+/**
+ @Function Number:299
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function routeProjectRequest($inputObject)
+{
+	_log("routeProjectRequest Started","success");
+	try 
+	{
+		_wait(10000, !(_button("RouteBtn").disabled));
+		if (!(_condition(_button("RouteBtn").disabled)))
+		{
+		    _click(_button("RouteBtn"));
+		    _selectWindow("RouteReject");
+		    setAllFields($inputObject);
+		    _click(_submit("QTP_Route_Reject"));
+		    _selectWindow();
+		}
+		if($inputObject.operation === "Error")
+		{
+			_assertTrue(_exists(_span("Please answer the Tailoring Questionnaire and save changes before routing.")));
+			_click(_submit("Back to previous"));
+		}
+		_wait(5000, !(_button("< Return").disabled));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("routeProjectRequest Completed","success");
+}
+
+/**
+ @Function Number:301
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function editTailoringQuestionnaire($inputObject)
+{
+	_log("editTailoringQuestionnaire Started","success");
+	try 
+	{
+		//negative case
+		if($inputObject.invalid === "not available")
+		{
+			_assertTrue(_exists(_span("There are no questions to be answered")));
+		}
+		else if($inputObject.invalid === "Disable")
+		{
+			if(_exists(_radio("quest1")))
+			{
+				_assertTrue(_radio("quest1").disabled);
+			}
+			if(_exists(_radio("quest2")))
+			{
+				_assertTrue(_radio("quest2").disabled);
+			}
+		}
+		else
+		{
+			var $values=$inputObject.TailoringAnswers.split(";");
+			for(var $i=0;$i<$values.length;$i++)
+			{
+				if(_assertTrue(_exists(_radio(0,_near(_cell($values[$i]))))))
+				{
+					_click(_radio(0,_near(_cell($values[$i]))));
+				}
+			}
+			_click(_button("SaveBtn"));
+		}
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editTailoringQuestionnaire Completed","success");
+}
+
+/**
+ @author: hbhuva
+ @example:
+ @description: when you want to verify attachment detail added.
+  pass input as : "Name:DefectError.txt;Description:~!@#$%^&*(){}\/[]?'+"
+ @param: 
+ @return: 
+ **/
+
+function verifyAttachmentListingDetails($inputObject)
+{
+	_log("verifyAttachmentListingDetails Started","success");
+	try 
+	{
+		var $totalItems = $inputObject.attachment_info.split(";");
+		for(var $i = 0;$i < $totalItems.length; $i++)
+		{
+			var $singleItem = $totalItems[$i].split(":");
+			var $key = $singleItem[0];
+			var $value = $singleItem[1];
+			
+			if($inputObject.operation === "Negative")
+				_assertFalse(_exists(_cell($value,_under(_cell($key)))));
+			else	
+				_assertTrue(_exists(_cell($value,_under(_cell($key)))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAttachmentListingDetails Completed","success");
+}
+
+/**
+ @Function Number:305
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRiskInstancesInProject($inputObject)
+{
+	_log("verifyRiskInstancesInProject Started","success");
+	try 
+	{
+		_click(_link("de-icon-risk"));
+		_selectWindow("Risk Instances In Projects");
+		var $headerInputs = $inputObject.col_headers.split(";");
+		var $headerValue; 
+		if($inputObject.values)
+		{	
+			$headerValue = $inputObject.values.split(";");
+		}
+		if($inputObject.col_headers != undefined && $inputObject.values != undefined)
+		{
+			for(var $i = 0 ;$i < $headerInputs.length; $i++)
+			{
+				var $tableId = _table("QTP_List_Table_Risk");
+				_assertTrue(_exists(_cell($headerValue[$i],_under(_cell($headerInputs[$i]))),_in($tableId)));
+			}
+		}
+		else
+		{
+			for(var $i = 0 ;$i < $headerInputs.length; $i++)
+			{	
+				_assertTrue(_exists(_cell($headerInputs[$i]),_in(_table("QTP_List_Table_Risk"))));
+			}
+		}
+		_click(_button("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRiskInstancesInProject Completed","success");
+}
+
+/**
+ @Function Number:306
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRiskExposureTrend($inputObject)
+{
+	_log("verifyRiskExposureTrend Started","success");
+	try 
+	{
+		var $values = $inputObject.risk_exposure_values.split(";");
+		var $version = $inputObject.versions.split(";");
+		
+		for (var $i = 0; $i < $values.length; $i++)
+        {		
+			_assertEqual($values[$i],_getText(_cell(2,_near(_cell($version[$i])))));
+        }	 			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRiskExposureTrend Completed","success");
+}
+
+/**
+ @Function Number:307
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRiskDetailsFromImportOrgRiskList($inputObject)
+{
+	_log("verifyRiskDetailsFromImportOrgRiskList Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRiskDetailsFromImportOrgRiskList Completed","success");
+}
+
+/**
+ @Function Number:308
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyVersionDetails($inputObject)
+{
+	_log("verifyVersionDetails Started","success");
+	try 
+	{
+		_click(_link($inputObject.version));
+		_selectWindow("SetPagingPopup");
+		verifyAllFields($inputObject);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyVersionDetails Completed","success");
+}
+
+/**
+ @Function Number:309
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyVersionDifferenceDetails($inputObject)
+{
+	_log("verifyVersionDifferenceDetails Started","success");
+	try 
+	{
+		var $versions = $inputObject.versions.split(";");
+		var $versionNo = $inputObject.versionNo.split(";");
+		for(var $j = 0; $j < $versions.length; $j++)
+		{
+			_check(_checkbox(0,_near(_cell($versions[$j]))));
+		}
+		_click(_link("de-icon-show_difference"));
+		_selectWindow("VersionDifference");
+		var $stageUsers = $inputObject.workflows_stage_field_differences.split(";");
+		for(var $i = 0; $i < $stageUsers.length; $i++)
+		{
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.workflow_stage_field_names),_near(_cell($inputObject.workflow_stage_name))),_under(_cell($versionNo[$i])))),$stageUsers[$i]);
+		}
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyVersionDifferenceDetails Completed","success");
+}
+
+/**
+ @Function Number:310
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function customSearchSelect($inputObject)
+{
+	_log("customSearchSelect Started","success");
+	try 
+	{
+		SetCustomField($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("customSearchSelect Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.field_label = "Mandatory11"
+ 			$inputObject.field_type = "webEdit"
+			$inputObject.field_value = ""
+ 			$inputObject.mandatoryOnClose = "Y"
+ @description: Verifies the manadatory field value of eform instance
+ @param: String {None}
+ @return: String {None}
+ TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+ **/
+
+function VerifyMandatory($inputObject)
+{
+	_log("VerifyMandatory Started","success");
+	try 
+	{
+		var $fieldName;
+		var $field_label ;
+		if($inputObject.mandatory === "Y" && $inputObject.mandatoryOnClose === "Y")
+		{
+			$field_label = $inputObject.field_label+"*^:";
+		}
+		else if($inputObject.mandatory === "Y")
+		{
+			$field_label = $inputObject.field_label+"*:";
+		}
+		else if($inputObject.mandatoryOnClose === "Y")
+		{
+			$field_label = $inputObject.field_label+"^:";
+		}
+		else
+		{
+			$inputObject.field_label+":";
+		}	
+		
+		_set($fieldName, _cell($field_label).id);
+		$fieldName = $fieldName.substring(0, $fieldName.length - 5);
+		
+		if($inputObject.field_type === "textbox" 
+			|| $inputObject.field_type === "WebEdit"
+				|| $inputObject.field_type === "WebElement")
+		{
+			var $fieldValue;
+			// to get the textbox value u have to use _set()
+			// if u use _getText() it will give u null value
+			_set($fieldValue,_textbox($fieldName).value);
+			if($fieldValue === "")
+				_assertTrue(true, "Field Values Are Blank");
+			else
+				_assertFalse(false, "Field Values Are Not Blank");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("VerifyMandatory Completed","success");
+}
+
+/*************************************************************************
+* @author shashank
+* @example CreateInstanceReviewComments
+* @description This function is called to create instance of review comments
+* @param {String} None
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+function CreateInstanceReviewComments($inputObject)
+{
+	_log("CreateInstanceReviewComments Started","success");
+	try
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = "";
+		var $addbtnKey = $addBtn + $extJsId;
+		_wait(15000,_isVisible(_link($addbtnKey)));
+		if(_exists(_link($addbtnKey)))
+		{	
+			_click(_link($addbtnKey));
+		}
+		 
+		_selectWindow("newListing");
+			
+		setAllFields($inputObject);
+			
+        _click(_button("SaveBtn"));
+		
+        _wait(5000,null);
+        _click(_button("< Return"));
+		_selectWindow();
+	}
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("CreateInstanceReviewComments Completed","success");	
+}
+
+/*************************************************************************
+* @author Ram
+* @example OpenDeliverableInstance
+* @description This function is called to OpenDeliverableInstance
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function OpenDeliverableInstance($inputObject) //Script Smoke-433
+{
+    _log("OpenDeliverableInstance Started","success");
+    
+    try 
+	{
+    	var $tableId = _table("QTP_List");
+        _click(_link($inputObject.item, _in($tableId)) || _cell($inputObject.item, _in($tableId)));
+        _selectWindow("DlvEForm");
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("OpenDeliverableInstance Completed","success");	
+}
+
+/*************************************************************************
+* @author Ram
+* @example createLinkItemsInDeliverables
+* @description This function is called to createDefectsInDeliverables
+* @param {String} 
+* @return {String} None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+function createLinkItemsInDeliverables($inputObject) //Script Smoke-433
+{
+    _log("createDefectsInDeliverables Started","success");
+    
+    try 
+	{
+    	var $linkNewBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 
+		var $linkNewBtnKey = $linkNewBtn + $extJsId;		
+		_click(_link($linkNewBtnKey));
+
+		 setAllFields($inputObject);
+         if($inputObject.winprefix)
+        	 _selectWindow($inputObject.winprefix);
+         if(_isVisible(_submit("create")) ||  _isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+         	_click(_submit("create") ||  _submit("SaveBtn") || _submit("//s*Save/s*/"));
+         else
+         	_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+         
+        _wait(5000,null);
+        _closeWindow();
+        _selectWindow("DlvEForm");
+        _closeWindow();
+        _selectWindow("PhaseEForm");
+        _closeWindow();
+        _selectWindow();
+	} 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("createDefectsInDeliverables Completed","success");	
+}
+
+/*************************************************************************
+* @author Ram
+* @example linkExistingItemsInDeliverables
+* @description This function is called to linkExistingItemsInDeliverables
+* @param {String} 
+* @return {String} None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+function linkExistingItemsInDeliverables($inputObject) //Script Smoke-433
+{
+    _log("linkExistingItemsInDeliverables Started","success");
+    
+    try 
+	{
+    	var $linkExistItemBtn = "KEY_Link_Existing_Item";
+		var $extJsId = ""; 
+		var $linkExistItemBtnKey = $linkExistItemBtn + $extJsId;
+		
+		_click(_link($linkExistItemBtnKey));
+    	_selectWindow($inputObject.winprefix);
+ 		_click(_submit("QTP_Submit"));
+ 		_click(_checkbox(0,_near(_cell($inputObject.item))));
+ 		_click(_submit("QTP_Add_Link_Button"));
+ 		_wait(5000,null);
+ 		_selectWindow("DlvEForm");
+        _closeWindow();
+        _selectWindow("PhaseEForm");
+        _closeWindow();
+        _selectWindow();
+     } 
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("linkExistingItemsInDeliverables Completed","success");	
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyInAllProjectEforms
+* @description This function is called to verifyInAllProjectEforms
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifyInAllProjectEforms($inputObject)
+{
+	_log("verifyDynamicList Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+		_containsText(_select($inputObject.item_type), $inputObject.item_name);
+   	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDynamicList Completed","success");
+}
+
+
+/*************************************************************************
+* @author Ram
+* @example verifyDeliverables
+* @description This function is called to verifyDeliverables
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifyDeliverables($inputObject)
+{
+	_log("verifyDynamicList Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_List");
+		_selectWindow("PhaseEForm");
+		
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_isVisible(_link($inputObject.item,_in($tableId))));
+		}
+		else
+		{
+			_assertTrue(_isVisible(_link($inputObject.item,_in($tableId))));
+		}
+		_closeWindow();
+		_selectWindow();
+		
+   	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDynamicList Completed","success");
+}
+
+/*************************************************************************
+* @author sdindorkar
+* @example checkActivitylog
+* @description This function is called to checkActivitylog
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function checkActivitylog($inputObject)
+{
+	_log("checkActivitylog Started","success");
+	try 
+	{
+		if($inputObject.popup_name)
+		{
+			_selectWindow($inputObject.popup_name);			
+		}
+		var $todayDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format(new java.util.Date());
+		_assertTrue(_containsText(_table("QTP_activitylog"),$inputObject.item + " " + $todayDate));
+		
+		if($inputObject.popup_name)
+		{
+			_selectWindow();		
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkActivitylog Completed","success");
+}
+
+
+/**
+@author:sgoja
+@example:
+@description: 
+@param: 
+@return: 
+**/
+
+function createLinkedItem($inputObject)
+{
+	_log("createLinkedItem Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		_wait(10000, _isVisible(_link("KEY_Link_New_item")))
+		if(_isVisible(_link("KEY_Link_New_item")))
+		{	
+			_click(_link($addbtnKey));
+		}
+		else
+		{
+			_wait(10000, _isVisible(_image("QTP_Link_New")));
+			_click(_image("QTP_Link_New"));
+		}
+		_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_click(_button("CancelBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createLinkedItem Completed","success");
+}
+
+/**
+@author:ashwini lalit
+@example:
+* $inputObject.edt_name = $data.name6;
+* $inputObject.edt_pref_st = $data.pref_st6;
+* $inputObject.edt_pref_fn = $data.pref_fn6;
+* $inputObject.lst_priority = $data.priority6;
+* createLinkedTask($inputObject);
+@description: creates task in linked task segment
+@param: as in setAllFields
+@return:None
+**/
+
+function createLinkedTask($inputObject)
+{
+	_log("createLinkedTask Started","success");
+	try 
+	{
+
+	if(_isVisible(_span("/addTaskButton/")))
+	{
+	       _click(_span("/addTaskButton/"));
+	        if(_isIE())
+		   _selectWindow("NewTask");
+		   else
+		   _selectWindow("New Task");
+		   setAllFields($inputObject);
+		   _click(_button(" Save "));
+		   _selectWindow();
+		   _wait(3000);
+        }
+	else
+	{
+	_wait(10000, _isVisible(_span("de-icon-add")));
+	 _click(_span("de-icon-add"));
+	       _selectWindow("AddTask");
+		   setAllFields($inputObject);
+		   _click(_button(" Save "));
+		   _selectWindow();
+		   _wait(3000);
+	}
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createLinkedTask Completed","success");
+}
+
+
+
+/**
+@author:hbhuva
+@example:
+@description: This is used when we want to select segment which
+              are in  application preference,_wait() is given because it takes some time to load 
+@param: 
+@return: 
+**/
+
+function SelectCustomDivSegment($inputObject)
+{
+	_log("SelectCustomDivSegment Started","success");
+	try 
+	{
+		_wait(90000, _isVisible(_div($inputObject.segment_name)));
+		
+		if(_isVisible(_div($inputObject.segment_name)))
+		{
+			_click(_div($inputObject.segment_name));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("SelectCustomDivSegment Completed","success");
+}
+
+function openRiskPopUp()
+{
+	_log("openRiskPopUp Started","success");
+	try 
+	{
+		var $importOrgRskBtn = "KEY_BUTTON_Import_From_Org";
+		var $extJsId = "";
+		var $importOrgRskbtnKey = $importOrgRskBtn + $extJsId;
+		if(_exists(_link($importOrgRskbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($importOrgRskbtnKey)));
+			_click(_link($importOrgRskbtnKey));
+		}
+		_selectWindow("popup");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openRiskPopUp Completed","success");
+}
+/**
+@author:jai
+@example:
+@description: This is used when we want to increase the waitTime
+@param: //variableMaxWait({"element":"Details","waitTime":20000})
+@return: 
+**/
+
+function variableMaxWait($inputObject)
+{
+
+   var i = 0;
+   do {
+         i++;
+         _wait(1000);   
+      } while (!(_isVisible(_link($inputObject.element)|| _span($inputObject.element)|| _div($inputObject.element)|| _cell($inputObject.element))) && (i < ($inputObject.waitTime/1000)));
+}

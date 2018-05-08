@@ -1,0 +1,277 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Agile_ScheduleTask_Complete_flow_00", "Agile/ScheduleTask");  
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to Schedule task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "creating sub-proj & verifying fields/links in the eform");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data.newlink;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name1;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID = $inputObject.eformID;
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name1;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Trying to add a Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.ScheduledTasks;//_click(_link("Scheduled Tasks"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CM_Name1;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Edit;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.SaveButtons;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Undo;
+ InfyFTclick($inputObject); 
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " The plan is saved. You need to click on 'Save and Checkin' to checkin the plan.";
+ InfyFTassertExists($inputObject);
+
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Plan is not baselined. Do you want to Baseline the plan on checkin?";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok1;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.msg = "Task Name is mandatory for each task. For the below listed Task Ids Task Name is not assigned. Please fill the Task Name " +  _getText(_listItem(77)) +" ";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Plan is not baselined. Do you want to Baseline the plan on checkin?";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Activity code is a mandatory field and it is not setup for the listed tasks. Please assign activity code for the below listed tasks. "  + _getText(_listItem(78)) +" ";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject);  
+  
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "creating subtask under schedule Task");
+ $t.start();
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.item_name = $data.item_name;//_doubleClick(_div($data.item_name)); 38
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data.subtaskname;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data.activityTask;//_doubleClick(_div($data.activityTask)); 44
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data.Resource1;//  _doubleClick(_div($data.Resource));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.div = parseInt($data.DownArrows22);
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.div = $data.Checkbox;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.div = $data.Checkbox1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.close;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject);  
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $BE  = $inputObject.baselineEffortA;
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "creating one more subtask under schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data.item_name;//_doubleClick(_div($data.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data.subtaskname;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data.activityTask;//_doubleClick(_div($data.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject);  
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "deleting one subtask under schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data.item_name;//_doubleClick(_div($data.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.deletebutton;//_click(_span("deleteTaskButton-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject);  
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "Agile_ScheduleTask_Task_01");
+ $t.start();
+ 
+ _include("Agile_ScheduleTask_Task_01.sah");
+ 
+ $t.end(); 

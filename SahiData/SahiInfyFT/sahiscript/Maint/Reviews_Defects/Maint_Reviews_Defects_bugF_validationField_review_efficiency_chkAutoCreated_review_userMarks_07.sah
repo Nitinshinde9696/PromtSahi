@@ -1,0 +1,466 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_Reviews_Defects_bugF_validationField_review_efficiency_chkAutoCreated_review_userMarks_07", "Maint/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ var $TC = _testcase("TC_BRD10_FU_4.2","Check the validation for the field Review efficiency")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = [$data.LoginID1,$data.field200];;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ //Moderator Details
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colTeamMem;
+ $inputObject.fieldValues = $data.fieldValue1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colPrepEff;
+ $inputObject.fieldValues = $data.fieldValue2;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colDefects;
+ $inputObject.fieldValues = $data.fieldValue3;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ //Other Roles
+ 
+ _selectWindow("openLinkedItem");
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowIndex;
+ $inputObject.colNo = $data.colTeamMem1;
+ $inputObject.fieldValues = $data.field200;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowIndex;
+ $inputObject.colNo = $data.colRole;
+ $inputObject.fieldValues = $data.fieldValue4;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowIndex;
+ $inputObject.colNo = $data.colPrepEff1;
+ $inputObject.fieldValues = $data.fieldValue2;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowIndex;
+ $inputObject.colNo = $data.colDefects1;
+ $inputObject.fieldValues = $data.fieldValue3;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+ 
+ //Defect
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject); 
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.txt_CM_Description = $data.Description;
+ $inputObject.lst_DN_DefectDetectedBy = $data.detected;
+ $inputObject.lst_DN_Severity = $data.severity;
+ $inputObject.lst_PhaseDetected = $data.phase;
+ $inputObject.lst_DN_Owner = $data.owner;
+ InfyFTcreateLinkedItemForDefect($inputObject);
+ var $createdID1 = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.txt_CM_Description = $data.Description;
+ $inputObject.lst_DN_DefectDetectedBy = $data.detected;
+ $inputObject.lst_DN_Severity = $data.severity;
+ $inputObject.lst_PhaseDetected = $data.phase;
+ $inputObject.lst_DN_Owner = $data.owner;
+ InfyFTcreateLinkedItemForDefect($inputObject);
+ var $createdID2 = $inputObject.createdID;
+ 
+ _wait(5000);
+ 
+ InfyFTReturnPopUp();
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment2;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ //Checking the values for total review effort and No of defects
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.span_Name = $data.TotalPreparationEffort;
+ $inputObject.value = $data.value1;
+ InfyFTisGetValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.span_Name = $data.NoofDefects;
+ $inputObject.value = $data.Value2;
+ InfyFTisGetValue($inputObject);
+ 
+ //Review efficiency is NO of defects divided by total preparation effort
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.span_Name = $data.ReviewEfficiency;
+ $inputObject.value = $data.Value3;
+ InfyFTisGetValue($inputObject); 
+ 
+ InfyFTReturnPopUp()
+ 
+ _wait(2000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_BRD10_FU_24_1","Check the various fields to be entered by the user in Auto-Created reviews")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = [$data.LoginID1,$data.field200];;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID1_1 = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID1_1;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment;
+ SelectSegment($inputObject);
+ 
+_wait(2000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colTeamMem;
+ $inputObject.fieldValues = "--None--";
+ InfyFTsetSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Team Member in table Moderator Details in Review Roles tab\n";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colTeamMem;
+ $inputObject.fieldValues = $data.fieldValue1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colPrepEff;
+ $inputObject.fieldValues = $data.fieldValues2;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.msgAlert = "Error : Preparation Effort cannot take more than 6 values or negative values.Please enter a positive value less than 1000000";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colPrepEff;
+ $inputObject.fieldValues = $data.fieldValues3;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colDefects;
+ $inputObject.fieldValues = $data.fieldValues4;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.msgAlert = "Error : Please enter positive value for No of Defects detected";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colDefects;
+ $inputObject.fieldValues = $data.fieldValues5;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_BRD10_FU_24_1","Check the defect detected field in Auto-Created reviews")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colDefects;
+ $inputObject.fieldValues = $data.fieldValues0;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ InfyFTsaveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colDefects;
+ $inputObject.fieldValues = $data.fieldValues0; 
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(2000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_BRD10_FU_36","User marks the status of the Review as Abandoned")
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.item = $createdID1;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1; 
+ $inputObject.lst_DN_Status = $data.status1;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ _popup("openLinkedItem__1")._closeWindow();
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.item = $createdID2;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1; 
+ $inputObject.lst_DN_Status = $data.status;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ _popup("openLinkedItem__1")._closeWindow();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment2;
+ SelectSegment($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.lst_DN_Status = $data.status3;
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.msgAlert = "You cannot abandon this Review since there are defects logged."; 
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment1;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;  
+ $inputObject.item = $createdID2;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1; 
+ $inputObject.lst_DN_Status = $data.status1;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ _popup("openLinkedItem__1")._closeWindow();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.segment2;
+ SelectSegment($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup; 
+ $inputObject.lst_DN_Status = $data.status3;
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ _wait(2000);   
+ 
+ InfyFTReopenPopup();
+ 
+ _wait(2000);    
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(2000);  
+  
+ $TC.end();

@@ -1,0 +1,2 @@
+subname1,schedmode1,addTaskButton,item_name1,taskname1,activityTask,actcode1,Pland_Start,Pland_Finish,addIteration
+subtest,STaRT,addTaskButton-btnIconEl,x-grid-cell-inner [16],CRep,x-grid-cell-inner [20],PCD,x-grid-cell-inner [18],x-grid-cell-inner [19],KEY_Link_New_item-btnIconEl

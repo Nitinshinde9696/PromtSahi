@@ -1,0 +1,466 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_Segment_Validation_TS_Proj_22", "IMS/Performance_Scorecard");
+  
+ /* $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+selectProject($inputObject); */
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSCName4;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName41;//SLA Performance
+ SelectSegment($inputObject);
+ 
+ _click(_link("Click Here"));
+
+/**************************BaseMeasureNumerator****SLA Enabled Goals***************************/
+ 
+ var $t = _testcase("TC_23_TS_07","Check Text Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_08","Check NonNumeric Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_06","User Should Enter Positive Numeric value");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues503;//61
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /**************************Base Measure Denominator****SLA Enabled Goals***************************/
+ 
+ var $t = _testcase("TC_23_TS_10","Check Text Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_11","Check NonNumeric Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_09","User Should Enter Positive Numeric value in BaseMeasureDenominator");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues504;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /**********************SLA Enabled TAT Goals****Base Measure Numerator***************************/
+ 
+ var $t = _testcase("TC_24_TS_07","Check Text Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//SLA Enabled TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_08","Check NonNumeric Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_06","User Should Enter Positive Numeric value");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues540;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ /**************************SLA Enabled TAT Goals****BaseMeasureDenominator*******************************/
+ 
+ var $t = _testcase("TC_24_TS_10","Check Text Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52; //SLA Enabled TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_11","Check NonNumeric Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_09","User Should Enter Positive Numeric value ");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues541;//83
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+
+ 
+/**************************BaseMeasureNumerator****Internal Efficiency***************************/
+
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName42;//Internal Efficiency
+ SelectSegment($inputObject);
+ 
+ _click(_link("Click Here[1]"));
+ 
+ _wait(7000);
+ 
+ var $t = _testcase("TC_23_TS_07","Check Text Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_08","Check NonNumeric Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure Numerator at row number 1";
+ saveSwiftForm($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_06","User Should Enter Positive Numeric value");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues550;//61
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /**************************Base Measure Denominator*******************************/
+ 
+ var $t = _testcase("TC_23_TS_10","Check Text Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53; //
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_11","Check NonNumeric Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53; //SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_09","User Should Enter Positive Numeric value in BaseMeasureDenominator");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues551;//3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /**********************SLA Enabled TAT Goals****Base Measure Numerator***************************/
+ 
+ var $t = _testcase("TC_24_TS_07","Check Text Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;//SLA Enabled TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_08","Check NonNumeric Value in BaseMeasureNumerator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure - Numerator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_06","User Should Enter Positive Numeric value");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//10_edt
+ $inputObject.fieldValues = $data.fieldValues561;//7
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ /**************************BaseMeasureDenominator*******************************/
+ 
+ var $t = _testcase("TC_24_TS_10","Check Text Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54; //SLA Enabled TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues501;//AA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter valid numeric value or NA for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_11","Check NonNumeric Value in BaseMeasureDenominator Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues502;//-2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter positive number for Base Measure - Denominator at row number 1";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24_TS_09","User Should Enter Positive Numeric value");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//11_edt
+ $inputObject.fieldValues = $data.fieldValues562;//93
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 

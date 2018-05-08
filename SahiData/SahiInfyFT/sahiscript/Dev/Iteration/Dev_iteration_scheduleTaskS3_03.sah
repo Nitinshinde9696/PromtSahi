@@ -1,0 +1,142 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+/************************************************************************
+*creating new task under Schedule Task
+*Returning from Schedule Task & checking task report
+*creating another sub-project to test task report
+*************************************************************************/
+
+  
+ /*************************schedule task ********************************/
+ 
+ $data1 = readDataFromCSV("Dev_iteration_scheduleTask1_01", "Dev/Iteration");
+ $data = readDataFromCSV("Dev_iteration_scheduleTask0_00", "Dev/Iteration"); 
+ 
+ var $t = _testcase("TC_16", "creating new task under Schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name1;
+ OpenEformInstance($inputObject);  
+ 
+_selectWindow("openLinkedItem"); 
+
+ $inputObject = {};
+ $inputObject.link = $data1.ScheduledTasks;//_click(_link("Scheduled Tasks"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject);  
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name;//_doubleClick(_div($data1.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data1.subtaskname1;//textfield-1142-inputEl
+ setAllFields($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.activityTask;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+ 
+ /****another task***************/
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name1;//_doubleClick(_div($data1.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data1.subtaskname1;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.activityTask1;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_17", "Returning from Schedule Task & checking task report");
+ $t.start();
+ 
+ InfyFTgettingValueforIDCheck($inputObject);
+ var $Link = $inputObject.savelink;
+ var $Link1 = $inputObject.savelink1;
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data1.openedpopup;
+ InfyFTclickReturnInAddItemPopup();
+ _wait(1000);
+ 
+ clickReturn();
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $ID;//"CC123";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+ 
+ $inputObject = {};
+ $inputObject.item = $ID; //existing
+ OpenEformInstance($inputObject); 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.TaskReport;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $Link;
+ InfyFTassertNotExistsExists($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $Link1;
+ InfyFTassertNotExistsExists($inputObject); 
+ 
+ $t.end();
+ 
+
+ 
+ 

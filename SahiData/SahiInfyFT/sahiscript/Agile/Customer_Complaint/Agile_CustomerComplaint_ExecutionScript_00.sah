@@ -1,0 +1,25 @@
+ var $t = _testcase("Agile_CustomerComplaint_checkingButtons_CC_01");
+ $t.start(); 
+ _include("Agile_CustomerComplaint_checkingButtons_CC_01.sah");
+ $t.end(); 
+ 
+ var $t = _testcase("Agile_CustomerComplaint_Linkage_AI_05");
+ $t.start(); 
+ _include("Agile_CustomerComplaint_Linkage_AI_05.sah");
+ $t.end(); 
+ 
+ var $t = _testcase("Agile_CustomerComplaint_checkingFields_in_customer_complaint_02");
+ $t.start(); 
+ _include("Agile_CustomerComplaint_checkingFields_in_customer_complaint_02.sah");
+ $t.end(); 
+ 
+ var $t = _testcase("Agile_CustomerComplaint_export_CC_03");
+ $t.start(); 
+ _include("Agile_CustomerComplaint_export_CC_03.sah");
+ $t.end();
+  
+ var $t = _testcase("Agile_CustomerComplaint_Adding_customer_complaint_04");
+ $t.start(); 
+ _include("Agile_CustomerComplaint_Adding_customer_complaint_04.sah");
+ $t.end(); 
+ 

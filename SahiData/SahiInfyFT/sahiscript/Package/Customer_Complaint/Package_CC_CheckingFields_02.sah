@@ -1,0 +1,227 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+ 
+ $data = readDataFromCSV("Package_CC_CheckingFields_02", "Package/Customer_Complaint");
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Navdeep_Ghotra
+ $inputObject.edt_loginid = $data.LoginID1; //Navdeep_Ghotra
+ $inputObject.edt_password = $data.Password1; //111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name; 
+ selectProject($inputObject);
+ 
+ _wait(500);
+ 
+ var $ProjectStartDate = _getText(_span("STARTDATE"));
+ var $ProjectEndDate = _getText(_span("ENDDATE"));
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to customer complaint");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //CC
+ InfyFTnavigateTo($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "checking fields are present");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $t.end();
+
+ /****************************************************************************
+  * checking Mandatory fields of customer complaint  
+ ****************************************************************************/
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+  
+ var $t = _testcase("TC_5", "checking mandatory fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name5;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised By in Details tab \n• Field Description in Details tab \n• Field Complaint Category in Details tab \n• Field Severity in Details tab \n• Field Complaint Raised Date in Details tab \n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.CM_Description5;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised By in Details tab \n• Field Complaint Category in Details tab \n• Field Severity in Details tab \n• Field Complaint Raised Date in Details tab \n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised By in Details tab \n• Field Complaint Category in Details tab \n• Field Severity in Details tab \n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_RaisedBy = $data.DN_RaisedBy5; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Complaint Category in Details tab \n• Field Severity in Details tab \n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ComplaintCategory = $data.DN_ComplaintCategory5;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Severity in Details tab \n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Severity = $data.DN_Severity5;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $endDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name15;
+ $inputObject.lst_DN_RepeatComplaint = $data.DN_RepeatComplaint5; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+
+ /********************************************************************************
+  * checking raised by date and agreed/expected date fields of customer complaint  
+ *********************************************************************************/
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-2,$dateObj1);
+ var $endDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ //$data = readDataFromCSV("InfyFT_sahi2_individual_check", "InfyFTSahi/CC");
+ 
+ var $DN_ComplaintRaisedDate1 = "01-Jan-1996";
+ var $DN_ComplaintRaisedDate2 = "01-Jan-2019";
+ 
+ var $t = _testcase("TC_6", "checking Raised by date");
+ $t.start();
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name6;
+ $inputObject.txt_CM_Description = $data.CM_Description6;
+ $inputObject.edt_DN_ComplaintRaisedDate = $DN_ComplaintRaisedDate1;//"01-Jan-1996"
+ $inputObject.edt_DN_RaisedBy = $data.DN_RaisedBy6; 
+ $inputObject.lst_DN_Severity = $data.DN_Severity6; 
+ $inputObject.lst_DN_ComplaintCategory = $data.DN_ComplaintCategory6;
+ $inputObject.lst_DN_RepeatComplaint = $data.DN_RepeatComplaint6; 
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $startDate1; 
+ $inputObject.msgAlert = "Complaint Raised Date should be within Project Start Date ("+$ProjectStartDate+") and Project End Date ("+$ProjectEndDate+") and cannot be a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name61;
+ $inputObject.edt_DN_ComplaintRaisedDate = $DN_ComplaintRaisedDate2;//$projendDate"01-Jan-2019"
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $startDate1;
+ $inputObject.msgAlert = "Complaint Raised Date should be within Project Start Date ("+$ProjectStartDate+") and Project End Date ("+$ProjectEndDate+") and cannot be a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name62;
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $currentDate;
+ $inputObject.msgAlert = "Agreed/Expected Date of Closure (" + $currentDate + ") should be greater than Complaint Raised Date (" + $currentDate + ") and less than Project End Date ("+$ProjectEndDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name62;
+ $inputObject.edt_DN_ComplaintRaisedDate = $startDate1;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $startDate1;
+ $inputObject.msgAlert = "Complaint Raised Date should be within Project Start Date ("+$ProjectStartDate+") and Project End Date ("+$ProjectEndDate+") and cannot be a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "checking date of closure");
+ $t.start();
+
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name63;
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $currentDate; 
+ $inputObject.msgAlert = "Agreed/Expected Date of Closure (" + $currentDate + ") should be greater than Complaint Raised Date (" + $currentDate + ") and less than Project End Date ("+$ProjectEndDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name64;
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $endDate1; 
+ $inputObject.msgAlert = "Agreed/Expected Date of Closure (" + $endDate1 + ") should be greater than Complaint Raised Date (" + $currentDate + ") and less than Project End Date ("+$ProjectEndDate+").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "complaint category");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ComplaintCategory = $data.ComplaintCategory;//"--None--;Quality of deliverable or Service;Adherence to timelines or SLA;Project Management;People competency/ attitude;Information security violation;Financial/Billing;Relationship level;Others";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "raised by field values");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ComplaintRaisedbyCateg = $data.ComplaintRaisedbyCateg;// "--None--;Middle Management;Senior Management;CxO Level";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "severity field values");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Severity = $data.Severity;// "--None--;Critical;Major;Minor"; 
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

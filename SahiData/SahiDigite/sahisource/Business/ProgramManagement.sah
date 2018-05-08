@@ -1,0 +1,284 @@
+
+/**
+ @Function Number:1
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectProjectSection()
+{
+	_log("selectProjectSection Started","success");
+	try 
+	{
+		_click(_link("Projects"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectProjectSection Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectScorecardSection()
+{
+	_log("selectScorecardSection Started","success");
+	try 
+	{
+		_click(_link("Scorecard"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectScorecardSection Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addSubProjects($inputObject)
+{
+	_log("addSubProjects Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		
+		if($inputObject.winprefix === null)
+			_selectWindow($inputObject.winprefix);
+		_selectWindow("AddField");
+		_click(_checkbox(0,_near(_cell($inputObject.item))));
+		_click(_submit("QTP_KEY_BUTTON_Add"));
+		_wait(5000,null);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addSubProjects Completed","success");
+}
+
+/**
+ @Function removeSubProjects
+ @author:shashank
+ @example:
+ @description: the function would delete the project from the project link present at Program Profile.
+ @param: 
+ @return: 
+ **/
+
+function removeSubProjects($inputObject)
+{
+	_log("removeSubProjects Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_row($inputObject.item))));
+		_click(_submit("QTP_KEY_BUTTON_Remove_Subproject"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("removeSubProjects Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openProjectFromSubProjectListing($inputObject)
+{
+	_log("openProjectFromSubProjectListing Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openProjectFromSubProjectListing Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySubProjects($inputObject)
+{
+	_log("verifySubProjects Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertNotExists(_link($inputObject.item));
+		else
+			_assertExists(_link($inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySubProjects Completed","success");
+}
+
+/**
+ @Function Number:10
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyScorecardParameter($inputObject)
+{
+	_log("verifyScorecardParameter Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			var $expected = $inputObject.item + " " +  $inputObject.open + " " +  $inputObject.closed + " " +  $inputObject.total;
+			_assertNotEqual($expected,_getText(_parentRow(_cell($inputObject.item))));
+		}
+		else
+		{
+			_assertEqual($inputObject.open,_getText(_cell(0,_near(_cell($inputObject.item)),_under(_cell("Open[1]")))));
+			_assertEqual($inputObject.closed,_getText(_cell(0,_near(_cell($inputObject.item)),_under(_cell("Closed")))));
+			_assertEqual($inputObject.total,_getText(_cell(0,_near(_cell($inputObject.item)),_under(_cell("Total")))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyScorecardParameter Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyMilestoneList($inputObject)
+{
+	_log("verifyMilestoneList Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMilestoneList Completed","success");
+}
+
+/**
+ @Function verifyOpenItemList
+ @author: shashank
+ @example:
+ @description: 1) The function would check for the value that exist below the component in the report."Open Items" 
+ 				  Program Management.
+ @param: 
+ @return: 
+ **/
+
+function verifyOpenItemList($inputObject)
+{
+	_log("verifyOpenItemList Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("$inputObject.value" + $inputObject.value);
+			var $trueOrfalse = false;
+			_set($trueOrfalse, _isVisible(_cell($inputObject.value,_under(_cell($inputObject.component)))));
+			_log(" $trueOrfalse  " + $trueOrfalse);
+		    if($trueOrfalse === true)
+			   _log("Value " + $inputObject.value + "exists");
+		    else
+			   _log("Value " + $inputObject.value + "does not exists");
+		}
+		else
+		{
+		 	 verifyInstanceInListing($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyOpenItemList Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyProjectsInAddSubProjectPopup($inputObject)
+{
+	_log("verifyProjectsInAddSubProjectPopup Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("AddField");
+		var $items = $inputObject.projects.split(";");
+		for(var $i =0; $i < $items.length; $i++)
+		{
+			if($inputObject.operation === "Negative")
+			{
+				_assertFalse(_isVisible(_cell($items[$i])));			
+			}
+			else
+			{
+				_assertTrue(_isVisible(_cell($items[$i])));
+			}
+			
+		}
+		_closeWindow();
+		_selectWindow();
+					
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectsInAddSubProjectPopup Completed","success");
+}

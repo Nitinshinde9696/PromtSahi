@@ -1,0 +1,65 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+$data = readDataFromCSV("MechPD_Request_Management_Request_Summary_DS_02","MechPD/Request_Management/Design_Support");
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg01;//"Details";
+ SelectSegment($inputObject);
+ 
+ var $ASD = _getValue(_textbox("DN_PlannedStartDate"));
+ var $AED = _getValue(_textbox("DN_PlannedEndDate"));
+  
+ 
+ var $EE= parseInt(_getValue(_textbox("DN_EstimatedeffortPhrs")));
+ var $ARvE = parseInt(_getValue(_textbox("DN_ActualReviewEffortPhrs")));
+ var $AEE = parseInt(_getValue(_textbox("DN_ActualExecutionEffortP")));
+ var $ARwE = parseInt(_getValue(_textbox("DN_ActualReworkEffortPhrs")));
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg02;//"Request Summary";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.sec1;//"Schedule Summary";//
+ $inputObject.rowNo = $data.row1;//"1";
+ $inputObject.colNo = $data.col1;//"1_lbl|3_lbl";
+ $inputObject.fieldValues = $ASD+"|"+$AED;
+ verifySwiftFormData($inputObject);
+ 
+ var $AE = $ARvE + $AEE + $ARwE;
+ var $dev = ($AE - $EE)*100/$EE;
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.sec2;//"Effort Summary";//
+ $inputObject.rowNo = $data.row2;//"1";
+ $inputObject.colNo = $data.col2;//"0_lbl|1_lbl|2_lbl";
+ $inputObject.fieldValues = $EE+".00|"+$AE+".00|"+$dev+".00";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.sec2;//"Effort Summary";
+ $inputObject.rowNo = $data.row3;//"1";
+ $inputObject.colNo = $data.col3;//"3_txt";
+ $inputObject.fieldValues = $data.val3;//"Reason for Deviation";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ var $s1 = _testcase("TC_5.13","Verify the Sections in Request Summary");
+
+$s1.start();
+$inputObject = {};
+$inputObject.span_Name = $data.segments;//Schedule Summary;Effort Summary;Request performance;Reuse and Tools Summary
+InfyFTisVisible($inputObject);
+$s1.end();
+
+
+ 
+ 

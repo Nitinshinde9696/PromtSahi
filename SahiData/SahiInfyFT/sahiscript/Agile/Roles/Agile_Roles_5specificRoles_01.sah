@@ -1,0 +1,466 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+  
+ $data = readDataFromCSV("Agile_Roles_5specificRoles_01", "Agile/Roles");
+ 
+ /********************************************************************************************************
+ * Login to the person who having  Product Owner Role
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.productOwner;//pankaj_mahajan
+ $inputObject.edt_loginid = $data.productOwner;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ 
+ /**************************************************************************************************************
+ * Creation, deletion and modification for product owner role
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_3", "navigate to Themes");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Themes;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "creation of Themes instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Themes;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ CloseEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "navigate to Epics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Epics;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "creation of Epics instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Epics;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ CloseEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "navigate to User_Stories");
+ $t.start();
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.name = $data.User_Stories;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "creation of User_Stories instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.User_Stories;
+ InfyFTModifyEformInstance1($inputObject);
+  
+ $t.end();
+ 
+ 
+  /********************************************************************************************************
+ * Login to the person who having  proxy Product Owner Role
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.ProxyProductOwner;//pankaj_mahajan
+ $inputObject.edt_loginid = $data.ProxyProductOwner;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ 
+ /**************************************************************************************************************
+ * Creation, deletion and modification for product owner role
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_3", "navigate to Themes");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Themes;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "creation of Themes instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Themes;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ CloseEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "navigate to Epics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Epics;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "creation of Epics instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Epics;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ CloseEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "navigate to User_Stories");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.User_Stories;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "creation of User_Stories instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.User_Stories;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ /********************************************************************************************************
+ * Login to the person who having Agile coach role
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.AgileCoach;
+ $inputObject.edt_loginid = $data.AgileCoach;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+  
+ /**************************************************************************************************************
+ * checking access
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_3", "navigate to Themes");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Themes;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "navigate to Epics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Epics;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "navigate to User_Stories");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.User_Stories;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ /********************************************************************************************************
+ * Login to the person who having Release Manager 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.releaseManager;
+ $inputObject.edt_loginid = $data.releaseManager;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+  
+ /**************************************************************************************************************
+ * checking access
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_3", "navigate to Themes");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Themes;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "navigate to Epics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Epics;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "navigate to User_Stories");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.User_Stories;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ /********************************************************************************************
+ * Login to the person who having Scrum Master
+ ********************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.ScrumMaster;
+ $inputObject.edt_loginid = $data.ScrumMaster;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+  
+ /**************************************************************************************************************
+ * checking access
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_3", "navigate to Themes");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Themes;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_4", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "navigate to Epics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Epics;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "navigate to User_Stories");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.User_Stories;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "Checking the access");
+ $t.start();
+ 
+ _assertFalse(_span($data.creationbutton).enabled);
+ 
+ $t.end();
+  
+  
+ 

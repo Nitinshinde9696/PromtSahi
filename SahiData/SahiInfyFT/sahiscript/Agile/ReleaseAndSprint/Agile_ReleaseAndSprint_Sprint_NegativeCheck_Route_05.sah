@@ -1,0 +1,213 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+var $projectbeyondStart = "1-Jan-1966"; //	30-Oct-2015   	30-Oct-2019  
+var $projectbeyondEnd = "1-Jan-2028"
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_NegativeCheck_Route_05","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Navigating to sprint and check able to reopen the instance");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.sprint;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.span = $data.clearfilter;
+InfyFTclick($inputObject);
+
+_wait(2000);
+$inputObject = {};
+$inputObject.item = $SprintID; 
+OpenEformInstance($inputObject); 
+
+$inputObject = {};
+$inputObject.true = "0";// manually able to see correct opt 
+$inputObject.button = $data.Reopen;
+InfyFTcheckingButtons($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.note;
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Release and reopen the created instance");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.Releases;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.span = $data.clearfilter;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.item = $RelID;
+OpenEformInstance($inputObject);
+
+_wait(2000);
+InfyFTreopenInstance();
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.open; 
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Navigating to Sprint and check reopen option enabled or not");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.sprint;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.span = $data.clearfilter;
+InfyFTclick($inputObject);
+
+_wait(2000);
+$inputObject = {};
+$inputObject.item = $SprintID; 
+OpenEformInstance($inputObject); 
+
+_wait(2000);
+$inputObject = {};
+$inputObject.true = "0";
+$inputObject.button = $data.Reopen;
+InfyFTcheckingButtons($inputObject);
+
+_wait(2000);
+InfyFTreopenInstance();
+
+$t.end();
+
+var $t = _testcase("TC_4", "remapping the release in sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_TypeOfWork = $data.Others;
+$inputObject.lst_DN_Status = $data.Abandoned;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Details if Type of Work is Others in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.txt_DN_DetailsifTypeofWorkisO = $data.DN_DetailsifTypeofWorkisO;
+InfyFTModifyEformInstance1($inputObject);
+_expectConfirm("This sprint is tagged to another release,do you want to continue?");
+
+$t.end();
+
+var $t = _testcase("TC_5", "Sprint Retrospective Details");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.SprintRetrospective;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.retroValues;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.txt_DN_Whatwentwell = $data.WhatWentWell;
+$inputObject.txt_DN_Whatcanbeimproved = $data.WhatWentWell;
+$inputObject.txt_DN_DetailsofActionPlan = $data.WhatWentWell;
+$inputObject.edt_DN_Owner = $data.WhatWentWell;
+$inputObject.txt_DN_Whatdidnotgowell = $data.WhatWentWell;
+$inputObject.lst_DN_ImprovementPlanned = $data.ImprovementPlanned;
+$inputObject.txt_DN_ExpectedImprovement = $data.WhatWentWell;
+$inputObject.lst_DN_StatusonActionPlan = $data.StatusonActionPlan;
+$inputObject.txt_DN_Remarks1 = $data.WhatWentWell;
+$inputObject.edt_DN_DateClosed = $currentDate;
+$inputObject.msgAlert = "Please enter a valid login Id";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_Owner = $data.user;
+$inputObject.edt_DN_DateClosed = $projectbeyondStart;
+$inputObject.msgAlert = "Date Closed cannot be earlier than Project Start Date(1-Jun-2015).";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_DateClosed = $projectbeyondEnd;
+$inputObject.msgAlert = "Date Closed cannot be later than Project End Date(31-Dec-2019).";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_DateClosed = $currentDate;
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Navigating to Release and making it Abandoned");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.Releases;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $RelID;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Abandoned;
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.open;
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "END-Navigating to Release Retrospective Details");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.Retrospective;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.retroValues;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.txt_DN_Whatwentwell = $data.WhatWentWell;
+$inputObject.txt_DN_Whatcanbeimproved = $data.WhatWentWell;
+$inputObject.txt_DN_DetailsofActionPlan = $data.WhatWentWell;
+$inputObject.edt_DN_Owner = $data.WhatWentWell;
+$inputObject.txt_DN_Whatdidnotgowell = $data.WhatWentWell;
+$inputObject.lst_DN_ImprovementPlanned = $data.ImprovementPlanned;
+$inputObject.txt_DN_ExpectedImprovement = $data.WhatWentWell;
+$inputObject.lst_DN_StatusonActionPlan = $data.StatusonActionPlan;
+$inputObject.txt_DN_Remarks1 = $data.WhatWentWell;
+$inputObject.edt_DN_DateClosed = $currentDate;
+$inputObject.msgAlert = "Please enter a valid login Id";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_Owner = $data.user;
+$inputObject.edt_DN_DateClosed = $projectbeyondStart;
+$inputObject.msgAlert = "Date Closed cannot be earlier than Project Start Date(1-Jun-2015).";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_DateClosed = $projectbeyondEnd;
+$inputObject.msgAlert = "Date Closed cannot be later than Project End Date(31-Dec-2019).";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_DateClosed = $currentDate;
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();

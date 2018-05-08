@@ -1,0 +1,80 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/TaskGrid2.sah");
+
+ $data1 = readDataFromCSV("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05","Maint/Tools_Reuse");
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ var $s = _testcase("Scheduled Task Segment"," Scheduled Task segment");
+ $s.start()
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data1.seg_scheduledTask;//_link("Scheduled Task")
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ InfyFTcheckOutProjectInGrid();
+
+ var $baseTaskID = $id +"_TSK0";
+ 
+ $inputObject = {};
+ $inputObject.LinkedTask = "True";
+ $inputObject.baseTaskID = $baseTaskID;
+ $inputObject.baseTaskName = $bTN;
+ $inputObject.edt_Name = $data1.task_name;//"test";
+ $inputObject["edt_Planned Finish"] =$EndDate2;//"09-Sep-2015";
+ $inputObject["edt_Planned Start"] = $StartDate1;//"07-Sep-2015";
+ $inputObject["edt_Activity Code"] = $data1.Activity_Code_Id;//"PIA";
+ addTaskInGrid($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.task = $data1.task_name;//"test";
+ $inputObject.resource = $data1.Task_User11;//"Harinder_aulakh";
+ $inputObject["edt_Resource"] = "xyz";
+ assignResourceToTaskInGrid($inputObject);
+ InfyFTcheckInProjectFromGrid();
+ $s.end();
+ 
+ // var $s = _testcase("Scheduled Task Segment"," Scheduled Task segment-Task2");
+ // $s.start();
+ 
+ // $inputObject = {};
+ // $inputObject.segment_name = $data1.seg_scheduledTask;//_link("Scheduled Task")
+ // SelectSegment($inputObject);
+ 
+ // _wait(5000);
+ // InfyFTcheckOutProjectInGrid();
+ 
+ // $inputObject = {};
+ // $inputObject.LinkedTask = "True";
+ // $inputObject.baseTaskID = $baseTaskID;
+ // $inputObject.baseTaskName = $bTN;
+ // $inputObject.edt_Name = $data1.task_name1;//"test1";
+ // $inputObject["edt_Planned Finish"] = $EndDate2;//"09-Sep-2015";
+ // $inputObject["edt_Planned Start"] = $StartDate1;//"07-Sep-2015";
+ // $inputObject["edt_Activity Code"] = $data1.Activity_Code_Id1;//"PCM";
+ // addTaskInGrid($inputObject); 
+ 
+ // $inputObject = {};
+ // $inputObject.task = $data1.task_name1;//"test1";
+ // $inputObject.resource = $data1.Task_User11;//"Harinder_aulakh";
+ // $inputObject["edt_Resource"] = "abc";
+ // assignResourceToTaskInGrid($inputObject);
+ 
+ // InfyFTcheckInProjectFromGrid();
+ // $s.end();
+
+ 
+
+ 
+
+ 

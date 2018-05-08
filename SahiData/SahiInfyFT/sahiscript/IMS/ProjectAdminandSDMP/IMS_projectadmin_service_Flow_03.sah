@@ -1,0 +1,675 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; // Niklesh_Wankhade
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //Besinsod
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to Project Tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring [details]seg default
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+  
+ /**********************************************************************************************
+ * Selecting service and sub service
+ ***********************************************************************************************/
+ 
+ var $t = _testcase("TC_4", "selecting Applicable services");
+ $t.start();
+ 
+ _wait(6000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Applicable_service;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);  
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.route;//route
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "unchecking services");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //unchecking first two services
+ $inputObject.rowNo = $data.rowNo1; //1,3 & 2,3
+ $inputObject.colNo = $data.colNo31;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ _clearLastAlert();
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ //$inputObject.msgAlert = "Warning: De-selecting a service will result in removing all the Technologies, ITIL processes and metrics selected for the service. Are your sure?";
+ saveSwiftForm($inputObject);
+ 
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ var $MsginSummary = "No service sub-service has been selected.";
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ _assertEqual($MsginSummary, _getText(_span(40)));//33
+ _assertEqual($MsginSummary, _getText(_span(43)));
+ _assertEqual($MsginSummary, _getText(_span(46)));
+ _assertEqual($MsginSummary, _getText(_span(49)));
+ }
+ else
+ {
+ _assertEqual($MsginSummary, _getText(_span(62)));//33
+ _assertEqual($MsginSummary, _getText(_span(65)));
+ _assertEqual($MsginSummary, _getText(_span(68)));
+ _assertEqual($MsginSummary, _getText(_span(71)));
+ }
+  
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_technology;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecords;
+ InfyFTisVisibleN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_ITIL;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecords1;
+ InfyFTisVisibleN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Project_specific;
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecords2;
+ InfyFTisVisibleN($inputObject);
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.applicable_metrix;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecords3;
+ InfyFTisVisibleN($inputObject);
+ 
+ _wait(5000);
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(1000);
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ _highlight(_span(41));//35
+ var $s = _getText(_span(42));
+ var $smsg = "Either the project is in transition state or atleast one service is selected under Project Tailoring."
+ _assertEqual($smsg, $s);
+ 
+ _highlight(_span(47));//41
+ var $g = _getText(_span(48));
+ _assertEqual("Current stage of the project is \"Transition\" and there are no goals applicable", $g);
+ }
+ else
+ {
+ _highlight(_span(69));//35
+ var $s = _getText(_span(70));
+ var $smsg = "Either the project is in transition state or atleast one service is selected under Project Tailoring."
+ _assertEqual($smsg, $s);
+ 
+ _highlight(_span(75));//41
+ var $g = _getText(_span(76));
+ _assertEqual("Current stage of the project is \"Transition\" and there are no goals applicable", $g);
+ }
+ 
+ $t.end();  
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_6", "checking services");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring [details]seg default
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Applicable_service;
+ SelectSegment($inputObject); 
+ 
+ _wait(8000);
+ $inputObject = {}; //1-Applicable Services,checking first 3 services.
+ $inputObject.tableName = $data.tableName1; 
+ $inputObject.rowNo = $data.rowNo1C;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ _assertEqual(false, _button(" Save ").disabled);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_technology;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DS1;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.MDM1;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.UCS1;
+ InfyFTisVisibleN($inputObject);
+ 
+ _include("IMS_projectadmin_PA_service_Flow_assertequal_31.sah");
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_ITIL;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DS2;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.MDM2;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.UCS2;
+ InfyFTisVisibleN($inputObject);
+ 
+         $inputObject = {};
+		 $inputObject.tableName = $data.Selected_Process; 
+		 $inputObject.rowNo = $data.rowNo2;
+		 $inputObject.colNo = $data.colNo2AT;
+		 $inputObject.fieldValues = "";//$data.fieldValues2AT;
+		 verifySwiftFormData($inputObject);
+		 
+		 $inputObject = {};
+		 $inputObject.tableName = $data.Selected_Process; 
+		 $inputObject.rowNo = $data.rowNo3;
+		 $inputObject.colNo = $data.colNo2AT;
+		 $inputObject.fieldValues = "";//$data.fieldValues2AT;
+		 verifySwiftFormData($inputObject);
+		 
+		 $inputObject = {};
+		 $inputObject.tableName = $data.Selected_Process; 
+		 $inputObject.rowNo = $data.rowNo4;
+		 $inputObject.colNo = $data.colNo2AT;
+		 $inputObject.fieldValues = "";//$data.fieldValues2AT;
+		 verifySwiftFormData($inputObject);
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.applicable_metrix;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.DS3;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.MDM3;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.UCS3;
+ InfyFTisVisibleN($inputObject);
+ 
+         $inputObject = {};
+		 $inputObject.tableName = $data.Selected_Metrics; 
+		 $inputObject.rowNo = $data.rowNo2;
+		 $inputObject.colNo = $data.colNo2AT;
+		 $inputObject.fieldValues = "";
+		 verifySwiftFormData($inputObject);
+		 
+		 $inputObject = {};
+		 $inputObject.tableName = $data.Selected_Metrics; 
+		 $inputObject.rowNo = $data.rowNo3;
+		 $inputObject.colNo = $data.colNo2AT;
+		 $inputObject.fieldValues = "";
+		 verifySwiftFormData($inputObject);
+		 
+		 $inputObject = {};
+		 $inputObject.tableName = $data.Selected_Metrics; 
+		 $inputObject.rowNo = $data.rowNo4;
+		 $inputObject.colNo = $data.colNo2AT;
+		 $inputObject.fieldValues = "";
+		 verifySwiftFormData($inputObject);
+  
+ $t.end();
+
+ //_include("../../../sahisource/Business/InfyECR.sah");
+ 
+ var $t = _testcase("TC_7", "unchecking one service from selected services");
+ $t.start(); 
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Applicable_service;
+ SelectSegment($inputObject); 
+ 
+ _wait(8000);
+ $inputObject = {}; //unchecking one service.
+ $inputObject.tableName = $data.tableName1U; 
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo31;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ _assertEqual(false, _button(" Save ").disabled);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = ""; 
+ //$inputObject.msgAlert = "Warning: De-selecting a service will result in removing all the Technologies, ITIL processes and metrics selected for the service. Are your sure?";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_technology;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DS1;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.MDM1;
+ InfyFTisVisibleN($inputObject);
+  
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_ITIL;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DS2;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.MDM2;
+ InfyFTisVisibleN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.applicable_metrix;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.DS3;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.MDM3;
+ InfyFTisVisibleN($inputObject);
+  
+ $t.end(); 
+ 
+ var $t = _testcase("TC_8", "Selecting Applicable Technologies");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_technology;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.ST; //_click(_link("Select Technology[2]")); 
+ SelectSegment($inputObject);
+ 
+ _assertEqual(false, _button("Return").disabled);
+ _click(_div("overlayPopupContentClose"));
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.ST; //_click(_link("Select Technology")); 
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName5; //Technology Selection
+ $inputObject.rowNo = $data.rowNoT2;
+ $inputObject.colNo = $data.colNo4;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ clickReturn();
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.ST1; //_click(_link("Select Technology[1]"));
+ SelectSegment($inputObject); 
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName5; //Technology Selection
+ $inputObject.rowNo = $data.rowNoT21;
+ $inputObject.colNo = $data.colNo4;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ clickReturn();
+ _wait(5000);
+ 
+ var $one = _getValue(_textarea(0));
+  
+ $inputObject = {};
+ $inputObject.segment_name =  $data.ST; //_click(_link("Select Technology[2]")); 
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName5; //Technology Selection
+ $inputObject.rowNo = $data.rowNoT22;
+ $inputObject.colNo = $data.colNo41;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ clickReturn(); 
+ 
+ var $two = _getValue(_textarea(0));
+ _assertNotEqual($one, $two);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "Selecting Applicable ITIL process");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_ITIL;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.SP;//_click(_link("Select Process"));
+ SelectSegment($inputObject); 
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName6; //ITIL Process Selection
+ $inputObject.rowNo = $data.rowNoI2;
+ $inputObject.colNo = $data.colNo5;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.SP1;// _click(_link("Select Process[1]"));
+ SelectSegment($inputObject); 
+ _wait(5000);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName6; //ITIL Process Selection
+ $inputObject.rowNo = $data.rowNoI3;
+ $inputObject.colNo = $data.colNo5;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+  
+ var $three = _getText(_textarea(1));
+  
+ $inputObject = {};
+ $inputObject.segment_name =  $data.SP1;// _click(_link("Select Process[1]"));
+ SelectSegment($inputObject); 
+ _wait(5000);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName6; //ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ var $four = _getText(_textarea(1)); 
+ _assertNotEqual($four, $three);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "Selecting Applicable metric");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.applicable_metrix;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.M;// _click(_link("Select Metrics"));
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.metricSelection; 
+ $inputObject.rowNo = $data.rowNoM;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.M1;//  _click(_link("Select Metrics[1]"));
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.metricSelection; 
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.metricSelection; //ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.metricSelection; //ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.metricSelection; //ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo4M;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ var $five = _getText(_textarea(1));//0
+  
+ $inputObject = {};
+ $inputObject.segment_name =  $data.M1;// _click(_link("Select Metrics"));
+ SelectSegment($inputObject);  
+ _wait(5000); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.metricSelection; 
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo31;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ var $six = _getText(_textarea(1));
+ _assertNotEqual($six, $five);
+ _wait(6000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_11", "END");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring [details]seg default
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+
+ if(_isVisible(_link($data.Username1)))
+ {
+ _assertEqual("At least one service sub-service is selected.", _getText(_span(40)));
+ _assertEqual("At least one technology is selected for each service sub-service.", _getText(_span(43)));
+ _assertEqual("At least one process is selected for each service sub-service.", _getText(_span(46)));
+ _assertEqual("At least one metric is selected for each service sub-service.", _getText(_span(49)));
+ }
+ else
+ {
+ _assertEqual("At least one service sub-service is selected.", _getText(_span(62)));
+ _assertEqual("At least one technology is selected for each service sub-service.", _getText(_span(65)));
+ _assertEqual("At least one process is selected for each service sub-service.", _getText(_span(68)));
+ _assertEqual("At least one metric is selected for each service sub-service.", _getText(_span(71)));
+ }
+
+ $t.end(); 
+ 
+ _include("IMS_projectadmin_spcfc_04.sah");

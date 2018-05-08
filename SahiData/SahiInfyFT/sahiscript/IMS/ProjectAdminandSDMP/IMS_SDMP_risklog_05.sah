@@ -1,0 +1,246 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //Team Isha
+ selectProject($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /******************************************************************************
+ * Assumptions
+ ******************************************************************************/
+ 
+ var $t = _testcase("TC_4", "Assumptions");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Assumpt;//_click(_link("Assumptions"));
+ SelectSegment($inputObject);  
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.Keyall =$data.keyall;
+ $inputObject.item = $data.assm;
+ $inputObject.delete = $data.delete;
+ InfyFTsdmpDelete($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject); 
+  
+ _wait(5000);
+ if(_isVisible(_link($data.Username1)))
+ {
+ _highlight(_span(44));//red colour will indicate there 
+ var $assum = _getText(_span(45));
+ _assertEqual($assum, _getText(_span("No assumptions are added. Atleast one assumption must be added.", _near(_span(43)))));
+ }
+ else
+ {
+ _highlight(_span(72));//red colour will indicate there 
+ var $assum = _getText(_span(73));
+ _assertEqual($assum, _getText(_span("No assumptions are added. Atleast one assumption must be added.", _near(_span(71)))));
+ }
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Assumpt;//_click(_link("Assumptions"));
+ SelectSegment($inputObject);  
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.key
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.ProjectCharter;//"dgsdhad";
+ $inputObject.chk_DN_CommunicatedtoClient = $data.fieldValues01;//"true"; 
+ $inputObject.chk_DN_ConverttoRisk = $data.fieldValues01;
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.txt_DN_BasisofAssumption = $data.DN_BasisofAssumption;
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+  
+ _popup("newListing")._click(_button("Return"));
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject); 
+ 
+ _wait(5000);
+  if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(44));//green colour will indicate there 
+ var $assum1 = _getText(_span(45));
+ _assertNotEqual($assum,$assum1);
+ 
+ _highlight(_span(59));//red colour risk
+ var $risk = _getText(_span(60));
+ _assertEqual($risk, _getText(_span("All mandatory fields are not filled for all the risks. Please fill all the mandatory fields for the below risks: RSK21", _near(_span(58)))));
+ }
+else
+{
+ _highlight(_span(72));//green colour will indicate there 
+ var $assum1 = _getText(_span(73));
+ _assertNotEqual($assum,$assum1);
+ 
+ _highlight(_span(87));//red colour risk
+ var $risk = _getText(_span(88));
+ _assertEqual($risk, _getText(_span("All mandatory fields are not filled for all the risks. Please fill all the mandatory fields for the below risks: RSK21", _near(_span(86)))));
+} 
+ $t.end();
+ 
+ /******************************************************************
+ * Risk Log
+ ******************************************************************/
+ 
+ _include("IMS_projectadmin_route_sdmp_02.sah");
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_6", "Risk Log");
+ $t.start();
+  
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.span = $data.listprop;// _click(_span("de-iconshow_listprop collapseTreeMenu[1]"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.X14;//_click(_link("X-14[1]"));
+ InfyFTclick($inputObject); 
+ }
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.risklog; //_click(_link("Communication Plan"));
+ SelectSegment($inputObject);
+ 
+ _wait(3500);
+ var $a = _assertExists(_span("1"));
+  
+ if($a)
+ {  
+    /* $inputObject = {};
+	$inputObject.span = $data.risk; due to defect
+	InfyFTclick($inputObject);
+    
+	_selectWindow("Risk : Details (RSK1-)");
+	
+	_assertExists(_button("Return"));
+	
+	_wait(5000);
+	_popup("Risk : Details (RSK1-)")._closeWindow();
+	_selectWindow(); */
+ 
+    $inputObject = {};
+    $inputObject.name = $data.riskSeg; //risk
+    InfyFTnavigateTo($inputObject);
+    
+	_wait(5000);
+	if(_isVisible(_div("1")))
+	{
+		_wait(6000);
+		$inputObject = {};
+		$inputObject.item = $data.risk;
+		OpenEformInstance($inputObject);
+		
+		$inputObject = {};
+		$inputObject.edt_CM_Name = $data.CM_NameR; 
+		$inputObject.lst_DN_RiskCategory = $data.riskcategory;
+		$inputObject.txt_CM_Description = $data.CM_DescriptionR;
+	    $inputObject.lst_DN_Impact = $data.impact;
+		//$inputObject.edt_field5 = $data.impact;
+		$inputObject.lst_DN_Probability = $data.probability;
+		$inputObject.edt_DN_RiskOwner = $data.Username1;
+		$inputObject.lst_DN_ImpactTo = $data.impactRisk;
+		$inputObject.txt_DN_MitigationPlan = $data.CM_DescriptionR;
+		ModifyEformInstance($inputObject);
+		
+		clickReturn();
+    }
+  }
+  $inputObject = {};
+  $inputObject.name = $data.navigateTo3; //sdmp
+  InfyFTnavigateTo($inputObject);  
+  
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _wait(1000);
+  _highlight(_span(59));//green colour
+  var $risk1 = _getText(_span(60));
+  _assertEqual($risk1, _getText(_span(60), _near(_span(58))));
+ }
+ else
+ {
+  _highlight(_span(87));//green colour
+  var $risk1 = _getText(_span(88));
+  _assertEqual($risk1, _getText(_span(88), _near(_span(86))));
+ }
+ 
+  $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 

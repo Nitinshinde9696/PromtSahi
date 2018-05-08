@@ -1,0 +1,167 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+  var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+  
+ $data = readDataFromCSV("Maint_Prj_Admin_SLA_02", "Maint/Prj_Admin");
+/*  
+  var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; // 
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+  
+ var $t = _testcase("TC_3", "navigate to Project Tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+
+ $t.end(); */
+
+ /***********************************************************
+ * SLA Category
+ ***********************************************************/
+ 
+ var $t = _testcase("TC_4", "Selecting SLA category");
+ $t.start();
+ 
+ _click(_div("More_MenuItems_Segment"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.sla;// _click(_link("SLA Category"));
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Categories;
+InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category_Name;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Comma_Separated;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category1;
+InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category2;
+InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category3;
+InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category4;
+InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category5;
+InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = "";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = "#(";//$data.fieldValues61;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+ _click(_div("More_MenuItems_Segment"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.sla;// _click(_link("SLA Category"));
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues72;
+ setSwiftFormData($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter a valid value in Category Name column for Category 2. Special characters apart from Underscore and Space are not allowed.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues73;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; 
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = "#(";
+ setSwiftFormData($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Error: Please provide the values or remove the corresponding category name. ";//"Error : Please enter a valid value in Values Comma Separated column for Category 2. Special characters apart from Comma Underscore and Space are not allowed.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 

@@ -1,0 +1,3642 @@
+_include("../Business/DigiteCommon.sah");
+/*************************************************************************
+* @author Vaishali
+* @example addProcessStandardsinResume({ "lst_PSName_0" : "Agile" ,  "lst_PSLevel_0" : "Novice" });
+* @description This function is called to add process
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addProcessStandardsinResume($inputObject)
+{
+	_log("addProcessStandardsinResume Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_Process_Standards"));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addProcessStandardsinResume Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example  addDomaininResume({ "lst_DDName_0" : "Automobile" ,  "lst_DDLevel_0" : "Novice" });
+* @description This function is called to add domains in resume
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addDomaininResume($inputObject)
+{
+	_log("addDomaininResume Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_Domain"));
+		setAllFields($inputObject);
+		 _click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addDomaininResume Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example addOtherProjectsinResume({ "edt_PDName_0" : "website" ,  "edt_PDClientName_0" : "google" ,  "edt_PDRole_0" : "developer" ,  "edt_PDTeamSize_0" : "5" ,  "edt_PDFrom_0" : "01-Feb-2012" ,  "edt_PDTo_0" : "29-Feb-2012" ,  "edt_PDURL_0" : "http://google.com" });
+* @description This function is called to add project Resume
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addOtherProjectsinResume($inputObject)
+{
+	_log("addOtherProjectsinResume Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_Other_Projects"));
+		setAllFields($inputObject);
+		 _click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addOtherProjectsinResume Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example addSoftSkillsinResume({ "lst_SSName_0" : "Appraisal" ,  "lst_SSLevel_0" : "Novice" });
+* @description This function is called to add soft skills
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addSoftSkillsinResume($inputObject)
+{
+	_log("addSoftSkillsinResume Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_Soft_Skills"));
+		setAllFields($inputObject);
+		 _click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addSoftSkillsinResume Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example addITSkillsinResume({ "lst_ITSkillCatName_0" : "Management" ,  "lst_ITName_0" : "Technical Papers" ,  "lst_ITSelfLevel_0" : "Novice" , "lst_ITInterestLevel_0" : "2" , "lst_ITLastUsed_0" : "2007" , "edt_ITExpInYears_0" : "2", "edt_ITTraining_0" : "30", "lst_ITSkillType_0" : "Primary"});
+* @description This function is called to add Skills IT
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addITSkillsinResume($inputObject)
+{
+	_log("addITSkillsinResume Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("Invalid fields passed ,Please check provied fields.");
+		}
+		else
+		{
+			_click(_link("KEY_LABEL_Add_IT_Skills"));
+			setAllFields($inputObject);
+			_click(_button("SaveBtn"));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addITSkillsinResume Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example addEducationDetailsinResume({ "edt_EDQualName_0" : "B.E." ,  "edt_EDInstitute_0" : "Fr. Agnel" ,  "lst_EDYearPassed_0" : "2007" });
+* @description This function is called to add EducationalDetails
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addEducationDetailsinResume($inputObject)
+{
+	_log("addEducationDetailsinResume Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_Educational_Details"));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addEducationDetailsinResume Completed","success");
+}
+
+/**
+ @Function Number:	7
+ @author:			Vaishali
+ @example:			modifyRoleAtProject($inputObject)	
+ @description: 		This function modifies role
+ @param: 			member,role,removerole
+ @return: 
+ **/
+
+function modifyRoleAtProject($inputObject)
+{
+	_log("modifyRoleAtProject Started","success");
+	try 
+	{
+		if(_isVisible(_cell($inputObject.member)))
+		{
+			_check(_div("x-grid-row-checker", _near(_div($inputObject.member))));
+			
+			var $RoleAccessBtn = "KEY_LINK_Modify_Access_Roles";
+			var $extJsId = ""; 	
+			var $RoleAccessBtnKey = $RoleAccessBtn + $extJsId;		
+			_click(_link($RoleAccessBtnKey));
+			_selectWindow("modifyRole");
+			if($inputObject.operation === "RoleNotPresent")
+			{
+				_log("Role Not Present");
+				_click(_button("cancel"));	
+				_selectWindow();
+				return;
+			}
+			if($inputObject.role.indexOf(";")!= -1)
+			{
+				var $roles = $inputObject.role.split(";");
+				for(var $i = 0 ; $i < $roles.length ; $i++)
+				{
+					if(_containsText(_select("PLR_Roles"),$roles[$i]) === true)
+					{
+						_setSelected(_select("PLR_Roles"),$roles[$i]);
+						_click(_link("de-icon-next"));
+					}
+				}
+			}
+			else if(_containsText(_select("PLR_Roles"),$inputObject.role) === true)
+			{
+				_setSelected(_select("PLR_Roles"),$inputObject.role);
+				_click(_link("de-icon-next"));
+				
+			}
+			if($inputObject.removerole)
+			{
+				if(_containsText(_select("Assigned_Roles"),$inputObject.removerole) === true)
+				{
+					_setSelected(_select("Assigned_Roles"),$inputObject.removerole);
+					_click(_link("de-icon-previous"));
+				}
+			}
+			
+			_click(_submit("QTP_KEY_BUTTON_Save"));
+			
+			if($inputObject.operation === "RoleAlert")
+			{
+				_assertEqual("Please select some role",_lastAlert());
+				_click(_button("cancel"));	
+			}
+			else
+			{
+				_wait(8000,null);
+			}
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyRoleAtProject Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author: Hrishi
+ @example: navigateToAdvancedSettings()
+ @description: Clicks on advanced setting button so set filter in role assign popup 
+ @param: none
+ @return: none
+ **/
+
+function navigateToAdvancedSettings()
+{
+	_log("navigateToAdvancedSettings Started","success");
+	try 
+	{
+		_selectWindow("ImportPopup");
+		_click(_button("QTP_Advanced_Settings"));
+		_selectWindow("RoleFilters");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToAdvancedSettings Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author: Hrishi
+ @example: assignFiltertoRole({"role_name" :"Editor" , "filter_name" : "--None--"})
+ @description: set the filter foe specified role in advanced setting poppu 
+ @param: Json object containing role name and filter name
+ @return: none
+ **/
+
+function assignFiltertoRole($inputObject)
+{
+	_log("assignFiltertoRole Started","success");
+	try 
+	{
+		if($inputObject.SelectBox)
+		{
+			_setSelected(_select($inputObject.SelectBox),$inputObject.filter_name);
+			_click(_button("QTP_KEY_BUTTON_Save"));
+			_click(_submit("QTP_Save"));
+			_selectWindow();
+		}
+		else
+		{
+			_setSelected(_select(0,_near(_cell($inputObject.role_name))),$inputObject.filter_name);
+			_click(_button("QTP_KEY_BUTTON_Save"));
+			_selectWindow("ImportPopup");
+			_wait(2000);
+			_click(_submit("QTP_Save"));
+			_selectWindow();
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("assignFiltertoRole Completed","success");
+}
+
+
+/*************************************************************************
+* @author Ram
+* @example: addSkillCategory({"edt_name" : "Test Skill"});
+* @description This function is called to  Skill Category at Org Level 
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addSkillCategory($inputObject)
+{
+	_log("addSkillCategory Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			if(_assertFalse(_exists(_link("de-icon-add"))))
+			{
+				_log("You dont have rights to addSkillCategory");
+			}
+		}
+		else
+		{
+			_click(_link("de-icon-add"));
+			 
+			_selectWindow("Add Skill Category");
+			
+			setAllFields($inputObject);
+			 
+			_click(_submit("//s*Save/s*/"));
+			 
+			_selectWindow();	
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addSkillCategory Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteSkillCategory($inputObject)
+{
+	_log("deleteSkillCategory Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		if($inputObject.operation === "Negative")
+		{
+			if(_assertFalse(_exists(_link("de-icon-delete"))))
+			{
+				_log("You don't have rights to deleteSkillCategory");
+			}
+		}
+		else
+		{
+			_click(_checkbox(0, _near(_cell($inputObject.item))));
+			_click(_link("de-icon-delete"));
+	        
+			_expectConfirm("Are you sure you want to delete the selected Item(s)?", true);
+			
+	        _log("deleteSkillCategory Verification Started","success");
+			_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+			_log("deleteSkillCategory Verification Complete","success");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteSkillCategory Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addSkill($inputObject)
+{
+	_log("addSkill Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_IT_Skills"));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addSkill Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchSkill($inputObject)
+{
+	_log("searchSkill Started","success");
+	try 
+	{
+		var $addBtn = "KEY_BUTTON_Skill_Search";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		_click(_link($addbtnKey));
+		setAllFields($inputObject);
+		_click(_submit("QTP_Go"));
+		verifySkillSearchResult($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchSkill Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: inviteTeamMemberToProject({ "check_col_id" : "1" ,  "item" : "naman naman" ,  
+* 		"edt_startdate0" :  "10-Feb-2011" ,  "edt_enddate0" :  "08-Mar-2011", 
+* 			"lst_User_Project_Role0": "Editor" , "projectname" : "Hazol"});
+* @description This function is called to invite TeamMember To Project
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function inviteTeamMemberToProject($inputObject)
+{
+	_log("inviteTeamMemberToProject Started","success");
+	try 
+	{
+		var $inviteTeamMemBtn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $inviteTeamMemBtnKey = $inviteTeamMemBtn + $extJsId;
+		
+		_click(_link($inviteTeamMemBtnKey));
+		_selectWindow("AddTeamMember");
+		var $FnLn = $inputObject.item.split(" ");
+		var $tempjson = {};
+		$tempjson.edt_firstname = $FnLn[0];
+		$tempjson.edt_lastname = $FnLn[1];
+		setAllFields($tempjson);
+		_click(_submit("Search"));
+		
+		if($inputObject.operation === "Negative")
+		{
+			if(_isVisible(_span("No search result to display. Please use 'Search and Add Team Members' option on the left.") === true))
+			{
+				_assertExists(_span("No search result to display. Please use 'Search and Add Team Members' option on the left."));
+				_selectWindow();
+			}
+			else
+			{
+				_assertFalse(_isVisible($inputObject.item));
+			}
+			_closeWindow();
+		}
+		else
+		{
+
+			var $tableId = _table("QTP_Search_Results");
+	
+			_click(_checkbox(0,_near(_cell($inputObject.item, _in($tableId)))));
+	
+			_click(_link("QTP_Move_Selected_Team_Members_To_Team_List"));
+			
+			var $listTable = _table("QTP_ListTable");
+			
+			_click(_checkbox(0,_near(_cell($inputObject.item, _in($listTable)))));
+			
+			setAllFields($inputObject);
+			
+			if( $inputObject.PrimaryPrjRole != null)
+			{
+				_setSelected(_select(0,_near(_cell($inputObject.item))), $inputObject.PrimaryPrjRole);
+			}
+			if($inputObject.PrjRole)
+			{
+				_setSelected(_select(0,_near(_cell($inputObject.item))), $inputObject.PrjRole);
+			}
+			_click(_link("de-icon-save_team_member"));
+			
+			if($inputObject.operation === "Alert")
+			{
+				_assertEqual("To Date cannot be greater than Project End Date: "+$inputObject.projectEndDate+". Please Correct it.", _lastAlert());
+				_closeWindow();
+			}
+			_wait(10000);
+		}
+		_selectWindow();
+		_wait(10000, _exists(_link($inviteTeamMemBtnKey)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("inviteTeamMemberToProject Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addRole($inputObject)
+{
+	_log("addRole Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		
+		if($inputObject.operation === "Negative")
+		{
+			_assertTrue(_exists(_span("This Role name already exists.Please enter a unique Role Name.")));
+			_click(_button("QTP_Return"));
+		}
+		
+		if($inputObject.operation === "InvalidChar")
+		{
+			_assertEqual(_lastAlert(),"Invalid characters are not allowed.");
+			_click(_button("QTP_Return"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addRole Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRoleInListing($inputObject)
+{
+	_log("verifyRoleInListing Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRoleInListing Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyRoleInListing_iterative
+* @description This function is called to verifyRoleInListing_iterative
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifyRoleInListing_iterative($inputObject)
+{
+	_log("verifyRoleInListing_iterative Started","success");
+	try 
+	{
+var $tableId = _table("QTP_ListTable");
+		
+    	if($inputObject.type === "Negative" )
+    		_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+    	else 
+    		_assertTrue(_isVisible(_cell($inputObject.item, _in($tableId)) || _link($inputObject.item, _in($tableId))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRoleInListing_iterative Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ModifyRoleDetails($inputObject)
+{
+	_log("ModifyRoleDetails Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ModifyRoleDetails Completed","success");
+}
+
+/**
+ @Function copyRole
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function copyRole($inputObject)
+{
+	_log("copyRole Started","success");
+	try 
+	{
+		_click(_link("de-icon-copy_role"));
+		_selectWindow("popup");
+		setAllFields($inputObject);
+		_click(_button("QTP_Save"));		
+		if($inputObject.operation === "Negative")
+		{
+			_expectConfirm("This Role name already exists.Please enter a unique Role Name.",true);
+			_click(_button("Cancel"));
+		}
+		_selectWindow();
+		_wait(50000, _exists(_cell($inputObject.edt_rolename, _in(_table("QTP_ListTable")))));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyRole Completed","success");
+}
+
+/**
+ @Function Number:22
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function AddUser($inputObject)
+{
+	_log("AddUser Started","success");
+	try 
+	{
+		$inputObject.winprefix = "ImportPopup";
+		if(!$inputObject.lst_PrimaryProjectRole)
+		    $inputObject.lst_PrimaryProjectRole = "Default Team Member";
+		createInstanceForPopUp($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("AddUser Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example searchNLR
+* @description This function is called to search NLR
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function searchNLR($inputObject)
+{
+	_log("searchNLR Started","success");
+	try 
+	{
+		var $NLRSearchBtn = "KEY_Search_and_Invite_Non_Labor_Resources";
+		var $extJsId = ""; 	
+		var $NLRSearchBtnKey = $NLRSearchBtn + $extJsId;		
+		_click(_link($NLRSearchBtnKey));
+		_selectWindow("Search and Add Non Labor Resources");
+		setAllFields($inputObject);
+		_click(_submit("Search"));
+		_wait(5000,null);
+		verifyInstanceInListing($inputObject);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchNLR Completed","success");
+}
+
+/**
+ @Function Number:25
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addProcessMember($inputObject)
+{
+	_log("addProcessMember Started","success");
+	try 
+	{
+		if($inputObject.operation == "Negative")
+		{
+			if(_exists(_span("de-icon-add")))
+			_assertEqual(undefined,_click(_span("de-icon-add")));
+			else
+				_assertEqual(undefined,_click(_link("de-icon-add")));
+			return;
+		}
+		else
+		{
+			if(_exists(_link("de-icon-add")))
+				_click(_link("de-icon-add")); 
+			else
+				_click( _span("de-icon-add"));
+		}
+		_selectWindow("pt_team_add");
+		_setValue(_textbox("firstname"), $inputObject.first_name);
+		_click(_submit("Search"));
+		_click(_checkbox("selectAllUsers"));
+		_click(_link("de-icon-add"));
+		_click(_link("de-icon-save_team_member"));
+		_selectWindow();
+		_wait(2000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addProcessMember Completed","success");
+}
+
+/**
+ @Function Number:26
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteProcessMember($inputObject)
+{
+	_log("deleteProcessMember Started","success");
+	try 
+	{
+		_click(_checkbox(0, _near(_cell($inputObject.first_name))));
+		
+		if($inputObject.operation == "Negative")
+		{
+			if(_exists(_span("de-icon-delete")))
+				_assertEqual(undefined,_click(_span("de-icon-delete")));
+			else
+				_assertEqual(undefined,_click(_link("de-icon-delete")));
+				
+		}
+		else
+		{
+			if(_exists(_link("de-icon-delete")))
+				_click(_link("de-icon-delete")); 
+			else
+				_click( _span("de-icon-delete"));
+		}
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteProcessMember Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example replaceUser
+* @description This function is called to replaceUser
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+
+function replaceUser($inputObject)
+{
+	_log("replaceUser Started","success");
+	try 
+	{
+		var $buttonName = "KEY_BUTTON_Replace_Team_Member";
+		var $extJsId = ""; 	
+		var $buttonKey = $buttonName + $extJsId;
+		_click(_link($buttonKey));
+		setAllFields($inputObject);
+		if($inputObject.operation=="Negative")
+		{
+			_expectConfirm("The New User and the User to be Replaced need to be different",true);
+		}
+		else
+		_click(_submit("replaceMembers"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("replaceUser Completed","success");
+}
+
+/**
+ @Function Number:28
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addPseudoUser($inputObject)
+{
+	_log("addPseudoUser Started","success");
+	try 
+	{
+		    var $buttonName = "KEY_BUTTON_Create_Virtual_User";
+			var $extJsId = ""; 	
+			var $buttonKey = $buttonName + $extJsId;
+			_click(_link($buttonKey));
+			setAllFields($inputObject);
+			if($inputObject.operation=="Negative")
+			{
+				_expectConfirm("Please fill in Virtual User(s) "+$inputObject.item,true);
+				_click(_submit("< Return"));
+			}
+			else
+			_click(_button("Add"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPseudoUser Completed","success");
+}
+
+/**
+ @Function Number:29
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectUserFromHierarchy($inputObject)
+{
+	_log("selectUserFromHierarchy Started","success");
+	try 
+	{
+		_click(_image("nodeIcon1"));
+		
+		var $values = $inputObject.username.split(";");
+		
+		for(var $i =0; $i < $values.length;$i++)
+		{	
+			if( $inputObject.negetive === 'Y')
+		    	_assertFalse(_isVisible(_link($values[$i])));
+			else
+				_click(_link($values[$i]));	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectUserFromHierarchy Completed","success");
+}
+
+/**
+ @Function Number:30
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyUserDetails($inputObject)
+{
+	_log("verifyUserDetails Started","success");
+	try 
+	{
+	    if ($inputObject.firstname)
+		    _assertEqual($inputObject.firstname, _getText(_cell(0, _rightOf(_cell("First Name:")))));
+		if ($inputObject.lastname)
+		    _assertEqual($inputObject.lastname, _getText(_cell(0, _rightOf(_cell("Last Name:")))));
+		if ($inputObject.employeeid)
+		    _assertEqual($inputObject.employeeid, _getText(_cell(0, _rightOf(_cell("Employee Id:")))));
+		if ($inputObject.organization)
+		    _assertEqual($inputObject.organization, _getText(_cell(0, _rightOf(_cell("Organization:")))));
+		if ($inputObject.company)
+		    _assertEqual($inputObject.company, _getText(_cell(0, _rightOf(_cell("Company:")))));
+		if ($inputObject.employeetype)
+		    _assertEqual($inputObject.employeetype, _getText(_cell(0, _rightOf(_cell("Employee Type:")))));
+		if ($inputObject.group)
+		    _assertEqual($inputObject.group, _getText(_cell(0, _rightOf(_cell("Group:")))));
+		if ($inputObject.emailid)
+		    _assertEqual($inputObject.emailid, _getText(_cell(0, _rightOf(_cell("Email Id:")))));
+		if ($inputObject.officeaddress)
+		    _assertEqual($inputObject.officeaddress, _getText(_cell(0, _rightOf(_cell("Office Address:")))));
+		if ($inputObject.city)
+		    _assertEqual($inputObject.city, _getText(_cell(0, _rightOf(_cell("City:")))));
+		if ($inputObject.country)
+		    _assertEqual($inputObject.country, _getText(_cell(0, _rightOf(_cell("Country:")))));
+		if($inputObject.loginId)
+			_assertEqual($inputObject.loginId, _getText(_cell(0, _rightOf(_cell("Login Id :")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserDetails Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function viewUserDetails()
+{
+	_log("viewUserDetails Started","success");
+	try 
+	{
+		_click(_link("View Details"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("viewUserDetails Completed","success");
+}
+
+/**
+ @Function Number:32
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setUserContactDetails($inputObject)
+{
+	_log("setUserContactDetails Started","success");
+	try 
+	{
+		if($inputObject.popup_name)
+			_selectWindow($inputObject.popup_name);
+	
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		
+		if($inputObject.popup_name)
+			_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setUserContactDetails Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectUserAtOrg($inputObject)
+{
+	_log("selectUserAtOrg Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_isVisible(_link($inputObject.item)));
+		}
+		else
+		{
+			OpenEformInstance($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectUserAtOrg Completed","success");
+}
+
+/**
+ @Function Number:34
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyUserAtOrg($inputObject)
+{
+	_log("modifyUserAtOrg Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyUserAtOrg Completed","success");
+}
+
+/**
+ @Function Number:35
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setSuperiorUser($inputObject)
+{
+	_log("setSuperiorUser Started","success");
+	try 
+	{
+		_click(_button("Edit"));
+		_selectWindow("search");
+		_click(_submit("QTP_Submit"));
+		_click(_radio(0,_near(_cell($inputObject.SuperiorUser))));
+		_click(_submit("KEY_BUTTON_Add"));
+		_selectWindow();
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setSuperiorUser Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: setSubordinateUser
+* @description This function is called to setSubordinateUser 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function setSubordinateUser($inputObject)
+{
+	_log("setSubordinateUser Started","success");
+	try 
+	{
+		if($inputObject.popupName)
+		{
+			_click(_button("Add"));
+			_selectWindow("search");
+			_click(_submit("QTP_Submit"));
+			_click(_checkbox(0,_near(_cell($inputObject.SubordinateUser))));
+			_click(_submit("KEY_BUTTON_Add"));
+			_selectWindow();
+			_click(_button("SaveBtn"));
+		}
+		else
+		{
+			_click(_button("Add"));
+			_selectWindow("search");
+			_click(_submit("QTP_Submit"));
+			_click(_checkbox(0,_near(_cell($inputObject.SubordinateUser))));
+			_click(_submit("KEY_BUTTON_Add"));
+			_selectWindow();
+			_click(_button("SaveBtn"));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setSubordinateUser Completed","success");
+}
+
+/**
+ @Function Number:37
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function unAssignUser($inputObject)
+{
+	_log("unAssignUser Started","success");
+	try 
+	{
+	    if($inputObject !== undefined)
+		    if($inputObject.popup_name)
+			    _selectWindow($inputObject.popup_name);
+
+		_click(_submit("UnAllocate"));
+		
+		if($inputObject !== undefined)
+		    if($inputObject.popup_name)
+			    _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unAssignUser Completed","success");
+}
+
+/**
+ @Function Number:38
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteTeamMember($inputObject)
+{
+	_log("deleteTeamMemeber Started","success");
+	try 
+	{
+		if($inputObject.popupName)
+		{
+			_selectWindow($inputObject.popupName);
+			_click(_button("DeleteBtn"));
+			_selectWindow();
+		}
+		else
+		{
+			_click(_button("DeleteBtn"));
+			_assertTrue(_isVisible(_div("This work-item will no longer be available")));
+	        _click(_button("//s*Ok/s*/"));	
+		}
+		if($inputObject.operation === "TeamMemberAlreadyAllocated")
+		{
+			if(_isVisible(_span("QTP_Error1")))
+				_click(_submit("Back To Previous Page"));
+		}
+		else if($inputObject.errorMsg)
+		{
+			_assertEqual($inputObject.errorMsg,_getText(_span("QTP_Error1")));
+			_click(_submit("Back To Previous Page"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTeamMemeber Completed","success");
+}
+
+/**
+ @Function Number:	39
+ @author:			Vaishali
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function lockUser($inputObject)
+{
+	_log("lockUser Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_isVisible($inputObject.username));
+		}
+		else
+		{
+			_click(_button("Lock"));
+			if($inputObject.operation === "LoggedUserAlert")
+			{
+				_assertTrue(_isVisible(_div("Cannot lock/unlock logged in user")));
+				_click(_button("ScrnButton"));
+			}
+			else
+				_wait(8000, _isVisible(_button(" Unlock ")));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("lockUser Completed","success");
+}
+
+/**
+ @Function Number:40
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function unLockUser($inputObject)
+{
+	_log("unLockUser Started","success");
+	try 
+	{
+		_click(_button("UnLock"));
+		_click(_button("CancelBtn"));
+		verifyunLockUser($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unLockUser Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: delegateRole
+* @description This function is called to delegateRole 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function delegateRole($inputObject)
+{
+	_log("delegateRole Started","success");
+	try 
+	{
+		_selectWindow("DelegateRoles");
+		_click(_link("Add New Delegation"));
+		_selectWindow("Allocation");
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+		_wait(5000,null);
+		_selectWindow("DelegateRoles");
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("delegateRole Completed","success");
+}
+
+/**
+ @Function Number:42
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setFilterForUserList($inputObject)
+{
+	_log("setFilterForUserList  Started","success");
+	try 
+	{
+		//first clear all filter.
+		var $clearButtonKey = "clearFilterButton";
+		var $clearExtJsId = ""; 
+		var $clearButtonName = $clearButtonKey + $clearExtJsId;
+		_click(_link($clearButtonName));
+		//if we passed resFilter or RoleCombo for function then only we have  to do below functionality.
+		if($inputObject.lst_resFilter || $inputObject.lst_RoleCombo)
+		{
+			var $buttonKey = "KEY_TOOLTIP_User_Search";
+			var $extJsId = ""; 
+			var $buttonName = $buttonKey + $extJsId;
+			_click(_link($buttonName));
+			_selectWindow("ImportPopup");
+			if($inputObject.lst_resFilter)
+			_setSelected(_select("resFilter"),$inputObject.lst_resFilter);
+			if($inputObject.lst_RoleCombo)
+			_setSelected(_select("RoleCombo"),$inputObject.lst_RoleCombo);
+			_click(_submit("QTP_KEY_BUTTON_Go"));
+			_selectWindow();
+		}
+		_wait(5000);
+		setFilter($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setFilterForUserList  Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author: Hrishi
+ @example: addRoleToUser({"UserFirstName":"abc", "RoleType":"Prj", "RoleName":"Editor"})
+ @description: Select the user from user list based on users first name and set the role.
+ @param: Json object containing  user name, role name, Role type(Prj/Org) 
+ @return: 
+ **/
+
+function addRoleToUser($inputObject)
+{
+	_log("addRoleToUser Started","success");
+	try 
+	{
+		//_check(_checkbox(0, _near(_cell($inputObject.UserFirstName,_in(_table("QTP_ListTable"))))));
+		//_click(_link("TLB_KEY_TOOLTIP_Set_Access_Role"));
+		_selectWindow("ImportPopup");
+		
+		if(($inputObject.RoleType === "Prj") || ($inputObject.RoleType === "prj"))
+		{
+			if($inputObject.operation === "Negative")
+			{
+				for(var $i =0 ; $i <= _select("PLR_Roles").length ; $i++)
+				{
+					_assertNotEqual($inputObject.RoleName, _select("PLR_Roles")[$i].innerHTML);	//similarly can be written for org level roles.
+				}
+			}
+			else
+			{
+				if($inputObject.RoleName.indexOf(";")!=-1)
+				{
+					var $values = $inputObject.RoleName.split(";");
+					for(var $i = 0; $i < $values.length; $i++)
+					{
+						_setSelected(_select("QTP_PLR_Roles"),$values[$i]);
+						_click(_link("QTP_Add_PLR__Role_Prj"));
+					}
+				}
+				else
+				{
+					_setSelected(_select("QTP_PLR_Roles"),$inputObject.RoleName);
+					_click(_link("QTP_Add_PLR__Role_Prj"));
+				}
+				
+			}
+		}
+		else
+		{
+			if($inputObject.RoleName.indexOf(";")!=-1)
+			{
+				var $values = $inputObject.RoleName.split(";");
+				
+				for(var $i = 0; $i < $values.length; $i++)
+					{
+						_setSelected(_select("QTP_Org_Roles"),$values[$i]);
+						_click(_link("QTP_Add_PLR__Role_Org"));
+					}
+			}
+			else
+			{
+				_setSelected(_select("QTP_Org_Roles"),$inputObject.RoleName);
+				_click(_link("QTP_Add_PLR__Role_Org"));
+			}
+		}
+		_click(_submit("QTP_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addRoleToUser Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul
+* @example addTechnicalSkills({ "edt_SkillName" : "Tskill1" ,  "lst_SkillCategory" : "Automation Tools" ,  "edt_Version" : "4" ,  "lst_Weightage" : "8" ,  "lst_Priority" : "High" ,  "edt_GoalPercent0" : "90" ,  "col_id" : "3" });
+* @description This function is called to create TechnicalSkill
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+/**
+ @Function Number:44
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addTechnicalSkills($inputObject)
+{
+	_log("addTechnicalSkills Started","success");
+	try 
+	{
+		 CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTechnicalSkills Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: selectReportinghierarchy
+* @description This function is called to select Reporting hierarchy
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function selectReportinghierarchy($inputObject)
+{
+	_log("selectReportinghierarchy Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("QTP_KEY_BUTTON_Go"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectReportinghierarchy Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyReportinghierarchy
+* @description This function is called to verify Reporting hierarchy
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyReportinghierarchy($inputObject)
+{
+	_log("verifyReportinghierarchy Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReportinghierarchy Completed","success");
+}
+
+/**
+ @Function Number:47
+ @author: Hrishi
+ @example: verifyApprover({ "item" : "Ophelia" , "operation" : "Delete" })
+ @description: Check the approver is present in listing.
+ 			   Pass operation as delete if the approve is deleted or shoulld not be present in listing 
+ @param: $inputObject({ "item" : "Ophelia" , "operation" : "Delete" })
+ @return: none
+ **/
+
+function verifyApprover($inputObject)
+{
+	_log("verifyApprover Started","success");
+	try 
+	{
+		if($inputObject.pageNo)
+		{
+			gotoPage($inputObject);
+		}
+		var $tableId = _table("QTP_ListTable");
+		
+    	if($inputObject.operation === "Delete" || $inputObject.operation === "Negative")
+    	{
+    		if($inputObject.LastName)
+    		{
+    			if(_isVisible(_cell($inputObject.LastName,_in($tableId))) && _isVisible(_cell($inputObject.FirstName,_in($tableId))))
+    			{
+    				_assertFalse(_isVisible(0,_cell($inputObject.FirstName,_near(_cell($inputObject.LastName)),_in($tableId))));
+    			}
+       		}
+    		else
+    		{
+    			_assertFalse(_isVisible(_cell($inputObject.FirstName,_in($tableId))));	
+    		}
+    	}
+    	else 
+    	{
+    		_assertTrue(_isVisible(_cell($inputObject.FirstName,_near(_cell($inputObject.LastName)),_in($tableId))));
+    	}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyApprover Completed","success");
+}
+
+/**
+ @Function Number:48
+ @author: Hrishi
+ @example: selectRoleSettingTab({"edt_firstnametext","Alok", "edt_lastnametext","Agarwal"}) 
+ @description: select the user form user listing and open the assign access role popup 
+ @param: Json object containing first name and last name of user whose role need to be set
+ @return: none
+ **/
+
+function selectRoleSettingTab($inputObject)
+{ 
+	_log("selectRoleSettingTab Started","success");
+	try 
+	{
+		var $buttonKey = "Set Access Role";
+		var $extJsId = ""; 
+		var $buttonName = $buttonKey + $extJsId;
+		_check(_div("/x-grid-row-checker/", _near(_div($inputObject.edt_firstnametext), _near(_div($inputObject.edt_lastnametext)))));
+		_click(_link($buttonName));
+		_selectWindow("ImportPopup");
+		if(($inputObject.role_name != "" &&  $inputObject.role_name)!= undefined)
+		{
+			_setSelected(_select("PLR_Roles"), $inputObject.role_name);
+			_click(_image("QTP_Add_PLR__Role_Prj"));
+		}		
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectRoleSettingTab Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: generateTeamMemberCostReport
+* @description This function is called to generateTeamMemberCostReport 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function generateTeamMemberCostReport($inputObject)
+{
+	_log("generateTeamMemberCostReport Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_containsText(_select("NameCombo"),$inputObject.lst_NameCombo));
+		}
+		else
+		{
+			setAllFields($inputObject);
+			_click(_submit("QTP_KEY_BUTTON_Go"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("generateTeamMemberCostReport Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: navigateToTeamMemberUnderApprovalList
+* @description This function is called to navigateToTeamMemberUnderApprovalList 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function navigateToTeamMemberUnderApprovalList()
+{
+	_log("navigateToTeamMemberUnderApprovalList Started","success");
+	try 
+	{
+		 $inputObject = {};
+		 $inputObject.filterName = "ASSIGNMENTSTATUS";
+		 $inputObject.status = "Under Approval";
+		 setFilter($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToTeamMemberUnderApprovalList Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyTeamMemberUnderApproval
+* @description This function is called to verifyTeamMemberUnderApproval 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyTeamMemberUnderApproval($inputObject)
+{
+	_log("verifyTeamMemberUnderApproval Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTeamMemberUnderApproval Completed","success");
+}
+
+/**
+ @Function Number:53
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectUserFromApprovallist($inputObject)
+{
+	_log("selectUserFromApprovallist Started","success");
+	try 
+	{
+		_wait(15000,_exists(_cell($inputObject.username)));
+		_click(_cell($inputObject.username));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectUserFromApprovallist Completed","success");
+}
+
+/**
+ @Function Number:54
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteUser($inputObject)
+{
+	_log("deleteUser Started","success");
+	try 
+	{
+		DeleteEformInstance($inputObject);
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteUser Completed","success");
+}
+
+/**
+ @Function Number:55
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openUserDetails($inputObject)
+{
+	_log("openUserDetails Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertNotExists(_div($inputObject.item));
+			return;
+		}
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openUserDetails Completed","success");
+}
+
+/**
+ @Function Number:56
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function unAssignedRole($inputObject)
+{
+	_log("unAssignedRole Started","success");
+	try 
+	{
+		_selectWindow("ImportPopup");
+		if($inputObject.lst_Assigned_Roles.indexOf(";") != -1)
+		{
+			var $roles;
+			_set($roles, $inputObject.lst_Assigned_Roles.split(";"))
+			for(var $i = 0 ; $i < $roles.length ; $i++)
+			{
+				_setSelected(_select("Assigned_Roles"),$roles[$i]);
+				_click(_link("QTP_RemoveRole_Assigned"));
+			}
+			_click(_submit("QTP_Save"));
+			if($inputObject.alert === "selectOneOrgLevel")
+			{
+				_assertEqual("Please select at least one role to associate.", _lastAlert());
+				_click(_button("QTP_Cancel"));
+			}
+			_selectWindow();
+		}
+		else
+		{
+			setAllFields($inputObject);	
+			_click(_link("QTP_RemoveRole_Assigned"));
+			_click(_submit("QTP_Save"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unAssignedRole Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: addAllocationPeriod
+* @description This function is called to addAllocationPeriod 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function addAllocationPeriod($inputObject)
+{
+	_log("addAllocationPeriod Started","success");
+	try 
+	{
+		if($inputObject.popup_name)
+		{
+			_selectWindow("undefined");
+			_click(_link("Add New Allocation"));
+			_selectWindow("Allocation");
+			setAllFields($inputObject);
+			_click(_submit("QTP_KEY_BUTTON_Save"));
+			_selectWindow();
+		}
+		else
+		{
+			setAllFields($inputObject);
+			_click(_button("SaveBtn"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addAllocationPeriod Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: deleteAllocationPeriod
+* @description This function is called to deleteAllocationPeriod 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function deleteAllocationPeriod($inputObject)
+{
+	_log("deleteAllocationPeriod Started","success");
+	try 
+	{
+		_click(_link("Delete["+$inputObject.col_id+"]"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteAllocationPeriod Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: deleteDelegationRange
+* @description This function is called to deleteDelegationRange 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function deleteDelegationRange($inputObject)
+{
+	_log("deleteDelegationRange Started","success");
+	try 
+	{
+		_selectWindow("DelegateRoles");
+		_click(_image("Delete"));
+		_expectConfirm("Are you sure you want to delete the Delegation?", true);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteDelegationRange Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: modifyAllocationPeriod
+* @description This function is called to modifyAllocationPeriod 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function modifyAllocationPeriod($inputObject)
+{
+	_log("modifyAllocationPeriod Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyAllocationPeriod Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: modifyRole
+* @description This function is called to modifyRole 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function modifyRole($inputObject)
+{
+	_log("modifyRole Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyRole Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: openRoleDelegationRangeDetails
+* @description This function is called to openRoleDelegationRangeDetails 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function openRoleDelegationRangeDetails()
+{
+	_log("openRoleDelegationRangeDetails Started","success");
+	try 
+	{	
+		_click(_link("de-icon-delegate"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openRoleDelegationRangeDetails Completed","success");
+}
+
+/**
+ @Function Number:63
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setUserProjectContactDetails($inputObject)
+{
+	_log("setUserProjectContactDetails Started","success");
+	try 
+	{
+		_click(_link("Edit"));
+		_selectWindow("Edit");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setUserProjectContactDetails Completed","success");
+}
+
+/**
+ @Function Number:111
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySkillSearchResult($inputObject)
+{
+	_log("verifySkillSearchResult Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySkillSearchResult Completed","success");
+}
+
+/**
+ @Function Number:118
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyInviteTeamMember($inputObject)
+{
+	_log("verifyInviteTeamMember Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyInviteTeamMember Completed","success");
+}
+
+/**
+ @Function Number:125
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifysetUserContactDetails($inputObject)
+{
+	_log("verifysetUserContactDetails Started","success");
+	try 
+	{
+		if($inputObject.segment_name)
+		{
+			_click(_link($inputObject.segment_name));
+		}
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifysetUserContactDetails Completed","success");
+}
+
+/**
+ @Function Number:133
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  verifyunLockUser($inputObject)
+{
+	_log(" verifyunLockUser Started","success");
+	try 
+	{
+		$inputObject.edt_firstnametext = $inputObject.username;
+		$inputObject.lst_ResourceStatusCombo = "All";
+		setFilterForUserList($inputObject);
+		$inputObject.item = $inputObject.username;
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyunLockUser Completed","success");
+}
+
+/**
+ @Function Number:138
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyUserAtListing($inputObject)
+{
+	_log("verifyUserAtListing Started","success");
+	try 
+	{
+		$inputObject.item = $inputObject.user_name;
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserAtListing Completed","success");
+}
+
+/**
+ @Function Number:139
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyUserAssignedRoles($inputObject)
+{
+	_log("verifyUserAssignedRoles Started","success");
+	try 
+	{
+		_selectWindow("ImportPopup");
+		_assertEqual($inputObject.lst_Assigned_Roles, _getText(_select("Assigned_Roles")));
+		_click(_submit("QTP_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserAssignedRoles Completed","success");
+}
+
+/**
+ @Function Number:140
+ @author:Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTeamMemberRole($inputObject)
+{
+	_log("verifyTeamMemberRole Started","success");
+	try 
+	{
+		_wait(5000);
+		var $tableid = _table("mytableID");
+		
+		if($inputObject.popup_name)
+		{
+			_selectWindow($inputObject.popup_name);
+		}
+
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_isVisible(_cell($inputObject.role_name,_under(_cell("Role"))),_in($tableid)));
+		}	
+		else
+		{
+			_assertTrue(_isVisible(_cell($inputObject.role_name,_under(_cell("Role"))),_in($tableid)));
+		}
+		
+		if($inputObject.popup_name)
+		{
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTeamMemberRole Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifylocaleforprofiledetailtabs
+* @description This function is called to verify locale for profile detail tabs 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifylocaleforprofiledetailtabs($inputObject)
+{
+	_log("verifylocaleforprofiledetailtabs Started","success");
+	try 
+	{
+		SelectSegment($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifylocaleforprofiledetailtabs Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyprojectcontacts
+* @description This function is called to verify project contacts 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyprojectcontacts($inputObject)
+{
+	_log("verifyprojectcontacts Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyprojectcontacts Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyMemberAllocationPage
+* @description This function is called to verifyMemberAllocationPage 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyMemberAllocationPage($inputObject)
+{
+	_log("verifyMemberAllocationPage Started","success");
+	try 
+	{
+		_selectWindow("undefined");
+		verifyAllFields($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMemberAllocationPage Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyModifyRoleIcon
+* @description This function is called to verifyModifyRoleIcon 
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifyModifyRoleIcon($inputObject)
+{
+	_log("verifyModifyRoleIcon Started","success");
+	try 
+	{
+		var $modifyAccessRoleBtn = "KEY_LINK_Modify_Access_Roles";
+		var $extJsId = ""; 	
+		var $modifyAccessRoleBtnKey = $modifyAccessRoleBtn + $extJsId;		
+		
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_isVisible(_link($modifyAccessRoleBtnKey)));
+		}
+		else
+		{
+			_assertTrue(_isVisible(_link($modifyAccessRoleBtnKey)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyModifyRoleIcon Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyAllocationReport
+* @description This function is called to verifyAllocationReport 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyAllocationReport($inputObject)
+{
+	_log("verifyAllocationReport Started","success");
+	try 
+	{
+	    var $arrAttributes = $inputObject.attributes.split("|");
+		var $arrAttributesValue = $inputObject.attributesValue.split("|");
+	    _click(_link("View Existing Allocation"));
+		_selectWindow("AvailGraph");
+		for (var $i = 0; $i < $arrAttributes.length; $i++)
+		{
+		    $actualValue = _getText(_cell(0, _near(_cell($inputObject.project)), _under(_cell($arrAttributes[$i]))));
+			_assertEqual($arrAttributesValue[$i], $actualValue);
+		}
+		_click(_submit("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAllocationReport Completed","success");
+}
+
+/**
+ @Function Number:153
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTechnicalSkillsListing($inputObject)
+{
+	_log("verifyTechnicalSkillsListing Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTechnicalSkillsListing Completed","success");
+}
+
+/**
+ @Function Number:154
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  openResoureceCategory($inputObject)
+{
+	_log(" openResoureceCategory Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" openResoureceCategory Completed","success");
+}
+
+/**
+ @Function Number:155
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  deleteResoureceCategory($inputObject)
+{
+	_log(" deleteResoureceCategory Started","success");
+	try 
+	{
+		if( $inputObject.operation==="Negative")
+		{
+			_click(_submit("< Return"));
+			return;
+		}
+		var $tableId = _table("QTP_ListTable");
+	    
+        _click(_submit("Delete"));
+		
+        _expectConfirm("You are about to delete this Resource Category,do you still want to proceed with this action?.", true);
+		
+        _log("deleteResoureceCategory Verification Started","success");
+		_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+		_log("deleteResoureceCategory Verification Complete","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" deleteResoureceCategory Completed","success");
+}
+
+/**
+ @Function Number:158
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteSoftSkill ($inputObject)
+{
+	_log("deleteSoftSkill  Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		
+		if($inputObject.operation==="Negative")
+        {
+        	 _log("deleteSoftSkill Verification Started","success");
+        	_assertTrue(_isVisible(_cell($inputObject.item, _in($tableId))));
+        }
+        else 
+        {
+        	_click(_checkbox(0, _near(_cell($inputObject.item))));
+    		_click(_link("de-icon-delete"));
+            _expectConfirm("Are you sure you want to delete the selected Item(s)?", true);
+            _log("deleteSoftSkill Verification Started","success");
+        	_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+        }
+		
+		_log("deleteSoftSkill Verification Complete","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteSoftSkill  Completed","success");
+}
+
+/**
+ @Function Number:159
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  openTechnicalSkill($inputObject)
+{
+	_log(" openTechnicalSkill Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" openTechnicalSkill Completed","success");
+}
+
+/**
+ @Function Number:160
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteTechnicalSkill ($inputObject)
+{
+	_log("deleteTechnicalSkill  Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		 if($inputObject.operation==="Negative")
+	        {
+	        	 _click(_submit("< Return"));
+	        	 _log("deleteTechnicalSkill Verification Started","success");
+	        	_assertTrue(_isVisible(_cell($inputObject.item, _in($tableId))));
+	        }
+		 else
+	        {
+			 	_click(_submit("Delete"));
+			 
+			 	_expectConfirm("Are you sure you want to delete this skill.", true);
+		
+			 	_log("deleteTechnicalSkill Verification Started","success");
+       
+   			 	_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+        }
+		_log("deleteTechnicalSkill Verification Complete","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTechnicalSkill  Completed","success");
+}
+
+/**
+ @Function Number:164
+ @author:Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDefaultDateFormats($inputObject)
+{
+	_log("verifyDefaultDateFormats Started","success");
+	try 
+	{
+		var $dateFormatArr = $inputObject.optionList.split(";");
+		
+		for(var $i =0; $i < $dateFormatArr.length; $i++)
+		{
+			_assertTrue(_containsText(_select("DateFormat"),$dateFormatArr[$i]));	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDefaultDateFormats Completed","success");
+}
+
+/**
+ @Function Number:165
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTeamMember($inputObject)
+{
+	_log("openTeamMember Started","success");
+	try 
+	{
+		$inputObject.item = $inputObject.loginid;
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTeamMember Completed","success");
+}
+
+/**
+ @Function Number:166
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addResourceCategory($inputObject)
+{
+	_log("addResourceCategory Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addResourceCategory Completed","success");
+}
+
+/**
+ @Function Number:169
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyResourceCategory($inputObject)
+{
+	_log("modifyResourceCategory Started","success");
+	try 
+	{
+		if( $inputObject.operation==="Negative")
+		{
+			_click(_submit("< Return"));
+			return;
+		}
+		setAllFields($inputObject);
+		_click(_submit("Submit"))
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyResourceCategory Completed","success");
+}
+
+/**
+ @Function Number:171
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyTechnicalSkills($inputObject)
+{
+	_log("modifyTechnicalSkills Started","success");
+	try 
+	{
+		if( $inputObject.operation==="Negative")
+		{
+			_click(_submit("< Return"));
+			return;
+		}
+		setAllFields($inputObject);
+		_click(_submit("Save"))
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTechnicalSkills Completed","success");
+}
+
+/**
+ @Function Number:174
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewNonLaborResource($inputObject)
+{
+	_log("saveAndAddNewNonLaborResource Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewNonLaborResource Completed","success");
+}
+
+/**
+ @Function Number:177
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function resetNonLaborResource($inputObject)
+{
+	_log("resetNonLaborResource Started","success");
+	try 
+	{
+		_setAllFields($inputObject);
+		_click(_reset("ResetBtn"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resetNonLaborResource Completed","success");
+}
+
+/**
+ @Function Number:180
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setUserOfficeDetails($inputObject)
+{
+	_log("setUserOfficeDetails Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setUserOfficeDetails Completed","success");
+}
+
+/**
+ @Function deleteRole
+ @author: shashank
+ @example: 
+ @description:1) Function would delete the roles whose html visibility is true
+  			  2) Some roles cannot be deleted like Org level roles hence for these values 
+  			     we need to send $inputObject.operation === "Negative".	
+ @param: 
+ @return: 
+ **/
+
+function deleteRole($inputObject)
+{
+	_log("deleteRole Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		
+		if($inputObject.operation === "Negative")
+		{
+			_assertTrue( _checkbox("checkItem",_near(_link($inputObject.item))).disabled);	
+			_log($inputObject.item +" role cannot be deleted","success");
+		}
+		else
+		{
+			_click(_checkbox(0, _near(_cell($inputObject.item))));
+			_click(_link("de-icon-delete"));
+        
+			_expectConfirm("Are you sure you want to delete this Role?", true);
+		
+        	_log("deleteRole Verification Started","success");
+			_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+			_log("deleteRole Verification Complete","success");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteRole Completed","success");
+}
+
+/**
+ @Function Number:183
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDeleteRole($inputObject)
+{
+	_log("verifyDeleteRole Started","success");
+	try 
+	{
+		_assertFalse(_isVisible(_link($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDeleteRole Completed","success");
+}
+
+/**
+ @Function Number:184
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setGoalToTechnicalSkills($inputObject)
+{
+	_log("setGoalToTechnicalSkills Started","success");
+	try 
+	{
+		_click(_link("Goals"));
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setGoalToTechnicalSkills Completed","success");
+}
+
+/**
+ @Function Number:185
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyGoalToTechnicalSkills($inputObject)
+{
+	_log("verifyGoalToTechnicalSkills Started","success");
+	try 
+	{
+		_click(_link("Goals"));
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyGoalToTechnicalSkills Completed","success");
+}
+
+/**
+ @Function Number:186
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function importUserListAtOrg($inputObject)
+{
+	_log("importUserListAtOrg Started","success");
+	try 
+	{
+		var $ImportBtn = "KEY_LABEL_Import";
+		var $extJsId = "";
+		var $ImportBtnKey = $ImportBtn + $extJsId;
+		if(_exists(_link($ImportBtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($ImportBtnKey)));
+			_click(_link($ImportBtnKey));
+		}
+		_selectWindow("ImportPopup");
+		setAllFields($inputObject);
+		var $importDIR;
+		_set($importDIR,_getGlobal("importDIR")+$inputObject.filename);
+		_setFile(_file("file"), $importDIR);
+		_call(_file("file").type = "text");
+		_setValue(_textbox("file"),$inputObject.filename);			
+		_click(_submit("QTP_KEY_BUTTON_Upload"));
+		_wait(2000,null);
+		if($inputObject.errorMsg)
+		{
+			_assertEqual($inputObject.errorMsg,_getText(_listItem(0,_under(_cell("Error Details")))));
+			_click(_button("QTP_Close"));
+		}
+		else
+			_click(_button("QTP_OK"));
+		_selectWindow();
+		_wait(60000,null);	
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importUserListAtOrg Completed","success");
+}
+
+/**
+ @Function Number:188
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function exportUserList($inputObject)
+{
+	_log("exportUserList Started","success");
+	try 
+	{
+		var $ExportBtn = "KEY_TOOLTIP_Export";
+		var $extJsId = "";
+		var $ExportBtnKey = $ExportBtn + $extJsId;
+		if(_exists(_link($ExportBtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($ExportBtnKey)));
+			_click(_link($ExportBtnKey));
+		}
+		_selectWindow("ExportItem");
+		setAllFields($inputObject);		
+		//_assertNull(_lastDownloadedFileName()); // nothing so far
+		_click(_button("QTP_KEY_BUTTON_Ok")); // click on download link
+		var $importDIR;
+		_set($importDIR,_getGlobal("importDIR")+$inputObject.filename);
+		_saveDownloadedAs($importDIR); // save to another path
+		_click(_button("QTP_KEY_BUTTON_Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("exportUserList Completed","success");
+}
+
+/**
+ @Function Number:190
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function resetPasswordAtUserList($inputObject)
+{
+	_log("resetPasswordAtUserList Started","success");
+	try 
+	{
+		_click(_link("de-icon-reset_password"));
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resetPasswordAtUserList Completed","success");
+}
+
+/**
+ @Function Number:192
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addITSkillsToPLR($inputObject)
+{
+	_log("addITSkillsToPLR Started","success");
+	try 
+	{
+		_click(_link("IT Skills"));
+		_click(_link("de-icon-add"));
+		
+		var $ITSkillCatName_A = "ITSkillCatName_A_" + $inputObject.rowno;
+		var $ITName_A = "ITName_A_" + $inputObject.rowno;
+		var $ITManagerLevel_A = "ITManagerLevel_A_" + $inputObject.rowno;
+		var $ITExpInYears_A = "ITExpInYears_A_" + $inputObject.rowno;
+		var $ITSkillType_A = "ITSkillType_A_" + $inputObject.rowno;
+		
+		_setSelected(_select($ITSkillCatName_A),$inputObject.lst_ITSkillCatName_A);
+		_setSelected(_select($ITName_A),$inputObject.lst_ITSkillCatName_A);
+		_setSelected(_select($ITManagerLevel_A),$inputObject.lst_ITSkillCatName_A);
+		_setValue(_textbox($ITExpInYears_A), $inputObject.edt_estEffort);
+		_setSelected(_select($ITSkillType_A),$inputObject.lst_ITSkillCatName_A);
+		
+		_click(_submit("QTP_Save"));
+					
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addITSkillsToPLR Completed","success");
+}
+
+/**
+ @Function Number:195
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickOnProjectRoleAtOrg($inputObject)
+{
+	_log("clickOnProjectRoleAtOrg Started","success");
+	try 
+	{
+		_click(_link($inputObject.roleName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickOnProjectRoleAtOrg Completed","success");
+}
+
+/**
+ @Function Number:196
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyUserOfficeDetails($inputObject)
+{
+	_log("verifyUserOfficeDetails Started","success");
+	try 
+	{
+		verifyAllFields($inputObject); 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserOfficeDetails Completed","success");
+}
+
+/**
+ @Function Number:197
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyITSkillInResume($inputObject)
+{
+	_log("verifyITSkillInResume Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyITSkillInResume Completed","success");
+}
+
+/**
+ @Function Number:198
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addCostForUserAtOrg($inputObject)
+{
+	_log("addCostForUserAtOrg Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCostForUserAtOrg Completed","success");
+}
+
+/**
+ @Function Number:199
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyResourceCategoryDetails($inputObject)
+{
+	_log("verifyResourceCategoryDetails Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyResourceCategoryDetails Completed","success");
+}
+
+/**
+ @Function Number:200
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function AdvanceSearchTeamMemberInInvitePopup($inputObject)
+{
+	_log("AdvanceSearchTeamMemberInInvitePopup Started","success");
+	try 
+	{
+		var $inviteTeamMemBtn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $inviteTeamMemBtnKey = $inviteTeamMemBtn + $extJsId;
+		_click(_link($inviteTeamMemBtnKey));
+		_selectWindow("AddTeamMember");
+		_click(_link("QTP_Advanced_Search"));
+		setAllFields($inputObject);
+		_click(_submit("Search"));
+		if(_isVisible(_span("No search result to display. Please use 'Search and Add Team Members' option on the left.")))
+		{
+			_assertExists(_span("No search result to display. Please use 'Search and Add Team Members' option on the left."));
+		}
+		else
+		{
+			if($inputObject.listOfTeamMember.indexOf(";") != -1)
+			{
+				var $values=$inputObject.listOfTeamMember.split(";");
+			
+				for(var $i =0 ; $i < $values.length; $i++)
+				{
+					_containsText(_table("QTP_Search_Results"),$values[$i]);
+				}
+			}
+			else
+			{
+				_assertTrue(_isVisible(_cell($inputObject.listOfTeamMember)));
+			}
+		}
+		_closeWindow();
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("AdvanceSearchTeamMemberInInvitePopup Completed","success");
+}
+
+/**
+ @Function Number:203
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function BasicSearchTeamMemberInInvitePopup($inputObject)
+{
+	_log("BasicSearchTeamMemberInInvitePopup Started","success");
+	try 
+	{
+		var $inviteTeamMemBtn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $inviteTeamMemBtnKey = $inviteTeamMemBtn + $extJsId;
+		_click(_link($inviteTeamMemBtnKey));
+		_selectWindow("AddTeamMember");
+		_click(_link("QTP_Basic_Search"));
+		setAllFields($inputObject);
+		_click(_submit("Search"));
+		if(_isVisible(_span("No search result to display. Please use 'Search and Add Team Members' option on the left.")))
+			{
+			_assertExists(_span("No search result to display. Please use 'Search and Add Team Members' option on the left."));
+			}
+		else
+		{
+			_assertTrue(_isVisible(_cell($inputObject.listOfTeamMember)));
+		}
+		_closeWindow();
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("BasicSearchTeamMemberInInvitePopup Completed","success");
+}
+
+/**
+ @Function Number:206
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRolesInAdvanceSearchOptions($inputObject)
+{
+	_log("verifyRolesInAdvanceSearchOptions Started","success");
+	try 
+	{
+		var $inviteTeamMemBtn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $inviteTeamMemBtnKey = $inviteTeamMemBtn + $extJsId;
+		_click(_link($inviteTeamMemBtnKey));
+		_selectWindow("AddTeamMember");
+		_click(_link("QTP_Advanced_Search"));
+		setAllFields($inputObject);
+		var $valuesPLR=$inputObject.PLR.split(";");
+		var $valuesOLR=$inputObject.OLR.split(";");
+		for(var $i =0 ; $i < $valuesPLR.length; $i++)
+		{
+			_containsText(_select("PLR"),$valuesPLR[$i]);
+		}
+		for(var $j =0 ; $j < $valuesOLR.length; $j++)
+		{
+			_containsText(_select("OLR"),$valuesOLR[$j]);
+		}
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRolesInAdvanceSearchOptions Completed","success");
+}
+
+/**
+ @Function Number:207
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectUserForTeamList($inputObject)
+{
+	_log("selectUserForTeamList Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("Object does not contain any Key-value pair");
+		}
+		else
+		{
+			var $Btn = "KEY_BUTTON_Invite_User";
+			var $extJsId = ""; 	
+			var $BtnKey = $Btn + $extJsId;		
+			_click(_link($BtnKey));
+			_selectWindow("AddTeamMember");
+			_click(_submit("BtnSearch"));
+			var $values = $inputObject.memberList.split(";");
+			for(var $i= 0; $i < $values.length; $i++)
+				_check(_checkbox("checkUser",_near(_cell($values[$i]))));
+			_click(_link("de-icon-next"));
+			verifyselectUserForTeamList($inputObject);
+			_closeWindow();
+			_selectWindow();
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectUserForTeamList Completed","success");
+}
+
+/**
+ @Function Number:209
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyselectUserForTeamList($inputObject)
+{
+	_log("verifyselectUserForTeamList Started","success");
+	try 
+	{
+		var $values = $inputObject.memberList.split(";");
+		for(var $i= 0; $i < $values.length; $i++)
+			_assertTrue(_isVisible(_cell($values[$i])));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyselectUserForTeamList Completed","success");
+}
+
+/**
+ @Function Number:210
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function DeleteUserFromSelectedTeamList($inputObject)
+{
+	_log("DeleteUserFromSelectedTeamList Started","success");
+	try 
+	{
+		
+			var $Btn = "KEY_BUTTON_Invite_User";
+			var $extJsId = ""; 	
+			var $BtnKey = $Btn + $extJsId;		
+			_click(_link($BtnKey));
+			_selectWindow("AddTeamMember");
+			_click(_submit("BtnSearch"));
+			var $values = $inputObject.memberList.split(";");
+			for(var $i= 0; $i < $values.length; $i++)
+				_check(_checkbox("checkUser",_near(_cell($values[$i]))));
+			_click(_link("de-icon-next"));
+			verifyselectUserForTeamList($inputObject);
+			if($inputObject.operation === "Negative")
+			{
+				_log("Users from selected team list table not deleted");
+			}
+			else
+			{
+				for(var $i= 0; $i < $values.length; $i++)
+					_check(_checkbox("checkSelectedUser",_near(_cell($values[$i]))));
+				_click(_link("de-icon-delete"));
+				verifyDeleteUserFromSelectedTeamList($inputObject);
+			}
+			_closeWindow();
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("DeleteUserFromSelectedTeamList Completed","success");
+}
+
+/**
+ @Function Number:212
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDeleteUserFromSelectedTeamList($inputObject)
+{
+	_log("verifyDeleteUserFromSelectedTeamList Started","success");
+	try 
+	{
+		var $values = $inputObject.memberList.split(";");
+		for(var $i= 0; $i < $values.length; $i++)
+			_assertFalse(_isVisible(_cell($values[$i])));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDeleteUserFromSelectedTeamList Completed","success");
+}
+
+/**
+ @Function Number:213
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveToMembers($inputObject)
+{
+	_log("saveToMembers Started","success");
+	try 
+	{
+		var $Btn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $BtnKey = $Btn + $extJsId;		
+		_click(_link($BtnKey));
+		_selectWindow("AddTeamMember");
+		_click(_submit("BtnSearch"));
+		var $values = $inputObject.memberList.split(";");
+		for(var $i= 0; $i < $values.length; $i++)
+			_check(_checkbox("checkUser",_near(_cell($values[$i]))));
+		_click(_link("de-icon-next"));
+		verifyselectUserForTeamList($inputObject);
+		for(var $i= 0; $i < $values.length; $i++)
+		_check(_checkbox("checkSelectedUser",_near(_cell($values[$i]))));
+		_click(_link("Save Team List"));
+		_selectWindow();
+		verifySaveToMembers($inputObject);			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveToMembers Completed","success");
+}
+
+/**
+ @Function Number:215
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySaveToMembers($inputObject)
+{
+	_log("verifySaveToMembers Started","success");
+	try 
+	{
+		var $values = $inputObject.memberList.split(";");
+		for(var $i= 0; $i < $values.length; $i++)
+		_assertTrue(_isVisible(_div($values[$i])));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySaveToMembers Completed","success");
+}
+
+/**
+ @Function Number:216
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchAndVerifyUserInSearchResult($inputObject)
+{
+	_log("searchAndVerifyUserInSearchResult Started","success");
+	try 
+	{
+		var $Btn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $BtnKey = $Btn + $extJsId;		
+		_click(_link($BtnKey));
+		_selectWindow("AddTeamMember");
+		_click(_link("QTP_Advanced_Search"));
+		setAllFields($inputObject);
+		_click(_submit("BtnSearch"));
+		verifySearchAndVerifyUserInSearchResult($inputObject);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchAndVerifyUserInSearchResult Completed","success");
+}
+
+/**
+ @Function Number:218
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySearchAndVerifyUserInSearchResult($inputObject)
+{
+	_log("verifySearchAndVerifyUserInSearchResult Started","success");
+	try 
+	{
+		var $values = $inputObject.memberList.split(";");
+		for(var $i= 0; $i < $values.length; $i++)
+		{
+			_assertTrue(_isVisible(_cell($values[$i])));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySearchAndVerifyUserInSearchResult Completed","success");
+}
+
+/**
+ @Function Number:219
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchSkillAtOrg($inputObject)
+{
+	_log("searchSkillAtOrg Started","success");
+	try 
+	{
+		_click(_link("QTP_Advanced_Search"));
+		setAllFields($inputObject);
+		_click(_submit("BtnSearch"));
+		verifySearchSkillAtOrg($inputObject);		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchSkillAtOrg Completed","success");
+}
+
+/**
+ @Function Number:221
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySearchSkillAtOrg($inputObject)
+{
+	_log("verifySearchSkillAtOrg Started","success");
+	try 
+	{
+		var $values = $inputObject.memberList.split(";");
+		for(var $i= 0; $i < $values.length; $i++)
+		{
+			_assertTrue(_isVisible(_cell($values[$i])));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySearchSkillAtOrg Completed","success");
+}
+
+/**
+ @Function Number:222
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function resetSettingsAtSkillSearch()
+{
+	_log("resetSettingsAtSkillSearch Started","success");
+	try 
+	{
+		_click(_reset("BtnReset"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resetSettingsAtSkillSearch Completed","success");
+}
+
+/**
+ @Function Number:223
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySearchMemberFrame($inputObject)
+{
+	_log("verifySearchMemberFrame Started","success");
+	try 
+	{
+		var $Btn = "KEY_BUTTON_Invite_User";
+		var $extJsId = ""; 	
+		var $BtnKey = $Btn + $extJsId;		
+		_click(_link($BtnKey));
+		_selectWindow("AddTeamMember");
+		_click(_submit("ActionButton"));
+		_click(_link("Selected Team List"));
+		var $values = $inputObject.verifyColumns.split(";");
+		var $boolean = false;
+		for(var $i = 0; $i < $values.length; $i++)
+		{
+			_assertTrue(_containsText(_table("QTP_ListTable"),$values[$i]));
+		}
+		_closeWindow();
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySearchMemberFrame Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyProjectContacts
+* @description This function is called to verify Project Contacts 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyProjectContacts($inputObject)
+{
+	_log("verifyProjectContacts Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectContacts Completed","success");
+}
+
+/*************************************************************************
+* @author  Roma
+* @example verifyUserAccessRoleFilter($inputObject);
+* @description To verify Project Role Filter assigned to the User
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyUserAccessRoleFilter($inputObject)
+{
+	_log("verifyUserAccessRoleFilter Started","success");
+	try 
+	{	
+		if($inputObject.role_type === "org")
+		{
+			_assertFalse(_isVisible(_span($inputObject.role_name)));
+		}
+		else
+		{
+			_assertEqual($inputObject.filter_name, _getSelectedText(_select("/Filter/", _near(_span($inputObject.role_name)))));
+		}
+		_click(_button("QTP_KEY_BUTTON_Close"));
+		_selectWindow("ImportPopup");
+		_click(_button("Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserAccessRoleFilter Completed","success");
+}
+
+/*************************************************************************
+* @author  Roma
+* @example verifyUserReportingAccess($inputObject);
+* @description To verify Reporting Access of the User.
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyUserReportingAccess($inputObject)
+{
+	_log("verifyUserReportingAccess Started","success");
+	try 
+	{	
+		_setSelected(_select("repHierarchy"), $inputObject.org_hierarchy_name);
+		_click(_button("Go"));
+			
+		var $arrOrgName = $inputObject.OrgNames.split("|");
+		for(var $i = 0; $i < $arrOrgName.length; $i++)
+		{	
+			if($inputObject.role_type === "org")
+				_assertFalse(_checkbox(0,_near(_cell($arrOrgName[$i]))).checked);
+			else
+				_assert(_checkbox(0,_near(_cell($arrOrgName[$i]))).checked);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserReportingAccess Completed","success");
+}

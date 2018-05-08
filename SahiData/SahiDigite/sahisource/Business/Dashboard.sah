@@ -1,0 +1,986 @@
+/*************************************************************************
+* @author Arindam
+* @example: getPageId($inputObject.page_name)
+* @description This function is called to return PageId of any page
+* @param {String} $inputObject.page_name
+* @return {String} $tabId
+*************************************************************************/
+
+function getPageId($inputObject)
+{
+	_log("getPageId Started","success");
+	try 
+	{
+		//_click(_link($inputObject.page_name,_in(_div("dashboard_header")),5));
+
+		var $id1 = _parentNode(_link($inputObject.page_name)).id;
+		var $tabId = $id1.split("_")[0];
+		return $tabId;
+ 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("getPageId Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: getSettingId($inputObject.page_name)
+* @description This function is called to return PageId of any page
+* @param {String} $inputObject.page_name
+* @return {String} $setId1
+*************************************************************************/
+
+function getSettingId()
+{
+	_log("getSettingId Started","success");
+	try 
+	{
+		var $id1 = _parentNode(_textbox("PageCompTitle")).id;
+		var $setId1 = $id1.split("_")[0];
+		return $setId1;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("getSettingId Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: openPage($inputObject.page_name)
+* @description This function is called to open Page
+* @param {String} $inputObject.page_name
+* @return {String}   None 
+*************************************************************************/
+function openPage($inputObject)
+{
+	_log("openPage Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_isVisible(_link($inputObject.page_name)));
+		}
+		else
+		{
+			_click(_link($inputObject.page_name,_in(_div("dashboard_header")),5));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openPage Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: modifyPage($inputObject.page_name,$inputObject.page_name, $inputObject.newPageName,$inputObject.pageDesc, $inputObject.column, $inputObject.themeName)
+* @description This function is called to modify Page
+* @param {String} $inputObject.page_name, $inputObject.newPageName,$inputObject.pageDesc, $inputObject.column, $inputObject.themeName
+* @return {String}   None 
+*************************************************************************/
+
+function modifyPage($inputObject)
+{
+	_log("modifyPage started","success");
+	try
+	{
+		openPage($inputObject);
+		var $setId1 = getPageId($inputObject);
+		
+		_click(_div($setId1+"_pageEditIcon", _in(_div($setId1))));
+		
+		_setValue(_textbox( $setId1 + "_PageTitle", _in(_div("editPageInnerDivTitleBlock")),5), $inputObject.newPageName);
+		
+		_setValue(_textarea($setId1 + "_PageDesc", _in(_div("editPageInnerDivDescBlock")),5), $inputObject.pageDesc);
+		_click(_div($setId1 + "_colLayoutSelDiv",_in(_div( $setId1 + "_editPageInnerDivLayoutBlock")),5));
+		_click(_div($setId1 + "_colLayoutSelBoxDiv").children[parseInt($inputObject.column-1)]);
+				  
+		var $themename = "_" + $inputObject.themeName + "_" + "theme" ;
+		_click(_div($setId1 + $themename, _in(_div( $setId1 + "_themeSelBox")),5));
+		_click(_submit("/button/", _in(_div( $setId1 + "_editPageBlock")),5));
+		
+		$inputObject.page_name = $inputObject.newPageName;
+		$setId1 = getPageId($inputObject);
+		_assertFalse(_isVisible(_div( $setId1 + "_editPageBlock")));
+        
+		verifyPage($inputObject);
+
+	}catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" modifyPage Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: createPage($inputObject.page_name)
+* @description This function is called to modify Page
+* @param {String} $inputObject.page_name, $inputObject.newPageName,$inputObject.pageDesc, $inputObject.column, $inputObject.themeName
+* @return {String}   None 
+*************************************************************************/
+
+function createPage($inputObject)
+{
+	_log("createPage started","success");
+
+	try 
+	{
+        _click(_span("/addPageButton/",_in(_div("dashboard_header")),5));
+		$inputObject.page_name = "New Page";//DEFAULT PAGE NAME
+		$inputObject.newPageName = $inputObject.page_name;
+        modifyPage($inputObject);
+  
+    }catch(e)
+    {
+           handleFailure(e);
+
+    }
+	_log("createPage Completed","success");
+
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: verifyPage($inputObject.page_name)
+* @description This function is called to verify Page
+* @param {String}  $inputObject.page_name, $inputObject.newPageName,$inputObject.pageDesc, $inputObject.column, $inputObject.themeName
+* @return {String}   None 
+*************************************************************************/
+
+function verifyPage($inputObject)
+{
+	_log("verifyPage started","success");
+
+	try 
+	{
+		openPage($inputObject);
+  		var $setId1 = getPageId($inputObject);
+
+       //For Name verification
+       _assertContainsText($inputObject.newPageName, _link($inputObject.newPageName,_in(_div("dashboard_header")),5));
+
+       //For Desc verification
+       _assertEqual($inputObject.pageDesc, _listItem($inputObject.newPageName).getAttribute("title").split(":")[1]);
+
+       //For Column verification
+        _assertEqual($inputObject.column, _div( $setId1 + "_dashBoardMainContainer").children.length);
+
+	  //For Theme verification
+		_assertEqual($inputObject.themeName, _listItem($inputObject.newPageName).getAttribute("pagetheme"));
+    
+    }catch(e)
+     {
+           handleFailure(e);
+
+     }
+	_log("createPage Completed","success");
+
+}
+
+
+
+/*************************************************************************
+* @author Arindam
+* @example: deletePage($inputObject)
+* @description This function is called to delete page
+* @param {String} $inputObject.pageName, $inputObject.type="negative"
+* @return {String}   None 
+*************************************************************************/
+
+function deletePage($inputObject)
+{
+	_log("deletePage Started","success");
+	try 
+	{
+
+		if($inputObject && $inputObject.type === "negative")
+        {	
+		    if (_assertNotExists(_link($inputObject.pageName)))
+			{
+				_log("dashboard page should not be visible","success");
+				return;
+			}
+			else
+			{
+				throw  "even though dashboard page should not be visible still user can see the page","failure";
+			}
+        }
+
+         _click(_span("/closeIcon/", _near(_link($inputObject.pageName,_in(_div("dashboard_header"))))));
+         _click(_button("Ok",_in(_div("popup_widget"))));
+         
+         _assertNotExists(_link($inputObject.pageName),_in(_div("dashboard_header")));
+
+    }catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" deletePage Completed","success");
+}
+/*************************************************************************
+* @author Arindam
+* @example: addComponent($inputObject.page_name)
+* @description This function is called to add Component in Dashboard
+* @param {String} $inputObject.componentName
+* @return {String}   None 
+*************************************************************************/
+
+function addComponent($inputObject)
+{
+	_log("addComponent started","success");
+
+	try 
+	{
+            _click(_div("add_component_icon",_in(_div("add_component_border"))));
+            _click(_heading3($inputObject.analyticsName,_in(_div("add_component_lst"))));
+            var $setId1  = getPageId($inputObject);
+			//_dragDrop(_div($inputObject.componentName), _div( $setId1 + "_dashBoardMainContainer" ).children[parseInt($inputObject.lane-1)]);
+
+			_mouseDown(_div($inputObject.componentName,_in(_div("add_component_lst"))));
+			_mouseOver(_div($inputObject.componentName,_in(_div("add_component_lst"))));
+			_mouseOver(_div( $setId1 + "_dashBoardMainContainer" ).children[parseInt($inputObject.lane-1)]);
+			_mouseUp(_div( $setId1 + "_dashBoardMainContainer" ).children[parseInt($inputObject.lane-1)]);
+    }
+	 catch(e)
+    {
+          handleFailure(e);
+
+    }
+	_log("addComponent Completed","success");
+
+}
+
+/*************************************************************************
+* @author Ashwini
+* @example: verifyComponentGrid({"componentName":"Defect Density"})
+* @description This function is called to verifyComponentGrid
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function verifyComponentGrid($inputObject)
+{
+	var $componentName = $inputObject.componentName;
+	var $componentNameTrimed;
+	var $gridData, $gridHeader, $portletData, $compareResult=false;
+	
+	$gridHeader = getGridHeader($componentName);
+	
+	$gridData = getGridData($componentName);
+
+	$portletData = getPortletData($gridHeader,$gridData);
+
+	$componentNameTrimed = ($componentName.indexOf(" ")!=-1)?$componentName.replace(" ", "_"):$componentName;
+		
+	var $actual_dirPath = _getGlobal("importDIR")+"/dashboard/"+$componentNameTrimed+"_actualData.csv";
+	var $expected_dirPath = _getGlobal("importDIR")+"/dashboard/"+$componentNameTrimed+"_expectedData.csv";
+	
+	_writeCSVFile($portletData, $actual_dirPath , true);
+
+	$compareResult = compareCSV($actual_dirPath,$expected_dirPath);
+
+	return $compareResult;
+}
+
+function getGridHeader($componentName)
+{
+	var $portletId, $headerColumns, $outputArray;
+	_set($portletId,  _parentNode(_span($componentName)).id);
+	
+	$portletId = $portletId.split("_")[0];
+	var $headerString = $portletId+"_portlet";
+	_set($outputArray, getColumnNames1($headerString));
+	return $outputArray;
+}	
+<browser>
+function getColumnNames1(headerString){
+	var headerColumns = _div(headerString).getElementsByTagName("span");
+	var columns = headerColumns.length;
+	var outputArray = new Array(parseInt(columns));
+
+	for (var i = 0; i<headerColumns.length; i++)
+	{
+		outputArray [i]= ""+headerColumns[i].textContent;
+		_log(""+outputArray [i]);
+	}
+
+	return outputArray;
+	}
+</browser>	
+
+function getGridData($componentName)
+{
+	var $portletId,$gridData;
+	_set($portletId,  _parentNode(_span($componentName)).id);
+	$portletId = $portletId.split("_")[0];
+	
+	var $tableObj = _table("/gridview-.*-table/", _in(_div($portletId+"_grid_content")));
+	_set($gridData, getTableContents($tableObj));
+	return $gridData;
+}
+<browser>
+// Fetches table contents. contents will be accessible via indexes. 
+function getTableContents(table){
+    var array2d = new Array();
+    var rows = table.rows;
+    for (var i=0; i<rows.length; i++){
+        var row = rows[i];
+        array2d[i] = new Array();
+        var cells = rows[i].cells;
+        for (var j=0; j<cells.length; j++){
+            array2d[i][j] = _getText(cells[j]);
+        }
+    }    
+    return array2d;
+}
+
+</browser>
+
+function getPortletData($gridHeader,$gridData)
+{
+	if ($gridHeader.length !== $gridData[0].length)return null;
+
+	var $outputArray = new Array(parseInt($gridData.length)+1);
+	
+	for (var $i=0; $i<$outputArray.length; $i++)
+	{
+		$outputArray[$i] = new Array($gridHeader.length);
+	
+		for (var $j=0; $j<$gridHeader.length; $j++)
+		{
+			if($i==0)
+				$outputArray[$i][$j] = $gridHeader[$j];
+			else
+				$outputArray[$i][$j] = $gridData[$i-1][$j];
+		}
+	}
+
+	return $outputArray;
+}
+
+function compareCSV($expected,$actual)
+{
+	var $expected_data = _readCSVFile($expected);
+	var $actual_data =  _readCSVFile($actual);
+	
+	if ($expected_data.length != $actual_data.length) 
+	return false;
+
+	for (var $i=0; $i<$actual_data.length; $i++){
+		
+		if($actual_data[$i].length != $expected_data[$i].length)
+		return false;
+
+		for (var $j=0; $j<$actual_data[$i].length; $j++)
+		{
+			if ($actual_data[$i][$j] != $expected_data[$i][$j])
+			return false;
+		}
+	}
+
+	return true;
+}
+/*************************************************************************
+* @author Ashwini
+*   case "close"	: operatecomponent({"componentName":"PerfIndex"}); 
+*   case "invert"	: operatecomponent({"componentName":"PerfIndex"});
+*	case "layout"	: operatecomponent({"componentName":"PerfIndex","operation":"layout","layoutType":"OnlyChart"});
+*	case "comments" : operatecomponent({"componentName":"Cost Performance Index - Cost","commentText":"abcd"});
+*	case "max"      : operatecomponent({"componentName":"Cost Performance Index - Cost","operation":"max",["SCROLLHEIGHT":"469"],["SCROLLWIDTH":"960"]});
+*	case "min"      : operatecomponent({"componentName":"Cost Performance Index - Cost","operation":"min"});
+*	case "restore" 	: operatecomponent({"componentName":"Cost Performance Index - Cost","operation":"restore"});
+*   case "report"   : operatecomponent({"componentName":"Cost Performance Index - Cost","operation":"report","saveAs":"IndexPerormance"});
+* @description This function is called to viewComponent
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function operatecomponent($inputObject)
+{
+	
+	switch($inputObject.operation)
+	{
+	
+	case "report"	: $inputObject.operation = "ui-icon portlet-icon-report";operatePortlet($inputObject);fetchComponentReport($inputObject);break;
+	case "invert"	: $inputObject.operation = "ui-icon portlet-icon-invert";operatePortlet($inputObject);verifyComponentGrid($inputObject);break;
+	case "refresh"  : $inputObject.operation = "ui-icon portlet-icon-refresh";operatePortlet($inputObject);break;
+	case "layout"	: $inputObject.operation = "portlet-icon-layout";operatePortlet($inputObject);setComponentLayout($inputObject);break;
+	case "comments" : $inputObject.operation = "portlet-icon-comments";operatePortlet($inputObject);setComment($inputObject);break;
+	case "max"      : $inputObject.operation = "portlet-icon-max";operatePortlet($inputObject);verifyMaxMinOperation($inputObject);break;
+	case "min"      : $inputObject.operation = "portlet-icon-min";operatePortlet($inputObject);verifyMaxMinOperation($inputObject);break;
+	case "restore" 	: $inputObject.operation = "portlet-icon-restore";operatePortlet($inputObject);verifyMaxMinOperation($inputObject);break;
+	case "close"	: $inputObject.operation = "portlet-icon-close";operatePortlet($inputObject);removeComponent($inputObject);break;
+	
+	default			: _log("Portlet oeration = " + $inputObject.operation + " not proper","failure"); return;
+		
+	}
+	$inputObject = null;
+}
+
+function getPortletId($componentName)
+{
+	var $portletId, $headerColumns, $outputArray;
+	_set($portletId,  _parentNode(_span($componentName)).id);
+	$portletId = $portletId.split("_")[0];
+	return $portletId;
+}
+
+function operatePortlet ($inputObject)
+{
+	var $operation = $inputObject.operation;
+	var $portletId = getPortletId($inputObject.componentName);
+	
+	if ($operation.indexOf("ui-icon") == -1)
+		_click(_span($operation, _in(_list("/portletHeaderIcons/", _in(_div($portletId))))));
+	else
+		{
+			_mouseOver(_div($portletId+"_ExtChart"));
+			_click(_span($operation, _in(_div($portletId+"_toolbar"))));
+		}
+		
+		$inputObject = null;
+}
+
+function setComment($inputObject)
+{
+	_log("setComment Started","success");
+	try 
+	{
+		var $portletId = getPortletId($inputObject.componentName);
+		var $commentsTextbox = _textarea(0,_in(_div( $portletId + "_comments")));
+		
+	   _setValue($commentsTextbox, $inputObject.commentText);
+	   _click(_span("/Save/", _in(_div( $portletId + "_comments")),5));
+	   
+	   _click(_span($inputObject.operation, _in(_list("/portletHeaderIcons/", _in(_div($portletId))))));
+	    
+	   _assertEqual($inputObject.commentText, _getValue($commentsTextbox));
+	   _click(_span("/Save/", _in(_div( $portletId + "_comments")),5));
+    
+	}catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" setComment Completed","success");
+}
+
+function verifyMaxMinOperation($inputObject)
+{
+
+	var $portletId = getPortletId($inputObject.componentName);
+	var $MaxMin = ""+$inputObject.operation;
+	
+	var $scroll_Height_UI=0;
+	var $scroll_Width_UI=0;
+	
+	var $SCROLLHEIGHT_MAX = ($inputObject.SCROLLHEIGHT !== undefined && $inputObject.SCROLLHEIGHT !== null)?$inputObject.SCROLLHEIGHT : 469;
+	var $SCROLLHEIGHT_RESTORED = ($inputObject.SCROLLHEIGHT !== undefined && $inputObject.SCROLLHEIGHT !== null)?$inputObject.SCROLLHEIGHT : 375;
+	var $SCROLLHEIGHT_MIN = ($inputObject.SCROLLHEIGHT !== undefined && $inputObject.SCROLLHEIGHT !== null)?$inputObject.SCROLLHEIGHT : 0;
+	var $SCROLLWIDTH_MAX = ($inputObject.SCROLLWIDTH !== undefined && $inputObject.SCROLLWIDTH !== null)?$inputObject.SCROLLWIDTH : 960;
+	var $SCROLLWIDTH_RESTORED = ($inputObject.SCROLLWIDTH !== undefined && $inputObject.SCROLLWIDTH !== null)?$inputObject.SCROLLWIDTH : 465;
+	var $SCROLLWIDTH_MIN = ($inputObject.SCROLLWIDTH !== undefined && $inputObject.SCROLLWIDTH !== null)?$inputObject.SCROLLWIDTH : 0;
+	
+	_focus(_div($portletId+"_content"));
+	_wait(1000);
+	
+	_set($scroll_Height_UI, _div($portletId+"_content").scrollHeight);
+	_set($scroll_Width_UI, _div($portletId+"_content").scrollWidth);
+	
+	if ($MaxMin.indexOf("max")!==-1)
+	{
+		_assertEqual(""+$scroll_Height_UI,""+$SCROLLHEIGHT_MAX, "Maximised Heigth Verification");
+		_assertEqual(""+$scroll_Width_UI,""+$SCROLLWIDTH_MAX, "Maximised Width Verification");
+	}
+	if ($MaxMin.indexOf("min")!==-1)
+	{
+		_assertEqual(""+$scroll_Height_UI,""+$SCROLLHEIGHT_MIN, "Minimised Heigth Verification");
+		_assertEqual(""+$scroll_Width_UI,""+$SCROLLWIDTH_MIN, ""+"Minimised Width Verification");
+	}
+	if ($MaxMin.indexOf("restore")!==-1)
+	{
+		_assertEqual(""+$scroll_Height_UI,""+$SCROLLHEIGHT_RESTORED, "Restored Heigth Verification");
+		_assertEqual(""+$scroll_Width_UI,""+$SCROLLWIDTH_RESTORED, "Restored Width Verification");
+	}
+	$inputObject = null;
+}
+
+
+/*************************************************************************
+* @author Arindam
+* @example: 
+* @description This function is called remove component from dashboard
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function removeComponent($inputObject)
+{
+	_log("removeComponent Started","success");
+	try 
+	{
+        _click(_button("Ok",_in(_div("popup_widget"))));
+        _assertNotExists(_span($inputObject.componentName));
+     }
+
+catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" removeComponent Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: 
+* @description This function is called to setLayout in dashboard
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function setComponentLayout($inputObject)
+{
+	_log("setComponentLayout Started","success");
+	try 
+	{
+
+		var $setId1 = getPortletId($inputObject.componentName);
+		_click(_div($inputObject.layoutType, _in(_div($setId1+"_LayoutOtions"))));
+	
+		switch($inputObject.layoutType)
+		{
+			case "OnlyChart" : 			_assertExists(_div( $setId1 + "_chart"));
+										_assertFalse(_isVisible(_div($setId1 + "_grid")));
+										break;
+							   
+			case "OnlyGrid" : 			_assertExists(_div( $setId1 + "_grid"));
+										_assertFalse(_isVisible(_div($setId1 + "_chart")));
+										break;
+										
+			case "ChartLeftGridRight" :	_assertExists(_div( $setId1 + "_grid" , _rightOf(_div($setId1 + "_chart"))));
+                                        break;
+										
+			case "GridLeftChartRight" : _assertExists(_div( $setId1 + "_chart" , _rightOf(_div($setId1 + "_grid"))));
+			                            break;
+										
+			case "ChartTopGridBottom" :	_assertExists(_div( $setId1 + "_grid" , _under(_div($setId1 + "_chart"))));
+			                            break;
+										
+			case "GridTopChartBottom" :	_assertExists(_div( $setId1 + "_chart" , _under(_div($setId1 + "_grid"))));
+			                            break;
+										
+			default					  : _log("Invalid Layout Option = " + $inputObject.layout + " not proper","failure"); return;							
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setComponentLayout Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: 
+* @description This function is called to fetchComponentReport in dashboard
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function fetchComponentReport($inputObject)
+{    
+    _log("fetchComponentReport Started","success");
+    try {
+			var $saveAs;
+			
+			$saveAs = $inputObject.saveAs;
+			
+			var $componentName = $inputObject.componentName;
+			
+			var $componentNameTrimed;
+			
+			$componentNameTrimed = ($componentName.indexOf(" ")!=-1)?$componentName.replace(" ", "_"):$componentName;
+		
+			_click(_link("fdfga",_near(_span($inputObject.componentName))));
+			
+			var $actual_dirPath = _getGlobal("importDIR") + "/dashboard/" + $inputObject.saveAs;
+						
+			_saveDownloadedAs($actual_dirPath);
+						
+			var $expected_dirPath = _getGlobal("importDIR")+"/dashboard/"+$componentNameTrimed+"_expectedData.csv";	
+			var $compareResult = compareCSV($actual_dirPath,$expected_dirPath);
+		
+			if($compareResult === true)
+			 {
+				_log("Dashboard fetch result is correct","success");
+			}else
+			{
+				_log("Dashboard fetch result is wrong","failure");
+			}
+	}catch (e) {
+        handleFailure(e);
+    }
+    _log("fetchComponentReport Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: modifyComponentSettingReport
+* @description This function is called to add Component in Dashboard
+* @param {String} $inputObject.component,$inputObject.componentName,inputObject.componentType === "Item Status", $inputObject.chartType
+* $inputObject.checkInputValue=Yes/No, $inputObject.itemType, $inputObject.showOpenPastDue, $inputObject.chkNonZero, $inputObject.dragFieldTo,
+* selectField, selectField1, printGoal, dataValue, x-axisname, y-axisname, projectFilter, groupBy, selectList
+* @return {String}   None 
+*************************************************************************/
+
+function modifyComponentSetting($inputObject)
+{    
+    _log("modifyComponentSetting Started","success");
+    try {
+       _wait(2000, _isVisible(_span("portlet-icon-settings",_near(_span($inputObject.component)))));
+       _click(_span("portlet-icon-settings",_near(_span($inputObject.component))));
+
+       if($inputObject.componentType === "Item Status")
+            
+	    {	
+	     var $setId1;
+
+            
+	    
+         $setId1 = getSettingId();
+            _log($setId1);
+
+	     
+         
+             _setValue(_textbox( $setId1  + "_titleValue",_in(_div( $setId1  + "_editContainer")),5),$inputObject.componentName);
+         
+             _setSelected(_select( $setId1  + "_chartType",_in(_div( $setId1  + "_editContainer")),5),$inputObject.chartType);
+
+	     if($inputObject.checkInputValue === "Yes")
+	     {
+	      _check(_checkbox( $setId1  + "_showDataLabel",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+	     if($inputObject.checkInputValue === "No")
+	     {
+	      _uncheck(_checkbox( $setId1  + "_showDataLabel",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+	     _click(_heading3( $setId1 + "_itemHeader",_in(_div( $setId1  + "_editContainer")),5));
+
+	     _setSelected(_select( $setId1  + "_itemType",_in(_div( $setId1  + "_editContainer")),5),$inputObject.itemType);
+
+	     if($inputObject.showOpenPastDue === "Yes")
+	     {
+	      _check(_checkbox( $setId1  + "_showOpenPastDue",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+	     if($inputObject.showOpenPastDue === "No")
+	     {
+	      _uncheck(_checkbox( $setId1  + "_showOpenPastDue",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+            
+	     if($inputObject.chkNonZero === "Yes")
+	     {
+	      _check(_checkbox( $setId1  + "_chkNonZero",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+	     if($inputObject.chkNonZero === "No")
+	     {
+	      _uncheck(_checkbox( $setId1  + "_chkNonZero",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+             _click(_heading3( $setId1 + "_fieldHeader",_in(_div( $setId1  + "_editContainer")),5));
+            
+              if($inputObject.dragFieldTo === "Column")
+	      {
+		  _wait(2000, _isVisible(_div($inputObject.selectField)));
+	     _dragDrop(_div($inputObject.selectField,2,2), _list( $setId1  + "_selectFrom2",2,2));
+
+              }
+              if($inputObject.dragFieldTo1 === "Row")
+	      {
+		      _wait(2000, _isVisible(_div($inputObject.selectField1)));
+	      _dragDrop(_div($inputObject.selectField1,2,2),_list( $setId1  + "_selectFrom3",2,2));
+              }
+
+	      _click(_button("QTP_KEY_BUTTON_Save",_in(_div( $setId1  + "_controls"))));
+         
+	    }
+        
+        
+	    if($inputObject.componentType === "Open Items")
+	    {
+            var $id1 = _parentNode(_textbox("PageCompTitle")).id;
+		 
+            var $setId1  = $id1.split("_")[0];
+         
+            _setValue(_textbox( $setId1  + "_titleValue",_in(_div( $setId1  + "_editContainer")),5),$inputObject.componentName);
+         
+            _setSelected(_select( $setId1  + "_chartType",_in(_div( $setId1  + "_editContainer")),5),$inputObject.chartType);
+
+             if($inputObject.chkNonZero === "Yes")
+	     {
+	      _check(_checkbox( $setId1  + "_chkNonZero",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+	     if($inputObject.showOpenPastDue === "No")
+	     {
+	      _uncheck(_checkbox( $setId1  + "_chkNonZero",_in(_div( $setId1  + "_editContainer")),5));
+	     }
+
+	     _dragDrop(_div($inputObject.selectField), _list( $setId1  + "_selectFrom2"));
+
+	     _click(_button("QTP_KEY_BUTTON_Save",_in(_div( $setId1  + "_controls"))));
+            
+	    }
+
+	    if($inputObject.componentType === "Project Progress")
+	    
+	    {
+	    
+	    var $id1 = _parentNode(_textbox("PageCompTitle")).id;
+		 
+            var $setId1  = $id1.split("_")[0];
+         
+            _setValue(_textbox( $setId1  + "_titleValue",_in(_div( $setId1  + "_editContainer")),5),$inputObject.componentName);
+
+	    _setSelected(_select( $setId1  + "_groupby",_in(_div( $setId1  + "_editContainer")),5),$inputObject.chartType);
+
+	    _click(_button("QTP_KEY_BUTTON_Save",_in(_div( $setId1  + "_controls"))));
+	    
+	    }
+
+            if($inputObject.componentType === "Others")
+	    {
+                var $iframe1 = _div("/compEdit/").firstChild;
+		
+		
+		_wait(2000, _isVisible(_textbox("PageCompTitle",_in(_div("ListDiv",_in($iframe1))),5)));
+                _setValue(_textbox("PageCompTitle",_in(_div("ListDiv",_in($iframe1))),5),$inputObject.componentName);
+
+		_setSelected(_select("ChartType",_in(_div("ListDiv",_in($iframe1))),5),$inputObject.chartType);
+
+		_setValue(_textbox("xAxisLabel",_in(_div("ListDiv",_in($iframe1))),5),$inputObject.xAxisname);
+
+		_setValue(_textbox("yAxisLabel",_in(_div("ListDiv",_in($iframe1))),5),$inputObject.yAxisname);
+
+		if($inputObject.dataValue === "Yes")
+		{
+		_check(_checkbox("showDataLabel",_in(_div("ListDiv",_in($iframe1))),5));
+		}
+                if($inputObject.dataValue === "No")
+		{
+		_uncheck(_checkbox("showDataLabel",_in(_div("ListDiv",_in($iframe1))),5));
+		}
+
+		_setSelected(_select("projFilter",_in(_div("ListDiv",_in($iframe1))),5),$inputObject.projectFilter);
+
+		if($inputObject.printGoal === "OrgGoal")
+		{
+		 _click(_radio("Org",_in(_div("ListDiv",_in($iframe1))),5));
+		}
+
+                if($inputObject.printGoal === "ProjectGoal")
+
+                {
+		 _click(_radio("Prj",_in(_div("ListDiv",_in($iframe1))),5));
+
+		}
+
+                _check(_checkbox("USL",_in(_div("ListDiv",_in($iframe1))),5));
+                
+		_check(_checkbox("Target",_in(_div("ListDiv",_in($iframe1))),5));
+
+		_check(_checkbox("LSL",_in(_div("ListDiv",_in($iframe1))),5));
+
+                _setSelected(_select("GroupBy",_in(_div("ListDiv",_in($iframe1))),5),$inputObject.groupBy);
+                
+		if($inputObject.selectOption === "Yes")
+
+		{
+                        _set($len,_select("selectFrom",_in(_div("ListDiv",_in($iframe1)))).length);
+
+			for(var $i = 0; $i<$len; $i++)
+		         
+			 {
+	   	
+	                 _setSelected(_select("selectFrom",_in(_div("ListDiv",_in($iframe1)))),$inputObject.selectList,'CTRL');
+			
+		         }
+                        _click(_link("Move Right",_in(_div("ListDiv",_in($iframe1))),5));
+		}
+
+		_click(_submit("QTP_KEY_BUTTON_Save",_in(_div("ListDiv",_in($iframe1))),5));
+
+
+                
+
+	    }
+	    verifyComponentGrid($inputObject);
+
+	    
+       } 
+       catch (e) 
+            {
+        handleFailure(e);
+          }
+    _log("modifyComponentSetting Completed","success");
+}
+
+
+/**
+ @Function Number:	81
+ @author:			Vaishali	
+ @example:			enabledDashboardSecurity()	
+ @description: 		This function enables dash board security.
+ @param: 			None
+ @return: 			None
+**/
+function enabledDashboardSecurity()
+{
+	_log("enabledDashboardSecurity Started","success");
+	try 
+	{			
+		if(_exists(_image("QTP_enable_security")))
+			_click(_image("QTP_enable_security"));
+		
+		verifyenabledDashboardSecurity();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enabledDashboardSecurity Completed","success");
+}
+
+/**
+ @Function Number:	83
+ @author:			Vaishali
+ @example:			verifyenabledDashboardSecurity()			
+ @description: 		This function verifies for page security is enable or not.by checking disable symbol if disable image present it verified that your page enable security. 	
+ @param: 			None
+ @return: 			None
+**/
+function verifyenabledDashboardSecurity()
+{
+	_log("verifyenabledDashboardSecurity Started","success");
+	try 
+	{
+		if(_exists(_image("QTP_disable_security")))
+			_assertTrue(_exists(_image("QTP_disable_security")));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyenabledDashboardSecurity Completed","success");
+}
+/*************************************************************************
+* @author Arindam
+* @example: enableSecurity($inputObject.page_name)
+* @description This function is called to modify Page
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function enableSecurity($inputObject)
+{
+	_log("enableSecurity started","success");
+	try
+	{
+		openPage($inputObject);
+
+		var $setId1 = getPageId($inputObject);
+		
+		_click(_div($setId1+"_pageEditIcon", _in(_div($setId1))));
+		
+		
+		_click(_div($setId1 + "Security", _in(_div( $setId1 + "pageSecurityBlock")),5));
+
+		_assertExists(_div("pageSecurityDisabled"));
+		
+		_click(_submit("/button/", _in(_div( $setId1 + "_editPageBlock")),5));
+        
+		
+
+	}catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" enableSecurity Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: disableSecurity($inputObject.page_name)
+* @description This function is called to modify Page
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function disableSecurity($inputObject)
+{
+	_log("enableSecurity started","success");
+	try
+	{
+		openPage($inputObject);
+
+		var $setId1 = getPageId($inputObject);
+		
+		_click(_div($setId1+"_pageEditIcon", _in(_div($setId1))));
+		
+		
+		_click(_div($setId1 + "Security", _in(_div( $setId1 + "pageSecurityBlock")),5));
+
+		_assertExists(_div("pageSecurityEnabled"));
+		
+		_click(_submit("/button/", _in(_div( $setId1 + "_editPageBlock")),5));
+        
+		
+
+	}catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" enableSecurity Completed","success");
+}
+
+/*************************************************************************
+* @author Arindam
+* @example: verifyEnableSecurity($inputObject.page_name)
+* @description This function is called to modify Page
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function verifyEnableSecurity($inputObject)
+{
+	_log("verifyEnableSecurity started","success");
+	try
+	{
+		openPage($inputObject);
+
+		var $setId1 = getPageId($inputObject);
+		
+		_click(_div($setId1+"_pageEditIcon", _in(_div($setId1))));
+		
+		
+		_click(_div($setId1 + "Security", _in(_div( $setId1 + "pageSecurityBlock")),5));
+
+		_assertExists(_div("pageSecurityEnabled"));
+		
+		_click(_submit("/button/", _in(_div( $setId1 + "_editPageBlock")),5));
+        
+		
+
+	}catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" enableSecurity Completed","success");
+}
+

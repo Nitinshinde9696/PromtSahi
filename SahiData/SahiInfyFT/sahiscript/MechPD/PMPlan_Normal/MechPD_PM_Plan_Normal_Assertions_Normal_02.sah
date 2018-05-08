@@ -1,0 +1,57 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+
+ $data = readDataFromCSV("MechPD_PM_Plan_Normal_Assertions_Normal_02","MechPD/PMPlan_Normal"); 
+ 
+  var $t = _testcase("Assertions", "Production Support Service Scope,Language Settings,Production Support Goals,Operational Processes / Manual And OLA / Underpinning Contracts , all these should not be visible");
+ $t.start();
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject); //Project Charter
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PSSScope1; //Production Support Service Scope
+ InfyFTassertNotVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;//_InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.LSettings2;//Language Settings
+ InfyFTassertNotVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PSGoals3;//Production Support Goals
+ InfyFTassertNotVisible($inputObject);
+  
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon12;// 
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.OPManual4; //Operational Processes / Manual
+ InfyFTassertNotVisible($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.OLA5; //OLA / Underpinning Contracts
+ InfyFTassertNotVisible($inputObject);//
+ 
+ $t.end();
+ 
+
+ 

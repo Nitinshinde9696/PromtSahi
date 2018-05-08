@@ -1,0 +1,1065 @@
+
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setReportParameters($inputObject)
+{
+	_log("setReportParameters Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_button("QTP_KEY_BUTTON_Go"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setReportParameters Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example openReport({ "report_name" : "Contact Details By User" });
+* @description This function is called to open report
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function openReport($inputObject)
+{
+	_log("openReport Started","success");
+	try 
+	{
+		if($inputObject.report_type)
+		{
+			_click(_div($inputObject.report_type));
+			_click(_link($inputObject.report_name, _under(_div($inputObject.report_type))));
+		}
+		else
+			_click(_link($inputObject.report_name));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openReport Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author: Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openNotStartedTask($inputObject)
+{
+	_log("openNotStartedTask Started","success");
+	try 
+	{
+		if(_link(0,_in(_cell(5,_near(_cell($inputObject.item))))))
+			_click(_link(0,_in(_cell(5,_near(_cell($inputObject.item))))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openNotStartedTask Completed","success");
+}
+
+/**
+ @Function Number:10
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTaskFromUserReports($inputObject)
+{
+	_log("openTaskFromUserReports Started","success");
+	try 
+	{
+		_click(_link(0,_in(_cell(1,_near(_cell($inputObject.item))))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTaskFromUserReports Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyDynamicListReport
+* @description This function is called to verifyDynamicListReport
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyDynamicListReport($inputObject)
+{
+	_log("verifyDynamicListReport Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_containsText(_select($inputObject.item_type), $inputObject.item_name));
+		}
+		else
+		{
+			_assertTrue(_containsText(_select($inputObject.item_type), $inputObject.item_name));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDynamicListReport Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example verifyReportTableItem({"resFilter" : "TempResorceFilter"})
+* @description This function is called to check Report Table Item
+* @param {String} item, Item Name or Item Id to be open
+* @return {String}   None 
+*************************************************************************/
+
+function verifyReportTableItem($inputObject)
+{
+	_log("verifyReportTableItem Started","success");
+	try 
+	{
+		var $values;
+		setAllFields($inputObject);
+		if(_exists(_button("QTP_KEY_BUTTON_Go")))
+			_click(_button("QTP_KEY_BUTTON_Go"));
+		else
+			_click(_submit("Apply"));
+		if($inputObject.item.indexOf(";")!=-1)
+		{
+			_set($values,$inputObject.item.split(";"));
+			for(var $i=0;$i<$values.length;$i++)
+			{
+				if($inputObject.operation === "Negative")
+				{
+					_assertFalse(_isVisible(_cell($values[$i])));
+				}
+				_assertTrue(_isVisible(_cell($values[$i])));
+			}
+				
+		}
+		else
+		{
+			if($inputObject.operation === "Negative")
+				_assertFalse(_isVisible(_cell($inputObject.item)));
+			else
+				_assertTrue(_isVisible(_cell($inputObject.item)));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReportTableItem Completed","success");
+}
+
+/**
+ @Function Number:23
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyReportListing($inputObject)
+{
+	_log("verifyReportListing Started","success");
+	try 
+	{
+		var $reportNamesSet = $inputObject.report_names.split(";");
+		for(var $i=0; $i < $reportNamesSet.lenght; $i++)
+			_assertTrue(_isVisible(_cell($reportNamesSet[$i], _under(_cell($inputObject.report_type)))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReportListing Completed","success");
+}
+
+/**
+ @Function Number:24
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  verifyReportExistance()
+{
+	_log(" verifyReportExistance Started","success");
+	try 
+	{
+		verifyTrailFrame($inputObject);
+		_click(_button("Cancel"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyReportExistance Completed","success");
+}
+
+/**
+ @Function Number:28
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyReportList_Org($inputObject)
+{
+	_log("verifyReportList_Org Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete")
+			_assertFalse(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+    	    		
+    	else 
+    		_assertTrue(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReportList_Org Completed","success");
+}
+
+/**
+ @Function Number:29
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickReportAdmin_Org()
+{
+	_log("clickReportAdmin_Org Started","success");
+	try 
+	{
+		_click(_link("CustomReport"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickReportAdmin_Org Completed","success");
+}
+
+/**
+ @Function Number:30
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyCustomReport_Org($inputObject)
+{
+	_log("verifyCustomReport_Org Started","success");
+	try 
+	{
+		_setSelected(_select("selregFlag"),$inputObject.selregFlag);
+		_click(_submit("QTP_GO1"));
+		
+		if($inputObject.operation === "Delete")
+			_assertFalse(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+    	else 
+    		_assertTrue(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCustomReport_Org Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example addCustomReport_Org
+* @description This function is called to addCustomReport_Org
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function addCustomReport_Org($inputObject)
+{
+	_log("addCustomReport_Org Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		
+		var $reportRpt;
+		var $ReportXml;
+		var $ReportJSP;
+		if( $inputObject.lst_DeployReportType === "RPT - XML" || $inputObject.lst_DeployReportType === "BIRT")
+		{
+			_set($reportRpt,_getGlobal("importDIR")+$inputObject.ReportRpt);
+			_setFile(_file("ReportRpt"),$reportRpt);
+			_call(_file("ReportRpt").type = "text");
+			_setValue(_textbox("ReportRpt"), $inputObject.ReportRpt);
+			
+			_set($ReportXml,_getGlobal("importDIR")+$inputObject.ReportXml);
+			_setFile(_file("ReportXml"), $ReportXml);
+			_call(_file("ReportXml").type = "text");
+			_setValue(_textbox("ReportXml"),$inputObject.ReportXml);
+		}
+		
+		if( $inputObject.lst_DeployReportType === "JSP")
+		{
+			_set($ReportJSP,_getGlobal("importDIR")+$inputObject.ReportJSP);
+			_setFile(_file("ReportJSP"), $ReportJSP);
+			_call(_file("ReportJSP").type = "text");
+			_setValue(_textbox("ReportJSP"), $inputObject.ReportJSP);
+		}
+		
+		_wait(5000,null);
+		_click(_submit("QTP_SAVE"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCustomReport_Org Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickCustomReports()
+{
+	_log("clickCustomReports Started","success");
+	try 
+	{
+		_click(_link("de-icon-custom_reports"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickCustomReports Completed","success");
+}
+
+/**
+ @Function Number:34
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyCustomReportInReportList($inputObject)
+{
+	_log("verifyCustomReportInReportList Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete")
+			_assertFalse(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+    	    		
+    	else 
+    		_assertTrue(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCustomReportInReportList Completed","success");
+}
+
+/**
+ @Function Number:35
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickReportAdmin()
+{
+	_log("clickReportAdmin Started","success");
+	try 
+	{
+		_click(_link("CustomReport"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickReportAdmin Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example addCustomReport
+* @description This function is called to addCustomReport
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function addCustomReport($inputObject)
+{
+	_log("addCustomReport Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		if( $inputObject.lst_DeployReportType === "RPT - XML" || $inputObject.lst_DeployReportType === "BIRT")
+		{
+			_setFile(_file("ReportRpt"), _getGlobal("importDIR")+$inputObject.ReportRpt);
+			_call(_file("ReportRpt").type = "text");
+			_setValue(_textbox("ReportRpt"), $inputObject.ReportRpt);
+			
+			_setFile(_file("ReportXml"), _getGlobal("importDIR")+$inputObject.ReportXml);
+			_call(_file("ReportXml").type = "text");
+			_setValue(_textbox("ReportXml"),$inputObject.ReportXml);
+		}
+		
+		if( $inputObject.lst_DeployReportType === "JSP")
+		{
+			_setFile(_file("ReportJSP"), _getGlobal("importDIR")+$inputObject.ReportJSP);
+			_call(_file("ReportJSP").type = "text");
+			_setValue(_textbox("ReportJSP"), $inputObject.ReportJSP);
+		}
+		
+		_wait(5000,null);
+		_click(_submit("QTP_SAVE"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCustomReport Completed","success");
+}
+
+/**
+ @Function Number:38
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyCustomReportInReportAdmin($inputObject)
+{
+	_log("verifyCustomReportInReportAdmin Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete")
+			_assertFalse(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+    	    		
+    	else 
+    		_assertTrue(_isVisible(_cell($inputObject.item) || _link($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCustomReportInReportAdmin Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example selectReportInReportAdmin
+* @description This function is called to selectReportInReportAdmin
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function selectReportInReportAdmin($inputObject)
+{
+	_log("selectReportInReportAdmin Started","success");
+	try 
+	{
+		_click(_link($inputObject.reportName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectReportInReportAdmin Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example deleteReport
+* @description This function is called to deleteReport
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function deleteReport($inputObject)
+{
+	_log("deleteReport Started","success");
+	try 
+	{
+		_click(_button("QTP_DELETE"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteReport Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function generateReport($inputObject)
+{
+	_log("generateReport Started","success");
+	try 
+	{
+		if($inputObject.changeFilter === 'Y')// will be equal to Y
+		{
+			setAllFields($inputObject);
+			_click(_button("QTP_KEY_BUTTON_Go"));
+		}
+		_submit("print");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("generateReport Completed","success");
+}
+
+/**
+ @Function Number:
+ @author:Harshit
+ @example:verifygenerateReport($inputObject) 
+ @description: pass $inputObject.item = "abc;pqr"
+ @param: 
+ @return: 
+ **/
+
+function verifygenerateReport($inputObject)
+{
+	_log("verifygenerateReport Started","success");
+	try 
+	{
+		_selectWindow("rep_proj_status_det_print_preview");
+		var $items = $inputObject.item.split(";"); 
+		for (var $i = 0; $i < $items.length; $i ++)
+			_assertTrue(_isVisible(_cell($items[$i]), _under(_cell("Project")))));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifygenerateReport Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example checkOutReport
+* @description This function is called to checkOutReport
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function checkOutReport($inputObject)
+{
+	_log("checkOutReport Started","success");
+	try 
+	{
+		_click(_radio(0,_near(_link($inputObject.reportName))));
+		_click(_link("de-icon-checkout"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkOutReport Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example downloadReport
+* @description This function is called to downloadReport
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function downloadReport($inputObject)
+{
+	_log("downloadReport Started","success");
+	try 
+	{
+		var $downloadPath = _getGlobal("DOWNLOAD");
+		var $jspBoolean = false;
+		
+		_set($jspBoolean,_button("QTP_DOWNLOAD_JSP").disabled);
+		
+		if($jspBoolean === false)
+		{
+			_click(_button("QTP_DOWNLOAD_JSP"));
+		}
+		_saveDownloadedAs($downloadPath+""+$inputObject.w_fileNameArray);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("downloadReport Completed","success");
+}
+
+/**
+ @Function Number:58
+ @author: Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function generateTailoringGuidelineReport($inputObject)
+{
+	_log("generateTailoringGuidelineReport Started","success");
+	try 
+	{
+		var $fjson = {};
+		$fjson.lst_processtemplate = $inputObject.lst_processtemplate;
+		$fjson.lst_projFilter = $inputObject.lst_projFilter;
+		$fjson.lst_StatusFilter = $inputObject.lst_StatusFilter;
+		setAllFields($fjson);
+		
+		_click(_button("QTP_KEY_BUTTON_Go"));
+
+		var $sjson = {};
+		if($inputObject.setOfProjectAndQuestionsandAns !== "" && $inputObject.QuestionColumn !== "" )
+		{
+			$sjson.setOfProjectAndQuestionsandAns = $inputObject.setOfProjectAndQuestionsandAns;
+			$sjson.QuestionColumn = $inputObject.QuestionColumn;
+		}
+		$sjson.dataPresent = $inputObject.dataPresent;
+		verify_generateTailoringGuidelineReport($sjson);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("generateTailoringGuidelineReport Completed","success");
+}
+
+/**
+ @Function Number:60
+ @author: Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verify_generateTailoringGuidelineReport($inputObject)
+{
+	_log("verify_generateTailoringGuidelineReport Started","success");
+	try 
+	{
+		if($inputObject.dataPresent === "no")
+		{
+			_assertTrue(_exists(_cell("No Records Found",_in(_table("QTP_QA_table")))));
+		}
+		else if($inputObject.dataPresent ==="yes")
+		{
+			var $ProjquestionAnswer, $individualProjQsAns;
+			$ProjquestionAnswer = $inputObject.setOfProjectAndQuestionsandAns.split("|"); 
+			
+			for(var $i = 0; $i < $ProjquestionAnswer.length; $i++)
+			{
+				$individualProjQsAns = $ProjquestionAnswer[$i].split(";");
+				_assertContainsText($individualProjQsAns[0],_table("QTP_ProjectName"));
+				
+				var $row = _getText(_parentRow(_cell($individualProjQsAns[0]))).substring(1,_getText(_parentRow(_cell($individualProjQsAns[0]))).indexOf(" "));
+				var $j = parseInt($row) + 1;
+				if(_assertEqual($individualProjQsAns[0],_getText(_table("QTP_QA_table").rows[1].getElementsByTagName("TD").item($j).attributes.item(0))))
+				{
+					_assertEqual($individualProjQsAns[1],_getText(_cell("ValLft[1]",_in(_table("QTP_QA_table")))));
+					_assertEqual($individualProjQsAns[2],_getText(_cell("ValLft[" + $j + "]",_in(_table("QTP_QA_table")))));
+				}
+			}
+		}
+	}	
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verify_generateTailoringGuidelineReport Completed","success");
+}
+
+/**
+ @Function Number:61
+ @author: Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function defineCustomFilter($inputObject)
+{
+	_log("defineCustomFilter Started","success");
+	try 
+	{
+		if($inputObject.filterName)
+			_setSelected(_select("projFilter"), $inputObject.filterName);
+		_click(_button("QTP_custom_filter"));
+		_selectWindow("Project Filter Definition");
+		_setSelected(_select("projSelect"), $inputObject.projSelect);
+		
+		if($inputObject.projSelect === "Dynamic Search Criteria")
+		{
+			_click(_button("QTP_Define_Search_Criteria"));
+			_selectWindow("Search");
+			setAllFields($inputObject);
+			_click(_submit("QTP_Submit"));
+			_selectWindow("Project Filter Definition");
+		}
+		
+		else
+		{
+			var $splitVal = $inputObject.selectFrom.split(";");
+			
+			for(var $i = 0; $i < $splitVal.length; $i++)
+			{
+				_setSelected(_select("selectFrom"), $splitVal[$i]);
+				_click(_button("addProjBtn"));
+			}
+		}
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("defineCustomFilter Completed","success");
+}
+
+/**
+ @Function Number:64
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function exportTGReport($inputObject)
+{
+	_log("exportTGReport Started","success");
+	try 
+	{
+		var $downloadPath = _getGlobal("DOWNLOAD");
+		
+		_click(_image("download_doc.gif"));
+		_saveDownloadedAs($downloadPath+""+$inputObject.SaveAs);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("exportTGReport Completed","success");
+}
+
+/**
+ @Function Number:70
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function PlanAllocaationReportatOrg($inputObject)
+{
+	_log("PlanAllocaationReportatOrg Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Generate Report"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("PlanAllocaationReportatOrg Completed","success");
+}
+
+/**
+ @Function Number:73
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function PlanAllocationReportatPrj($inputObject)
+{
+	_log("PlanAllocationReportatPrj Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Generate Report"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("PlanAllocationReportatPrj Completed","success");
+}
+
+/**
+ @Function Number:76
+ @author:  Vaishali
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ResourceAllocationDetailsatOrg($inputObject)
+{
+	_log("ResourceAllocationDetailsatOrg Started","success");
+	try 
+	{
+		var $value;
+		var $length;
+		var $str;
+		
+		_set($value,_getText(_cell(0,_near(_cell($inputObject.Role)),_under(_cell($inputObject.legend,_under(_cell($inputObject.month)))))));
+		_click(_link($value));
+		
+		_selectWindow("pop_rescount_actuals_det");
+		if (_isIE())
+            $str = replaceAllStr($inputObject.values,";","");
+		else
+		    $str = replaceAllStr($inputObject.values,";"," ");
+		if($inputObject.values.indexOf(";") != -1)
+		{
+			_assertTrue(_containsText(_cell($inputObject.Resource).parentNode,$str));
+		}
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ResourceAllocationDetailsatOrg Completed","success");
+}
+
+/**
+ @Function Number:79
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ResourceAllocationDetailsatPrj($inputObject)
+{
+	_log("ResourceAllocationDetailsatPrj Started","success");
+	try 
+	{
+		if(_exists(_link("Grid View")))
+		{
+			_click(_link("Grid View"));
+		}
+		var $value;
+		var $length;
+		var $str;
+		//_set($value,_getText(_cell(0,_near(_cell($inputObject.Role)),_under(_cell($inputObject.month) && _cell($inputObject.legend)))));
+		_click(_link(_getText(_cell(0,_near(_cell($inputObject.Role)),_under(_cell($inputObject.legend)),_under(_cell($inputObject.month))))));
+		_selectWindow("pop_rescount_actuals_det");
+		if (_isIE())
+            $str = replaceAllStr($inputObject.values,";","");
+		else
+		    $str = replaceAllStr($inputObject.values,";"," ");
+		if($inputObject.values.indexOf(";") != -1)
+		{
+			_assertTrue(_containsText(_cell($inputObject.Resource).parentNode,$str));
+		}
+		_closeWindow();
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ResourceAllocationDetailsatPrj Completed","success");
+}
+
+/**
+ @Function Number:85
+ @author: Vaishali
+ @example:
+ @description: 
+ @param: item_name,resource
+ @return: 
+ **/
+
+function openItemFromReportList($inputObject)
+{
+	_log("openItemFromReportList Started","success");
+	try 
+	{	
+		_click(_button("QTP_KEY_BUTTON_Go"));
+		if($inputObject.item_name && $inputObject.resource)
+		{
+			$item = "/"+$inputObject.item_name+"/";
+			$resource="/"+$inputObject.resource+"/";
+			_set($values,_getText(_cell($item,_near(_cell($resource)),_under(_cell("Project")))));
+			_click(_link($values));
+		}
+		else
+		{
+			_click(_link($inputObject.item_name));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openItemFromReportList Completed","success");
+}
+
+/**
+ @Function Number:86
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyReportItemOnPrintView($inputObject)
+{
+	_log("verifyReportItemOnPrintView Started","success");
+	try 
+	{
+		if(_exists(_submit("print")))
+		{
+			_click(_submit("print"));
+			_selectWindow("rep_proj_status_det_by_user_print_preview");
+			_assertTrue(_exists(_cell($inputObject.item_name)));
+			/*var $count = 0 ;
+			_set($count,_table("QTP_KEY_TABLE_Trace_Display").rows.length);
+			for(var $i =0; $i < $count $i++)
+			{
+				
+			}*/
+			_closeWindow();
+			_selectWindow();
+
+		}	
+		else
+			_click(_link("de-icon-print"));
+		//verify functionality can not check because print screen can not catch by sahi.
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReportItemOnPrintView Completed","success");
+}
+/**
+@Function Number:86
+@author:
+@example:
+@description: 
+@param: 
+@return: 
+**/
+
+function verifyDetailsinPrintPreview()
+{
+	_log("verifyDetailsinPrintPreview Started","success");
+	try 
+	{
+		_selectWindow("rep_exception_det");
+		//parameter not passed what to verify
+		_click(_button("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDetailsinPrintPreview Completed","success");
+}
+
+/**
+@Function Number:86
+@author:
+@example:
+@description: 
+@param: 
+@return: 
+**/
+
+function clickonTeamMember()
+{
+	_log("clickonTeamMember Started","success");
+	try 
+	{
+		_click(_link("Team Member"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickonTeamMember Completed","success");
+}
+
+

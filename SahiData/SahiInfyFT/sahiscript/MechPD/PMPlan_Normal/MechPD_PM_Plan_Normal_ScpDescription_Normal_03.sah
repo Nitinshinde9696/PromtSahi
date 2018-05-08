@@ -1,0 +1,324 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("MechPD_PM_Plan_Normal_ScpDescription_Normal_03","MechPD/PMPlan_Normal"); 
+
+ _wait(1000);
+
+ var $t = _testcase("TC_1", "Verifying available details in the PM Plan summary and Additional Note.");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(1000);
+ /*
+ $inputObject = {};
+ $inputObject.span_Name = $data.note5;// Additional Note.
+ InfyFTisVisible1($inputObject);
+ 
+ _wait(1000);
+ */
+ $t.end(); 
+ 
+ /********************************************************************
+ Scope Description started(Project Charter Node)
+ ********************************************************************/
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link5;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";//$data.field1;//"" 
+ $inputObject.txt_DN_ClientsObjectives = "";// $data.field2;//""
+ $inputObject.txt_DN_ProjectandBusinessCont = "";//$data.field3;//""  
+ InfyFTsaveInstance($inputObject);// 
+ 
+ var $t = _testcase("TC_2", "Scope Description");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName2;//Scope Description
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Scope Description
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason2;//Following fields not filled: Project Scope, Clients Objectives, Project and Business Context.
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Filling the Scope Description fields ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link5;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.field1;//Test
+ //$inputObject.txt_DN_ClientsObjectives = $data.field2;//Test 
+ InfyFTsaveInstance($inputObject);//
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName2;//Scope Description
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Scope Description
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason2a;//Following fields not filled: Clients Objectives, Project and Business Context.
+ verifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link5;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.txt_DN_ClientsObjectives = $data.field2;//Test
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.field3;//Test  
+ InfyFTsaveInstance($inputObject);//
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Verifying the Scope Description of summary after filling the SD fields ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName2;//Scope Description
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Scope Description
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason3;//All fields are filled.
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ /********************************************************************
+ Scope Description ended and Assumption started
+ ********************************************************************/
+
+ var $t = _testcase("TC_8", "Creating the Assumption ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumtion1;// _InfyFTclick(_link("Assumption"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("1")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data.Assm13;//Assm1
+	 OpenEformInstance($inputObject);
+ 
+	 _wait(2000);
+ 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.Assm13;//Assm1
+	 InfyFTDeleteEformInstance($inputObject); 
+ }
+ 
+ _wait(5000);
+
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName3;//Assumption
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName3;//Assumption
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason4;//No assumptions are added. At least one assumption must be added.
+ verifySwiftFormData($inputObject);
+
+ _wait(1000);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumtion1;// _InfyFTclick(_link("Assumption"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Assm13;
+ $inputObject.txt_CM_Description = $data.adescription;//creating assumption for pmp 
+ $inputObject.chk_DN_ConverttoRisk = $data.aCRisk;//subhashini_k03 //true
+ //$inputObject.chk_DN_CommunicatedtoClient = $data.aCClient;//true
+ createLinkedItem($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Assm13;
+ verifyLinkedItem($inputObject);
+ 
+_wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName3;//Assumption
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName3;//Assumption
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason5;//At least one assumption is added.
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "Risk Log,checking reason's after and before creating assumption");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Risk
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName4;//Risk 
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason5a;//Mandatory fields are not filled for the Risks.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon13;// _InfyFTclick(_image("nodeIcon16"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.RiskLog13;// _InfyFTclick(_link("Risk Log"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Risk Management
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.item = $data.RiskID;//RSK6
+ OpenEformInstance($inputObject); 
+ 
+ //Modifying the risk(assumption)
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;//Risk1
+ $inputObject.lst_DN_RiskCategory = $data.Rcategory;//Customer
+ $inputObject.lst_DN_Probability = $data.Probability;//0.3
+ $inputObject.lst_DN_Impact = $data.Impact;//3
+ //$inputObject.edt_DN_ScheduleImpactDays = $data.Days;//5
+ //$inputObject.edt_DN_CostImpactduetoSchedul = $data.CImapct;//4
+ //$inputObject.edt_DN_CostofRiskMitigationUS = $data.CRisk;//5
+ //$inputObject.edt_DN_OtherCostofRiskUSD = $data.ORisk;//8
+ $inputObject.txt_DN_MitigationPlan = $data.MPlan;//modify risk
+ $inputObject.lst_DN_ImpactTo = $data.ImpactTo;//Others
+ $inputObject.edt_DN_RiskOwner = $data.Rowner;//arjun.r02
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5a; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Risk
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName4;//Risk
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = $data.reason6;//Atleast one Risk is added and All mandatory fields are filled for Risks.
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ 

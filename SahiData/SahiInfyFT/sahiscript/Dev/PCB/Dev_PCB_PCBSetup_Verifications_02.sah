@@ -1,0 +1,39 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Dev_PCB_PCBSetup_Verifications_02", "Dev/PCB");
+ 
+ $gen = readDataFromCSV("Dev_PCB_Common_00", "Dev/PCB");
+  
+ var $t = _testcase("TC_1", "Login to Digite");
+
+ $t.start();
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $gen.UserName11;//dushyant
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.name = $gen.navigateTo21;//Process Templates
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $gen.Dev_PT;//INFY001010Dev001							
+ OpenEformInstance($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.name = $gen.navigateTo23;//PCB Setup;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $t.start();
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName31;//Details
+ SelectSegment($inputObject);
+ 
+ //Write code for Details Segment for PCB Setup.
+ //Write code for verifying the PCB Setup segments 

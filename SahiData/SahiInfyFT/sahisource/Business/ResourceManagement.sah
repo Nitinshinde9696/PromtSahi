@@ -1,0 +1,157 @@
+_include("../Business/DigiteCommon.sah");
+_include("../../../SahiDigite/sahisource/Business/ResourceManagement.sah");
+
+/*************************************************************************
+* @author Nitin
+* @example: InfyFTinviteTeamMemberToProject({ "edt_loginid" : "Nitin_shinde05@infosys.com" ,  "lst_Assigned_Roles" : "SPM" });
+* @description This function is called to invite TeamMember To Project
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTinviteTeamMemberToProject($inputObject)
+ {
+	_log("InfyFTinviteTeamMemberToProject Started","success");
+		try 
+		{
+			var $inviteTeamMemBtn = "KEY_BUTTON_Invite_User";
+			var $extJsId = ""; 	
+			var $inviteTeamMemBtnKey = $inviteTeamMemBtn + $extJsId;
+		
+			_click(_link($inviteTeamMemBtnKey));
+			_selectWindow("AddTeamMember");
+			_check(_radio("loginidradio"));
+			_setValue(_textbox("loginid"),$inputObject.edt_loginid);
+			_click(_button("Go"));
+			var $chk = _lastAlert();
+			if($chk == "User is already part of project team. Hence cannot be invited again")
+			{
+				_assertTrue(true,"user already invited");
+				_closeWindow();
+				_selectWindow();
+				_wait(10000, _exists(_link($inviteTeamMemBtnKey)));	
+				_clearLastAlert();
+			}
+			else if($chk == "No record found")
+			{
+				_assertTrue(true,"Invalid Member");
+				_closeWindow();
+				_selectWindow();
+				_wait(10000, _exists(_link($inviteTeamMemBtnKey)));	
+				_clearLastAlert();
+			}
+			else
+			{
+			
+				//setAllFields($inputObject);
+				_wait(1000);
+				var $flag="", $str="";
+				var $n=0;
+				$str = $inputObject.lst_Assigned_Roles;
+				var $list ="";
+				$list = _getOptions(_select("Assigned_Roles"));
+				//_alert("list "+$list+ " ######string values "+$str);
+				for(var $i=0; $i< $list.length;$i++)
+				{
+					$n = $str.localeCompare($list[$i]);
+					//_alert($list[$i]);
+						if($n == 0)
+							{
+								break;
+							
+							}
+						
+				}
+				if($n == 0)
+				{
+					_setSelected(_select("Assigned_Roles"),$inputObject.lst_Assigned_Roles);
+					setAllFields($inputObject);
+					_click(_button(" Invite "));
+					var $chk1 = _lastAlert();
+					if($chk1 == "Select at least one role for the team member")
+					{
+						_assertTrue(true,"Select at least one Role");
+						_closeWindow();
+						_selectWindow();
+						_wait(10000, _exists(_link($inviteTeamMemBtnKey)));	
+						_clearLastAlert();
+					}
+					
+				
+				}
+				else
+				{
+					_assert(true,"Job level is not sufficient");
+					//_closeWindow();
+				
+				}
+			
+				if($inputObject.operation === "Negative")
+				{
+					if(_isVisible(_span("No search result to display. Please use 'Search and Add Team Members' option on the left.") === true))
+					{
+						_assertExists(_span("No search result to display. Please use 'Search and Add Team Members' option on the left."));
+						_selectWindow();
+					}
+					else
+					{
+						_assertFalse(_isVisible($inputObject.item));
+					}
+					_closeWindow();
+				}
+				else
+				{
+					if($inputObject.operation === "Alert")
+					{
+						_assertEqual("To Date cannot be greater than Project End Date: "+$inputObject.projectEndDate+". Please Correct it.", _lastAlert());
+						_closeWindow();
+					}
+					_wait(5000);
+				} //test
+				_closeWindow();
+				_selectWindow();
+				_wait(10000, _exists(_link($inviteTeamMemBtnKey)));	
+			}
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}	
+	_log("InfyFTinviteTeamMemberToProject Completed","success");	
+ }
+ 
+ 
+ /*************************************************************************
+* @author Nitin
+* @example: InfyFTUnAllocationofTeamMember();
+* @description This function is called to invite TeamMember To Project
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTUnAllocationofTeamMember()
+ {
+	_log("InfyFTUnAllocationofTeamMember Started","success");
+		try 
+		{
+			_wait(1500);
+			var $a = _isVisible(_submit("UnAllocate"));
+		
+			if($a == true)
+			{
+				_expectConfirm("Use 'Replace Team Member'  to transfer assignments before un-allocating the user. Do you want to 'Unallocate' this user now?", true);
+				_click(_submit("UnAllocate"));
+				
+				//_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+			}
+			else
+			{
+				_assert(true,"Role not allocate to this user");
+			}
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}	
+	_log("InfyFTUnAllocationofTeamMember Completed","success");	
+ }

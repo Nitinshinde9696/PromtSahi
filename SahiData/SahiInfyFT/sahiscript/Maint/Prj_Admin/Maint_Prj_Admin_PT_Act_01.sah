@@ -1,0 +1,103 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Prj_Admin_PT_Act_01","Maint/Prj_Admin"); 
+  
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ $t.end();
+ var $t = _testcase("TC_1.1.2", "Navigate");
+ $t.start();
+ 
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();var $t = _testcase("TC_5","Verify Activity code");
+ $t.start();
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.Acc12;//Activity Code Customization
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+  
+ $inputObject = {};
+ $inputObject["ele_eformHeaderContent[1]"] = $data.message12;
+ verifyAllFields($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.actcode13;// _span("ActCode")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.desc14;// _span("Description")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.IIP15;// _cell("Include In Project")
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_6.2","Verify Activity code in listing");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2|6";
+ $inputObject.colNo  = "1_lbl|2_lbl";
+ $inputObject.tableName  = $data.tbnm16;
+ $inputObject.fieldValues ="GCAL|General catch all|GHOL|Declared Holiday";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid16;
+ $inputObject.colNo  = $data.chkcid16;
+ $inputObject.tableName  = $data.tbnm16;
+ $inputObject.fieldValues ="True";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo18; //Project Management Request
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name19;
+ CreateInstance($inputObject);
+ 
+  $id = _getText(_span("CM_ItemCode"));
+
+ $bTN= "test";
+ _include("Maint_Prj_Admin_Scheduled_Task_04.sah");
+
+  $t.start();

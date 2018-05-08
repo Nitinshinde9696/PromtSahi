@@ -1,0 +1,290 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data1 = readDataFromCSV("Agile_PMPlan_Small_clientCommitment_scopeDescription","Agile/PMPlan_Small"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_12", "User goes to Scope Description");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkScopeDesc; //Scope Description
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.projectScope;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.clientsObjectives;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.projectBusinessContext;
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_13", "User tests Scope Description");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = "";  
+ InfyFTsaveInstance($inputObject); 
+
+ _wait(3000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.PmPlanSummary; //PmPlanSummary
+ InfyFTclick($inputObject); 
+
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.scopeDescription;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.scopeReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ //*****Check Whether the section is accepting 2000 characters*****\\
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkScopeDesc; //Scope Description
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data1.twothousand;
+ $inputObject.txt_DN_ClientsObjectives = $data1.twothousand;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data1.twothousand;  
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(2000);
+ 
+ //*****Check Whether the Mandatory fields check is working*****\\
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data1.twothousand;
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = "";  
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.PmPlanSummary; //PmPlanSummary
+ InfyFTclick($inputObject); 
+
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.scopeDescription;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.scopeReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkScopeDesc; //Scope Description
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = $data1.twothousand;
+ $inputObject.txt_DN_ProjectandBusinessCont = "";  
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.PmPlanSummary; //PmPlanSummary
+ InfyFTclick($inputObject); 
+
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.scopeDescription;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.scopeReason3;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkScopeDesc; //Scope Description
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = $data1.twothousand;  
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.PmPlanSummary; //PmPlanSummary
+ InfyFTclick($inputObject); 
+
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.scopeDescription;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.scopeReason4;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkScopeDesc; //Scope Description
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data1.fieldValueTest;
+ $inputObject.txt_DN_ClientsObjectives = $data1.fieldValueTest;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data1.fieldValueTest;  
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.PmPlanSummary; //PmPlanSummary
+ InfyFTclick($inputObject); 
+
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.scopeDescription;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.scopeReason5;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_14", "User tests the footersection of scope description");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkScopeDesc; //Scope Description
+ InfyFTclick($inputObject); 
+
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.scopeNote1;//Max. Characters allowed is 2000.
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.scopeNote2;//All three fields are mandatory.
+ InfyFTisVisible($inputObject);  
+ 
+ $t.end();

@@ -1,0 +1,166 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../sahisource/Business/EformInstanceNethra.sah");
+
+$data = readDataFromCSV("Roles_PrjLvl_2_TL_Mom_18","Roles"); 
+
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",1,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+ 
+ /**********************************************************************
+ LOGINNG WITH TL / TEST CASES 6 //PGATTOPS
+ **********************************************************************/ 
+ 
+ var $t = _testcase("TC_1", "TL login ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//vaadmin
+ $inputObject.edt_loginid = $data.LoginID1;//vaadmin
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//PGATTOPS
+ selectProject($inputObject);
+  $t.end();
+ 
+ var $t = _testcase("TC_2", "Verifying the meeting functionalities ");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo17;//Process Governance
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo18;//Meeting Minutes_usp
+ navigateTo($inputObject); 
+ 
+ _assertFalse(_span("KEY_BUTTON_Add-btnIconEl").disabled); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Create the Meeting ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name18;//Standup call
+ $inputObject.lst_CM_Priority = $data.Priority18;//High 
+ CreateInstance($inputObject);
+
+ var $meeting = _getText(_span("CM_ItemCode"));
+ 
+ $t.end();
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $meeting;//Meeting
+ verifyInstanceInListing($inputObject);
+ 
+ var $t = _testcase("TC_4", "Modifying the Meeting ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $meeting;//Process Governance
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name19;//Modifying the meeting
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Deleting the Meeting ");
+ $t.start();
+ 
+ InfyFTsimpleDelete(); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//PGATTOPS
+ selectProject($inputObject);  
+  /////////////\\\\\\\\\\\\\\\\\\\
+ 
+ var $t = _testcase("TC_7.0", "Create the Reviews and Defects ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo6;//Enhancements
+ InfyFTnavigateTo($inputObject);
+
+ _click(_div("1"));
+
+ $t.end();
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name7;//Reviews
+ SelectSegment($inputObject); 
+ 
+ var $t = _testcase("TC_7.1", "Create the Reviews  ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name8;//Review1 
+ $inputObject.lst_DN_ReviewMode = $data.reviewmode8;//Group Review/One Person Review
+ $inputObject.lst_DN_Reviewer = $data.Reviewer8;//subhashini_k03 
+ $inputObject.txt_DN_ArtifactName = $data.artifatName8;//Creating the review
+ $inputObject.lst_reviewtype = $data.testingof8;//Test Case Review
+ InfyFTcreateLinkedItem($inputObject);
+_wait(1000); 
+
+_click(_div("REV16"));
+  
+ var $t = _testcase("TC_6", "Verifying the Defect Management available functionalities");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject); 
+ 
+  _popup("openLinkedItem"). _click(_span("KEY_Link_New_item-btnIconEl"));
+
+ 
+ var $t = _testcase("TC_20", "Create the Defect Management ");
+ $t.start();
+ 
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name9;//Defect1
+ $inputObject.txt_CM_Description = $data.Description9;//Creating the defect
+ $inputObject.lst_DN_DefectDetectedBy = $data.Decetedby9;//Rahul_Garg 
+ $inputObject.lst_DN_Owner = $data.Owner9;//subhashini_k03
+ $inputObject.lst_DN_Severity = $data.Severity9;//minor
+ //$inputObject.lst_field194 = $data.Status16;//mandatory field but disabled
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _popup("newListing"). _click(_button("Return"));
+ _selectWindow("openLinkedItem");
+ _popup("openLinkedItem"). _click(_button("Return")); 
+ _selectWindow();
+
+ _wait(1000);
+ logOut();
+ 
+ 
+   

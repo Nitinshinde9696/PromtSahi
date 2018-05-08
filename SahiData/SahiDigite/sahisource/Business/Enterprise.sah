@@ -1,0 +1,208 @@
+
+/**
+ @Function Number:1
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyEnterpriseListing($inputObject)
+{
+	_log("verifyEnterpriseListing Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative" )
+			_assertFalse(_isVisible(_cell($inputObject.item)));
+		else
+			_assertTrue(_isVisible(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEnterpriseListing Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example addEnterprise({"edt_entName" : "SahiEnt" , "edt_entCode" : "EntS" , "edt_entPrefix" : "EntS" , 
+				"edt_loginID" : "EntS.admin" , "edt_firstName" : "Ent" , "edt_lastName" : "sahi" , 
+					"edt_email" : "EntS@digite.com" , "pwd_password1" : "111111" , 
+						"pwd_password2" : "111111" });
+* @description This function is called to create a New Enterprise
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addEnterprise($inputObject)
+{
+	_log("addEnterprise Started","success");
+	try 
+	{
+	    _setSelected(_select("selectURL"), "Enterprise List");
+		_click(_submit("KEY_BUTTON_Add_Enterprise"));
+		setAllFields($inputObject);
+		_click(_submit("KEY_BUTTON_Save"));
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(false, "Error: The following fields already exist LoginId, Enterprise Name, Enterprise Code, EnterprisePrefix, Please try again");
+		}
+		else
+			_wait(300000,_exists(_submit("KEY_BUTTON_Add_Enterprise")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addEnterprise Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function changePassword($inputObject)
+{
+	_log("changePassword Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		verifyChangePassword();		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changePassword Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyChangePassword()
+{
+	_log("verifyChangePassword Started","success");
+	try 
+	{
+		_assertEqual("Your password has been changed successfully.",_getText(_cell("Your password has been changed successfully.")));
+
+		_click(_submit("QTP_Ok"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyChangePassword Completed","success");
+}
+
+/**
+ @Function Number:	5
+ @author:			Vaishali	
+ @example:			enterpriseOneTimeSetting($inputObject)
+ enterpriseOneTimeSetting({"edt_stages":"16","alertMsg":"Please enter value in range 1 - 15 for Workflow Stages"});
+ @description: 		This function sets on time setting
+ @param: 			
+ @return: 			None
+ **/
+function enterpriseOneTimeSetting($inputObject)
+{
+	_log("enterpriseOneTimeSetting Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+		if ($inputObject.alertMsg)
+		{
+		    _assertEqual($inputObject.alertMsg,_lastAlert());
+		}
+		else
+		{
+		    _expectConfirm("Settings once made cannot be changed, are you sure you want to continue?",true);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enterpriseOneTimeSetting Completed","success");
+}
+
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function runSchedulerAPI($inputObject)
+{
+	_log("runSchedulerAPI Started","success");
+	try 
+	{
+		_click(_button($inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("runSchedulerAPI Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectURL($inputObject)
+{
+	_log("selectURL Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectURL Completed","success");
+}
+/*Author : Mukesh Kumar Verma
+ * Usage :verifyEnterpriseLevelOneTimeSettings({"edt_stages":"5","rdg_SyncCal":"No","lst_firstDisplayLabel":"Last Name"})
+ * Description : This function is used to verify details in first time login for new enterprise
+ */
+
+function verifyEnterpriseLevelOneTimeSettings($inputObject){
+	_log("verifyEnterpriseLevelOneTimeSettings Started,Success");
+	try{
+		
+		
+		verifyAllFields($inputObject);
+		_click(_submit("Cancel"));
+		
+	}
+	catch(e){
+		_logExceptionAsFailure(e);
+	}
+	_log("verifyEnterpriseLevelOneTimeSettings Started,Success");
+}

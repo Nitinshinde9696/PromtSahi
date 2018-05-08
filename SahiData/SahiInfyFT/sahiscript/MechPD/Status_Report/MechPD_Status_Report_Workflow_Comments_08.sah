@@ -1,0 +1,110 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("MechPD_Status_Report_Workflow_Comments_08","MechPD/Status_Report"); 
+ 
+ 
+  var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Jayesh_Potnis
+ $inputObject.edt_loginid = $data.LoginID1;//Jayesh_Potnis.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//UNIVIABS
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep3
+ OpenEformInstance($inputObject);
+ 
+  var $t = _testcase("TC_3", "Check for Comment segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.segment1;//Comments
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.txt_New_Comment = $data.comment;
+ addComment($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_4", "Check for Workflow segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.workflows;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_4", "Check whether PM's and SPM's name are coming under Submitter dropdown");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_selectsingleuser0 = $data.PMname;//Jayesh_Potnis
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_selectsingleuser0 = $data.SPMname;//subhashini_k03
+ verifyEformInstanceDetails($inputObject);
+ $t.end();
+ 
+  var $t = _testcase("TC_4", "Check whether GPM's,DM and SDM's name are coming under Approver dropdown");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_selectsingleuser1 = $data.GPMname;//rathnakarss
+ verifyEformInstanceDetails($inputObject);
+ 
+/*  $inputObject = {};
+ $inputObject.lst_selectsingleuser1 = $data.DMname;//Santhosh_Sonar
+ verifyEformInstanceDetails($inputObject);  */
+ 
+ $inputObject = {};
+ $inputObject.lst_selectsingleuser1 = $data.SDMname;//snehal_ghodeswar
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

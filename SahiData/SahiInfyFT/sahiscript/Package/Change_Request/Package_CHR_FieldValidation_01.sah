@@ -1,0 +1,451 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/Timesheet.sah");
+
+ $data = readDataFromCSV("Package_CHR_FieldValidation_01", "Package/Change_Request");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy hh:").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",-2398,$dateObj2);
+ var $currentDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",4025,$dateObj3);
+ var $endDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy hh:").format($dateObj3); 
+ 
+/*************************************************************************
+*  TestCase_01  : Login Window and Selecting Project
+*************************************************************************/
+
+ var $t = _testcase("TC_01_TS_02","Wrong Login");
+ 
+ $t.start();
+/*
+ $inputObject = {}; //login Window using wrong ID/Password
+ $inputObject.user_name = $data.Username112;
+ $inputObject.edt_loginid = $data.LoginID112;
+ $inputObject.edt_password = $data.Password112;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ logOut();
+ */
+ $t.end();
+ 
+ var $t = _testcase("TC_01_TS_01","Valid Login");
+ 
+ $t.start();
+ 
+ $inputObject = {}; //Snehal will login as a PM
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_01_TS_03","Selecting Project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ var $PSD = _getText(_span("STARTDATE"));
+ var $PED = _getText(_span("ENDDATE"));
+  
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_02  : Navingate to Change Request for Checking List of Change Request
+*************************************************************************/
+
+ var $t = _testcase("TC_02_TS_01_02_03","Navingate to Change Request");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $t.end(); // End of TestCase_02
+ 
+/*************************************************************************
+*  TestCase_03  : Verifying each field in Change Request Eform
+*************************************************************************/
+
+ var $t = _testcase("TC_03_TS_01","Verifying each field in Change Request Eform");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation51;
+ clickAddIcon($inputObject);
+ 
+ _assertEqual(true, _button("Save & Add New").disabled);
+ _assertEqual(true, _button(" Save ").disabled);
+ _assertEqual(true, _reset("Reset").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ _assertNotExists(_button("Complete"));
+ _assertNotExists(_button("Reopen"));
+ _assertNotExists(_button("Delete"));
+ 
+ $t.end(); // End of TestCase_03
+ 
+ /*************************************************************************
+*  TestCase_04  : Checking Mandatory Fields
+*  Explanation : Check whether name is mandatory field or not
+*************************************************************************/
+
+ var $t = _testcase("TC_04_TS_01","Verifying each field in Change Request Eform");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ID4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Description4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RaisedDate4;
+ InfyFTisVisibleS($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.span_Name = $data.ExpectedDeliveryDate4;					// Field Not Available
+ InfyFTisVisibleS($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.span_Name = $data.CR_Category4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.BusinessCriticality4;
+ InfyFTisVisibleS($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.span_Name = $data.ScheduleImpact4;						// Field Not Available
+ InfyFTisVisibleS($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.span_Name = $data.InitiatedBy4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CR_Cost4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.EffortImpact4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.BillToCust4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Currency4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CACost4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CAStatus4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ReasonForBilling4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ActualEffort4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.WorkFlowQueue4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CreatedBy4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ChildProjectCode4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CRStatus4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RejectionReason4;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RevenueImpact4;
+ InfyFTisVisibleS($inputObject);
+  
+ $t.end();
+ /*
+ var $t = _testcase("TC_04_TS_02","Check Name Field");
+ 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.ID4;
+ $inputObject.cell_Name = $data.IDValue4;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $t.end(); 
+ */
+ var $t = _testcase("TC_04_TS_04","Check Name Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Business Criticality in Details tab \n• Field Raised Date in Details tab \n• Field CR Category in Details tab \n• Field Effort Impact (No.of FTEs/Month) in Details tab \n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+
+ _assertEqual(false, _button(" Save ").disabled);
+ _assertEqual(false, _button("Save & Add New").disabled);
+ _assertEqual(false, _reset("Reset").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ _assertNotExists(_button("Complete"));
+ _assertNotExists(_button("Reopen"));
+ _assertNotExists(_button("Delete"));
+ 
+ $t.end();
+ /*
+ var $t = _testcase("TC_04_TS_05","Check CR Status Should be Blank");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CRStatus4;
+ $inputObject.cell_Name = "";//$data.CRStatusValue41;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $t.end();
+*/
+ var $t = _testcase("TC_04_TS_22","Check Business Criticality Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Business Criticality in Details tab \n• Field Raised Date in Details tab \n• Field CR Category in Details tab \n• Field Effort Impact (No.of FTEs/Month) in Details tab \n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ //Value must be set for the following mandatory field(s):\n• Business Criticality\n• Raised Date\n• CR Category\n• Effort Impact (No.of FTEs/Month)\n• Currency\n• CR Cost\n• Initiated By\n
+ $t.end(); 
+ 
+ var $t = _testcase("TC_04_TS_07","Check For Description Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Description in Details tab \n• Field Raised Date in Details tab \n• Field CR Category in Details tab \n• Field Effort Impact (No.of FTEs/Month) in Details tab \n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_04_TS_10","Check For Raised Date Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised Date in Details tab \n• Field CR Category in Details tab \n• Field Effort Impact (No.of FTEs/Month) in Details tab \n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_04_TS_18"," Check DropDown List of CR Category");
+ 
+ $t.start();
+
+ $inputObject = {}; 
+ $inputObject.lst_DN_CRCategory = $data.CRCategoryList4;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_04_TS_19","Check CR Category Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field CR Category in Details tab \n• Field Effort Impact (No.of FTEs/Month) in Details tab \n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_04_TS_32","Check Effort Impact Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_CategoryValue41;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Effort Impact (No.of FTEs/Month) in Details tab \n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_04_TS_36","Check Currency Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_CategoryValue41;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpactValue4;
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Currency in Details tab \n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end(); 
+
+ var $t = _testcase("TC_04_TS_29","Check CR Cost Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_CategoryValue41;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpactValue4;
+ $inputObject.edt_DN_Currency = $data.CurrencyValue4;
+ $inputObject.edt_DN_CRCost = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field CR Cost in Details tab \n• Field Initiated By in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_04_TS_27"," Check Initiated By Field");
+ 
+ $t.start()
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_CategoryValue41;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpactValue4;
+ $inputObject.edt_DN_Currency = $data.CurrencyValue4;
+ $inputObject.edt_DN_CRCost = $data.CR_CostValue4;
+ $inputObject.lst_DN_InitiatedBy = "--None--";
+ $inputObject.msgAlert = $data.InitiatedByAlert4;//"\nValue must be set for the following mandatory field(s):\n• Initiated By";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+  /*
+ var $t = _testcase("TC_04_TS_33_34","Check CR Cost Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_BusinessCriticality2 = $data.BillToCustList4;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ */
+ var $t = _testcase("TC_04_TS_43"," Modify Change Request Eform");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ 
+ $inputObject.edt_CM_Name = $data.NameValue4;
+ $inputObject.lst_DN_BusinessCriticality = $data.BusinessCriticalityValue4;
+ $inputObject.txt_CM_Description = $data.DescriptionValue4;
+ $inputObject.edt_DN_RaisedDate = $currentDate;
+ $inputObject.lst_DN_CRCategory = $data.CR_CategoryValue42;
+ $inputObject.edt_DN_EffortImpactNoofFTEsMo = $data.EffortImpactValue4;
+ $inputObject.edt_DN_Currency = $data.CurrencyValue4;
+ $inputObject.edt_DN_CRCost = $data.CR_CostValue4;
+ $inputObject.lst_DN_InitiatedBy = $data.InitiatedByValue4; 
+ $inputObject.lst_DN_BilltoCustomer = $data.BillToCustValue42// No
+ $inputObject.txt_DN_ReasonfornotBillingPar = "";
+ $inputObject.msgAlert = "Reason for not Billing/ Partial Billing is mandatory when Bill to Customer is No.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.txt_DN_ReasonfornotBillingPar = "Test"; 
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end(); 
+/*
+ var $t = _testcase("TC_04_TS_47","RevenueImpact field should be Non Editable");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RevenueImpact4;
+ $inputObject.cell_Name = $data.RevenueImpactValue4;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $t.end(); 
+
+ var $t = _testcase("TC_04_TS_48","RejectionReason field should be Non Editable");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RejectionReason4;
+ $inputObject.cell_Name = $data.RejectionReasonValue4;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_04_TS_48","CR Status Field should be Non Editable");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CRStatus4;
+ $inputObject.cell_Name = $data.CRStatusValue4;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $t.end();
+ */

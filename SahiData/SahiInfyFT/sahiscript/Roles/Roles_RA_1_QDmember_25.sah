@@ -1,0 +1,372 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+
+
+$data = readDataFromCSV("Roles_RA_1_QDmember_25","Roles"); 
+
+ 
+/**********************************************************************
+ LOGINNG WITH JOB LEVEL 7A &  QTLY MEMBER of IL 
+ **********************************************************************/
+ var $t = _testcase("TC_1", "IL QD member login"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Abhimanyu_Sinha
+ $inputObject.edt_loginid = $data.LoginID1;//Abhimanyu_Sinha
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_1.1 & 1.2", "Verifying read only access in projects of Organization repository ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//TJCSTIVP
+ selectProject($inputObject);
+ 
+ 
+ $t.end(); 
+ 
+ /*if(_isVisible(_div("1")))
+ {
+  _click(_div("1")); 
+ }*/
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName1;// --None-- 
+ $inputObject.cell_Name = $data.cName1;//ELF Status :
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName2;//--None--  
+ $inputObject.cell_Name = $data.cName2;//SQA :
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_2.0", "Verifying the read access to all the sections in the project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section1;//Project Health
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section2;//Linked Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section3;//Project Request Comments
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section4;//UPF
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section5;//Activity Log
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section6;//Overview
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ //clickReturn();  
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//"Team Members";// Team Members
+ navigateTo($inputObject);
+ 
+ 
+ var $t = _testcase("TC_2.1", "QD member is inviting as SQA role for the project "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id4;//Deepika_Billava and JL 3A
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles4;//SQA
+ //$inputObject.edt_startdateInput = $StartDate1;
+ //$inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id4;//Deepika_Billava
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2.2", "Non QD member is inviting as SQA role for the project "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id5;//Arun
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles4;//SQA
+ //$inputObject.edt_startdateInput = $StartDate1;
+ //$inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id5;//Arun
+ verifyInstanceInListing($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1.4", "QD member Inviting self as SQA member ");
+ $t.start(); 
+ 
+ var $dateObj1 = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",300,$dateObj2);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Username1;//snehal_ghodeswar
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name6;//Member Allocations
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles4;//SQA
+ $inputObject.edt_allocstartdate = $StartDate;
+ $inputObject.edt_allocenddate = $EndDate;
+ //InfyFTaddAllocationPeriod($inputObject);
+ InfyFTAllocateRoleToTeamMember($inputObject); 
+ 
+ $t.end(); 
+ 
+ clickReturn();  
+   
+ 
+ /*********************************************************************
+ LOGGING WITH QD Member of BPO
+ **********************************************************************/
+ 
+ var $t = _testcase("TC_1", "BPO QD member login");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//nitin_shinde05
+ $inputObject.edt_loginid = $data.LoginID2;//nitin_shinde05
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//TJCSTIVP
+ selectProject($inputObject);
+ 
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName1;// --None-- 
+ $inputObject.cell_Name = $data.cName1;//ELF Status :
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.sName2;//--None--  
+ $inputObject.cell_Name = $data.cName2;//SQA :
+ InfyFTisReadOnly($inputObject);
+  
+ var $t = _testcase("TC_2.0", "Verifying the read access to all the sections in the project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section1;//Project Health
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section2;//Linked Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section3;//Project Request Comments
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section4;//UPF
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section5;//Activity Log
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section6;//Overview
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Team Members
+ navigateTo($inputObject);
+ 
+ var $t = _testcase("TC_2.1", "QD member is inviting as SQA role for the project "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id4;//anilp and JL 7A
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles4;//SQA
+ //$inputObject.edt_startdateInput = $StartDate1;
+ //$inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id4;//Sudipta_300499//anilp
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2.2", "Non QD member is inviting as SQA role for the project "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id5;//Allen_Lam
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles4;//SQA
+ //$inputObject.edt_startdateInput = $StartDate1;
+ //$inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id5;//Allen_Lam
+ verifyInstanceInListing($inputObject); 
+ 
+ $t.end();
+ 
+  
+ /***********************************************************************
+ DELIVERY HEAD LoginID
+ ************************************************************************/ 
+ 
+ var $t = _testcase("TC_1", "Unit Delivery Head login");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username5;//ubpravin
+ $inputObject.edt_loginid = $data.LoginID5;//ubpravin
+ $inputObject.edt_password = $data.Password5;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home//Projects
+ navigateTo($inputObject);
+ 
+ /*$inputObject = {};
+ $inputObject.span = "Other Accessible Projects";//$data.OAProjects;// _InfyFTclick(_span("KEY_LABEL_Other_Accessible_Projects-btnIconEl"));
+ InfyFTclick($inputObject);*/
+ 
+ _click(_span("KEY_LABEL_Other_Accessible_Projects-btnIconEl"));
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//TJCSTIVP
+ selectProject($inputObject);
+ 
+ var $t = _testcase("TC_2", "Verifying the read access to all the sections in the project");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section1;//Project Health
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section2;//Linked Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section3;//Project Request Comments
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section4;//UPF
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section5;//Activity Log
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Section6;//Overview
+ SelectSegment($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_3.2.1", "logging the customer complaint "); 
+ $t.start();
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",1,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",10,$dateObj3);
+ var $CloseDate3 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Customer Complaint
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_RaisedBy = $data.RaisedBy; //subhashini_k03
+ $inputObject.edt_CM_Name = $data.Name; //MANDATORY FIELD//CC2
+ $inputObject.txt_CM_Description = $data.Description1; //MANDATORY FIELD
+ $inputObject.lst_DN_ComplaintCategory = $data.ComplaintCategory; //Others
+ $inputObject.lst_DN_Severity = $data.Severity;//Critical
+ //$inputObject.lst_DN_Status = $data.Status;//Open
+ $inputObject.edt_DN_ComplaintRaisedDate = $StartDate1;
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $EndDate2;
+ //$inputObject.edt_DN_ComplaintClosedOn = $CloseDate3;
+ $inputObject.lst_DN_RepeatComplaint = $data.RepeatComplaint;//Yes
+ CreateInstance($inputObject);
+ 
+ $t.end();
+ 
+ clickReturn();
+ 
+ var $t = _testcase("TC_4", "verifying the not able to log the customer complaint for other unit(s) "); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject);  
+ 
+ _wait(5000);
+ _click(_span("KEY_LABEL_Other_Accessible_Projects-btnIconEl"));
+  
+ clearFilterSettings();
+ 
+ $inputObject = {};
+ $inputObject.filterName = $data.filterName1;//SECONDARYDATABASE
+ $inputObject.searchboxName = $data.searchboxName1;//"x-form-field x-form-text  [2]";//
+ $inputObject.text = $data.status1;//BPO
+ $inputObject.status = $data.status1;//BPO
+ InfyFTsearchBoxSetFilter($inputObject);
+ 
+ var $result1 = _getText(_div("noRecordDiv"));
+ 
+ _log($result1);
+ 
+ $t.end(); 
+
+ 

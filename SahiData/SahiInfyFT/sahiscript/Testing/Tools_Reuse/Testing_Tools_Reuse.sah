@@ -1,0 +1,59 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+var $Script1 = _testcase("Testing_Tools_Reuse_Data_Creation_10.sah");
+$Script1.start();
+
+	//_include("Testing_Tools_Reuse_Data_Creation_10.sah");
+	
+$Script1.end();
+var $Script2 = _testcase("Testing_Tools_Reuse_RP_01.sah");
+$Script2.start();
+
+	_include("Testing_Tools_Reuse_RP_01.sah");
+	
+$Script2.end();
+var $Script3 = _testcase("Testing_Tools_Reuse_RP_RTracking_02.sah");
+$Script3.start();
+
+	_include("Testing_Tools_Reuse_RP_RTracking_02.sah");
+	
+$Script3.end();
+var $Script4 = _testcase("Testing_Tools_Reuse_RP_RTracking_AddAsset_03.sah");
+$Script4.start();
+
+	_include("Testing_Tools_Reuse_RP_RTracking_AddAsset_03.sah");
+	
+$Script4.end();
+var $Script5 = _testcase("Testing_Tools_Reuse_RP_RTracking_AFReuse_Report_04.sah");
+$Script5.start();
+
+	_include("Testing_Tools_Reuse_RP_RTracking_AFReuse_Report_04.sah");
+	
+$Script5.end();
+var $script6 = _testcase("Testing_Tools_Reuse_TP_05.sah");    
+  $script6.start();  					
+  
+  _include("Testing_Tools_Reuse_TP_05.sah");	
+  
+$script6.end();
+
+var $script7 = _testcase("Testing_Tools_Reuse_TP_Ttracking_StnrdPtool_06.sah");  
+    $script7.start();  	
+	_include("Testing_Tools_Reuse_TP_Ttracking_StnrdPtool_06.sah");	
+	$script7.end();
+	
+var $script8 = _testcase("Testing_Tools_Reuse_TP_AvailblStnrdPtool_07.sah");
+ $script8.start(); 
+ _include("Testing_Tools_Reuse_TP_AvailblStnrdPtool_07.sah"); 
+ $script8.end();
+ 
+var $script9 = _testcase("Testing_Tools_Reuse_RP_RTracking_AFReuse_Report_08.sah");     
+ $script9.start();  			
+ _include("Testing_Tools_Reuse_RP_RTracking_AFReuse_Report_08.sah");		
+ $script9.end();

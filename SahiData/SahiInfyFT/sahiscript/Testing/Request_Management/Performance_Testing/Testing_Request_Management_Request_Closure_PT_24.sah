@@ -1,0 +1,76 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Closure_PT_24","Testing/Request_Management/Performance_Testing"); 
+ /*
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Siddharth Kale	
+$inputObject.edt_loginid = $data.LoginID1;//siddharth_kale
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+// CLICK ON THE CREATE TAB //
+
+$inputObject = {};
+$inputObject.item = "PerT13";
+OpenEformInstance($inputObject);
+*/
+
+var $t = _testcase("TC-6.2,6.4 & 6.5 ", "CHECK THE FIELDS DURING EXECUTION/CLOSURE IN PERFORMANCE TESTING");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Details;//"Details";
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.ele_DN_RemarksLABEL = $data.C_Remarks;//"Remarks :";
+$inputObject.txt_DN_Remarks = "";
+$inputObject.ele_DN_StatusLABEL = $data.C_Status;//"Status :";  
+$inputObject.ele_DN_CurrentBaselineSetByLABEL =  $data.CBSB;//"Current Baseline Set By :";
+$inputObject.ele_DN_CurrentBaselineSetBy = $data.Baselineby;//"Ricky_Wang";
+$inputObject.ele_DN_CurrentBaselineSetOnLABEL = $data.CBSO;//"Current Baseline Set On :";
+$inputObject.ele_DN_LastPushtoTimesheetLABEL = $data.LPTT;//"Last Push to Timesheet :";
+$inputObject.ele_DN_LastfetchfromTimesheetLABEL = $data.LFFT;//"Last Fetch from Timesheet :";
+$inputObject.ele_DN_TypeofDataLABEL = $data.TofData;//"Type of Data :";
+$inputObject.ele_DN_ReasonforBadDataLABEL = $data.Reason;//"Reason for Bad Data :";
+$inputObject.ele_DN_ActualStartDateLABEL = $data.Astart;//"Actual Start Date :"; 
+$inputObject.ele_DN_ActualEndDateLABEL = $data.Aend;//"Actual End Date :";
+$inputObject.ele_DN_ScheduleDeviationLABEL = $data.R_SD;//"Schedule Deviation :";
+$inputObject.ele_DN_EffortDeviationLABEL = $data.ED;//"Effort Deviation :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.ele_DN_TotalNoOfBottlenecksInLABEL = $data.val1;//"Total No Of Bottlenecks In The Business Logic Layer :";
+$inputObject.ele_DN_TotalNoOfBottlenecksIn1LABEL = $data.val2;//"Total No Of Bottlenecks In The Presentation Logic Layer :";
+$inputObject.ele_DN_TotalNoOfBottlenecksIn2LABEL = $data.val3;//"Total No Of Bottlenecks In The Persistence Logic Layer :";
+$inputObject.ele_DN_TotalNoOfBottlenecksLABEL = $data.val4;//"Total No Of Bottlenecks :";
+$inputObject.ele_DN_TotalNoOfTransactionsLABEL = $data.val5;//"Total No Of Transactions :";
+$inputObject.ele_DN_TotalNoOfCriticalTransLABEL = $data.val6;//"Total No Of Critical Transactions Covered :";
+$inputObject.ele_DN_TotalNoOfCriticalTrans1LABEL = $data.val7;//"Total No Of Critical Transactions Identified :";
+$inputObject.ele_DN_NumberofSLAspecificatiLABEL = $data.val8;//"Number of SLA (specifications)s :";
+$inputObject.ele_DN_NumberofSLAspecificati1LABEL = $data.val9;//"Number of SLA (specifications)s met :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+saveSwiftForm($inputObject);
+
+
+//IF REQUIRED NEED TO ADD FIELDS FOR CREATE INSTANCE //
+
+$t.end();
+

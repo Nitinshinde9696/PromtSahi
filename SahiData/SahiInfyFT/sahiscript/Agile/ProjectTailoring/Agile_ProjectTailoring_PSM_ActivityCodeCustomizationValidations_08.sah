@@ -1,0 +1,63 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data3 = readDataFromCSV("Agile_ProjectTailoring_ProjectSpecificMetrics_activityCodeCustomization","Agile/ProjectTailoring");
+
+ var $t = _testcase("TC_01", "Test step 1: To check  the prersence of the tab activity code customization ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.segmentActivityCode;//Activity Code Customization
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data3.tableNameActCode;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_01", "Test step 2: To check the presence of the tab activity code customization ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableNameActCode;
+ $inputObject.rowNo = $data3.rowActCodes;
+ $inputObject.colNo = $data3.colIncludeInproject;
+ $inputObject.fieldValues = $data3.fieldValueYes;
+ verifySwiftFormData($inputObject)
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Test step 3: To check the other activity codes check box");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableNameActCode;
+ $inputObject.rowNo = $data3.rowAllActivityCodes;
+ $inputObject.colNo = $data3.colIncludeInproject;
+ $inputObject.fieldValues = $data3.fieldValueYes;
+ setSwiftFormData($inputObject)
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end(); 

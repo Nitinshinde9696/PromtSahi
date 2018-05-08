@@ -1,0 +1,173 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+ $data = readDataFromCSV("Package_Iteration_CloseandAbandoned_05", "Package/Iteration");
+ 
+ var $t = _testcase("TC_01", "open an iteration instance");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Sreya
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+  _wait(8000);
+ $inputObject = {};
+ $inputObject.item = $data.existingInstance;//"checking";ITR24
+ OpenEformInstance($inputObject); 
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_02", "work-flow segment");
+ $t.start(); 
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.link = $data.Workflow;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage0;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members1;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage2;
+ WorkflowSet($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_03", "status as closed");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ $inputObject.msgAlert = "Error : There are few mandatory data integrity checks that have failed. Please refer to Iteration Closure Checks for details and address the failed checks.";
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Open;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_04", "Iteration closure check");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.closure_check;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ //$inputObject.popup_name = $data.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.rowApplicable;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.ApplicableReason;
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+  $inputObject = {};
+  $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.rowApplicable;
+ $inputObject.colNo = $data.colReason1;
+ $inputObject.fieldValues = $data.ApplicableReason1;
+ InfyFTverifySwiftFormData($inputObject); 
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_05", "routing in abandoned state");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.abandoned;
+ $inputObject.txt_DN_Reasonforabandon ="";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Reason for abandon in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Open;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_06", "Schedule over all status after abandoning");
+ $t.start(); 
+ 
+ _include("Package_navigation_iteration_04.sah");
+ 
+ $data = readDataFromCSV("Package_Iteration_CloseandAbandoned_05", "Package/Iteration");
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterationslink; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = "checking";//$data.subproj;//"checking";
+ OpenEformInstance($inputObject); 
+  
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Schedule;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = "SubP1";//$data.subproj;//"checking";
+ OpenEformInstance($inputObject);  
+ 
+ _selectWindow("openLinkedItem__1");
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.closed;
+ $inputObject.cell_Name = $data.overStatus;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Scheduled_Tasks;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.operation = "Negative";
+ $inputObject.span_Name = $data.Edit;//checking edit button visibility.
+ InfyFTisVisiblep($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ $t.end();  
+ 

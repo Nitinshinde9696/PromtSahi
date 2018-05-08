@@ -1,0 +1,250 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Status_Report_Production_Support_Distribution_07","Maint/Status_Report"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+  $t.end();
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+ 
+ 
+ var $t = _testcase("TC_3", "Check for visibility of fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment3;
+ SelectSegment($inputObject);
+ 
+ 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tablenames;//"Risk List";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.labelnames;
+ InfyFTisVisible($inputObject);
+
+ $t.end();
+ 
+ 
+
+ 
+ 
+ var $t = _testcase("TC_4", "verify data flown from pmp");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo501;
+ $inputObject.fieldValues = $data.fieldValues501;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo502;
+ $inputObject.fieldValues = $data.fieldValues502;
+ verifySwiftFormData($inputObject);
+ 
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.onetwo;
+ $inputObject.colNo = $data.one;
+ $inputObject.fieldValues = $data.fieldvaluestable3;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+
+ var $t = _testcase("TC_5", "SET NUMERATOR AND DENOMINATOR VALUES");
+ $t.start();
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo503;
+ $inputObject.fieldValues = $data.fieldValues503;
+  setSwiftFormData($inputObject);
+  
+  $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo504;
+ $inputObject.fieldValues = $data.fieldValues503;
+  setSwiftFormData($inputObject); 
+  
+   $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+  $t.end();
+  
+   var $t = _testcase("TC_6", "verify sla met metric actual values and sla met status");
+   
+  $t.start();
+  
+   $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo505;
+ $inputObject.fieldValues = $data.fieldValues505;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.red;
+ InfyFTisVisible($inputObject);
+ 
+   $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo506;
+ $inputObject.fieldValues = $data.fieldValues506;
+ verifySwiftFormData($inputObject);
+ 
+   $t.end();
+   
+    var $t = _testcase("TC_7", "SET NUMERATOR AND DENOMINATOR and verify VALUES for sla performance");
+ $t.start();
+ 
+   $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo503;
+ $inputObject.fieldValues = $data.fieldValues5071;
+  setSwiftFormData($inputObject);
+  
+     $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+    $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo505;
+ $inputObject.fieldValues = $data.fieldValues5081;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.green;
+ InfyFTisVisible($inputObject);
+ 
+    $t.end();
+	
+	   
+    var $t = _testcase("TC_8", "SET reason values");
+ $t.start();
+ 
+    $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo507;
+ $inputObject.fieldValues = $data.fieldValues507;
+  setSwiftFormData($inputObject);
+  
+    $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues507;
+  setSwiftFormData($inputObject);
+  
+   $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo509;
+ $inputObject.fieldValues = $data.fieldValues507;
+  setSwiftFormData($inputObject);
+  
+   $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowNo502;
+ $inputObject.colNo = $data.colNo509;
+ $inputObject.fieldValues = $data.fieldValues507;
+  setSwiftFormData($inputObject);
+  
+  
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+      $t.end();
+	  
+ var $t = _testcase("TC_9", "reset all values ");
+ $t.start();  
+
+     $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo507;
+ $inputObject.fieldValues = $data.fieldValues509;
+  setSwiftFormData($inputObject);
+
+  
+  
+    $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues509;
+  setSwiftFormData($inputObject);
+  
+  
+    $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo509;
+ $inputObject.fieldValues = $data.fieldValues509;
+  setSwiftFormData($inputObject);
+  
+   $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowNo502;
+ $inputObject.colNo = $data.colNo509;
+ $inputObject.fieldValues = $data.fieldValues509;
+  setSwiftFormData($inputObject);
+  
+   $inputObject = {}; 
+ saveSwiftForm($inputObject);
+     $t.end();
+
+ 
+ 

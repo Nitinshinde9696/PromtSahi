@@ -1,0 +1,310 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; // Niklesh_Wankhade
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to Project Tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+
+ $t.end();
+ 
+ /**************************************************************
+ * Project specific metric and project level metric
+ ***************************************************************/
+ 
+ var $t = _testcase("TC_4", "Selecting project specific metric");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.specific_metrix1;
+ SelectSegment($inputObject);
+ _wait(8000);
+  
+ if(_isVisible(_checkbox(3)))
+{  
+   _check(_checkbox(3));	
+   
+    $inputObject = {}; 
+    $inputObject.msgAlert = "";
+    saveSwiftForm($inputObject);    
+ }
+  
+ _wait(5000); 
+ if(_isVisible(_checkbox(6)))
+ {
+    _check(_checkbox(6));
+ 
+	$inputObject = {}; 
+    $inputObject.msgAlert = "";
+    saveSwiftForm($inputObject);
+	_wait(8000);
+ }
+  
+ _click(_link("Add Rows"));
+ _click(_link("Add Rows[1]"));
+   
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo3;//2
+ $inputObject.colNo = $data.colNo9;
+ $inputObject.fieldValues = $data.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric Name in table Project Level Metrics in Project Specific Metrics tab\n• Field Metric UOM in table Project Level Metrics in Project Specific Metrics tab\n• Field Metric Type in table Project Level Metrics in Project Specific Metrics tab\n";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo3;//1
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $data.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo3;//2
+ $inputObject.colNo = $data.colNo8L;
+ $inputObject.fieldValues = $data.fieldValues8L;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(3000);
+ 
+ /******************************************************************
+ * Project specific metric negative part
+ *******************************************************************/
+ _include("../../../sahisource/Business/InfyECR.sah");
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Add1;//"Project Specific Metrics";
+ $inputObject.rowCount = $data.rowNo01;// "1"
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo9;
+ $inputObject.fieldValues = $data.fieldValues91;
+ setSwiftFormData($inputObject); 
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric Name in table Process Specific Metrics in Project Specific Metrics tab\n• Field Metric UOM in table Process Specific Metrics in Project Specific Metrics tab\n• Field Metric Type in table Process Specific Metrics in Project Specific Metrics tab\n";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ _clearLastAlert();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo92;
+ $inputObject.fieldValues = $data.fieldValues92;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric UOM in table Process Specific Metrics in Project Specific Metrics tab\n• Field Metric Type in table Process Specific Metrics in Project Specific Metrics tab\n";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ _clearLastAlert();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo9;
+ $inputObject.fieldValues = $data.fieldValues10;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix; //Project specific Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNoD;
+ $inputObject.fieldValues = $data.fieldValues91;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000); 
+ 
+ /**************************************************************
+ * project level metric negative part
+ **************************************************************/
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix;//"Project Level Metrics";
+ $inputObject.rowCount = $data.rowNo01;// "3"
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNoLM8;
+ $inputObject.fieldValues = $data.fieldValues81;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric UOM in table Project Level Metrics in Project Specific Metrics tab\n• Field Metric Type in table Project Level Metrics in Project Specific Metrics tab\n";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ _clearLastAlert();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $data.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo8L;
+ $inputObject.fieldValues = $data.fieldValues8L;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error: Please delete duplicate entries from Project Level Metrics";
+ saveSwiftForm($inputObject);
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $data.fieldValues83;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix; //Project level Metrics
+ $inputObject.rowNo = $data.rowNo4;//3
+ $inputObject.colNo = $data.colNo8L;
+ $inputObject.fieldValues = $data.fieldValues8L;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000); 
+ 
+ /******************************************************************
+ * specific metric without clone
+ *******************************************************************/
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Add1;//"Project Specific Metrics";
+ $inputObject.rowCount = $data.rowNo3;// "3"
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix;//"Project Level Metrics";
+ $inputObject.rowCount = $data.rowNo2;// "3"
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Add1;//"Project Specific Metrics";
+ $inputObject.rowNo = $data.rowcount1;
+ InfyFTdeleteRowInSwiftFormN($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.level_metrix;//"Project Level Metrics";
+ $inputObject.rowNo = $data.rowcount1; 
+ InfyFTdeleteRowInSwiftFormN($inputObject);
+ _wait(1000);
+ 
+ $t.end(); 
+ 
+ $data = readDataFromCSV("IMS_projectadmin_spcfc_04", "IMS/ProjectAdminandSDMP"); 
+ _wait(10000);
+ 
+ var $t = _testcase("TC_5", "Selecting project specific metric without clone");
+ $t.start(); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix;//"Project Specific Metrics";
+ $inputObject.rowCount = $data.rowNo1;// "3"
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo3;//2
+ $inputObject.colNo = $data.colNo9;
+ $inputObject.fieldValues = $data.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.specific_metrix;//"Project Specific Metrics";
+ $inputObject.rowNo = $data.rowNo3;
+ InfyFTdeleteRowInSwiftFormN($inputObject);
+ _wait(8000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

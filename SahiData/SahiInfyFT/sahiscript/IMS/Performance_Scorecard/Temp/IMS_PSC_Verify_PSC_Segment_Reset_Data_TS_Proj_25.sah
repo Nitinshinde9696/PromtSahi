@@ -1,0 +1,287 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_Verify_PSC_Segment_Reset_Data_TS_Proj_25", "IMS/Performance_Scorecard");
+  
+ /* $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+   selectProject($inputObject); */
+ 
+ _wait(7000);
+  
+ /****************************Navigate***************************************/
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+if(_isVisible(_button("Reopen")))
+ {
+ _click(_button("Reopen"));
+ _assertEqual("Are you sure you want to reopen this item?", _lastConfirm());
+ }
+
+ _click(_image("nodeIcon11")); 
+ _wait(300);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName45;//Goals
+ SelectSegment($inputObject);
+ 
+ _click(_link("Setup Goals[1]"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo54;//1_chk|10_edt|11_lst|12_edt|13_edt|14_lst|15_txt
+ $inputObject.fieldValues = $data.fieldValues52;//TRUE|5|Internal|8|4|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+/* $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo54;//1_chk|10_edt|11_lst|12_edt|13_edt|14_lst|15_txt
+ $inputObject.fieldValues = $data.fieldValues53;//TRUE|5|SLA|8|4|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo54;
+ $inputObject.fieldValues = $data.fieldValues54;//TRUE|5|SLA with Financial Impact|8|4|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo54;
+ $inputObject.fieldValues = $data.fieldValues52;//TRUE|5|Internal|8|4|Hour|Working
+ setSwiftFormData($inputObject);*/
+ 
+/* $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo54;
+ $inputObject.fieldValues = $data.fieldValues53;//TRUE|5|SLA|8|4|Hour|Working
+ setSwiftFormData($inputObject);*/
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(3000);
+ 
+ _click(_link("Setup Goals[2]"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo54;//1_chk|10_edt|11_lst|12_edt|13_edt|14_lst|15_txt
+ $inputObject.fieldValues = $data.fieldValues52;//TRUE|5|Internal|8|4|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ /*$inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo54;//1_chk|10_edt|11_lst|12_edt|13_edt|14_lst|15_txt
+ $inputObject.fieldValues = $data.fieldValues53;//TRUE|5|SLA|8|4|Hour|Working
+ setSwiftFormData($inputObject);*/
+ 
+ /*$inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo54;//1_chk|10_edt|11_lst|12_edt|13_edt|14_lst|15_txt
+ $inputObject.fieldValues = $data.fieldValues54;//TRUE|5|SLA with Financial Impact|8|4|Hour|Working
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo54;//1_chk|10_edt|11_lst|12_edt|13_edt|14_lst|15_txt
+ $inputObject.fieldValues = $data.fieldValues52;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName55;//Goal Selection
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo54;
+ $inputObject.fieldValues = $data.fieldValues53;
+ setSwiftFormData($inputObject);*/
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(3000);
+ 
+ /*****************************************************************************************************/
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ _wait(3000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ _wait(3000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSCName4;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};//Internal Efficiency
+ $inputObject.segment_name = $data.SegmentName46;
+ SelectSegment($inputObject);
+ 
+ var $t = _testcase("TC_31_TS_01","Check Values in Applicable Services");
+ 
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo55;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues551;//Service
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo56;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues552;//Sub-Service
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo57;//2_lbl
+ $inputObject.fieldValues = $data.fieldValues553;//Provide Actuals
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo55;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues561;//End-user Compute
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo56;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues562;//Desktop Services
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo55;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues561;//End-user Compute
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo56;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues57;//Mobile Device Management
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo55;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues561;//End-user Compute
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo56;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues58;//VDI Services
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ _click(_button("Reopen"));
+ _assertEqual("Are you sure you want to reopen this item?", _lastConfirm());
+ 
+ _wait(3000); 
+ 
+ $inputObject = {}; // giving the path for SetUp - Project Tailoring
+ $inputObject.name = $data.navigateTo32; 
+ navigateTo($inputObject);
+ 
+ inputObject = {};//Applicable Services
+ $inputObject.segment_name = $data.SegmentName41;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName512;//Applicable Services
+ $inputObject.rowNo = $data.rowNo11;//2|4
+ $inputObject.colNo = $data.colNo58;//3_unchk
+ $inputObject.fieldValues = $data.fieldValues51;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ _click(_image("nodeIcon11")); 
+ _wait(300);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName45;//Goals
+ SelectSegment($inputObject);
+ 
+ _click(_link("Setup Goals"));
+ 
+ _wait(7000);
+ 
+ clickReturn();
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ _wait(3000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ _wait(3000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 

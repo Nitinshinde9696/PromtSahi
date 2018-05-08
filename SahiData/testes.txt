@@ -1,0 +1,2 @@
+CALL testrunner D:\Sahi\SahiData\Agile_PT.suite http://isvwlapt01:7009/digite firefox
+CALL testrunner D:\Sahi\SahiData\Agile_PT.suite http://isvwlapt01:7009/digite firefox

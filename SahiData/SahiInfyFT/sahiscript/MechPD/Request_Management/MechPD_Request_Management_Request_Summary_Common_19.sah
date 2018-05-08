@@ -1,0 +1,55 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+//$data = readDataFromCSV("MechPD_Request_Management_Request_Summary_Common_19","MechPD/Request_Management");
+
+ $inputObject = {};
+ $inputObject.segment_name = "Details";
+ SelectSegment($inputObject);
+ 
+ var $ASD = _getValue(_textbox("DN_ActualStartDate"));
+ var $AED = _getValue(_textbox("DN_ActualEndDate"));
+  
+ 
+ var $EE= parseInt(_getValue(_textbox("DN_EstimatedeffortPhrs")));
+ var $ARvE = parseInt(_getValue(_textbox("DN_ActualReviewEffortPhrs")));
+ var $AEE = parseInt(_getValue(_textbox("DN_ActualExecutionEffortP")));
+ var $ARwE = parseInt(_getValue(_textbox("DN_ActualReworkEffortPhrs")));
+
+ $inputObject = {};
+ $inputObject.segment_name = "Request Summary";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Schedule Summary";//
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "1_lbl|3_lbl";
+ $inputObject.fieldValues = $ASD+"|"+$AED;
+ verifySwiftFormData($inputObject);
+ 
+ var $AE = $ARvE + $AEE + $ARwE;
+ var $dev = ($AE - $EE)100/$EE;
+  
+ $inputObject = {};
+ $inputObject.tableName = "Effort Summary";//
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl";
+ $inputObject.fieldValues = $EE+".0|"+$AE+".0|"+$dev+".0";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Effort Summary";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "3_txt";
+ $inputObject.fieldValues = "Reason for Deviation";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ 

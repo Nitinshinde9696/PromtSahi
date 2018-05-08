@@ -1,0 +1,306 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //Team isha
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "checking links are visible or not");
+ $t.start();
+  
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.linkDetails; //Details link
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ProjectProfile; //span_Project_Profile
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.SDMPSummary;  //span_SDMP_Summary 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ZDP; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.overview; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ProjectCharter; //span_Project_Charter
+ InfyFTisVisibleN($inputObject);
+ }
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); //expanding the list
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ScopeDescription; //span_Scope_Description
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ClientCommitments; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Servicesinscope; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.assumptions; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); //minimizing the list
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Quality; 
+ InfyFTisVisibleN($inputObject);
+ }
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.goals; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ProjectProcess; 
+ InfyFTisVisibleN($inputObject);
+ }
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Operational; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.RiskLog; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Requirement; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.OLA; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.CommunicationPlan; 
+ InfyFTisVisibleN($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.comments; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.attachments; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.workflow; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ActivityLog; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.PreviousVersions; 
+ InfyFTisVisibleN($inputObject);
+ }
+ 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ 
+ $t.end();
+ 
+ /******************************************************************
+ * Scope Description
+ ******************************************************************/
+ 
+ var $t = _testcase("TC_5", "set values for scope description");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name1; //Scope Description
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_ProjectScope; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_InfosysDCsFromWherePro; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_ClientServiceManagemen; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_ServiceWindow; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_ClientObjectives; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_ClientLocationsService; 
+ InfyFTisVisibleN($inputObject);
+ 
+ /*****************************************************************
+ * Set values for Scope description
+ *****************************************************************/
+ 
+ $inputObject = {}; //set values for scope description
+ $inputObject.txt_DN_ProjectScope = $data.ProjectScope;
+ $inputObject.txt_DN_InfosysDCsFromWherePro = $data.InfosysDCsFromWherePro;
+ $inputObject.txt_DN_ClientObjectives = $data.ClientObjectives;
+ $inputObject.txt_DN_ClientLocationsService = $data.ClientLocationsService;
+ $inputObject.txt_DN_OtherTools = $data.OtherTools;
+ $inputObject.edt_DN_OtherServiceWindow  = $data.OtherServiceWindow ; //NULL
+ $inputObject.lst_DN_ClientServiceManagemen = $data.ClientServiceManagemen;//NULL
+ $inputObject.lst_DN_ServiceWindow = $data.ServiceWindow;
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name0; //SDMP summary
+ SelectSegment($inputObject); 
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ _wait(1000);
+ _highlight(_span(38)); //Red color 
+ var $scope = _getText(_span(39));
+ _assertEqual($scope, _getText(_span("The following fields are not filled:Client Service Management Tool,Service Window", _near(_span(37)))));
+ }
+ else
+ {
+ _highlight(_span(66)); //Red color 
+ var $scope = _getText(_span(67));
+ _assertEqual($scope, _getText(_span("The following fields are not filled:Client Service Management Tool,Service Window", _near(_span(65)))));
+ }
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name1; //Scope Description
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.lst_DN_ClientServiceManagemen = $data.ClientServiceManagemen1;
+ $inputObject.lst_DN_ServiceWindow = $data.ServiceWindow1;
+ ModifyEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2; //Changes  as per DEV Env
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name0; //SDMP summary
+ SelectSegment($inputObject); 
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+  _wait(1000);
+ _highlight(_span(38));
+ var $scope1 = _getText(_span(39));
+ _assertNotEqual($scope, $scope1);
+ }
+ else
+ {
+ _highlight(_span(66));
+ var $scope1 = _getText(_span(67));
+ _assertNotEqual($scope, $scope1);
+ }
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "set values for scope description");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name1; //Scope Description
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.lst_DN_ServiceWindow = $data.ServiceWindowO;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_OtherServiceWindow; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

@@ -1,0 +1,399 @@
+
+/**
+ @Function Number:1
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addForum($inputObject)
+{
+	_log("addForum Started","success");
+	try 
+	{
+		$inputObject.winprefix = "popup";
+		
+		if($inputObject.operation === "DisabledButtonForum")
+			_assertEqual("IconDisable",_cell("IconDisable").className);
+		else
+			CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addForum Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyForum($inputObject)
+{
+	_log("verifyForum Started","success");
+	try 
+	{
+		if($inputObject.ForumName)
+			$inputObject.item = $inputObject.ForumName;
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyForum Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openForum($inputObject)
+{
+	_log("openForum Started","success");
+	try 
+	{
+		_click(_link($inputObject.ForumName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openForum Completed","success");
+}
+
+/**
+ @Function postTopic:4
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function postTopic($inputObject)
+{
+	_log("postTopic Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Post_New_Topic"));
+		_selectWindow("popup");
+		setAllFields($inputObject);
+		_click(_button("QTP_KEY_BUTTON_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("postTopic Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifypostTopic($inputObject)
+{
+	_log("verifypostTopic Started","success");
+	try 
+	{
+		_assertTrue(_exists(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifypostTopic Completed","success");
+}
+
+/**
+ @Function searchForum
+ @author:shashank
+ @example:
+ @description: the function would perform search for a forum and check for it in the listing.
+ @param: 
+ @return: 
+ **/
+
+function searchForum($inputObject)
+{
+	_log("searchForum Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+		$inputObject.item = $data.SearchPhrase5;
+		_assertContainsText($inputObject.edt_SearchPhrase ,_link(0,_near(_cell("Subject"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchForum Completed","success");
+}
+
+/**
+ @Function Number:	8
+ @author:			Vaishali
+ @example:			addTraceabilityToForum($inputObject)
+ @description: 		This function add traciblity 
+ @param: 			lst_NewExisting,lst_Items,edt_CM_Name,lst_CM_Priority.
+ @return: 			None
+ **/
+
+function addTraceabilityToForum($inputObject)
+{
+	_log("addTraceabilityToForum Started","success");
+	try 
+	{
+		_click(_link("/View Traceability/", _leftOf(_cell($inputObject.TopicName))));
+		_setSelected(_select("NewExisting"), $inputObject.lst_NewExisting);
+		_setSelected(_select("Items"),$inputObject.lst_Items);
+		_click(_button("GoButton"));
+		_setValue(_textbox("CM_Name"),$inputObject.edt_CM_Name);
+		_setSelected(_select("CM_Priority"),$inputObject.lst_CM_Priority);
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTraceabilityToForum Completed","success");
+}
+
+/**
+ @Function Number:	9
+ @author:			Vaishali
+ @example:			verifyTraceabilityToForum($inputObject)
+ @description: 		This function verify tracibility.
+ @param: 			name,operation
+ @return: 			None
+ **/
+
+function verifyTraceabilityToForum($inputObject)
+{
+	_log("verifyTraceabilityToForum Started","success");
+	try 
+	{
+		_click(_link("/View Traceability/", _leftOf(_cell($inputObject.TopicName))));
+		if($inputObject.operation === "Negative" )
+    		_assertFalse(_isVisible(_cell($inputObject.name)));
+		else			
+			_assertTrue(_isVisible(_cell($inputObject.name)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTraceabilityToForum Completed","success");
+}
+
+/**
+ @Function Number:10
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTopic($inputObject)
+{
+	_log("openTopic Started","success");
+	try 
+	{
+	    _click(_link("/TOP/",_near(_cell($inputObject.TopicName))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTopic Completed","success");
+}
+
+/**
+ @Function modifyForum
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyForum($inputObject)
+{
+	_log("modifyForum Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Modify_Forum"));
+			
+		$inputObject.winprefix = "forum_mod";
+			
+		if($inputObject.operation === "DisabledButton")// Delete Button
+		{	_selectWindow("forum_mod");
+			_assertTrue(_button($inputObject.buttonName).disabled);
+			_click(_button("CancelBtn"));
+			_selectWindow();
+		}
+		else
+			saveInstance($inputObject);
+			
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyForum Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifymodifyForum($inputObject)
+{
+	_log("verifymodifyForum Started","success");
+	try 
+	{
+		if (_exists(_button("Cancel")))
+			_click(_button("Cancel"));
+		_click(_link("KEY_LABEL_Modify_Forum"));
+		_selectWindow("forum_mod");
+		verifyAllFields($inputObject);
+		_click(_button("CancelBtn"));
+		_selectWindow();		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifymodifyForum Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function replyToTopic($inputObject)
+{
+	_log("replyToTopic Started","success");
+	try 
+	{
+		_click(_link("Reply"));
+		_setValue(_textarea("replyBox"), $inputObject.txt_replyBox);
+		_click(_div("Post"));
+		_assert(_isVisible(_div($inputObject.txt_replyBox)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("replyToTopic Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteReply($inputObject)
+{
+	_log("deleteReply Started","success");
+	try 
+	{
+		_click(_link("/Delete/", _near(_div($inputObject.replyMsg))));
+		_assert(_isVisible(_div("Do you really want to delete?")));
+		_click(_div("Ok"));
+		_assertFalse(_isVisible(_div($inputObject.replyMsg)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteReply Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteTopic($inputObject)
+{
+	_log("deleteTopic Started","success");
+	try 
+	{
+		openTopic($inputObject);
+		var $topicName = "/" + $inputObject.TopicName + "/";
+		_click(_link("/Delete/", _near(_div($topicName))));
+		_assert(_isVisible(_div("Do you really want to delete?")));
+		_click(_div("Ok"));
+		_assertFalse(_cell($topicName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTopic Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifydeleteTopic($inputObject)
+{
+	_log("verifydeleteTopic Started","success");
+	try 
+	{
+		_assertFalse(_exists(_cell($inputObject.item)));	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifydeleteTopic Completed","success");
+}

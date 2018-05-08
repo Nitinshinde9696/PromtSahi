@@ -1,0 +1,350 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Testing_Request_Management_CR12_ReuseClosureTable_PT_41","Testing/Request_Management/Performance_Testing");
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+ var $t = _testcase("TC_1.1.1","Login & Navigate");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Manual Testing
+ navigateTo($inputObject);
+ 
+ 
+ _wait(3000);
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//"CR12";
+ $inputObject.txt_CM_Description = $data.descr;//"Descr";
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity =  $data.complex;//"Simple";
+ $inputObject.lst_DN_TypeofTesting = $data.totesting;//"Load Testing";
+ $inputObject.lst_DN_TechnologyofApplicatio = $data.toa;//"Package or Product";
+ $inputObject.lst_DN_LCStage = $data.stage;//"Partial LC Stage";
+ CreateInstance($inputObject);
+ 
+ var $ID = _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ActualStartDate = $StartDate1;
+ $inputObject.edt_DN_ActualEndDate = $StartDate1;
+ $inputObject.lst_DN_AgileTestingAdopted = $data.No;//"No";
+ $inputObject.edt_DN_TotalNoOfBottlenecksIn = $data.NoCreated;//"30";
+ $inputObject.edt_DN_TotalNoOfBottlenecksIn2 = $data.NoCreated;//"30";
+ $inputObject.edt_DN_TotalNoOfBottlenecksIn = $data.NoCreated;//"30";
+ $inputObject.edt_DN_TotalNoOfCriticalTrans1 = $data.NoCreated;//"30";
+ $inputObject.edt_DN_NumberofSLAspecificati = $data.NoCreated;//"30"; 
+ $inputObject.edt_DN_TotalNoOfCriticalTrans = $data.NoCreated;//"30"; 
+ $inputObject.edt_DN_NumberofSLAspecificati1 = $data.NoCreated;//"30"; 
+ $inputObject.edt_DN_TotalNoOfTransactions = $data.NoCreated;//"30"; 
+ $inputObject.edt_DN_TotalNoOfBottlenecks = $data.NoCreated;//"30"; 
+ $inputObject.edt_DN_TotalNoOfBottlenecksIn1 = $data.NoCreated;//"30";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Req_summary;//"Request Summary";
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Declaration;//"Declaration";
+ $inputObject.rowNo = $data.row1;//"2";
+ $inputObject.colNo = $data.col1;//"1_lst";
+ $inputObject.fieldValues = $data.val1;//"Normal";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Reason;//"Reason for Bad Data";
+ $inputObject.rowNo = $data.row2;//"3";
+ $inputObject.colNo = $data.col2;//"1_txt";
+ $inputObject.fieldValues = $data.val2;//"Closure comments";
+ setSwiftFormData($inputObject);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.tableName = "Declaration";
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "0_chk";
+ $inputObject.fieldValues = "Yes";
+ setSwiftFormData($inputObject);
+ */
+ 
+ _click(_checkbox(0));
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $s1 = _testcase("TC_BRD34_FU_23.1,2","CHECK CLOSURE TABLE VISIBILITY");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.reuse;//"Reuse Tracking";
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//"Add Rows";
+ InfyFTclick($inputObject);
+ 
+ //**CR128**
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName =  $data.ReusablAsset;// "Reusable Assets";
+ $inputObject.rowNo = $data.row3;//"1";
+ $inputObject.colNo = "License Type/Source*_lst";
+ $inputObject.fieldValues = "--None--#3rd Party#Knowledge Assets#Local Repository#Open Source#Others";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.ReusablAsset;// "Reusable Assets";
+ $inputObject.rowNo = $data.row3;//"1";
+ $inputObject.colNo = $data.col3;//"Name*_edt";
+ $inputObject.fieldValues = $ID+"|"+"_CR12";
+ setSwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName =  $data.ReusablAsset;// "Reusable Assets";
+ $inputObject.rowNo = $data.row3;//"1";
+ $inputObject.colNo = $data.col4;//"Asset Version*_edt|Asset Type*_lst|License Type/Source*_lst|Unit of Measure*_lst|Size*_edt|Estimated Effort Saving (P hrs)*_edt|Usage Status_lst|Savings Factored in Estimates_lst";
+ $inputObject.fieldValues = $data.val4;//"1256|Package|Open Source|Lines Of Code|20|50.00|Used with Major modification|Y";
+ setSwiftFormData($inputObject);
+ 
+  _wait(2000);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.AES;//"Actual Effort Savings";
+ $inputObject.rowNo = $data.row5;//"Actual Effort Savings"
+ $inputObject.colNo = $data.col5;//"Not factored in estimates_edt|Factored in estimates_edt";
+ $inputObject.fieldValues = $data.val5;//"0.00|0.00"
+ verifySwiftFormData($inputObject);
+ 
+ _wait(4000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.AES;//"Actual Effort Savings";
+ $inputObject.rowNo = $data.row5;//"Actual Effort Savings"
+ $inputObject.colNo = $data.col6;//"Factored in estimates_edt";
+ $inputObject.fieldValues = "3.00";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  _wait(4000);
+  
+ $inputObject = {};
+ $inputObject.operation = "Negative";
+ $inputObject.span_Name = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.ReusablAsset;// "Reusable Assets";
+ $inputObject.rowNo = $data.row7;//"1";
+ $inputObject.colNo = $data.col7;//"Savings Factored in Estimates_lst";
+ $inputObject.fieldValues ="Y";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.AES;//"Actual Effort Savings";
+ $inputObject.rowNo = $data.row5;//"Actual Effort Savings"
+ $inputObject.colNo = $data.col8;//"Not factored in estimates_edt";
+ $inputObject.fieldValues = "3.00";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  _wait(4000);
+  
+ $inputObject = {};
+ $inputObject.operation = "Negative";
+ $inputObject.span_Name = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.AES;//"Actual Effort Savings";
+ $inputObject.rowNo = $data.row5;//"Actual Effort Savings"
+ $inputObject.colNo = $data.col9;//"Not factored in estimates_edt|Factored in estimates_edt";
+ $inputObject.fieldValues = $data.val9;//"0.00|0.00"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+
+ $s1.end();
+
+ var $s2 = _testcase("TC_BRD34_FU_23.3,4,5,6","CHECK THE CLOSURE CHECK TABLE");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tableheader1;//"Metrics corelation check;Options;Remarks";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1";
+ $inputObject.colNo = $data.col10;//"Metrics corelation check_lbl";
+ $inputObject.fieldValues = $data.val10;//"There is no actual reuse saving effort logged for this request. Please select appropriate reasons"
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1"
+ $inputObject.colNo = $data.col11;//"Options_lst";
+ $inputObject.fieldValues = $data.val11;//"--None--#Constraints(Asset Access & Usage)#Execution only request#No Relevant Assets Found"
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1"
+ $inputObject.colNo = $data.col11;//"Options_lst";
+ $inputObject.fieldValues = $data.val12;//"No Relevant Assets Found"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+_assertEqual("If there are no existing reusable assets available , please provide details of reusable assets contributed from this request under Reuse Tracking Segment - Remarks column of Request Closure Checks for Reuse Table", _lastAlert());
+
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_BRD34_FU_23.8","CHECK THE CLOSURE CHECK TABLE");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1"
+ $inputObject.colNo = $data.col11;//"Options_lst";
+ $inputObject.fieldValues = $data.val13;//"Constraints(Asset Access & Usage)"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1"
+ $inputObject.colNo = $data.col11;//"Options_lst";
+ $inputObject.fieldValues = $data.val14;//"Execution only request"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_BRD34_FU_23.10,11","Closing the Request to Validate the Check");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1"
+ $inputObject.colNo = $data.col11;//"Options_lst";
+ $inputObject.fieldValues = $data.val15;//"--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.details;//"Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Status_Closed;//"Closed";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _assertEqual("There is no actual reuse saving effort logged for this request. Please select appropriate reasons in Reuse Tracking Segment , Options column of Request Closure Checks for Reuse table", _lastAlert());
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.reuse;//"Reuse Tracking";
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+ 
+  //CLOSING THE REQUEST AFTER SETTING THE REQUEST CLOSURE FIELDS
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.RequestClosure;//"Request Closure Checks for Reuse";
+ $inputObject.rowNo = $data.row10;//"1"
+ $inputObject.colNo = $data.col12;//"Options_lst|Remarks_txt";
+ $inputObject.fieldValues = $data.val16;//"No Relevant Assets Found|Test"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.details;//"Details";
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Status_Closed;//"Closed";
+ ModifyEformInstance($inputObject);
+ 
+ _assertEqual("Error : There are few mandatory data integrity checks that have failed. Please refer to Request Closure Checks for details and address the failed checks.", _lastAlert());
+
+ $s4.end();
+ 

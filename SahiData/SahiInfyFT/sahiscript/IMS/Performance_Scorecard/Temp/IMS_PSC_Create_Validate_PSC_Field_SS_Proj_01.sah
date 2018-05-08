@@ -1,0 +1,399 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_Create_Validate_PSC_Field_SS_Proj_01", "IMS/Performance_Scorecard");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-60,$dateObj1);//Main Date
+ var $FromDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",-55,$dateObj2);//Main Date
+ var $ToDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",-57,$dateObj3);//2nd scorecard date
+ var $FromDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ var $dateObj4 = new Date();
+ $dateObj4 = DateAdd("d",-50,$dateObj4);//checking 31 days
+ var $ToDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj4);
+ 
+ var $dateObj5 = new Date();
+ $dateObj5 = DateAdd("d",-59,$dateObj5);//Main Date
+ var $FromDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj6 = new Date();
+ $dateObj6 = DateAdd("d",-58,$dateObj6);//Main Date
+ var $ToDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj7 = new Date();
+ $dateObj7 = DateAdd("d",-50,$dateObj7);//2nd scorecard date
+ var $FromDate3 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ var $dateObj8 = new Date();
+ $dateObj8 = DateAdd("d",-10,$dateObj8);//checking 31 days
+ var $ToDate3 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj4);
+  
+ var $From_Date_Before_Project_Start_Date = "15-Oct-2006";
+ var $To_Date_Before_Project_Start_Date = "20-Oct-2006";
+  
+/*************************************************************************
+*  TestCase_1  : login Window using wrong ID/Password
+************************************************************************
+
+ var $t = _testcase("TC_1_TS_2","Invalid Login");
+ 
+ $t.start();
+
+ $inputObject = {}; //login Window using wrong ID/Password
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ logOut();
+ 
+ $t.end();
+ */
+ var $t = _testcase("TC_1_TS_1","Valid Login");
+ 
+ $t.start();
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1_TS_3","Select Project");
+ 
+ $t.start();
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $t.end();
+ 
+ /*************************************************************************
+ *  TestCase_2  : Navigate and Check Fields in PSC
+ *************************************************************************/
+ 
+ var $t = _testcase("TC_2_TS_1","Navigate to Performance Scorecard");
+ 
+ $t.start();
+ 
+ $inputObject = {}; // giving the path for Execute-PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2_TS_2","User clicks on add IMS Performance Scorecard");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation41; // Opening Blank Eform of PSC
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName50;//Details
+ SelectSegment($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_2_TS_3","Check Fields in PSC");
+ 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.true = $data.T1;//true
+ $inputObject.button = $data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;//False
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ID6;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name6;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.FromDate6;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ToDate6;
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Status6;
+ InfyFTisVisibleS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2_TS_6","Enter Value In Name field");
+ 
+ $t.start();/* For Name */
+  
+ $inputObject = {};
+ $inputObject.edt_DN_FromDate = $FromDate;//Main Date
+ $inputObject.edt_DN_ToDate = $ToDate;//Main Date
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Scorecard Name in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+/*************************************************************************
+*  TestCase_3  : Check the Status
+*************************************************************************/
+ 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.Status6;
+ $inputObject.span_Name = $data.StatusValue6;
+ InfyFTisReadOnlyS($inputObject); 
+ 
+/*************************************************************************
+ *  TestCase_6  : Project Current State is Steady State
+ *************************************************************************/
+ 
+ var $t = _testcase("TC_6_TS_4","Max Duration Should be 31 Days ");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue6;
+ $inputObject.edt_DN_FromDate = $FromDate; 
+ $inputObject.edt_DN_ToDate = $ToDate3;
+ $inputObject.msgAlert = "Error: Scorecard date span should not be more than 31 days if current stage is Steady State";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Scorecard Creation For Steady State");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue6;//Creation of 1st PSC
+ $inputObject.edt_DN_FromDate = $FromDate;
+ $inputObject.edt_DN_ToDate = $ToDate;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(3000);
+ 
+ var $IDpsc =  _getText(_span("CM_ItemCode"));
+  
+ $t.end();
+ 
+ /*****************************************************************************
+ *  TestCase_15  : Check Fields in Scorecard
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_15_TS_2","Check For Sub-fields");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Segments;
+ InfyFTisVisibleS($inputObject);
+ 
+ $t.end();
+ 
+ /*****************************************************************************
+ *  TestCase_16  : User click on SLA_Penalty
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_16","Check fields in SLA_Penalty");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName51;
+ SelectSegment($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end(); 
+ 
+ /*****************************************************************************
+ *  TestCase_7  : Project Current State is Steady State and not 1st Scorecard
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_7_TS_1","Check For From Date");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation41; // Opening Blank Eform of PSC
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName50;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue6;
+ $inputObject.edt_DN_FromDate = $From_Date_Before_Project_Start_Date;
+ $inputObject.edt_DN_ToDate = $To_Date_Before_Project_Start_Date;
+ $inputObject.msgAlert = "Error: Scorecard From Date (15-Oct-2006) should be greater than the Project Start Date (1-May-2009)";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7_TS_4","Max Duration Should be 31 Days");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue6;
+ $inputObject.edt_DN_FromDate = $FromDate3; 
+ $inputObject.edt_DN_ToDate = $ToDate3;
+ $inputObject.msgAlert = "Error: Scorecard date span should not be more than 31 days if current stage is Steady State";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7_TS_5","From date should not be Less than To Date of Previous Scorecard");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue6;//Creation of 1st PSC
+ $inputObject.edt_DN_FromDate = $FromDate1;//"14-Sep-2025";
+ $inputObject.edt_DN_ToDate = $ToDate1; //"17-Sep-2025";
+ $inputObject.msgAlert = "Error: Scorecard To Date (21-Sep-2015) should be greater than Scorecard From Date (14-Sep-2025)";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ //clickReturn();
+ 
+ $t.end();  
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue6;//Creation of 1st PSC
+ $inputObject.edt_DN_FromDate = $FromDate2;
+ $inputObject.edt_DN_ToDate = $ToDate2;
+ $inputObject.msgAlert = "Error: Overlapping scorecards are not allowed.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ clickReturn();
+  
+ _include("InfyFT_BR19_sahi_04_TC_SS_PSC_1_2.sah");
+ 
+ _wait(300);
+ 
+ /*****************************************************************************
+ *  TestCase_37  : Project Current State is Steady State and not 1st Scorecard
+ *****************************************************************************/
+ 
+ $data = readDataFromCSV("InfyFT_BR19_sahi_04_TC_SS_PSC_1", "InfyFTSahi/PerformanceScoreCard");
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName54;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName61;//Service Sub Service Effort Distribution
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo60;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl
+ $inputObject.fieldValues = $data.fieldValues60;//Service|Sub-Service|ITIL Process|Total Effort from Base Measures|Total Actual Effort from Timesheet System|Total Effort against Custom metrics|Reasons for Manual Update|Total Effort
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName61;//Service Sub Service Effort Distribution
+ $inputObject.rowNo = $data.rowNo61;//1
+ $inputObject.colNo = $data.colNo61;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|7_lbl
+ $inputObject.fieldValues = $data.fieldValues61;//End-user Compute|Desktop Services|Incident Management|7.00|0.00|7.00
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName61;//Service Sub Service Effort Distribution
+ $inputObject.rowNo = $data.rowNo62;//2
+ $inputObject.colNo = $data.colNo61;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|7_lbl
+ $inputObject.fieldValues = $data.fieldValues62;//End-user Compute|Desktop Services|Request Fulfillment|8.00|0.00|8.00
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName61;//Service Sub Service Effort Distribution
+ $inputObject.rowNo = $data.rowNo63;//3
+ $inputObject.colNo = $data.colNo62;//3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.fieldValues63;//15.00|0.00|0.00
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName62;//Project Level Effort Comparison
+ $inputObject.rowNo = $data.rowNo60;//0
+ $inputObject.colNo = $data.colNo63;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl
+ $inputObject.fieldValues = $data.fieldValues64;//Alcon Allocated Effort|Total Actual TS effort - Phrs|Project related TS effort - Phrs|TS effort for different ITIL processes - Phrs|Non-ITIL processes TS effort (Phrs)|Non-project related TS effort - Phrs|Ratio of project related TS / Alcon effort|Ratio of ITIL processes TS / Alcon effort|Ratio of non-project related TS / Alcon effort
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName61;//Service Sub Service Effort Distribution
+ $inputObject.rowNo = $data.rowNo61;//1
+ $inputObject.colNo = $data.colNo64;//5_edt|6_txt
+ $inputObject.fieldValues = $data.fieldValues65;//10|Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName61;//Service Sub Service Effort Distribution
+ $inputObject.rowNo = $data.rowNo62;//2
+ $inputObject.colNo = $data.colNo64;//5_edt|6_txt
+ $inputObject.fieldValues = $data.fieldValues65;//10|Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _include("InfyFT_BR19_sahi_26_SS_New_CR.sah");
+ 
+ /* $inputObject = {};
+ $inputObject.item = $IDpsc;
+ DeleteEformInstance($inputObject); */
+ 
+ /*************************************************************************
+ *  TestCase_12  : Create PSC having ROle Other than PM,SPM 
+ *************************************************************************
+ 
+ var $t = _testcase("TC_12","Create PSC having ROle Other than PM,SPM");
+ 
+ $t.start();
+ 
+ $inputObject = {}; //login Having SE ROle
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name21;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ InfyFTnavigateTo($inputObject);
+  
+ logOut();
+ 
+ $t.end();
+ */

@@ -1,0 +1,69 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformListing.sah");
+
+
+$data = readDataFromCSV("Roles_Manage_Roles_UQH_Version_Validation_49","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password1;//Password1 :123456
+loginIntoDigite($inputObject);
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//CREATE UQH//
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;//ALLY
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;//ALLY
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;//Nethravathi_r02
+CreateInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_user = $data.user7;//"Niharika.Karingula ";
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; // Previous Version
+SelectSegment($inputObject);
+
+
+$inputObject = {};
+$inputObject.chk_chkbox = "True";//"Niharika.Karingula";
+$inputObject.chk_Version1 = "True";
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.link = $data.link1;//"Version Difference";
+InfyFTclick($inputObject);
+
+_selectWindow("VersionDifference");
+
+$inputObject = {};
+$inputObject.ele_Nethravathi_r02 = $data.changename1;
+$inputObject.ele_snehal_ghodeswar = $data.changename2;
+verifyEformInstanceDetails($inputObject);
+
+_closeWindow();
+_selectWindow();
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name3; // Previous Version
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;
+ModifyEformInstance($inputObject);

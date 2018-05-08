@@ -1,0 +1,308 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+ 
+ $data = readDataFromCSV("MechPD_CC_CheckingButtons_01", "MechPD/Customer_Complaint");
+ 
+ var $t = _testcase("START"); 
+ $t.start(); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; //Navdeep_Ghotra
+ $inputObject.edt_loginid = $data.LoginID1;//Navdeep_Ghotra
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name; //INFY000020Team_Isha_0
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to customer complaint");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //CC
+ InfyFTnavigateTo($inputObject);
+  
+ $t.end();
+
+ var $t = _testcase("TC_4", "checking buttons visibility");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;//T0 new changes 31 jan 2017 modified
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+  $t.end();
+
+ /*******************Buttons at modification time*********************/ 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+  
+ var $t = _testcase("TC_5", "during modification time");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name5;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Raised By in Details tab \n• Field Description in Details tab \n• Field Complaint Category in Details tab \n• Field Severity in Details tab \n• Field Complaint Raised Date in Details tab \n• Field Agreed/Expected Date of Closure in Details tab \n• Field Repeat Complaint in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject); 
+ 
+ $t.end();
+
+ /********************************************************************************
+  * adding a new customer complaint  
+ *********************************************************************************/
+ 
+ var $t = _testcase("TC_6", "create customer complaint");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.DN_RaisedBy6;
+ $inputObject.txt_CM_Description = $data.CM_Description6;
+ $inputObject.edt_DN_ComplaintRaisedDate = $currentDate;
+ $inputObject.edt_DN_RaisedBy = $data.DN_RaisedBy6; 
+ $inputObject.lst_DN_Severity = $data.DN_Severity6; 
+ $inputObject.lst_DN_AssignedTo = $data.DN_AssignedTo6;
+ $inputObject.lst_DN_ComplaintCategory = $data.DN_ComplaintCategory6; 
+ $inputObject.edt_DN_AgreedExpectedDateofCl = $endDate; 
+ $inputObject.lst_DN_RepeatComplaint = $data.DN_RepeatComplaint6; 
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete 
+ InfyFTcheckingButtons($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ var $IDcus =  _getText(_span("CM_ItemCode")); 
+ 
+ $t.end();
+ 
+ /*********************************************************************************************************************
+ * close the instance when status is closed/abandoned 
+ **********************************************************************************************************************/
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",-4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TC_7", "modify and close the instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status14;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken14;
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause14; 
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate;
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.reopen;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $t.end();
+ 
+ /************************************************************************************************************************
+ * Re-Open the closed instance  (reopen is not found)
+ *************************************************************************************************************************/
+ 
+ var $t = _testcase("TC_8", "reopen complaint for closed/abandoned status");
+ $t.start();
+ 
+ InfyFTreopenInstance();
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.reopen;//reset
+ InfyFTcheckingButtons($inputObject);
+  
+ $inputObject = {};
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken4; 
+ $inputObject.txt_DN_RootCause = $data.DN_RootCause4;   
+ ModifyEformInstance($inputObject);
+
+ $t.end();
+ 
+ /***************************************************************************************************************************
+ * Close the complaint by setting status as Abandoned 
+ ****************************************************************************************************************************/
+ 
+ var $t = _testcase("TC_9", "modify and close the instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.DN_Status24;
+ $inputObject.txt_DN_ActionTaken = $data.DN_ActionTaken24;
+ $inputObject.edt_DN_ComplaintClosedOn = $currentDate;
+ ModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.reopen;//reset
+ InfyFTcheckingButtons($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

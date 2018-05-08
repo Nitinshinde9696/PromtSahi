@@ -1,0 +1,522 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $data = readDataFromCSV("Package_Reviews_Defects_Generic_00","Package/Reviews_Defects");
+ var $data1 = readDataFromCSV("Package_Reviews_Defects_Group_Review_04","Package/Reviews_Defects");
+
+ var $TC1 = _testcase("GROUP REVIEW","CREATING A GROUP REVIEW"); 
+ $TC1.start();
+var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",30,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $TC1 = _testcase("TC_BRD10_FU2.2","CHECK FOR THE MANDATORY FIELDS IN THE REVIEW FORM"); 
+ $TC1.start();
+ 
+ //SETTING VALUES IN SIZING DETAILS AND LC STAGES
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.User_name;//Sreya_Chatterjee
+ $inputObject.edt_loginid = $data.LoginID;//Sreya_Chatterjee
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name_PI;//LFGHHHHH
+ selectProject($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment7;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.sizerow1;// "1"
+ $inputObject.colNo  = $data1.sizecol;//"1_lst|2_lst|3_lst|7_lst"
+ $inputObject.tableName  = $data1.table1;//"Sizing Details"; 
+ $inputObject.fieldValues = $data1.values1;//"Development|New Development|3rd Generation default|Backward FP";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+  */
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.navigateTo2;//Iterations
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addIteration;//KEY_Link_New_item-btnIconEl
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.Itrname;//Review Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ $inputObject.lst_DN_IterationType = $data1.Itrtype;//;"Package Implementation - ORC"
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $Itr_ID = $inputObject.createdID;
+ 
+ //SETTING THE LC STAGE VALUES
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment9;//Applicable LC Stages
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw1;//Package Evaluation|Project Scoping|Requirements Gathering|Package Configuration
+ $inputObject.colNo = $data1.appcol2;//Applicable_chk
+ $inputObject.fieldValues = $data1.appval;//Y
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw2;//To-Be Design|Package Configuration|Testing|User Acceptance
+ $inputObject.colNo = $data1.appcol3;//Applicable_unchk
+ $inputObject.fieldValues = $data1.appval;//Y
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ 
+ _wait(6000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ 
+ //******CREATING A GROUP REVIEW*****//
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data1.rev_name01;//Review1
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name02;//Descr
+ $inputObject.lst_DN_ReviewMode = $data1.Revmode03;//Group Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer04;//Sreya_Chatterjee#Arjun.R02
+ $inputObject.lst_reviewtype = $data1.revType06;//Independent Unit Testing
+ InfyFTcreateLinkedItemPackage($inputObject);
+ 
+ var $ReviewID = $inputObject.createdID;
+
+ //******CREATING TWO DEFECTS IN THE GROUP REVIEW*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name1;//openLinkedItem
+ $inputObject.lst_reviewtype = $data1.review_types;//to be updated
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment2;//Defect
+ SelectSegment($inputObject);
+
+ //*****DEFECT 1*****//
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name07;//Defect1
+ $inputObject.txt_CM_Description = $data1.def_descr08;//descr
+ $inputObject.lst_DN_Owner = $data1.def_owner09;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data1.def_sev10;//Critical
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment2;//Defect
+ SelectSegment($inputObject);
+ */
+ 
+  //*****DEFECT 2*****//
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name11;//Defect1
+ $inputObject.txt_CM_Description = $data1.def_descr12;//descr
+ $inputObject.lst_DN_Owner = $data1.def_owner13;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data1.def_sev014;//Minor
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("TC_BRD10_FU_25","CHECK THE FIELDS IN REVIEW ROLES SEGMENT"); 
+ $TC2.start();
+ 
+ //***** NAVIGATING TO REVIEWS ROLES TO ENTER THE DETAILS*****
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment5//Review Roles
+ SelectSegment($inputObject);
+ 
+ //*****CHECKING THE FIELDS OF MODERATOR FIELDS TABLE*****//
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.span_Name = $data1.MDval17;//"Team Member*|Role|Preparation Effort (Hrs)|No of Defects detected";
+ InfyFTisVisible($inputObject)
+
+ 
+ //*****MEMBERS IN TEAM MEMBER DROP DOWN*****//
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.Moderator_Table;//Moderator Details
+ $inputObject.rowNo = $data1.MDrow18;//"1";
+ $inputObject.colNo = $data1.MDcol9;// "1_lst"
+ $inputObject.fieldValues = $data1.MDval20;//--None--#Sreya_Chatterjee#Arjun.R02#lohith_krishnarao#Niharika.Karingula#rahul_virmani#swamir
+ InfyFTverifySwiftFormDataPopup($inputObject); 
+ 
+ //*****CHECKING THE DEFECT DETECTED FIELD DEPENDING AND THE PREPARATION EFFORT
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.Moderator_Table;//Moderator Details 
+ $inputObject.rowNo = $data1.MDrow21;//"1";
+ $inputObject.colNo = $data1.MDco22;// "3_edt|4_edt"
+ $inputObject.fieldValues = $data1.MDval23;//0.0|0 //Preparation Effort|defects
+ InfyFTverifySwiftFormDataPopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName =  $data.Moderator_Table;//Moderator Details 
+ $inputObject.rowNo = $data1.MDrow21;//"1";
+ $inputObject.colNo = $data1.MDcol29;//"2_lst|3_edt|4_edt";
+ $inputObject.fieldValues = $data1.MDval30;//"Arjun.R02|3.0|3";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.Moderator_Table;//Moderator Details 
+ $inputObject.rowNo = $data1.MDrow21;//"1";
+ $inputObject.colNo = $data1.MDcol24;//"3_edt|4_edt"
+ $inputObject.fieldValues = $data1.MDval25;//"0.0|5"
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ _assertEqual("Error : No of Defects detected cannot be more than zero since Preparation Effort is zero", _lastAlert());
+ /*
+ $inputObject = {};
+ $inputObject.msgAlert= "Error : No of Defects detected cannot be more than zero since Preparation Effort is zero";
+ saveSwiftForm($inputObject);
+ 
+ */
+ 
+ //****** CHECKING THE NEGATIVE SCENARIO OF  DEFECTS DETECTED AND PREPARATION EFFORT FIELDS*****//
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.Moderator_Table;//Moderator Details 
+ $inputObject.rowNo = $data1.MDrow212;//"1";
+ $inputObject.colNo = $data1.MDcol242;//3_edt
+ $inputObject.fieldValues = $data1.MDval252;//"-50"
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ _assertEqual("Error : Preparation Effort cannot take more than 6 values or negative values.Please enter a positive value less than 1000000", _lastAlert());
+ 
+ /*
+ $inputObject = {};
+ $inputObject.msgAlert= "Error : Preparation Effort cannot take more than 6 values or negative values.Please enter a positive value less than 1000000";
+ saveSwiftForm($inputObject);
+ */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.Moderator_Table;//Moderator Details 
+ $inputObject.rowNo = $data1.MDrow212;//"1";
+ $inputObject.colNo = $data1.MDcol243;//"4_edt
+ $inputObject.fieldValues = $data1.MDval253;//"-30"
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert= "Error : Please enter positive value for No of Defects detected";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName =  $data.Moderator_Table;//Moderator Details 
+ $inputObject.rowNo = $data1.MDrow21;//"1";
+ $inputObject.colNo = $data1.MDcol29;//"2_lst|3_edt|4_edt";
+ $inputObject.fieldValues = $data1.MDval30;//"Arjun.R02|3.0|3";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.link = $data1.link;//Add Rows
+ InfyFTclick($inputObject);//InfyFTaddRowInSwiftForm($inputObject) 
+ 
+  
+ //*****VALUES IN THE ROLES DROPDOWN*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.ORoles_table;//Other Roles
+ $inputObject.rowNo = $data1.ORrow26;//"1";
+ $inputObject.colNo = $data1.ORcol27;//"3_lst";
+ $inputObject.fieldValues = $data1.ORval28;//"--None--#Author#Reader#Reviewer#Scribe";
+ InfyFTverifySwiftFormDataPopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.ORoles_table;//Other Roles
+ $inputObject.rowNo = $data1.ORrow31;//"1";
+ $inputObject.colNo = $data1.ORcol32;//"1_lst|2_lst|3_edt|4_edt";
+ $inputObject.fieldValues = $data1.ORval33;//"Sreya_Chatterjee|Author|3.0|2";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.link = $data1.link;//Add Rows
+ InfyFTclick($inputObject);//InfyFTaddRowInSwiftForm($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.tableName = $data.ORoles_table;//Other Roles
+ $inputObject.rowNo = $data1.ORrow34;//"2";
+ $inputObject.colNo = $data1.ORcol35;//"1_lst|2_lst|3_edt|4_edt";
+ $inputObject.fieldValues = $data1.ORval36;//"swamir|Scribe|3.0|3";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $TC2.end();
+ 
+ var $TC3 = _testcase("TC_BRD10_FU_6","CHECK THE FIELDS IN DETAILS SEGMENT"); 
+ $TC3.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment6;//Details
+ SelectSegment($inputObject);
+ 
+ //*****TOTAL REVIEW EFFORT IS READ=ONLY******//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.span_Name = $data1.TPE37;//"DN_TotalPreparationEffort";
+ $inputObject.cell_Name = $data1.TPE38;//"Total Preparation Effort";
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject.lbl_DN_TotalPreparationEffort = $data1.TPEval;//9
+ verifyEformInstanceDetails($inputObject);
+ 
+  //*****DELETING A REVIEW ROLE TO VIEW THE CHANGE IN TOTAL PREPARATION EFFORT*****
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.navigateTo2;//Iterations
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $Itr_ID;;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.segment_name = $data.segment5//Review Roles
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.tableName = $data.ORoles_table;//Other Roles
+ $inputObject.rowNo = $data1.ORrow311;//"2";
+ $inputObject.colNo = $data1.ORcol321;//"1_chk";
+ $inputObject.fieldValues = "true";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.segment_name = $data.segment6;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lbl_DN_TotalPreparationEffort = $data1.TPEval1;//6
+ verifyEformInstanceDetails($inputObject);
+ 
+ //******CALCULATING THE REVIEW EFFICIENCY FIELD******//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.edt_DN_ActualReviewEffort = $data1.ARE39;//10
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lbl_DN_TotalReviewEffort = "16.0";
+ verifyEformInstanceDetails($inputObject);
+
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ InfyFTcalculateReviewEfficiency($inputObject);//$Defects/$TEffort
+
+ var $RevEfficiency = $inputObject.RevEfficiency;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+  
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lbl_DN_ReviewEfficiency = $RevEfficiency;//$Defects/$TEffort
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC3.end();
+ 
+ var $TC4 = _testcase("TC_BRD10_FU_13","VALIDATION OF STATUS FIELD"); 
+ $TC4.start();
+ 
+ //*****STATUS SHOULD BE IN-PROGRESS AS DEFECT IS ADDED*****//
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+  
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.status41;//In-Progress
+ verifyEformInstanceDetails($inputObject);
+ 
+ //*****DELETING THE REVIEW WITH DEFECTS*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+  
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name3;//openLinkedItem__1
+ $inputObject.msgAlert = "Review cannot be deleted if there are Defects linked or if Review Effort is greater than zero";
+ InfyFTDeleteEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC4.end();
+ 
+ 
+
+
+	
+ 
+ 
+ 
+ 
+ 

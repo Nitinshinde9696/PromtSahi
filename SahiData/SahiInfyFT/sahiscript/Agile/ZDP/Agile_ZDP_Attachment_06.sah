@@ -1,0 +1,358 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",7,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Agile_ZDP_Attachment_06", "Agile/ZDP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to ZDP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ /***********************************************************
+ * Create Instance of ZDP
+ ***********************************************************/ 
+ 
+ var $t = _testcase("TC_4", "create instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name; //PDZ
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMfor;
+ CreateInstance($inputObject);
+ _wait(1000);
+
+ var $IDZ =  _getText(_span("CM_ItemCode"));
+ $inputObject = {};
+ $inputObject.span_Name = $IDZ;//system generated value 
+ $inputObject.cell_Name = $data.ID;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+  
+ /*********************************************************************
+ * set some values in planning segment by leaving one fields
+ *********************************************************************/
+ 
+ var $t = _testcase("TC_5", "set values to planning segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.planning;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textarea of left side
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //check box left side
+ $inputObject.rowNo = $data.rowNo6;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textarea of right side
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.fieldValues2;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textbox of left side
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues31;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textbox of left side
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues31;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //listBox
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo5;
+ $inputObject.fieldValues = $data.fieldValues5;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //list box rgt side
+ $inputObject.rowNo = $data.rowNo7;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //date filed
+ $inputObject.rowNo = $data.rowNo8;
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $startDate;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //date filed
+ $inputObject.rowNo = $data.rowNo9;
+ $inputObject.colNo = $data.colNo9;
+ $inputObject.fieldValues = $data.fieldValues9;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //date filed
+ $inputObject.rowNo = $data.rowNo101;
+ $inputObject.colNo = $data.colNo101;
+ $inputObject.fieldValues = $data.fieldValues101;
+  setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+  _wait(5000); 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textarea of right side
+ $inputObject.rowNo = $data.workflow_stage1;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.tableName1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /***************************************************
+ * routing ZD to DM
+ ****************************************************/
+ 
+ var $t = _testcase("TC_6", "routing to DM");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "For Submitting ZDP below are mandated under Planning:-\n\n-> At least one attachment should be present if Is POC, POV or Prototype created to Demonstrate Innovation? is checked.\n";
+ InfyFTClickRoutewithCommentsN($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_7", "What Improvements Parameters");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.planning;
+ SelectSegment($inputObject);
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; //checking field negative part
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo23;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo24;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo25;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo26;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "How Improvements Parameters");
+ $t.start();
+ 
+ _click(_link("Add Rows[1]"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; //checking field negative part
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo23;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo24;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo25;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo26;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+
+
+ /******************************************************
+ * Add attachment
+ *******************************************************/
+ 
+ var $t = _testcase("TC_10", "Add Attachment");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Attachment;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.attfilename = $data.attfilename2;//BR2final
+ InfyMyADDAttachment($inputObject);
+ _wait(8000);
+ 
+ $t.end();
+ 
+ 
+ /*******************************************************************
+ * checking in execution window
+ ********************************************************************/
+
+ var $t = _testcase("TC_9", "execution flow for two tables");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.execution; //workflow
+ SelectSegment($inputObject);
+ 
+  _wait(2000);
+ if(_isVisible(_link($data.Username1)))
+ {
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name26);// _span("Parameter")
+ $inputObject.message = $data.fieldValues22;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name27);// _span("Parameter")
+ $inputObject.message = $data.fieldValues22;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name28);// _span("Parameter")
+ $inputObject.message = $data.rowNo3;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name29);// _span("Parameter")
+ $inputObject.message = $data.rowNo3;
+ InfyFTverifyValue($inputObject); 
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name36);// _span("Parameter")
+ $inputObject.message = $data.fieldValues22;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name37);// _span("Parameter")
+ $inputObject.message = $data.fieldValues22;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name38);// _span("Parameter")
+ $inputObject.message = $data.rowNo3;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_name = parseInt($data.span_Name39);// _span("Parameter")
+ $inputObject.message = $data.rowNo3;
+ InfyFTverifyValue($inputObject); 
+ }
+ 
+ $t.end();
+
+ 
+
+ 
+ 
+
+ 
+ 
+ 

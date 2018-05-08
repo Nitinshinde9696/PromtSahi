@@ -1,0 +1,171 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformListing.sah");
+
+
+$data = readDataFromCSV("Roles_Manage_Roles_SQA_Version_Validation_42","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//CREATE UQH//
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;
+CreateInstance($inputObject);
+
+var $UQH= _getText(_span("CM_ItemCode"));
+_wait(1000);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles ->PQM
+navigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.rdg_DN_CombineAs = "DN_CombineAs";//$data.DN_Unit5;
+$inputObject.lst_DN_Unit = $data.DN_Unit5;
+$inputObject.lst_DN_PU = $data.SubUnit5;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchUser5;
+CreateInstance($inputObject);
+
+var $PQM = _getText(_span("CM_ItemCode"));
+_wait(1000);
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Navigate To2 :Manage Roles -> SQA
+navigateTo($inputObject);
+
+$inputObject ={};
+clickAddIcon($inputObject);
+
+_wait(3000);
+
+if(_isVisible(_span("PQM")))
+{
+_wait(2000);
+clickReturn();
+$inputObject = {};
+//$inputObject.rdg_DN_LoginAs = $data.MyRole3; //PQM
+$inputObject.lst_DN_UnitPQM = $data.Unit3; //MANDATORY FIELD
+$inputObject.lst_DN_PUPQM = $data.PU3;
+//$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);
+
+}
+else
+{
+_wait(2000);
+clickReturn();
+$inputObject = {};
+$inputObject.rdg_DN_LoginAs = $data.MyRole3; //PQM
+$inputObject.lst_DN_UnitPQM = $data.Unit3; //MANDATORY FIELD
+$inputObject.lst_DN_PUPQM = $data.PU3;
+//$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);
+}
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_User = $data.user7;//"Priyanka21";
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; // Previous Version
+SelectSegment($inputObject);
+
+
+$inputObject = {};
+$inputObject.chk_chkbox = "True";//"Check";
+$inputObject.chk_Version1 = "True";
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.link = $data.link1;//"Version Difference";
+InfyFTclick($inputObject);
+
+_selectWindow("VersionDifference");
+
+$inputObject = {};
+$inputObject.ele_Nethravathi_r02 = $data.changename1;
+$inputObject.ele_nitin_shinde05 = $data.changename2;
+verifyEformInstanceDetails($inputObject);
+
+_closeWindow();
+_selectWindow();
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name3; // Previous Version
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.rdg_InActive = $data.Inactive7;
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles ->PQM
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$PQM);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.item = $PQM; 
+OpenEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.item = $UQH; 
+OpenEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;
+ModifyEformInstance($inputObject);
+
+
+
+

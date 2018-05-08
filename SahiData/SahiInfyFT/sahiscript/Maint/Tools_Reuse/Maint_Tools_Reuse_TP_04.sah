@@ -1,0 +1,135 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+$data = readDataFromCSV("Maint_Tools_Reuse_TP_04","Maint/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // subhashini_k03
+$inputObject.edt_loginid = $data.LoginID1;// subhashini_k03	
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+ 
+var $t = _testcase("TC_2", "Navigating to Projects_home ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the MainPT project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//TXSHTP15
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating the Tools Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Navigating to Tools Tracking section through Major/Minor Enhancement ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5;//Enhancements
+InfyFTnavigateTo($inputObject);
+
+_wait(5000);
+
+ var $GetExcel = _testcase("SetExcel"," Getting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "Enh";
+  infyFTGetValueFromExcel($inputObject);
+  $Enh_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $Enh_Id;
+OpenEformInstance($inputObject)
+
+_wait(5000);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name6;//Tools Tracking
+ SelectSegment($inputObject);
+
+
+$t.end();
+
+var $t = _testcase("TC_6", "Navigating to Tools Tracking section through Bug Fixes ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo7;//Bug Fixes
+InfyFTnavigateTo($inputObject);
+
+_wait(5000);
+
+ var $GetExcelBF = _testcase("SetExcel"," Getting the value in Excel");
+ $GetExcelBF.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "BF";
+  infyFTGetValueFromExcel($inputObject);
+  $BF_Id  = $value;
+ 
+ $GetExcelBF.end();
+
+$inputObject = {};
+$inputObject.item = $BF_Id;
+OpenEformInstance($inputObject);;
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name6;//Tools Tracking
+ SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Available Links in Tools Tracking section ");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link1;//Add from PRIME
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link2;//Available Standard Tools
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link3;//Available Planned Tools
+InfyFTisVisible($inputObject);
+
+
+
+$t.end();
+
+
+
+
+
+
+

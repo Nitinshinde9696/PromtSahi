@@ -1,0 +1,233 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/EformListing.sah");
+
+$data = readDataFromCSV("Roles_Manage_Roles_AQM_Merger_30","Roles");
+
+// LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : SolomonDeepak_AI
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : SolomonDeepak_AI
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+
+$inputObject = {};
+$inputObject.item = "PREQ3673"; 
+OpenEformInstance($inputObject);
+
+
+//PREQ MODIFYING INSTANCE //
+
+$inputObject = {};
+$inputObject.lst_DN_InitiateAction = $data.IA;
+$inputObject.txt_CM_Description = $data.desc;
+$inputObject.lst_DN_PeakTeamSize = $data.TeamSize;
+ModifyEformInstance($inputObject);
+
+/* $inputObject = {};
+$inputObject.segment_name = $data.segment_name1; // More Details
+SelectSegment($inputObject);
+
+var $unit = _getText(_span(100));
+_wait(10000); */
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; //Workflow
+SelectSegment($inputObject);
+
+//AQM VERIFICATION PENDING //
+
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage;//"1";
+$inputObject.multiple_member = $data.member1;//"";
+WorkflowSet($inputObject); //stage-2, 
+
+
+$inputObject = {};
+$inputObject.lst_selectsingleuser1 = $data.AQMname;
+$inputObject.operation = "Negative";
+verifyEformInstanceDetails($inputObject);
+
+logOut(); 
+
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2; //user_name1 : Siddharth_Kale
+$inputObject.edt_loginid = $data.LoginID2;//LoginID1 : siddharth_kale	
+$inputObject.edt_password = $data.Password2;//Password1 :111111
+loginIntoDigite($inputObject);
+
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.unit; //BIZP									
+$inputObject.lst_DN_SubUnit = $data.subunit;//
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;//						
+CreateInstance($inputObject);
+
+_wait(1000);
+
+var $UQH= _getText(_span("CM_ItemCode"));
+_wait(2000);
+
+clickReturn();
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $UQH;// Verify created UQH
+verifyInstanceInListing($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2A;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.unit;//
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode6;//AIRTELIN
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode6;//AIRTELIN
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchCriteria_DN_user6;//
+CreateInstance($inputObject);
+
+_wait(1000);
+
+var $AQM = _getText(_span("CM_ItemCode"));
+_wait(2000);
+
+
+clickReturn();
+
+_setValue(_textbox("searchTextBox-inputEl"),$AQM);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+//VERIFY INSTANCE //
+
+
+$inputObject = {};
+$inputObject.item = $AQM;
+verifyInstanceInListing($inputObject);
+
+logOut(); 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Anirudh_khot
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Anirudh_khot
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.item = "PREQ3673"; 
+OpenEformInstance($inputObject);
+
+//SELECT LINKED PROJECT REQ SEGMENT//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name4; // Workflow
+SelectSegment($inputObject);//
+
+
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage;//"1";
+$inputObject.multiple_member = $data.member;//"";
+WorkflowSet($inputObject); //stage-2, 
+
+
+$inputObject = {};
+$inputObject.lst_selectsingleuser1 = $data.AQMname;
+verifyEformInstanceDetails($inputObject);
+
+logOut(); 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2; //user_name1 : siddharth_kale
+$inputObject.edt_loginid = $data.LoginID2;//LoginID1 : siddharth_kale
+$inputObject.edt_password = $data.Password2;//Password1 :111111
+loginIntoDigite($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2B;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$AQM);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $AQM;// Open Created AQM
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;//"Inactive AQM";
+ModifyEformInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles UQH
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.item = $UQH;// Open Created AQM
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive6;//"Inactive UQH";
+ModifyEformInstance($inputObject);
+
+logOut(); 
+
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Anirudh_khot
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Anirudh_khot
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.item = "PREQ3673"; 
+OpenEformInstance($inputObject);
+
+//SELECT LINKED PROJECT REQ SEGMENT//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name5; // Workflow
+SelectSegment($inputObject);//
+
+
+//AQM VERIFICATION PENDING //
+
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage;//"1";
+$inputObject.multiple_member = $data.member1;//"";
+WorkflowSet($inputObject); //stage-2, 
+
+$inputObject = {};
+$inputObject.lst_selectsingleuser1 = $data.AQMname;
+$inputObject.operation = "Negative";
+verifyEformInstanceDetails($inputObject);
+
+
+
+
+
+

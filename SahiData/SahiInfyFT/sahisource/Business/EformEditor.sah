@@ -1,0 +1,38 @@
+_include("../../../SahiDigite/sahisource/Business/EformEditor.sah");
+_include("../Business/EformInstance.sah");
+
+
+/**
+ @Function Number:1
+ @author: Kunal Gajbhiye
+ @example:
+ @description: This function is modified to check whether Last Page icon is enabled or not if enabled then it will click on it. 
+ @param: 
+ @return: 
+ **/
+
+function InfyFTverifyEformListing($inputObject)
+{
+	_log("InfyFTverifyEformListing Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete" || $inputObject.operation === "Negative"){
+    		_assertFalse(_isVisible(_link($inputObject.item)));
+		}	
+    	else{ 
+		   if(_isVisible(_span("x-btn-icon-el x-tbar-page-last ")) && $inputObject.item != " "){
+		   	_click(_span("x-btn-icon-el x-tbar-page-last "));
+			_assertTrue(_isVisible(_link($inputObject.item)) || _isVisible(_cell($inputObject.item)) || _isVisible(_div($inputObject.item)));
+		   }
+           else{
+		    _assertTrue(_isVisible(_link($inputObject.item)) || _isVisible(_cell($inputObject.item)) || _isVisible(_div($inputObject.item)));
+           }		   
+		}
+        		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTverifyEformListing Completed","success");
+}

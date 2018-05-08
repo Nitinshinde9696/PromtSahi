@@ -1,0 +1,201 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data1 = readDataFromCSV("Agile_ProjectTailoring_SizingDetails_FillingtheFields","Agile/ProjectTailoring"); 
+ 
+var $t = _testcase("TC_08", "Columns coming up while selecting ALM tool");
+ $t.start(); 
+ 
+ //To check for the columns that  come up on selecting the ALM tool - Other ALM tool
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = $data1.fieldValueDev;//Development
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldValueOtherALM;//Other ALM Tool
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblSelectALMTool;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblVersionTool;
+ InfyFTisVisible($inputObject); 
+ 
+ //Another text box should come up so that User can enter the other ALM tool used.
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.lblSelectALMTool;
+ $inputObject.colNo = $data1.colSelectALM;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblDetailsOthers;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000);
+
+ //To check for the columns that come up on selecting the ALM tool - Promt
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;//PROMT
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblSelectALMTool;
+ InfyFTassertNotVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblVersionTool;
+ InfyFTassertNotVisible($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_09", "Columns coming up while selecting Sizing Technique");
+ $t.start(); 
+
+ //To check for the columns that  come up on selecting the Sizing technique- Others
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblDetailsSizTech;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblReasoninfySiz;
+ InfyFTisVisible($inputObject); 
+ 
+ //To check for the columns that  come up on selecting the Sizing technique- Infosys SP sizing model
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldInfySP;//Infosys SP sizing Model
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblDetailsSizTech;
+ InfyFTassertNotVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.lblReasoninfySiz;
+ InfyFTassertNotVisible($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "Columns coming up while selecting Sizing Technique");
+ $t.start(); 
+ 
+ //To check for multi select list for Agile/ Methods Practices	User will be able to select single and multiple option from the multiselect and clicking on Apply the selected options should get reflected in the sizing table 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAgileMethods;
+ $inputObject.colNo = $data1.colAgileMethods;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue6;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply6;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ //Remarks column should come up in the Sizing details table along with the required columns based on the selection of the ALM tools and type of work
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAgileMethods;
+ $inputObject.colNo = $data1.colAgileMethods;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue6;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply6;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = $data1.fieldValueinfyTimesheet;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = $data1.fieldValueOtherTools;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+/* $inputObject = {};
+ $inputObject.span_Name = $data1.lblRemarks;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000);
+*/
+ $t.end(); 

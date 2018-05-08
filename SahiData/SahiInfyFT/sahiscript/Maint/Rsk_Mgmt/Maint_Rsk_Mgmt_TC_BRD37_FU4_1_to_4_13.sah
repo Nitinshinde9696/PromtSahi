@@ -1,0 +1,75 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU4_1_to_4_13", "Maint/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1); 
+
+ var $TC = _testcase("TC_BRD37_FU4_1","Checking for condition in Fields Impact and Probability(Probability < 0.7 or Impact < 7)."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_ContingencyPlan = $data.field4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4;  
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ _log("There is no alert message shown when the probability is < 0.7 and impact is < 7");
+
+ $TC.end();
+ /* 
+ var $TC = _testcase("TC_BRD37_FU4_4.2","PM Plan is not baselined."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name4;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name4;
+ DeleteEformInstance($inputObject);
+
+ $TC.end();
+ */
+ 
+
+ 
+
+
+
+ 
+ 

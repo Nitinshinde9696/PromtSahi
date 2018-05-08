@@ -1,0 +1,117 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Def_Rep_Req_Summary_Common_36","Maint/Request_Management");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+  
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s1 = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+ $s1.start();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "Enh63";//$id;
+ OpenEformInstance($inputObject);
+ 
+ _wait(8000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Defect Report";//$data.segment_Def_rep6;//_link("Defect Report")
+ SelectSegment($inputObject);
+ 
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = "Severity";
+ $inputObject.colid = 2;
+ $inputObject.fieldValue ="Major";
+ calculate_Count($inputObject);
+ 
+ 
+ _log($inputObject.count +"Major count");
+ 
+ $count_Major = $inputObject.count;
+ 
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = "Severity";
+ $inputObject.colid = 2;
+ $inputObject.fieldValue ="Minor";
+ calculate_Count($inputObject);
+ 
+ _log($inputObject.count +"Minor count");
+ $count_Minor = $inputObject.count;
+ 
+  $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = "Severity";
+ $inputObject.colid = 2;
+ $inputObject.fieldValue ="Critical";
+ calculate_Count($inputObject);
+ 
+ _log($inputObject.count +"Critical count");
+ $count_Critical = $inputObject.count;
+ 
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = "Severity";
+ $inputObject.colid = 2;
+ $inputObject.fieldValue ="Cosmetic";
+ calculate_Count($inputObject);
+ 
+ _log($inputObject.count +"Cosmetic count");
+ $count_Cosmetic = $inputObject.count;
+ 
+ $count_total = $count_Critical +$count_Cosmetic+$count_Major+$count_Minor;
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Summary";//_link("Request Summary")
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = "Defect Summary";// _span("Defect Summary");
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.tableName = "Defect Summary";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";
+ $inputObject.fieldValues = $count_Critical+"|"+$count_Major+"|"+$count_Minor+"|"+$count_Cosmetic+"|"+$count_total;
+ verifySwiftFormData($inputObject);
+ 
+  $s1.end();
+ 
+ 

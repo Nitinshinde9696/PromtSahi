@@ -1,0 +1,62 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("Package_StatusReport_LCStageWise_06","Package/Status_Report");
+
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep1
+ OpenEformInstance($inputObject);
+ 
+ var $t = _testcase("TC_3", "Check for LCStageWise Effort Distribution");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//RequestWise Effort Distribution
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1+";"+$data.table2;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Effort_Summary+";"+$data.LCStageWise;//
+ InfyFTisVisible($inputObject);
+  
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 

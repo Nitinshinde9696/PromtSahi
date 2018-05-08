@@ -1,0 +1,440 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data4 = readDataFromCSV("Maint_PMPlan_Small_Project_MaintPT_operational_process_underpinning_contracts_03","Maint/PMPlan_Small"); 
+ 
+ var $t = _testcase("Script 30", "TC 13, 14, 15");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data4.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+
+ $t.end(); 
+
+ var $t = _testcase("TC_14", "Applicable LC Stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data4.navigateTo4; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data4.segment_name0;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName0;
+ $inputObject.rowNo = $data4.rowName2;
+ $inputObject.colNo = $data4.colName0;
+ $inputObject.fieldValues = $data4.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName0;
+ $inputObject.rowNo = $data4.rowName3;
+ $inputObject.colNo = $data4.colName0;
+ $inputObject.fieldValues = $data4.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName0;
+ $inputObject.rowNo = $data4.rowName2;
+ $inputObject.colNo = $data4.colName1;
+ $inputObject.fieldValues = $data4.fieldValues0_1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName0;
+ $inputObject.rowNo = $data4.rowName3;
+ $inputObject.colNo = $data4.colName1;
+ $inputObject.fieldValues = $data4.fieldValues0_1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data4.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link44;// _InfyFTclick(_link("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data4.tableName7;//Applicable LC Stages for Major Enhancement
+ $inputObject.rowNo = $data4.rowName5;
+ $inputObject.colNo = $data4.colName5;
+ $inputObject.fieldValues = $data4.fieldValues12;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data4.tableName8;//Applicable LC Stages for Minor Enhancement
+ $inputObject.rowNo = $data4.rowName6;
+ $inputObject.colNo = $data4.colName5;
+ $inputObject.fieldValues = $data4.fieldValues12;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.ApplicableLCStages;//Applicable LC Stages
+ $inputObject.colNo = $data4.colNo17;//Reason_lbl
+ $inputObject.fieldValues = $data4.reason12;//Reason 13
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link44;// _InfyFTclick(_link("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data4.tableName7;//Applicable LC Stages for Major Enhancement
+ $inputObject.rowNo = $data4.rowName5;
+ $inputObject.colNo = $data4.colName5;
+ $inputObject.fieldValues = $data4.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data4.tableName8;//Applicable LC Stages for Minor Enhancement
+ $inputObject.rowNo = $data4.rowName6;
+ $inputObject.colNo = $data4.colName5;
+ $inputObject.fieldValues = $data4.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.ApplicableLCStages;//Applicable LC Stages
+ $inputObject.colNo = $data4.colNo17;//Reason_lbl
+ $inputObject.fieldValues = $data4.reason13;//Reason 12
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_16", "Operational Processes/Manual");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.OperationalProcess;// _InfyFTclick(_link("OperationalProcess"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("OPPS1")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data4.item1;
+	 OpenEformInstance($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.popup = $data4.popup;
+	 $inputObject.item = $data4.item1;
+	 InfyFTDeleteEformInstance($inputObject);
+ }
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.rowNo15_4;
+ $inputObject.colNo = $data4.colNo17;
+ $inputObject.fieldValues = $data4.reason14;//Reason 14
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.OperationalProcess;// _InfyFTclick(_link("OperationalProcess"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data4.CM_Name1;
+ $inputObject.txt_CM_Description = $data4.CM_Description;
+ InfyFTcreateLinkedItemOPPS($inputObject);//For creating the Operational Process Manually.
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.rowNo15_4;
+ $inputObject.colNo = $data4.colNo17;
+ $inputObject.fieldValues = $data4.reason15;//Reason 15
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.OperationalProcess;// _InfyFTclick(_link("OperationalProcess"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(1000);
+  
+ $inputObject = {};
+ $inputObject.item = $data4.item1;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data4.popup;
+ $inputObject.segment_name = $data4.segment_name;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data4.popup;
+ $inputObject.fileName = $data4.fileName;
+ InfyADDAttachment($inputObject);
+ 
+ _wait(5000);
+ 
+ InfyFTReturnPopUp();
+  
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.rowNo15_4;
+ $inputObject.colNo = $data4.colNo17;
+ $inputObject.fieldValues = "An attachment is added to the Operational Process Manual instance.";//Reason 14
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_17", "OLA/Underpinning Contracts");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.OLAUnderpinning;// _InfyFTclick(_link("OLA / Underpinning Contracts[1]"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("OLAC1")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data4.item2;
+	 OpenEformInstance($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.popup = $data4.popup;
+	 $inputObject.item = $data4.item2;
+	 InfyFTDeleteEformInstance($inputObject);
+ }
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.rowNo15_5;
+ $inputObject.colNo = $data4.colNo17;
+ $inputObject.fieldValues = $data4.reason20;//Reason 16
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.OLAUnderpinning;// _InfyFTclick(_link("OLA / Underpinning Contracts"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data4.CM_Name2;
+ $inputObject.txt_CM_Description = $data4.CM_Description;
+ InfyFTcreateLinkedItemOPPS($inputObject);//For creating the OLA / Underpinning Contract.
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.rowNo15_5;
+ $inputObject.colNo = $data4.colNo17;
+ $inputObject.fieldValues = $data4.reason19;//Reason 17
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.OLAUnderpinning;// _InfyFTclick(_link("OLA / Underpinning Contracts[1]"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data4.item2;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data4.popup;
+ $inputObject.segment_name = $data4.segment_name;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data4.popup;
+ $inputObject.fileName = $data4.fileName;
+ InfyADDAttachment($inputObject);
+ 
+ _wait(5000);
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data4.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data4.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+   
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data4.tableName9;
+ $inputObject.rowNo = $data4.rowNo15_5;
+ $inputObject.colNo = $data4.colNo17;
+ $inputObject.fieldValues = "Attachment is added to the OLA/Underpinning Details instance.";//Reason 16
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+  
+ _wait(2000);
+ 
+ $t.end();
+ 

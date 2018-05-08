@@ -1,0 +1,165 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $data = readDataFromCSV("Dev_Reviews_Defects_Generic_00","Dev/Reviews_Defects");
+ var $data1 = readDataFromCSV("Dev_Reviews_Defects_Review_Mapping_06","Dev/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $Multiple_User = $data.User_name;
+
+
+ var $TC1 = _testcase("LC STAGE VALUES","SETTING LC STAGE VALUES"); 
+ $TC1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.User_name;//Ricky_Wang
+ $inputObject.edt_loginid = $data.LoginID;//Ricky_Wang
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;//BGGSZ199
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment7;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.sizerow1;// "1"
+ $inputObject.colNo  = $data1.sizecol;//"1_lst|2_lst|3_lst|7_lst"
+ $inputObject.tableName  = $data1.table1;//"Sizing Details"; 
+ $inputObject.fieldValues = $data1.values1;//"Development|New Development|3rd Generation default|Backward FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment8;//PM Plan
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon14
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link;//Applicable LC Stages
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw1;//Requirements Analysis|High Level Design|Detailed Design|Coding|Unit Testing
+ $inputObject.colNo = $data1.appcol2;//Applicable_chk
+ $inputObject.fieldValues = $data1.appval;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data1.name;//"Yes";
+ $inputObject.tableName = $data1.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data1.approw2;//Integration Test|System Test|Acceptance and Installation|Post Implementation|Others - Engineering
+ $inputObject.colNo = $data1.appcol3;//Applicable_unchk
+ $inputObject.fieldValues = $data1.appval;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //***** ROUTING THE PM PLAN FOR BASE-LINING******//
+ 
+ $inputObject = {};
+ $inputObject.link = "Workflow";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data1.stage11;//0
+ $inputObject.multiple_member = $Multiple_User;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data1.stage12;//1
+ $inputObject.multiple_member = $data1.Reviewer;//Skip
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data1.stage13;//2
+ $inputObject.multiple_member = $Multiple_User;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data1.Comments;//submitter
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data1.Comments1;//Approver
+ InfyFTClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Iterations
+ InfyFTnavigateTo($inputObject); 
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.desc221;//Review Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ CreateInstance($inputObject);
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("TC_BRD10_FU_3","MAPPING OF REVIEW OF/TESTING FIELD"); 
+ $TC2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.rev_name01;//lc stage detect
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name;//Descr
+ $inputObject.lst_DN_ReviewMode = $data.Rev_mode1;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer;//Ricky_Wang
+ $inputObject.lst_reviewtype = $data1.revType;//System Test Plan Review
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var  $RevId = $inputObject.createdID;
+ 
+ //*****VALIDATING THE LIST VALUES IN REVIEWS/TESTING OF FIELD*****//
+ 
+ $inputObject = {};
+ $inputObject.item = $RevId;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name1;//openLinkedItem
+ $inputObject.lst_reviewtype = $data1.review_types;//Acceptance Test Plan Review;Code Review;Detailed Design Review;High Level Design Review;Independent Unit Testing;Integration Test Plan Review;Requirements Specifications Review;System Test Plan Review;Unit Test Plan Review
+ verifyEformInstanceDetails($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment8;//PM Plan
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.button;//Reopen
+ InfyFTclick($inputObject);
+ 
+ $TC2.end();
+ 

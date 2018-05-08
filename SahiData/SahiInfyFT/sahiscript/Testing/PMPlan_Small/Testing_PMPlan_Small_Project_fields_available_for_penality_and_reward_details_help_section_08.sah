@@ -1,0 +1,390 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data6 = readDataFromCSV("Testing_PMPlan_Small_Project_fields_available_for_penality_and_reward_details_help_section_08","Testing/PMPlan_Small"); 
+ 
+ var $t = _testcase("Script 35", "TC 71, 72, 73, 75");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data6.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+
+ var $t = _testcase("TC_71", "Check the condition to enable the SLA Penalty and Reward Details.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data6.nodeIcon10;//  _image("nodeIcon10")
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.goals;//  _link("Goals")
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowName1;//1
+ $inputObject.colNo = $data6.colName1;//6_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowOverProd;//2
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowOverProd1;//2
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowName3;//3
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowName4;//4
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowName5;//2
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowName4;//3
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowName1;//4
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowName6;//1
+ $inputObject.colNo = $data6.colName3;//6_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowName1;//2
+ $inputObject.colNo = $data6.colName3;//6_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowName7;//3
+ $inputObject.colNo = $data6.colName3;//6_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName4;//Performance Testing Goals.
+ $inputObject.rowNo = $data6.rowName8;//2
+ $inputObject.colNo = $data6.colName4;//7_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName4;//Performance Testing Goals.
+ $inputObject.rowNo = $data6.rowName1;//3
+ $inputObject.colNo = $data6.colName4;//7_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data6.rowName9;//1
+ $inputObject.colNo = $data6.colName5;//5_lst
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data6.SLAPenaltyAndReward;//_link("SLAPenaltyAndReward")
+ InfyFTassertNotVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.goals;//  _link("Goals")
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowName1;//1
+ $inputObject.colNo = $data6.colName1;//6_lst
+ $inputObject.fieldValues = $data6.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowOverProd;//2
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowOverProd1;//2
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowName3;//3
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowName4;//4
+ $inputObject.colNo = $data6.colName1;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowName5;//2
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowName4;//3
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowName1;//4
+ $inputObject.colNo = $data6.colName2;
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowName6;//1
+ $inputObject.colNo = $data6.colName3;//6_lst
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowName1;//2
+ $inputObject.colNo = $data6.colName3;//6_lst
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowName7;//3
+ $inputObject.colNo = $data6.colName3;//6_lst
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName4;//Performance Testing Goals.
+ $inputObject.rowNo = $data6.rowName8;//2
+ $inputObject.colNo = $data6.colName4;//7_lst
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName4;//Performance Testing Goals.
+ $inputObject.rowNo = $data6.rowName1;//3
+ $inputObject.colNo = $data6.colName4;//7_lst
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data6.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data6.rowName9;//1
+ $inputObject.colNo = $data6.colName5;//5_lst
+ $inputObject.fieldValues =$data6.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName1;//Manual Testing Goals.
+ $inputObject.rowNo = $data6.rowNames1;//1
+ $inputObject.colNo = $data6.colNames1;//6_lst
+ $inputObject.fieldValues = $data6.fieldvalues10;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName2;//Automated Testing Goals.
+ $inputObject.rowNo = $data6.rowNames2;//2
+ $inputObject.colNo = $data6.colNames2;
+ $inputObject.fieldValues = $data6.fieldvalues11;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName3;//Test Automation Goals.
+ $inputObject.rowNo = $data6.rowNames3;//1
+ $inputObject.colNo = $data6.colNames3;//6_lst
+ $inputObject.fieldValues = $data6.fieldvalues11;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName4;//Performance Testing Goals.
+ $inputObject.rowNo = $data6.rowNames4;//2
+ $inputObject.colNo = $data6.colNames4;//7_lst
+ $inputObject.fieldValues = $data6.fieldvalues12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data6.tableName7;//Project Specific Goals.
+ $inputObject.rowNo = $data6.rowNames5;//1
+ $inputObject.colNo = $data6.colNames5;//5_lst
+ $inputObject.fieldValues = $data6.fieldvalues13;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.SLAPenaltyAndReward;//_link("SLAPenaltyAndReward")
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_72", "Checking the fields available for SLA Penalty and Reward Details.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.SLAPenaltyAndReward;// _InfyFTclick(_link("SLAPenaltyAndReward"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.atRisk;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.poolPercentage;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.measurementOfPeriod;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.currency;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.earnback;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.SLAResp;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.PenaltyFarmwork;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_73", "Checking the available options in the penalty framework");
+ $t.start();
+ 
+ $inputObject = {}
+ $inputObject.lst_DN_PenaltyFramework = $data6.fieldValues2;
+ InfyFTverifyEformInstanceDetails($inputObject);
+ 
+ $t.end();  
+ 
+ 
+ var $t = _testcase("TC_75", "Help section should display the definition of At Risk%, Pool %, Penalty framework.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.iconInfo;
+ InfyFTclick($inputObject);//_span("de-icon-info")
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data6.iconInfo;
+ InfyFTclick($inputObject);//_span("de-icon-info")
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data6.viewDef;
+ InfyFTclick($inputObject);//_span("View Definitions")
+ 
+ _wait(1000);
+ 
+ $t.end();
+ 

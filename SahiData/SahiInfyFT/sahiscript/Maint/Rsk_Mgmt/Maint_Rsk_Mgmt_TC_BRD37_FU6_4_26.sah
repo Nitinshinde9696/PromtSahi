@@ -1,0 +1,274 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU6_4_26", "Maint/Rsk_Mgmt"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC = _testcase("TC_BRD37_FU6_4","Deleting the risk created when PM plan is not Baselined"); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name13;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo13;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name13;
+ $inputObject.txt_CM_Description = $data.CM_Description13;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory13;
+ $inputObject.lst_DN_Probability = $data.probability13;
+ $inputObject.lst_DN_Impact = $data.impact13;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays13;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan13;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo13;  
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ //Risk created. 
+
+ var $createdID = _getText(_span("CM_ItemCode"));
+ var $CM_Name = _getText(_textbox("CM_Name"));
+
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo14; //PM Plan.
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link13;// _InfyFTclick(_link("Workflow");
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+
+ if(_isVisible(_button("RecallBtn")))
+ {
+    $inputObject = {};
+    $inputObject.button = $data.recall;//"RecallBtn";
+    InfyFTclick($inputObject);
+ }	
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo13;//Risk Management
+ navigateTo($inputObject);
+ 
+ $inputObject= {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ 
+ $inputObject= {};
+ $inputObject.item = $createdID;
+ InfyFTDeleteEformInstance($inputObject);
+
+ 
+ // creating risk.
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo13;  //Risk Management.
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name13;
+ $inputObject.txt_CM_Description = $data.CM_Description13;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory13;
+ $inputObject.lst_DN_Probability = $data.probability13;
+ $inputObject.lst_DN_Impact = $data.impact13;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays13;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan13;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo13;  
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ //Risk created. 
+ 
+ var $ID = _getText(_span("CM_ItemCode"));
+ var $CM_Name = _getText(_textbox("CM_Name"));
+ 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo14; //PM Plan.
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link13;// _InfyFTclick(_link("Workflow");
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username1;//Prashant_Sharma19
+ $inputObject.workflow_stage = $data.workflow_stage0;//0
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username14;//Prashant_Sharma19
+ $inputObject.workflow_stage = $data.workflow_stage1;//1
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username15;//Roshan_300515
+ $inputObject.workflow_stage = $data.workflow_stage2;//2
+ WorkflowSet($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.DN_ClosingComments13;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+  _wait(5000); 
+ 
+ logOut(); 
+ 
+ _wait(5000); 
+//loging In with other reviewer Id.
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username14;//Prashant_Sharma19
+ $inputObject.edt_loginid = $data.LoginID14;//Prashant_Sharma19
+ $inputObject.edt_password = $data.Password14;//Allahu@1
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name13;
+ selectProject($inputObject);
+   
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo14; //PM Plan.
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.link13;// _InfyFTclick(_link("Workflow");
+ InfyFTclick($inputObject);
+  
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.DN_ClosingComments13;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(5000); 
+ 
+ logOut(); 
+ 
+ _wait(5000); 
+ //Loging in as a DM for approver. 
+  
+ $inputObject = {};
+ $inputObject.user_name = $data.Username15;//Roshan_300515
+ $inputObject.edt_loginid = $data.LoginID15;//Roshan_300515
+ $inputObject.edt_password = $data.Password15;//welcome@1
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name13;
+ selectProject($inputObject);
+   
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo14; //PM Plan.
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.link13;// _InfyFTclick(_link("Workflow");
+ InfyFTclick($inputObject);
+  
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.DN_ClosingComments13;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+  
+ _wait(5000); 
+ 
+ logOut(); 
+ 
+ _wait(5000); 
+ 
+ // Loging with submitter Id "Prashant_Sharma19".
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name13;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo13;//RiskManagement
+ navigateTo($inputObject);
+ 
+ $inputObject= {};
+ $inputObject.item = $ID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ 
+ $inputObject = {}; 
+ $inputObject.button_Name = $data.DeleteButton13;
+ InfyFTverifyButton1($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo14; //PM Plan.
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link13;// _InfyFTclick(_link("Workflow");
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.Reopenbtn13;//Reopen
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ //Reopened the project and a risk is created.
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo13;  //Risk Management.
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name13;
+ $inputObject.txt_CM_Description = $data.CM_Description13;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory13;
+ $inputObject.lst_DN_Probability = $data.probability13;
+ $inputObject.lst_DN_Impact = $data.impact13;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays13;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan13;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo13;  
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ //Risk created. 
+ 
+ var $ID1 = _getText(_span("CM_ItemCode"));
+ var $CM_Name = _getText(_textbox("CM_Name"));
+ 
+ $inputObject= {};
+ $inputObject.item = $ID1;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject= {};
+ $inputObject.item = $ID1;
+ InfyFTDeleteEformInstance($inputObject);
+
+ _wait(5000);
+ 
+ $TC.end();
+ 
+ 

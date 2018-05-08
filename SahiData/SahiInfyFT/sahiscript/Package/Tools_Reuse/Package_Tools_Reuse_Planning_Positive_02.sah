@@ -1,0 +1,286 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+//$data = readDataFromCSV("InfyFT_sahi_Reuse_Tracking_PackagePT","Phase2/Reuse_Planning_PackagePT");
+$data1 = readDataFromCSV("Package_Tools_Reuse_Planning_Positive_02","Package/Tools_Reuse");
+
+/* var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ */
+var $t = _testcase("TC_BRD52_FU_8", "Navigating to Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data1.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = "#;ID;Asset Name;Asset Version;Asset Type;License Type/Source;Technology;Domain;Sub Domain;Size;Unit of Measure;Estimated Effort Saving (P hrs);Security Level";
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+
+
+var $t = _testcase("TC_BRD52_FU_8", "Available fields in create Reuse Planning ");
+$t.start();
+
+_click(_span("KEY_BUTTON_Add-btnIconEl"));
+$inputObject = {};
+$inputObject.span_Name = "Details;ID :;Asset Name * :;Asset Type * :;Asset Version * :;License Type/Source *;Unit of Measure * :;Estimated Effort Saving (P hrs) * :;Size * :;Technology :;Security Level :;Domain :;Sub Domain :";
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_AssetType = "Business;--None--;Package;Technical";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_LicenseType = "3rd Party;--None--;Open Source";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UnitofMeasure = "Function Points;Lines Of Code;--None--;Others;Pages;Screens;Test Cases;Use Cases";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Technology = "Administrator;--None--;.Net;ABAQUS;Administrator;Adobe Flash;Adobe Flex;All J2EE web servers;AlUI - BEA WebLogic;Amdocs;Android;Application Servers;Ariba;AS400;AXAPTA;Billing;BiZTalk;Business Intelligence;C;CATIA V4;CATIA V5;CICS;COBOL;Core Java;CORE WMS;CRM;Data Modeling;Database;Database Adminstration;Datawarehouse;DB2;Development;Development Platforms;Documentum;DW/BI;EAI;eBanking;Ejb;Embedded Systems;Enterprise Java;Enterprise Package;File Handling;FileNET;Focus;HCM;HYPERMESH;IBM;IBM_EAI;IDEAS;Interwoven;Iphone;J2EE;JAVA;Java Databases;Java Flex;Javascript;JCL;Linux;LS-DYNA;Mac OS X;Mainframe Technologies;Microsoft .Net;Mobility;MOSS;MVS;MySQL;NA;None;Objective C;Open Source;Open Systems;Oracle;Oracle and PS;Oracle Business Intelligence;Oracle CRM;Oracle ERP;ORACLE Fusion;Oracle HRMS;OS 390;Others;Others-OpenSource;PeopleSoft;Reporting Tool;Retek;SAP;SAP XI;SAP-PI;SAPCRM;SCM;SFDC;Siebel;Solaris;SQL;Sql Server;Technology;Testing;TIBCO;Treasury;Unix;VB 6.0;VSAM;WCS;Web Services;Web Technologies;Weblogic;WebMethods;WebSphere MB;WebSphere MQ;Windows;WPS;XML;XML Technologies;z OS";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_SecurityLevel = "Account;Account-Unit;Org;Unit";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Domain = "--None--;Aerospace;ALL;Automotive;Banking;Banking and Financial Services;Commodities;Communications;Energy;Energy Utility and Services;Financial Securities;General Insurance;Health Insurance;Health Insurance Services;High-Tech Industry;Human Resource Management;INSURANCE;Life Insurance;Life Insurance Services;Life Sciences;Manufacturing;Mobility;None;Reinsurance;Retail & CPG;Software Engg & Quality Assurance Mgmt;Supply chain management;Telecom;Travel and Leisure";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_SubDomain = "Agents;Aircraft Parameter Derivatives;Animal Health;Auctions & B2B Exchanges;Automated Clearing House;Automotive;Automotive Industry;Banking & Capital market;Banking Services;Basic reinsurance;Billing;Billing & Payments;Buying;Capital Markets;Category Management;CFD;Claims;Colloborative Design;Commercial Insurance;Competitive Intelligence Management;Consumer & Market Research Management;Corporate;Cost Management;Credit Cards;CRM;Customer Management;Customer Service Management;Damage Tolerance;E-Commerce;Employee;Employers;Energy & Utility;Enterprise;Finance;Flight Testing;Franchisee & Co Brand Management;Fraud & abuse;Fuel Systems;Fulfilment;Gaming;General Insurance;Generic;Healthcare;Insurance;Inventory Management;Legal & Admin Management;Life Insurance;Loans;Local Brand Tracking;Logistics Management;Loyalty Management;Manufacturing;Medical Devices;Members;Merchandise Management;Merchandise Planning;Miscellaneous;Miscellaneous Services;Mortgage;Net banking;None;Operational Support Systems;Optimization & Markup Management;Order Management;Partnership Management;Payments;Payroll;Pharmaceuticals;Planning & Control Management;POS Management;Pricing;Pricing Management;Procurement Management;Product Development;Products & Services;Program Management;Providers;Purchasing;Quality Assurance;Quality Management;Replinishment & Fulfillment Management;Retail;Risk Management;Sales and Marketing;Sales Forecast;Security;Sourcing;Special Accounts Management;Store Management;Store Operations Management;Supplier Selection & Management;Supply Chain Planning and Management;Trading;Training Administration;Transportation;Vendor Extranet;Vision care;Warehouse Management;Wealth Management";
+verifyEformInstanceDetails($inputObject);
+
+clickReturn();
+$t.end();
+
+
+
+var $t = _testcase("TC_6 TC_BRD52_FU_9", "Verifying the mandatory fields of create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.AssetName;//10
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Asset Type in Details tab \n•  Field Asset Version in Details tab \n•  Field License Type/Source in Details tab \n•  Field Unit of Measure in Details tab \n•  Field Estimated Effort Saving (P hrs) in Details tab \n•  Field Size in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7 TC_BRD52_FU_9", "Create the Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//
+$inputObject.lst_DN_Domain = $data1.Domain5;//Banking
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//Agents
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Others
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+$inputObject.msgAlert ="Kindly ensure MSA permits usage of OSS / Third Party software. Take necessary approvals from customer/IP Cell as required.";
+ModifyEformInstance($inputObject);
+
+_wait(5000);
+var $name1 = _getText(_span("CM_ItemCode"));
+
+$inputObject = {};
+$inputObject.span_Name = "Asset Description :;LC Stage :;Security Details :";
+InfyFTisVisible($inputObject);
+
+clickReturn();
+$t.end();
+var $t = _testcase("TC_9 TC_BRD52_FU_9", "Verifying the Created instance in Reuse Planning list");
+$t.start();
+$inputObject = {};
+$inputObject.item = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_10 TC_BRD52_FU_9", "Verifying the Not to take with same name of Reuse planning");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = "ATPackage";//Jonny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Banking
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType6;//Business
+CreateInstance($inputObject);
+
+var $name3 = _getText(_span("CM_ItemCode"));
+
+$inputObject = {};
+$inputObject.span_Name = "Asset Description :;LC Stage :;Security Details :;Package Version :;Security Details :;Industry :;Module :;Practice :;Package :;Reuse Classification :";
+InfyFTisVisible($inputObject);
+
+clickReturn();
+$t.end();
+
+
+var $t = _testcase("TC_10 TC_BRD52_FU_9", "Verifying the Not to take with same name of Reuse planning");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Banking
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+$inputObject.msgAlert =  $data1.Name5 + " already exists with same version number.";
+CreateInstance($inputObject);
+
+clickReturn();
+$t.end();
+
+
+
+var $t = _testcase("TC_11 TC_BRD52_FU_9", "Creating the instance with another name");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name6;//Sunny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Banking
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+CreateInstance($inputObject);
+
+var $name2 = _getText(_span("CM_ItemCode"));
+
+clickReturn();
+$t.end();
+
+
+
+var $t = _testcase("TC_12 TC_BRD52_FU_9", "Verifying the instance in listing");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $name1;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_EstimatedEffortSavingP = "-3545";
+$inputObject.msgAlert ="Please enter value within the range for the following fields-\nEstimated Effort Saving (P hrs) : Range 1.0 - To 999999.0";
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;
+ModifyEformInstance($inputObject);
+
+clickReturn();
+$inputObject = {};
+$inputObject.item = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name2;
+InfyFTverifyInstanceInListing($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_13 TC_BRD52_FU_9", "Verifying the instance Unique name in listing");
+$t.start();
+
+
+if ($name1 != $name2)
+{
+  _log(" Asset names are unique");
+}
+
+$t.end();
+
+var $t = _testcase("TC_14 TC_BRD52_FU_9", "To repeat the script execution ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name1;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+
+_wait(500);
+
+$inputObject = {};
+$inputObject.item = $name2 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name2;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name3;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name3;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+
+$t.end();
+
+
+
+
+
+
+
+
+
+
+
+
+
+

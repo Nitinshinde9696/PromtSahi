@@ -1,0 +1,31 @@
+_include("../../../SahiDigite/sahisource/Business/Filter.sah");
+
+
+/**
+@author : Siddharth Kale
+@example:  VerifyOptionsForDefaultView($inputObject);		    
+@description : no need to pass any input 
+@param : String {None}
+@return : String {None}
+**/
+
+function InfyFTverifySpanFilterValue($inputObject)
+{
+	_log("InfyFTverifySpanFilterValue Started","success");
+	try 
+	{
+	var $extJsId = "-textEl";
+	var $filterName = $inputObject.filterName;
+	var $filterNameKey = $filterName + $extJsId;
+	
+	_assertEqual($inputObject.value,_getText(_span($filterNameKey)));
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTverifySpanFilterValue Completed","success");
+}
+
+

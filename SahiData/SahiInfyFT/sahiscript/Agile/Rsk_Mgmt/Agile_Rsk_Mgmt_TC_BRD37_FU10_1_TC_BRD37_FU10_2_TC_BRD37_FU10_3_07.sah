@@ -1,0 +1,113 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+ $data = readDataFromCSV("Agile_Rsk_Mgmt_TC_BRD37_FU10_1_TC_BRD37_FU10_2_TC_BRD37_FU10_3_07", "Agile/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ var $TC = _testcase("TC_BRD37_FU10_2","Check available project risk status."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = "Not High Risk;Proactive High Risk;High;High2;Critical";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_BRD37_FU10_1_4_and_6","Checking for classification/declassification of project."); 
+ $TC.start();
+ 
+ _setSelected(_select("DN_Classifytherisklevelof"), "Not High Risk"); 
+ _setSelected(_select("DN_IsLegalReviewdone"), "--None--");
+ _setSelected(_select("DN_IsFinancialProvisionin"), "--None--");
+ _setValue(_textarea("DN_Reasonforclassifyingth"), "");
+ _setValue(_textarea("DN_Actiontomovetheproject"), "");
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify4;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Is Legal Review done in Details tab \n• Field Reason for classifying the project as High or Critical Risk in Details tab \n• Field Is Financial Provisioning done in Details tab \n• Field Action to move the project out of High or Critical status in Details tab";
+ InfyFTModifyEformInstanceAlert($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify4;//High
+ $inputObject.lst_DN_IsLegalReviewdone = $data.field2;
+ $inputObject.lst_DN_IsFinancialProvisionin = $data.field3;
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.field4;
+ $inputObject.txt_DN_Actiontomovetheproject = $data.field5;
+ InfyFTModifyEformInstanceAlert($inputObject);
+
+ $TC.end();
+ 
+ logOut();
+ 
+ var $TC = _testcase("TC_BRD37_FU10_3_and_5","Checking for various roles who can classify a project as high or critical risk."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;
+ $inputObject.edt_loginid = $data.LoginID2;
+ $inputObject.edt_password = $data.Password2;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify5;//Not High Risk
+ $inputObject.lst_DN_IsLegalReviewdone = "--None--";
+ $inputObject.lst_DN_IsFinancialProvisionin = "--None--";
+ $inputObject.txt_DN_Reasonforclassifyingth = "";
+ $inputObject.txt_DN_Actiontomovetheproject = "";
+ InfyFTModifyEformInstanceAlert($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify6;//Critical
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Is Legal Review done in Details tab \n• Field Reason for classifying the project as High or Critical Risk in Details tab \n• Field Is Financial Provisioning done in Details tab \n• Field Action to move the project out of High or Critical status in Details tab";
+ InfyFTModifyEformInstanceAlert($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify6;//Critical
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.field4;
+ InfyFTModifyEformInstanceAlert($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify5;//Not High Risk
+ $inputObject.lst_DN_IsLegalReviewdone = "--None--";
+ $inputObject.lst_DN_IsFinancialProvisionin = "--None--";
+ $inputObject.txt_DN_Reasonforclassifyingth = "";
+ $inputObject.txt_DN_Actiontomovetheproject = "";
+ InfyFTModifyEformInstanceAlert($inputObject);
+
+ $TC.end();
+
+ 
+ 

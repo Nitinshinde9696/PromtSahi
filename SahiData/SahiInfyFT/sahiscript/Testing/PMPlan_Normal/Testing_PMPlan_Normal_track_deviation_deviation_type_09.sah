@@ -1,0 +1,74 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data2 = readDataFromCSV("Testing_PMPlan_Normal_track_deviation_deviation_type_09","Testing/PMPlan_Normal"); 
+   
+ var $t = _testcase("Script 37", "83,84,85");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.PMPlan; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(3000);
+ $t.end();
+ 
+ var $t = _testcase("TC_83", "Checking the available options in the Track Wise Process Tailoring/ Deviations");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon13;// _InfyFTclick(_image("nodeIcon13"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.TrackWiseProcessTailoringDeviations;// _InfyFTclick(_link("TrackWiseProcessTailoringDeviations"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.Deviationfromstandardprocess;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.Justificationfordeviation;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.ApplicabletoTrack;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.Deviationtype;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_84", "Deviation Type");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data2.tableName0;
+ $inputObject.rowNo = $data2.rowDev;
+ $inputObject.colNo = $data2.colDev2;
+ $inputObject.fieldValues = $data2.fieldValues0;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_85", "Deviation Type");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data2.tableName0;
+ $inputObject.rowNo = $data2.rowDev;
+ $inputObject.colNo = $data2.colDev;
+ $inputObject.fieldValues =$data2.fieldValues1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 

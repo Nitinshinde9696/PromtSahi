@@ -1,0 +1,207 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+
+ $data = readDataFromCSV("MechPD_PM_Plan_Small_Workflow_05","MechPD/PMPlan_Small"); 
+ 
+ var $t = _testcase("Verifying the Reasons in PM plan summary");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ // verifying the indicators and the reasons; 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName1;//Applicable Request Types
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1;//Applicable Request Types
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason1;//Request types other than Project Management Request is selected in Project Tailoring. Following are selected: Product Design ,Design Support ,Other Request.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName2;//Scope Description
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Scope Description
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason2;//All fields are filled.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName3;//Client Commitment
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName3;//Client Commitment
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason3;//At least one commitment is entered.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Assumption
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName4;//Assumption
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason4;//At least one assumption is added.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName5;//Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName5;//Goals
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason5;//Goals are setup. Strategies are defined. Project specific metric details are filled.Basis of Goals is selected as: Similar projects in the account.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName6;//SLA penalty and rewards details
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6;//SLA penalty and rewards details
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason2;//All fields are filled.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName7;//Applicable LC Stages
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName7;//Applicable LC Stages
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason7;//Atleast one LC Stage is selected for all applicable Tracks.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName8;//Risk
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName8;//Risk
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason8;//Atleast one Risk is added and All mandatory fields are filled for Risks.
+ verifySwiftFormData($inputObject);
+
+ //The actual reason is "risk Profiling is done"
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName9;//Risk Profiling
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName9;//Risk Profiling
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason6;
+ verifySwiftFormData($inputObject);
+ 
+/* $inputObject = {};
+ $inputObject.tableName = $data.rowName10;//Requirement Scope Change Management
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName10;//Requirement Scope Change Management
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason10;//This section is not mandatory since Contract Type is not FP.
+ verifySwiftFormData($inputObject);
+ */
+ 
+ $t.end();
+ 
+ var $t = _testcase("Routing and Baselining the project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name1;//Workflow
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.user_name1;//Arjun R02
+ $inputObject.workflow_stage = $data.workflow_stage0;//0
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.user_name2;//Nethravathi_r02
+ $inputObject.workflow_stage = $data.workflow_stage1;//1
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.user_name3;//Sajna_Basheer
+ $inputObject.workflow_stage = $data.workflow_stage2;//2
+ WorkflowSet($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Routing_Comments9;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+  _wait(5000); 
+ 
+ logOut(); 
+ 
+ _wait(5000); 
+ 
+ //Reviewer
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name2;//Nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID2;//Nethravathi_r02
+ $inputObject.edt_password = $data.Password2;//123456
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//HEFPSHL1
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name1;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Routing_Comments9;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(5000); 
+ 
+ logOut(); 
+ 
+ _wait(5000); 
+ 
+ // Approver. 
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name3;//Sajna_Basheer
+ $inputObject.edt_loginid = $data.LoginID3;//Sajna_Basheer
+ $inputObject.edt_password = $data.Password3;//Allahu@1
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//HEFPSHL1
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name1;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Routing_Comments9;//Test
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(1000);
+ 
+ logOut(); 
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+ 

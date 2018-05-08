@@ -1,0 +1,267 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+ 
+ $data = readDataFromCSV("Maint_Tools_Reuse_Data_Creation_12","Maint/Tools_Reuse");
+
+ var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+var $value;
+ var $GetExcel = _testcase("GetExcel"," Getting the Project name From Excel Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "ProjectName";
+  infyFTGetValueFromExcel($inputObject);
+  $prj_Id  = $value; 
+  
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "LoginUser";
+  infyFTGetValueFromExcel($inputObject); 
+
+   $user_Id  = $value;
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "Password";
+  infyFTGetValueFromExcel($inputObject);
+  $user_pswd  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.user_name = $user_Id; 
+$inputObject.edt_loginid = $user_Id;
+$inputObject.edt_password = $user_pswd;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t2 = _testcase("TC_2", "Navigating to Projects_home ");
+$t2.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $prj_Id;
+ selectProject($inputObject)
+
+ 
+ 
+ $t2.end();
+ 
+ var $A_R = _testcase("A_R"," Creating a Analysis Research for Maint PT");
+ $A_R.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Analysis and Research
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Analysis and Research
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;
+ $inputObject.lst_DN_LCStage = $data.LC_stage;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $AnR = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $AnR;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+ 
+ 
+ $A_R.end(); 
+ var $en = _testcase("Enhancements"," Creating a Enhancements for Maint PT");
+ $en.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.lst_DN_RequestType = $data.reqtype20;//Minor
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ $inputObject.lst_DN_LCStage = $data.LC_stage; 
+/*  $inputObject.lst_DN_Services = $data.service;
+ $inputObject.lst_DN_SubService = $data.subService;
+ $inputObject.lst_DN_Technology = $data.technology; */
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $Enh = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $Enh;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+
+ $en.end(); 
+ var $bug = _testcase("BugFix"," Creating a BugFix for Maint PT");
+ $bug.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToBug_Fixes;//Bug Fixes
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ $inputObject.lst_DN_LCStage = $data.LC_stage;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $BugFix = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $BugFix;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+
+ $bug.end();
+ var $Prod_Support = _testcase("Prod_Support"," Creating a Production Support for Maint PT");
+ $Prod_Support.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToProd_Support;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $Production_Support = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $Production_Support;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+
+ $Prod_Support.end();
+
+ var $Testing_Req = _testcase("Testing_Request"," Creating a Testing_Request for Maint PT");
+ $Testing_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToTesting_Request;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ $inputObject.lst_DN_LCStage = $data.LC_stage;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $Testing_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $Testing_Request;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+
+
+ $Testing_Req.end();
+ var $Other_Req = _testcase("Other_Request"," Creating a Other Request for Maint PT");
+ $Other_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToOther_Request;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $Other_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $Other_Request;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+
+
+ $Other_Req.end(); 
+ var $PM_Req = _testcase("PM_Request"," Creating a Project Mgmt Request for Maint PT");
+ $PM_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPM_Request;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $PM_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $PM_Request;
+
+_include("Maint_Tools_Reuse_Data_Scheduled_Task_Creation_05.sah");
+
+
+ $PM_Req.end();
+  
+  var $SetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $SetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.rowNo = 1;
+  $inputObject.columnNames = "Enh|AnR|OR|PS|TR|PMR|BF";
+  $inputObject.fieldValues = $Enh+"|"+$AnR+"|"+$Other_Request+"|"+$Production_Support+"|"+$Testing_Request+"|"+$PM_Request+"|"+$BugFix;
+  infyFTSetValueInExcel($inputObject)
+ 
+ $SetExcel.end(); 
+  
+/*  var $GetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Maint/Tools_Reuse/Maint_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "Enh";
+  infyFTGetValueFromExcel($inputObject);
+  
+  _log("Enh Id "+$value);
+ 
+ $GetExcel.end(); */

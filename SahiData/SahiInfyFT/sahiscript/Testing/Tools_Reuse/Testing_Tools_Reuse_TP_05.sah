@@ -1,0 +1,188 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+//_include("../../../sahisource/Business/Filter.sah");
+
+$data = readDataFromCSV("Testing_Tools_Reuse_TP_05","Testing/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer //Arjun R02
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer //nitin_shinde05	
+$inputObject.edt_password = $data.Password1;//Allahu@1 //111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Testing PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//3IPEROPS
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Tool Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tool Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Available tools in Tool Planning Section ");
+$t.start();
+
+if(_isVisible(_div("Tools Plan For Manual Testing")))
+{_log("Manual Testing is selected in 'Request Type Selection' before baseline the PM Plan");}
+
+if(_isVisible(_div("Tools Plan for Automated Testing")))
+{_log("Automated Testing is selected in 'Request Type Selection' before baseline the PM Plan");}
+
+if(_isVisible(_div("Tools Plan For Test Automation")))
+{_log("Test Automation is selected in 'Request Type Selection' before baseline the PM Plan");}
+
+if(_isVisible(_div("Tools Plan For Performance Testing")))
+{_log("Performance Testing is selected in 'Request Type Selection' before baseline the PM Plan");}
+
+if(_isVisible(_div("Tools Plan For Other Request")))
+{_log("Other Request is selected in 'Request Type Selection' before baseline the PM Plan");}
+
+$t.end();
+
+var $t = _testcase("TC_6", "Navigating to Tools Tracking through Manual Testing ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;//Manual Testing
+InfyFTnavigateTo($inputObject);
+
+var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "M_T";
+  infyFTGetValueFromExcel($inputObject);
+  $M_T_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $M_T_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Tools Planning
+SelectSegment($inputObject);
+_wait(500);
+
+
+$t.end();
+
+var $t = _testcase("TC_7", "Navigating to Tools Tracking through Performance Testing ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo8;//Performance Testing
+InfyFTnavigateTo($inputObject);
+
+var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "P_T";
+  infyFTGetValueFromExcel($inputObject);
+  $P_T_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $P_T_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Tools Tracking
+SelectSegment($inputObject);
+_wait(500);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Navigating to Tools Tracking through Test Automation ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo9;//Test Automation
+InfyFTnavigateTo($inputObject);
+
+var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "T_A";
+  infyFTGetValueFromExcel($inputObject);
+  $T_A_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $T_A_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Tools Tracking
+SelectSegment($inputObject);
+_wait(500);
+
+$t.end();
+
+var $t = _testcase("TC_9", "Navigating to Tools Tracking through Automated Testing ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo10;//Automated Testing
+InfyFTnavigateTo($inputObject);
+
+var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "A_T";
+  infyFTGetValueFromExcel($inputObject);
+  $A_T_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $A_T_Id;
+OpenEformInstance($inputObject);;
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name7;//Tools Tracking
+SelectSegment($inputObject);
+_wait(500);
+
+$t.end();
+
+

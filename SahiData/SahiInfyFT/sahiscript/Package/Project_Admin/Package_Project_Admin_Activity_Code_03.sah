@@ -1,0 +1,120 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ //$data = readDataFromCSV("Package_Project_Admin_Project_Tailoring","Package/Project_Admin");
+ $data1 = readDataFromCSV("Package_Project_Admin_Activity_Code_03","Package/Project_Admin"); 
+ 
+ /* var $t = _testcase("TC_1.1.1", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;//projectname
+ selectProject($inputObject);
+ 
+
+ 
+ $s.end(); */
+ 
+ 
+ $t.end();var $t = _testcase("TC_5","Verify Activity code");
+ $t.start();
+ 
+  $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Activity_Code;//Activity Code Customization
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+ /*  //Not Available in DEV PT
+ $inputObject = {};
+ $inputObject["ele_eformHeaderContent[1]"] = $data.message12;
+ verifyAllFields($inputObject);
+   */
+   
+ $inputObject = {};
+ $inputObject.rowNo = "0";
+ $inputObject.colNo  = "1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";
+ $inputObject.tableName  = "Act Code";//
+ $inputObject.fieldValues ="Act Code|Description|IncludeInProject|COQ Category|GroupCode";
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+ var $t = _testcase("TC_1.2","Setting Sizing Details Value As TOA Development");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;//Sizing_Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2";
+ $inputObject.colNo  = "0_lst|1_lst|2_lst|4_edt|5_edt|7_lst|8_lst";
+ $inputObject.tableName  = "Sizing Details";
+ $inputObject.fieldValues ="Package|Multi-site Rollout|Kenan|10|10|IFPUG FP|IFPUG FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Activity_Code;//Activity Code Customization
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "9|10|11|23|27|28|29|30|31|33|34|35|36|37|39|43|44|48|73|77|78|87|90|94|95|96|98|100|106|110|111|115|116|117|132|135|139|140|141|143|144|145|151|159|161|164|168|169|170|197|198";//|201
+ $inputObject.colNo  = "3_chk";
+ $inputObject.tableName  = "Act Code";
+ $inputObject.fieldValues ="Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y";
+ verifySwiftFormData($inputObject);
+ 
+ 
+ $t.end();
+ var $t = _testcase("TC_2.2","Setting Sizing Details Value As TOA BI");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;//Sizing_Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2";
+ $inputObject.colNo  = "0_lst|1_lst|6_lst|7_lst|8_lst";
+ $inputObject.tableName  = "Sizing Details";
+ $inputObject.fieldValues ="PLM Product|Multi-site Rollout|ECO|IFPUG FP|IFPUG FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Activity_Code;//Activity Code Customization
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "23|27|28|29|30|31|32|33|34|35|36|37|39|43|44|45|46|47|48|69|73|77|78|84|98|100|106|110|111|132|135|139|140|141|151|154|155|156|159|161|164|168|169|170|197|198|206";//|201
+ $inputObject.colNo  = "3_chk";
+ $inputObject.tableName  = "Act Code";
+ $inputObject.fieldValues ="Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y|Y";
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+ 

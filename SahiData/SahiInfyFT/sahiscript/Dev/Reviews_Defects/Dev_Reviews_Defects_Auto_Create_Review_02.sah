@@ -1,0 +1,412 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/TaskGrid2.sah");
+_include("../../../Sahisource/Business/EformEditor.sah");
+
+ var $data = readDataFromCSV("Dev_Reviews_Defects_Generic_00","Dev/Reviews_Defects");
+ var $data1 = readDataFromCSV("Dev_Reviews_Defects_Auto_Create_Review_02","Dev/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ 
+ var $TC1 = _testcase("TC_BRD10_FU_3","CREATING AN AUTO REVIEW"); 
+ $TC1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.User_name;
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;//NKIMSTMP
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.desc2;//Review Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ CreateInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name= $data.segment3;//Sub Projects
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ // *****ADDING SUBPROJECT*****
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.Task_name01;//Review Project
+ $inputObject.lst_isPackageDigiteStart = $data1.mode02;//STaRT
+ InfyFTcreateInstanceForPopUp($inputObject);
+ 
+ var $subID = $inputObject.subID;
+
+ 
+ //*****ADDING SCHEDULED TASK*****
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.segment_name = $data.segment4;//Scheduled Tasks
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTcheckOutProjectInGridForPopup($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.span= $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item_name = $data1.item_name1;//x-grid-cell-inner [22]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $subID+"_Rev1";
+ setAllFields($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.task = $subID+"_Rev1";
+ $inputObject.resource = $data1.Resource07;//"Ricky_Wang";
+ InfyFTassignResourceToTaskInGrid($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item_name = $data1.activityTask;//x-grid-cell-inner [9]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.Act_code03;//PIARV
+ setAllFields($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item_name = $data1.Program_code;//x-grid-cell-inner [42]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_FIELD8[1]"] = $data1.Pcode04;//Program code
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item_name = $data1.Module_code;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_FIELD6[1]"] = $data1.Mcode05;//Dashboard
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.item_name = $data1.Application_code;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_FIELD7[1]"] = $data1.Appcode06;//RETAIL
+ setAllFields($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTcheckInProjectFromGrid($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+
+ /*
+ var $baseTaskID = $subID+"_TSK0";
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.LinkedTask = "True";
+ $inputObject.baseTaskID = $baseTaskID;//$subID+"_TSK0";
+ $inputObject.baseTaskName = $data1.Task_name01;//Review Project
+ $inputObject.edt_Name = $subID+"_Rev1";
+ $inputObject["edt_Planned Finish"] =$EndDate;//
+ $inputObject["edt_Planned Start"] = $StartDate;//
+ $inputObject["edt_Activity Code"] = $data1.Act_code03;//PIARV
+ $inputObject["edt_Program Code"] = $data1.Pcode04;//Program code
+ $inputObject["lst_Module Code"] = $data1.Mcode05;//Dashboard
+ $inputObject["lst_Application Code"] = $data1.Appcode06;//RETAIL
+ InfyFTaddTaskInGrid($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.task = $subID+"_Rev1";
+ $inputObject.resource = $data1.Resource07;//Arivazhagan_C
+ $inputObject["edt_Resource"] = $data1.r_name08;//Arivazhagan_C
+ InfyFTassignResourceToTaskInGrid($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTcheckInProjectFromGrid($inputObject);
+ 
+ $TC1.end();
+ */
+ var $TC2 = _testcase("TC_BRD10_FU_3","VALIDATION OF FIELDS CREATED BY AUTO REVIEW"); 
+ $TC2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $subID+"_Rev1";
+ InfyFTverifyEformListing($inputObject);
+ 
+ //**NAME,APPLICATION CODE,MODULE CODE,PROGRAM CODE AUTO POPULATION**
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $subID+"_Rev1";
+ $inputObject.edt_CM_Name = $subID+"_Rev1";
+ //$inputObject.lbl_DN_ModuleCode = $data1.Mcode05;//Dashboard
+ //$inputObject.lbl_DN_ProgramCode = $data1.Pcode04;//Program code
+ //$inputObject.lbl_DN_ApplicationCode = $data1.Appcode06;//RETAIL
+ $inputObject.lbl_DN_ReviewEfficiency = "0.0";//   TC_BRD10_FU_9 Rev Efiiciency is 0.0
+ $inputObject.lbl_reviewtype = $data1.Type13;//Impact Analysis Review
+ InfyFTverifyEformInstanceDetails($inputObject);
+ 
+ $RevID = _getText(_span("CM_ItemCode"));
+ 
+ 
+ $inputObject = {};
+ $inputObject.item = $subID+"_Rev1";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+
+ //******ADDING DEFECT******//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment2;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.span = $data1.link;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name14;//Defect1
+ $inputObject.txt_CM_Description = $data1.def_descr15;//descr
+ $inputObject.lst_DN_Owner = $data1.def_owner16;//Arivazhagan_C
+ $inputObject.lst_DN_Severity = $data1.def_sev17;//Critical
+ $inputObject.lst_PhaseDetected = $data1.lc_detect18;//Requirements Gathering
+ InfyFTModifyEformInstance($inputObject);
+ 
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_PhaseDetected = $data1.lc_detect18;//Requirements Gathering
+ $inputObject.lst_PhaseInjected = $data1.lc_inject19;//Requirements Gathering
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC2.end();
+ 
+ var $TC3 = _testcase("TC_BRD10_FU_22,23","VALIDATION OF REVIEWER AND REVIEW MODE CREATED BY AUTO REVIEW"); 
+ $TC3.start();
+ 
+ //***ONLY ONE RESOURCE IS ASSIGNED***
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.item = $subID+"_Rev1";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = "Details";
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject.lbl_DN_ReviewMode = $data.Rev_mode1;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.Resource07;//Arivazhagan_C
+ verifyEformInstanceDetails($inputObject);
+ 
+ //***ADDING MULTIPLE RESOURCE***//***CHANGING THE ACTIVITY CODE***
+ /*
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name= $data.segment3;//Sub Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $subID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment4;//Scheduled Tasks
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTcheckOutProjectInGridForPopup($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item_name = $data1.activityTask;//x-grid-cell-inner [9]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.Act_code11;//PDDRV
+ setAllFields($inputObject);
+
+ $inputObject = {};
+ $inputObject.task = $subID+"_Rev1";
+ $inputObject.resource = $data1.resource09;//Ricky_Wang
+ InfyFTassignResourceToTaskInGrid($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTcheckInProjectFromGrid();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTReturnPopUp($inputObject);
+ 
+ //****VALIDATING MULTIPLE RESOURCE AND ACTIVITY CODE ASSINGMENT CHANGES****
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $subID+"_Rev1";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject.lbl_DN_ReviewMode = $data.Rev_mode2;//Group Review
+ $inputObject.lst_DN_Reviewer = $data1.Resources12;//Arivazhagan_C,Ricky_Wang
+ $inputObject.lbl_reviewtype = $data1.Type13;//"Detailed Design Review";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $subID+"_Rev1";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment2;//Defect
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_PhaseDetected = $data1.lc_detect18;//"Detailed Design"
+ $inputObject.lst_PhaseInjected = $data1.lc_inject19;//"Detailed Design";
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC3.end();
+ 
+ var $TC4 = _testcase("TC_BRD10_FU_22.6","CHANGING THE AUTO REVIEW TO AN NON-REVIEW ACTIVITY CODE"); 
+ $TC4.start();
+
+ $inputObject = {};
+ $inputObject.segment_name= $data.segment3;//Sub Projects
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $subID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment4;//Scheduled Tasks
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTcheckOutProjectInGridForPopup($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item_name = $data1.activityTask;//x-grid-cell-inner [9]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.Act_code22;//PCD
+ setAllFields($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTcheckInProjectFromGrid($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTReturnPopUp($inputObject);
+*/
+ //*****VERIFYING IF THE REVIEW IS VISIBLE******//
+ /*
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.cell_Name = $data1.testingof23;//Review/Testing of :
+ $inputObject.span_Name = $data1.reviewtype24;//reviewtype
+ InfyFTisReadOnly($inputObject);
+  */
+ $TC3.end();
+ 
+ 
+ 
+ 
+ 
+ 

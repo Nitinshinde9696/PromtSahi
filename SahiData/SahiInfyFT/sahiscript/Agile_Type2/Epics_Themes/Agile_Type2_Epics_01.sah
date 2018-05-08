@@ -1,0 +1,238 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah"); 
+_include("../../../sahisource/Business/Filter.sah");
+
+ $data = readDataFromCSV("Agile_Type2_Epics_01", "Agile_Type2/Epics_Themes");
+ $gen = readDataFromCSV("Agile_Type2_Epics_Themes_Common", "Agile_Type2/Epics_Themes")
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",2,$dateObj2);
+ var $FutureDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $T0 = false;
+ var $T1 = true;
+
+ var $t = _testcase("TC_1","Login");
+ 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//Epics
+ navigateTo($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_2","Verify Available Buttons");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.button = $data.Save_Add_New;//Save & Add New
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.button = " Save ";//$data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_3","Check Fields in Epics");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation;
+ clickAddIcon($inputObject);
+ 
+ _wait(500);
+ 
+ var $UI_Date = _getText(_textbox("CM_DATEIDENTIFIED"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Details4;//ID :;Name * :;Date Identified * :;Description :;Priority :;Overall Status :;Theme :;Created By :
+ InfyFTisVisibleS($inputObject);
+ 
+ $t.end();
+ /* 
+ $inputObject = {};
+ $inputObject.textbox = $UI_Date;
+ $inputObject.cell_Name = $data.Date_Identified4;
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.Overall_Status4;
+ $inputObject.span_Name = $data.Overall_Status5;//Open
+ InfyFTisReadOnlyS($inputObject);
+  */
+ var $t = _testcase("TC_4", "Check Name Field");
+ 
+ $t.start();
+ 
+ $inputObject = {};	
+ $inputObject.edt_CM_Name = "";
+ $inputObject.lst_CM_Priority = $data.Priority_Value5;//"Medium";//
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = " Save ";//$data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Save_Add_New;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Check Date Identified Field");
+ 
+ $t.start(); 
+  
+ $inputObject = {};	
+ $inputObject.edt_CM_Name = $data.Name_Value5;//Epics_1
+ $inputObject.edt_CM_DATEIDENTIFIED = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and Save:\n•  Field Date Identified in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ clickReturn();
+
+ $t.end();
+ 
+ var $t = _testcase("TC_6","Create Epics");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name_Value5;
+ CreateInstance($inputObject);
+ 
+ var $Epics_ID =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Complete;//Complete
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//false
+ $inputObject.button = " Save ";//$data.Save;//Save
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T1;//false
+ $inputObject.reset = $data.Reset;//Reset
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $T0;//true
+ $inputObject.button = $data.Return;//Return
+ InfyFTcheckingButtonsS($inputObject);
+ 
+ $t.end();
+ /* 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.Created_By4;
+ $inputObject.span_Name = $data.Username11;
+ InfyFTisReadOnlyS($inputObject);
+  */
+ //clickReturn();
+ 
+ var $t = _testcase("TC_9", "Verify Available fields after Instance Creation");
+ 
+ $t.start();
+ /* 
+ $inputObject = {};
+ $inputObject.item = $Epics_ID;
+ OpenEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.Overall_Status5;//Open
+ $inputObject.cell_Name = $data.Overall_Status4;
+ InfyFTisReadOnlyS($inputObject);
+ */
+ clickReturn();
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_7","Date Validations");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $Epics_ID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_DATEIDENTIFIED = $FutureDate;
+ $inputObject.msgAlert = "Date Identified can not be greater than today, please correct it.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_8", "Verify Drop Down List of Priority");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $Epics_ID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};// to check drop down list of Priority
+ $inputObject.lst_CM_Priority = $data.PriorityList;//Critical;High;Medium;Low
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ /* 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name_Value5;
+ $inputObject.txt_
+ InfyFTModifyEformInstanceS($inputObject); 
+ */

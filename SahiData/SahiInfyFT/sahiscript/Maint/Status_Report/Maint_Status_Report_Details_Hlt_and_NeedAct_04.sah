@@ -1,0 +1,83 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Status_Report_Details_Hlt_and_NeedAct_04","Maint/Status_Report"); 
+ 
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname  = $data.Project_name1;//TJCSTMEP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+
+ var $t = _testcase("TC_3", "Check for segment availability");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segments;
+ InfyFTisVisible($inputObject); 
+ 
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Check for details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.labelnames1;
+ InfyFTisVisible($inputObject); 
+ 
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_5", "Check for Highlighs and Need Attention segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//Highlighs and Need Attention
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.labelnames2;
+ InfyFTisVisible($inputObject); 
+ 
+
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = $data.tdata1;
+ $inputObject.txt_DN_NeedsAttentionitems = $data.tdata2;
+ ModifyEformInstance($inputObject);
+  
+ $t.end();
+  

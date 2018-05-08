@@ -1,0 +1,208 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+
+
+ $data = readDataFromCSV("Maint_Request_Management_Production_Issues_23","Maint/Request_Management/Production_Issues");
+
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_2.1"," check Traverse Production Issues");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo7;//Projection issues
+ navigateTo($inputObject);
+ 
+ $s2.end();
+ var $s3 = _testcase("TC_2.2"," Check Mandatory fields");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc8;
+ $inputObject.edt_CM_Name = $data.name8;
+ $inputObject.edt_DN_TicketID =""; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Issue Occured Again After Fixing in Details tab \n• Field Ticket ID in Details tab";
+ CreateInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_DN_TicketID =$data.tid9; 
+ $inputObject.txt_CM_Description = $data.desc8;
+ $inputObject.lst_DN_IssueOccuredAgainAfter = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Issue Occured Again After Fixing in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_TicketID =$data.tid9; 
+ $inputObject.edt_CM_Name = $data.name8;
+ $inputObject.txt_CM_Description = $data.desc8;
+ $inputObject.lst_DN_IssueOccuredAgainAfter = $data.lstval8;
+ ModifyEformInstance($inputObject);
+ 
+ $s3.end();
+ var $s4 = _testcase("TC_5.1"," Production Issues");
+ $s4.start();
+
+ $id = _getText(_span("CM_ItemCode"))
+ clickReturn();
+
+  $inputObject = {};
+  $inputObject.item = $id;
+  InfyFTOpenEformInstanceForLastPage($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.cell_Name43;
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.cell_Name44;
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.cell_Name45;
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.cell_Name46;
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.cell_Name47;
+  InfyFTisVisible($inputObject);
+  
+  clickReturn();
+  $s4.end();
+  
+  var $s5 = _testcase("TC_6.1"," Production Issues  check Segments Fields");
+  $s5.start();
+  
+  $inputObject = {};
+  $inputObject.item = $id;//testing
+  InfyFTOpenEformInstanceForLastPage($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name50;
+  InfyFTisVisible($inputObject);
+  
+  /*
+
+ var $s = _testcase("Print-Icon"," Check Printing the Request");
+ $s.start();
+ 
+ InfyFTprint();
+ 
+ $s.end();//Icon not available
+
+ */ 
+ 
+  /*
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name52;//_link("Previous Versions")
+  InfyFTisVisible($inputObject);
+   
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name53;//_link("Comments")
+  InfyFTisVisible($inputObject);
+ ///segments not available1.4.17.6
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name54;//_link("Activity Log")
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name55;//_link("Attachments")
+  InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name56;
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name57;
+  InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+  $inputObject.span_Name = $data.segment_Name58;
+  InfyFTisVisible($inputObject);
+  */
+  $s5.end();
+ 
+  var $s6 = _testcase("TC_"," Production Issues linked to Bugfix ");
+  $s6.start(); 
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo8;//Bug Fixes
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc60;
+ $inputObject.lst_DN_RequestOwner = $data.reqowner61;//Himanshu_Bhayana
+ $inputObject.lst_DN_Complexity = $data.complex62;//Medium
+ $inputObject.edt_CM_Name = $data.bugname63;
+ $inputObject.lst_DN_LCStage = "Partial LC Stage";
+ $inputObject.lst_isPackageDigiteStart = $data.module64;//STaRT
+ CreateInstance($inputObject); 
+ 
+ $bug_id = _getText( _span("CM_ItemCode"));
+  
+ clickReturn();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo7;//Production issues
+ navigateTo($inputObject); 
+
+ $bugid_temp = $data.bugname63+"("+$bug_id+")";//test(BugF7)
+ 
+ $inputObject = {};
+ $inputObject.item = $id;//testing
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_BugFixId = $bugid_temp;
+ verifyEformInstanceDetails($inputObject);
+   
+ $inputObject = {};
+ $inputObject.lst_DN_BugFixId = $bugid_temp;
+ ModifyEformInstance($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo8;//Bug Fixes
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $bug_id;//
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.span_Name65;//_link("Production Issues[1]")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $id+";"+$data.name8;
+ verifyInstanceInListing($inputObject);
+ 
+ $s6.end();
+ 
+
+ 
+
+ 

@@ -1,0 +1,220 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Request_Closure_BF_10","Maint/Request_Management/Bug_Fixes");
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+ var $n = _testcase("TC_1.1.1","Login");
+ $n.start();
+ /*
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $n.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_1.1.3"," Check the Fields");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc16;//
+ $inputObject.edt_CM_Name = $data.requestTitle17;
+ $inputObject.lst_DN_Complexity = $data.complexity20;//Minor
+ $inputObject.lst_DN_RequestOwner = $data.reqowner16;
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ CreateInstance($inputObject);
+ */
+ $n.end();
+
+ 
+ var $n1 = _testcase("Date"," verifying Actual Start Date and Actual End Date");
+ $n1.start();  
+
+  $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.chk_checkAll = $data.yes;
+ regenerate($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+/*
+ $inputObject = {};
+ $inputObject.span_Name ="Actual Start Date should not be empty. Please enter Actual Start Date in Details page within a range of Project start date ( 20-Jan-2012 ) and Project end date ( 31-Dec-2021 ).";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name ="Actual End Date should not be empty. Please enter Actual End Date in Details page within a range of Project start date ( 20-Jan-2012 ) and Project end date ( 31-Dec-2021 ).";
+ InfyFTisVisible($inputObject);
+*/
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment3;//_link("Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ActualStartDate = $StartDate1;
+ $inputObject.edt_DN_ActualEndDate = $StartDate1;
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.chk_checkAll = $data.yes;
+ regenerate($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Actual Start Date should not be empty. Please enter Actual Start Date in Details page within a range of Project start date ( 20-Jan-2012 ) and Project end date ( 31-Dec-2021 ).";
+ $inputObject.operation = $data.OperationN;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Actual End Date should not be empty. Please enter Actual End Date in Details page within a range of Project start date ( 20-Jan-2012 ) and Project end date ( 31-Dec-2021 ).";
+ $inputObject.operation = $data.OperationN;
+ InfyFTisVisible($inputObject);
+ 
+ $n1.end();
+
+  var $n2 = _testcase("Test cases"," verifying Test cases or Test Units entered");
+ 
+ $n2.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Are number of issues fixed (planned + unplanned) entered ?";//Filled in details segment
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Are number of issues rejected/ reopened (planned or unplanned) entered ?";
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment3;//_link($data.segment2)
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_NoOfUnPlannedProductio = "5";
+ $inputObject.edt_DN_RefixedorRejectedFixes1 = "4";
+ ModifyEformInstance($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Are number of issues fixed (planned + unplanned) entered ?;Are number of issues rejected/ reopened (planned or unplanned) entered ?";
+ $inputObject.operation = $data.OperationN;
+ InfyFTisVisible($inputObject);
+ 
+  $n2.end();
+ 
+var $n3 = _testcase("Review", "Checking for the Open reviews");
+ $n3.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//"Reviews";//_link("Reviews")
+ SelectSegment($inputObject); 
+   
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//"Request Closure Checks";//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.msg1;//"There are open reviews. Please close all reviews.";//_span("There are open reviews. Please close all reviews")
+ $inputObject.operation = $data.OperationN;
+ InfyFTisVisible($inputObject);
+
+ 
+//_include("/../Maint_Request_Management_Rev_Def_Common_31.sah");
+ 
+ $inputObject = {};
+ $inputObject.chk_checkAll = $data.yes;
+ regenerate($inputObject);
+ 
+ _wait(10000);
+ 
+  $data = readDataFromCSV("Maint_Request_Management_Request_Closure_BF_10","Maint/Request_Management/Bug_Fixes");
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "There are open reviews. Please close all reviews.";
+ InfyFTisVisible($inputObject);
+
+ $n3.end();
+
+ var $n4 = _testcase("Task"," verifying for the open tasks");
+ $n4.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "All tasks must be closed.";//_span("All tasks must be closed.")
+ $inputObject.operation = $data.OperationN;
+ InfyFTisVisible($inputObject);
+ 
+ _include("/../Maint_Request_Management_Scheduled_Task_Report_Common_32.sah");
+ 
+ $inputObject = {};
+ $inputObject.chk_checkAll = $data.yes;
+ regenerate($inputObject);
+ 
+ _wait(1000);
+ 
+  $data = readDataFromCSV("Maint_Request_Management_Request_Closure_BF_10","Maint/Request_Management/Bug_Fixes");
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//_link("Request Closure Checks")
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "All tasks must be closed.";//_span("All tasks must be closed.")
+ $inputObject.operation = $data.OperationN;
+ InfyFTisVisible($inputObject);
+ 
+ $n4.end();
+ 

@@ -1,0 +1,275 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Agile_Defects_Fieldchecking_mandatoryFieldValidation_02", "Agile/Defects");
+ 
+ var $name = new Date();
+ 
+ var $dateObj = new Date();
+ var $releaseStartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj); 
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",20,$dateObj1);
+ var $releaseEndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",2,$dateObj2);
+ var $sprintStartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $dateObj3 = new Date();
+ $dateObj3 = DateAdd("d",9,$dateObj3);
+ var $sprintEndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj3);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ var $TC = _testcase("TC_02","To check for the values of the defect category drop down"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.addButton;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.lst_DN_DefectCategory = $data.defectCategoryValues;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(5000);
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check for the values of the review type drop down"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ReviewType = $data.reviewTypeValues;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check for the values of the defect type drop down"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_DefectType = $data.defectTypeValues;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check the values in the severity dropdown"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Severity = $data.severityValues;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check the default value of the Status dropdown while creating defect"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lbl_DN_Status = $data.statusOpen;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $TC.end();  
+ 
+ var $TC = _testcase("TC_02","Creating a Defect"); 
+ $TC.start(); 
+ 
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = $data.fieldValueReview;
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000, _isVisible(_cell(" eform_field_container FormDataLeft") || _span("CM_ItemCode")));
+ var $createdID = _getText(_span("CM_ItemCode"));
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","to check the values in the status dropdown"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.statusValues;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.returnButton;
+ InfyFTclick($inputObject);
+
+ _wait(5000); 
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check for the Release dropdown"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.addButton;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject.edt_CM_Name = $name;
+ $inputObject.edt_DN_PlannedStartDate = $releaseStartDate;
+ $inputObject.edt_DN_PlannedEndDate = $releaseEndDate;
+ InfyFTsaveInstance($inputObject);
+ 
+ var $releaseName = _getText(_textbox("CM_Name"))
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.returnButton;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_CM_Release = $releaseName;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_CM_Release = $releaseName;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000);
+
+ $TC.end();  
+ 
+ var $TC = _testcase("TC_02","To check for the Sprint dropdown"); 
+
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.addButton;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject.edt_CM_Name = $name;
+ $inputObject.lst_DN_TypeofSprint1 = $data.fieldValueInitiation;
+ $inputObject.lst_DN_TypeOfWork = $data.fieldValueDevelopment;
+ $inputObject.edt_DN_PlannedStartDate = $sprintStartDate;
+ $inputObject.edt_DN_PlannedEndDate = $sprintEndDate;
+ $inputObject.lst_CM_Release = $releaseName;
+ InfyFTsaveInstance($inputObject);
+ 
+ var $sprintName = _getText(_textbox("CM_Name"));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Sprint = $sprintName;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Sprint = $sprintName;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000);
+
+ $TC.end();
+ 
+ var $TC = _testcase("TC_02","To check for the owner dropdown"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Owner = $data.availableMembers;
+ verifyEformInstanceDetails($inputObject);
+
+ _wait(5000); 
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_02","To check for  the Status dropdown after creation of defect"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closeStatus;
+ $inputObject.msgAlert = "Please fill the Defect Type before closing the Defect.";
+ InfyFTsaveInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closeStatus;
+ $inputObject.lst_DN_DefectType = $data.fieldValueLogic;
+ InfyFTsaveInstance($inputObject); 
+ 
+ $TC.end(); 

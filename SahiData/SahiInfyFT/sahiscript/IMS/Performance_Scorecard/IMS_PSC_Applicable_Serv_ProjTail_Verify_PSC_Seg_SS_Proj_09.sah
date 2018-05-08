@@ -1,0 +1,206 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_Applicable_Serv_ProjTail_Verify_PSC_Seg_SS_Proj_09", "IMS/Performance_Scorecard");
+ $gen = readDataFromCSV("IMS_PSC_Common", "IMS/Performance_Scorecard");
+  
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+
+ /*****************************************************************************
+ *  TestCase_31  : Check Fields in Internal Efficiency
+ *****************************************************************************/
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ _wait(300);
+ 
+ InfyFTreopenInstanceS();
+ 
+ _wait(3000); 
+ 
+ $inputObject = {}; // giving the path for SetUp - Project Tailoring
+ $inputObject.name = $data.navigateTo32; 
+ navigateTo($inputObject);
+ 
+ inputObject = {};//Applicable Services
+ $inputObject.segment_name = $data.SegmentName41;
+ SelectSegment($inputObject);
+  
+ _wait(5000); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Applicable Services[1] index added
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo51;//3_chk
+ $inputObject.fieldValues = $data.fieldValues51;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Applicable Services
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo51;//3_chk
+ $inputObject.fieldValues = $data.fieldValues51;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ inputObject = {};//Applicable Technologies
+ $inputObject.segment_name = $data.SegmentName42;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ _click(_link("Select Technology[3]"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Technology Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo53;//2_chk
+ $inputObject.fieldValues = $data.fieldValues51;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ _wait(7000);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000); 
+ 
+ clickReturn();
+ 
+ _wait(5000);
+ 
+ _click(_link("Select Technology[4]"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Technology Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo53;//2_chk
+ $inputObject.fieldValues = $data.fieldValues51;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ _wait(7000);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000); 
+
+ clickReturn();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};//Applicable ITIL Process
+ $inputObject.segment_name = $data.SegmentName43;
+ SelectSegment($inputObject);
+ 
+ _wait(300);
+ _click(_link("Select Process[3]"));
+ _wait(300);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;//ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo508;//8
+ $inputObject.colNo = $data.colNo53;//2_chk
+ $inputObject.fieldValues = $data.fieldValues51;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ clickReturn();
+ 
+ _wait(300);
+ 
+ _click(_link("Select Process[4]"));
+ 
+ _wait(300);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;//ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo508;//8
+ $inputObject.colNo = $data.colNo53;//2_chk
+ $inputObject.fieldValues = $data.fieldValues51;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000); 
+ 
+ clickReturn();
+ 
+ _wait(3000); 
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName44;
+ SelectSegment($inputObject);
+ 
+ _wait(300);
+ 
+ _click(_link("Select Metrics[3]"));
+ 
+ _wait(300);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo51;//3_chk
+ $inputObject.fieldValues = $data.fieldValues51;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(300);
+ 
+ _click(_link("Select Metrics[4]"));
+ 
+ _wait(300);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName54;//Metrics Selection
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo51;//3
+ $inputObject.fieldValues = $data.fieldValues51;//true
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(7000);
+ 
+ clickReturn();
+ 
+ //_include("InfyFT_BR19_sahi_24_TC_SS_PSC_24.sah");

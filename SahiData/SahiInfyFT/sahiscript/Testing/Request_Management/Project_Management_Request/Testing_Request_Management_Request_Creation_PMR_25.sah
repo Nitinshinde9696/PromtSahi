@@ -1,0 +1,119 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Creation_PMR_25","Testing/Request_Management/Project_Management_Request"); 
+
+ $bTN = $data.Name;
+ $review_type = $data.rev_type;//"Others";
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+ 
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Siddharth Kale	
+$inputObject.edt_loginid = $data.LoginID1;//siddharth_kale
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+var $t = _testcase("TC-4.2", "CHECK ALL THE FIELDS ARE MANDATORY IN PROJECT MANAGEMENT TASK");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+_wait(100000);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.status;
+ModifyEformInstance($inputObject);
+
+_assertEqual("Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab", _lastAlert());
+$t.end();
+
+//clickReturn();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name;
+ModifyEformInstance($inputObject);
+ 
+var $ID = _getText(_span("CM_ItemCode"));
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTOpenEformInstanceForLastPage($inputObject);
+
+
+var $t1 = _testcase("TC-4.1", "CHECK THE FIELDS AVAILABLE WHILE CREATING A PROJECT MANAGEMENT TASK ");
+$t1.start();
+$inputObject = {};
+$inputObject.ele_CM_NameLABEL = $data.Title;//"Request Title * :"; 
+$inputObject.ele_isPackageDigiteStartLABEL = $data.SMU;//"Scheduling Module Used :";
+verifyEformInstanceDetails($inputObject);
+$t1.end();
+
+var $s1 = _testcase("Print-Icon"," Check Printing the Request");
+$s1.start();
+ 
+InfyFTprint();
+ 
+$s1.end();
+
+var $t2 = _testcase("SCHEDULE TASK", "CHECK THE SCHEDULE TASK SEGMENT");
+
+$t2.start();
+
+_include("/../Testing_Request_Management_Scheduled_Task_Report_Common_35.sah");
+
+$t2.end();
+
+var $t3 = _testcase("REVIEWS", "CHECK THE REVIEWS SEGMENT");
+
+$t3.start();
+
+_include("Testing_Request_Management_Rev_Def_PMR_26.sah");
+
+$t3.end();
+
+ var $st4 = _testcase("CLOSING THE REQUEST", "CLOSING PMR REQUEST");
+ /*
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details;//"Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Closed;//"Closed";
+ ModifyEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.ST;//"Scheduled Tasks";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.edit;//"Edit";
+ InfyFTisVisible($inputObject);
+ */
+ 
+ $st4.end();

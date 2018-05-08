@@ -1,0 +1,300 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+
+$data = readDataFromCSV("Dev_Tools_Reuse_sahi_Reuse_Tracking","Dev/Tools_Reuse");
+$data1 = readDataFromCSV("Dev_Tools_Reuse_Tracking_Positive_06","Dev/Tools_Reuse");
+
+/*  var $dateObj1 = new Date();
+var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+var $dateObj2 = new Date();
+$dateObj2 = DateAdd("d",10,$dateObj2);
+var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+var $t = _testcase("TC_1.1.1","Login");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1;
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password =$data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+var $s = _testcase("TC_1.1.2"," Navigation");
+$s.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname4;//projectname
+selectProject($inputObject);
+
+$s.end(); */
+var $s = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+$s.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5//
+navigateTo($inputObject);
+
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "ITR";
+  infyFTGetValueFromExcel($inputObject);
+  $ITR_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $ITR_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_Reuse_tracking;//_span("Reuse Tracking")
+SelectSegment($inputObject);
+
+_wait(500);
+$inputObject = {};
+$inputObject.tblname = $data1.tableName1;//_span("Reusable Assets")
+$inputObject.row_id = parseInt($data1.rowNo1);//"2";
+$inputObject.col_id = parseInt($data1.colNo13);//"0_chk";
+$inputObject.btnSave ="yes";
+InfyFTDeleteRows($inputObject);
+
+if(_isVisible(_link("Add Rows[1]")))
+{
+_click(_link("Add Rows[1]"));
+}
+else
+{
+_click(_link("Add Rows"));
+}
+
+  //**CR128**
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName =  $data1.tableName1;//_span("Reusable Assets")
+ $inputObject.rowNo = "License Type/Source*";//$data1.rowNo1;//"2";
+ $inputObject.colNo = "License Type/Source*_lst";
+ $inputObject.fieldValues = "--None--#3rd Party#Knowledge Assets#Local Repository#Open Source#Others";
+ verifySwiftFormData($inputObject);
+ 
+$inputObject = {};
+$inputObject.tableName = $data1.tableName1;//_span("Reusable Assets")
+$inputObject.rowNo = $data1.rowNo1;//"2";
+$inputObject.colNo = $data1.Assver1+"|"+$data1.colNo3+"|"+$data1.colNo4+"|"+$data1.colNo5+"|"+$data1.colNo6+"|"+$data1.colNo7+"|"+$data1.colNo8+"|"+$data1.Size;
+$inputObject.fieldValues = $data1.AssverVal+"|"+$data1.values3+"|"+$data1.values4+"|"+$data1.values5+"|"+$data1.values6+"|"+$data1.values7+"|"+$data1.values8+"|"+$data1.Sizevalues;
+setSwiftFormData($inputObject);
+
+$inputObject = {};
+saveSwiftForm($inputObject);
+_wait(10000);
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName2;//_span("Estimated")
+$inputObject.rowNo = $data1.rowNo2;//"1";
+$inputObject.colNo = $data1.colNo9;//"2_lbl";
+$inputObject.fieldValues = "5.00";//$data1.values9;//"5.00";
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName1;//_span("Reusable Assets")
+$inputObject.rowNo = $data1.rowNo1;//"2";
+$inputObject.colNo = $data1.colNo10;//"16_lst";
+$inputObject.fieldValues = $data1.values10;//"N";
+setSwiftFormData($inputObject);
+_wait(1000);
+$inputObject = {};
+saveSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName2;//_span("Estimated")
+$inputObject.rowNo = $data1.rowNo2;//"1";
+$inputObject.colNo = $data1.colNo11;//"2_lbl";
+$inputObject.fieldValues = "5.00";//"5.00";
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName2;//_span("Estimated")
+$inputObject.rowNo = $data1.rowNo2;//"1";
+$inputObject.colNo = $data1.colNo9;//"2_lbl"
+$inputObject.fieldValues = "0.00";//$data1.values9;//"5.00";
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName3;//"Actual";
+$inputObject.rowNo = $data1.Arow3;//"0";
+$inputObject.colNo = $data1.Acol3;//"1_edt";
+$inputObject.fieldValues = "10.00";//
+InfyFTsetSwiftFormData($inputObject);
+
+_expectConfirm("Error : Actual effort savings 10.0 is greater than the estimated effort savings 5.0. Actual effort savings cannot be more than estimated effort saving. Please change the actual effort saving",true); 
+_click(_button(" Save "));
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName3;//"Actual";
+$inputObject.rowNo = $data1.Arow3;//"0";
+$inputObject.colNo = $data1.Acol3;//"1_edt";
+$inputObject.fieldValues = "3.00";//
+InfyFTsetSwiftFormData($inputObject);
+
+$inputObject = {};
+saveSwiftForm($inputObject);
+
+$s.end();
+
+var $sqw = _testcase("TC_Reuse Plan","Add from Reuse Plan");
+
+$sqw.start();
+
+_click(_link("Add From Reuse Plan"));
+$sqw.end();
+var $sta = _testcase("TC_Reuse Plan","Added reuse tool should be disabled");
+
+$sta.start();
+
+$inputObject = {};
+$inputObject.tableName = "Add[1]";//$data1.table3;//Add[1] 
+$inputObject.byColRowName = "Yes";//$data1.bycolrow1;//Yes
+$inputObject.rowNo = $data1.values3;//$data1.rowname1;//1
+$inputObject.colNo = "Add_chk";//$data1.colname6;//Add_chk
+$inputObject.fieldValues = "Y";//$data1.true1;//Y
+InfyFTverifySwiftFormData($inputObject);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.tableName = $data1.tableName3;//"Actual";
+$inputObject.rowNo = $data1.Arow3;//"0";
+$inputObject.colNo = $data1.Acol3;//"1_edt";
+$inputObject.fieldValues = "0.00";//
+InfyFTsetSwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tblname = $data1.tableName1;//_span("Reusable Assets")
+$inputObject.row_id = parseInt($data1.rowNo1);//"2";
+$inputObject.col_id = parseInt($data1.colNo13);//"0_chk";
+$inputObject.btnSave ="yes";
+InfyFTDeleteRows($inputObject);
+
+$sta.end();
+var $ssd = _testcase("TC_Reuse Plan","Adding reuse tool from planning it should be display under the Reuse Plan");
+$ssd.start();
+
+$inputObject = {};
+$inputObject.name = $data1.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Aerospace
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//Agents
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Others
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+CreateInstance($inputObject);
+
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5//
+navigateTo($inputObject);
+
+$inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "ITR";
+  infyFTGetValueFromExcel($inputObject);
+  $ITR_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $ITR_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_Reuse_tracking;//_span("Reuse Tracking")
+SelectSegment($inputObject);
+
+_click(_link("Add From Reuse Plan"));
+
+$inputObject = {};
+$inputObject.tableName = $data1.table4;//"Add[1]";
+$inputObject.rowNo = $data1.addrow4;//"1";
+$inputObject.colNo = "1_lbl|4_lbl|5_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl";
+$inputObject.fieldValues = $data1.Name5+"|7.000|"+$data1.Technology5+"|7.000|"+$data1.Unit5+"|7.000|"+$data1.AssetType5+"|"+$data1.LicenseType5;
+verifySwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data1.table4;//"Add[1]";
+$inputObject.rowNo = $data1.addrow4;//"1";
+$inputObject.colNo = $data1.addcol4;//"0_chk";
+$inputObject.fieldValues = "true";
+setSwiftFormData($inputObject);
+
+$inputObject = {};
+$inputObject.msgAlt = "The following asset  is  already being used in your project:\n\nTEST\n\nBy clicking on the OK button you are confirming the following message:\n\n-> Where assets  are already part of the application, the effort savings reported for the assets  will be only for new features of assets  used in this request and they are not part of existing code base of application or\n\n-> Assets  are used for first time in the new application and they are not part of existing code base of the application\n\nWould you like to add again to report effort savings?";
+saveSwiftForm($inputObject);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.tblname = $data1.tableName1;//_span("Reusable Assets")
+$inputObject.row_id = parseInt($data1.rowNo1);//"2";
+$inputObject.col_id = parseInt($data1.colNo13);//"0_chk";
+$inputObject.btnSave ="yes";
+InfyFTDeleteRows($inputObject);
+
+$ssd.end();
+
+var $sds = _testcase("TC_Asset Usage Report","Asset Usage Report");
+
+$sds.start(); 
+
+_click(_link("Asset Usage Report"));
+
+$inputObject={};
+$inputObject.lst_DN_AssetName  = $data1.asstnme1;//"Enh27"; 
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+saveSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data1.asstseg1;//"Asset Usage Report";
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.asstfields1;//"Sr. No.;Asset Name;Asset Code;Asset Version;License Type
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.asstval1;
+InfyFTisVisible($inputObject);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.name = $data1.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data1.Name5;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+DeleteEformInstance($inputObject);
+
+
+$sds.end();
+

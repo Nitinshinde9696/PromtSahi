@@ -1,0 +1,368 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("Agile_PMPlan_Normal_Goals_SLAPenalty_RewardDetails","Agile/PMPlan_Normal"); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_66", "User tests SLA with Financial Impact");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);   
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.DN_AtRisk ;
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = "";
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.lst_DN_Subjecttoearnback = "";
+ $inputObject.lst_DN_SLAresponsibilityshare = "";
+ $inputObject.lst_DN_PenaltyFramework = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = $data.DN_PoolPercentage;
+ $inputObject.lst_DN_MeasurementPeriod = "";
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.lst_DN_Subjecttoearnback = "";
+ $inputObject.lst_DN_SLAresponsibilityshare = "";
+ $inputObject.lst_DN_PenaltyFramework = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason3;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = $data.DN_MeasurementPeriod;
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.lst_DN_Subjecttoearnback = "";
+ $inputObject.lst_DN_SLAresponsibilityshare = "";
+ $inputObject.lst_DN_PenaltyFramework = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason4;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = "";
+ $inputObject.edt_DN_Currency = $data.DN_Currency;
+ $inputObject.lst_DN_Subjecttoearnback = "";
+ $inputObject.lst_DN_SLAresponsibilityshare = "";
+ $inputObject.lst_DN_PenaltyFramework = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);   
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason5;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = "";
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.lst_DN_Subjecttoearnback = $data.DN_Subjecttoearnback;
+ $inputObject.lst_DN_SLAresponsibilityshare = "";
+ $inputObject.lst_DN_PenaltyFramework = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason6;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = "";
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.lst_DN_Subjecttoearnback = "";
+ $inputObject.lst_DN_SLAresponsibilityshare = $data.DN_SLAresponsibilityshare;
+ $inputObject.lst_DN_PenaltyFramework = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason7;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = "";
+ $inputObject.edt_DN_Currency = "";
+ $inputObject.lst_DN_Subjecttoearnback = "";
+ $inputObject.lst_DN_SLAresponsibilityshare = "";
+ $inputObject.lst_DN_PenaltyFramework = $data.DN_PenaltyFramework;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason8;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+$inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSLAPenalty; //SLA
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.DN_AtRisk;
+ $inputObject.edt_DN_PoolPercentage = $data.DN_PoolPercentage;
+ $inputObject.lst_DN_MeasurementPeriod = $data.DN_MeasurementPeriod;
+ $inputObject.edt_DN_Currency = $data.DN_Currency;
+ $inputObject.lst_DN_Subjecttoearnback = $data.DN_Subjecttoearnback;
+ $inputObject.lst_DN_SLAresponsibilityshare = $data.DN_SLAresponsibilityshare;
+ $inputObject.lst_DN_PenaltyFramework = $data.DN_PenaltyFramework;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+$inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkPmPlan; //PM Plan summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.SummarySLA;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.slaReason9;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $t.end(); 

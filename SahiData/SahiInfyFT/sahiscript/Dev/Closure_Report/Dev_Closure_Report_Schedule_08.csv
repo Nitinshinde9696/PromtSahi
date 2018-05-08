@@ -1,0 +1,2 @@
+table1,rowheaders1,colheaders1,table2,colheaders2,iter1,isegment1,sub1,popup1,isegment2,bycolrow1,rowname1,rowname2,colname1,colname2,colname3,colname4,testdata,rowno1,colno1,colno2
+Schedule,Estimated Date;Actual Date;Deviation(Days);Remarks,Start Date;End Date,Overall Deviation,Deviation(%)[2];Remarks[2],ITR1,Sub Projects,SubP1,openLinkedItem,Scheduled Tasks,Yes,Start Date,End Date,Estimated Date_lbl,Actual Date_lbl,Deviation(Days)_lbl,Remarks_txt,test,0,1_lbl,3_txt

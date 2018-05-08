@@ -1,0 +1,295 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/Filter.sah")
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+$data = readDataFromCSV("Roles_Manage_Roles_SQA_AQMRad_36","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Aman
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//CREATE UQH WITH ONE UNIT // 
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;//Vishnu
+CreateInstance($inputObject);
+
+var $UQH= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.item = $UQH;
+InfyFTverifyInstanceInListing($inputObject);
+
+//Navigate To AQM // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2; //vishnu
+$inputObject.edt_loginid = $data.LoginID2;
+$inputObject.edt_password = $data.Password2;
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+//CREATE AQM WITH SAME UNIT //
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.Unit6;
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode6;//PROGEON
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode6;//PROGEON
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchCriteria_DN_user6;//Nethravathi_r02
+CreateInstance($inputObject);
+
+var $AQM= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.item = $AQM;
+InfyFTverifyInstanceInListing($inputObject);
+
+//Navigate To SQA // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //Aman
+$inputObject.edt_loginid = $data.LoginID1;	
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+//SELECT THE FIRST SQA : AQM//
+
+_wait(5000);
+
+
+$inputObject = {};
+//$inputObject.rdg_DN_LoginAs = $data.MyRole3; //AQM
+$inputObject.lst_DN_Unit = $data.Unit3; //MANDATORY FIELD
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode3; //MANDATORY FIELD
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode3; //CUSTOMER CODE
+$inputObject.lst_DN_PU = $data.PU3;//BPOHR
+//$inputObject.lst_DN_DU = $data.DU3;//PROBPOHRJAI
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;//snehal_ghodeswar
+CreateInstance($inputObject);
+//}
+//else 
+//{
+_wait(500);
+var $SQA= _getText(_span("CM_ItemCode"));
+_click(_button("Return"));
+
+/*$inputObject = {};
+$inputObject.rdg_DN_LoginAs = $data.MyRole3; //AQM
+$inputObject.lst_DN_Unit = $data.Unit3; //MANDATORY FIELD
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode3; //MANDATORY FIELD
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode3; //CUSTOMER CODE
+$inputObject.lst_DN_PU = $data.PU3;
+//$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);*/
+//}
+
+//clickReturn();
+
+$inputObject = {};
+$inputObject.item = $SQA;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $SQA;// Open Created SQA
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.lbl_CM_ItemCode =  $SQA;
+$inputObject.ele_DN_LoginAsLABEL = "My Role :";
+$inputObject.ele_DN_DummyUnitLABEL = "Unit :";
+$inputObject.ele_DN_MasterCustomerCodeLABEL = "Master Customer Code :";
+$inputObject.ele_DN_CustomerCodeLABEL = "Customer Code :";
+$inputObject.ele_DN_PU1LABEL = "PU :";
+$inputObject.ele_DN_DULABEL = "DU :";
+$inputObject.ele_DN_DMLABEL = "DM :";
+$inputObject.ele_DN_LocationLABEL = "Location :";
+$inputObject.ele_DN_UserLABEL = "User * :";
+$inputObject.ele_DN_StatusLABEL = "Status * :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.txt_New_Comment = $data.Comments7;//Comments //
+addComment($inputObject);
+
+//SELECT SEGMENT PREVIOUS VERSION//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; // Previous Versions
+SelectSegment($inputObject);
+
+if(_isVisible(_table("QTP_versionlog")))
+{
+_highlight(_table("QTP_versionlog"));
+_wait(500);
+}
+
+//SELECT SEGMENT ACTIVITY LOGS//
+
+$inputObject = {};
+$inputObject.segment_name = "Activity Log";//$data.segment_name35; // Activity log
+SelectSegment($inputObject);
+
+//VERIFY COMMENTS ARE BEING LOGGED//
+
+$inputObject = {};
+var $activitylog = 0;
+if(_isVisible(_row("RowOdd")))
+	{
+		$activitylog = _getText(_row("RowOdd"));
+		_highlight(_row("RowOdd"));
+		$inputObject.Comments = $activitylog;
+		verifyActivityLogComments($inputObject);
+	}
+	
+
+//SELECT SEGMENT DETAILS//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name4; // Details
+SelectSegment($inputObject);
+
+_wait(2000);
+clickReturn();
+//_click(_span("KEY_BUTTON_Add-btnIconEl"));
+
+//CREATE SQA CHECK CONDITIONS//
+
+$inputObject = {};
+//$inputObject.rdg_DN_LoginAs = $data.MyRole3; //SQA
+$inputObject.lst_DN_Unit = $data.Unit3; //MANDATORY FIELD
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode3; //MANDATORY FIELD
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode3; //CUSTOMER CODE
+$inputObject.edt_SearchCriteria_DN_User = $data.SearchCriteria_DN_User3;
+CreateInstance($inputObject);
+
+//_assertEqual("Value must be set for the following mandatory field(s):\n• Master Customer Code\n• Customer Code\n", _lastAlert());
+_assertEqual("Please enter Mandatory field PU", _lastAlert());
+
+clickReturn();
+
+
+$inputObject = {};
+//$inputObject.rdg_DN_LoginAs = $data.MyRole3; //AQM
+$inputObject.lst_DN_Unit = $data.Unit3; //MANDATORY FIELD
+$inputObject.lst_DN_MasterCustomerCode = $data.MasterCustomerCode3; //MANDATORY FIELD
+$inputObject.lst_DN_CustomerCode = $data.CustomerCode3; //CUSTOMER CODE
+$inputObject.lst_DN_PU = $data.PU3;
+$inputObject.lst_DN_DU = $data.DU3;
+//$inputObject.lst_DN_DM = $data.DM3;
+//$inputObject.lst_DN_Location = $data.Location3;
+$inputObject.edt_SearchCriteria_DN_User = $data.Status16;
+CreateInstance($inputObject);
+
+_assertEqual("Please enter valid User.", _lastAlert());
+
+clickReturn();
+
+_setValue(_textbox("searchTextBox-inputEl"),$SQA);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $SQA;// Open Created SQA
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_User = $data.user7;//"snehal_ghodeswar";
+$inputObject.rdg_InActive = $data.Inactive6;//"InActive";
+ModifyEformInstance($inputObject);
+
+_assertEqual("The changes made to the EForm will be lost if you exit without saving.", _lastConfirm());
+
+$inputObject = {};
+$inputObject.lbl_DN_Status = $data.InActiveChk; //_isVisible(_span("Inactive"));
+verifyEformInstanceDetails($inputObject);
+
+clickReturn();
+
+//Navigate To AQM // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name2; //vishnu
+$inputObject.edt_loginid = $data.LoginID2;
+$inputObject.edt_password = $data.Password2;
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo3;//Navigate To2 :Manage Roles AQM
+navigateTo($inputObject);
+
+
+_setValue(_textbox("searchTextBox-inputEl"),$AQM);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+_wait(2000);
+
+$inputObject = {};
+$inputObject.item = $AQM;// Open Created SQA
+OpenEformInstance($inputObject);
+
+_wait(5000);
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive7;//"Inactive AQM";
+ModifyEformInstance($inputObject);
+
+//Navigate To SQA // 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //Aman
+$inputObject.edt_loginid = $data.LoginID1;	
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $UQH;// Open Created SQA
+OpenEformInstance($inputObject);
+
+_wait(5000);
+
+$inputObject = {};
+$inputObject.rdg_Inactive = $data.Inactive7;//"Inactive UQH";
+ModifyEformInstance($inputObject);
+
+logOut();
+

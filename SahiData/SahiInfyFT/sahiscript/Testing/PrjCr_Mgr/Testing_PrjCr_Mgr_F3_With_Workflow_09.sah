@@ -1,0 +1,378 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+  _include("Testing_PrjCr_Mgr_Delete_Project_11.sah");
+if(_getGlobal("New_UI")==="yes")
+	$data = readDataFromCSV("Testing_PrjCr_Mgr_F3_With_Workflow_09_NewUI","Testing/PrjCr_Mgr");
+else
+	$data = readDataFromCSV("Testing_PrjCr_Mgr_F3_With_Workflow_09","Testing/PrjCr_Mgr");
+ 
+  $dateObj1 = new Date();
+  $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+  $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+  $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+  $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//Project Request_home
+ navigateTo($inputObject);
+ 
+  $inputObject = {}; 
+  $inputObject["edt_searchTextBox-inputEl"] = $data.Project_code4;
+  setAllFields($inputObject);
+  
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+infyFTverifyProjectRequestInstanceInListing($inputObject);
+
+  $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+
+
+_wait(5000);
+
+  InfyFTverifyRouteButton();
+
+ $t.end();
+  $t1 = _testcase("TC_4.5"," verify Recommended Action");
+ $t1.start();
+ 
+
+  $Recaction = _getSelectedText(_select("DN_RecommendedAction"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Recommended Action";//_link("Recommended Action")
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.raction = $Recaction;
+  InfyFTVerifyRecommendedAction($inputObject);
+  
+ $t1.end(); 
+ 
+  $t2 = _testcase("TC_5.1"," Project request Workflow");
+ $t2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";//_link("Details")
+ SelectSegment($inputObject);
+ 
+   $proj_code =  _getValue(_textbox("PROJECTCODE"));
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.field12;
+ $inputObject.lst_PROJECTTYPE = $data.projecttype13;
+ $inputObject.txt_CM_Description = $data.desc14;
+  //$inputObject.txt_field38 = $data.desc14;
+ //$inputObject.lst_DN_OverallPeakTeamSize = $data.peak_team_size14;
+ ModifyEformInstance($inputObject);
+   
+ $t2.end();
+  $t3 = _testcase("TC_5.5.1","Workflow");
+ $t3.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name15;//workflow
+ SelectSegment($inputObject);
+ 
+ InfyFTverifyRouteButton();
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage17;
+ $inputObject.multiple_member = $data.user_skip17;
+ WorkflowSet($inputObject);
+ 
+ InfyFTverifyRouteButton();
+  
+ $t3.end();
+  $s4 = _testcase("TC_7.2"," Open Inbox");
+ $s4.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Project Request_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestid4;
+ infyFTOpenProjectRequest($inputObject);
+ $s4.end();
+ _wait(5000);
+  $t5 = _testcase("TC_7.4"," Verify segment");
+ $t5.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name14;//Questionnaire
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name15;//workflow
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name16;//attachment
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name17;//comments
+ InfyFTisVisible($inputObject);
+ 
+ $t5.end();
+ 
+  $t6 = _testcase("TC_9.5"," Verify Question list");
+ $t6.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name14;//Questionnarie segment
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name18;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name181;
+ InfyFTisVisible($inputObject);
+ 
+ $t6.end();
+  $t7 = _testcase("TC_9.6"," Verify Questions");
+ $t7.start();
+  
+ $inputObject = {};
+ $inputObject.lst_DN_IstheprojectmanagedbyI = $data.item_Name19;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _setSelected(_select("DN_IstheprojectmanagedbyI"), $data.item_Name19);
+  
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.lst_DN_Choosetheappropriatena = $data.item_Name20;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _setSelected(_select("DN_Choosetheappropriatena"), $data.item_Name20);//"Maintenance"
+ _wait(2000);
+ if(_isVisible(_select("DN_Methodology")))
+ {
+	$inputObject = {};
+	$inputObject.lst_DN_Methodology = $data.item_Name21;
+	verifyEformInstanceDetails($inputObject);
+ }
+ $t7.end();
+
+  $t8 = _testcase("TC_11.0"," select Questionnaire segment");
+ $t8.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name14;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IstheprojectmanagedbyI = $data.item_Name19;
+ $inputObject.lst_DN_Choosetheappropriatena = $data.item_Name20;
+ $inputObject.lst_DN_Methodology = $data.item_Name21;//WARNING: The suggested process type "Agile" is not yet available in SwiftALM. Please create the project in IPM+ if you want to choose the suggested process type
+ InfyFTProcessSelectionQuestionnaire($inputObject);
+ 
+ //clickReturn();
+ 
+ $t8.end();
+  $s9 = _testcase("TC_9.2"," Open Inbox");
+ $s9.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Project Request_home
+ navigateTo($inputObject);
+ $s9.end();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestid4;
+ infyFTOpenProjectRequest($inputObject);
+ _wait(5000);
+   
+   $TC_12 = _testcase("TC_12.4"," select Attachment segment");
+ $TC_12.start();
+  
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name16;//Attachments
+ SelectSegment($inputObject);
+ 
+ InfyADDAttachment();
+ _wait(5000);
+ $TC_12.end();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Detail_Segment4;//details
+ SelectSegment($inputObject);
+ 
+  $chk = InfyFTverifyProjectType();//check project type
+  if($chk == true) 
+{
+   $TC_14 = _testcase("TC_14.3"," Route with comments");
+  $TC_14.start();
+  
+  $inputObject = {};
+  $inputObject.segment_name = $data.segment_name15;
+  SelectSegment($inputObject);
+  
+  $inputObject = {};
+  $inputObject.workflow_stage = $data.stage17;
+  $inputObject.multiple_member = $data.user_skip18;
+  WorkflowSet($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.txt_Comments = $data.Comments18;
+  InfyFTClickRoutewithComments($inputObject);
+ 
+  $TC_14.end();
+  _wait(10000);
+   $TC_15 = _testcase("TC_15.1","after routing request details segment should be read only UAT");//approval Login
+	$TC_15.start();
+	$inputObject = {};
+	$inputObject.segment_name = $data.Detail_Segment4;//details
+	SelectSegment($inputObject);	
+	
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.ini_action19;//_span("Create[1]")
+	 $inputObject.cell_Name = $data.ini_actionc19;//_cell("Initiate Action :")
+	 InfyFTisReadOnly($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.pro_type20;//_span("Mech PD")
+	 $inputObject.cell_Name = $data.pro_typec20;//_cell("Process Type :")
+	 InfyFTisReadOnly($inputObject);
+			
+	$TC_15.end();	
+  	/* $t = _testcase("TC_16.1","verify Approval field enabled after routing");//approval Login
+	$t.start();
+	
+    $inputObject = {};
+	$inputObject.segment_name = $data.segment_name15;
+	SelectSegment($inputObject);
+    
+	$inputObject = {};
+	$inputObject.lst_selectsingleuser1 = $data.user_skip18;
+	verifyAllFields($inputObject); 
+	
+	$t.end();*///D:/Testing/fsg.xlsxneed to execute after migration done
+	
+  logOut();
+   $TC_1 = _testcase("TC_1.1","Login");//approval Login
+  $TC_1.start();
+ 
+  $inputObject = {};
+  $inputObject.user_name = $data.user_name21;
+  $inputObject.edt_loginid = $data.LoginID21;
+  $inputObject.edt_password =$data.Password21;
+  loginIntoDigite($inputObject);
+  $TC_1.end();
+ 
+   $TC_2 = _testcase("TC_2.1"," Open Request");
+  $TC_2.start();
+
+  $inputObject = {};
+  $inputObject.name = $data.navigateTo4;//INbox
+  navigateTo($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.item = $data.Project_requestid4;
+  infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.item = $data.Project_requestid4;
+  infyFTOpenProjectRequest($inputObject);
+ 
+  $TC_2.end();
+    $TC_151 = _testcase("TC_15.1","Approval side details segment should be read only UAT");//approval Login
+	$TC_151.start();
+	$inputObject = {};
+	$inputObject.segment_name = $data.Detail_Segment4;//details
+	SelectSegment($inputObject);	
+	
+	 /* $inputObject = {};
+	 $inputObject.span_Name = $data.ini_action19;//_span("Create[1]")
+	 $inputObject.cell_Name = $data.ini_actionc19;//_cell("Initiate Action :")
+	 InfyFTisReadOnly($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.pro_type20;//_span("Mech PD")
+	 $inputObject.cell_Name = $data.pro_typec20;//_cell("Process Type :")
+	 InfyFTisReadOnly($inputObject); */
+			
+	$TC_151.end();
+ 
+   $TC_152 = _testcase("TC_15.5"," Route request");
+  $TC_152.start();
+ 
+  $inputObject = {};
+  $inputObject.segment_name = $data.segment_name15;
+  SelectSegment($inputObject);
+ 
+	_assertEqual("Approver" , _getText(_link("WorkflowTitle Current")))
+	_assertFalse(_select("selectsingleuser1").disabled)
+ 
+  $inputObject = {};
+  $inputObject.txt_Comments = $data.Comments5;
+  InfyFTClickRoutewithComments($inputObject);
+
+  $TC_152.end();
+  _wait(10000);
+  logOut();
+ 
+   $TC_153 = _testcase("TC_1.1","Login");
+  $TC_153.start();
+ 
+  $inputObject = {};
+  $inputObject.user_name = $data.user_name1;
+  $inputObject.edt_loginid = $data.LoginID1;
+  $inputObject.edt_password =$data.Password1;
+  loginIntoDigite($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.projectname = $proj_code;
+  selectProject($inputObject);
+  $TC_153.end();
+
+ /* 
+		
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo22;//Profile_usp
+	navigateTo($inputObject);
+	
+	$inputObject = {};
+	$inputObject.span_Name = $data.proc_type23;//_span("PROJECTTYPE")
+	$inputObject.cell_Name = $data.proc_typec23;//_cell("Process Type :")
+	InfyFTisReadOnly($inputObject);
+		
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo24;//All Items
+	navigateTo($inputObject);
+	
+	$inputObject = {};
+	$inputObject.item = $proj_code;
+	infyFTverifyProjectRequestInstanceInListing($inputObject);;
+	
+	$inputObject = {};
+	$inputObject.item = $proj_code;
+	infyFTOpenProjectRequest($inputObject); */
+	
+}
+  
+ 
+ 
+ 
+
+ 

@@ -1,0 +1,137 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+
+ $data = readDataFromCSV("MechPD_Request_Management_Defect_Report_Common_20", "MechPD/Request_Management");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};		
+ $inputObject.name = $data.navigateTo1;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "PDRQ11"; 
+ OpenEformInstance($inputObject)
+
+ _wait(8000);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name3;//"Defect Report";
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+
+ //Major//
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = $data.DefTableName;//"Severity";
+ $inputObject.colid = 3;//$data.colid;
+ $inputObject.fieldValue = $data.Major1;//"Major";
+ calculate_Count($inputObject);
+ 
+  $count_Major = $inputObject.count;
+  
+ _log($count_Major +"Major count");
+ 
+
+ 
+//Crtical//
+
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = $data.DefTableName;//"Severity";
+ $inputObject.colid = 3;//$data.colid;
+ $inputObject.fieldValue =$data.Critical1;//"Critical";
+calculate_Count($inputObject);
+
+ $count_Critical = $inputObject.count;
+ 
+_log($count_Critical +"Critical count");
+
+//Minor //
+  
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = $data.DefTableName;//"Severity";
+ $inputObject.colid = 3;//$data.colid;
+ $inputObject.fieldValue =$data.Minor1;//"Minor";
+calculate_Count($inputObject);
+
+ $count_Minor = $inputObject.count;
+
+ _log($count_Minor +"Minor count");
+
+//Cosmetic //
+   
+ $inputObject.count =0;
+ $inputObject = {};
+ $inputObject.tblname = $data.DefTableName;//"Severity";
+ $inputObject.colid = 3;//$data.colid;
+ $inputObject.fieldValue =$data.Cosmetic1;//"Cosmetic";
+calculate_Count($inputObject);
+
+ $count_Cosmetic = $inputObject.count;;
+ 
+ 
+ _log($count_Cosmetic +"Cosmetic count");
+ 
+ 
+ $count_Total = $count_Cosmetic + $count_Minor + $count_Critical + $count_Major;
+
+
+ _log($count_Total+ "Total count");
+
+ var $t = _testcase("TC-18.1 To 18.5", "VERIFYING DEFECT SUMMARY");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;
+ SelectSegment($inputObject);
+
+ /*
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.DefectSummary;//Defect Summary
+ $inputObject.rowNo = $data.InProcessDefects;//
+ $inputObject.colNo = $data.Cosmetic+"|"+$data.Minor+"|"+$data.Critical+"|"+$data.Major+"|"+$data.Total;
+ $inputObject.fieldValues = $count_Cosmetic+"|"+$count_Minor+"|"+$count_Critical+"|"+$count_Major+"|"+$count_Total;
+ verifySwiftFormData($inputObject);
+*/
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.DefectSummary;
+ $inputObject.rowNo = "2";//$data.InProcessDefects;//
+ $inputObject.colNo = "1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";//$data.Cosmetic+"|"+$data.Minor+"|"+$data.Critical+"|"+$data.Major+"|"+$data.Total;
+ $inputObject.fieldValues = $count_Critical+"|"+$count_Major+"|"+$count_Minor+"|"+$count_Cosmetic+"|"+$count_Total;
+ verifySwiftFormData($inputObject);
+ 
+ 
+ $t.end();
+   
+  
+  

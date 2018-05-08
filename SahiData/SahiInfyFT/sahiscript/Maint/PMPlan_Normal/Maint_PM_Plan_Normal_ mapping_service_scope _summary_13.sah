@@ -1,0 +1,411 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data11 = readDataFromCSV("Maint_PM_Plan_Normal_ mapping_service_scope _summary_13","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "Checking the type of application maintained drop box");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data11.nodeIcon2;
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.Overview;//Overview
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.fieldValue1;
+ verifySwiftFormData($inputObject)
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "Mapping of service scope,sub service scope and technology");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Service scope = BI
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.fieldValueBI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Dashboard and reporting
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldValueDashboard;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldValue2;
+ verifySwiftFormData($inputObject)
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering = Self-Service BI
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldValueSelfBI;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldValue3;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering = EPM
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldEPM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldValue5;
+ verifySwiftFormData($inputObject) 
+
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering = In - Memory
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldInMemory;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldValue6;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering = Migration
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldMigration;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldValue7;
+ verifySwiftFormData($inputObject)  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering = Migration
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldDataMining;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldValue8;
+ verifySwiftFormData($inputObject)
+
+ 
+ //DATA MANAGEMENT
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Service scope = DM
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.fieldValueDM;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Big Data
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldValuebigData;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue1;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Data consolidation
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldDataConsolidation;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue2;
+ verifySwiftFormData($inputObject)  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Data integration
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldDataIntegration;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue3;
+ verifySwiftFormData($inputObject) 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Data Quality
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldDataQuality;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue4;
+ verifySwiftFormData($inputObject)  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  MDM
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldValueMDM;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue5;
+ verifySwiftFormData($inputObject)  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  MetaData
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldMetaData;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue6;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Migration
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldMigration;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.DMvalue7;
+ verifySwiftFormData($inputObject);   
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "Choose type of Application Maintained as BPM/EAI");
+ $t.start(); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.valueBPM;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data11.primaryEAI;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data11.sizingEnhancement;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "Choose type of Application Maintained as BI ");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.fieldValueBI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data11.fieldsubService;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data11.Technology;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data11.sizingEnhancement;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "Sub service field is only applicable for DM,BI DM & BI");
+ $t.start(); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.fieldPortalContent;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.span_Name = $data11.fieldsubService;
+ InfyFTassertNotVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "Choose type of Application Maintained as None and try saving it");
+ $t.start();
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues= "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Type of Application Maintained in table Sizing Details in Overview tab";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_BRD27_FU1_2", "Checking for PM Plan summary page for Overview section");
+ $t.start(); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Service scope = BI
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.appMaintained;
+ $inputObject.fieldValues=$data11.fieldValueBI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Sub service offering =  Dashboard and reporting
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.subService;
+ $inputObject.fieldValues=$data11.fieldValueDashboard;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.technology;
+ $inputObject.fieldValues=$data11.fieldTechValue1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.colSizingTechnique;
+ $inputObject.fieldValues=$data11.fieldvalueEnh;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject={};
+ $inputObject.byColRowName = "Yes";//Technology
+ $inputObject.tableName=$data11.tableSizing;
+ $inputObject.rowNo=$data11.rowName1;
+ $inputObject.colNo=$data11.colReasonStandard;
+ $inputObject.fieldValues=$data11.fieldValueTest;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject={};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data11.linkPMPlan;
+ InfyFTclick($inputObject); 
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data11.tableSummary;
+ $inputObject.rowNo = $data11.Overview;
+ $inputObject.colNo = $data11.colSummary;
+ $inputObject.fieldValues = "Details in Overview are filled.";
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+
+ _wait(2000); 
+  
+ $t.end();
+ 

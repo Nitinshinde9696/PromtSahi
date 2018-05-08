@@ -1,0 +1,22 @@
+  var $t = _testcase("Package_navigation_iteration_04");
+ $t.start();
+ _include("Package_navigation_iteration_04.sah");
+ $t.end();
+ 
+  var $t = _testcase("Package_iteration_scheduleTaskS1_01");
+ $t.start();
+ _include("Package_iteration_scheduleTaskS1_01.sah");
+ $t.end();
+ 
+  var $t = _testcase("Package_iteration_scheduleTaskS2_02");
+ $t.start();
+ _include("Package_iteration_scheduleTaskS2_02");
+ $t.end();
+ 
+  var $t = _testcase("Package_iteration_scheduleTaskS3_03");
+ $t.start();
+ _include("Package_iteration_scheduleTaskS3_03.sah");
+ $t.end();
+
+
+

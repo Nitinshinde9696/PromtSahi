@@ -1,0 +1,150 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Dev_genericcsv_ToolsPlanning_ToolsTracking","Dev/Tools_Reuse");
+ $data = readDataFromCSV("Dev_Tools_Reuse_ToolsPlanning_Development_01","Dev/Tools_Reuse");
+
+ var $t = _testcase("TC_1", "Logging with valid user");
+ $t.start();
+
+/*  $inputObject = {};
+ $inputObject.user_name = $generic.Username1; //
+ $inputObject.edt_loginid = $generic.LoginID1;//
+ $inputObject.edt_password = $generic.Password1;
+ loginIntoDigite($inputObject);
+ */
+ $t.end();
+ var $n = _testcase("Script 1","Dev_Tools_Reuse_ToolsPlanning_Development_01");
+ $n.start();
+ 
+ var $t = _testcase("TC_2", "Navigating to Project Tailoring for a Dev PT project ");
+ $t.start();
+
+/*  $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.Projectname1;//FPEDGTST
+ OpenEformInstance($inputObject);
+  */
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject ={};
+ InfyFTreopenPMP($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_3", "Setting Sizing details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.ptsegment1;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Type of Application Developed*";
+ $inputObject.colNo = "Type of Application Developed*_lst"
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Type of Application Developed*";
+ $inputObject.colNo = "Type of Application Developed*_lst"
+ $inputObject.fieldValues = "Development";
+ setSwiftFormData($inputObject);
+$inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Type of Work*";
+ $inputObject.colNo = "Type of Work*_lst"
+ $inputObject.fieldValues = "New Development";
+ setSwiftFormData($inputObject);
+$inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Primary Language";
+ $inputObject.colNo = "Primary Language_lst"
+ $inputObject.fieldValues = "Basic";
+ setSwiftFormData($inputObject);
+$inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Sizing Technique*";
+ $inputObject.colNo = "Sizing Technique*_lst"
+ $inputObject.fieldValues = "IFPUG FP";
+ setSwiftFormData($inputObject);
+
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ $t.end();
+ var $t = _testcase("TC_2", "Navigating to PM Plan and setting Applicable LC stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//nodeIcon16
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//Applicable LC Stages
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//Applicable LC Stages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.pmrow1;//Coding|Detailed Design|Coding
+ $inputObject.colNo = $data.pmcol1;//Applicable_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//Applicable LC Stages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.pmrow2;//High Level Design;Unit Testing;Integration Test;System Test;Acceptance and Installation;Post Implementation;Others - Engineering
+ $inputObject.colNo = $data.pmcol2;//Applicable_unchk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ $n.end();
+ /* 
+   var $t = _testcase("Script 2","Dev_Tools_Reuse_FLW527_ToolsPlanning_addTools_02");
+ $t.start();
+  
+  _include("Dev_Tools_Reuse_FLW527_ToolsPlanning_addTools_02.sah");
+  
+ $t.end();  
+ var $t = _testcase("Script 3","Dev_Tools_Reuse_FLW516_ToolsTracking_addTools_03");
+ $t.start();
+  
+  _include("Dev_Tools_Reuse_FLW516_ToolsTracking_addTools_03.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 4","Dev_Tools_Reuse_FLW516_ToolsTracking_addPlanned_04");
+ $t.start();
+  
+  _include("Dev_Tools_Reuse_FLW516_ToolsTracking_addPlanned_04.sah");
+  
+ $t.end(); */
+ 

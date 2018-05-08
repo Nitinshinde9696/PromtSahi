@@ -1,0 +1,614 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_GoalSection_03", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //team isha
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+_wait(6000); 
+
+ $t.end();
+ 
+ /********************************************************
+ * Service in scope
+ ********************************************************/
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ _wait(6000); 
+ var $t = _testcase("TC_4", "navigate to Project Tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "transition stage & unchecking service");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Applicable_service; //Applicable service
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //unchecking
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo31;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end(); 
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_6", "SDMP for checking color indicates");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //SDMP
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(5000);
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(41));
+ var $serv = _getText(_span(42));
+ _assertEqual($serv, _getText(_span("No service is defined in project scope. At least one service line must be part of the plan.", _near(_span(40)))));
+ }
+ else
+ {
+ _highlight(_span(69));
+ var $serv = _getText(_span(70));
+ _assertEqual($serv, _getText(_span("No service is defined in project scope. At least one service line must be part of the plan.", _near(_span(68)))));
+ }
+ 
+ $t.end();
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_7", "navigate to Project Tailoring & selecting services");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Applicable_service; //Applicable service
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; //1-Applicable Services,checking first 3 services.
+ $inputObject.tableName = $data.tableName1; 
+ $inputObject.rowNo = $data.rowNo1C;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ _assertEqual(false, _button(" Save ").disabled);
+ 
+  _wait(8000);
+ $inputObject = {}; //unchecking one service.
+ $inputObject.tableName = $data.tableName1; 
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo31;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+/*  _wait(8000);
+ $inputObject = {}; //unchecking one service.
+ $inputObject.tableName = $data.tableName1; 
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo31;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); */
+
+ $t.end();
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_8", "SDMP for checking color indicates");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //SDMP
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(5000);//Defect
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(41));
+ var $serv1 = _getText(_span(42));
+ _assertNotEqual($serv1, $serv);
+ }
+ else
+ {
+ _highlight(_span(69));
+ var $serv1 = _getText(_span(70));
+ _assertNotEqual($serv1, $serv);
+ }
+ 
+ $t.end(); 
+ 
+ /*************************************************
+ * Goals
+ *************************************************/ 
+ 
+ var $t = _testcase("TC_9", "Goals");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goal; //_click(_link("Select Goal"));
+ SelectSegment($inputObject);  
+ 
+ _assertExists(_span("No Records Found")); 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Goal1; //Goals
+ SelectSegment($inputObject); 
+ 
+ _assertExists(_span("No Records Found")); 
+ clickReturn();
+ 
+ $t.end();
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_10", "changing state in PT & checking colour indicate of goal");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+     $inputObject = {};
+	 $inputObject.segment_name =  $data.Segment_technology;
+	 SelectSegment($inputObject);
+	 
+	 _wait(5000);
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.ST; //_click(_link("Select Technology")); 
+	 SelectSegment($inputObject);  
+	 _wait(5000);
+	 
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.tableName5; //Technology Selection
+	 $inputObject.rowNo = $data.rowNoT2;
+	 $inputObject.colNo = $data.colNo5;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.msgAlert = "";
+	 saveSwiftForm($inputObject);
+	 
+	 _wait(5000);
+	 clickReturn();
+	 
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.ST1; //_click(_link("Select Technology[1]"));
+	 SelectSegment($inputObject); 
+	 _wait(5000);
+	 
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.tableName5; //Technology Selection
+	 $inputObject.rowNo = $data.rowNoT21;
+	 $inputObject.colNo = $data.colNo5;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.msgAlert = "";
+	 saveSwiftForm($inputObject);
+	 
+	 _wait(5000);
+	 clickReturn();
+	 
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.Segment_ITIL;
+	 SelectSegment($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.SP;//_click(_link("Select Process"));
+	 SelectSegment($inputObject); 
+	 _wait(5000);
+	 
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.tableName6; //ITIL Process Selection
+	 $inputObject.rowNo = $data.rowNoI2;
+	 $inputObject.colNo = $data.colNo5;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	  
+	 $inputObject = {}; 
+	 $inputObject.msgAlert = "";
+	 saveSwiftForm($inputObject);
+	 
+	 _wait(8000);
+	 clickReturn();
+	 
+	 _wait(5000);
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.SP1;// _click(_link("Select Process[1]"));
+	 SelectSegment($inputObject); 
+	 _wait(5000);
+	  
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.tableName6; //ITIL Process Selection
+	 $inputObject.rowNo = $data.rowNoI3;
+	 $inputObject.colNo = $data.colNo5;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.msgAlert = "";
+	 saveSwiftForm($inputObject);
+	 
+	 _wait(8000);
+	 clickReturn();
+	 
+	  $inputObject = {};
+	 $inputObject.segment_name =  $data.applicable_metrix;
+	 SelectSegment($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.M;// _click(_link("Select Metrics"));
+	 SelectSegment($inputObject);  
+	 _wait(5000);
+	 
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.metricSelection; 
+	 $inputObject.rowNo = $data.rowNo1;
+	 $inputObject.colNo = $data.colNo3;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.msgAlert = "";
+	 saveSwiftForm($inputObject);
+	 
+	 _wait(8000);
+	 clickReturn();
+	 
+	 $inputObject = {};
+	 $inputObject.segment_name =  $data.M1;//  _click(_link("Select Metrics[1]"));
+	 SelectSegment($inputObject);  
+	 _wait(5000);
+	 
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.metricSelection; 
+	 $inputObject.rowNo = $data.rowNo2;
+	 $inputObject.colNo = $data.colNo3;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.tableName = $data.metricSelection; //metric
+	 $inputObject.rowNo = $data.rowNo3;
+	 $inputObject.colNo = $data.colNo3;
+	 $inputObject.fieldValues = $data.fieldValues5;
+	 setSwiftFormData($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.msgAlert = "";
+	 saveSwiftForm($inputObject);
+	 
+	 _wait(8000);
+	 clickReturn();
+	 _wait(8000);
+	 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP"); 
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(500);
+ if(_isVisible(_link($data.Username1)))
+ {
+ _highlight(_span(47));// red colour indicates here
+ var $G = _getText(_span(48));
+ }
+ else
+ {
+ _highlight(_span(75));// red colour indicates here
+ var $G = _getText(_span(76));
+ }
+ 
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ _highlight(_span(47));// red colour indicates here
+ var $goal1 = _getText(_span(48));
+ _assertEqual($goal1, $G);
+ }
+ else
+ {
+ _highlight(_span(75));// red colour indicates here
+ var $goal1 = _getText(_span(76));
+ _assertEqual($goal1, $G);
+ }
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ _wait(10000);
+  $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goal; //_click(_link("Select Goal"));
+ SelectSegment($inputObject);  
+ 
+ _wait(10000); 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.goalSelection; 
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1; //2,(1,10,11,13,14) 
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Goal1; //_click(_link("Select Goal[1]"));
+ SelectSegment($inputObject); 
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.goalSelection; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues2; //2,(1,10,11,14) 
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+  
+ _wait(8000); 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ _highlight(_span(47));// orange colour indicates here
+ var $goal2 = _getText(_span(48));
+ _assertEqual($goal2, _getText(_span("There are metrics with Goal Type as \"SLA with Financial Impact\" for which minimum SL target is not set.", _near(_span("Goals")))));
+ }
+ else
+ {
+ _highlight(_span(75));// orange colour indicates here
+ var $goal2 = _getText(_span(76));
+ _assertEqual($goal2, _getText(_span("There are metrics with Goal Type as \"SLA with Financial Impact\" for which minimum SL target is not set.", _near(_span("Goals")))));
+ }
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "set value for SLA penalty & Metric");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goals; //Goals
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.goal; //_click(_link("Select Goal"));
+ SelectSegment($inputObject);  
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.goalSelection; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.fieldValues3; //2,(1,10,11,14) 
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Goal1; //_click(_link("Select Goal[1]"));
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.goalSelection; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.fieldValues3; //2,(1,10,11,14) 
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(8000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.penalty; //_click(_link("SLA Penalty and Reward"));
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.fieldValuesE1; 
+ $inputObject.edt_DN_PoolPercentage = $data.fieldValuesE1;  
+ $inputObject.lst_DN_SLAResponsibilityShare = $data.fieldValuesE; 
+ $inputObject.lst_DN_PenaltyFramework = $data.fieldValuesE; 
+ $inputObject.lst_DN_SubjecttoEarnBack = $data.fieldValuesE; 
+ $inputObject.msgAlert = "Error: \n->At-Risk cannot be less than or equal to 0\n->Pool Percentage cannot be less than or equal to 0\n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.DN_AtRisk1; 
+ $inputObject.edt_DN_PoolPercentage = $data.DN_PoolPercentage;  
+ $inputObject.lst_DN_SLAResponsibilityShare = $data.DN_SLAResponsibilityShare; 
+ $inputObject.lst_DN_PenaltyFramework = $data.DN_PenaltyFramework; 
+ $inputObject.lst_DN_SubjecttoEarnBack = $data.DN_SubjecttoEarnBack; 
+ ModifyEformInstance($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ {
+ _highlight(_span(47));// green colour indicates here
+ var $goal3 = _getText(_span(48));
+ _assertEqual($goal3, _getText(_span("Goal details for all metrics are filled.", _near(_span("Goals")))));
+ 
+ _highlight(_span(50));// green colour indicates here
+ var $slaPenalty = _getText(_span(51));
+ _assertEqual("There are metrics with Goal Type as \"SLA with financial impact\" and all the fields are filled.", $slaPenalty);
+ }
+ else
+ {
+ _highlight(_span(75));// green colour indicates here
+ var $goal3 = _getText(_span(76));
+ _assertEqual($goal3, _getText(_span("Goal details for all metrics are filled.", _near(_span("Goals")))));
+ 
+ _highlight(_span(78));// green colour indicates here
+ var $slaPenalty = _getText(_span(79));
+ _assertEqual("There are metrics with Goal Type as \"SLA with financial impact\" and all the fields are filled.", $slaPenalty);
+ }
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.penalty; //_click(_link("SLA Penalty and Reward"));
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SLAResponsibilityShare = $data.slarespon;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubjecttoEarnBack = $data.slarespon;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_PenaltyFramework = $data.DN_PenaltyValue; 
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("InfyFT_BR20_sahi10_SDMP_PA_spfc"); 
+ $t.start(); 
+ 
+ _include("IMS_SDMP_PA_spfc_10.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ 
+ $t.end();
+ 

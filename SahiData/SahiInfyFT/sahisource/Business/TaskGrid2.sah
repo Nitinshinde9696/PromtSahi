@@ -1,0 +1,77 @@
+_include("../../../SahiDigite/sahisource/Business/TaskGrid.sah");
+
+
+
+/**
+ @Function Number:21
+ @author: Kunal Gajbhiye
+ @example:assignResourceToTaskInGrid({"taskName":"hhas", "Resources":[{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"}]})
+ @description: assigns a resource to a task and verifies it all the parameters are set as per input parameters
+ @param: taskName and resource array. resource array is array of resource object. Resource object has parameters as per column headers as seen on resource allocation screen.
+ date format for planned start and planned finish is 'dd-mmm-yyy'
+ @return: None
+ **/
+
+function InfyFTassignResourceToTaskInGrid($inputObject)
+{
+	_log("InfyFTassignResourceToTaskInGrid Started","success");
+	try 
+	{
+		InfyFTto_assignResourceToTaskInGrid($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTassignResourceToTaskInGrid Completed","success");
+}
+
+/**
+ @Function Number:22
+ @author:Ashwini Lalit
+ @example:to_assignResourceToTaskInGrid({"taskName":"hhas", "Resources":{{"Name":"Vinay Sharma", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"},{"Name":"Admin Test", "Units":"50", "Effort":"", "Planned Start":"20-Jul-2012", "Planned Finish":"25-Jul2012"}}})
+ @description: main implementation body for assignResourceToTaskInGrid
+ @param: taskName and Resource Objects. Resource Object has parameters-values that are column headers as seen on resource allocation screen
+ @return: None
+ **/
+
+function  InfyFTto_assignResourceToTaskInGrid($inputObject)
+{
+	_log(" InfyFTto_assignResourceToTaskInGrid Started","success");
+	try 
+	{
+	
+	    if($inputObject.popup_name)
+		{
+		  _selectWindow($inputObject.popup_name);
+		}
+		if ($inputObject.negative)
+			return;
+
+		var $resource = $inputObject.resource;
+		var $task = $inputObject.task;
+		//delete $inputObject.resource;
+		//delete $inputObject.task;
+		
+		
+            _doubleClick(_div(0, _near(_div($task, _in(_div("/treeview/")))), _under(_div("/Resource/", _in(_div("/headercontainer/"))),6)));//Modified by Sunitha for New UI Scope 
+			//_wait(2000);
+
+			//_click(_textbox("/RESOURCE/"));
+			_wait(4000, _isVisible(_textbox("RESOURCES[1]")));
+			_click(_div("/x-trigger/", _rightOf(_textbox("RESOURCES[1]"))));
+		    _wait(5000);
+
+			_click(_div("/x-grid-row-checker/", _near(_div($resource))));
+		
+
+
+		_click(_span("Close"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" InfyFTto_assignResourceToTaskInGrid Completed","success");
+}

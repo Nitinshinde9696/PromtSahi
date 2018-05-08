@@ -1,0 +1,41 @@
+﻿
+ var $t = _testcase("Agile_ZDP_testcreation_02");
+ $t.start(); 
+ _include("Agile_ZDP_testcreation_02.sah");
+ $t.end();
+ 
+ 
+ var $t = _testcase("Agile_ZDP_DM_Rejects_03");
+ $t.start(); 
+ _include("Agile_ZDP_DM_Rejects_03.sah");
+ $t.end();
+ 
+ 
+ var $t = _testcase("Agile_ZDP_Closure_DMA_04");
+ $t.start(); 
+ _include("Agile_ZDP_Closure_DMA_04.sah");
+ $t.end();
+ 
+ 
+ var $t = _testcase("Agile_ZDP_Closure_DMR_05");
+ $t.start(); 
+ _include("Agile_ZDP_Closure_DMR_05.sah");
+ $t.end(); 
+ 
+ 
+ var $t = _testcase("Agile_ZDP_Comp_Flow_07");
+ $t.start(); 
+ _include("Agile_ZDP_Comp_Flow_07.sah");
+ $t.end();
+ 
+ 
+ var $t = _testcase("Agile_ZDP_Testinomails_08");
+ $t.start(); 
+ _include("Agile_ZDP_Testinomails_08.sah");
+ $t.end();
+ 
+  
+ var $t = _testcase("Agile_ZDP_Attachment_06");
+ $t.start(); 
+ _include("Agile_ZDP_Attachment_06.sah");
+ $t.end();

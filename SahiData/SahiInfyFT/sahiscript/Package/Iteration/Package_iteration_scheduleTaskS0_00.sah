@@ -1,0 +1,136 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ /*******************************************************************
+ *opening existing or creating new instance of iteration
+ *checking visibility of links-segments in Iteration eform
+ *navigating to Task report and sub project segment[No records found]
+ *creating sub-proj & verifying fields/links in the eform{with -ve]
+ *status values check
+ *******************************************************************/
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",6,$dateObj1);
+ var $DN_PlannedEndDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ $data = readDataFromCSV("Package_iteration_scheduleTask0_00", "Package/Iteration");   
+ 
+ /**************************************************************************************************************
+ * checking mandatory fields and date validation 
+ **************************************************************************************************************/
+ 
+ var $t = _testcase("TC_4", "creating new instance of iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject); //_click(_image("nodeIcon10"));
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterations; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.span = $data.new;//"KEY_Link_New_item-btnIconEl"; //_click(_link("Iterations"));
+ InfyFTclick($inputObject); 
+ _wait(2000);
+
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.lst_DN_IterationType = "Global rollout";
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID = $inputObject.eformID;
+ 
+ $t.end();
+ 
+/********checking visibility of links(segments)********/
+
+ var $t = _testcase("TC_5", "checking visibility of links-segments in Iteration eform");
+ $t.start();
+ 
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.SubProjects;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.SizingDetails;
+ InfyFTisVisibleN($inputObject);
+  
+ $t.end();
+
+ /*****************************Navigating to Sub Project****************************/
+ 
+ var $t = _testcase("TC_6", "navigating to Task report and sub project segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.TaskReport;
+ InfyFTclick($inputObject); 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecordsFound; // checking visibility of instance
+ InfyFTisVisibleN($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SubProjects;
+ InfyFTclick($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "creating sub-proj & verifying fields/links in the eform");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data.newlink;
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing__1"); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name1;
+ $inputObject.lst_isPackageDigiteStart = $data.isPackageDigiteStart;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name1;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.SchedulingModuleUsed;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "status value");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Open;//system generated value 
+ $inputObject.cell_Name = $data.Status;
+ InfyFTisReadOnly($inputObject);
+  
+ $t.end(); 
+ 
+ 

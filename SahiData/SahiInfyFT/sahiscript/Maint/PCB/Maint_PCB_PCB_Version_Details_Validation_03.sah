@@ -1,0 +1,282 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_PCB_PCB_Version_Details_Validation_03", "Maint/PCB");
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;//Process Template
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject);
+ 
+ var $t = _testcase("TC_1", "Navigate to PCB Version");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+
+ /* $inputObject = {};
+ $inputObject.item = $data.PCBVersion3;
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation31;
+ clickAddIcon($inputObject);
+
+ _assertEqual(true, _button(" Save ").disabled);
+ _assertEqual(true, _button("Save & Add New").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DetailsPage4;//ID :;Name * :;Type of Application * :;Version * :;Status :
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Status_Value41;//"Inactive";
+ $inputObject.cell_Name = $data.Status4;//"Status :";
+ InfyFTisReadOnlyS($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation31;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_field200 = $data.Typeo_of_Application_Value41;//"Custom Application";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Version in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//"Test_1";
+ $inputObject.lst_field200 = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type of Application in Details tab \n• Field Version in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//"Test_1";
+ $inputObject.lst_field200 = $data.Typeo_of_Application_Value41;//"Custom Application";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Version in Details tab";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_field200 = $data.Type_of_Application_List4;//Custom Application;BPM / EAI;DM;BI;Both DM & BI;Portal or Content Management Site;Package or Product;Others
+ verifyEformInstanceDetails($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;
+ $inputObject.lst_field200 = $data.Typeo_of_Application_Value41;//"Custom Application";
+ $inputObject.edt_field199 = $data.VersionValue4;
+ CreateInstance($inputObject);
+ 
+ _wait(3000);
+ 
+ var $IDpcbVer = _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.radio = $data.Active;
+ InfyFTclickS($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;
+ $inputObject.lst_field200 = $data.Typeo_of_Application_Value41;//"Custom Application";
+ $inputObject.edt_field199 = $data.VersionValue4;
+ $inputObject.msgAlert = "Error: Instance already exists.";
+ CreateInstance($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.msgAlert = "The changes made to the EForm will be lost if you exit without saving.";
+ InfyFTclickReturn($inputObject); */
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue42;
+ $inputObject.lst_field200 = $data.Typeo_of_Application_Value41;//"Custom Application";
+ $inputObject.edt_field199 = $data.VersionValue4;
+ $inputObject.msgAlert = "Error: Instance already exists.";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(500);
+ 
+ /* $inputObject = {};
+ $inputObject.msgAlert = "The changes made to the EForm will be lost if you exit without saving.";
+ InfyFTclickReturn($inputObject); */
+ 
+ clickReturn();
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcbVer;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ _log("TC_2", "Track and LC Stage Header Validation");
+ //var $t = _testcase("TC_2", "Track and LC Stage Header Validation");
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo20;
+ $inputObject.fieldValues = $data.FIELDVALUE20;//Track Metrics Details
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.LCStageMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo21;
+ $inputObject.fieldValues = $data.FIELDVALUE21;//LC Stage Metrics Details
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details3;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.radio = "field198[1]";//$data.Active;
+ InfyFTclickS($inputObject);
+ 
+ //$data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_06.1", "InfyFTSahi/pcb");
+ 
+ /* $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+
+ $inputObject = {};
+ $inputObject.item = $data.PCBVersion3;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject); */
+	
+ /* var $t = _testcase("TC_3","remove ucl value(lc stage)");
+
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metric Details	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo501;
+ $inputObject.fieldValues = $data.fieldValues501;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Issue in LC Stage Metric Details: \nRow 1: Please enter UCL. ";
+ saveSwiftForm($inputObject);
+ $t.end();
+ 
+ var $t = _testcase("TC_4","remove lcl value(lc stage)");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo503;
+ $inputObject.fieldValues = $data.fieldValues501;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Issue in LC Stage Metric Details: \nRow 1: Please enter UCL LCL.";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_5","remove cov value(lc stage)");
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo504;
+ $inputObject.fieldValues = $data.fieldValues501;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert ="";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_6","remove min value(lc stage)");
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo505;
+ $inputObject.fieldValues = $data.fieldValues503;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_7","remove max value(lc stage)");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo506;
+ $inputObject.fieldValues = $data.fieldValues506;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end(); 
+ var $t = _testcase("TC_8","remove mean value(lc stage)");
+ $t.start();
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues509;
+ setSwiftFormData($inputObject);
+  
+ saveSwiftForm($inputObject);
+ $t.end(); 
+  
+ var $t = _testcase("TC_8","remove mean value(track metrics details)");
+ $t.start();
+ $data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_02", "InfyFTSahi/pcb");
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.fieldValues601;
+ $inputObject.colNo = $data.colNoREM;
+ $inputObject.fieldValues = $data.fieldValuesrem;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end();  */

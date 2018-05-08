@@ -1,0 +1,1714 @@
+
+/**
+ @Function Number:1
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyTask($inputObject)
+{
+	_log("modifyTask Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTask Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:Sheetal Dindorkar
+ @example:openTimeEntryForTask({"taskName":"hhas"}); for Listing & openTimeEntryForTask() for any open instance
+ @description: this api clicks on OpenTimeEntry button for a task selected through listing or any open instance.
+ @param: taskName if called from listing. Else no parameters
+ @return: None
+ **/
+
+function openTimeEntryForTask($inputObject)
+{
+	_log("openTimeEntryForTask Started","success");
+	try 
+	{
+		var $buttonObj = (_isChrome())?_span("KEY_LABEL_Open_Time-entry-btnIconEl"):_link("KEY_LABEL_Open_Time-entry");
+		//LISTING
+		if ($inputObject !== undefined)
+		{
+		    if ($inputObject.taskName !== undefined || $inputObject.taskName !== null)
+		    {
+		        _click(_div("x-grid-row-checker", _near(_cell($inputObject.taskName)), _in(_div("extGridDiv"))));
+				_click($buttonObj);
+		    }
+		} else //INSTANCE
+		{
+			_expectConfirm("Are you sure you want to reopen this item?", true);
+			_click(_button("Open Time-Entry"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimeEntryForTask Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:Sheetal Dindorkar
+ @example:closeTimeEntryForTask({"taskName":"hhas"}); for Listing 
+ @example:closeTimeEntryForTask({}) for any open instance
+ @example:closeTimeEntryForTask({"taskName":"hhas", "summary":true}) for closetimeentry from listing for summary task
+ @example:closeTimeEntryForTask({"summary":true}) for closetimeentry when the instance is open, for summary task
+ @example:closeTimeEntryForTask({"taskName":"hhas", "negative":true}) for closetimeentry from listing for selected task and close time entry button is disabled
+ @example:closeTimeEntryForTask({"negative":true}) for closetimeentry when the instance is open, and close time entry button is disabled  
+ @description: this api clicks on closeTimeEntry button for a task selected through listing or any open instance.
+ @param: taskName, summary, negative - all param optional depending on context
+ @return: None
+
+ **/
+
+function closeTimeEntryForTask($inputObject)
+{
+	_log("closeTimeEntryForTask Started","success");
+	try 
+	{
+		
+		//LISTING
+		if ($inputObject!==undefined && $inputObject.taskName)
+		{
+			_log("CloseTimeEntryForTask on Listing Page Started");
+			
+			var $buttonObj = (_isChrome())?_span("KEY_LABEL_Close_Time-entry-btnIconEl"):_link("KEY_LABEL_Close_Time-entry");
+			_set($isDisabled,_parentNode(_parentNode(_parentNode($buttonObj))).className);
+			$disabledStatus = ($isDisabled.indexOf("disabled") != -1)?true:false;
+			
+			if ($inputObject.summary || $inputObject.negative !== undefined)
+			{
+					_assertEqual(true, $disabledStatus);
+			}else
+			{
+					_assertEqual(false,$disabledStatus);
+					_click(_div("x-grid-row-checker", _near(_cell($inputObject.taskName)), _in(_div("extGridDiv"))));
+					_click($buttonObj);
+			}
+
+			_log("CloseTimeEntryForTask on Listing Page Completed");
+			
+		}else//INSTANCE
+		{
+			_log("CloseTimeEntryForTask on Instance Page Started");
+
+			_assertExists(_button("Close Time-Entry"));
+			_set($disabledStatus, _button("Close Time-Entry").disabled);
+
+			if ($disabledStatus === false)
+			_click(_button("Close Time-Entry"));
+			
+			_log("CloseTimeEntryForTask on Instance Page Completed");
+
+		}
+		
+		if ($inputObject!==undefined && $inputObject.error)
+			_assert(_isVisible(_span($inputObject.error)));
+		
+		if ($inputObject!==undefined && ($inputObject.summary || $inputObject.negative))
+			_assertEqual(true, $disabledStatus, "Verifying Close-Time-Entry Button is disabled");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeTimeEntryForTask Completed","success");
+}
+
+
+//function closeTimeEntryForSummaryTask($inputObject) -- DELETED. Use following
+//@example:closeTimeEntryForTask({"taskName":"hhas", "summary":true}) for closetimeentry from listing for summary task
+//@example:closeTimeEntryForTask({"summary":true}) for closetimeentry when the instance is open, for summary task 
+
+/**
+ @Function Number:8
+ @author:Sheetal Dindorkar
+ @example:openTimeEntryForResources({"Resources":"Admin Test|Vinay Sharma"});
+ @description: This api selects the resource from the resource table and clicks on the open time entry icon.
+ @param: resource names
+ @return: None
+ **/
+
+function openTimeEntryForResources($inputObject)
+{
+	_log("openTimeEntryForResources Started","success");
+	try 
+	{
+		$resources = $inputObject.Resources.split("|");
+		$resArray = new Array();
+
+		for ($res = 0; $res<$resources.length; $res++)
+		{
+			$resArray[$res] = new Object();
+			$resArray[$res]["Selected Resources"] = $resources[$res];
+			$resArray[$res].timeEntry = "Open";
+		}
+		
+		$inputObject.Resources = $resArray;
+		
+		to_modifyTimeEntryForResource($inputObject);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimeEntryForResources Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openTimeEntryForResourcesAlreadyOpened($inputObject)
+{
+	_log("openTimeEntryForResourcesAlreadyOpened Started","success");
+	try 
+	{
+		var $resourceList = $inputObject.resources_name.split(";");
+
+		for(var $i = 0 ; $i < $resourceList.length ; $i++)
+		{
+			_click(_checkbox(0, _near(_cell($resourceList[$i]))));
+		}
+		
+		_click(_link("Open Time-Entry"));
+		
+		_expectConfirm(_lastAlert(),true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimeEntryForResourcesAlreadyOpened Completed","success");
+}
+
+/**
+ @Function Number:10
+ @author:Sheetal Dindorkar
+ @example:closeTimeEntryForResources({"Resources":"Admin Test|Vinay Sharma"});
+ @description: This api selects the resource from the resource table and clicks on the close time entry icon.
+ @param: resource names
+ @return: None
+ **/
+
+function closeTimeEntryForResources($inputObject)
+{
+	_log("closeTimeEntryForResources Started","success");
+	try 
+	{
+
+		if($inputObject.type === "negative")
+        {	
+			if(_link("Close Time-Entry").disabled)
+			{
+				_log("timesheet entry can not be closed as it is already closed","success");
+				return;
+			}
+			else
+			{
+				throw  "even after closing time entry still it the time entry button is enabled","failure";
+			}
+        }
+		$resources = $inputObject.Resources.split("|");
+		$resArray = new Array();
+
+		for ($res = 0; $res<$resources.length; $res++)
+		{
+			$resArray[$res] = new Object();
+			$resArray[$res]["Selected Resources"] = $resources[$res];
+			$resArray[$res].timeEntry = "Close";
+		}
+		
+		$inputObject.Resources = $resArray;
+		
+		to_modifyTimeEntryForResource($inputObject);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeTimeEntryForResources Completed","success");
+}
+
+/**
+ @Function Number:12
+ @author:Sheetal Dindorkar
+ @example:assignResourcesToTask({"Resources":[{"Selected Resources":"Hussain Iqtidar","% Units":"50.00","Assigned Effort":"32.00","Planned Start Date":"01-Aug-2012","Planned End Date":"10-Aug-2012"}, {"Selected Resources":"Sharma Vinay","% Units":"100.00","Assigned Effort":"64.00","Planned Start Date":"01-Aug-2012","Planned End Date":"10-Aug-2012"}]})
+ @description:This api works in the "Resource" Segment of Task Eform Instance. It basically selects specified resources from the multi-select Option box and clicks Add button. 
+ CANNOT CALL verify, as effort, units is re-calculated by application. Call verifyTaskResourceAllocation from the script.  
+ @param: Resource Names, with resource parameters as seen in the RESOURCES segment Table Header.
+ @return: None
+ **/
+
+function assignResourcesToTask($inputObject)
+{
+	_log("assignResourcesToTask Started","success");
+	try 
+	{
+		to_assignResourcesToTask($inputObject);
+		//verifyTaskResourceAllocations($inputObject); do not call from here. Call verifyTaskResourceAllocations from the script.
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("assignResourcesToTask Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function convertMspProjecttoDigiteStart()
+{
+	_log("convertMspProjecttoDigiteStart Started","success");
+	try 
+	{
+		if(_isVisible(_span("convertButton-btnIconEl")))
+		{             
+			_expectConfirm("You have chosen to change project task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",true);
+			_click(_span("convertButton-btnIconEl"));
+		}
+
+		else if(_isVisible(_span("KEY_TOOLTIP_Convert_from_MSP_to_STaRT-btnIconEl")))
+		{
+		 _expectConfirm("You have opted to change project task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",true);
+		 _click(_span("KEY_TOOLTIP_Convert_from_MSP_to_STaRT-btnIconEl"));
+		 }
+		
+		else if (_isVisible(_link("Change Package Task Module")))
+		{
+			_expectConfirm("You have chosen to change package task module to STaRT. Changeover to new task module may alter project plan.(Please refer Online Help for details). Do you wish to continue?",true);
+			_click(_link("Change Package Task Module"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("convertMspProjecttoDigiteStart Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:Ashwini Lalit
+ @example:modifyResourceAllocations({"Resources":[{"Selected Resources":"Hussain Iqtidar","% Units":"100.00","Assigned Effort":"132.00","Planned Start Date":"02-Aug-2012","Planned End Date":"11-Aug-2012"}, {"Selected Resources":"Admin Test","% Units":"100.00","Assigned Effort":"64.00","Planned Start Date":"01-Aug-2012","Planned End Date":"10-Aug-2012", "selected":true}, {"Selected Resources":"Sharma Vinay", "selected":false}]});
+ @description: modifies resource Allocation, ie assign or unassign resource and modify assigned resource parameters
+ @param: parameters as in resource allocation screen, "selected"=true if resource has to be selected, "selected"=false if resource has to be removed from the task
+ @return: None
+ **/
+
+function modifyResourceAllocations($inputObject)
+{
+	_log("modifyResourceAllocations Started","success");
+	try 
+	{
+		to_modifyResourceAllocations($inputObject);
+		//verifyTaskResourceAllocations($inputObject);//CANNOT BE CALLED AS EFFORT AND UNIT VALUES ARE COMPUTED BY APPLICATION ON MODIFICATION.//CALL VERIFICATION IN THE SCRIPT
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyResourceAllocations Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author:Ashwini Lalit
+ @example:unAssignResourcesFromTask({"Resources":"Vinay Sharma|Admin Test"})
+ @description: unassigns resource from task.
+ @param: resource names
+ @return: None
+ **/
+
+function unAssignResourcesFromTask($inputObject)
+{
+	_log("unAssignResourcesFromTask Started","success");
+	try 
+	{
+		to_unAssignResourcesFromTask($inputObject);
+		//verifyTaskResourceAllocation() CALLED FROM unAssignResourcesFromTask
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unAssignResourcesFromTask Completed","success");
+}
+
+/**
+ @Function Number:25
+ @author:Ashwini Lalit
+ @example:to_assignResourcesToTask({"Resources":[{"Selected Resources":"Hussain Iqtidar","% Units":"50.00","Assigned Effort":"32.00","Planned Start Date":"01-Aug-2012","Planned End Date":"10-Aug-2012"}, {"Selected Resources":"Sharma Vinay","% Units":"100.00","Assigned Effort":"64.00","Planned Start Date":"01-Aug-2012","Planned End Date":"10-Aug-2012"}]})
+ @description:This api works in the "Resource" Segment of Task Eform Instance. It basically selects specified resources from the multi-select Option box and clicks Add button.   
+ @param: Resource Names, with resource parameters as seen in the RESOURCES segment Table Header.
+ @return: None
+ **/
+
+function to_assignResourcesToTask($inputObject)
+{
+	_log("to_assignResourcesToTask Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			if(_assertFalse(_containsText(_select("selectFrom"), $inputObject.Resources)))
+			{
+				_log("Locked and Un-assigned users not to be availble for allocation");
+			}
+		}
+		else
+		{	
+			for (var $res = 0; $res<$inputObject.Resources.length; $res++)
+			{
+				$inputObject.Resources[$res]["selected"] = true;
+			}
+			modifyResourceAllocations($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_assignResourcesToTask Completed","success");
+}
+
+/**
+ @Function Number:27
+ @author:Ashwini Lalit
+ @example:to_modifyResourceAllocations({"Resources":[{"Selected Resources":"Hussain Iqtidar","% Units":"100.00","Assigned Effort":"132.00","Planned Start Date":"02-Aug-2012","Planned End Date":"11-Aug-2012"}, {"Selected Resources":"Admin Test","% Units":"100.00","Assigned Effort":"64.00","Planned Start Date":"01-Aug-2012","Planned End Date":"10-Aug-2012", "selected":true}, {"Selected Resources":"Sharma Vinay", "selected":false}]});
+ @description: modifies resource Allocation, ie assign or unassign resource and modify assigned resource parameters
+ @param: parameters as in resource allocation screen, "selected"=true if resource has to be selected, "selected"=false if resource has to be removed from the task
+ @return:None 
+ **/
+
+function to_modifyResourceAllocations($inputObject)
+{
+	_log("to_modifyResourceAllocations Started","success");
+	try 
+	{
+
+		// Initialize required variables.
+		var $iframeObj;
+		
+		if($inputObject.local !== undefined ){
+			var $local=$inputObject.local;
+		}
+		else
+			var $local="Resources";
+		
+		
+		delete $inputObject.local;
+	
+			_set($segmentId, _link($local, _in(_list("segmentMenu"))).id);
+		$segmentId = $segmentId.split("_")[1];
+		$iframeObj =  _div($segmentId);
+
+		var $resources = $inputObject.Resources;
+		
+		
+		//FOR EVERY RESOURCE MODIFY ROW SELECTION AND SET THE PARAMETERS
+		//1. Assign or Unassign Resource
+		for (var $res = 0; $res<$resources.length; $res++)
+		{
+			$currentResource = $resources[$res];
+			$resName = $resources[$res]["Selected Resources"];
+			
+			_log("$currentResource = "+$currentResource);
+			
+				if ($currentResource.selected !== null && $currentResource.selected !== undefined)
+				{
+					//SELECT RESOURCE ROW
+					if ($currentResource.selected == false)
+					{
+						$chkBox = _checkbox(0, _near(_cell($resName)),_in(_table("ResourceTable",_in($iframeObj))));
+						_check($chkBox);
+						_click(_button("< Remove", _in($iframeObj)));
+						
+					}else
+					{
+						_setSelected(_select("selectFrom", _in($iframeObj)), $resName, true);
+						_click(_button("Add >", _in($iframeObj)));
+					}
+					delete $resources[$res].selected;
+				}
+		}
+			
+		//2. For assigned resources, modify parameters
+		for (var $res = 0; $res<$resources.length; $res++)
+		{
+			$currentResource = $resources[$res];
+			$resName = $resources[$res]["Selected Resources"];
+			
+			for ($key in $currentResource)
+			 {
+				if ($key!=="Selected Resources") 
+				{
+					var $inputValue = ""+$currentResource[$key];
+					_setValue(_textbox(0, _near(_cell($resName)),_under(_cell($key, _in(_table("ResourceTable",_in($iframeObj)))))), $inputValue);
+				}
+			 }
+		}
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_modifyResourceAllocations Completed","success");
+}
+
+/**
+ @Function Number:28
+ @author:Ashwini Lalit
+ @example:to_unAssignResourcesFromTask({"Resources":"Vinay Sharma|Admin Test"})
+ @description: unassigns resource from task.
+ @param: resource names
+ @return: None
+ **/
+
+function to_unAssignResourcesFromTask($inputObject)
+{
+	_log("to_unAssignResourcesFromTask Started","success");
+	try 
+	{
+		/*Change input object before verification for expected formats*/
+		$resources = $inputObject.Resources.split("|");
+		$resArray = new Array();
+
+		for ($res = 0; $res<$resources.length; $res++)
+		{
+			$resArray[$res] = new Object();
+			$resArray[$res]["Selected Resources"] = $resources[$res];
+			$resArray[$res].selected = false;
+		}
+		
+		$inputObject.Resources = $resArray;
+		
+		modifyResourceAllocations($inputObject);
+		verifyTaskResourceAllocations($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_unAssignResourcesFromTask Completed","success");
+}
+
+/**
+ @Function Number:30
+ @author:verifyTaskAssignments({"User":"Admin Test", "Planned Start":"25-Jul-2012", "Planned Finish":"30-Jul-2012", "% Units":"50", "Assigned Effort":"40", "Actual Start":"26-Jul-2012", "Actual Finish":"31-Jul-2012", "% Work Complete":"20", "Remaining Effort":"32", "Timesheet Actual Effort":"30"});
+ @example:Ashwini Lalit
+ @description: Verifies Table displayed in the TaskAssignment Eform Segment of Task Eform Instance. This api asserts parameter values passed to the api on the task assignment table.
+ @param: as column names displayed in the task assignment table. User Name is mandatory.
+ @return: None
+ **/
+
+function verifyTaskAssignments($inputObject)
+{
+	_log("verifyTaskAssignments Started","success");
+	try 
+	{
+		if($inputObject.popup_name)
+		{
+			_selectWindow($inputObject.popup_name);
+			delete $inputObject.popup_name;
+		}
+			_set($segmentId, _link("Task Assignments", _in(_list("segmentMenu"))).id);
+			$segmentId = $segmentId.split("_")[1];
+			
+			$resName = $inputObject["User"];
+			
+			if (_isVisible(_cell("User")))
+			    _assertExists(_cell($resName, _under(_cell("User", _in(_table("QTP_ListTable",_in(_iframe($segmentId).contentWindow.document)))))));
+			else if (_isVisible(_cell("Benutzer")))
+			    _assertExists(_cell($resName, _under(_cell("Benutzer", _in(_table("QTP_ListTable",_in(_iframe($segmentId).contentWindow.document)))))));
+			
+			delete $inputObject["User"];
+			
+		for ($key in $inputObject)
+		 {
+			var $inputValue = ""+$inputObject[$key];
+
+			_assertExists(_cell($inputValue, _near(_cell($resName, _in(_table("QTP_ListTable")))), _under(_cell($key, _in(_table("QTP_ListTable",_in(_iframe($segmentId).contentWindow.document)))))));
+			
+		 }
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskAssignments Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author:Ashwini Lalit
+ @example:verifyBaselineDetailsOfTask({"Baseline Name":"Baseline2","Resource":"Admin Test", "Date Set":"30-08-2012", "Baseline Start":"01-08-2012","Baseline Finish":"30-09-2012","Baseline Duration":"280","Baseline Effort":"280","Baseline Cost":"7,000","Baseline Price":"2,800"})
+ @example:verifyBaselineDetailsOfTask({"Baseline Name":"Baseline2", "Date Set":"30-08-2012", "Baseline Start":"01-08-2012","Baseline Finish":"30-09-2012","Baseline Duration":"280","Baseline Effort":"280","Baseline Cost":"7,000","Baseline Price":"2,800"})
+ @description: Open Task eform instance and call verifyBaselineDetailsOfTask. IT verifies the Baseline details table.
+ @param: Column header as parameters
+ @return: None
+ **/
+
+function verifyBaselineDetailsOfTask($inputObject)
+{
+	_log("verifyBaselineDetailsOfTask Started","success");
+	try 
+	{
+             if($inputObject.type === "negative")
+                {	
+
+		    if ($inputObject["Baseline Name"] !== undefined || $inputObject["Baseline Name"] !== null)
+
+			{
+				_log("The mentioned baseline does not exists in the list","success");
+					return;
+			}
+
+ 
+
+                  else
+			{
+				throw  "even though the baseline is removed still the tab is showing the value of that baseline","failure";
+			}
+
+
+               }
+
+
+
+		var $iframeObj, $segmentId, $tableObj, $baselineName, $cellObj1, $cellObj2, $cellObj, $resourceName, $inputValue, $actualValue, $popup = null;
+
+		if ($inputObject.popup_name){
+			_selectWindow($inputObject.popup_name);
+			$popup = $inputObject.popup_name;
+			delete $inputObject.popup_name;
+		}
+
+		
+		//Initialize Segment
+		_set($segmentId, _link("Baseline Details", _in(_list("segmentMenu"))).id);
+		$segmentId = $segmentId.split("_")[1];
+		$iframeObj =  _iframe($segmentId);
+		
+		//Initialize table
+		$tableObj = _table("QTP_ListTable",_in($iframeObj));
+		$baselineName = $inputObject["Baseline Name"];
+		$cellObj1 =_cell($baselineName, _in($tableObj)).nextSibling.nextSibling;
+		_highlight($cellObj1);
+		delete $inputObject["Baseline Name"];
+		
+		//Initialize row
+		$resourceName = $inputObject["Resource"];
+		$cellObj2 = ($resourceName == undefined)?_cell($baselineName, _in($tableObj)):_cell($resourceName, _under($cellObj1));
+		_highlight($cellObj2);
+		delete $inputObject["Resource"];
+		
+		//Compare Parameter Values
+		for ($key in $inputObject)
+		{
+			$inputValue = $inputObject[$key];
+			$cellObj = _cell(0,_near($cellObj2), _under(_cell($key)));
+			_highlight($cellObj);
+			$actualValue = _getText($cellObj);
+			_assertEqual($inputValue, $actualValue, "Verifying "+$key+" Value");
+		}	
+		if ($popup !== null)
+		{
+			_click(_button("< Return"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBaselineDetailsOfTask Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTaskStatus($inputObject)
+{
+	_log("verifyTaskStatus Started","success");
+	try 
+	{
+		if($inputObject.winprefix === "EForm")
+			_selectWindow("EForm");
+ 
+		
+		verifyAllFields($inputObject);
+ 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskStatus Completed","success");
+}
+
+/**
+ @Function Number:34
+ @author: Vaisahli
+ @example:
+ @description: 
+ @param: 
+ @return: 	
+ **/
+
+function verifyTasksWBSCode($inputObject)
+{
+	_log("verifyTasksWBSCode Started","success");
+	try 
+	{
+		var $pairs = $inputObject.pairOfTaskAndWBSCode.split(";");
+		for(var $i=0; $i< $pairs.length; $i++)
+		{
+			var $pair = $pairs[$i].split("#");
+			_assertEqual(_getText(_div(0,_near(_div($pair[0])),_under(_div("WBS Code")))),$pair[1]);
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTasksWBSCode Completed","success");
+}
+
+/**
+ @Function Number:36
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+
+function openLinkedTaskFromWorkPackage($inputObject)
+{
+	_log("openLinkedTaskFromWorkPackage Started","success");
+	try 
+	{
+	    
+	     if (_isVisible(_link(0, _near(_div($inputObject.TaskName)))))
+	        _click(_link(0, _near(_div($inputObject.TaskName))));
+		else
+		    _doubleClick(_div($inputObject.TaskName));
+    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openLinkedTaskFromWorkPackage Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author: Ashwini Lalit
+ @example: verifytooltipforresource({"Resource":"Admin Test", "tooltip":"Resource Timesheet status is Open"})
+ @description: verifies tooltip on row hover for a resource in the Resource Table (in the Task Eform Instance - Resource Tab) 
+ @param: resource name and the tooltip to be verified
+ @return: None
+ **/
+
+function verifytooltipforresource($inputObject)
+{
+	_log("verifytooltipforresource Started","success");
+	try 
+	{
+		// Initialize required variables.
+		var $iframeObj;
+		
+		_set($segmentId, _link("Resources", _in(_list("segmentMenu"))).id);
+		$segmentId = $segmentId.split("_")[1];
+		$iframeObj =  _div($segmentId);
+		
+		_set($tooltip,_parentRow(_cell($inputObject.Resource,_in(_table("ResourceTable",_in($iframeObj))))).title);
+		_assertEqual($inputObject.tooltip, $tooltip, $inputObject.Resource+" Row Tooltip Verified");
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifytooltipforresource Completed","success");
+}
+
+/**
+ @Function Number:53
+ @author:Ashwini Lalit
+ @example:verifyLastCheckinFailDetails({"failureDate":"16-07-2012", "reasons":"TSK1:hh : Task Planned Start is blank|TSK1:hh : Task Planned Finish is blank"})
+ @description: click on lastcheckinfailed icon and verify pop up content
+ @param: failure date and failure reasons
+ @return: None
+ **/
+
+function verifyLastCheckinFailDetails($inputObject)
+{
+	_log("verifyLastCheckinFailDetails Started","success");
+	try 
+	{
+		/*Open the Last Checkin Fail Details Pop up*/
+		_assertExists(_div("extGridDiv"));
+		_assertExists(_link("Last_Checkin_Failure_Details"));		
+		_click(_link("Last_Checkin_Failure_Details"));
+		_popup("Last Checkin Failure Details")._assertExists(_cell("Last Checkin Failure Details"));
+		
+		/*verify the pop up content*/
+		_popup("Last Checkin Failure Details")._assertExists(_cell("/"+$inputObject.failureDate+"/", _near(_cell("Failure Date:"))));
+		$reasons = $inputObject.reasons.split("|");
+		
+		for (var $i = 0; $i < $reasons.length; $i++)
+		{
+			_popup("Last Checkin Failure Details")._assertExists(_cell("/"+$reasons[$i]+"/", _near(_cell("Failure Reason:"))));
+		}
+		_popup("Last Checkin Failure Details")._click(_button("Close"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyLastCheckinFailDetails Completed","success");
+}
+
+/**
+ @Function Number:54
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function convertDigiteStartProjectToMsp($inputObject)
+{
+	_log("convertDigiteStartProjectToMsp Started","success");
+	try 
+	{
+		_click(_link("QTP_convert_start_msp")||_span("/convertButton/"));
+		_expectConfirm($inputObject.message, true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("convertDigiteStartProjectToMsp Completed","success");
+}
+
+/**
+ @Function Number:57
+ @author:Ashwini Lalit
+ @example:clickManageBaseline
+ @description: click on manage baseline icons
+ @param: None
+ @return: None
+ **/
+
+function clickManageBaseline($inputObject)
+{
+	_log("clickManageBaseline Started","success");
+	try 
+	{
+		to_clickManageBaseline($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickManageBaseline Completed","success");
+}
+
+/**
+@Function Number:
+@author:Ashwini Lalit
+@example:clickCloseManageBaseline()
+@description: click on manage baseline icons
+@param: None
+@return: None
+**/
+
+function clickCloseManageBaseline()
+{
+	_log("clickCloseManageBaseline Started","success");
+	try 
+	{
+		_popup("Baseline")._wait(2000,_isVisible(_button("< Return")));
+		_popup("Baseline")._assertExists(_button("< Return"));		
+		_popup("Baseline")._click(_button("< Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickCloseManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:58
+ @author:Ashwini Lalit
+ @example:to_clickManageBaseline()
+ @description: click on manage baseline icon
+ @param: None
+ @return: None
+ **/
+
+function  to_clickManageBaseline($inputObject)
+{
+	_log(" to_clickManageBaseline Started","success");
+	try 
+	{
+
+	if($inputObject.type1 === "negative1")
+                     {	
+		    if (_assertNotExists(_span("/baselineButton/")))
+			{
+				_log("As the module is MSP hence manage baseline is not available","success");
+				return;
+			}
+			else
+			{
+				throw  "evn though the module is MSP still manage baseline icon is available so log a defect ","failure";
+			}
+                    }
+	
+	
+		if($inputObject.type === "negative")
+                     {	
+		    if (_span("/baselineButton/").disabled)
+			{
+				_log("according to the access configuration the icon should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "even after the acces configuration is set to no the icon is still enabled","failure";
+			}
+                    }
+	
+			        _click(_span("/baselineButton/"));
+				//Verification
+				_popup("Baseline")._wait(1000,_isVisible(_radio("base_num")));
+				_popup("Baseline")._assertExists(_radio("base_num"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_clickManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:60
+ @author:Ashwini Lalit
+ @example:setManageBaseline({"taskName":"ABC","sourceBaseline":"Current", "destinationBaseline":"Baseline2", "Comments":"as of trending meet"});
+ @description: This api does a "Save As" Baseline Details 
+ @param: sourceBaseline [ie radio button on baselinepage], destinationBaseline [select on Save POP UP]Optional, Comments
+ @return: None
+ **/
+
+function setManageBaseline($inputObject)
+{
+	_log("setManageBaseline Started","success");
+	try 
+	{
+		//CHECK THE TASK IN THE TASK LISTING
+		//if ($inputObject !== undefined && $inputObject.taskName !== undefined && $inputObject.LinkedTask !== undefined)//LINKED TASK LIST
+			//_click(_checkbox("/checkItem/", _near(_link($inputObject.taskName)), _in(_table("List"))));
+		//else if ($inputObject !== undefined && $inputObject.taskName !== undefined && $inputObject.LinkedTask == null)//MAIN MPP TASK LIST
+			//_click(_div("x-grid-row-checker", _near(_cell($inputObject.taskName)), _in(_div("eformListGrid"))));
+		
+		
+		
+		if ($inputObject !== undefined && ($inputObject.negative == null || $inputObject.negative == "false"))
+		{
+			to_setManageBaseline($inputObject);
+			clickCloseManageBaseline();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:61
+ @author:Ashwini Lalit
+ @example:to_setManageBaseline({"taskName":"ABC","sourceBaseline":"Current", "destinationBaseline":"Baseline2", "Comments":"as of trending meet"});
+ @description: This api does a "Save As" Baseline Details 
+ @param: sourceBaseline [ie radio button on baselinepage], destinationBaseline [select on Save POP UP] Optional, Comments
+ @return: None
+  **/
+
+function  to_setManageBaseline($inputObject)
+{
+	_log(" to_setManageBaseline Started","success");
+	try 
+	{
+		_popup("Baseline")._click(_radio("base_num", _near(_cell($inputObject.sourceBaseline)), _in(_table("QTP_baselinelist"))));
+		_popup("Baseline")._click(_button("SaveAs"));
+		$inputObject.destinationBaseline = ($inputObject.destinationBaseline == null)?$inputObject.sourceBaseline:$inputObject.destinationBaseline;
+		_popup("Save Baseline")._setSelected(_select("base_num"), $inputObject.destinationBaseline);
+		_popup("Save Baseline")._setValue(_textarea("comments"), $inputObject.Comments);
+		_popup("Save Baseline")._click(_button("Save"));
+		_popup("Baseline")._assertExists(_cell($inputObject.Comments, _near(_cell($inputObject.destinationBaseline)), _under(_cell("Comments")),_in(_table("QTP_baselinelist"))), "Comments verified on baseline list page");
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_setManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:63
+ @author: Ashwini Lalit
+ @example:verifyManageBaseline({"Baseline":"Baseline1", "Comments":"Milestone Completion", "Revision No":"3", "Date Modified":"21-08-2012", "Modified By":"Admin Test"});
+ @description: verifies baseline details 
+ @param: column headers and values to be verified
+ @return: None
+ **/
+
+function verifyManageBaseline($inputObject)
+{
+	_log("verifyManageBaseline Started","success");
+	try 
+	{
+		_log("in verify ="+$inputObject);
+		to_verifyManageBaseline($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:64
+ @author: Ashwini Lalit
+ @example:to_verifyManageBaseline({"Baseline":"Baseline1", "Comments":"Milestone Completion", "Revision No":"3", "Date Modified":"21-08-2012", "Modified By":"Admin Test"});
+ @description: verifies baseline details 
+ @param: column headers and values to be verified
+ @return: None
+ **/
+
+function to_verifyManageBaseline($inputObject)
+{
+	_log("to_verifyManageBaseline Started","success");
+	try 
+	{
+		_log("to_ = "+$inputObject);
+		for ($key in $inputObject)
+		{
+			$expectedValue = $inputObject[$key];
+			$cellObj = _cell(0, _near(_cell($inputObject.Baseline)), _under(_cell($key)),_in(_table("QTP_baselinelist")));
+
+			_popup("Baseline")._set($uiValue, _getCellText($cellObj));
+			_popup("Baseline")._assertEqual($expectedValue, $uiValue, "Verifying "+$key);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_verifyManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:66
+ @author:Ashwini Lalit
+ @example:clearManageBaseline({"baselineName":"Baseline1"})
+ @description: set the radio button for selected baseline and click "clear" button.
+ @param: Baseline Name
+ @return: None
+ **/
+
+function clearManageBaseline($inputObject)
+{
+	_log("clearManageBaseline Started","success");
+	try 
+	{
+		to_clearManageBaseline($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clearManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:67
+ @author:Ashwini Lalit
+ @example:to_clearManageBaseline({"baselineName":"Baseline1"})
+ @description: set the radio button for selected baseline and click "clear" button.
+ @param: Baseline Name
+ @return: None
+ **/
+
+function  to_clearManageBaseline($inputObject)
+{
+	_log(" to_clearManageBaseline Started","success");
+	try 
+	{
+		_popup("Baseline")._click(_radio("base_num", _near(_cell($inputObject.baselineName)), _in(_table("QTP_baselinelist"))));
+		_popup("Baseline")._expectConfirm("Are you sure you want to clear the baseline ?", true);
+		_popup("Baseline")._click(_button("Clear Baseline"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_clearManageBaseline Completed","success");
+}
+
+/**
+@Function Number:
+@author:Ashwini Lalit
+@example:copyManageBaseline({"sourceBaseline":"Baseline1", "destinationBaseline":"Baseline2", "Comments":"copied"})
+@description: set the radio button for selected baseline and click "copy" button. set the other baseline and click Copy Baseline.
+@param: Source Baseline Name and Destination Baseline Name.
+@return: None
+**/
+
+function copyManageBaseline($inputObject)
+{
+	_log("copyManageBaseline Started","success");
+	try 
+	{
+		 to_copyManageBaseline($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyManageBaseline Completed","success");
+}
+
+/**
+ @Function Number:
+ @author:Ashwini Lalit
+ @example:to_copyManageBaseline({"sourceBaseline":"Baseline1", "destinationBaseline":"Baseline2", "Comments":"copied"})
+ @description: set the radio button for selected baseline and click "copy" button. set the other baseline and click Copy Baseline.
+ @param: Source Baseline Name and Destination Baseline Name.
+ @return: None
+**/
+function  to_copyManageBaseline($inputObject)
+{
+	_log(" to_copyManageBaseline Started","success");
+	try 
+	{
+		_popup("Baseline")._click(_radio("base_num", _near(_cell($inputObject.sourceBaseline)), _in(_table("QTP_baselinelist"))));
+		_popup("Baseline")._click(_button("Copy"));
+		_popup("Copy")._setSelected(_select("srcbase_num"), $inputObject.sourceBaseline);
+		_popup("Copy")._setSelected(_select("destbase_num"), $inputObject.destinationBaseline);
+		_popup("Copy")._setValue(_textarea("comments"), $inputObject.Comments);
+		_popup("Copy")._click(_button("Save"));
+		_wait(2000);
+		_popup("Baseline")._set($comments,_getText(_cell(0, _near(_cell($inputObject.destinationBaseline)), _under(_cell("Comments")),_in(_table("QTP_baselinelist")))));
+		_popup("Baseline")._assertEqual($inputObject.Comments, $comments, "Comments verified on baseline list page");
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_copyManageBaseline Completed","success");
+}
+
+/**
+@Function Number:72
+@author:Ashwini Lalit
+@example:clickRescheduleIcon(), Icon($inputObject) where $inputObject = {} $inputObject.negative = "true"
+@description: click on reshedule icon on the task listing
+@param: None
+@return: None
+**/
+function clickRescheduleIcon($inputObject)
+{
+	_log("clickRescheduleIcon Started","success");
+	try 
+	{
+		to_clickRescheduleIcon($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickRescheduleIcon Completed","success");
+}
+
+/**
+ @Function Number:73
+ @author:Ashwini Lalit
+ @example:to_clickRescheduleIcon()
+ @description: click on reshedule icon on the task listing
+ @param: None
+ @return: None
+ **/
+
+
+function to_clickRescheduleIcon($inputObject)
+{
+	_log("to_clickRescheduleIcon Started","success");
+	try 
+	{
+	
+		if($inputObject && $inputObject.type === "negative")
+        {	
+		    if (_link("rescheduleButton").disabled)
+			{
+				_log("according to the access configuration the icon should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "even after the acces configuration is set to no the icon is still enabled","failure";
+			}
+        }
+
+             
+           _assertExists(_span("/rescheduleButton/"));
+	     
+		_click(_span("/rescheduleButton/"));
+            _popup("Rescheduling")._assertExists(_table("QTP_rescheduling"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_clickRescheduleIcon Completed","success");
+}
+
+
+		
+
+
+/**
+@Function Number:
+@author:Ashwini Lalit
+@example:verifydetailsAfterRescheduling({"Status":"N", "ID":"TSK5", "Name":"Sowmya", "Planned Start":"01-Aug-2012", "Planned Finish":"11-Aug-2012", "Duration":"8 days", "New Planned Start":"NA", "New Planned Finish":"NA"});
+@description: verify content in the Rescheduling pop up 
+@param: parameters as seen in the column header
+@return: None
+**/
+
+function verifydetailsAfterRescheduling($inputObject)
+{
+	_log("verifydetailsAfterRescheduling Started","success");
+	try 
+	{
+		to_verifydetailsAfterRescheduling($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifydetailsAfterRescheduling Completed","success");
+}
+
+/**
+ @Function Number:76
+ @author:Ashwini Lalit
+ @example:to_verifydetailsAfterRescheduling({"Status":"N", "ID":"TSK5", "Name":"Sowmya", "Planned Start":"01-Aug-2012", "Planned Finish":"11-Aug-2012", "Duration":"8 days", "New Planned Start":"NA", "New Planned Finish":"NA"});
+ @description: verify content in the Rescheduling pop up 
+ @param: parameters as seen in the column header
+ @return: None
+ **/
+
+function  to_verifydetailsAfterRescheduling($inputObject)
+{
+	_log(" to_verifydetailsAfterRescheduling Started","success");
+	try 
+	{
+		$firstKey = $inputObject.ID;
+		
+		for ($key in $inputObject)
+		 {
+			var $inputValue = ""+$inputObject[$key];
+
+			_popup("Rescheduling")._assertExists(_cell($inputValue, _near(_cell($firstKey, _in(_table("QTP_rescheduling")))), _under(_cell($key))));
+		 }
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" to_verifydetailsAfterRescheduling Completed","success");
+}
+/**
+@Function Number:
+@author:Ashwini Lalit
+@example:confirmRescheduleTask()
+@description: click confirm button on the Reschedule pop up
+@param: None
+@return: None
+**/
+function confirmRescheduleTask()
+{
+	_log("confirmRescheduleTask Started","success");
+	try 
+	{
+		to_confirmRescheduleTask();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("confirmRescheduleTask Completed","success");
+}
+
+/**
+@Function Number:
+@author:Ashwini Lalit
+@example:to_confirmRescheduleTask()
+@description: click confirm button on the Reschedule pop up
+@param: None
+@return: None
+**/
+function to_confirmRescheduleTask()
+{
+	_log("to_confirmRescheduleTask Started","success");
+	try 
+	{
+		_popup("Rescheduling")._assertExists(_table("QTP_rescheduling"));
+		_popup("Rescheduling")._assertExists(_submit("Confirm"));		
+		_popup("Rescheduling")._click(_submit("Confirm"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("to_confirmRescheduleTask Completed","success");
+}
+
+//function verifyResourceAllocationFields($inputObject) make use of 
+//verifyTaskResourceAllocations("Resources":[{"Selected Resources":"Admin Test","% Units":"100","Assigned Effort":"24.00","Planned Start Date":"25-Jul-2012","Planned End Date":"27-Jul-2012", "selected":true},{"Selected Resources":"Sharma Vinay","% Units":"100","Assigned Effort":"24.00","Planned Start Date":"25-Jul-2012","Planned End Date":"27-Jul-2012", "selected":true}, {"Selected Resources":"Sharma Vinay", "selected":false}]);
+
+/**
+ @Function Number:81
+ @author:Ashwini Lalit
+ @example:undoCheckOutFromTaskListing()
+ @description: click on undoCheckout button on the task listing page
+ @param: None
+ @return: None
+ **/
+
+function undoCheckOutFromTaskListing($inputObject)
+{
+	_log("undoCheckOutFromTaskListing Started","success");
+	try 
+	{
+        if($inputObject.type === "negative")
+        {	
+			if(_span("Undo").disabled)
+			{
+				_log("according to the preference it should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "Make Undo CheckOut only available to the user who checked-out the project: preference not working","failure";
+			}
+        }
+        
+		_assertExists(_span("Undo"));
+		_click(_span("Undo"));
+		
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("undoCheckOutFromTaskListing Completed","success");
+}
+
+/**
+ @Function Number:82
+ @author:Ashwini Lalit
+ @example:deleteTask({"taskName":"hhas"}); for Listing & closeTimeEntryForTask() for any open task instance
+ @description: this api clicks on delete icon for a task selected through listing or any open task instance.
+ @param: taskName if called from listing. Else no parameters
+ @return: None
+ **/
+
+function deleteTask()
+{
+	_log("deleteTask Started","success");
+	try 
+	{
+		_click(_span("deleteTaskButton-btnIconEl"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTask Completed","success");
+}
+
+/**
+ @Function Number:83
+ @author:Ashwini Lalit
+ @example:verifyTaskResourceAllocations("Resources":[{"Selected Resources":"Admin Test","% Units":"100","Assigned Effort":"24.00","Planned Start Date":"25-Jul-2012","Planned End Date":"27-Jul-2012", "selected":true},{"Selected Resources":"Sharma Vinay","% Units":"100","Assigned Effort":"24.00","Planned Start Date":"25-Jul-2012","Planned End Date":"27-Jul-2012", "selected":true}, {"Selected Resources":"Sharma Vinay", "selected":false}]);
+ @example:verifyTaskResourceAllocations("Resources":[{"Selected Resources":"Admin Test","timeEntry":"closed"},{"Selected Resources":"Sharma Vinay","timeEntry":"closed"}]);
+ @example:verifyTaskResourceAllocations({"Resources":[{"Selected Resources":"Admin Test","% Units":"100.00","Assigned Effort":"40.00","Planned Start Date":"01-08-2012","Planned End Date":"08-08-2012", "selected":true, "timeEntry":"closed"}, {"Selected Resources":"Sharma Vinay","% Units":"100.00","Assigned Effort":"64.00","Planned Start Date":"01-08-2012","Planned End Date":"10-08-2012", "selected":true, "timeEntry":"closed"}]});
+ @description: verifies Resource Segment of Task Eform Instance. It verifies parameter-values passed in the api are present in the resource allocation table
+ @param: Parameter values as shown in the Resource Table under the Resource Segment of Task Eform Instance
+ @return: None
+ **/
+
+function verifyTaskResourceAllocations($inputObject)
+{
+	_log("verifyTaskResourceAllocations Started","success");
+	try 
+	{
+		
+		// Initialize required variables.
+		var $iframeObj;
+		
+		_set($segmentId, _link("Resources", _in(_list("segmentMenu"))).id);
+		$segmentId = $segmentId.split("_")[1];
+		$iframeObj =  _div($segmentId);
+
+		var $resources = $inputObject.Resources;
+		
+		//FOR EVERY RESOURCE MODIFY ROW SELECTION AND SET THE PARAMETERS
+		
+		for (var $res = 0; $res<$resources.length; $res++)
+		{
+			$currentResource = $resources[$res];
+			$resName = $resources[$res]["Selected Resources"];
+			
+			for ($key in $currentResource)
+			 {
+				if ($key == "selected")
+				{
+					//VERIFY RESOURCE IS PRESENT IN "RESOURCE TABLE" or "OPTION-BOX"
+
+					if ($currentResource.selected == false)
+					{
+						_assertExists(_option($resName, _in(_select("selectFrom", _in($iframeObj)))));
+					}else
+					{
+						_assertExists(_assertExists(_cell($resName, _under(_cell("Selected Resources", _in(_table("ResourceTable",_in(_div($segmentId)))))))));
+					}
+				}else if ($key!=="Selected Resources" && $key !=="timeEntry") 
+				{
+					
+					//VERIFY SELECTED RESOURCE PARAMETERS
+					var $inputValue = ""+$currentResource[$key];
+					var $timeEntryStatus = ($currentResource.timeEntry == undefined)?"open":$currentResource.timeEntry;
+					
+					if ($timeEntryStatus == "open")
+						$uiValue = _getText(_textbox(0, _near(_cell($resName)),_under(_cell($key, _in(_table("ResourceTable",_in($iframeObj)))))));
+					else if ($timeEntryStatus == "closed")
+						$uiValue = _getText(_cell(0, _near(_cell($resName)),_under(_cell($key, _in(_table("ResourceTable",_in($iframeObj)))))));
+					
+					_assertEqual($inputValue, $uiValue, "Resource Parameter "+$key+" has expected value -"+$inputValue+" and actual value is -"+$uiValue);
+				
+				}else if ($key == "timeEntry")
+				{
+					var $inputValue = ""+$currentResource[$key];
+					
+					$uiValue = _isVisible(_image("Closed Time-Entry", _in(_parentRow(_cell("Admin Test", _in(_table("ResourceTable",_in(_div("598992")))))))));
+					$uiValue = ($uiValue == true)?"closed":"open";
+					
+					_assertEqual($inputValue, $uiValue, "Verifying existance of 'X' icon for resource "+$currentResource);
+				}
+			}
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskResourceAllocations Completed","success");
+}
+
+/**
+ @Function Number:86
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTaskDetailsInDigite($inputObject)
+{
+	_log("verifyTaskDetailsInDigite Started","success");
+	try 
+	{
+		verifyEformInstanceDetails($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskDetailsInDigite Completed","success");
+}
+
+
+
+
+/**
+@Function Number:
+@author:Ashwini Lalit
+@example:to_modifyTimeEntryForResource({"Resources":[{"Selected Resources":"Admin Test", "timeEntry":"Open"}, {"Selected Resources":"Admin Test", "timeEntry":"Closed"}]});
+@description: modify ie open or close time entry for a resource in the Resource Segment of Task Eform Instance.
+@param: Resource names and timeEntry option-Open/Closed
+@return: None
+**/
+
+function to_modifyTimeEntryForResource($inputObject)
+{
+	_log("to_modifyTimeEntryForResource Started");
+	
+	try{
+		
+		var $iframeObj;
+		
+		_set($segmentId, _link("Resources", _in(_list("segmentMenu"))).id);
+		$segmentId = $segmentId.split("_")[1];
+		$iframeObj =  _div($segmentId);
+
+		var $resources = $inputObject.Resources;
+
+		for (var $res = 0; $res<$resources.length; $res++)
+		{
+			$currentResource = $resources[$res];
+			$resName = $resources[$res]["Selected Resources"];
+
+			$chkBox = _checkbox(0, _near(_cell($resName)),_in(_table("ResourceTable",_in($iframeObj))));
+			_check($chkBox);
+			
+			if ($currentResource.timeEntry == "Open")
+			{
+//				$confirmationMsg1 = "";
+//				_expectConfirm(label, true);
+				_click(_link("Open Time-Entry", _in($iframeObj)));
+//				_assertEqual("", _lastConfirm(), "Open Time Entry Message Verified");
+			}
+			else if ($currentResource.timeEntry == "Close")
+			{
+				//_click(_link("CloseButtonA", _near(_image("QTP_close_time_entry", _in($iframeObj)))));
+				_click(_link("Close Time-Entry"));
+				$confirmationMsg1 = "You are about to close the Time-Entry(s). It is possible that the corresponding timesheet might be in \"Corrected\", \"Saved\", \"Rejected\" or \"Routed\" state. Are you sure you want to close the Time-Entry(s)?";
+				$confirmationMsg2 = "Sucessfully closed 1 resource(s)";
+				/*You are about to close the Time-Entry(s).
+				It is possible that the corresponding timesheet might be in Corrected, Saved, Rejected or Routed state.
+				Are you sure you want to close the Time-Entry(s)?*/
+				_expectConfirm($confirmationMsg1, true);
+				_expectConfirm($confirmationMsg2, true);
+				//_assertEqual($confirmationMsg1, _lastConfirm(), "Close Time Entry Message Verified");
+				_wait(5000);
+			}		
+		}
+		
+	}catch(e){
+		handleFailure(e);
+		}
+	
+	_log("to_modifyTimeEntryForResource Completed");
+}
+
+/**
+@Function Number:8
+@author: Ashwini Lalit
+@example: openGanttView()
+@description: click on openGanttView button
+@param: None
+@return: None
+**/
+
+function openGanttView()
+{
+	_log("openGanttView Started","success");
+	try 
+	{
+		_assertExists(_div("extGridDiv"));
+		_assertExists(_link("KEY_LABEL_Gantt_View"));
+		_click(_link("KEY_LABEL_Gantt_View"));
+
+		_popup("undefined")._assertExists(_select("periodicity"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openGanttView Completed","success");
+}
+
+/*
+@Function Number:8
+@author: Arindam
+@example: clickRescheduleIconForWorkPackage($inputObject)
+@description: click on rescheduleIcon in workpackage window button
+
+
+
+
+*/
+
+function clickRescheduleIconForWorkPackage($inputObject)
+{
+	_log("clickRescheduleIconForWorkPackage","success");
+	try 
+	{
+	
+		if($inputObject.type === "negative")
+        {	
+		    if (_link("rescheduleButton").disabled)
+			{
+				_log("according to the access configuration the icon should be disabled","success");
+				return;
+			}
+			else
+			{
+				throw  "even after the acces configuration is set to no the icon is still enabled","failure";
+			}
+        }
+		_click(_link("rescheduleButton"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickRescheduleIconForWorkPackage","success");
+}
+
+
+/*
+@Function Number:
+@author:Arindam
+@description: click on the cancel button of  reschedule popup
+@param: None
+@return: None
+*/
+
+function cancelRescheduleTask()
+{
+
+        
+	_log("cancelRescheduleTask Started","success");
+
+	try 
+	{
+		_popup("Rescheduling")._assertExists(_button("Cancel"));		
+		_popup("Rescheduling")._click(_button("Cancel"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("cancelRescheduleTask Completed","success");
+}
+
+//@Function Number:
+//@author:Arindam
+//@description: to verify the Dependencies tab in task
+//@example: ["Name"] = "dddd",["Predecessor Type"] = "FS",["Lag/Lead Time (hrs)"] = "0"
+//@param: None
+//@return: None
+
+function verifyDependenciesOfTask($inputObject)
+{
+	_log("verifyDependenciesOfTask Started","success");
+	try 
+	{
+
+            if($inputObject.type === "negative")
+                {	
+
+		    if ($inputObject["Name"] !== undefined || $inputObject["Name"] !== null)
+
+			{
+				_log("No dependencies exist","success");
+					return;
+			}
+
+ 
+
+                  else
+			{
+				throw  "even though the dependencies is removed still the tab is showing the value of dependencies","failure";
+			}
+
+
+               }
+
+		var  $tableObj, $Name, $cellObj1, $cellObj, $inputValue, $actualValue;
+
+		
+		
+		$tableObj = _table("QTP_KEY_LABEL_Predecessors");
+		$Name = $inputObject["Name"];
+		$cellObj1 =_cell($Name, _in($tableObj)).nextSibling.nextSibling;
+		_highlight($cellObj1);
+		delete $inputObject["Name"];
+		
+		
+		
+		
+		for ($key in $inputObject)
+		{
+			$inputValue = $inputObject[$key];
+			$cellObj = _cell(0,_near($cellObj1), _under(_cell($key)));
+			_highlight($cellObj);
+			$actualValue = _getText($cellObj);
+			_assertEqual($inputValue, $actualValue, "Verifying "+$key+" Value");
+		}	
+	}
+	catch(e)
+	{
+		_logExceptionAsFailure(e);
+	}
+	_log("verifyDependenciesOfTask Completed","success");
+}
+
+

@@ -1,0 +1,120 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ $data = readDataFromCSV("Dev_Act_Item_AI_LinkedTo_Risk_02", "Dev/Action_Item");
+ 
+ /**********************************************************************************************************
+ * Login with rite userID and password 
+ **********************************************************************************************************/ 
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //INFY000020Team_Isha_0
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to risk");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ /*******************************************************
+ * create risk
+ ********************************************************/
+ 
+ var $t = _testcase("TC_4", "create risk");
+ $t.start();
+ 
+ $inputObject = {};
+ _wait(5000);
+ $inputObject.edt_CM_Name = $data.CM_NameR; 
+ $inputObject.lst_DN_RiskCategory = $data.riskcategory;//field10
+ $inputObject.txt_CM_Description = $data.CM_DescriptionR;
+ $inputObject.lst_DN_Impact = $data.impact;//field10
+ //$inputObject.edt_DN_ScheduleImpactDays = $data.impact;//field5
+ $inputObject.lst_DN_Probability = $data.probability;//field1
+ $inputObject.edt_DN_RiskOwner = $data.Username1;//field198
+ $inputObject.lst_DN_ImpactTo = $data.impactRisk;//field13
+ $inputObject.txt_DN_MitigationPlan = $data.CM_DescriptionR;//field14
+ CreateInstance($inputObject);
+
+ $t.end(); 
+ 
+ /*******************************************************
+ *linkage Part to check source field
+ *******************************************************/
+ 
+ var $t = _testcase("TC_5", "linkage part");
+ $t.start();
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span = $data.KeyNew;
+ InfyFTclick($inputObject);
+ 
+ _selectWindow("newListing"); 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description; 
+ $inputObject.lst_DN_Owner = $data.Username1;
+ $inputObject.lst_DN_Assignee = $data.assignedto; //field199
+ $inputObject.edt_CM_DUEDATE = $startDate;
+ ModifyEformInstance($inputObject);
+ 
+ _wait(8000);
+ var $cellSource = _getText(_cell("Source :"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.source;//system generated value 
+ $inputObject.cell_Name = $cellSource;
+ InfyFTisReadOnly($inputObject);
+ 
+ _popup("newListing")._click(_button("Return"));
+ _wait(500);
+ 
+ _selectWindow(); 
+ clickReturn();
+ 
+ $t.end();
+  
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

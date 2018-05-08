@@ -1,0 +1,92 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Task_Req_Summary_Common_33","Maint/Request_Management");
+/*
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+
+ $s.end();
+ var $s = _testcase("TC_1.1.3"," Check the Fields");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;
+ navigateTo($inputObject);
+ $s.end();
+ var $s = _testcase("TC_2.1"," Check available Fields after saving");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.item = "Enh7";
+ OpenEformInstance($inputObject);
+ 
+ $s.end();
+ */
+ var $s = _testcase("TC_3"," Open Summery Task segment");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_summery_task;//_link("Scheduled Tasks")
+ SelectSegment($inputObject);
+ 
+ $planned_startDT = _getText(_div("x-grid-cell-inner [2]"));
+ $planned_endDT = _getText(_div("x-grid-cell-inner [3]"));
+  
+ $s.end();
+ 
+ 
+ var $s1 = _testcase("TC_4"," Open Request Summery segment");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+  
+ $s1.end();  
+ var $s2 = _testcase("TC_3.1"," verify Schedule Summery fields ");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Schedule_Summary;//_span("Schedule Summary")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Schedule Summary";//$data.tblname;//_span("Details")
+ $inputObject.rowNo = "2";//$data.rowid;//"1";
+ $inputObject.colNo = "0_lbl|1_cell|2_lbl|3_cell";//$data.colid1;//"0_lst";
+ $inputObject.fieldValues = "Planned Start Date|"+$planned_startDT +"|Planned End Date|"+$planned_endDT +"|First TS Entry Date|Last TS Entry Date"
+ InfyFTverifySwiftFormData($inputObject);
+
+ $s2.end(); 
+  
+
+ 
+ 
+ 

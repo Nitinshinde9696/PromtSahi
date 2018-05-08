@@ -1,0 +1,574 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Dev_PCB_PT_Setting_Validation_01", "Dev/PCB");
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = "Dushyant_300494";//$data.Username11;
+ $inputObject.edt_loginid = "Dushyant_300494";//$data.LoginID11;
+ $inputObject.edt_password = "111111";//$data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.name = "Process Governance";//$data.navigateTo21;//Process Template
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "INFY001010Dev001";//$data.MaintPT3;							
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = "PCB Version";//$data.navigateTo22;//PT Setting
+ InfyFTnavigateTo($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = "PCBV9";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV10";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV11";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV12";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV13";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV14";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV15";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV16";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV17";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV18";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV19";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV20";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV21";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV22";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV23";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV24";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV25";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV26";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV27";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV28";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV29";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV30";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV31";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV32";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV33";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV34";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV35";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV36";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV37";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV38";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV39";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV40";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV41";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV42";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV43";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV44";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV45";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV46";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV47";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV48";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV49";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV50";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV51";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV52";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV53";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV54";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV55";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV56";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV57";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV58";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV59";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV60";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV61";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV62";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV63";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV64";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV65";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV66";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV67";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV68";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV69";							
+ OpenEformInstance($inputObject);
+ 
+ _click(_button("Delete"));
+ _click(_button("Ok"));
+ 
+ _wait(500);

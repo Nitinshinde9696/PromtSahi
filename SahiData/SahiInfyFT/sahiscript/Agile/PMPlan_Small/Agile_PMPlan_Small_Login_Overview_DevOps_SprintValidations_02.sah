@@ -1,0 +1,426 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("Agile_PMPlan_Small_Login_Overview_DevOps_Sprint","Agile/PMPlan_Small"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("TC_BRD27_FU1_7", "User checks for the DevOps field");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ /*****CD*****/
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.devElement;
+ $inputObject.fieldValues = $data.dev1;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.applyButton;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.dev1;
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ /*****CI*****/
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.devElement;
+ $inputObject.fieldValues = $data.dev2;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.applyButton;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.dev2;
+ InfyFTverifySwiftFormData($inputObject);  
+ 
+ /*****--All--*****/
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.devElement;
+ $inputObject.fieldValues = $data.dev3;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.applyButton;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.dev5;
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ /*****--None--*****/
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.devElement;
+ $inputObject.fieldValues = $data.dev4;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.applyButton;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.dev4;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowDevOps;
+ $inputObject.colNo = $data.colDevOps;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.devElement;
+ $inputObject.fieldValues = $data.dev2;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.applyButton;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $t.end();  
+ 
+ var $t = _testcase("New CR", "Changing Customer Managed as yes in Project tailoring and checing sprints in overview");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToProjectTailoring;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentProjectCongiration;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableTypeOfProject;
+ $inputObject.rowNo = $data.rowCustomerManaged;
+ $inputObject.colNo = $data.colCustomerManaged;
+ $inputObject.fieldValues = $data.sprintYES;//Selecting Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureofWork;
+ $inputObject.rowNo = $data.rowtypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = $data.fieldValueDev;//Development
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSizingDetails;
+ $inputObject.rowNo = $data.rowSizing;
+ $inputObject.colNo = $data.colSizing;
+ $inputObject.fieldValues = $data.fieldValueSP;//Infosys SP sizing Model
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOthers;
+ $inputObject.rowNo = $data.rowTimesheet;
+ $inputObject.colNo = $data.colTimesheet;
+ $inputObject.fieldValues = $data.fieldValueinfyTime;//Infosys Timesheet
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOthers;
+ $inputObject.rowNo = $data.rowDefecttracking;
+ $inputObject.colNo = $data.colDefectTracking;
+ $inputObject.fieldValues = $data.fieldValuePromt;//PROMT
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.sprintYES;//Selecting Yes
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.sprintNO;//Selecting No
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToProjectTailoring;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentProjectCongiration;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableTypeOfProject;
+ $inputObject.rowNo = $data.rowCustomerManaged;
+ $inputObject.colNo = $data.colCustomerManaged;
+ $inputObject.fieldValues = $data.sprintNO;//Selecting No
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $t.end();  
+ 
+ var $t = _testcase("TC_BRD27_FU1_8", "User checks for the 'Are you planning to have sprints with duration more than 4 weeks?' field");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.fieldValueSprint;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.sprintYES;//Selecting Yes
+ setSwiftFormData($inputObject);
+ 
+ _expectConfirm("Sprint duration more than 4 weeks may lead to non-agile behaviour of teams and reduce benefits derived from agile. The recommended maximum sprint duration is 4 weeks. Please consult a coach to optimize your agile process. If you still want to continue, please get exceptional approval from DM and attach the same in the attachments section.",true);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.sprintYES;//Selecting Yes
+ setSwiftFormData($inputObject);
+ 
+ _expectConfirm("Sprint duration more than 4 weeks may lead to non-agile behaviour of teams and reduce benefits derived from agile. The recommended maximum sprint duration is 4 weeks. Please consult a coach to optimize your agile process. If you still want to continue, please get exceptional approval from DM and attach the same in the attachments section.",false); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowSprint;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.sprintNO;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);  
+
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_9", "User checks for the 'Are you planning to have sprints with duration more than 4 weeks?' field");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.footerLargeDeal;//Footer: Large deal Program
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.footerSprint;//Footer: Sprint
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.PmPlanSummary; //PmPlanSummary
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.rowOverview;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.overviewReason;
+ InfyFTverifySwiftFormDataWithCell($inputObject);

@@ -1,0 +1,315 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Testing_Request_Management_Req_Summary_PT_23","Testing/Request_Management/Performance_Testing");
+/*
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_1.1.3"," Check the Fields");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Testing Request
+ navigateTo($inputObject);
+ $s.end();
+ var $s = _testcase("TC_2.1"," Check available Fields after saving");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.item = "PerT3";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $s.end();
+*/
+ var $s1 = _testcase("TC_3"," Open Request Summery segment");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery;//"Request Summary";
+ SelectSegment($inputObject);
+  
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_3.1"," verify Schedule Summery fields ");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Schedule_Summary;//"Schedule Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Schedule_Summary;//"Schedule Summary";
+ $inputObject.rowNo = $data.Srow1;//"0";
+ $inputObject.colNo = $data.Scol1;//"0_lbl|1_lbl|2_lbl|3_lbl";
+ $inputObject.fieldValues = $data.Sval1;//"Planned Start Date|Planned End Date";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Schedule_Summary;//"Schedule Summary";
+ $inputObject.rowNo = $data.Srow2;//"1";
+ $inputObject.colNo = $data.Scol2;//"0_lbl|2_lbl";
+ $inputObject.fieldValues = $data.Sval2;//"First TS Entry Date|Last TS Entry Date";//CR UPDATED
+ verifySwiftFormData($inputObject);
+/*
+ $inputObject = {};
+ $inputObject.span_Name = $data.msg1;//"**Actual Start Date and Actual End Date fields are editable in details page";
+ InfyFTisVisible($inputObject); 
+ 
+ *///CR UPDATED
+ 
+  $s2.end();
+  
+ var $s3 = _testcase("TC_3.2"," verify Effort Summary fields ");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Effort_Summary;//"Effort Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Effort_Summary;//"Effort Summary";
+ $inputObject.rowNo = $data.Erow2;//"0";
+ $inputObject.colNo = $data.Ecol2;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell|6__cell";
+ $inputObject.fieldValues = $data.Eval2;//"Effort Category|Task|Review|Rework|Total|Estimated Effort|% Deviation"
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Effort_Summary;//"Effort Summary";
+ $inputObject.rowNo = $data.Erow3;//"1|2|3|4|5";
+ $inputObject.colNo = $data.Ecol3;//"0_lbl";
+ $inputObject.fieldValues = $data.Eval03;//"Engineering effort|Non Engineering effort|Total effort considered for metrics|Non Request effort|Total Effort"
+ verifySwiftFormData($inputObject);
+ 
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_3.2"," verify Defect Summary fields ");
+ $s4.start(); 
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.Defect_Summary;//"Defect Summary";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Defect_Summary;//"Defect Summary";
+ $inputObject.rowNo = $data.Drow04;//"0";
+ $inputObject.colNo = $data.Dcol04;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell";
+ $inputObject.fieldValues = $data.Dval04;//"Defect category|Critical|Major|Minor|Cosmetic|Total";
+ InfyFTverifySwiftFormData($inputObject); 
+  
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Defect_Summary;//"Defect Summary";
+ $inputObject.rowNo = $data.Drow05;//"1";
+ $inputObject.colNo = $data.Dcol05;//"0_lbl";
+ $inputObject.fieldValues = $data.Dval05;//"In process defects";
+ verifySwiftFormData($inputObject);
+ 
+ $s4.end();
+ 
+  var $s5 = _testcase("TC_3.4"," verify Size Summary fields ");
+ $s5.start(); 
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.Size_Summary;//_span("Size Summary")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Size_Summary;//_span("Size Summary")
+ $inputObject.rowNo = $data.Qrow06;//"0";
+ $inputObject.colNo = $data.Qcol06;//"0_cell|1_cell";
+ $inputObject.fieldValues = $data.Qval06;//"Measurement|Actual";
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Size_Summary;//_span("Size Summary")
+ $inputObject.rowNo = $data.Qrow07;//"1|2|3|4";
+ $inputObject.colNo = $data.Qcol07;//"0_lbl";
+ $inputObject.fieldValues = $data.Qval07;//"No of Test Cases Prepared|No of Test Cases Executed|No of Test Units Prepared|No of Test Units Executed";
+ verifySwiftFormData($inputObject);
+
+ $s5.end();
+  
+  var $s6 = _testcase("TC_3.3"," verify Request performance fields ");
+ $s6.start(); 
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.Request_performance;//"Request Performance";
+ InfyFTisVisible($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Request_performance;//"Request Performance";
+ $inputObject.rowNo = $data.Rrow06;//"0";
+ $inputObject.colNo = $data.Rcol06;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell";
+ $inputObject.fieldValues = $data.Rval06;//"Metric Name|UOM|Goal|Actual|% Deviation|Reason for deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+
+ $s6.end();
+ /*
+ var $s = _testcase("TC_3.4"," verify Project Specific Metrics ");
+ $s.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = "Project Specific Metrics";
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.metrics;//"Project Specific Metrics";
+ $inputObject.rowNo = $data.mrow10;//"0";
+ $inputObject.colNo = $data.mcol10;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell";
+ $inputObject.fieldValues = $data.mval10;//"MetricName|UOM|Goal|Actual|% Deviation|Reason for deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName =$data.metrics;//"Project Specific Metrics";
+ $inputObject.rowNo = $data.mrow11;//"6";
+ $inputObject.colNo = $data.mcol11;//"0_lbl|1_lbl";
+ $inputObject.fieldValues = $data.mval11;//"Testing Request|Testing";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $s.end();
+ */
+ var $s7 = _testcase("TC_3.4"," verify Reuse and Tools Summary fields ");
+ $s7.start(); 
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.Reuse_Tools_Summary;//"Reuse and Tools Summary";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Reuse_Tools_Summary;//"Reuse and Tools Summary";
+ $inputObject.rowNo =  $data.Rrow07;//"0";
+ $inputObject.colNo =  $data.Rcol07;//"0_cell|1_cell|2_cell";
+ $inputObject.fieldValues =  $data.Rval07;//"Reuse and Tools Savings|Actual Savings|Savings%";
+ InfyFTverifySwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.tableName =  $data.Reuse_Tools_Summary;//"Reuse and Tools Summary";
+ $inputObject.rowNo = $data.Rrow08;//"1|2";
+ $inputObject.colNo = $data.Rcol08;//"0_lbl";
+ $inputObject.fieldValues = $data.Rval08;//"Reuse Savings|Total Savings";
+ verifySwiftFormData($inputObject);
+ 
+ $s7.end();
+ 
+  var $s8 = _testcase("Summary Closure"," Verify Request Summary Closure ");
+ $s8.start();
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.declar;//"Declaration";
+ InfyFTisVisible($inputObject);
+
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.type;//"Type of Data";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.reson;//"Reason for Bad Data";
+ $inputObject.operation = $data.oper;//"Negative";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.clrcom;//"Closure Comments";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.confirm;//"Confirm Review of Request Summary Along Request Performance ( Quality , Productivity , Schedule Adherence etc )";$data.span_Name56;
+ InfyFTisVisible($inputObject);
+ 
+ $s8.end();
+ 
+ var $s9 = _testcase("Request Summary Segment"," Verify Request summery segment");
+ $s9.start()
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.segment_req_summery;//"Request Summary";
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.declar;//"Declaration";
+ $inputObject.rowNo = $data.decrow01;//"0";
+ $inputObject.colNo = $data.deccol01;//"1_lst";
+ $inputObject.fieldValues = $data.decval01;//"--None--#Bad Data#Normal";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.declar;//"Declaration";
+ $inputObject.rowNo = $data.decrow01;//"0";
+ $inputObject.colNo = $data.deccol01;//"1_lst";
+ $inputObject.fieldValues = $data.decval02;//"Bad Data";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.reson;//"Reason for Bad Data";
+ $inputObject.rowNo = $data.rearow01;//"0";
+ $inputObject.colNo = $data.reacol01;//"1_txt";
+ $inputObject.fieldValues = $data.reaval01;//"Bad Data";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.reson;//"Reason for Bad Data";
+ $inputObject.rowNo = $data.rearow02;//"1";
+ $inputObject.colNo = $data.reacol01;//"1_txt";
+ $inputObject.fieldValues = $data.reaval02;//"Bad Data comments";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _mouseOver(_div("More_MenuItems_Segment"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.wrkflw;//"Workflow";
+ InfyFTisVisible($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.declar;//"Declaration";
+ $inputObject.rowNo = $data.wrkrow01;//"0";
+ $inputObject.colNo = $data.wrkcol01;//"1_lst";
+ $inputObject.fieldValues = $data.wrkval01;//"Normal";
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.oper;//"Negative";
+ $inputObject.span_Name = $data.wrkflw;//"Workflow";
+ InfyFTisVisible($inputObject);
+ 
+ 
+ $s9.end();
+
+  
+  
+  

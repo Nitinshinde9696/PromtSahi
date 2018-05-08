@@ -1,0 +1,105 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+ _include("../../../sahisource/Business/EformEditor.sah");
+
+ $data2 = readDataFromCSV("Agile_PMPlan_Normal_Assumption_Risk","Agile/PMPlan_Normal"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_67", "User tests Risk Management Plan");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.planSummary; //PM Plan Summary
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data2.tableSummary;
+ $inputObject.rowNo = $data2.linkRisk;
+ $inputObject.colNo = $data2.colReason;
+ $inputObject.fieldValues = $data2.riskReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon13;// _InfyFTclick(_image("nodeIcon12"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.linkRiskLog; //Risk Log
+ InfyFTclick($inputObject); 
+ 
+ _wait(30000);
+ 
+ var $RSK = _getText(_span(0, _in(_cell(0, _under(_cell("Risk ID[1]"), 20), _near(_cell("Assm1_Test", _in(_table(0, _in(_parentNode(_span("Risk ID[1]"), "DIV", 2))))))))))
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_67", "Filling Risk and checking Summary");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.RiskNavigate;//Risks
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $RSK; 
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data2.RiskID;
+ $inputObject.lst_DN_RiskCategory = $data2.riskCategory;
+ $inputObject.txt_CM_Description = $data2.fieldValueTest;
+ $inputObject.lst_DN_Probability = $data2.riskProb;
+ $inputObject.lst_DN_Impact = $data2.riskImpact;
+ $inputObject.txt_DN_MitigationPlan = $data2.fieldValueTest;
+ $inputObject.edt_DN_RiskOwner = $data2.riskOwner;
+ $inputObject.edt_DN_ScheduleImpactDays = $data2.riskImpact;
+ $inputObject.lst_DN_ImpactTo = $data2.riskTo;
+ $inputObject.lst_DN_Status = $data2.riskStatus;
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;//PM Plan
+ navigateTo($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.planSummary; //PM Plan Summary
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data2.tableSummary;
+ $inputObject.rowNo = $data2.linkRisk;
+ $inputObject.colNo = $data2.colReason;
+ $inputObject.fieldValues = $data2.riskReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(5000); 
+ 
+ $t.end();

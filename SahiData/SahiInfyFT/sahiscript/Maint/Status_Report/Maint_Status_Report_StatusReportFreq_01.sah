@@ -1,0 +1,198 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Status_Report_StatusReportFreq_01","Maint/Status_Report"); 
+ 
+ var $t = _testcase("TC_1", "Login with non PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//Niharika.Karingula
+ $inputObject.edt_loginid = $data.LoginID2;//Niharika.Karingula
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname  = $data.Project_name1;//TJCSTMEP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.freqspan1;
+ $inputObject.cell_Name = $data.freqcell1;
+ InfyFTisReadOnlySR($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+  $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //PM Plan
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link11;//"Workflow";
+ InfyFTclick($inputObject);
+ 
+ _wait(1000);
+ 
+ InfyFTreopenPMP($inputObject);
+  
+  
+ var $t = _testcase("TC_3", "Navigate to Project Tailoring");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Check for visibility of fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.freqlbl1;//Frequency :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.radios1;//"Not Set;Weekly;Fortnightly;Monthly";//$data.freqlbl1;//Frequency
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.rdgwk1;//Weekly
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.dayLbl1;//Day of Week :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rdgdays1;//
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.noteLbl1;//Note :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data.note1;//Status Report will be auto-generated on the selected day of week
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.rdgfn1;//Fortnightly
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data.note2;//Status Report will be auto-generated on 1st and 16th of every month.
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Weekly = $data.rdgmnt1;//Monthly
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_MonthlyNote = $data.note3;//Status Report will be auto-generated on 1st of every month.
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Check for default when Prodn support is enabled");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rdg_DN_Frequency = $data.rdgnst1;//Not Set
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName  = $data.table1;//"Name";
+ $inputObject.rowNo = $data.rowname1;//"Analysis and Research|Bug Fix|Major Enhancement|Minor Enhancement|Other Request|Production Support|Testing Request";
+ $inputObject.colNo  = $data.colname1;//"Selected_unchk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName  = $data.table1;//"Name";
+ $inputObject.rowNo = $data.rowname2;//"Production Support";
+ $inputObject.colNo  = $data.colname2;//"Selected_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ 
+  $inputObject = {};
+ $inputObject.rdg_Monthly = $data.Monthly;
+ verifyAllFields($inputObject);
+ 
+
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Check for regeneration of Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+ 
+/*  $inputObject = {};
+ $inputObject.span_Name = $data.regenerate1;//de-icon-refresh
+ InfyFTisVisible($inputObject); */ //for last SR only it iwll show
+
+ 
+ clickReturn();
+ 
+ 

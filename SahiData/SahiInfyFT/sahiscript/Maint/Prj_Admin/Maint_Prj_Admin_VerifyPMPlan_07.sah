@@ -1,0 +1,156 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_Prj_Admin_VerifyPMPlan_07","Maint/Prj_Admin"); 
+ 
+ var $t = _testcase("TC_1.1.1", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ $t.end();
+ var $t = _testcase("TC_1.1.2", "Navigate");
+ $t.start();
+ 
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_1.1.3","Verify Request Type segment");
+ $t.start();
+ _wait(5000);
+  
+$inputObject = {};
+$inputObject.segment_name = $data.rtseg4;//_link("Request Type Selection")
+SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.rowNo = $data.rtsegvrid;
+ $inputObject.colNo  = $data.rtsegvcid0;
+ $inputObject.tableName  = $data.tableName;//_span("Name")
+ $inputObject.fieldValues = $data.all_requests;//all request verification
+ verifySwiftFormData($inputObject);
+ 
+ 
+ 
+ $t.end();
+ var $t = _testcase("TC_1.2","Verify Project Tailoring is enabled or not in Submittor stage");
+ $t.start();
+ 
+    $inputObject = {};
+	$inputObject.name = $data.navigateTo5; //PM Plan
+	navigateTo($inputObject);
+ 
+	 $inputObject = {}; 
+	 $inputObject.link = $data.link6;//Workflow
+	 InfyFTclick($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.stage = $data.currentstage7;
+	 InfyFTVerifyCurrentStage($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.name = $data.navigateTo3; 
+	 navigateTo($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.segment_name = $data.rtseg4;
+	 SelectSegment($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.rowNo = $data.chkrid10;//5
+	 $inputObject.colNo  = $data.chkcid8;//1
+	 $inputObject.tableName  = $data.tbnm8;
+	 $inputObject.disable = 1;
+	 verifySwiftFormFieldDisability($inputObject);//only for project mgmt request
+
+	 $inputObject = {};
+	 $inputObject.rowNo = $data.chkrid9;//2
+	 $inputObject.colNo  = $data.chkcid8;//1
+	 $inputObject.tableName  = $data.tbnm8;
+	 $inputObject.disable = 0;
+	 verifySwiftFormFieldDisability($inputObject); 
+	 
+	 $t.end();
+	 /*
+	 $inputObject = {};
+	 $inputObject.name = $data.navigateTo5; //PM Plan
+	 navigateTo($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.link = $data.link6;//Workflow
+	 InfyFTclick($inputObject);
+	 
+	 $inputObject = {}; 
+	 $inputObject.stage = $data.currentstage7;
+	 InfyFTVerifyCurrentStage($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.workflow_stage = $data.stage11;
+	 $inputObject.multiple_member = $data.user_name12;
+	 WorkflowSet($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.workflow_stage = $data.stage12;
+	 $inputObject.multiple_member = $data.user_name13;
+	 WorkflowSet($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.txt_Comments = $data.Comments13;
+	 ClickRoutewithComments($inputObject);
+
+/*	 
+ var $t = _testcase("TC_1.3","Verify Project Tailoring is enabled or not in Reviewer stage");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.stage = $data.currentstage9;
+ InfyFTVerifyCurrentStage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.rtseg4;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//5
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  = $data.tbnm8;
+ $inputObject.disable = 1;
+ verifySwiftFormFieldDisability($inputObject);//only for project mgmt request
+
+ $t.end();
+ var $t = _testcase("TC_1.4","Reject");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.link = $data.link6;//Workflow
+ InfyFTclick($inputObject);
+ 
+ ClickReject();
+ $t.end();
+*/

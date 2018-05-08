@@ -1,0 +1,74 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Status_Report_Requestwise_Efort_Distribution_08","Maint/Status_Report"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",4,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+ 
+ 
+ var $t = _testcase("TC_3", "Check for visibility of fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment3;//Risk Issues and Complaints
+ SelectSegment($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.table2;//Effort Distribution
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.table1;//Effort Summary
+ InfyFTisVisible($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.labelnames;
+ InfyFTisVisible($inputObject);
+   
+ 
+
+ 
+ $t.end();
+ 
+ 

@@ -1,0 +1,210 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Testing_Tools_Reuse_RP_RTracking_AFReuse_Report_08","Testing/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer//Niharika Karingula	
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer//Niharika.Karingula	
+$inputObject.edt_password = $data.Password1;//Allahu@1//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Testing PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//GNORDHD1
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Navigating to Reuse Tracking using Test Automation");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5;//Test Automation
+InfyFTnavigateTo($inputObject);
+
+$t.end()
+
+var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "T_A";
+  infyFTGetValueFromExcel($inputObject);
+  $T_A_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $T_A_Id;
+OpenEformInstance($inputObject);
+
+_wait(8000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";
+SelectSegment($inputObject);
+
+/* $inputObject = {};
+$inputObject.icon = $data.addIcon;//"Add Rows"
+clickAddIcon($inputObject); */
+
+_click(_link("Add Rows"));
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo6;//2
+$inputObject.colNo = $data.colNo8;//2_edt|5_edt|6_lst|7_lst|8_lst|9_lst|10_lst|11_lst|12_edt|13_lst|14_edt|15_lst|16_lst
+$inputObject.fieldValues = $data.fieldValues8;//Rose|1.10|Package|J2EE|Life Insurance|SD2|Sec1|Open Source|10.00|Unit1|15|Not used|Y
+setSwiftFormData($inputObject);
+
+$inputObject = {};  
+saveSwiftForm($inputObject);
+
+var $t = _testcase("TC_6", "Available links on Reuse Tracking page");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link1;//Add from PRIME
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link2;//Add From Reuse Plan
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link3;//Asset Usage Report
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Adding asset from Add From Reuse Plan link to Reuse Tracking");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Add From Reuse Plan
+SelectSegment($inputObject);
+
+_wait(1000);
+
+$inputObject = {};
+
+$inputObject.tableName = $data.tableName11;//Asset Name
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowNo1;//1
+$inputObject.colNo = $data.colNo1;//0_chk
+$inputObject.fieldValues = "true";//$data.fieldValues2;
+setSwiftFormData($inputObject);
+
+$inputObject ={}; saveSwiftForm($inputObject);
+
+clickReturn();
+
+$t.end();
+
+_wait(2000);
+
+var $t = _testcase("TC_8", "Verifying the asset in Reuse Tracking list");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName2;//Reusable Assets
+$inputObject.rowNo = $data.rowNo2;//2
+$inputObject.colNo = $data.colNo2;//3_lbl
+$inputObject.fieldValues = $data.value2;//testOSS1
+verifySwiftFormData($inputObject);
+$t.end();
+
+var $t = _testcase("TC_9", "Verifying the read only values from asset link in Reuse Tracking section");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Link9;//REPL2
+SelectSegment($inputObject);
+_wait(1000);
+
+_selectWindow($data.popupName);
+
+$inputObject = {};
+$inputObject.lbl_CM_Name = $data.Field1;//testOSS1
+$inputObject.lbl_DN_SecurityLevel = $data.Field2;//Account
+$inputObject.lbl_DN_LicenseType = $data.Field3;//3rd Party
+$inputObject.txt_DN_SecurityDetails = "";//$data.Field5;//""
+verifyAllFields($inputObject);
+
+_closeWindow();
+
+$t.end();
+_selectWindow();
+
+
+_wait(5000);
+/* 
+$inputObject = {};
+$inputObject.byColRowName = "yes";
+$inputObject.tableName = "Name*";//$data.tableName2;//Reusable Assets
+$inputObject.rowNo = "Rose";//$data.rowNo2;//2
+$inputObject.colNo = "Delete_chk";//$data.colNo1a;//1_chk
+$inputObject.fieldValues = "true";//$data.fieldValues2;
+setSwiftFormData($inputObject);
+
+$inputObject ={}; saveSwiftForm($inputObject); */
+
+var $t = _testcase("TC_10", "Verifying the Asset Usage Report");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Asset Usage Report
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_AssetName = $data.Field1;//testOSS1 
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name9;//Asset Usage Report
+SelectSegment($inputObject);
+
+_highlight(_table("TableData_0_0"));
+
+$inputObject = {};
+$inputObject.byColRowName = "yes";
+$inputObject.tableName = "Name*";//$data.tableName2;//Reusable Assets
+$inputObject.rowNo = "Rose";//$data.rowNo2;//2
+$inputObject.colNo = "Delete_chk";//$data.colNo1a;//1_chk
+$inputObject.fieldValues = "true";//$data.fieldValues2;
+setSwiftFormData($inputObject);
+
+$inputObject ={}; saveSwiftForm($inputObject);
+
+$t.end();

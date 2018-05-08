@@ -1,0 +1,241 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $generic = readDataFromCSV("Dev_Closure_Report_Generic_00","Dev/Closure_Report");
+ var $data = readDataFromCSV("Dev_Closure_Report_Iteration_Creation_01","Dev/Closure_Report");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+/*
+ var $TC1 = _testcase("LC STAGE VALUES","SETTING LC STAGE VALUES"); 
+ $TC1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1;//Ricky_Wang
+ $inputObject.edt_loginid = $generic.LoginID1;//Ricky_Wang
+ $inputObject.edt_password = $generic.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $generic.projectname1;//BGGSZ199
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment10;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.sizerow1;// "1"
+ $inputObject.colNo  = $data.sizecol;//"1_lst|2_lst|3_lst|7_lst"
+ $inputObject.tableName  = $data.table1;//"Sizing Details"; 
+ $inputObject.fieldValues = $data.values1;//"Development|New Development|3rd Generation default|Backward FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//nodeIcon13
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.segment11;//Applicable LC Stages
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.name;//"Yes";
+ $inputObject.tableName = $data.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data.approw1;//Requirements Analysis|High Level Design|High Level Design|Coding|Unit Testing
+ $inputObject.colNo = $data.appcol2;//Applicable_chk
+ $inputObject.fieldValues = $data.appval;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.name;//"Yes";
+ $inputObject.tableName = $data.tableApplicable;//Sizing Details
+ $inputObject.rowNo = $data.approw2;//Requirements Analysis|High Level Design|High Level Design|Coding|Unit Testing
+ $inputObject.colNo = $data.appcol3;//Applicable_unchk
+ $inputObject.fieldValues = $data.appval;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("LANGUAGE SETTINGS","SELECTING THE REQUIRED LANGUAGE"); 
+ $TC2.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// nodeIcon11
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkLanguage;//Language Settings
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Lan_tabl;//Language[2]
+ $inputObject.rowNo = $data.Lan_row;//1
+ $inputObject.colNo = $data.Lan_col;//1_chk
+ $inputObject.fieldValues = $data.Lan_val;//Y
+ InfyFTdeleteLanguage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Lan_tabl;//Language[2]
+ $inputObject.rowCount = $data.rowCount;//1
+ addRowInSwiftForm($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = $data.name;//"Yes";
+ $inputObject.tableName = $data.Lan_tabl;//Language[2]
+ $inputObject.rowNo = $data.Lan_row1;//1
+ $inputObject.colNo = $data.Lan_Col2;//Language*_lst
+ $inputObject.fieldValues = $data.Lan_value2;//ANSI SQL
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $TC2.end();
+ */
+ var $TC3 = _testcase("WORKFLOW_STAGE","ROUTING THROUGH STAGES"); 
+ $TC3.start();
+ 
+ //***** ROUTING THE PM PLAN FOR BASE-LINING******//
+/*
+ $inputObject = {};
+ $inputObject.link = $generic.segment9//Workflow;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage11;//0
+ $inputObject.multiple_member = $data.submmiter;//Ricky_Wang
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage12;//1
+ $inputObject.multiple_member = $data.Reviewer;//Skip
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage13;//2
+ $inputObject.multiple_member = $data.Approver;//Ricky_Wang
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Comments;//submitter
+ InfyFTClickRoutewithComments($inputObject); 
+
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.Comments1;//Approver
+ InfyFTClickRoutewithComments($inputObject);
+ */
+ /*
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//Iterations
+ InfyFTnavigateTo($inputObject); 
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.desc221;//Closure Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ CreateInstance($inputObject);
+ 
+ $TC3.end();
+ */
+ var $TC4 = _testcase("ITERATION DATA SETUP","SCHEDULED TASK ; TOOLS AND REUSE ; SIZING DETAILS ; REVIEWS AND DEFECTS"); 
+ $TC4.start();
+ 
+ //*****SCHEDULED TASK*****//
+ 
+ //_include("Dev_Closure_Report_Iteration_Scheduled_Task_02.sah");
+ 
+ //*****TOOLS AND REUSE*****//
+ 
+ //_include("Dev_Closure_Report_Iteration_ToolsAndReuse_03.sah");
+ 
+ //*****SIZING DETAILS*****//
+ 
+ //_include("Dev_Closure_Report_Iteration_Sizing_Details_04.sah");
+ 
+ //*****REVIEWS AND DEFECTS*****//
+ 
+ //_include("Dev_Closure_Report_Iteration_Defect_05.sah");
+ 
+ $TC4.end();
+ 
+ var $TC5 = _testcase("CLOSURE_REPORT","VERIFY DETAILS SEGMENT"); 
+ $TC5.start();
+ 
+  _include("Dev_Closure_Report_Details_06.sah");
+ 
+ $TC5.end();
+ 
+ var $TC6 = _testcase("CLOSURE_REPORT","VERIFY EFFORT SEGMENT"); 
+ $TC6.start();
+ 
+  _include("Dev_Closure_Report_Effort_07.sah");
+ 
+ $TC6.end();
+ 
+ var $TC7 = _testcase("CLOSURE_REPORT","VERIFY SCHEDULE SEGMENT"); 
+ $TC7.start();
+ 
+ _include("Dev_Closure_Report_Schedule_08.sah");
+ 
+ $TC7.end();
+ 
+ var $TC8 = _testcase("CLOSURE_REPORT","VERIFY DEFECTS SEGMENT"); 
+ $TC8.start();
+ 
+ _include("Dev_Closure_Report_Defects_09.sah");
+ 
+ $TC8.end();
+ 
+ var $TC9 = _testcase("CLOSURE_REPORT","VERIFY SIZE SEGMENT"); 
+ $TC9.start();
+ 
+ _include("Dev_Closure_Report_Size_10.sah");
+ 
+ $TC9.end();
+ 
+ var $TC10 = _testcase("CLOSURE_REPORT","VERIFY QUALITY AND PRODUCTIVITY SEGMENT"); 
+ $TC10.start();
+ 
+ _include("Dev_Closure_Report_QandP_11.sah");
+ 
+ $TC10.end();
+ 
+ 
+ 
+ 
+ 
+ 

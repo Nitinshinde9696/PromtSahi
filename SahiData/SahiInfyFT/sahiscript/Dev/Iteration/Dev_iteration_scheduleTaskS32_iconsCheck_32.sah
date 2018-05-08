@@ -1,0 +1,67 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ 
+ /*************************schedule task icons visibility********************************/
+ 
+ $data2 = readDataFromCSV("Dev_iteration_scheduleTaskS32_iconsCheck_32", "Dev/Iteration"); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data2.QTP_convert_start_msp;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.Last_Checkin_Failure_Details;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.FetchFromTimesheet;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.PushToTimesheet;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.ganttViewToggleButton;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.resourcePanelToggleButton;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.baselineButton;
+ InfyFTisVisibleN($inputObject); 
+ 
+/*  $inputObject = {};
+ $inputObject.span_Name = $data2.printButton;
+ InfyFTisVisibleN($inputObject);  */
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.InstantiateButton;
+ InfyFTisVisibleN($inputObject); 
+ 
+ /**************checking add button befor clicking edit button*************/
+  
+ $inputObject = {};
+ $inputObject.span = $data2.bfeditnewlink;
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("New Task");
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data2.overAllStatus;
+ $inputObject.cell_Name = $data2.cellOverAll;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data2.NewTask;
+ InfyFTclickReturnInAddItemPopup();
+ 
+ 
+ 
+ 
+ 

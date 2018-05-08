@@ -1,0 +1,156 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_PCB_PCB_Setup_Validation_02", "Maint/PCB");
+ 
+ var $t = _testcase("TC_1", "Login to digite");
+
+ $t.start();
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_2", "Navigate to Maintenance PT");
+
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;//Process Template
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject); 
+ 
+ $t.end();
+ 
+ //navigate to PCB Setup  
+ 
+ var $t = _testcase("TC_8", " Navigate to PCB Setup");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo23;//PCB Setup
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PCBSetupSegments4;//Details;PCB Setup
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowCount = "1";
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo506;//8
+ $inputObject.colNo = $data.colNo51;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues500;//--None--|--None--
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo506;//8
+ $inputObject.colNo = $data.colNo52;//1_chk
+ $inputObject.fieldValues = $data.fieldValues506;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DeleteBtn;//Delete
+ InfyFTclickS($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1", "Inserting values in ECR form");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues501;//Major Enhancement|HL
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues502;//Minor Enhancement|HL
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues503;//Major Enhancement|LL
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues504;//Minor Enhancement|LL
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues505;//Analysis and Research|Others
+ setSwiftFormData($inputObject);
+ 
+ _wait(3000); 
+ 
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ _wait(3000); 
+ 
+ var $t = _testcase("TC_9", "verifing values in pcb setup");
+
+ $t.start();
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues501;//Major Enhancement|HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo502;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues502;//Minor Enhancement|HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo503;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues503;//Major Enhancement|LL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo504;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues504;//Minor Enhancement|LL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo505;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues505;//Analysis and Research|Others
+ verifySwiftFormData($inputObject);
+  
+ $t.end();

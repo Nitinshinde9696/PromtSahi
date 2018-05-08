@@ -1,0 +1,84 @@
+
+/**
+ @Function Number:17
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchAndInviteNLR($inputObject)
+{
+	_log("searchAndInviteNLR Started","success");
+	try 
+	{
+		var $Btn = "KEY_Search_and_Invite_Non_Labor_Resources";
+		var $extJsId = ""; 	
+		var $BtnKey = $Btn + $extJsId;		
+		_click(_link($BtnKey));
+		_selectWindow("AddNonLaborResource");
+		setAllFields($inputObject);
+		_click(_submit("ActionButton"));
+		_check(_checkbox("CheckItem",_near(_cell($inputObject.edt_Name))));
+		_click(_link("de-icon-add"));
+		_click(_button("SAVEANDEXIT"));
+		_selectWindow();
+		verifysearchAndInviteNLR($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchAndInviteNLR Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifysearchAndInviteNLR($inputObject)
+{
+	_log("verifysearchAndInviteNLR Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_div($inputObject.edt_Name)))
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifysearchAndInviteNLR Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addBudget($inputObject)
+{
+	_log("addBudget Started","success");
+	try 
+	{
+		_click(_link("KEY_Add_Budget"));
+		_selectWindow("Add Budget");
+		setAllFields($inputObject);	
+		_click(_submit("QTP_Add"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addBudget Completed","success");
+}

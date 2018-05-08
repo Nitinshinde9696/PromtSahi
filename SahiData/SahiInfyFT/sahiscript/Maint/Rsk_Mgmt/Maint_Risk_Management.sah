@@ -1,0 +1,173 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+var $Script1 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU1_1_and_TC_BRD37_FU1_2_01.sah");
+$Script1.start();
+
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU1_1_and_TC_BRD37_FU1_2_01.sah");
+	
+$Script1.end();
+var $Script2 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU2_1_02.sah");
+$Script2.start();
+
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU2_1_02.sah");
+	
+$Script2.end();
+var $Script3 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU2_2_3_4_5_6_7_9_03.sah");
+$Script3.start();
+
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU2_2_3_4_5_6_7_9_03.sah");
+	
+$Script3.end();
+var $Script4 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU2_10_04.sah");
+$Script4.start();
+
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU2_10_04.sah");
+	
+$Script4.end();
+var $Script5 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU2_11_05.sah");
+$Script5.start();
+
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU2_11_05.sah");
+	
+$Script5.end();
+
+var $script6 = _testcase("Maint_Rsk_Mgmt_CR61_FieldValidation_28.sah");    
+  $script6.start();  					
+  
+  _include("Maint_Rsk_Mgmt_CR61_FieldValidation_28.sah");	
+  
+$script6.end();
+
+var $script7 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU10_10_11_12_13_14_15_08.sah");  
+    $script7.start();  	
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU10_10_11_12_13_14_15_08.sah");	
+	$script7.end();
+	
+var $script8 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU10_1_TC_BRD37_FU10_2_TC_BRD37_FU10_3_07.sah");
+ $script8.start(); 
+ _include("Maint_Rsk_Mgmt_TC_BRD37_FU10_1_TC_BRD37_FU10_2_TC_BRD37_FU10_3_07.sah"); 
+ $script8.end();
+ 
+var $script9 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU2_12_06.sah");     
+ $script9.start();  			
+ _include("Maint_Rsk_Mgmt_TC_BRD37_FU2_12_06.sah");		
+ $script9.end();
+ 
+var $script10 = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU3_1_to_4_09.sah");    
+  $script10.start();  			
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU3_1_to_4_09.sah");		
+  $script10.end();
+  
+var $scripts = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU3_5_10.sah");    
+  $scripts.start(); 				
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU3_5_10.sah");		
+  $scripts.end();
+  
+var $scripta = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU3_6_11.sah");     
+ $scripta.start(); 			
+ _include("Maint_Rsk_Mgmt_TC_BRD37_FU3_6_11.sah");		
+ $scripta.end();
+ 
+var $scriptd = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU3_7_12.sah");     
+ $scriptd.start(); 				
+ _include("Maint_Rsk_Mgmt_TC_BRD37_FU3_7_12.sah");		
+ $scriptd.end();
+ 
+var $scriptf = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU4_1_to_4_13.sah");   
+   $scriptf.start(); 				
+   _include("Maint_Rsk_Mgmt_TC_BRD37_FU4_1_to_4_13.sah");	
+   $scriptf.end();
+   
+var $scriptg = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU4_5_14.sah");   
+   $scriptg.start(); 				
+   _include("Maint_Rsk_Mgmt_TC_BRD37_FU4_5_14.sah");		
+   $scriptg.end();
+   
+var $scripth = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU4_6_15.sah");      
+$scripth.start(); 				
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU4_6_15.sah");		
+	$scripth.end();
+	
+var $scriptj = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU4_7_16.sah");     
+ $scriptj.start(); 				
+ _include("Maint_Rsk_Mgmt_TC_BRD37_FU4_7_16.sah");		
+ $scriptj.end();
+ 
+var $scriptk = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU5_10_20.sah");    
+  $scriptk.start();				
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU5_10_20.sah");		
+  $scriptk.end();
+  
+var $scriptl = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU5_11_21.sah");    
+  $scriptl.start();				
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU5_11_21.sah");		
+  $scriptl.end();
+  
+var $scriptm = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU5_12_17.sah");    
+  $scriptm.start();				
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU5_12_17.sah");		
+  $scriptm.end();
+  
+var $script = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU5_1_to_2_18.sah");    
+  $script.start(); 				
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU5_1_to_2_18.sah");	
+  $script.end();
+  
+var $scriptn = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU5_4_5_6_7_9_19.sah");    
+  $scriptn.start(); 			
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU5_4_5_6_7_9_19.sah");	
+  $scriptn.end();
+   
+var $scripto = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU6_4_26.sah");     
+ $scripto.start(); 			
+ _include("Maint_Rsk_Mgmt_TC_BRD37_FU6_4_26.sah");	
+ $scripto.end();
+ 
+var $scriptp = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_1_22.sah");   
+   $scriptp.start(); 		
+   _include("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_1_22.sah");	
+   $scriptp.end();
+   
+var $scriptq = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_5_23.sah");    
+  $scriptq.start(); 			
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_5_23.sah");		
+  $scriptq.end();
+  
+var $scriptr = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_6_7_24.sah");  
+    $scriptr.start(); 			
+	_include("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_6_7_24.sah");		
+	$scriptr.end();
+	
+var $scripts = _testcase("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_8_25.sah");    
+  $scripts.start(); 		
+  _include("Maint_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_8_25.sah");		
+  $scripts.end();
+  
+  var $scriptas = _testcase("Dev_Rsk_Mgmt_CR61_FieldValidation_27.sah");    
+  $scriptas.start(); 		
+  _include("Dev_Rsk_Mgmt_CR61_FieldValidation_27.sah");		
+  $scriptas.end();
+  
+  var $scriptas = _testcase("MechPD_Rsk_Mgmt_CR61_FieldValidation_29.sah");    
+  $scriptas.start(); 		
+  _include("MechPD_Rsk_Mgmt_CR61_FieldValidation_29.sah");		
+  $scriptas.end();
+  
+  var $scriptas = _testcase("Package_Rsk_Mgmt_CR61_FieldValidation_30.sah");    
+  $scriptas.start(); 		
+  _include("Package_Rsk_Mgmt_CR61_FieldValidation_30.sah");		
+  $scriptas.end(); 
+
+  var $scriptas = _testcase("Testing_Rsk_Mgmt_CR61_FieldValidation_31.sah");    
+  $scriptas.start(); 		
+  _include("Testing_Rsk_Mgmt_CR61_FieldValidation_31.sah");		
+  $scriptas.end();
+
+
+
+
+

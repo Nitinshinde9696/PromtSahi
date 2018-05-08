@@ -1,0 +1,1542 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+$data = readDataFromCSV("Package_Iteration_SizingDetails_Estimation_01", "Package/Iteration");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",999,$dateObj);
+ var $endDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",1000,$dateObj);
+ var $endDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+
+ /********************************************************************************************************
+ * Login 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_3", "navigate to project tailoring and set sizing details");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Project; 
+ InfyFTnavigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ InfyFTSelectSegment($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.colNoNEW;//3_lst
+ $inputObject.fieldValues = $data.sizing_details_values;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoNEW;
+ $inputObject.fieldValues = $data.sizing_details_values;
+ verifySwiftFormData($inputObject);
+ 
+  _wait(8000);
+ 
+ var $t = _testcase("TC_4", "navigate to PMPLAN");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_5", "click on add button ");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject);
+
+
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclick($inputObject);
+ $inputObject = {};
+ $inputObject.span = $data.nodeIcon12;
+ InfyFTclick($inputObject);
+ $t.end();
+ var $t = _testcase("TC_6", " create iteration");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType;
+ InfyFTModifyEformInstance2($inputObject);
+ $t.end();
+ var $t = _testcase("TC_7", "select segment sizing details and verify all fields");
+ $t.start();
+ 
+ _selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ InfyFTSelectSegment($inputObject);
+
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Sizing_Details; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Sizing_Details1; 
+ InfyFTisVisiblep($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo  = $data.colNolbl1;
+ $inputObject.disable = $data.TRUE;
+ InfyFTverifySwiftFormFieldDisabilityN($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.collabel;
+ $inputObject.fieldValues = $data.pt2;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.col_sizdetails;
+ $inputObject.fieldValues = $data.sizing_details_values1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_8", "select segment sizing details and set activity points and verify");
+ $t.start();
+ 
+//activity points
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.lsd;//3_lst
+ $inputObject.fieldValues = $data.lst_one;//activity points
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.lst;//3_lst
+ $inputObject.fieldValues = $data.Nesma_FP;//activity points
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.lsd;//3_lst
+ $inputObject.fieldValues = $data.lst_one;//activity points
+ setSwiftFormData($inputObject);
+ 
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.lst_one;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo0;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Activity_Points; 
+ InfyFTisVisiblep($inputObject)
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Size4; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.UOM4; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TS; 
+ InfyFTisVisiblep($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "select segment sizing details and set IFPUGFP and verify");
+ $t.start();
+ //IFPUGFP
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;//3_lst
+ $inputObject.fieldValues = $data.IFPUG_FP;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.IFPUG_FP;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IFPUG_FP; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ts1; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.tz1; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.fs1; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+  
+  $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+  $t.end();
+var $t = _testcase("TC_10", "select segment sizing details and set NESMAFP and verify");
+ $t.start();
+ //NESMAFP
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Nesma_FP;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Nesma_FP;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Nesma_FP; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TC3; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.FS3; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TS3; 
+ InfyFTisVisiblep($inputObject)
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+
+var $t = _testcase("TC_11", "select segment sizing details and set No standard sizing techniques and verify");
+ $t.start();
+
+//No standard sizing techniques
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Ns;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Ns;
+ verifySwiftFormData($inputObject);
+ $t.end();
+
+var $t = _testcase("TC_12", "select segment sizing details and set Others and verify");
+ $t.start();
+//Others
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Others;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Others;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.UOM; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TS5; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TC; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.FS; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter valid UOM";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter valid UOM";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+
+  _clearLastAlert()
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+  $t.end(); 
+  
+var $t = _testcase("TC_13", "select segment sizing details and set Siebel_Points and verify");
+ $t.start();
+
+//Siebel_Points
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Siebel_Points;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Siebel_Points;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.tss; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.fss; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.tsss; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Siebel_Points; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Technical Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Functional Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.value35;
+ $inputObject.colNo = $data.fst;
+ $inputObject.fieldValues = "2.0";
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTReturnPopUpN($inputObject);
+ _wait(5000);
+ _selectWindow();
+   
+ var $t = _testcase("TC_14", "navigate to project tailoring");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Project; 
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ InfyFTSelectSegment($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.colNoNEW1;//3_lst
+ $inputObject.fieldValues = $data.sizing_details_values3;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+  var $t = _testcase("TC_15", "navigate to PMPLAN");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_16", "click on add button ");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.nodeIcon12;
+ InfyFTclick($inputObject);
+
+ var $t = _testcase("TC_17", " create iteration");
+ 
+ $t.start();
+ 
+ _selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data.DN_IterationType3;
+ InfyFTModifyEformInstance2($inputObject);
+ 
+ var $t = _testcase("TC_18", "select segment sizing details and verify ");
+ $t.start();
+ 
+ _selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ InfyFTSelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Sizing_Details1; 
+ InfyFTisVisiblep($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo  = $data.colNolbl1;
+ $inputObject.disable = $data.TRUE;
+ InfyFTverifySwiftFormFieldDisabilityN($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.collabel;
+ $inputObject.fieldValues = $data.pt2;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.col_sizdetails1;
+ $inputObject.fieldValues = $data.sizing_details_values2;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_19", "select segment sizing details and set activity points and verify");
+ $t.start();
+ 
+
+//activity points
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.lsd;//3_lst
+ $inputObject.fieldValues = $data.lst_one;//activity points
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.lst;//3_lst
+ $inputObject.fieldValues = $data.Nesma_FP;//activity points
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;//1 row
+ $inputObject.colNo = $data.lsd;//3_lst
+ $inputObject.fieldValues = $data.lst_one;//activity points
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.lst_one;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo2;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo3;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo4;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo3;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo4;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo3;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Activity_Points;
+ $inputObject.rowNo = $data.rowNo4;//1 row
+ $inputObject.colNo = $data.colNoh;//1_edt
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Activity_Points; 
+ InfyFTisVisiblep($inputObject)
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IMS4; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.COS4; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.CUS4; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TS4; 
+ InfyFTisVisiblep($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_20", "select segment sizing details and set IFPUGFP and verify");
+ $t.start();
+ //IFPUGFP
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;//3_lst
+ $inputObject.fieldValues = $data.IFPUG_FP;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.IFPUG_FP;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IFPUG_FP; 
+ InfyFTisVisiblep($inputObject)
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IMS1; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.COS1; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.CUS1; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.ts1; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = "  Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Implementation Size";
+InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = "  Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ 
+ $t.end();
+ var $t = _testcase("TC_21", "select segment sizing details and set NESMAFP and verify");
+ $t.start();
+ //NESMAFP
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Nesma_FP;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Nesma_FP;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Nesma_FP; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IMS3; 
+ InfyFTisVisiblep($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.COS3; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.CUS3; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.TS3; 
+ InfyFTisVisiblep($inputObject);
+
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+
+   $inputObject = {};
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+
+    
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Nesma_FP;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ var $t = _testcase("TC_22", "select segment sizing details and set No standard sizing techniques and verify");
+ $t.start();
+
+//No standard sizing techniques
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Ns;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Ns;
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+ var $t = _testcase("TC_23", "select segment sizing details and set Others and verify");
+ $t.start();
+//Others
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Others;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Others;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name =  $data.UOM; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.COS; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.CUS; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IMS; 
+ InfyFTisVisiblep($inputObject);
+ 
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter valid UOM";
+ InfyFTassertmessage($inputObject);
+
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter valid UOM";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+
+ _clearLastAlert()
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+ _clearLastAlert()
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32A;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+
+ $t.end(); 
+  
+
+ var $t = _testcase("TC_24", "select segment sizing details and set Siebel_Points and verify");
+ $t.start();
+
+//Siebel_Points
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.lsd;
+ $inputObject.fieldValues = $data.Siebel_Points;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Sizing_Details1;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.sld;
+ $inputObject.fieldValues = $data.Siebel_Points;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.COS2; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.CUS2; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.IMS2; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Siebel_Points; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+ _clearLastAlert()
+   $inputObject = {};
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+
+ _clearLastAlert()
+ $inputObject = {};
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+
+  _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Configuration Size";
+ InfyFTassertmessage($inputObject);
+ 
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Customization Size";
+ InfyFTassertmessage($inputObject);
+  
+ _clearLastAlert()
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.msg = " Error : Please enter a positive numeric value for Implementation Size";
+ InfyFTassertmessage($inputObject);
+ _clearLastAlert()
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ inputObject = {}; 
+ $inputObject.tableName = $data.Siebel_Points;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.fst;
+ $inputObject.fieldValues = "3.0";
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTReturnPopUpN($inputObject);
+ 
+  $t.end(); 

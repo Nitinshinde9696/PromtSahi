@@ -1,0 +1,492 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Dev_Iteration_closure_checks_final_06", "Dev/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ /********************************************************************************************************
+ * Login to swiftAlm
+ *********************************************************************************************************/
+
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username;//jyothi
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //SYAMSTIE
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_4", "creating new instance of iteration");
+ $t.start();
+ 
+ _wait(1500);
+ $inputObject = {};
+ $inputObject.icon = $data.icon; //creating new 
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;//$endDate;
+ ModifyEformInstance($inputObject); 
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID = $inputObject.eformID;
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Work flow segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Workflow;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage0;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members1;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage2;
+ WorkflowSet($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Checking for Actual start date and end date Message in closure check");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ $inputObject.msgAlert = "Error : \nFollowing fields in Iteration Summary section are mandatory :\n* Type of Data\n* Closure Comments\n* Confirm Review of Iteration Summary Along Iteration Performance";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.IterationSummary;
+ InfyFTclick($inputObject); 
+ 
+ _check(_checkbox("false"), "TRUE");
+ _setValue(_textarea(21), "closing");
+ _setSelected(_select(2), "Normal");
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Actual Start Date in Details tab \n• Field Actual End Date in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ActualStartDate = $currentDate;
+ $inputObject.edt_DN_ActualEndDate = $currentDate;
+ ModifyEformInstance($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.link = $data.closureCheck;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValuesChk;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValuesNoreview;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.open;
+ ModifyEformInstance($inputObject);  
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "Add Reuse component with status as not Used");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Reuse_Tracking;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.addlink;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Reusable_Assets;//Reusable Assets
+ $inputObject.rowNo = $data.rowNo3;//3
+ $inputObject.colNo = $data.colNoR;
+ $inputObject.fieldValues = $data.fieldValuesReuse;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $ID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ setAllFields($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please delete all Unused Assets in Reuse Tracking Section";
+ InfyFTassertmessage($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.Reuse_Tracking;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Reusable_Assets;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNoReuseChange;
+ $inputObject.fieldValues = $data.fieldValuesReuseChange;
+ setSwiftFormData($inputObject); 
+ 
+ //_setValue(_textbox(159), "1");
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.open;
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Reuse_Tracking;
+ InfyFTclick($inputObject); 
+
+ _wait(2000);
+ _check(_checkbox(4));
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "adding open reviews but no defect-- defect check");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Reviews; 
+ InfyFTclick($inputObject);  
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span = $data.addlinkReview;//_click(_span("KEY_Link_New_item-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Reviewname;
+ $inputObject.lst_DN_ReviewMode = $data.DN_ReviewMode;
+ $inputObject.lst_DN_Reviewer = $data.DN_Reviewer;
+ $inputObject.txt_DN_ArtifactName = $data.Reviewname;
+ $inputObject.lst_reviewtype = $data.reviewtype; 
+ ModifyEformInstance($inputObject); 
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID1 = $inputObject.eformID;
+ 
+ _popup("newListing"). _click(_button("Return")); 
+ _selectWindow();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ $inputObject.msgAlert = "Error : There are few mandatory data integrity checks that have failed. Please refer to Iteration Closure Checks for details and address the failed checks.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.closureCheck;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "There are no defects logged for the iteration but reviews exists. Please log defects, if found or provide explanation for no defects identified.";
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValuesNoreview;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "adding UAT review without defect");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Reviews; 
+ InfyFTclick($inputObject); 
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.span = $data.addlinkReview;//_click(_span("KEY_Link_New_item-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Reviewname;
+ $inputObject.lst_DN_ReviewMode = $data.DN_ReviewMode;
+ $inputObject.lst_DN_Reviewer = $data.DN_Reviewer;
+ $inputObject.txt_DN_ArtifactName = $data.Reviewname;
+ $inputObject.lst_reviewtype = $data.AcceptanceTestPlanReview;//$data.reviewtypeUAT; 
+ ModifyEformInstance($inputObject); 
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID2 = $inputObject.eformID;
+ 
+ _popup("newListing"). _click(_button("Return")); 
+ _selectWindow();
+
+ $inputObject = {};
+ $inputObject.link = $data.closureCheck;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "There are UAT Reviews but no UAT defects. Please confirm that there were zero UAT defects or log the UAT defects before iteration closure.";
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValuesChk;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//"Following Review are Open.Do you still want to proceed  :\n"+  $ID2+"";
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "adding open reviews and defect check");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.link = $data.Reviews;
+ InfyFTclick($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addlinkReview;//_click(_span("KEY_Link_New_item-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Reviewname;
+ $inputObject.lst_DN_ReviewMode = $data.DN_ReviewMode;
+ $inputObject.lst_DN_Reviewer = $data.DN_Reviewer;
+ $inputObject.txt_DN_ArtifactName = $data.Reviewname;
+ $inputObject.lst_reviewtype = $data.reviewtype; 
+ ModifyEformInstance($inputObject); 
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $ID = $inputObject.eformID;
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Defect;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addlinkReview;//_click(_span("KEY_Link_New_item-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing__1");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Defectname;
+ $inputObject.txt_CM_Description = $data.DN_ReviewMode;
+ $inputObject.lst_DN_Owner = $data.DN_Reviewer;
+ $inputObject.lst_DN_Severity = $data.DN_Severity;
+ ModifyEformInstance($inputObject);  
+ 
+ InfyFTgettingValueforIDCheck($inputObject); 
+ var $IDD = $inputObject.eformID;
+ 
+ _wait(2000);
+ _popup("newListing__1"). _click(_button("Return")); 
+ _selectWindow("newListing");
+ 
+ _wait(2000);
+ _popup("newListing"). _click(_button("Return")); 
+ _selectWindow();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ $inputObject.msgAlert = "Error : There are few mandatory data integrity checks that have failed. Please refer to Iteration Closure Checks for details and address the failed checks.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.closureCheck;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "There are defects logged but there is no review effort. Please log review effort or provide reasons for no review effort.";
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo7;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValuesNoreview;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.LC_Stage_wise_checks;//"LC Stage wise checks";
+ $inputObject.rowNo = $data.details2;//"Details[2]";//$data.rowNo7;
+ $inputObject.colNo = $data.explanation;//"Explanation_txt";//$data.colNo1;
+ $inputObject.fieldValues = $data.fieldValuesNoreview;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.LC_Stage_wise_checks;//"LC Stage wise checks";
+ $inputObject.rowNo = $data.details3;//"Details[2]";//$data.rowNo7;
+ $inputObject.colNo = $data.explanation;//"Explanation_txt";//$data.colNo1;
+ $inputObject.fieldValues = $data.fieldValuesNoreview;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.closed;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ /* $inputObject = {};/************temporary purpose******
+ $inputObject.link = $data.Details;
+ InfyFTclick($inputObject); 
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.open;
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ _assertEqual("Following Review are Open.Do you still want to proceed  : \n  "+$ID+"", _lastAlert());
+// _assertEqual("You cannot close this Review since it has Open Defects linked to it.", _lastAlert()); */
+
+ $t.end();  
+ 
+ var $t = _testcase("TC_11", "END -- routing");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.true = $data.fail;
+ $inputObject.button = $data.Reopen; // _assertExists(_button("Reopen"));
+ InfyFTcheckingButtons($inputObject);
+ 
+ $t.end();

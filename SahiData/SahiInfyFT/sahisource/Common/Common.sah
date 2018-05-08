@@ -1,0 +1,509 @@
+_include("../../../SahiDigite/sahisource/Common/Common.sah");
+
+
+/*************************************************************************
+* @author Kunal Gajbhiye
+* @example setAllFields({"edt_fields.name":"Defect1","lst_fields.priority":"Medium","dat_fields.dueDate":"25/08/2010","rte_fields.description_editor":"New Defect"});
+* @description This function is called to set all editable fields
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function InfyFTsetAllFields($inputObject) 
+{
+    _log("InfyFTsetAllFields Started","success");
+    try 
+	{
+    	if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		
+        var $arrKeySet;
+	    var $key;
+	    var $keyValue;
+	    var $mergekey;
+		
+        for ($key in $inputObject) 
+		{
+        	$keyValue = String([$key]);
+            $arrKeySet = $keyValue.split("_");
+            
+	        
+			if($arrKeySet.length > 2)
+            {   
+			    $mergekey = $arrKeySet[1];
+			    for (var $i = 2; $i < $arrKeySet.length; $i++) 
+				{
+                    $mergekey = $mergekey + "_" + $arrKeySet[$i];
+				}
+				$arrKeySet[1] = $mergekey;
+            }
+			
+            if ($arrKeySet[0] === "edt") 
+			{
+                _setValue(_textbox($arrKeySet[1]), $inputObject[$key]);
+            }
+	        
+			if ($arrKeySet[0] === "pwd")
+			{
+                _setValue(_password($arrKeySet[1]), $inputObject[$key]);
+            }		
+			var $temp =$inputObject[$key];
+            if ($arrKeySet[0] === "lst") 
+			{
+			
+			var $newUI = _getGlobal("New_UI");
+			_log("new user");
+			if($newUI ==="yes")
+			{	
+				//_alert("New UI");
+				$fileName = "NewUI_Users.csv";
+				var $dirPath = _getGlobal("datatDIR")+$fileName;
+				var $rs1 = _readCSVFile($dirPath,",");
+				var $rowLength1 = $rs1.length;
+				for(var $j = 0; $j < $rowLength1; $j++)
+				{
+					var $w_key = $rs1[$j];
+					$j++;
+					var  $w_value = $rs1[$j];
+					
+				}
+
+				var $jsonObj = {};
+				for(var $j = 0; $j < $w_key.length; $j++)
+				{
+					$jsonObj[$w_key[$j]] = $w_value[$j];
+				} 
+				
+				var $tests = $inputObject[$key];
+				$userName = $jsonObj[$tests];
+					$inputObject[$key] = $userName;
+					_log("Data:= "+$userName);
+				
+			}		
+				if($inputObject[$key] =="Null")
+				{
+					$inputObject[$key] = $temp;
+					_log("$temp "+$temp);
+					_log("$inputObject[$key] "+$inputObject[$key]);
+				}			
+			
+            	if($arrKeySet[1].indexOf("_") != -1 && $inputObject.split === "Y")
+            	{
+            		var $keyAndValues = $arrKeySet[1].split("_");
+            		_setSelected(_select($keyAndValues[0]), $inputObject[$key]);
+					
+            	}
+            	else
+            	{
+	            	if($inputObject[$key].indexOf("#")!=-1)
+	        		{
+	            		var $values = $inputObject[$key].split("#");
+						for(var $i = 0; $i < $values.length; $i++)
+	        			{
+	        				_setSelected(_select($arrKeySet[1]), $values[$i]);
+							
+	        			}
+	        		}
+	            	else
+	            	{
+					    
+						var $arrKey = $inputObject[$key].split(";");
+						
+						if($arrKey.length < 1)
+						{
+						_setSelected(_select($arrKeySet[1]), [$arrKey[0],$arrKey[1]], true);
+						}
+						else
+						{
+						_setSelected(_select($arrKeySet[1]), $arrKey[0]);
+						}
+						
+	            	}
+            	}
+			}
+			
+			if ($arrKeySet[0] === "chk") 
+			{
+				_check(_checkbox($arrKeySet[1]));
+			}
+			
+			// @AUTHOR : Dinesh
+			// Use this when u want to make sure that a checkbox is unchecked
+			// Pass your parameter as unchk_<CHECKBOX NAME>
+			if ($arrKeySet[0] === "unchk") 
+			{
+				_uncheck(_checkbox($arrKeySet[1]));
+			}
+			
+			if ($arrKeySet[0] === "rdg") 
+			{
+				_click(_radio($inputObject[$key]));
+            }
+			
+			if ($arrKeySet[0] === "txt") 
+			{
+				_setValue(_textarea($arrKeySet[1]), $inputObject[$key]);
+			}
+			// for search select box
+			if($arrKeySet[0] === "ssl")
+			{
+				_setValue(_textbox($arrKeySet[1]), $inputObject[$key]);
+				_click(__span("/de-icon-search/", _near(_textbox($arrKeySet[1]))));
+				_click(_listItem($inputObject[$key],_near(_textbox($arrKeySet[1]))));
+			}
+			// @AUTHOR : Harshit
+			// Use this when u want to add searchSelect Field at any eform 
+			// and want to assign some value to that searchSelect Field.
+			// Pass the parameter as "ssf_newValue"
+			//fieldValues
+			if ($arrKeySet[0] === "ssf")
+			{
+				if($inputObject[$key].indexOf(";")!=-1)
+        		{
+        			var $values =$inputObject[$key].split(";");
+        			for(var $i = 0 ; $i < $values.length; $i ++)
+        			{
+        				_setValue(_textbox($arrKeySet[1]), $values[$i]);
+        				_click(_button("addValue"));
+        			}
+        		}
+            	else
+            	{
+            		_setValue(_textbox($arrKeySet[1]), $inputObject[$key]);
+    				_click(_button("Add Value"));
+            	}
+			}
+			if($arrKeySet[0] === "slb")
+			{
+				//_setSelected(_option($inputObject[$key], _in(_select($arrKeySet[1]))));
+				var $values = $inputObject[$key].split(";");
+								
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					if($arrKeySet[1] === "PLRRoles")
+					{
+						$arrKeySet[1] = "PLR_Roles";
+						_log("$arrKeySet[1] : "+$arrKeySet[1]);
+					}
+					_setSelected(_select($arrKeySet[1]), $values[$k]);
+					
+					if(_isVisible(_button("Add >")))
+					{
+						if($inputObject.optional === "Y")
+							_click(_button("Add >[1]"));
+						else
+							_click(_button("Add >"));
+					}					 
+					else if (_isVisible(_link("QTP_Add_Role")))
+						_click(_link("QTP_Add_Role"));
+				}	
+			}
+			if($arrKeySet[0] === "mvr")
+			{
+				var $len =0;
+				var $values = $inputObject[$key].split(";");
+				var $alreadyContainsFlag;
+				if($arrKeySet[1] === "PLRRoles")
+				{
+					_set($len,_select("PLR_Roles").length);
+				}
+				else
+				{
+					_set($len,_select("selectTo").length);
+				}
+				
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					if($len === 0)
+					{
+						
+						if($arrKeySet[1] === "PLRRoles")
+						{
+							$arrKeySet[1] = "PLR_Roles";
+							
+						}
+						_setSelected(_select($arrKeySet[1]), $values[$k]);
+						_click(_link("de-icon-next"));
+					}
+					else if($len != 0)
+					{	
+						if(_exists(_select("PLR_Roles")))
+						{
+							$alreadyContainsFlag =_containsText(_select("PLR_Roles"),$values[$k]);
+						}
+						else
+						{
+							$alreadyContainsFlag =_containsText(_select("selectTo"),$values[$k]);
+						}
+						if($alreadyContainsFlag === true)
+						{
+							if($arrKeySet[1] === "PLRRoles")
+							{
+								$arrKeySet[1] = "PLR_Roles";
+							}
+							_setSelected(_select($arrKeySet[1]), $values[$k]);
+							_click(_link("de-icon-next"));
+						}
+					}
+				}	
+			}
+			if($arrKeySet[0] == "img")
+			{
+				_click(_link("de-icon-open_dropdown_list"));
+				_selectWindow("AvailableValues");
+				_setSelected(_select($arrKeySet[1]), $inputObject[$key]);
+				_click(_submit("//s*Ok/s*/"));
+				_selectWindow("Filter");
+				_wait(2000);
+			}
+			if($arrKeySet[0] === "file")
+			{
+				var $uploadFromPath = _getGlobal("DOWNLOAD");
+				_setFile(_file($inputObject[$key]),$uploadFromPath);
+				_call(_file($inputObject[$key]).type = "zip");
+			}
+			if($arrKeySet[0] === "search")
+			{
+			    _setValue(_textbox($arrKeySet[1]), $inputObject[$key].substring(0,3));
+				_click(_span("Project Manager_Img"));
+				_click(_listItem($inputObject[$key]));
+				
+			}
+			if($arrKeySet[0] === "hidden")
+			{
+				_log("can not set value for this field as this is read only field");
+				return;	
+			}
+			if($arrKeySet[0] === "dat")
+			{
+			    _click(_link("Select Date", _rightOf(_textbox($arrKeySet[1]))));
+				var $arrDate = $inputObject[$key].split("-");
+                _setSelected(_select("ui-datepicker-month"), $arrDate[1]);
+                _setSelected(_select("ui-datepicker-year"), $arrDate[2]);
+                _click(_link($arrDate[0]));
+			}
+		}
+        if($inputObject.winprefix)
+			_selectWindow();
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("InfyFTsetAllFields Completed","success");	
+}
+
+
+
+
+
+/*************************************************************************
+* @author Kunal Gajbhiye
+* @example InfyFTverifyAllFields({"edt_fields.name":"Defect1","lst_fields.priority":"Medium","txt_fields.Junit_Description":"Some description"});
+* @description This function is called to verify all set fields
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyAllFields($inputObject) 
+{
+    _log("InfyFTverifyAllFields Started","success");
+    try 
+	{
+        var $arrKeySet;
+	    var $key;
+	    var $keyValue;
+	    var $mergekey;
+		
+        for ($key in $inputObject) 
+		{
+            $keyValue = String([$key]);
+            $arrKeySet = $keyValue.split("_");
+	        
+			if($arrKeySet.length > 2)
+            {   
+			    $mergekey = $arrKeySet[1];
+			    for (var $i=2; $i<$arrKeySet.length; $i++) 
+				{
+                    $mergekey = $mergekey + "_" + $arrKeySet[$i];
+				}
+				$arrKeySet[1] = $mergekey;
+            }
+			
+            if ($arrKeySet[0] === "edt") 
+			{
+            	var $value;
+            	_set($value, _textbox($arrKeySet[1]).value);
+            	var $boolean = false;
+            	if(_textbox($arrKeySet[1]).value.indexOf(";") != -1)
+            	{
+            		_set($boolean, _assertEqual($inputObject[$key].replace(",",";"), $value.replace(",",";")));
+            	}
+            	else
+            		_set($boolean, _assertEqual($inputObject[$key], $value));
+				if($boolean === true)
+            	{
+            		if(_textbox($arrKeySet[1]).value.indexOf(";") != -1)
+            		{
+            			_assertEqual($inputObject[$key].replace(",",";"), $value.replace(",",";"));
+            		}
+            		else
+            			_assertEqual($inputObject[$key], $value);
+            	}
+            	else
+            	{
+            		_assertNotEqual($inputObject[$key], $value);
+            	}	
+            }
+	   
+            if ($arrKeySet[0] === "lst") 
+			{
+            	if($inputObject.operation === "Negative")
+            		_assertNotEqual($inputObject[$key], _getSelectedText(_select($arrKeySet[1])));
+            	else
+            	{
+	            	var $values = $inputObject[$key].split(";");
+					for(var $i = 0; $i < $values.length; $i++)
+	        		{
+					    _assertTrue(_containsText(_select($arrKeySet[1]), $values[$i]));	
+	        		}
+            	}	
+			}
+
+            if ($arrKeySet[0] === "txt") 
+			{
+				if($inputObject.operation === "Negative"){
+					_assertNotEqual($inputObject[$key], _textarea($arrKeySet[1]).value);
+				}	
+				else{
+					_assertEqual($inputObject[$key], _textarea($arrKeySet[1]).value);
+				}
+            }
+			
+			
+			if($arrKeySet[0] === "cell")
+			{
+			    if($inputObject.operation === "Negative")
+				{
+					_assertNotEqual($inputObject[$key], _getText(_cell(0, _rightOf(_cell($arrKeySet[1].replace("_"," "))))));
+				}
+				else
+			    {
+				    _assertEqual($inputObject[$key], _getText(_cell(0, _rightOf(_cell($arrKeySet[1].replace("_"," "))))));
+				}
+			}
+			
+			// To Verify if all the item passed in the CSV are Present in the ListBox.
+			if($arrKeySet[0] === "slb")
+			{
+				var $values = $inputObject[$key].split(";");
+								
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					if($arrKeySet[1] === "selectFrom")
+					{
+						_assertTrue(_containsText(_select("selectTo"), $values[$k]));	
+					}
+					else
+						_assertTrue(_containsText(_select("projSelect"), $values[$k]));	
+				}	
+			}	
+			
+			// To Verify if all the item passed in the CSV are Present in SelectFrom.
+			if($arrKeySet[0] === "sfm")
+			{
+				var $values = $inputObject[$key].split(";");
+								
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					_assertTrue(_containsText(_select("selectFrom"), $values[$k]));	
+				}	
+			}	
+			
+			if($arrKeySet[0] === "lbl")
+			{
+				_assertEqual($inputObject[$key],_getText(_span($arrKeySet[1])));
+			}
+			
+			if($arrKeySet[0] === "ele")
+			{
+				_assertEqual($inputObject[$key],(_getText(_cell($arrKeySet[1]) || _span($arrKeySet[1]))));
+			}
+			// TO check if the List only contains the provided text
+			if ($arrKeySet[0] === "con") 
+			{
+				var $values = $inputObject[$key];
+				
+				if($inputObject[$key].indexOf(";") != -1)
+				{
+					$values = $inputObject[$key].split(";");
+					for(var $k=0; $k<$values.length; $k++)
+					{
+						_assertTrue(_containsText(_select($arrKeySet[1]), $values[$k]));	
+					}
+				}
+				else
+				{
+					_assertTrue(_containsText(_select($arrKeySet[1]), $values));
+				}
+			}
+			if ($arrKeySet[0] === "rdg") 
+			{
+				_assertEqual($inputObject[$key], _radio($arrKeySet[1]).value);
+			}
+			
+			if ($arrKeySet[0] === "chk") 
+			{
+				_assertTrue(_checkbox($arrKeySet[1]).checked);
+			}
+			
+			if ($arrKeySet[0] === "unchk") 
+			{
+				// this added because after global filter is checked,after save it becomes YES so for this qst if is added
+				// if u want to verify that global filter is TRUE or FALSE then pass input as this "unchk_isGlobalFilter_Yes"
+				if($arrKeySet[2] === 'Yes')
+				{
+					_assertTrue(_isVisible(_row("Global Filter: Yes"),_in(_table("FormArea"))));
+				}
+				else
+					_assertFalse(_checkbox($arrKeySet[1]).checked);
+			}
+			if ($arrKeySet[0] === "img") 
+			{
+				var $values = $inputObject[$key].split(";");
+				
+				$values = $inputObject[$key].split(";");
+				for(var $k=0; $k<$values.length; $k++)
+				{
+					_assertTrue(_isVisible(_link($values[$k])));	
+				}
+			}
+			if($arrKeySet[0] === "link") // to verify link eg.segment etc.
+			{
+				var $segmentName;
+				$segmentName =  $inputObject[$key].split(";");
+				for (var $i = 0; $i < $segmentName.length; $i ++)
+				{
+					_assertTrue(_isVisible(_link($segmentName[$i])));
+				}
+			}
+        }
+	} catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("InfyFTverifyAllFields Completed","success");	
+}
+/*************************************************************************
+* @author Kunal Gajbhiye
+* @example InfyFThandleFailure(e);
+* @description This function is called to handle failure and take the screen shot of the error page. 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function handleFailure(e)
+{
+	_logExceptionAsFailure(e);
+	_focusWindow();
+    _takeScreenShot();
+	_fail("Script stopped due to Error.");
+}

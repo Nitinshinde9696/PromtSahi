@@ -1,0 +1,104 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //Team Isha
+ selectProject($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /******************************************************************************
+ * Client commitments
+ ******************************************************************************/
+ 
+ var $t = _testcase("TC_4", "Client Commitments");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.ClientCommitments;//_click(_link("Client commitments"));
+ SelectSegment($inputObject);  
+ _wait(3000);
+ 
+ _click(_span("Delete"));
+ _assertEqual("Please select at least one work-item.", _lastAlert());
+ 
+ if(_isVisible(_span("1")))
+{  
+	$inputObject = {}; 
+	$inputObject.tableName = $data.ClientCommitments; //Project Specific Metrics
+	$inputObject.rowNo = $data.rowNo3;
+	$inputObject.colNo = $data.colNo01;
+	$inputObject.fieldValues = $data.fieldValues01;
+	setSwiftFormData($inputObject);
+ 
+	_click(_span("Delete"));
+	_assertEqual("This row will no longer be available", _lastConfirm());
+ }
+ 
+ $inputObject = {}; 
+ $inputObject.link = $data.add;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.ClientCommitments; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo2C;
+ $inputObject.fieldValues = $data.ClientCommitments;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(300);
+ 
+ _isVisible(_link("http://172.25.103.220/MSACTS"));
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

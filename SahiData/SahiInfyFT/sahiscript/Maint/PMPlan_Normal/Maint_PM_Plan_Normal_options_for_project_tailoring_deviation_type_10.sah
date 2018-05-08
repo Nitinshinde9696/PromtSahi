@@ -1,0 +1,88 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data9 = readDataFromCSV("Maint_PM_Plan_Normal_options_for_project_tailoring_deviation_type_10","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 37", "83,84,85");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data9.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+
+ $t.end();
+ var $t = _testcase("TC_83", "Checking the available options in the Track Wise Process Tailoring/ Deviations");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data9.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data9.TrackWiseProcessTailoringDeviations;// _InfyFTclick(_link("TrackWiseProcessTailoringDeviations"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data9.tableName0;
+ $inputObject.rowCount = $data9.rowCount0;
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.Deviationfromstandardprocess;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.Justificationfordeviation;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.ApplicabletoTrack;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data9.Deviationtype;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_84", "Deviation Type");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName0;
+ $inputObject.rowNo = $data9.rowIndex;
+ $inputObject.colNo = $data9.colApplicable;
+ $inputObject.fieldValues = $data9.fieldValues0;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_85", "Deviation Type");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data9.tableName0;
+ $inputObject.rowNo = $data9.rowIndex;
+ $inputObject.colNo = $data9.colDeviation;
+ $inputObject.fieldValues = $data9.fieldValues1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ /*
+ var $t = _testcase("InfyFT_sahi_BR27_Project_Tailoring");
+ $t.start();
+ 
+ _include("Maint_PM_Plan_Normal_Project_Tailoring_data_setup.sah");
+ 
+ $t.end(); 
+ */
+
+ 

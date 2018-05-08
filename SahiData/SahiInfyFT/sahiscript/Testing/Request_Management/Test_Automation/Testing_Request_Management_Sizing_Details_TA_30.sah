@@ -1,0 +1,98 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+
+
+ $data = readDataFromCSV("Testing_Request_Management_Sizing_Details_TA_30", "Testing/Request_Management/Test_Automation");
+ 
+/*
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};		
+ $inputObject.name = $data.navigateTo1;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $ID; 
+ OpenEformInstance($inputObject)
+ 
+*/
+ var $t = _testcase("TC-20.1 To 20.3", "SET VALUES FOR SIZE SUMMARY");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;
+ SelectSegment($inputObject);
+
+ $inputObject ={};
+ $inputObject.edt_DN_NoofTestStepsAutomated=$data.fieldValueAA;
+ $inputObject.edt_DN_NoofTestScriptsPrepare = $data.fieldValueBB;
+ $inputObject.edt_DN_NoofTestScriptsExecute = $data.fieldValueCC;
+ $inputObject.edt_DN_NoofTestStepsAutomated1 = $data.fieldValueGG;
+ $inputObject.edt_DN_NoofTestScriptsPrepare1 = $data.fieldValueEE;
+ $inputObject.edt_DN_NoofTestScriptsExecute1 = $data.fieldValueFF;
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC-22.1 To 22.3", "SIZE SUMMARY-VERFYING SET VALUES");
+
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;
+ SelectSegment($inputObject);
+
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data.SizeSummary;;
+ $inputObject.rowNo = "0";//"0";
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl";// 
+ $inputObject.fieldValues = "Measurement|Planned|Actual";// 
+ InfyFTverifySwiftFormData($inputObject);  
+ */
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.SizeSummary;;
+ $inputObject.rowNo = $data.row1;//"1|2|3";//
+ $inputObject.colNo = $data.col1;//"0_lbl";// 
+ $inputObject.fieldValues = $data.val1;//"Test Steps Automated|Test Scripts-Prepared|Test Scripts-Executed";// 
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.SizeSummary;;
+ $inputObject.rowNo = $data.row1;//""1|2|3"";
+ $inputObject.colNo = $data.col2;//"1_lbl";// 
+ $inputObject.fieldValues = $data.val2;//"456|789|741";// 
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.SizeSummary;;
+ $inputObject.rowNo = $data.row1;//""1|2|3"";
+ $inputObject.colNo = $data.col3;//"2_lbl";// 
+ $inputObject.fieldValues = $data.val3;//"321|321|123";// 
+ verifySwiftFormData($inputObject);
+ 
+
+$t.end();
+
+  
+  

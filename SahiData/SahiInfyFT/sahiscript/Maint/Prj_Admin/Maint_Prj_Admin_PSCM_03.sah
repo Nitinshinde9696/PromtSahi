@@ -1,0 +1,122 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+$data1 = readDataFromCSV("Maint_Prj_Admin_PSCM_03", "Maint/Prj_Admin");
+
+ /**************************************************************
+ * Project specific metric and project level metric
+ ***************************************************************/
+ 
+ var $t = _testcase("TC_5", "Selecting Production Support Custom Metrics segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data1.specific_metrix;//Production Support Custom Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tblname = "Production Support Custom Metrics[1]";
+ $inputObject.row_id = 3;
+ $inputObject.col_id =1;
+ InfyFTDeleteRows($inputObject);
+
+ _click(_link("Add Rows"));
+   
+ $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics[1]";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "3";
+ $inputObject.colNo = "7_lst";
+ $inputObject.fieldValues = "Event Management";//;$data1.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric Name in table Production Support Custom Metrics in Production Support Custom Metrics tab\n• Field Metric UOM in table Production Support Custom Metrics in Production Support Custom Metrics tab\n• Field Metric Type in table Production Support Custom Metrics in Production Support Custom Metrics tab\n";//"Value must be set for the following mandatory field(s):\n• Metric Name field inside Production Support Custom Metrics Table of Production Support Custom Metrics Tab\n• Metric UOM field inside Production Support Custom Metrics Table of Production Support Custom Metrics Tab\n• Metric Type field inside Production Support Custom Metrics Table of Production Support Custom Metrics Tab\n";//"Value must be set for Metric Name field under Production Support Custom Metrics > Production Support Custom Metrics.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics[1]";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "3";
+ $inputObject.colNo = "13_edt";
+ $inputObject.fieldValues = "Event Management";//;$data1.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+  $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric UOM in table Production Support Custom Metrics in Production Support Custom Metrics tab\n• Field Metric Type in table Production Support Custom Metrics in Production Support Custom Metrics tab\n";//"Value must be set for the following mandatory field(s):\n• Metric UOM field inside Production Support Custom Metrics Table of Production Support Custom Metrics Tab\n• Metric Type field inside Production Support Custom Metrics Table of Production Support Custom Metrics Tab\n";//"Value must be set for Metric UOM field under Production Support Custom Metrics > Production Support Custom Metrics.";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics[1]";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "3";
+ $inputObject.colNo = "14_lst";
+ $inputObject.fieldValues = "Number";//;$data1.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+  $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Metric Type in table Production Support Custom Metrics in Production Support Custom Metrics tab\n";//"Value must be set for the following mandatory field(s):\n• Metric Type field inside Production Support Custom Metrics Table of Production Support Custom Metrics Tab\n";//"Value must be set for Metric Type field under Production Support Custom Metrics > Production Support Custom Metrics.";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+  $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics[1]";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "3";
+ $inputObject.colNo = "15_lst";
+ $inputObject.fieldValues = "Positive";//;$data1.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ _wait(5000);
+ 
+ $t.end(); 
+ /* 
+ var $t = _testcase("TC_6", "Veryfing CLONE Matrics ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tblname = "Production Support Custom Metrics";
+ $inputObject.row_id = 2;
+ $inputObject.col_id =1;
+ InfyFTDeleteRows($inputObject);
+
+ _click(_link("Add Rows"));
+   
+ $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "7_lst|11_lst";
+ $inputObject.fieldValues = "Access Management|Change Productivity";//;$data1.fieldValues9;
+ setSwiftFormData($inputObject);
+  
+  _wait(8000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Value must be set for Metric Name field under Production Support Custom Metrics > Production Support Custom Metrics.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "13_edt";
+ $inputObject.fieldValues = "Matric name";//;$data1.fieldValues9;
+ setSwiftFormData($inputObject);
+ 
+   _wait(8000);
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.tableName = "Production Support Custom Metrics";//$data1.specific_metrix1; //Project Specific Metrics
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "14_lst|15_lst";
+ $inputObject.disable = "1";//;$data1.fieldValues9;
+ verifySwiftFormFieldDisability($inputObject);
+ 
+ $t.end();
+ */ 

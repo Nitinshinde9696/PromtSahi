@@ -1,0 +1,1449 @@
+
+/**
+@Function Number:1
+@author: Vaishali saitwal
+@example: setApplicationPreferences({ "lst_DateFormat" : "DD-MMM-YYYY" ,  "lst_UserMapping" : "Make All Normal User" ,  "lst_ProjectCreationFrom" : "Process Template Only" ,  "rdg_EditComments" : "Yes" ,  "rdg_TimeReminders" : "Yes" ,  "rdg_allowpersonallocaltaskaddition" : "No" ,  "rdg_viewbillablehours" : "Yes" ,  "rdg_ApproverFilter" : "PrjTeamList" ,  "lst_routesequentialTimesheet" : "Enforce Sequential Processing of Timesheet" ,  "rdg_showrejectedtimesheetcount" : "Y" ,  "rdg_TSShowHideItems" : "Y" ,  "rdg_AppFutureTs" : "Y" ,  "rdg_TSItemsStayAfterRoute" : "Y" ,  "rdg_TSCanUsersEditTimesheetWorkflo" : "Y" ,  "rdg_TSDisableTimesheetEntryOnResou" : "Y" ,  "rdg_TSAllowAutomaticApportioning" : "N" ,  "rdg_AllowSummTaskEdition" : "N" ,  "rdg_MakeTimeLogsBillable" : "Y" ,  "rdg_TimesheetRouteOnDeviation" : "Y" ,  "edt_PerDay" : "4.0" ,  "edt_PerMonth" : "167.0" ,  "edt_PerWeek" : "50.0" ,  "rdg_ProjectApproval" : "Y" ,  "rdg_MakeStdCodeMandatory" : "No" ,  "rdg_PhaseActivityPreference" : "Y" , ' "rdg_TeamApprovalMan" : "Y" ,  "rdg_sendMailOnTeamInvite" : "No" ,  "rdg_TSTotallingRules" : "Y" ,  "edt_Week" : "9.0" ,  "edt_Weekend" : "9.0" ,  "rdg_AllocChangeProjLevel" : "Y" ,  "rdg_MailNotifyonTSReject" : "N" ,  "lst_FolderSorting" : "Alphabetic Sorting" , ' "edt_CostOfCapital" : "25.0" , ' "chk_AllowCheckInCheckOutViaMSPClie" : "OFF" ,  "rdg_UpdateActualEffOnMSPCheckIn" : "Yes" ,  "rdg_TimesheetRouteEvenIfCheckedOut" : "Yes" ,  "lst_MSPDefaultTextSettingStdCode" : "Text 1" ,  "rdg_AllowPrjDeletion" : "Yes" ,  "lst_TSSupervisorStage" : "Stage 1" ,  "lst_TSPostingStage" : "Stage 2" ,  "rdg_DisableAllProjectTaskAddition" : "No" ,  "rdg_AssociateRoleWithAllocPeriod" : "Yes" ,  "rdg_MostPermissiveRights" : "Yes" });
+          setApplicationPreferences({"rdg_TSAllowPastTimelogsEdit[2]":"TSAllowPastTimelogsEdit[2]","edt_TSAllowPastTimelogsEditUPTO":"0","alertMsg":"Please enter a numeric value greater than 0 for Past Timelogs."});
+@description:  pass the aplication preferences for organization
+@param: 
+@return: None
+**/
+function setApplicationPreferences($inputObject)
+{
+	_log("setApplicationPreferences Started","success");
+	try 
+	{
+		if($inputObject.rdg_MostPermissiveRights != undefined && $inputObject.rdg_MostPermissiveRights != "")
+		{
+			_click(_div("Team"));
+			if($inputObject.rdg_MostPermissiveRights == "No")
+			{
+				_click(_radio("MostPermissiveRights[1]"));	
+			}
+			if($inputObject.rdg_MostPermissiveRights == "Yes")
+			{
+				_click(_radio("MostPermissiveRights"));
+			}	
+		}
+		if($inputObject.MostPermissiveRights1 != undefined && $inputObject.MostPermissiveRights1 != "")
+		{
+			_click(_div("Team"));
+			if($inputObject.MostPermissiveRights1 == "No")
+			{
+				_click(_radio("MostPermissiveRights"));	
+			}
+			if($inputObject.MostPermissiveRights1 == "Yes")
+			{
+				_click(_radio("MostPermissiveRights[1]"));
+			}	
+		}
+		else
+		{	
+			if($inputObject.edt_ProjCodePrefix != "" && $inputObject.edt_ProjCodePrefix != undefined)
+			{
+				_click(_div("Project"));
+			}
+			if($inputObject.lst_UserMapping != "" && $inputObject.lst_UserMapping != undefined)
+			{
+				_click(_div("Team"));
+			}
+			if($inputObject.rdg_EditComments != "" && $inputObject.rdg_EditComments != undefined)
+			{
+				_click(_div("Eform"));	
+			}
+			if($inputObject.rdg_TimeReminderss != "" && $inputObject.rdg_TimeReminderss != undefined)
+			{
+				_click(_div("Eform"));	
+			}
+			
+			if($inputObject.edt_SiteURL != "" && $inputObject.edt_SiteURL != undefined)
+			{
+				_click(_div("Organization"));
+				if($inputObject.operation == "Negative")
+				{
+					_assertEqual( $inputObject.edt_SiteURL, _getText(_cell(1,_near(_cell("Site URL for Application:")))));
+					return true;
+				}
+			}
+			if($inputObject.rdg_ApproverFilter != "" && $inputObject.rdg_ApproverFilter != undefined)
+			{
+				_click(_div("Timesheet"));
+			}
+			setAllFields($inputObject);
+		}
+		_click(_submit("//s*Save/s*/") || _button("//s*Save/s*/"));
+		
+		if ($inputObject.alertMsg)
+		{
+		    _assertEqual($inputObject.alertMsg,_lastAlert());
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setApplicationPreferences Completed","success");
+}
+
+
+/**
+ @Function Number:	2
+ @author: 			Vaishali
+ @example: 			switchToSubOrg($inputObject)
+ @description: 		This function is called to subOrganization.
+ @param:       		SubOrg_name
+ @return: 	    	none
+ **/
+//Functionality Deprecated
+/*function switchToSubOrg($inputObject)
+{
+	_log("switchToSubOrg Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertNotExists(_cell($inputObject.item));
+		}
+		else
+		{
+			OpenEformInstance($inputObject);
+			_expectConfirm("Do you wish to switch context to: "+$inputObject.item, true);
+		}
+		_wait(10000, _cell("organizationcodeLABEL"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("switchToSubOrg Completed","success");
+}*/
+
+/**
+ @Function Number:	3
+ @author:			Vaishali	
+ @example:			switchToOrg()
+ @description: 		This function switch to Organization
+ @param: 			None
+ @return: 			None
+ **/
+//Functionality Deprecated
+/*function switchToOrg()
+{
+	_log("switchToOrg Started","success");
+	try 
+	{
+		_click(_image("QTP_back_organization"));
+		_expectConfirm("Do you wish to switch context to: Organization", true);
+		
+		_assertFalse(_exists(_image("QTP_back_organization")), "switchToOrg Verified");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("switchToOrg Completed","success");
+}
+*/
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchPeople($inputObject)
+{
+	_log("searchPeople Started","success");
+	try 
+	{
+		var $addBtn = "KEY_TOOLTIP_People_Search";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		if(_exists(_link($addbtnKey)))
+		{
+			_click(_link($addbtnKey));	
+		}
+		
+		setAllFields($inputObject);
+		_click(_submit("SubmitBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchPeople Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchOrganization($inputObject)
+{
+	_log("searchOrganization Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Organization_Search"));
+		setAllFields($inputObject);
+		_click(_submit("SubmitBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchOrganization Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchProject($inputObject)
+{
+	_log("searchProject Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchProject Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setFeatureSettings($inputObject)
+{
+	_log("setFeatureSettings Started","success");
+	try 
+	{
+		//Set The Role in DropDown
+		_setSelected(_select("select2"), $inputObject.Role);
+		
+		//Clicks FeatureSetting Tab
+		_click(_link("QTP_KEY_LINK_Feature_Settings"));
+
+		//Set FeatureSetting Values
+		var $YorN = $inputObject.featureSettingAvailability;
+		
+		_log("$YorN" + $YorN);
+		if ("Y" === $YorN)
+		{	
+			_check(_checkbox("isAvailable"+$inputObject.modulecode));
+		}
+		
+		if ("N" === $YorN)
+		{	
+			_uncheck(_checkbox("isAvailable"+$inputObject.modulecode));
+		}
+
+		if ("Y" === $YorN)
+		{	
+			_check(_checkbox("canChange"+$inputObject.modulecode));
+		}
+      
+		if ("N" === $YorN)
+		{	
+			_uncheck(_checkbox("canChange"+$inputObject.modulecode));
+		}
+	
+		_click(_button("SaveBtn"));
+		_wait(5000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setFeatureSettings Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author: Rahul Mahant
+ @example: deleteSubOrg({ "suborg_name" : "Ophelia" ,  "col_id" : "3" });
+ @description:  pass the sub org name and table column id to be deleted
+ @param: sub organization object to be deleted
+ @return: None
+ **/
+
+function deleteSubOrg($inputObject)
+{
+	_log("deleteSubOrg Started","success");
+	try 
+	{
+		_click(_radio(0, _near(_cell($inputObject.suborg_name))));
+		_click(_submit(" Delete "));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteSubOrg Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function editRelationshipType($inputObject)
+{
+	_log("editRelationshipType Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			if($inputObject.lst_RelList_0)
+			{
+				_assertFalse(_select("RelList_0").isContentEditable);
+				return;
+			}			
+		}
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_wait(5000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editRelationshipType Completed","success");
+}
+
+/**
+ @Function Number:	10
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addRelationshipType($inputObject)
+{
+	_log("addRelationshipType Started","success");
+	try 
+	{
+		$inputObject.winprefix = "popup";
+		createInstanceForPopUp($inputObject);
+		
+		if(!$inputObject.alert)
+			verifyRelationshipTypeListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addRelationshipType Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addReportingAttribute($inputObject)
+{
+	_log("addReportingAttribute Started","success");
+	try 
+	{
+		createInstanceForPopUp($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addReportingAttribute Completed","success");
+}
+
+/**
+ @Function Number:12
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToReportingAttributesValues($inputObject)
+{
+	_log("navigateToReportingAttributesValues Started","success");
+	try 
+	{
+		_click(_link(0,_in(_cell(6,_near(_cell($inputObject.edt_relName))))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToReportingAttributesValues Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addReportingAttributeValue($inputObject)
+{
+	_log("addReportingAttributeValue Started","success");
+	try 
+	{
+		_click(_link("KEY_BUTTON_Add_Reporting_Attrib_Val"));
+		_selectWindow("popup");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		_selectWindow();
+		_wait(5000, _isVisible(_link($inputObject.edt_NodeName)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addReportingAttributeValue Completed","success");
+}
+
+/**
+ @Function Number:	14
+ @author:			Vaishali
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToAdvancedSearch()
+{
+	_log("navigateToAdvancedSearch Started","success");
+	try 
+	{
+		if(_exists(_div("KEY_BUTTON_Prj_Org_Relationship")))
+		{
+			_click(_div("KEY_BUTTON_Prj_Org_Relationship"));
+		}
+		_click(_link("QTP_KEY_LINK_Advanced_Search"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToAdvancedSearch Completed","success");
+}
+
+/**
+ @Function Number:	15
+ @author:			Vaishali
+ @example:			batchUpdate($inputObject)
+ @description: 		This function update multiple values in batch 
+ @param: 			$inputObject.name,$inputObject.chk_col_id,$inputObject.assn_values
+ @return: 			none
+ **/
+
+function batchUpdate($inputObject)
+{
+	_log("batchUpdate Started","success");
+	try 
+	{
+		var $name=$inputObject.name;
+		//for multiple values update value split by #..comes from csv file
+		if($name.indexOf("#")!=-1)
+		{
+			var $values =$name.split("#");
+			for(var $i = 0 ; $i < $values.length; $i ++)
+			{
+				_check(_checkbox(0,_near(_cell($values[$i]))));  
+			}
+		}
+		else
+		{
+			_check(_checkbox(0,_near(_cell($name))));
+		}
+		_click(_submit("QTP_KEY_BUTTON_Batch_Update"));
+	
+		var $multipleValues ;
+		_set($multipleValues,$inputObject.assn_values);
+		_log("$multipleValues" +$multipleValues);
+		var $index ;
+		_set($index,$multipleValues.indexOf(";"));
+		//modified by shashank to handle data in "Common1#Common1N1;Project1#Project1N1" format
+		if( $index !== -1)
+		{
+			var $multipleAssgnValues= $multipleValues.split(";");
+			var $selectbox = $inputObject.SelectBox.split("#");
+				for(var $i = 0 ; $i <$multipleAssgnValues.length ; $i++)
+				{
+					var $values =$multipleAssgnValues[$i].split("#");
+					_setSelected(_select($selectbox[$i]),$values[1]);	
+				}
+		}
+		else
+		{
+			var $multipleAssgnValues=$inputObject.assn_values.split("#");
+			_log("$multipleAssgnValues" +$multipleAssgnValues);
+			_setSelected(_select($inputObject.SelectBox),$multipleAssgnValues[1]);
+		}
+		
+		_click(_submit("QTP_KEY_BUTTON_Save_Updates"));
+		verifyBatchUpdateItems($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("batchUpdate Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function multipleUpdate($inputObject)
+{
+	_log("multipleUpdate Started","success");
+	try 
+	{
+		var $name=$inputObject.name;
+		//for multiple values update value split by #..comes from csv file
+		if($name.indexOf("#")!=-1)
+		{
+				var $values =$name.split("#");
+				for(var $i = 0 ; $i < $values.length; $i ++)
+				{
+					_check(_checkbox(0,_near(_cell($values[$i]))));  
+				}
+		}
+		else
+		{
+				_check(_checkbox(0,_near(_cell($name))));
+		}
+		_click(_submit("QTP_KEY_BUTTON_Multiple_Update"));
+		
+		var $multipleAssgnValues=$inputObject.assn_values;
+		
+		if($multipleAssgnValues.indexOf(";")!=-1)
+		{		
+			var $noOfSelectBox = $multipleAssgnValues.split(";");
+			for(var $i=0; $i<$noOfSelectBox.length; $i++)
+			{
+				 var $assVal= $noOfSelectBox[$i].split("#");
+				 _log("$assVal" +$assVal);
+				 for(var $j = 0 ; $j < $assVal.length; $j++)
+				{
+					 if($assVal[$j]!="user relation" || $assVal[$j] != "Project relation" )
+					 {
+						 if($inputObject.SelectBox !== "")
+						 {
+							 var $selectboxes = $inputObject.SelectBox.split("#"); //get the select boxes
+							 for(var $a = 0 ; $a < $selectboxes.length; $a++)
+							{
+								 _setSelected(_select($selectboxes[$a]),$assVal[1]);
+							}
+						 }
+					 }
+					 if($assVal[$j]==="user relation" || $assVal[$j] === "Project relation" )
+					 {
+						 if($inputObject.SelectBox !== "")
+						 {
+							 var $selectboxes = $inputObject.SelectBox.split("#"); //get the select boxes
+							 for(var $a = 0 ; $a < $selectboxes.length; $a++)
+							{
+								 _setSelected(_select($selectboxes[$a]),$assVal[1]);
+							}
+						 }
+						 else
+						 {
+							 _setSelected(_select("item2"),$assVal[1]);
+							 _setSelected(_select("item5"),$assVal[1]);
+						 	 
+						 }
+					 }
+					 if($assVal[$j]==="Project1" || $assVal[$j]==="User1")
+					 {
+						 _setSelected(_select("item2"),$assVal[1]);	
+						 _setSelected(_select("item6"),$assVal[1]);
+					 }
+					 if($assVal[$j]==="Common1")
+					 {
+						 _setSelected(_select("item0"),$assVal[1]);
+						 _setSelected(_select("item4"),$assVal[1]);
+					 }
+				}
+			}
+			_click(_submit("QTP_KEY_BUTTON_Save_Updates"));
+		}
+		 else
+		{
+			 var $assVal= $inputObject.assn_values.split("#");
+			 if($assVal[0]==="user relation" || $assVal[0]==="Project1")
+			 {
+				 _setSelected(_select("item2"),$assVal[1]);
+				 _click(_submit("QTP_KEY_BUTTON_Save_Updates"));
+			 }
+		}
+		verifyMultipleUpdateItems($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("multipleUpdate Completed","success");
+}
+
+/**
+@Function Number:16
+@author:shashank
+@example:
+@description: Function added its for two scripts 825,823
+@param: 
+@return: 
+**/
+
+function multipleUpdates($inputObject)
+{
+	_log("multipleUpdates Started","success");
+	try 
+	{
+		var $name=$inputObject.name;
+		//for multiple values update value split by #..comes from csv file
+		if($name.indexOf("#")!=-1)
+		{
+				var $values =$name.split("#");
+				for(var $i = 0 ; $i < $values.length; $i ++)
+				{
+					_check(_checkbox(0,_near(_cell($values[$i]))));  
+				}
+		}
+		else
+		{
+				_check(_checkbox(0,_near(_cell($name))));
+		}
+		_click(_submit("QTP_KEY_BUTTON_Multiple_Update"));
+		
+		var $count= $inputObject.assn_values.split(";");
+		
+		if($inputObject.SelectBox.indexOf(";") !== -1)
+		{
+			
+			var $selectBox = $inputObject.SelectBox.split(";");//["item0#item1","item2#item3"]
+			_log("$selectBox" +$selectBox);
+
+			for(var $j = 0 ;$j <$selectBox.length ; $j++)
+			{
+				var $select = $selectBox[$j].split("#"); 	//["Common1#Common1N1","Project1#Project1N1","Common1#Common1N1","Project1#Project1N1"]
+				_log("$select" + $select);
+				_log("$assVal" + $assVal);
+				for(var $k = 0 ; $k < $select.length ; $k++)
+				{
+					var $assVal= $count[$k].split("#"); 
+					_setSelected(_select($select[$k]),$assVal[1]);
+				}
+			}
+		}
+		_click(_submit("QTP_KEY_BUTTON_Save_Updates"));
+		
+		verifyMultipleUpdateItems($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("multipleUpdates Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example: organizeMenuStructure({ "lst_section" : "My Work" ,  "lst_tree" : "������My�Resume" ,  "operation" : "QTP_KEY_TOOLTIP_Promote" });
+* @description This function is called to organize menu Structure
+* @param {String} None
+* @return {String}   None 
+
+*************************************************************************/
+
+function organizeMenuStructure($inputObject)
+{
+	_log("organizeMenuStructure Started","success");
+	try 
+	{
+		 _wait(15000,_exists(_link("de-icon-reorder")));
+		 _click(_link("de-icon-reorder"));
+		 _selectWindow("menuOraganize");
+		 _setSelected(_select("section"),$inputObject.lst_section);
+		 _setSelected(_select("tree"),$inputObject.slb_tree);
+		
+		 if($inputObject.operation === "moveup")
+		 {
+			 _click(_link("de-icon-moveto_up"));
+		 }
+		 if($inputObject.operation === "movedown")
+		 {
+			 _click(_link("de-icon-moveto_down"));
+		 }
+		 if($inputObject.operation === "promote")
+		 {
+			 _click(_link("de-icon-promote"));
+		 }
+		 if($inputObject.operation === "demote")
+		 {
+			 _click(_link("de-icon-demote"));
+		 }
+		
+			 
+		 _click(_link("de-icon-save"));
+		 _click(_button("Close"));
+		 _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("organizeMenuStructure Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openRelationshipType($inputObject)
+{
+	_log("openRelationshipType Started","success");
+	try 
+	{
+		$inputObject.item = $inputObject.rel_name;
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openRelationshipType Completed","success");
+}
+
+/**
+ @Function Number:21
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteRelationshipType($inputObject)
+{
+	_log("deleteRelationshipType Started","success");
+	try 
+	{
+		
+		if($inputObject.operation === "disabled")
+		{
+			_assertTrue(_button("Delete").disabled);
+		}
+		else if($inputObject.operation === "Negative")
+		{
+			_selectWindow("popup");
+			_click(_submit("Delete"));
+			_selectWindow();
+			_log("Please check Error while deleting");
+		}
+		else
+		{
+			_selectWindow("popup");
+			_click(_submit("Delete"));
+			_selectWindow();
+			_log("deleteRelationshipType Verification Started","success");
+			if($inputObject.rel_name)
+				_assertFalse(_isVisible(_div($inputObject.rel_name)));
+			_log("deleteRelationshipType Verification Completed","success");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteRelationshipType Completed","success");
+}
+
+/*************************************************************************
+* @author Shashank
+* @example: Purpose of this function is to verify the application preferences. Following are the formats to pass the data
+*           1) For HTML Objects like selectbox there need not be any changes in data.
+*           2) For radio buttons   $inputObject.rdg_EditComments == "No" it would check for assertFalse else it would check for assertTrue.
+* @description This function is called to verify_setApplicationPreferences
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function verify_setApplicationPreferences($inputObject)
+{
+	_log("verify_setApplicationPreferences Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("Field Not Present.");
+			return;
+		}
+		if($inputObject.rdg_MostPermissiveRights != undefined && $inputObject.rdg_MostPermissiveRights != "")
+		{
+			_click(_div("Team"));
+			if($inputObject.rdg_MostPermissiveRights === "No")
+			{
+				_assertTrue(_radio("MostPermissiveRights[1]").checked);	
+			}
+			if($inputObject.rdg_MostPermissiveRights === "Yes")
+			{
+				_assertTrue(_radio("MostPermissiveRights").checked);	
+			}	
+			
+		}
+		if($inputObject.MostPermissiveRights1 != undefined && $inputObject.MostPermissiveRights1 != "")
+		{
+			_click(_div("Team"));
+			if($inputObject.MostPermissiveRights1 === "No")
+			{
+				_assertTrue(_radio("MostPermissiveRights").checked);	
+			}
+			if($inputObject.MostPermissiveRights1 === "Yes")
+			{
+				_assertTrue(_radio("MostPermissiveRights[1]").checked);	
+			}	
+			
+		}
+		if($inputObject.edt_ProjCodePrefix != undefined && $inputObject.edt_ProjCodePrefix != "")
+		{
+			_click(_div("Project"));
+			_assertEqual($inputObject.edt_ProjCodePrefix, _getValue(_textbox("ProjCodePrefix")));
+		}
+		if($inputObject.lst_DateFormat != undefined && $inputObject.lst_DateFormat != "")
+		{
+			_click(_div("Organization"));
+			_assertEqual( $inputObject.lst_DateFormat, _getSelectedText(_select("DateFormat")));	
+		}
+		
+		if($inputObject.ele_Currency != undefined && $inputObject.ele_Currency != "")
+		{
+			_click(_div("Organization"));
+			_assertEqual($inputObject.ele_Currency, _getText(_cell("\$")));
+		}
+		if($inputObject.lst_UserMapping != undefined && $inputObject.lst_UserMapping != "")
+		{
+			_click(_div("Team"));
+			if($inputObject.lst_UserMapping === _getSelectedText(_select("UserMapping")))
+			{
+				_assertEqual($inputObject.lst_UserMapping,_getSelectedText(_select("UserMapping")));	
+			}
+			else
+			{
+				_assertNotEqual($inputObject.lst_UserMapping,_getSelectedText(_select("UserMapping")));
+			}
+			
+		}
+		if($inputObject.rdg_EditComments != undefined && $inputObject.rdg_EditComments != "")
+		{
+			_click(_div("Eform"));
+			if($inputObject.rdg_EditComments === "No")
+			{
+				_assertNotTrue(_radio("EditComments").checked);
+			}
+			else
+			{
+				_assertTrue(_radio("EditComments").checked);
+			}	
+		}
+		if(($inputObject.rdg_TimeReminders != undefined && $inputObject.rdg_TimeReminders != "") ||
+			($inputObject.lst_routesequentialTimesheet != undefined && $inputObject.lst_routesequentialTimesheet != "") ||
+			($inputObject.rdg_TSAllowPastTimelogsEdit != undefined && $inputObject.rdg_TSAllowPastTimelogsEdit != "") || 
+			($inputObject.rdg_CanApproverEditTS != undefined && $inputObject.rdg_CanApproverEditTS != "")||
+			($inputObject.rdg_TSShowHideItems != undefined && $inputObject.rdg_TSShowHideItems != "") ||
+			($inputObject.rdg_AppFutureTs != undefined && $inputObject.rdg_AppFutureTs != "")||
+			($inputObject.rdg_TSTotallingRules != undefined && $inputObject.rdg_TSTotallingRules != "")||
+			($inputObject.rdg_allowpersonallocaltaskaddition != undefined && $inputObject.rdg_allowpersonallocaltaskaddition != "") ||
+			($inputObject.rdg_TSAllowAutomaticApportioning != undefined && $inputObject.rdg_TSAllowAutomaticApportioning != "") ||
+			($inputObject.rdg_ApproverFilter != undefined && $inputObject.rdg_ApproverFilter != ""))
+		{
+			_click(_div("Timesheet"));
+			if($inputObject.rdg_ApproverFilter === "EntUser")
+			{
+				_assert(_radio("ApproverFilter").checked);	
+			}
+			if($inputObject.rdg_TimeReminders === "No")
+			{
+				_assertNotTrue(_radio("TimeReminders").checked);
+			}
+			else if($inputObject.rdg_TimeReminders === "Yes")
+			{
+				_assertTrue(_radio("TimeReminders").checked);
+			}
+			if($inputObject.rdg_TSAllowPastTimelogsEdit === "No")
+			{
+				_assertNotTrue(_radio("TSAllowPastTimelogsEdit").checked);
+			}
+			else if($inputObject.rdg_TSAllowPastTimelogsEdit === "Yes")
+			{
+				_assertTrue(_radio("TSAllowPastTimelogsEdit").checked);
+			}
+			if($inputObject.rdg_CanApproverEditTS === "No")
+			{
+				_assertNotTrue(_radio("CanApproverEditTS").checked);
+			}
+			else if($inputObject.rdg_CanApproverEditTS === "Yes")
+			{
+				_assertTrue(_radio("CanApproverEditTS").checked);
+			}
+			if($inputObject.rdg_TSShowHideItems === "No")
+			{
+				_assertNotTrue(_radio("TSShowHideItems").checked);
+			}
+			else if($inputObject.rdg_TSShowHideItems === "Yes")
+			{
+				_assertTrue(_radio("TSShowHideItems").checked);
+			}
+			if($inputObject.rdg_AppFutureTs === "No")
+			{
+				_assertNotTrue(_radio("AppFutureTs").checked);
+			}
+			else if($inputObject.rdg_AppFutureTs === "Yes")
+			{
+				_assertTrue(_radio("AppFutureTs").checked);
+			}
+			if($inputObject.rdg_TSTotallingRules === "No")
+			{
+				_assertNotTrue(_radio("TSTotallingRules").checked);
+			}
+			else if($inputObject.rdg_TSTotallingRules === "Yes")
+			{
+				_assertTrue(_radio("TSTotallingRules").checked);
+			}
+			if($inputObject.rdg_allowpersonallocaltaskaddition === "No")
+			{
+				_assertNotTrue(_radio("allowpersonallocaltaskaddition").checked);
+			}
+			else if($inputObject.rdg_allowpersonallocaltaskaddition === "Yes")
+			{
+				_assertTrue(_radio("allowpersonallocaltaskaddition").checked);
+			}
+			if($inputObject.rdg_TSAllowAutomaticApportioning === "No")
+			{
+				_assertNotTrue(_radio("TSAllowAutomaticApportioning").checked);
+			}
+			else if($inputObject.rdg_TSAllowAutomaticApportioning === "Yes")
+			{
+				_assertTrue(_radio("TSAllowAutomaticApportioning").checked);
+			}
+			
+			if($inputObject.lst_routesequentialTimesheet != undefined && $inputObject.lst_routesequentialTimesheet != "")
+			{
+				if($inputObject.lst_routesequentialTimesheet === _getSelectedText(_select("routesequentialTimesheet")))
+				{
+					_assertEqual($inputObject.lst_routesequentialTimesheet,_getSelectedText(_select("routesequentialTimesheet")));	
+				}
+				else if($inputObject.lst_routesequentialTimesheet  != _getSelectedText(_select("routesequentialTimesheet")))
+				{
+					_assertNotEqual($inputObject.lst_routesequentialTimesheet,_getSelectedText(_select("routesequentialTimesheet")));
+				}
+			}
+			
+		}
+			
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verify_setApplicationPreferences Completed","success");
+}
+
+/**
+ @Function Number:41
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyEformExist($inputObject)
+{
+	_log("verifyEformExist Started","success");
+	try 
+	{
+		for($key in $inputObject)
+		{
+			_assertTrue(_exists(_link($inputObject[$key],_in(_div("navigation-bar jquerycssmenu")))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformExist Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySubOrgHierarchyList($inputObject)
+{
+	_log("verifySubOrgHierarchyList Started","success");
+	try 
+	{
+		if($inputObject.item.split(";") > -1)
+		{
+			var $items;
+			_set($items,$inputObject.item.split(";"));
+			for(var $i = 0 ; $i < $items.length ; $i++)
+			{
+				_assertTrue($items[$i], _getSelectedText($inputObject.lst_Hierarchy));
+			}
+		}
+		else
+		{
+			verifyInstanceInListing($inputObject);	
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySubOrgHierarchyList Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyRelationshipType
+* @description This function is called to verifyRelationshipType
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyRelationshipType($inputObject)
+{
+	_log("verifyRelationshipType Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+		{
+			_assertNotEqual($inputObject.values, _getSelectedText(_select(0,_near(_cell($inputObject.rel_type)),_under(_cell($inputObject.level)))));			
+		}
+		else
+		{
+			_assertEqual($inputObject.values, _getSelectedText(_select(0,_near(_cell($inputObject.rel_type)),_under(_cell($inputObject.level)))));
+		}			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRelationshipType Completed","success");
+}
+
+/**
+ @Function Number:45
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyRelationshipTypeListing($inputObject)
+{
+	_log("verifyRelationshipTypeListing Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_cell($inputObject.lst_relType),_under(_cell("Relationship Type"))));
+		_assertTrue(_isVisible(_link($inputObject.edt_relName),_under(_cell("Relationship"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRelationshipTypeListing Completed","success");
+}
+
+/**
+ @Function Number:48
+ @author:shashank
+ @example:
+ @description:1) The following function would check for the reporting attributes at project level
+ 			  2) The data reporting attributes and values are to sent in the following format
+ 			  	"Common1#Project1" =>reporting_attributes
+ 			  	"Common1N1#Project1N1" =>values
+ @param: 
+ @return: 
+ **/
+
+function verifyReportingAttributes($inputObject)
+{
+	_log("verifyReportingAttributes Started","success");
+	try 
+	{
+		var $reporting_attributes ;
+		if($inputObject.reporting_attributes.indexOf("#")!= -1 && $inputObject.values.indexOf("#")!= -1)
+		{
+			$reporting_attributes = $inputObject.reporting_attributes.split("#");
+			var $values = $inputObject.values.split("#");
+			for(var $i =0 ; $i < $values.length ; $i++)
+			{
+				_assertEqual($values[$i], _getSelectedText(_select(0,_near(_cell($reporting_attributes[$i])))));	
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReportingAttributes Completed","success");
+}
+
+/**
+ @Function Number:49
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyBatchUpdateItems($inputObject)
+{
+	_log("verifyBatchUpdateItems Started","success");
+	try 
+	{
+		if($inputObject.assn_values.indexOf(";")!=-1)
+		{
+			var $multipleRowsCols = $inputObject.assn_values.split(";");
+			_log("$multipleRowsCols" +$multipleRowsCols);
+			
+			for(var $j=0; $j<$multipleRowsCols.length;$j++)
+			{
+				var $colsrows = $multipleRowsCols[$j].split("#");
+				_log("$colsrows" +$colsrows);
+				_assertEqual($colsrows[1], _getText(_cell(0,_near(_cell($inputObject.name)),_under(_cell($colsrows[0])))));
+			}	
+		}
+	  	else
+	  	{
+	  		var $assVal= $inputObject.assn_values.split("#");
+	  		var $userNme = $inputObject.name;
+	  		
+	  		//qtpt2324
+			if($userNme.indexOf("#") != -1)
+			{
+				var $multiNames ;
+				var $userNames ;
+				_set($userNames,$userNme.split("#"));
+				_set($multiNames,$userNames);
+				for(var $i = 0 ; $i < $multiNames.length ; $i++)
+				{
+					_assertEqual($assVal[1], _getText(_cell(0,_near(_cell($multiNames[$i])),_under(_cell($assVal[0])))));	
+				}				
+			}
+			else
+			{
+				_assertEqual($assVal[1], _getText(_cell(0,_near(_cell($inputObject.name)),_under(_cell($assVal[0])))));
+			}
+					
+			
+	  	}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBatchUpdateItems Completed","success");
+}
+
+/**
+ @Function Number:50
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyMultipleUpdateItems($inputObject)
+{
+	_log("verifyMultipleUpdateItems Started","success");
+	try 
+	{
+		_click(_button("QTP_KEY_BUTTON_Back_to_Srch_Res"));
+		if($inputObject.assn_values.indexOf(";")!=-1)
+		{
+			var $multipleRowsCols = $inputObject.assn_values.split(";");
+			_log("$multipleRowsCols" +$multipleRowsCols);
+			
+			for(var $j=0; $j<$multipleRowsCols.length;$j++)
+			{
+				var $colsrows = $multipleRowsCols[$j].split("#");
+				_log("$colsrows" +$colsrows);
+				if($inputObject.name.indexOf("#") != -1)
+				{
+					var $multipleusers  =$inputObject.name.split("#");
+					for(var $k = 0 ; $k < $multipleusers.length ; $k++)
+					{
+						_assertEqual($colsrows[1], _getText(_cell(0,_near(_cell($multipleusers[$k])),_under(_cell($colsrows[0])))));	
+					}
+				}
+				else
+				{
+					_assertEqual($colsrows[1], _getText(_cell(0,_near(_cell($inputObject.assn_values)),_under(_cell($colsrows[0])))));
+				}
+				
+			}	
+		}
+	  	else
+	  	{
+	  		var $assVal= $inputObject.assn_values.split("#");
+			_log("$assVal in else" + $assVal);
+			_assertEqual($assVal[1], _getText(_cell(0,_near(_cell($inputObject.name)),_under(_cell($assVal[0])))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMultipleUpdateItems Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyMessageAtRoutePreference
+* @description This function is called to verifyMessageAtRoutePreference
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyMessageAtRoutePreference($inputObject)
+{
+	_log("verifyMessageAtRoutePreference Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMessageAtRoutePreference Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: getProjectStatus
+* @description This function is called getProjectStatus
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function getProjectStatus($inputObject)
+{
+	_log("getProjectStatus Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+		var $prj_status = _getText(_span("Status"));
+		
+		_assertTrue($prj_status === $inputObject.status);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("getProjectStatus Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyOrgProjectList
+* @description This function is called verifyOrgProjectList
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+
+function verifyOrgProjectList($inputObject)
+{
+	_log("verifyOrgProjectList Started","success");
+	try 
+	{
+		var $tableId = _table("QTP_ListTable");
+		if(_exists( _table("QTP_ListTable")))
+		{
+	    	if($inputObject.operation === "Delete")
+	    		_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+	    	else 
+	    		_assertTrue(_isVisible(_cell($inputObject.item, _in($tableId))));
+		}
+		else
+		{
+			if($inputObject.operation === "Delete")
+				_assertFalse(_isVisible(_div($inputObject.item)));
+			else
+				_assertTrue(_isVisible(_div($inputObject.item)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyOrgProjectList Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: reopenProject
+* @description This function is called to reopenProject
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function openProjectFromOrg($inputObject)
+{
+	_log("openProjectFromOrg Started","success");
+	try 
+	{
+		clearFilterSettings($inputObject);
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openProjectFromOrg Completed","success");
+}
+
+/**
+ @Function Number:56
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyMenuListing($inputObject)
+{
+	_log("verifyMenuListing Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		if(_exists($inputObject.menu_name))
+		{
+			_assertTrue(_exists($inputObject.menu_name), "Item is present");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMenuListing Completed","success");
+}
+
+/**
+ @Function Number:57
+ @author:Vaishali
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyMenuStructuring($inputObject)
+{
+	_log("verifyMenuStructuring Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_containsText(_list(0,_near(_link($inputObject.menu_name))),$inputObject.value));
+		else
+			_assertTrue(_containsText(_list(0,_near(_link($inputObject.menu_name))),$inputObject.value));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMenuStructuring Completed","success");
+}
+
+/**
+@Function Number:64
+@author:
+@example:
+@description: 
+@param: 
+@return: 
+**/
+function setAllFieldsInApplicationPreference($inputObject){
+	_log("setAllFieldsInApplicationPreference Started,Success");
+	try{
+		var $tabName=$inputObject.tabName;
+		_click(_div($tabName,_in(_div("admin"))));
+		delete $inputObject["Title"];
+		setAllFields($inputObject);
+		_click(_submit(" Save "));
+		
+		if($inputObject.type!== undefined && $inputObject.type=="negative"){
+			_expectConfirm($inputObject.msg,true);
+			var $msg=_lastConfirm();
+		//_assertTrue($msg==$inputObject.msg,"Sorry the alert does not appear");
+		}
+	
+	}
+	catch(e){
+		handleFailure(e);
+	}
+}

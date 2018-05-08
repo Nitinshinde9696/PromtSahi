@@ -1,0 +1,83 @@
+_include("../../../SahiDigite/sahisource/Business/DigiteCommon.sah");
+_include("../config/GlobalConstants.sah");
+_include("../Common/Common.sah");
+
+
+/*************************************************************************
+* @author Snehal
+* @example loginIntoDigite({"user_name":"SAVITHA THAKKAR","edt_loginid":"HRD","edt_password":"111111"});
+* @description This function is called to login in Digite
+* @param {String} user_name, User Name
+* @return {String} None 
+*************************************************************************/
+
+function InfyFTloginIntoDigite($inputObject) 
+{
+    _log("loginIntoDigite Started","success");
+    try 
+	{
+    	var $URL = _getGlobal("URL_ENV");
+        _navigateTo($URL,true);
+        
+	    var $userName = $inputObject.user_name;
+		//_setValue(_textbox("CustomerCode"), $inputObject.edt_CustomerCode);
+        _setValue(_textbox("loginId"), $inputObject.edt_loginid);
+        _setValue(_password("password"), $inputObject.edt_password);
+        _click(_submit("Login"));
+        
+		_wait(2000);
+		_log("loginIntoDigite Verification Started");
+		_assertVisible(_label("The Login Id/Password is incorrect. Please input correct credentials and try logging in."));
+		
+		/*if(_assertEqual(_link($userName),_link("UserName")))
+		{
+			_log("loginIntoDigite Verification Started","success");
+		}
+		else
+		{	
+			_log("loginIntoDigite Verification Started","Entered Login Id Or Password is Incorrect");
+		}
+		
+			
+		/*if($inputObject.locale === "German")
+		{
+			_assertContainsText($userName,_div("username"));
+		}
+		else
+		{
+			var $dateFormat = $inputObject.DateFormat != null && $inputObject.DateFormat != undefined ?
+					$inputObject.DateFormat : "dd-MMM-yyyy";
+				
+			var $todayDate = new java.text.SimpleDateFormat($dateFormat).format(new java.util.Date());
+	        $userName = $userName + " " + $todayDate;
+			_assert(_isVisible(_div($userName)));
+		}*/
+		
+		_log("loginIntoDigite Verification Completed","success");
+	}
+	catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("loginIntoDigite Completed","success");	
+}
+
+/*************************************************************************
+* @author Nethra
+* @example selectProject
+*************************************************************************/
+
+function InfyFTselectProject($inputObject) 
+{
+    _log("selectProject Started","success");
+    try 
+	{
+    	_click(_link("View My Projects"));
+		_click(_div($inputObject.projectname));					
+	}
+	catch(e) 
+	{
+	    handleFailure(e);
+	}
+   _log("selected project open successfully","Entered project name is found");	
+}

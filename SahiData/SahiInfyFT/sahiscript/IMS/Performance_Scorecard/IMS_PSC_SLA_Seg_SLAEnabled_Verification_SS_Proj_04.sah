@@ -1,0 +1,530 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceSnehal.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+ 
+ var $s = _testcase("Script_04", "SLA_Seg_SLAEnabled_Verification");
+ 
+ $s.start();
+ 
+ var $dateObj = new Date();
+ var $FromDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $ToDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $data = readDataFromCSV("IMS_PSC_SLA_Seg_SLAEnabled_Verification_SS_Proj_04", "IMS/Performance_Scorecard");
+ $gen = readDataFromCSV("IMS_PSC_Common", "IMS/Performance_Scorecard");
+  
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ /*****************************************************************************
+ *  TestCase_22  : Check For Applicable Services in PSC
+ *****************************************************************************/
+
+ var $t = _testcase("TC_22_TS_01","Check For Applicable Services in PSC");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSC_ID;//$data.PSCName4;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName51;//SLA Performance
+ SelectSegment($inputObject);
+ 
+ _wait(300);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.LinkProvideActuals6;//Click Here
+ InfyFTClickButtonS($inputObject);
+ 
+ _click(_link("Click Here"));
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_22_TS_02","Check For Applicable Services in PSC");
+  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.Service7;//Service
+ $inputObject.span_Name = $data.ServiceValue7;//Sub-Service
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.cell_Name = $data.SubService7;//Service
+ $inputObject.span_Name = $data.SubServiceValue7;//Sub-Service
+ InfyFTisReadOnlyS($inputObject);
+ 
+ $t.end();
+ 
+ /*****************************************************************************
+ *  TestCase_23  : SLA Actuals Page is Opened
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_23_TS_02_01","Check for ITIL Process Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo501;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues501;//Status
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_02","Check for ITIL Process Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo502;//2_lbl
+ $inputObject.fieldValues = $data.fieldValues502;//ITIL Process
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_03","Check for Metric Name Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo503;//3_lbl
+ $inputObject.fieldValues = $data.fieldValues503;//Metric Name
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_04","Check for UOM Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo504;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues504;//UOM
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_05","Check for Priority Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo505;//5_lbl
+ $inputObject.fieldValues = $data.fieldValues505;//Priority
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_23_TS_02_06","Check for Goal Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo506;//10_lbl
+ $inputObject.fieldValues = $data.fieldValues506;//Goal
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_07","Check for Base Measure Numerator* Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo507;//11_lbl
+ $inputObject.fieldValues = $data.fieldValues507;//Base Measure Numerator*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_08","Check for Base Measure Denominator* Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo508;//12_lbl
+ $inputObject.fieldValues = $data.fieldValues508;//Base Measure Denominator*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_09","Check for Actual Performance* Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo509;//13_lbl
+ $inputObject.fieldValues = $data.fieldValues509;//Actual Performance*
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_10","Check for Base Measure And Formula Help Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo510;//14_lbl
+ $inputObject.fieldValues = $data.fieldValues510;//Base Measure And Formula Help
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_11","Check for Penalty Applicable Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo511;//15_lbl
+ $inputObject.fieldValues = $data.fieldValues511;//Penalty Applicable
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_13","Check for SLA Met Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo512;//16_lbl
+ $inputObject.fieldValues = $data.fieldValues512;//SLA Met
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_14","Check for Reason For Not Meeting SLA Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo513;//17_lbl
+ $inputObject.fieldValues = $data.fieldValues513;//Reason For Not Meeting SLA
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_02_15","Check for KPI Field is available");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo514;//18_lbl
+ $inputObject.fieldValues = $data.fieldValues514;//KPI
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ /*
+ var $t = _testcase("TC_23_TS_03_01","Check the Value of Status Fields");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues515;//de-icon-red_signal
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_03_02","Check the Value of Status Fields");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo502;//1
+ $inputObject.colNo = $data.colNo501;//1_lbl
+ $inputObject.fieldValues = $data.fieldValues516;//de-icon-green_signal
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ */
+ var $t = _testcase("TC_23_TS_03_03","Check the Value of ITIL Process Fields");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//2_lbl
+ $inputObject.fieldValues = $data.fieldValues517;//Incident Management
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_03_04","Check the Value of Metric Name Fields");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo503;//3_lbl
+ $inputObject.fieldValues = $data.fieldValues518;//Average Response Time
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_05","Check Value in UOM In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo504;//4_lbl
+ $inputObject.fieldValues = $data.fieldValues519;//Time
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_06","Check the Value of Priority Fields");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo505;//5_lbl
+ $inputObject.fieldValues = $data.fieldValues520;//High
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_07","Check Value in Goal Column In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo506;//10_lbl
+ $inputObject.fieldValues = $data.fieldValues521;//3
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ /*var $t = _testcase("TC_23_TS_08","Check Value in Penalty Applicable Column for No In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo511;//15_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//No
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();*/
+ 
+ var $t = _testcase("TC_23_TS_09","Check Value in Penalty Applicable Column for Yes In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo511;//15_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//No
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_10","Check Value in SLA Met Column for no In Provide Actuals");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo512;//16_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//No
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_11","Check Value in SLA Met Column for yes In Provide Actuals");
+ 
+ $t.start();
+ /* 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//5
+ $inputObject.colNo = $data.colNo513;//16_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//No
+ verifySwiftFormData($inputObject);
+  */
+ $t.end();
+ 
+ var $t = _testcase("TC_23_TS_12","Check for the Value of KPI");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo514;//18_lbl
+ $inputObject.fieldValues = $data.fieldValues522;//No
+ verifySwiftFormData($inputObject);
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_23_TS_13","Check for the Value of KPI");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo502;//5
+ $inputObject.colNo = $data.colNo514;//18_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//Yes
+ 
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+
+ /*var $t = _testcase("TC_23_TS_14","Check for the Value of KPI");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo513;//17_lbl
+ $inputObject.fieldValues = $data.fieldValues523;//No
+ verifySwiftFormData($inputObject);
+  
+ $t.end();*/
+  
+ clickReturn();
+ 
+ $s.end();
+ 
+ _wait(3000);
+ /* 
+ var $s = _testcase("Script_05", "IMS_PSC_SLA_Seg_SLAEnabledTAT_Verification_SS_Proj_05");
+ 
+ $s.start();
+ 
+ _include("IMS_PSC_SLA_Seg_SLAEnabledTAT_Verification_SS_Proj_05.sah");
+ 
+ $s.end();
+ 
+ _wait(3000);
+ 
+ var $s = _testcase("Script_06", "IMS_PSC_Internal_Seg_SLAEnabled_Verification_SS_Proj_06");
+ 
+ $s.start();
+ 
+ _include("IMS_PSC_Internal_Seg_SLAEnabled_Verification_SS_Proj_06.sah");
+ 
+ $s.end();
+ 
+ _wait(3000);
+ 
+ var $s = _testcase("Script_07", "IMS_PSC_Internal_Seg_SLAEnabledTAT_Verification_SS_Proj_07");
+ 
+ $s.start();
+ 
+ _include("IMS_PSC_Internal_Seg_SLAEnabledTAT_Verification_SS_Proj_07.sah");
+ 
+ $s.end();
+ 
+ _wait(3000);
+ 
+ var $s = _testcase("Script_08", "IMS_PSC_SDMP_Goals_to_PSC_Segments_SS_Proj_08");
+ 
+ $s.start();
+ 
+ _include("IMS_PSC_SDMP_Goals_to_PSC_Segments_SS_Proj_08.sah");
+ 
+ $s.end();
+ 
+ var $s = _testcase("Script_2","IMS_PSC_SDMP_Data_Setup_SS_Proj_02");
+ $s.start();
+
+ _include("IMS_PSC_SDMP_Data_Setup_SS_Proj_02.sah");
+ 
+ $s.end();
+ 
+ var $s = _testcase("Script_3","IMS_PSC_PSC_Data_Setup_SS_Proj_03");
+ $s.start();
+ 
+ _include("IMS_PSC_PSC_Data_Setup_SS_Proj_03.sah");
+
+ $s.end();
+ 
+ _wait(3000);
+ 
+ var $s = _testcase("Script_9", "IMS_PSC_Applicable_Serv_ProjTail_Verify_PSC_Seg_SS_Proj_09");
+ 
+ $s.start();
+ 
+ _include("IMS_PSC_Applicable_Serv_ProjTail_Verify_PSC_Seg_SS_Proj_09.sah");
+ 
+ $s.end();
+ 
+ var $s = _testcase("Script_10","IMS_PSC_Verify_PSC_Segment_Reset_Data_SS_Proj_10");
+ $s.start();
+ 
+ _include("IMS_PSC_Verify_PSC_Segment_Reset_Data_SS_Proj_10.sah");
+ 
+ $s.end();
+ 
+ _wait(3000);
+ 
+ var $s = _testcase("Script_11", "IMS_PSC_Segment_Validation_SS_Proj_11");
+ 
+ $s.start();
+ 
+ _include("IMS_PSC_Segment_Validation_SS_Proj_11.sah");
+ 
+ $s.end(); */

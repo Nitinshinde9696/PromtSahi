@@ -1,0 +1,5245 @@
+//Alpesh
+/*************************************************************************
+* @author Alpesh
+* @example expandProjectInTimesheet({"projectNames":"CONG DEVELOPMENT|AANEW"});
+* @description This function is called to expand projects timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function expandProjectInTimesheet($inputObject)
+{
+	_log("expandProjectInTimesheet Started","success");
+	try 
+	{   
+	    var $arrProjectNames = $inputObject.projectNames.split("|");
+		var $rowClassName;
+		
+		for (var $i = 0; $i < $arrProjectNames.length; $i++)
+		{
+			_set($rowClassName, (_parentRow(_image(1, _near(_div($arrProjectNames[$i], _in(_div("timesheetGrid-body"))))))).className);
+		   
+			if ($rowClassName.indexOf("x-grid-tree-node-expanded") === -1)
+			    _click(_image(1, _near(_div($arrProjectNames[$i], _in(_div("timesheetGrid-body"))))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("expandProjectInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example enterTimeLog({"taskName":"TASK1","days":"Mon","hrs":"8"});
+           enterTimeLog({"taskName":"TASK1","days":"Mon","hrs":"8","type":"negative"});
+* @description This function is called to enter timelog in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function enterTimeLog($inputObject)
+{
+	_log("enterTimeLog Started","success");
+	try 
+	{   
+		var $taskName = $inputObject.taskName;
+	    var $arrDays = $inputObject.days.split("|");
+		var $arrHrs = $inputObject.hrs.split("|");
+		var $prow = _parentRow(_div($taskName));
+		
+		for (var $i = 0; $i < $arrDays.length; $i++) {
+			$dayArg = "/" + $arrDays[$i] + "/";
+			_wait(5000, _isVisible(_cell(0, _in($prow), _under(_div($dayArg),5))));
+            _click(_cell(0, _in($prow), _under(_div($dayArg),5)));
+            
+			if ($inputObject.type === "negative")
+			{
+				_assertFalse(_textbox(0, _in($prow), _under(_div($dayArg))));
+			}
+			else
+			{
+			    _wait(5000, _textbox(0, _under(_div($dayArg),5)));
+				_setValue(_textbox(0, _under(_div($dayArg),5)), $arrHrs[$i]);
+				if($inputObject.tooltip !== undefined){
+					_mouseOver(_textbox(0, _in($prow), _under(_div($dayArg),5)));
+					_wait(2000,_isVisible(_div("/form-invalid-tip-body/")));
+					var $msg=_getText(_div("/form-invalid-tip-body/"));
+					_assertTrue($inputObject.tooltip === $msg,"Sorry the tool tip value doesnt match");
+				}
+			}
+		}
+		_click($prow);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enterTimeLog Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyTaskStatus({"taskName":"task1","status":"Done"});
+           modifyTaskStatus({"taskName":"task1","type":"negative"});
+* @description This function is called to modify task status in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyTaskStatus($inputObject)
+{
+	_log("modifyTaskStatus Started","success");
+	try 
+	{
+		var $status = $inputObject.status;
+		
+		if ($status === "Rcvd")
+		    $status = "Open";
+		else if ($status === "Done")
+		    $status = "Completed";
+		
+        _click(_div(0, _near(_div($inputObject.taskName)), _under(_div("Status"))));
+        _wait(1000);
+		
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_textbox(0, _under(_div("Status")))));
+		}
+		else
+		{
+			_click(_textbox(0, _under(_div("Status"))));
+			_click(_listItem($status));
+			_click(_span("Name"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTaskStatus Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example saveTimesheet();
+* @example saveTimesheet({"type":"negative","msgDetail":"Timesheet Save Failed"});
+* @description This function is called to save timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function saveTimesheet($inputObject)
+{
+	_log("saveTimesheet Started","success");
+	try 
+	{
+	    _click(_link("Save"));
+
+		if($inputObject !== undefined)
+		{
+		    if ($inputObject.type === "negative")
+		    {
+			    _assert(_isVisible(_span($inputObject.msgDetails)));
+			}
+		}
+		else
+		{
+		    _assert(_isVisible(_span("Saved successfully")));
+		}
+		
+		if (_isVisible(_link("OK")))
+		    _click(_link("OK"));
+		else if (_isVisible(_link("OK[1]")))
+		    _click(_link("OK[1]"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example routeTimesheet();
+           routeTimesheet({"type":"negative","msgDetail":"Timesheet Routed Failed"});
+           routeTimesheet({"type":"negative","msgDetail":"unroutedtimehseet","unroutedDetails":"26-Nov-2012,A1 Project,Saved|26-Nov-2012,A2 Project,Saved|26-Nov-2012,A3 Project,Saved"});
+* @description This function is called to route timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function routeTimesheet($inputObject)
+{
+	_log("routeTimesheet Started","success");
+	try 
+	{
+        _click(_link("Route"));
+		
+		if($inputObject !== undefined)
+		{
+		    if ($inputObject.type === "negative")
+			{
+			    //Unrouted Timesheet Verification
+			    if ($inputObject.msgDetail !== "unroutedtimehseet")
+				{
+				    _assert(_isVisible(_listItem($inputObject.msgDetail)));
+				}
+				else
+				{
+				    var $arrUnroutedDetails = $inputObject.unroutedDetails.split("|");
+					for (var $i = 0; $i < $arrUnroutedDetails.length; $i++)
+					{
+				        $arrDetails = $arrUnroutedDetails[$i].split(",");
+					    _assert(_isVisible(_div("/" + $arrDetails[2] + "/", _near(_link("/" + $arrDetails[1] +"/", _near(_link($arrDetails[0])))))));
+					}
+				}
+				if (_isVisible(_link("Continue")))
+				{
+				    _click(_link("Continue"));
+				    _assert(_isVisible(_span("Timesheet Routed Successfully.")));
+			        if (_isVisible(_link("OK")))
+				        _click(_link("OK"));
+			        else if (_isVisible(_link("OK[1]")))
+				        _click(_link("OK[1]"));
+				}
+				else
+				{
+				    _click(_link("Cancel"));
+				}
+			}
+		}
+		else
+		{
+			_assert(_isVisible(_span("Timesheet Routed Successfully.")));
+			if (_isVisible(_link("OK")))
+				_click(_link("OK"));
+			else if (_isVisible(_link("OK[1]")))
+				_click(_link("OK[1]"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("routeTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addNewTaskInTimesheet({"selectItemFromProject_List:Alles Gute[1],lst_selectItemFromProject":"Alles Gute","lst_summTask":"COGN000003AllesGute",
+           "edt_taskName":"NewTask","edt_start_date":"18-Jun-2012","edt_duration":"40","edt_alloc":"100",
+		   "txt_description":"New Task description", "ValidationFields" : "taskName" ,"msgDetail":"Task name can not be blank."});
+* @description This function is called to add new task in timesheet
+* @param {String} None
+* @return {String} None 
+* selectItemFromProject_List:This parameter is  added when project name is displayed with index number in list box, e.g Alles Gute[1]
+* 
+*************************************************************************/
+function addNewTaskInTimesheet($inputObject)
+{
+	_log("addNewTaskInTimesheet Started","success");
+	try 
+	{
+        _click(_link("ToolBarNewTask"));
+		_setValue(_textbox(0,_near(_label("Select a Project"))), $inputObject.lst_selectItemFromProject);
+		_wait(2000,_isVisible(_div("/boundlist/",_in(_div("popup_ToolBarNewTask")))));
+		if($inputObject.selectItemFromProject_List)
+			_click(_listItem($inputObject.selectItemFromProject_List));
+		else
+			_click(_listItem($inputObject.lst_selectItemFromProject,_in(_div("/boundlist/"))));
+		
+		delete $inputObject.lst_selectItemFromProject;
+		
+		_setValue(_textbox(0,_near(_label("Summary Task"))), $inputObject.lst_summTask);
+		_click(_listItem($inputObject.lst_summTask));
+		delete $inputObject.lst_summTask;
+		setAllFields($inputObject);
+		if($inputObject.ValidationFields && $inputObject.msgDetail)
+		{
+			//This code works for validating single item only .for multiple pass value(msgDetail;ValidationFields), seprated by ";" and write code in for loop
+			_mouseOver(_textbox($inputObject.ValidationFields));
+			_wait(2000);
+            _assert(_isVisible(_listItem($inputObject.msgDetail)));
+			_click(_link("Cancel"));
+		}
+		else
+			_click(_link("Add"));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addNewTaskInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addExistingTaskInTimesheet({"searchPhrase":"TAS","taskName":"TASK1","projectName":"Alles Gute","category":"Other Tasks"});
+* @description This function is called to add existing task in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function addExistingTaskInTimesheet($inputObject)
+{
+	_log("addExistingTaskInTimesheet Started","success");
+	try 
+	{
+	    var $taskName = $inputObject.taskName;
+        
+		_click(_link("AddExistingTask"));
+		
+		_selectWindow("popup2");
+		
+		if ($inputObject.searchPhrase)
+		{
+		    _setValue(_textbox("searchPhrase"), $inputObject.searchPhrase);
+		}
+		
+        _setSelected(_select("selectProject"), $inputObject.projectName);
+        _setSelected(_select("selectCategory"), $inputObject.category);
+        _click(_submit("Go"));
+
+        _click(_checkbox("/mainCheckbox/", _near(_cell($taskName))));
+        _click(_submit("Add"));
+		
+		if ($inputObject.category === "Other Tasks")
+		{
+		    _selectWindow("Add Other Tasks");
+		    _click(_submit("Save"));
+		    _selectWindow();
+		}
+        _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addExistingTaskInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyExistingTaskInTimesheet({"taskName":"TASK1|TASK2","projectName":"Alles Gute","category":"Other Tasks"});
+           verifyExistingTaskInTimesheet({"taskName":"TASK1|TASK2","projectName":"Alles Gute","category":"Other Tasks","type":"negative"});
+* @description This function is called to verify existing task in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyExistingTaskInTimesheet($inputObject)
+{
+	_log("verifyExistingTaskInTimesheet Started","success");
+	try 
+	{
+	    var $arrTaskName = $inputObject.taskName.split("|");
+        
+		_click(_link("AddExistingTask"));
+		_selectWindow("popup2");
+	
+        _setSelected(_select("selectProject"), $inputObject.projectName);
+        _setSelected(_select("selectCategory"), $inputObject.category);
+        _click(_submit("Go"));
+        
+		if ($inputObject.type !== "negative")
+		{
+			for (var $i = 0; $i < $arrTaskName.length; $i++)
+			_assert(_isVisible(_cell($arrTaskName[$i])));
+		}
+		else
+		{
+		    _assertFalse(_isVisible(_cell($arrTaskName[$i])));
+		}
+		
+		_closeWindow();
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyExistingTaskInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyProjectsInAddNewTask({"projectsName":"NM Sons|HMTA Mobiles"});
+           verifyProjectsInAddNewTask({"projectsName":"NM Sons|HMTA Mobiles","type":"negative"});
+* @description This function is called to verify projects in add new task in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyProjectsInAddNewTask($inputObject)
+{
+	_log("verifyProjectsInAddNewTask Started","success");
+	try 
+	{
+	    var $arrProjectsName = $inputObject.projectsName.split("|");
+		
+        _click(_link("ToolBarNewTask"));
+		
+		for (var $i = 0; $i < $arrProjectsName.length; $i++)
+		{
+		    _setValue(_textbox(0), $arrProjectsName[$i]);
+			if ($inputObject.type === "negative")
+			{
+				_assertFalse(_isVisible(_listItem($arrProjectsName[$i])));
+			}
+			else
+			{
+				_assert(_isVisible(_listItem($arrProjectsName[$i])));
+			}
+		}
+		_click(_link("Cancel"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectsInAddNewTask Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyProjectsInAddExistingTask({"projectsName":"NM Sons|HMTA Mobiles"});
+           verifyProjectsInAddExistingTask({"projectsName":"NM Sons|HMTA Mobiles","type":"negative"});
+* @description This function is called to verify projects in add new task in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyProjectsInAddExistingTask($inputObject)
+{
+	_log("verifyProjectsInAddExistingTask Started","success");
+	try 
+	{
+	    var $projectsName = $inputObject.projectsName;
+		
+		_click(_link("AddExistingTask"));
+		_selectWindow("popup2");
+		
+		if ($inputObject.type === "negative")
+		{
+            verifyItemsInWeblist({"itemList":$projectsName,"listName":"selectProject","type":"negative"});
+		}
+		else
+		{
+		    verifyItemsInWeblist({"itemList":$projectsName,"listName":"selectProject"});
+		}
+		
+		_click(_button("< Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectsInAddExistingTask Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyTimesheetWorkflowInProject({"firstName":"SAVITHA","lastName":"THAKKAR","emailId":"hrd@digite.com",
+           "unassignUser":"yes","userName":"Alok Agarwal|Reise Reise","stageDetails":"Stage 1,Lisa Lisa|Stage 2,Skip"});
+           modifyTimesheetWorkflowInProject({"userName":"jenny jenny|nandan nandan","stageDetails":"Stage 1,hamish hamish","type":"negative"});
+* @description This function is called to modify timesheet workflow in project
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyTimesheetWorkflowInProject($inputObject)
+{
+	_log("modifyTimesheetWorkflow Started","success");
+	try 
+	{
+		var $arrUserName = $inputObject.userName.split("|");
+		var $arrStageDetails = $inputObject.stageDetails.split("|");
+		
+        if($inputObject.firstName)
+		{
+		    _setValue(_textbox("firstnametext"), $inputObject.firstName);
+		}
+		 
+		if($inputObject.lastName)
+		{
+		    _setValue(_textbox("lastnametext"), $inputObject.lastName);
+		}
+		
+	    if($inputObject.emailId)
+		{
+		    _setValue(_textbox("emailtext"), $inputObject.emailId);
+		}
+		
+		if($inputObject.unassignUser)
+		{
+		    _check(_checkbox("IncludeseLockedUser"));
+		}
+		
+		_click(_submit(" Go "));
+		
+		for (var $i = 0; $i < $arrUserName.length; $i++)
+		{
+		    _check(_checkbox("/checkItem/", _near(_cell($arrUserName[$i]))));
+		}
+		
+		_click(_button(" Batch Update "));
+		
+		_selectWindow("searchpopup");
+		
+		for (var $j = 0; $j < $arrStageDetails.length; $j++)
+		{
+			if ($inputObject.type === "negative")
+			{
+			    _set($checkDisable, _select("/selectApprover/", _under(_cell($arrStage[0]))).disabled);
+				if (!$checkDisable)
+				_log("Given Stage = " + $arrStage[0] + " is editable","failure");
+			}
+			else
+			{
+		        $arrStage = $arrStageDetails[$j].split(",");
+			    _setSelected(_select("/selectApprover/", _under(_cell($arrStage[0]))), $arrStage[1]);
+			}
+		}
+		
+		_click(_button("Save"));
+		_selectWindow();
+		
+		if ($inputObject.type !== "negative")
+        verifyTimesheetWorkflowInProject($inputObject)
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTimesheetWorkflowInProject Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetWorkflowInProject({"firstName":"SAVITHA","lastName":"THAKKAR","emailId":"hrd@digite.com",
+           "unassignUser":"yes","userName":"Alok Agarwal|Reise Reise","stageDetails":"Stage 1,Lisa Lisa|Stage 2,Skip"});
+		   verifyTimesheetWorkflowInProject({"firstName":"SAVITHA","lastName":"THAKKAR","emailId":"hrd@digite.com",
+           "unassignUser":"yes","userName":"Alok Agarwal|Reise Reise","stageDetails":"Stage 1,Lisa Lisa|Stage 2,Skip",
+		   "type":"negative"});
+* @description This function is called to replace timesheet approver
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetWorkflowInProject($inputObject)
+{
+	_log("verifyTimesheetWorkflowInProject Started","success");
+	try 
+	{
+		var $arrUserName = $inputObject.userName.split("|");
+		var $arrStageDetails = $inputObject.stageDetails.split("|");
+		
+        if($inputObject.firstName)
+		{
+		    _setValue(_textbox("firstnametext"), $inputObject.firstName);
+		}
+		 
+		if($inputObject.lastName)
+		{
+		    _setValue(_textbox("lastnametext"), $inputObject.lastName);
+		}
+		
+	    if($inputObject.emailId)
+		{
+		    _setValue(_textbox("emailtext"), $inputObject.emailId);
+		}
+		
+		if($inputObject.unassignUser)
+		{
+		    _check(_checkbox("IncludeseLockedUser"));
+		}
+		
+		_click(_submit(" Go "));
+		
+		for (var $i = 0; $i < $arrUserName.length; $i++)
+		{   
+		    if ($inputObject.type === "negative")
+			{
+			    _assertFalse(_isVisible(_cell($arrUserName[$i])));
+			}
+			else
+			{
+			    for (var $j = 0; $j < $arrStageDetails.length; $j++)
+		        {
+		            $arrStage = $arrStageDetails[$j].split(",");
+			        _set($actualValue, _getText(_cell(0, _near(_cell($arrUserName[$i],_under(_cell("Users")))), _under(_cell($arrStage[0])))));
+				    _assertEqual($arrStage[1], $actualValue, "For " + $arrStage[0]);
+		        }
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetWorkflowInProject Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example replaceTimesheetApprover({"oldApprover":"Alok Agarwal","newApprover":"Lisa Lisa"});
+* @description This function is called to replace timesheet approver
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function replaceTimesheetApprover($inputObject)
+{
+	_log("replaceTimesheetApprover Started","success");
+	try 
+	{
+	    _click(_link("KEY_LINK_Replace_Approver"));
+		
+		_selectWindow("replaceApprover");
+		
+		_setSelected(_select("oldApproverId"), $inputObject.oldApprover);
+		_setSelected(_select("newApproverId"), $inputObject.newApprover);
+		_click(_button(" OK "));
+		
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("replaceTimesheetApprover Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetApprover({"userNames":"Alok Agarwal|Lisa Lisa"});
+           verifyTimesheetApprover({"userNames":"Alok Agarwal|Lisa Lisa","type":"negative"});
+* @description This function is called to verify timesheet approver
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetApprover($inputObject)
+{
+	_log("verifyTimesheetApprover Started","success");
+	try 
+	{
+        var $arrUser,$lastName,$prow;
+		var $arrUserNames = $inputObject.userNames.split("|");
+
+		for (var $i = 0; $i < $arrUserNames.length; $i++)
+		{   
+		    $arrUser = $arrUserNames[$i].split(" ");
+			
+			if ($inputObject.type !== "negative")
+			{
+			    $prow = _parentRow(_cell($arrUser[0]));
+                $lastName = _getText(_cell(0, _in($prow), _under(_cell("ColHeaderLink"))));
+			    _assertEqual($arrUser[1], $lastName, "For Last Name");
+			}
+			else
+			{
+			    _assertFalse(_isVisible(_cell($arrUser[0])));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetApprover Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example manageTimesheetDelegates({"teamMember":"Alok Agarwal","action":"Add","delegates":"Lisa Lisa|Reise Reise"});
+           manageTimesheetDelegates({"teamMember":"Alok Agarwal","delegates":"Lisa Lisa|Reise Reise","type":"negative"});
+* @description This function is called to manage timesheet delegates
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function manageTimesheetDelegates($inputObject)
+{
+	_log("manageTimesheetDelegates Started","success");
+	try 
+	{
+	    var $type;
+        var $arrDelegates = $inputObject.delegates.split("|");
+		_check(_checkbox("/checkItem/", _near(_cell($inputObject.teamMember, _under(_cell("Team Members"))))));
+		_click(_link("KEY_LABEL_Manage_Delegates"));
+		
+		_selectWindow("Manage Timesheet Delegation");
+		
+		if ($inputObject.type === "negative")
+		{
+		    verifyItemsInWeblist({"itemList":$inputObject.delegates,"listName":"selectFrom","type":"negative"});
+			_click(_button("Cancel"));
+			_selectWindow();
+		}
+		else
+		{
+			switch($inputObject.action)
+			{
+				case "Add" :       
+								  for($i = 0; $i < $arrDelegates.length; $i++) {
+									  _setSelected(_select("selectFrom"), $arrDelegates[$i], true); 
+								  }
+								  _click(_button("Add >"));
+								  break;
+							 
+				case "AddAll" :    
+								   _click(_button("Add All >>"));
+								   break; 
+								
+				case "Remove" :    
+								   for($i = 0; $i < $arrDelegates.length; $i++) {
+									  _setSelected(_select("selectTo"), $arrDelegates[$i], true);
+								   }
+								   _click(_button("< Remove"));
+								   $type = "negative";
+								   break;
+								   
+				case "RemoveAll" : 
+								   _click(_button("<< Remove All"));
+								   $type = "negative";
+								   break;
+			}
+			
+			_click(_submit("Save"));
+			_selectWindow();
+			$inputObject.type = $type;
+			verifyTimesheetDelegates($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("manageTimesheetDelegates Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetDelegates({"teamMember":"Alok Agarwal","delegates":"Lisa Lisa|Reise Reise","type":"negative"});
+* @description This function is called to verify timesheet delegates
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetDelegates($inputObject)
+{
+	_log("verifyTimesheetDelegates Started","success");
+	try 
+	{
+	    var $teamMember = $inputObject.teamMember;
+	    var $delegates = replaceAllStr($inputObject.delegates,"|",", ");
+		
+		var $actualValue = _getText(_cell(0, _near(_cell($teamMember, _under(_cell("Team Members")))), _under(_cell("Delegates"))));
+		
+		if ($inputObject.type === "negative")
+		{
+		    var $match = $actualValue.match($delegates);
+			if ($match !== null) 
+			{
+			    _log("Delegates = " + $delegates + " present","failure");
+			}
+		} 
+		else 
+		{
+		    _assertEqual($delegates, $actualValue, "For " + $teamMember);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetDelegates Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example viewTimesheetsFor({"userName":"Admin Test"});
+           viewTimesheetsFor({"userName":"Admin Test","type":"negative"});
+* @description This function is called to view timesheet of given user
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function viewTimesheetsFor($inputObject)
+{
+	_log("viewTimesheetsFor Started","success");
+	try 
+	{   
+		_click(_link(0, _near(_span("Timesheet For:"))));
+		
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_span($inputObject.userName)));
+		}
+		else
+		{
+		    _click(_span($inputObject.userName));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("viewTimesheetsFor Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyFilterAttributesInTimesheet({"filterName":"Projects","itemNames":"GT Management|Alles Gute"});
+           verifyFilterAttributesInTimesheet({"filterName":"Projects","itemNames":"GT Management|Alles Gute","type":"negative"});
+* @description This function is called to verify filter attributes in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyFilterAttributesInTimesheet($inputObject)
+{
+	_log("verifyFilterAttributesInTimesheet Started","success");
+	try 
+	{   
+		var $filterName = "/" + $inputObject.filterName + "/";
+		_click(_link(0, _near(_span($filterName))));
+		
+		var $arrItemNames = $inputObject.itemNames.split("|");
+		
+		for (var $j = 0; $j < $arrItemNames.length; $j++)
+		{
+		    if ($inputObject.type === "negative")
+			{
+			    _assertFalse(_isVisible(_span($arrItemNames[$j])));
+			}
+			else
+			{
+				_assert(_isVisible(_span($arrItemNames[$j])));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFilterAttributesInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example setFilterInTimesheet({"filterName":"Project|Item Status","itemNames":"Alles Gute|Select All"});
+* @description This function is called to set timesheet filter
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function setFilterInTimesheet($inputObject)
+{
+	_log("setFilterInTimesheet Started","success");
+	try 
+	{   
+	    var $arrFilterName = $inputObject.filterName.split("|");
+		var $arrItemNames = $inputObject.itemNames.split("|");
+		
+		for (var $i = 0; $i < $arrFilterName.length; $i++)
+		{
+		    $filterValue = _getText(_link(0, _near(_span("/" + $arrFilterName[$i] + "/"))));
+		    
+			if (!($filterValue === "All" && ($arrItemNames[$i] === "Select All")))
+			{
+				if ($filterValue !== $arrItemNames[$i])
+				{
+					_click(_link(0, _near(_span("/" + $arrFilterName[$i] + "/"))));
+					if ($arrFilterName[$i] === "Project" || $arrFilterName[$i] === "Projects")
+					{
+						if (_isVisible(_span("Select All")))
+						{
+							if($filterValue !== "All"){
+								_click(_div("/menucheckitem/", _near(_span("Select All"))));
+								_click(_div("/menucheckitem/", _near(_span("Select All"))));
+							}
+							else
+							{
+								_click(_div("/menucheckitem/", _near(_span("Select All"))));
+							}
+						}
+						else if (_isVisible(_span("Select All[1]")))
+						{
+							if($filterValue !== "All"){
+								_click(_div("/menucheckitem/", _near(_span("Select All[1]"))));
+								_click(_div("/menucheckitem/", _near(_span("Select All[1]"))));
+							}
+							else
+							{
+								_click(_div("/menucheckitem/", _near(_span("Select All[1]"))));
+							}
+						}
+					}
+					
+					$arrItems = $arrItemNames[$i].split(",");
+					
+					for (var $j = 0; $j < $arrItems.length; $j++)
+					{
+					    if ($arrItems[$j] !== "Select All")
+						{
+						    _wait(_isVisible(_div("/menucheckitem/", _near(_span($arrItems[$j])))));
+						    _click(_div("/menucheckitem/", _near(_span($arrItems[$j]))));
+						}
+						else
+						{
+						    if (_isVisible(_span("Select All")))
+							    _click(_div("/menucheckitem/", _near(_span("Select All"))));
+						    else if (_isVisible(_span("Select All[1]")))
+							    _click(_div("/menucheckitem/", _near(_span("Select All[1]"))));
+							else if (_isVisible(_span("Select All[2]")))
+							    _click(_div("/menucheckitem/", _near(_span("Select All[2]"))));
+						}
+					}
+					_click(_link("/Apply/"));
+				}
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setFilterInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetItemDetails({"itemName":"TASK1","itemAttributes":"Code|Item","itemAttributeValues":"TSK1|je"});
+           verifyTimesheetItemDetails({"itemName":"TASK1","itemAttributes":"Actual Start","itemAttributeValues":"30-Jul-2012","type":"negative"});
+           verifyTimesheetItemDetails({"itemName":"Leave","itemAttributes":"Item","itemAttributeValues":"Leave","type":"global"});
+* @description This function is called to verify timesheet item details
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetItemDetails($inputObject)
+{
+	_log("verifyTimesheetItemDetails Started","success");
+	try 
+	{   
+	    var $arrItemAttributes = $inputObject.itemAttributes.split("|");
+		var $arrItemAttributeValues = $inputObject.itemAttributeValues.split("|");
+		
+		var $prow = _parentRow(_div($inputObject.itemName));
+        _click(_cell(0, _in($prow)));
+        
+		if ($inputObject.type === "global" || $inputObject.type === "local")
+		{
+		    _assertFalse(_isVisible(_popup("Item Details")));
+		}
+		else
+		{
+			_selectWindow("Item Details");
+			
+			for (var $i = 0; $i < $arrItemAttributes.length; $i++)
+			{
+				if ($inputObject.type === "negative")
+				{
+					_assertFalse(_isVisible(_cell($arrItemAttributes[$i])));
+				}
+				else
+				{
+					_set($actualValue, _getText(_cell(1, _near(_cell($arrItemAttributes[$i])))));
+				
+					if ($actualValue !== $arrItemAttributeValues[$i])
+					{
+						_log("Attribute = " + $arrItemAttributes[$i] + " Expected value = " + $arrItemAttributeValues[$i] + " and Actual value = " + $actualValue,"failure");
+					}
+				}	
+			}
+			_click(_button("Close"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetItemDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clickTimesheetItemCodeLink({"itemName":"je"});
+* @description This function is called to click timesheet item code link 
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function clickTimesheetItemCodeLink($inputObject)
+{
+	_log("clickTimesheetItemCodeLink Started","success");
+	try 
+	{   
+		var $prow = _parentRow(_div($inputObject.itemName));
+        _click(_cell(0, _in($prow)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickTimesheetItemCodeLink Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example switchTimesheetView();
+* @description This function is called to switch to timesheet list view
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function switchTimesheetView()
+{
+	_log("switchTimesheetView Started","success");
+	try 
+	{   
+		_click(_link("GridToListId"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("switchTimesheetView Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetListView({"date":"18-Jun-2012","projectName":"Alles Gute",
+           "itemAttributes":"Current User|Status[1]","itemAttributeValues":"Reise Reise|Saved"});
+           verifyTimesheetListView({"date":$currentWeekStart,"projectName":"Delet Perct","type":"negative"});
+* @description This function is called to verify timesheet list view
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetListView($inputObject)
+{
+	_log("verifyTimesheetListView Started","success");
+	try 
+	{   
+	    var $actualValue;
+		var $projectName = "/" + $inputObject.projectName + "/"; 
+		var $date = "/" + $inputObject.date + "/";
+		
+		_click(_image("/gif/", _near(_link($date, _under(_span("Project"))))));
+		
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_link($projectName)));
+		}
+		else
+		{
+		    var $prow = _parentRow(_link($projectName, _near(_link($date, _under(_span("Project"))))));
+		    var $arrItemAttributes = $inputObject.itemAttributes.split("|");
+		    var $arrItemAttributeValues = $inputObject.itemAttributeValues.split("|");
+		    _wait(2000);
+		    
+		    for (var $i = 0; $i < $arrItemAttributes.length; $i++)
+		    {		    	
+		        $actualValue = _getText(_div(0, _in($prow), _under(_div($arrItemAttributes[$i]))));
+			    _assertEqual($arrItemAttributeValues[$i], $actualValue, "For " + $arrItemAttributes[$i]);
+		    }
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetListView Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clickProjectInTimesheetListView({"date":"18-Jun-2012","projectName":"Alles Gute"});
+* @description This function is called to click project link in timesheet list view
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function clickProjectInTimesheetListView($inputObject)
+{
+	_log("clickProjectInTimesheetListView Started","success");
+	try 
+	{   
+		var $projectName = $inputObject.projectName;
+		
+		_click(_image("/gif/", _near(_link($inputObject.date))));
+		
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_link($projectName, _near(_link($inputObject.date)))));
+		}
+		else
+		{
+		    _click(_link($projectName, _near(_link($inputObject.date))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickProjectInTimesheetListView Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyWorkflowInTimesheetInformation({"projectName":"Alles Gute","workflowDetails":"Responsible,SAVITHA THAKKAR|Stage 1,Alok Agarwal|Stage 2,Skip|Stage 3,Skip"});
+* @description This function is called to verify timesheet workflow information
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyWorkflowInTimesheetInformation($inputObject)
+{
+	_log("verifyWorkflowInTimesheetInformation Started","success");
+	try 
+	{   
+	    var $projectName = $inputObject.projectName;
+		var $arrWorkflowDetails = $inputObject.workflowDetails.split("|");
+		
+        _click(_link("Information"));
+		_selectWindow("Timesheet Information");
+		_click(_link("Workflow"));
+		
+		for (var $i = 0; $i < $arrWorkflowDetails.length; $i++)
+		{
+		    $arrAttribute = $arrWorkflowDetails[$i].split(",");
+			_set($actualValue, _getText(_cell(0, _near(_cell($projectName)), _under(_cell($arrAttribute[0])))));
+	        _assertEqual($arrAttribute[1], $actualValue, "For " + $arrAttribute[0]);
+		}
+		_click(_button("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWorkflowInTimesheetInformation Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetActivityLog({"comments":"TSK1: je marked as Rcvd by SAVITHA THAKKAR on 27-Jun-2012"});
+* @description This function is called to verify timesheet activity log
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetActivityLog($inputObject)
+{
+	_log("verifyTimesheetActivityLog Started","success");
+	try 
+	{   
+	    var $arrComments = $inputObject.comments.split("|");
+		
+        _click(_link("Information"));
+		_selectWindow("Timesheet Information");
+		_click(_link("Activity Log"));
+		
+		for (var $i = 0; $i < $arrComments.length; $i++)
+		{
+		    $arrComments[$i] = "/" + $arrComments[$i] + "/";
+            _assert(_isVisible(_popup("Timesheet Information")._cell($arrComments[$i])));
+		}
+		_click(_button("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetActivityLog Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example enableTimesheetInProject({"settings":"Preserve|Billable|ProjectCreator","stageDetails":"Stage 1,Alok Agarwal|Stage 2,Lisa Lisa","startFromDate":"27-Jun-2012"});
+* @description This function is called to enable timesheet in project
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function enableTimesheetInProject($inputObject)
+{
+	_log("enableTimesheetInProject Started","success");
+	try 
+	{   
+		_click(_link("Timesheet Setup Wizard"));
+		
+		_selectWindow("Timesheet Setup Wizard");
+		if ($inputObject.settings)
+		{
+			var $arrSettings = $inputObject.settings.split("|");
+		
+		    for (var $i = 0; $i < $arrSettings.length; $i++)
+		    {
+		        _check(_checkbox($arrSettings[$i]));
+		    }
+		}
+
+		_click(_submit("Next"));
+		
+		_selectWindow("Timesheet Workflow");
+		if ($inputObject.stageDetails)
+		{
+		    var $arrStageDetails = $inputObject.stageDetails.split("|");
+		
+		    for (var $j = 0; $j < $arrStageDetails.length; $j++)
+		    {   
+		        $arrStage = $arrStageDetails[$j].split(",");
+		        _setSelected(_select("/selectApprover/", _near(_cell($arrStage[0]))), $arrStage[1]);
+		    }
+		}
+		_click(_submit("Finish"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enableTimesheetInProject Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTasksInTimesheet({"projectName":"Alles Gute","tasksName":"task1|task2"});
+           verifyTasksInTimesheet({"projectName":"Alles Gute","tasksName":"task1|task2","type":"negative"});
+* @description This function is called to verify tasks in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTasksInTimesheet($inputObject)
+{
+	_log("verifyTasksInTimesheet Started","success");
+	try 
+	{   
+        var $projectName = $inputObject.projectName;
+		var $arrTasksName = $inputObject.tasksName.split("|");
+		
+		if ($inputObject.type === "negative")
+		{
+		    for (var $i = 0; $i < $arrTasksName.length; $i++)
+		    {
+			    if (_isVisible(_div($projectName)))
+		            _assertFalse(_isVisible(_div($arrTasksName[$i], _in(_div($projectName)))));
+		    }
+		} 
+		else
+		{
+		    for (var $i = 0; $i < $arrTasksName.length; $i++)
+		    {
+		        _assert(_isVisible(_div($arrTasksName[$i], _in(_div($projectName)))));
+		    }
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTasksInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTaskDetailsInTimesheet({"taskName":"task1","attributes":"Status|Est. Effort|Mon|Tue","attributeValues":"Rcvd|375|9|8"});
+           verifyTaskDetailsInTimesheet({"taskName":"task1","attributes":"Mon","attributeValues":"8","type":"negative"});
+* @description This function is called to verify tasks details in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTaskDetailsInTimesheet($inputObject)
+{
+	_log("verifyTaskDetailsInTimesheet Started","success");
+	try 
+	{   
+	    var $prow,$actualValue;
+	    var $arrAttributes = $inputObject.attributes.split("|");
+		var $arrAttributeValues = $inputObject.attributeValues.split("|");
+		
+		$prow = _parentRow(_div($inputObject.taskName));
+		
+		for (var $i = 0; $i < $arrAttributes.length; $i++)
+		{   
+		    if ($arrAttributes[$i] !== "Status")
+		        $arrAttributes[$i] = "/" + $arrAttributes[$i] + "/";
+			else
+			{
+			    if ($arrAttributeValues[$i] === "Rcvd")
+				    $arrAttributeValues[$i] = "Open";
+				else if ($arrAttributeValues[$i] === "Done")
+				    $arrAttributeValues[$i] = "Completed";
+			}
+			
+			if ($arrAttributes[$i] !== "/Est. Effort/")
+			    $actualValue = _getText(_cell(0, _in($prow), _under(_div($arrAttributes[$i]),5)));
+			else
+			    $actualValue = _getText(_cell(0, _in($prow), _under(_div("Logged Effort"),5)).previousSibling);
+			
+			if ($inputObject.type !== "negative")
+			    _assertEqual($arrAttributeValues[$i], $actualValue, "For " + $arrAttributes[$i]);
+			else
+			    _assertNotEqual($arrAttributeValues[$i], $actualValue, "For " + $arrAttributes[$i]);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskDetailsInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyTimesheetWorkflowStages({"stageNos":"1|2|3","stageNames":"Initiator|Performer|Approver"});
+* @description This function is called to modify timesheet workflow stages
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyTimesheetWorkflowStages($inputObject)
+{
+	_log("modifyTimesheetWorkflowStages Started","success");
+	try 
+	{   
+	    var $actualValue;
+	    var $arrStageNos = $inputObject.stageNos.split("|");
+		var $arrstageNames = $inputObject.stageNames.split("|");
+		
+		for (var $i = 0; $i < $arrStageNos.length; $i++)
+		{
+		    _setValue(_textbox("/stageName/", _near(_cell($arrStageNos[$i]))), $arrstageNames[$i]);
+		}
+        
+		_click(_submit("Save"));
+		
+		//Verification
+		for (var $i = 0; $i < $arrStageNos.length; $i++)
+		{
+		    $actualValue = _getText(_textbox("/stageName/", _near(_cell($arrStageNos[$i]))));
+			_assertEqual($arrstageNames[$i], $actualValue, "For " + $arrStageNos[$i]);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTimesheetWorkflowStages Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addTimesheetGlobalItem({"edt_name":"Trip","txt_description":"Office trip","lst_number1":"act1","chk_Calculations":"on"});
+* @description This function is called to add timesheet global item
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function addTimesheetGlobalItem($inputObject)
+{
+	_log("addTimesheetGlobalItem Started","success");
+	try 
+	{
+        _click(_link("Add Timesheet Global Item"));
+		
+		_selectWindow("AddItem");
+		setAllFields($inputObject);
+        _click(_submit("Save"));
+		_selectWindow();
+		
+		_wait(5000, _isVisible(_cell($inputObject.edt_name)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTimesheetGlobalItem Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetGlobalItems({"itemsName":"Holiday|Leave"});
+           verifyTimesheetGlobalItems({"itemsName":"Holiday|Leave","type":"negative"});
+* @description This function is called to verify timesheet global items
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetGlobalItems($inputObject)
+{
+	_log("verifyTimesheetGlobalItems Started","success");
+	try 
+	{
+        var $arrItemsName = $inputObject.itemsName.split("|");
+		
+		for (var $i = 0; $i < $arrItemsName.length; $i++)
+		{
+		    if ($inputObject.type === "negative")
+			{
+			    _assertFalse(_isVisible(_cell($arrItemsName[$i])));
+			}
+			else
+			{
+			    _assert(_isVisible(_cell($arrItemsName[$i])));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetGlobalItems Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyTimesheetGlobalItem({"itemName":"Holiday","edt_name":"Trip","txt_description":"Office trip","rdg_inactive":"on"
+           ,"lst_number1":"act1","chk_Calculations":"on"});
+* @description This function is called to modify timesheet global item
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyTimesheetGlobalItem($inputObject)
+{
+	_log("modifyTimesheetGlobalItem Started","success");
+	try 
+	{
+        _click(_link("/Glb/", _near(_cell($inputObject.itemName))));
+		delete $inputObject.itemName;
+		
+		_selectWindow("AddItem");
+		setAllFields($inputObject);
+        _click(_submit("Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTimesheetGlobalItem Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example deleteTimesheetGlobalItem({"itemNames":"Holiday|Leave"});
+* @description This function is called to delete timesheet global item
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function deleteTimesheetGlobalItem($inputObject)
+{
+	_log("deleteTimesheetGlobalItem Started","success");
+	try 
+	{
+        var $arrItemNames = $inputObject.itemNames.split("|");
+		
+		for (var $i = 0; $i < $arrItemNames.length; $i++)
+		{
+		    _check(_checkbox("/glbCheckBox/", _near(_cell($arrItemNames[$i]))));
+		}
+		
+		_click(_link("Delete Timesheet Global Item"));
+		
+		for (var $i = 0; $i < $arrItemNames.length; $i++)
+		{
+		    if ($inputObject.type === "negative")
+			{
+			    _assert(_isVisible(_cell($arrItemNames[$i])));
+			}
+			else
+			{
+		        _assertFalse(_isVisible(_cell($arrItemNames[$i])));
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTimesheetGlobalItem Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyTimesheetGlobalItemWorkflow({"firstName":"SAVITHA","lastName":"THAKKAR","emailId":"hrd@digite.com",
+           "unassignUser":"yes","userName":"Alok Agarwal|Reise Reise","stageDetails":"Stage 1,Lisa Lisa|Stage 2,Skip"});
+* @description This function is called to modify global item timesheet workflow
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyTimesheetGlobalItemWorkflow($inputObject)
+{
+	_log("modifyTimesheetGlobalItemWorkflow Started","success");
+	try 
+	{
+		modifyTimesheetWorkflowInProject($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTimesheetGlobalItemWorkflow Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example changeTimesheetWeek({"selectWeek":"previous"});
+           changeTimesheetWeek({"selectDate":"30-Jun-2012","selectWeek":"previous"});
+		   changeTimesheetWeek({"fieldName":"From Date:","selectDate":"30-Jun-2012"});
+* @description This function is called to change timesheet week
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function changeTimesheetWeek($inputObject)
+{
+	_log("changeTimesheetWeek Started","success");
+	try 
+	{
+		if ($inputObject.selectWeek)
+		{
+		    var $selectWeek = $inputObject.selectWeek;
+			
+		    if ($selectWeek === "previous")
+			{
+			    _click(_link("tsForSplitPrev", _near(_span("Week:"))));
+			}
+			else if ($selectWeek === "next")
+			{
+			    _click(_link("tsForSplitNext", _near(_span("Week:"))));
+			}
+			else if ($selectWeek === "today")
+			{
+			    _click(_link("tsForSplitDuration", _near(_span("Week:"))));
+				_click(_link("Today"));
+			}
+		}
+		else
+		{
+		    var $arrSelectDate = $inputObject.selectDate.split("-");
+			$date = $arrSelectDate[0];
+			$month = $arrSelectDate[1];
+			$year = $arrSelectDate[2];
+			
+			if ($inputObject.fieldName)
+			    _click(_link(0, _near(_span($inputObject.fieldName))));
+			else
+		        _click(_link("tsForSplitDuration", _near(_span("Week:"))));	
+			_click(_link(1, _near(_link("/Previous Month/"))));
+			
+			//Select Year
+			var $todayDate = new Date();
+			var $todayYear = $todayDate.getFullYear();
+	        var $diffYear = $todayYear - $year;
+			
+			while (!(_isVisible(_link($year))))
+			{
+			    if ($diffYear < 0) 
+			    {
+				    _click(_link("/monthpicker.*nextEl/"));
+			    }
+			    else if ($diffYear > 0)
+			    {
+				    _click(_link("/monthpicker.*prevEl/"));
+			    }
+			}
+	        
+			_wait(1000);
+	        _click(_link($year));
+			//Select Month
+			_wait(1000);
+			_click(_link($month));
+			_wait(1000);
+			_click(_link("OK"));
+			//Select Date
+			_wait(1000);
+			_click(_link($date));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changeTimesheetWeek Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetWeek({"week":"06-Aug-2012"});
+* @description This function is called to verify timesheet week
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetWeek($inputObject)
+{
+	_log("verifyTimesheetWeek Started","success");
+	try 
+	{
+	    var $actualValue = _getText(_link(1, _near(_span("Week:"))));
+		_assertEqual($inputObject.week, $actualValue, "Timesheet Week");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetWeek Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyStageWiseTimelogs({"taskName":"TASK1","day":"Mon","edt_hd_BillHrs":"9","edt_hd_Result":"9","txt_txtAreaComments":"timelog added"});
+		   modifyStageWiseTimelogs({"taskName":"TASK1","day":"Mon","edt_hd_BillHrs":"9","txt_txtAreaComments":"timelog added","stageWiseTimelogDetails":"Initiator,First Time,5|Initiator,Next Time,5"});
+		   modifyStageWiseTimelogs({"taskName":"TASK1","day":"Mon","edt_hd_BillHrs":"2","edt_hd_Result":"1","type":"negative","msgDetails":"Billable hours should not be more than total actual hours."});
+* @description This function is called to modify stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyStageWiseTimelogs($inputObject)
+{
+	_log("modifyStageWiseTimelogs Started","success");
+	try 
+	{   
+        openStageWiseTimelogs($inputObject);
+		
+		if ($inputObject.stageWiseTimelogDetails)
+		{
+		    var $arrStageWiseTimelogDetails = $inputObject.stageWiseTimelogDetails.split("|");
+			for (var $i = 0; $i < $arrStageWiseTimelogDetails.length; $i++)
+			{
+			    $arrStageDetails = $arrStageWiseTimelogDetails[$i].split(",");
+				if ($arrStageDetails[1] === "First Time")
+				    _click(_cell(0, _rightOf(_cell($arrStageDetails[0])), _near(_span("First Time"))));
+				else if ($arrStageDetails[1] === "Next Time")
+				    _click(_cell(1, _rightOf(_cell($arrStageDetails[0])), _near(_span("First Time"))));
+				
+				_setValue(_textbox("firstTimeLog", _rightOf(_div($arrStageDetails[0]))), $arrStageDetails[2]);
+				_click(_link("Time Log"));
+			}
+		}
+		//Timelog
+		if ($inputObject.edt_hd_Result)
+		    _setValue(_textbox(0, _near(_label("Timelog:"))), $inputObject.edt_hd_Result);
+		//Billable	
+		if ($inputObject.edt_hd_BillHrs)
+		    _setValue(_textbox(1, _near(_label("Timelog:"))), $inputObject.edt_hd_BillHrs);
+		//Remaining
+		if ($inputObject.edt_hd_DlyResult)
+		    _setValue(_textbox(2, _near(_label("Timelog:"))), $inputObject.edt_hd_DlyResult);
+		
+		//Comments
+		if ($inputObject.txt_txtAreaComments)
+		{
+		    _click(_link("Comments"));
+		    var $commentsMsg = $inputObject.txt_txtAreaComments;
+			_setValue(_textarea("txtcomments"), $commentsMsg);
+			_click(_link("Add"));
+			_wait(4000, _isVisible(_link($commentsMsg)));
+			_assert(_isVisible(_link($commentsMsg)));
+		}
+		
+		_click(_link("Time Log"));
+		_click(_link("Save And Close"));
+		
+		if ($inputObject.type === "negative")
+		{		   
+		    _assert(_isVisible(_span($inputObject.msgDetails)));
+		    _click(_link("OK"));
+			_click(_link("cancelButton"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyStageWiseTimelogs Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyStageWiseTimelogsForMultipleDay({"taskName":"TASK1","day":"Mon","edt_hd_Result":"9|9","edt_hd_BillHrs":"9|9","txt_txtAreaComments":"timelog added"});
+* @description This function is called to modify stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyStageWiseTimelogsForMultipleDay($inputObject)
+{
+	_log("modifyStageWiseTimelogsForMultipleDay Started","success");
+	try 
+	{   
+        openStageWiseTimelogs($inputObject);
+		
+		var $arrTimelog = $inputObject.edt_hd_Result.split("|");
+		if ($inputObject.edt_hd_BillHrs)
+		    var $arrBillable = $inputObject.edt_hd_BillHrs.split("|");
+		if ($inputObject.txt_txtAreaComments)
+		    var $arrComments = $inputObject.txt_txtAreaComments.split("|");
+		
+		for (var $i = 0; $i < $arrTimelog.length; $i++)
+		{
+		    _setValue(_textbox(0, _near(_label("Timelog:"))), $arrTimelog[$i]);
+			
+			if ($inputObject.edt_hd_BillHrs)
+			    _setValue(_textbox(1, _near(_label("Timelog:"))), $arrBillable[$i]);
+				
+			if ($inputObject.txt_txtAreaComments)
+			{
+				_click(_link("Comments"));
+				var $commentsMsg = $arrComments[$i];
+				_setValue(_textarea("txtcomments"), $commentsMsg);
+				_click(_link("Add"));
+				_wait(4000, _isVisible(_link($commentsMsg)));
+				_assert(_isVisible(_link($commentsMsg)));
+			}
+			
+			_click(_link("Time Log"));
+			if ($i < $arrTimelog.length - 1)
+			    _click(_link("nextDay"));
+		}
+		    
+		_click(_link("Save And Close"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyStageWiseTimelogsForMultipleDay Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyStageWiseTimelogs({"taskName":"TASK1","day":"Mon","edt_hd_BillHrs":"9","edt_hd_Result":"9","txt_txtAreaComments":"timelog added","itemAttributes":"Name|Project Name|Code","itemAttributesValue":"TASK1|Prj1|TSK1"});
+		   verifyStageWiseTimelogs({"taskName":"TASK1","day":"Mon","edt_hd_Result":"8","edt_hd_BillHrs":"8","txt_txtAreaComments":"timelog added","stageWiseTimelogDetails":"Initiator,First Time,5|Initiator,Next Time,5"});
+* @description This function is called to verify stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyStageWiseTimelogs($inputObject)
+{
+	_log("verifyStageWiseTimelogs Started","success");
+	try 
+	{   
+        openStageWiseTimelogs($inputObject);
+		
+		//Timelog
+		if ($inputObject.edt_hd_Result || $inputObject.timelogValue)
+		{
+		    if ($inputObject.timelogValue)
+			    $inputObject.edt_hd_Result = $inputObject.timelogValue;
+				
+		    $actualValue = _getText(_textbox(0, _near(_label("Timelog:"))));
+		    _assertEqual($inputObject.edt_hd_Result, $actualValue, "For Timelog");	
+		}
+		//Billable Hrs
+		if ($inputObject.edt_hd_BillHrs)
+		{
+		    $actualValue = _getText(_textbox(1, _near(_label("Timelog:"))));
+			_assertEqual($inputObject.edt_hd_BillHrs, $actualValue, "For Billable Hrs");	
+		}
+		//Remaining Hrs
+		if ($inputObject.edt_hd_DlyResult)
+		{
+		    $actualValue = _getText(_textbox(2, _near(_label("Timelog:"))));
+			_assertEqual($inputObject.edt_hd_DlyResult, $actualValue, "For Remaining Hrs");	
+		}
+		
+		if ($inputObject.stageWiseTimelogDetails)
+		{
+		    var $arrStageWiseTimelogDetails = $inputObject.stageWiseTimelogDetails.split("|");
+			for (var $i = 0; $i < $arrStageWiseTimelogDetails.length; $i++)
+			{
+			    $arrStageDetails = $arrStageWiseTimelogDetails[$i].split(",");
+				if ($arrStageDetails[1] === "First Time")
+				    $actualValue = _getText(_cell(0, _rightOf(_cell($arrStageDetails[0])), _near(_span("First Time"))));
+				else if ($arrStageDetails[1] === "Next Time")
+				    $actualValue = _getText(_cell(1, _rightOf(_cell($arrStageDetails[0])), _near(_span("First Time"))));
+				_assertEqual($arrStageDetails[2], $actualValue, "For " + $arrStageDetails[0] + " " + $arrStageDetails[1]);
+			}
+		}
+		
+		if ($inputObject.txt_txtAreaComments)
+		{
+		    _click(_link("Comments"));
+		    _assert(_isVisible(_link($inputObject.txt_txtAreaComments)));
+		}
+		
+		if ($inputObject.itemAttributes)
+		{
+		    _click(_link("Details"));
+		    var $arrItemAttributes = $inputObject.itemAttributes.split("|");
+			var $arrItemAttributesValue = $inputObject.itemAttributesValue.split("|");
+			
+			for (var $i = 0; $i < $arrItemAttributes.length; $i++)
+			{
+		        $actualValue = _getText(_label($arrItemAttributes[$i]).nextSibling.nextSibling);
+				_assertEqual($arrItemAttributesValue[$i], $actualValue, "For " + $arrItemAttributes[$i]);
+			}
+		}
+        _click(_link("cancelButton"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyStageWiseTimelogs Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyStageWiseTimelogsForMultipleDay({"taskName":"TASK1","day":"Mon","edt_hd_Result":"9|9","edt_hd_BillHrs":"9|9","txt_txtAreaComments":"timelog added"});
+* @description This function is called to verify stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyStageWiseTimelogsForMultipleDay($inputObject)
+{
+	_log("verifyStageWiseTimelogsForMultipleDay Started","success");
+	try 
+	{   
+        openStageWiseTimelogs($inputObject);
+		
+		if ($inputObject.timelogValue)
+			$inputObject.edt_hd_Result = $inputObject.timelogValue;
+		var $arrTimelog = $inputObject.edt_hd_Result.split("|");
+		if ($inputObject.edt_hd_BillHrs)
+		    var $arrBillable = $inputObject.edt_hd_BillHrs.split("|");
+		if ($inputObject.txt_txtAreaComments)
+		    var $arrComments = $inputObject.txt_txtAreaComments.split("|");
+		
+		for (var $i = 0; $i < $arrTimelog.length; $i++)
+		{
+		    $actualValue = _getText(_textbox(0, _near(_label("Timelog:"))));
+		    _assertEqual($arrTimelog[$i], $actualValue, "For Timelog");
+			
+			if ($inputObject.edt_hd_BillHrs)
+			{
+			    $actualValue = _getText(_textbox(1, _near(_label("Timelog:"))));
+			    _assertEqual($arrBillable[$i], $actualValue, "For Billable Hrs");
+			}
+			
+			if ($inputObject.txt_txtAreaComments)
+			{
+			    _click(_link("Comments"));
+		        _assert(_isVisible(_link($arrComments[$i])));
+			}
+			
+			_click(_link("Time Log"));
+			if ($i < $arrTimelog.length - 1)
+			    _click(_link("nextDay"));
+		}
+		
+        _click(_link("cancelButton"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyStageWiseTimelogsForMultipleDay Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example editCommentStageWiseTimelogs({"taskName":"TASK1","day":"Mon","comment":"new timelog entry","newComment":"timelog entry done","attributesValue":"11-Jul-2012|Savitha Thakkar|timelog entry done"});
+		   editCommentStageWiseTimelogs({"taskName":"TASK1","day":"Mon","comment":"new timelog entry","type":"negative"});
+* @description This function is called to edit stage wise timelogs comments
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function editCommentStageWiseTimelogs($inputObject)
+{
+	_log("editCommentStageWiseTimelogs Started","success");
+	try 
+	{   
+        openStageWiseTimelogs($inputObject);
+		
+		_click(_link("Comments"));
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_link($inputObject.comment)));
+		}
+		else
+		{
+			_click(_link($inputObject.comment));
+			_setValue(_textarea("txtcomments"), $inputObject.newComment);
+			_click(_link("commentBtn"));
+			_wait(4000, _isVisible(_link($inputObject.newComment)));
+			_assert(_isVisible(_link($inputObject.newComment)));
+		}
+        
+		$inputObject.open = "no";
+        verifyStageWiseTimelogsCommentsHistory($inputObject)
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editCommentStageWiseTimelogs Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyStageWiseTimelogsCommentsHistory({"taskName":"TASK1","day":"Mon","attributesValue":"11-Jul-2012|Savitha Thakkar|timelog entry done"});
+* @description This function is called to verify stage wise timelogs comments history
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyStageWiseTimelogsCommentsHistory($inputObject)
+{
+	_log("verifyStageWiseTimelogsCommentsHistory Started","success");
+	try 
+	{   
+		var $arrAttributesValue = $inputObject.attributesValue.split("|");
+		
+		if ($inputObject.open !== "no")
+            openStageWiseTimelogs($inputObject);
+		
+		_click(_link("Comments"));
+        var $comments = "/" + $arrAttributesValue[1] + " on " + $arrAttributesValue[0] + ".*" + $arrAttributesValue[2] + "/";
+		_assert(_isVisible(_div($comments)));
+		
+		if ($inputObject.open !== "no")
+		    _click(_link("cancelButton"));
+		else
+		    _click(_link("saveAndCloseButton"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyStageWiseTimelogsCommentsHistory Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example openStageWiseTimelogs({"taskName":"TASK1","day":"Mon"});
+* @description This function is called to open stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function openStageWiseTimelogs($inputObject)
+{
+	_log("openStageWiseTimelogs Started","success");
+	try 
+	{   
+		var $prow = _parentRow(_div($inputObject.taskName));
+		var $dayArg = "/" + $inputObject.day + "/";
+		
+        _click(_cell(0, _in($prow), _under(_div($dayArg),5)));
+		
+		if (_isVisible(_textbox(0, _in($prow), _under(_div($dayArg)))))
+		    _doubleClick(_textbox(0, _under(_div($dayArg))));
+		else
+		    _doubleClick(_cell(0, _in($prow), _under(_div($dayArg),5)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openStageWiseTimelogs Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addCommentsInTimesheet({"comments":"task added in timesheet"});
+* @description This function is called to add comments in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function addCommentsInTimesheet($inputObject)
+{
+	_log("addCommentsInTimesheet Started","success");
+	try 
+	{
+        _click(_link("/.*Comments.*/"));
+		_setValue(_textarea("txtcomments"), $inputObject.comments);
+		_wait(1000);
+		_click(_link("Submit"));
+		_wait(3000);
+		_click(_image("/x-tool-close/", _near(_link("/Comments/"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCommentsInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyCommentsInTimesheet({"comments":"task added in timesheet"});
+           verifyCommentsInTimesheet({"comments":"task added in timesheet","type":"negative"});
+		   verifyCommentsInTimesheet({"comments":"task added in timesheet","userName":"yang","commentDate":"15-Oct-2012"});
+* @description This function is called to verify comments in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyCommentsInTimesheet($inputObject)
+{
+	_log("verifyCommentsInTimesheet Started","success");
+	try 
+	{
+        _click(_link("/.*Comments.*/"));
+		
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_div($inputObject.comments)));
+	    }
+		else
+		{
+		    if ($inputObject.userName && $inputObject.commentDate)
+			{
+			    var $comments = "/" + $inputObject.userName + " on " + $inputObject.commentDate + ".*" + $inputObject.comments + "/";
+			}
+			else
+			{
+			    var $comments = $inputObject.comments;
+			}
+		    _assert(_isVisible(_div($comments)));
+		}
+		_click(_image("/x-tool-close/", _near(_link("/Comments/"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCommentsInTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetApprovalListing({"resourceName":"THAKKAR SAVITHA","projectName":"AANEW","week":"02-Jul-2012","attributes":"Total Hours|Billable Hours","attributeValues":"9.00|0.00"});
+* @description This function is called to verify timesheet under approval listing
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetApprovalListing($inputObject)
+{
+	_log("verifyTimesheetApprovalListing Started","success");
+	try 
+	{
+	    var $week = "/" + $inputObject.week + "/";
+		
+		if ($inputObject.type !== "negative")
+		{
+			var $prow = _parentRow(_div($inputObject.projectName, _near(_div($week, _near(_div("/" + $inputObject.resourceName + "/"))))));
+			
+			if ($inputObject.attributes)
+			{
+				var $arrAttributes = $inputObject.attributes.split("|");
+				var $arrAttributeValues = $inputObject.attributeValues.split("|");
+			
+				for (var $i = 0; $i < $arrAttributes.length; $i++)
+				{   
+					$actualValue = _getText(_cell(0, _in($prow), _under(_div($arrAttributes[$i]))));
+					_assertEqual($arrAttributeValues[$i], $actualValue, "For " + $arrAttributes[$i]);
+				}
+			}
+		}
+		else
+		{
+		    _assertFalse(_isVisible(_div($inputObject.projectName, _near(_div($week)))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetApprovalListing Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example bulkUpdateTimesheetApproval({"resourceName":"mihigan gary|mihigan gary","projectName":"AANEW|GT Management","week":"02-Jul-2012|23-Jul-2012","action":"Approve"});
+           bulkUpdateTimesheetApproval({"resourceName":"mihigan gary|mihigan gary","projectName":"AANEW|GT Management","week":"02-Jul-2012|23-Jul-2012","action":"Reject"});
+* @description This function is called to bulk update timesheet under approval
+* @return {String} None 
+*************************************************************************/
+function bulkUpdateTimesheetApproval($inputObject)
+{
+	_log("bulkUpdateTimesheetApproval Started","success");
+	try 
+	{
+		var $arrActions = $inputObject.action.split("|");
+		
+		if ($inputObject.ApplyToAll)
+		{
+		    _click(_span("x-column-header-text"));
+		}
+		else
+		{
+			var $arrProjectsName = $inputObject.projectName.split("|");
+		    var $arrResourcesName = $inputObject.resourceName.split("|");
+		    var $arrWeek = $inputObject.week.split("|");
+		
+			for (var $i = 0; $i < $arrResourcesName.length; $i++)
+			{
+				var $prow = _parentRow(_div($arrProjectsName[$i], _near(_div("/" + $arrWeek[$i] + "/", _near(_div("/" + $arrResourcesName[$i] + "/"))))));
+				_click(_div("x-grid-row-checker", _in($prow)));
+			}
+		}
+
+		if ($arrActions[0] === "Approve")
+		{
+		    _click(_link("QTP_KEY_BUTTON_Route"));
+			_assert(_isVisible(_span("Do you want to bulk approve the selected Timesheets?")));
+			_click(_link("Yes"));
+			
+		    if ($inputObject.msgDetails)
+		    {
+		        _assertEqual($inputObject.msgDetails, _getText(_list("Messages")));
+		    }
+			else
+			{
+			    _wait(5000, _isVisible(_span("Timesheet(s) approved successfully.")));
+		        _assert(_isVisible(_span("Timesheet(s) approved successfully.")));
+			}
+		}
+		else if ($arrActions[0] === "Reject")
+		{
+		    _click(_link("QTP_KEY_BUTTON_Reject"));
+			_assert(_isVisible(_span("Do you want to bulk reject the selected Timesheets?")));
+			_click(_link("Yes"));
+			_assert(_isVisible(_span("Do you want to Add Rejection Comments?")));
+			
+		    if ($inputObject.comments)
+		    {
+				_click(_link("Yes"));
+				_setValue(_textarea("rejectionComment"), $inputObject.comments);
+				_wait(1000);
+		        _click(_link("saveButton"));
+		    }
+            else
+		    {
+			    _click(_link("No"));
+	        }
+			_wait(5000, _isVisible(_span("Timesheet(s) rejected successfully.")));
+			_assert(_isVisible(_span("Timesheet(s) rejected successfully.")));
+		}
+		
+		_click(_link("OK"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("bulkUpdateTimesheetApproval Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example openTimesheetApprovalInstance({"resourceName":"THAKKAR SAVITHA","projectName":"AANEW","week":"02-Jul-2012"});
+* @description This function is called to open timesheet under approval
+* @return {String} None 
+*************************************************************************/
+function openTimesheetApprovalInstance($inputObject)
+{
+	_log("openTimesheetApprovalInstance Started","success");
+	try 
+	{
+	    var $week = "/" + $inputObject.week + "/";
+	    var $resourceName = "/" + $inputObject.resourceName + "/";
+        var $prow = _parentRow(_div($inputObject.projectName, _near(_div($week, _near(_div($resourceName))))));
+        _click(_div($resourceName, _in($prow)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimesheetApprovalInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetApprovalDetails({"taskName":"TASK1","attributes":"Estimated|Logged|Mon","attributeValues":"0|0|8"});
+           verifyTimesheetApprovalDetails({"taskName":"TASK1","type":"negative"});
+* @description This function is called to verify tasks details in timesheet approval
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetApprovalDetails($inputObject)
+{
+	_log("verifyTimesheetApprovalDetails Started","success");
+	try 
+	{   
+	    if ($inputObject.type !== "negative")
+	    {
+			var $prow,$actualValue;
+			var $arrAttributes = $inputObject.attributes.split("|");
+			var $arrAttributeValues = $inputObject.attributeValues.split("|");
+			
+			$prow = _parentRow(_div($inputObject.taskName));
+
+			for (var $i = 0; $i < $arrAttributes.length; $i++)
+			{   
+			    $arrAttributes[$i] = "/" + $arrAttributes[$i] + "/";
+				$actualValue = _getText(_cell(0, _in($prow), _under(_div($arrAttributes[$i]),5)));
+				_assertEqual($arrAttributeValues[$i], $actualValue, "For " + $arrAttributes[$i]);
+			}
+		}
+		else
+		{
+		    _assertFalse(_isVisible(_div($inputObject.taskName)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetApprovalDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example viewRejectedTimesheetList();
+* @description This function is called to view rejected timesheet list
+* @return {String} None 
+*************************************************************************/
+function viewRejectedTimesheetList($inputObject)
+{
+	_log("viewRejectedTimesheetList Started","success");
+	try 
+	{
+        _click(_link("QTP_KEY_BUTTON_TS_REJECT"));
+		_assert(_isVisible(_link("Rejected", _near(_span("Timesheet Status:")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("viewRejectedTimesheetList Completed","success");
+}
+
+
+/*************************************************************************
+* @author Alpesh
+* @example addGlobalLocalTask({"taskName":"Leave","taskType":"global"});
+           addGlobalLocalTask({"taskName":"local1","taskType":"local"});
+		   addGlobalLocalTask({"taskName":"Trip","taskType":"global","type":"disable"});
+		   addGlobalLocalTask({"taskName":"local1","taskType":"local","type":"disable"});
+		   addGlobalLocalTask({"taskName":"Trip","taskType":"global","type":"negative"});
+		   addGlobalLocalTask({"type":"iconDisable"});
+* @description This function is called to add Global/Local task
+* @return {String} None 
+*************************************************************************/
+function addGlobalLocalTask($inputObject)
+{
+	_log("addGlobalLocalTask Started","success");
+	try 
+	{
+	    if ($inputObject.type === "iconDisable")
+		{
+            _click(_link("ToolBarGlobalLocalTask"));
+			_assertFalse(_isVisible(_span("Add Global/Local Item")));
+			return true;
+		}
+		else
+		{
+		    _click(_link("ToolBarGlobalLocalTask"));
+		}
+		
+		var $taskName = $inputObject.taskName;
+		
+		if ($inputObject.taskType === "local")
+		{
+		    if ($inputObject.type === "disable")
+			{
+			    _assertFalse(_isVisible(_label("Local Item")));
+				_click(_image("/x-tool-close/", _near(_span("Add Global/Local Item"))));
+				return true;
+			}
+			else
+			{
+		        _click(_label("Local Item"));
+			    _setValue(_textbox("tsLocalTask"), $taskName);
+			    _wait(1000);
+		        _click(_link("Add"));
+		        _assert(_isVisible(_span("Local Item Added Successfully")));
+			}
+		}
+		else if ($inputObject.taskType === "global")
+		{
+		    if ($inputObject.type === "disable")
+			{
+			    _assertFalse(_isVisible(_label("Global Item")));
+				_click(_image("/x-tool-close/", _near(_span("Add Global/Local Item"))));
+				return true;
+			}
+			else
+			{
+		        _click(_label("Global Item"));
+		        _click(_textbox("tsGlobalTask"));
+			    _wait(1000);
+			    if ($inputObject.type === "negative")
+			    {
+		            _assertFalse(_isVisible(_listItem($taskName)));
+					_click(_image("/x-tool-close/", _near(_span("Add Global/Local Item"))));
+				    return true;
+			    }
+			    else
+			    {
+			        _click(_listItem($taskName));
+					_wait(1000);
+		            _click(_link("Add"));
+		            _assert(_isVisible(_span("Global Item Added Successfully")));
+			    }
+		    }
+		}
+		_click(_link("OK"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addGlobalLocalTask Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example deleteTaskFromTimesheet({"taskName":"Leave"});
+* @example deleteTaskFromTimesheet({"taskName":"Leave","msgDetail":"Task can't be deleted"});
+* @description This function is called to delete task from timesheet
+* @return {String} None 
+*************************************************************************/
+function deleteTaskFromTimesheet($inputObject)
+{
+	_log("deleteTaskFromTimesheet Started","success");
+	try 
+	{
+        _rightClick(_div($inputObject.taskName));
+	    if ($inputObject.type !== "negative")
+		{
+			_click(_link("Delete"));
+			_assertTrue(_isVisible(_span("Do you want to delete task?")));
+			_click(_link("Yes"));
+			
+			if ($inputObject.msgDetail)
+			{
+				_assert(_isVisible(_span($inputObject.msgDetail)));
+			}
+			else
+			{
+				_assert(_isVisible(_span("Task Deleted Successfully")));
+			}
+			_click(_link("OK"));
+		}
+		else
+		{
+		    _assertFalse(_isVisible(_link("Delete")));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteTaskFromTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example editTimesheetApprovalInstance();
+* @example editTimesheetApprovalInstance({"type":"negative"});
+* @description This function is called to edit timesheet approval instance
+* @return {String} None 
+*************************************************************************/
+function editTimesheetApprovalInstance($inputObject)
+{
+	_log("editTimesheetApprovalInstance Started","success");
+	try 
+	{
+	    if($inputObject !== undefined)
+		{
+	        if ($inputObject.type === "negative")
+		    {
+				var $editButtonClassName;
+			    _set($editButtonClassName, _link("Edit").className);
+                var $isButtonDisabled = $editButtonClassName.indexOf("disabled");
+			    if ($isButtonDisabled !== -1)
+			        _log("Edit timesheet under approval icon disabled","success");
+			    else
+			        _log("Edit timesheet under approval icon not disabled","failure");
+		    }
+		}
+		else
+		{
+		    _click(_link("Edit"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editTimesheetApprovalInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example routeTimesheetApprovalInstance();
+* @description This function is called to route timesheet approval instance
+* @return {String} None 
+*************************************************************************/
+function routeTimesheetApprovalInstance($inpuObject)
+{
+	_log("routeTimesheetApprovalInstance Started","success");
+	try 
+	{
+        _click(_link("QTP_KEY_BUTTON_Route"));
+	    _assert(_isVisible(_span("Timesheet Approved Successfully.")));
+	    _click(_link("OK"));
+    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("routeTimesheetApprovalInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example rejectTimesheetApprovalInstance();
+* @example rejectTimesheetApprovalInstance({"comments":"rejected comments"});
+* @description This function is called to reject timesheet approval instance
+* @return {String} None 
+*************************************************************************/
+function rejectTimesheetApprovalInstance($inputObject)
+{
+	_log("rejectTimesheetApprovalInstance Started","success");
+	try 
+	{
+	    _click(_link("QTP_KEY_BUTTON_Reject"));
+		
+		if($inputObject !== undefined)
+		{
+		    if ($inputObject.comments)
+		    {
+			    _assert(_isVisible(_span("Do you want to Add Rejection Comments?")));
+				_click(_link("Yes"));
+				_setValue(_textarea("rejectionComment"), $inputObject.comments);
+				_wait(1000);
+		        _click(_link("saveButton"));
+		    }
+		}
+        else
+		{
+        	_assert(_isVisible(_span("Do you want to Add Rejection Comments?")));
+			_click(_link("No"));
+		}
+		
+		_assert(_isVisible(_span("Timesheet Rejected Successfully.")));
+		_click(_link("OK"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("rejectTimesheetApprovalInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example openTimesheetFromInstance();
+           openTimesheetFromInstance({"type":"negative"});
+* @description This function is called to open timesheet from eform instance
+* @return {String} None 
+*************************************************************************/
+function openTimesheetFromInstance($inputObject)
+{
+	_log("openTimesheetFromInstance Started","success");
+	try 
+	{
+		if($inputObject !== undefined)
+		{
+		    if ($inputObject.type === "negative")
+		    _assertFalse(_isVisible(_link("Enter Time")));
+		}
+		else
+		{
+		    _click(_link("Enter Time"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimesheetFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example openTimesheetFromInbox({"itemName":"Planning Work"});
+           openTimesheetFromInbox({"itemName":"Planning Work","type":"negative"});
+* @description This function is called to open timesheet from inbox
+* @return {String} None 
+*************************************************************************/
+function openTimesheetFromInbox($inputObject)
+{
+	_log("openTimesheetFromInbox Started","success");
+	try 
+	{
+        if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_link("TblLnk de-icon-add_timelog", _leftOf(_cell($inputObject.itemName)))));
+		}
+		else
+		{
+			_click(_link("TblLnk de-icon-add_timelog", _near(_cell($inputObject.itemName))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimesheetFromInbox Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example closeTimesheetFromInstance();
+* @description This function is called to close timesheet from eform instance
+* @return {String} None 
+*************************************************************************/
+function closeTimesheetFromInstance()
+{
+	_log("closeTimesheetFromInstance Started","success");
+	try 
+	{
+	    _selectWindow("CurrentTimesheet");
+        _closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeTimesheetFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example enterTimeLogFromInstance({"taskName":"TASK1","days":"Mon|Tue","hrs":"8|9"});
+* @description This function is called to enter timelog in timesheet from eform instance
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function enterTimeLogFromInstance($inputObject)
+{
+	_log("enterTimeLogFromInstance Started","success");
+	try 
+	{
+	    _selectWindow("CurrentTimesheet");
+	    enterTimeLog($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enterTimeLogFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyTaskStatusFromInstance({"taskName":"task1","status":"Done","type":"negative"});
+* @description This function is called to modify task status in timesheet from eform instance
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyTaskStatusFromInstance($inputObject)
+{
+	_log("modifyTaskStatusFromInstance Started","success");
+	try 
+	{
+	    _selectWindow("CurrentTimesheet");
+        modifyTaskStatus($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTaskStatusFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example saveTimesheetFromInstance();
+* @example saveTimesheetFromInstance({"type":"negative","msgDetail":"Timesheet Save Failed"});
+* @description This function is called to save timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function saveTimesheetFromInstance($inputObject)
+{
+	_log("saveTimesheetFromInstance Started","success");
+	try 
+	{
+	    _selectWindow("CurrentTimesheet");
+        saveTimesheet($inputObject);
+		_selectWindow();
+		closeTimesheetFromInstance();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveTimesheetFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example changeTimesheetWeekFromInstance({"selectDate":"30-Jun-2012","selectWeek":"previous"});
+* @description This function is called to change timesheet week
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function changeTimesheetWeekFromInstance($inputObject)
+{
+	_log("changeTimesheetWeekFromInstance Started","success");
+	try 
+	{
+	    _selectWindow("CurrentTimesheet");
+		changeTimesheetWeek($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changeTimesheetWeekFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyStageWiseTimelogsFromInstance({"taskName":"TASK1","day":"Mon","edt_hd_BillHrs":"9"
+           ,"edt_hd_Result":"9","txt_txtAreaComments":"timelog added",
+		   "stageWiseTimelogDetails":"Initiator,First Time,5|Initiator,Next Time,5"});
+* @description This function is called to modify stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function modifyStageWiseTimelogsFromInstance($inputObject)
+{
+	_log("modifyStageWiseTimelogsFromInstance Started","success");
+	try 
+	{   		
+	    _selectWindow("CurrentTimesheet");
+		$inputObject.popupName = "CurrentTimesheet";
+        modifyStageWiseTimelogs($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyStageWiseTimelogsFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyStageWiseTimelogsFromInstance({"taskName":"TASK1","day":"Mon","edt_hd_BillHrs":"9"
+           ,"edt_hd_Result":"9","txt_txtAreaComments":"timelog added","timelogValue":"12.00",
+		   "stageWiseTimelogDetails":"Initiator,First Time,5|Initiator,Next Time,5"});
+* @description This function is called to verify stage wise timelogs
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyStageWiseTimelogsFromInstance($inputObject)
+{
+	_log("verifyStageWiseTimelogsFromInstance Started","success");
+	try 
+	{   
+	    _selectWindow("CurrentTimesheet");
+        verifyStageWiseTimelogs($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyStageWiseTimelogsFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example hideUnhideColumnsInTimesheetFromInstance({"columnNames":"Bill Hours|Logged Effort","operation":"hide"});
+           hideUnhideColumnsInTimesheetFromInstance({"columnNames":"Bill Hours|Logged Effort","operation":"unhide"});
+* @description This function is called to hide unhide columns in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function hideUnhideColumnsInTimesheetFromInstance($inputObject)
+{
+	_log("hideUnhideColumnsInTimesheetFromInstance Started","success");
+	try 
+	{   
+	    _selectWindow("CurrentTimesheet");
+        hideUnhideColumnsInTimesheet($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("hideUnhideColumnsInTimesheetFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTaskDetailsInTimesheetFromInstance({"taskName":"task1","attributes":"Status|Est. Effort|Mon|Tue","attributeValues":"Rcvd|375|9|8"});
+* @description This function is called to verify task details in timesheet from popup
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTaskDetailsInTimesheetFromInstance($inputObject)
+{
+	_log("verifyTaskDetailsInTimesheetFromInstance Started","success");
+	try 
+	{   
+	    _selectWindow("CurrentTimesheet");
+        verifyTaskDetailsInTimesheet($inputObject);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTaskDetailsInTimesheetFromInstance Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetReport({"itemName":"TASK1","prjName":"JKGA","attributes":"Actual Effort|Billable Effort","attributeValues":"1|0"});
+           verifyTimesheetReport({"itemName":"TASK1","prjName":"JKGA","type":"negative"});
+* @description This function is called to verify timesheet report
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetReport($inputObject)
+{
+	_log("verifyTimesheetReport Started","success");
+	try 
+	{   
+	    var $itemName = $inputObject.itemName;
+		
+		if ($inputObject.type === "negative")
+		{
+		    _assertFalse(_isVisible(_cell($itemName)));
+		}
+		else
+		{
+		    var $arrAttributes = $inputObject.attributes.split("|");
+		    var $arrAttributeValues = $inputObject.attributeValues.split("|");
+			
+			for (var $i = 0; $i < $arrAttributes.length; $i++)
+			{
+				$actualValue = _getText(_cell(0, _near(_cell($itemName)), _under(_cell($arrAttributes[$i]))));
+				if ($actualValue !== $arrAttributeValues[$i])
+				_log("Item = " + $itemName + ", Attribute = " + $arrAttributes[$i] + ", Actual Value = " + $arrAttributeValues[$i],"failure");
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetReport Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyBillableResourceDetailReport({"itemName":"TASK1","prjName":"JKGA","attributes":"Team Member|Actual Effort|Billable Effort","attributeValues":"qadir qadir|1|0"});
+           verifyBillableResourceDetailReport({"itemName":"TASK1","prjName":"JKGA","type":"negative"});
+* @description This function is called to verify billable resource detail report
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyBillableResourceDetailReport($inputObject)
+{
+	_log("verifyBillableResourceDetailReport Started","success");
+	try 
+	{   
+        verifyTimesheetReport($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBillableResourceDetailReport Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyTimesheetExceptionsReport({"itemName":"qadir qadir","prjName":"JKGA","attributes":"Email|Start Date|Estimated Hours|Actual Hours","attributeValues":"qadir@digite.com|15-Oct-2012|40|0"});
+* @description This function is called to verify timesheet exceptions report
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyTimesheetExceptionsReport($inputObject)
+{
+	_log("verifyTimesheetExceptionsReport Started","success");
+	try 
+	{   
+        verifyTimesheetReport($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetExceptionsReport Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyResourceLoadingReport({"userName":"yang lee","projectName":"Global Item","attributes":"Al|Pr.Al.|As|Ac","attributeValues":"0.00|0.00|0.00|2.00"});
+* @description This function is called to verify resource loading report
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function verifyResourceLoadingReport($inputObject)
+{
+	_log("verifyResourceLoadingReport Started","success");
+	try 
+	{   
+	    var $userName = $inputObject.userName;
+		var $prjName = $inputObject.projectName;
+		var $arrAttributes = $inputObject.attributes.split("|");
+		var $arrAttributeValues = $inputObject.attributeValues.split("|");
+		
+		_click(_checkbox("globalTasks"));
+		_click(_submit("Apply"));
+	    _click(_span("/img_/", _near(_cell($userName))));
+		
+		var $prjEle = _cell($prjName, _under(_parentRow(_cell($userName))));
+		
+		for (var $i = 0; $i < $arrAttributes.length; $i++)
+		{
+		    $actualValue = _getText(_cell(0, _near($prjEle), _under(_cell($arrAttributes[$i]))));
+		    if ($actualValue !== $arrAttributeValues[$i])
+			_log("User = " + $userName + ", Project = " + $prjName + ", Attribute = " + $arrAttributes[$i] + ", Actual Value = " + $arrAttributeValues[$i],"failure");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyResourceLoadingReport Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example lockTimesheet({"status":"Closed","userName":"ranjan bindra","weekEndingDate":"09-Dec-2012"});
+* @description This function is called to lock timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function lockTimesheet($inputObject)
+{
+	_log("lockTimesheet Started","success");
+	try 
+	{   
+	    var $userName = $inputObject.userName;
+		delete $inputObject.userName;
+		
+        _click(_link("Lock Timesheet"));
+		_selectWindow("LockTimesheet");
+		setAllFields($inputObject);
+		_click(_button("Go"));
+		_click(_checkbox("chk_0"));
+		_click(_button("Lock"));
+		_expectConfirm("Do you want to Lock the Timesheet for selected Rows.", true);
+		_click(_button("Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("lockTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example unlockTimesheet({"userName":"ranjan bindra","weekEndingDate":"09-Dec-2012"});
+* @description This function is called to unlock timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function unlockTimesheet($inputObject)
+{
+	_log("unlockTimesheet Started","success");
+	try 
+	{   
+	    var $userName = $inputObject.userName;
+		delete $inputObject.userName;
+		
+        _click(_link("Unlock Timesheet"));
+		_selectWindow("UnLockTimesheet");
+		setAllFields($inputObject);
+		_click(_button("Go"));
+		_click(_checkbox("chk_0"));
+		_click(_button("Unlock"));
+		_expectConfirm("Do you want to Unlock the Timesheet for selected Rows.", true);
+		_click(_button("Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unlockTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example hideUnhideColumnsInTimesheet({"columnNames":"Bill Hours|Logged Effort","operation":"hide"});
+           hideUnhideColumnsInTimesheet({"columnNames":"Bill Hours|Logged Effort","operation":"unhide"});
+* @description This function is called to hide unhide columns in timesheet
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+function hideUnhideColumnsInTimesheet($inputObject)
+{
+	_log("hideUnhideColumnsInTimesheet Started","success");
+	try 
+	{   
+	    var $arrColumnNames = $inputObject.columnNames.split("|");
+		
+		_click(_div("itemName-triggerEl"));
+        _mouseOver(_link("Columns"));
+		
+		for (var $i = 0; $i < $arrColumnNames.length; $i++)
+		{
+            _click(_link($arrColumnNames[$i]));
+			
+			//Verification
+			if ($inputObject.operation === "hide")
+		        _assertFalse(_isVisible(_div($arrColumnNames[$i])));
+		    else if ($inputObject.operation === "unhide")
+		        _assert(_isVisible(_div($arrColumnNames[$i])));
+		}   
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("hideUnhideColumnsInTimesheet Completed","success");
+}
+//Alpesh
+
+/**
+ @Function Number:7
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setTimesheetItemDetails($inputObject)
+{
+	_log("setTimesheetItemDetails Started","success");
+	try 
+	{
+		//For cell Id is in this Format "Tue 14/02" thats.
+		var $weekdayId="";
+			
+		if($inputObject.weekday==="monday")
+			$weekdayId="ColHdrTS";
+		if($inputObject.weekday==="tuesday")
+			$weekdayId="ColHdrTS[1]";
+		if($inputObject.weekday==="wednesday")
+			$weekdayId="ColHdrTS[2]";
+		if($inputObject.weekday==="thursday")
+			$weekdayId="ColHdrTS[3]";
+		if($inputObject.weekday==="friday")
+			$weekdayId="ColHdrTS[4]";
+		if($inputObject.weekday==="saturday")
+			$weekdayId="ColHdrTS[5]";
+		if($inputObject.weekday==="sunday")
+			$weekdayId="ColHdrTS[6]";
+				
+		var $isEnabled;
+		
+		_set($isEnabled,!_textbox(0,_under(_cell($weekdayId))).disabled);
+		
+		if($isEnabled)
+		{
+			_doubleClick(_textbox(0,_near(_span($inputObject.item),_under(_cell($weekdayId)))));
+			_selectWindow("myWin");
+			setAllFields($inputObject);
+			_click(_submit("QTP_KEY_BUTTON_Save"));
+			_selectWindow();
+			_click(_button("QTP_KEY_LABEL_Save"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTimesheetItemDetails Completed","success");
+}
+
+/**
+ @Function Number:	8
+ @author:			Vaishali
+ @example:			selectDetailsOfUserInHierarchy($inputObject)
+ @description: 		This function sets details of user in Hierarchy
+ @param: 			lst_viewSubTS
+ @return: 			none
+ **/
+
+function selectDetailsOfUserInHierarchy($inputObject)
+{
+	_log("selectDetailsOfUserInHierarchy Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_LABEL_Go"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectDetailsOfUserInHierarchy Completed","success");
+}
+
+/**
+ @Function Number:	9
+ @author:			Vaishali
+ @example:			openSubordinateTimesheet($inputObject)
+ @description: 		This function open Subordinate Timesheet.
+ @param: 			$inputObject.item
+ @return: 			None.	
+ **/
+
+function openSubordinateTimesheet($inputObject)
+{
+	_log("openSubordinateTimesheet Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openSubordinateTimesheet Completed","success");
+}
+
+/**
+ @Function Number:10
+ @author: Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function switchToUserInTimesheet()
+{
+	_log("switchToUserInTimesheet Started","success");
+	try 
+	{
+		_click(_submit("QTP_KEY_BUTTON_Switch_To_User"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("switchToUserInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickRejectButtonInApprovalTimesheet()
+{
+	_log("clickRejectButtonInApprovalTimesheet Started","success");
+	try 
+	{
+		_click(_button("QTP_KEY_BUTTON_Reject"));
+		_selectWindow("Add Comment");
+		_setValue(_textarea("description"), "Rejected");
+		_click(_submit("SaveBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickRejectButtonInApprovalTimesheet Completed","success");
+}
+
+/**
+ @Function Number:	12
+ @author:			Vaishali
+ @example:			selectSubordinateUserInTimesheet($inputObject)
+ @description: 		This function selets SubordinateUser in timesheet
+ @param: 			$inputObject.userName 
+ @return: 			none
+ **/
+
+function selectSubordinateUserInTimesheet($inputObject)
+{
+	_log("selectSubordinateUserInTimesheet Started","success");
+	try 
+	{
+		_click(_link($inputObject.userName));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectSubordinateUserInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function viewTimesheetWorkflow()
+{
+	_log("viewTimesheetWorkflow Started","success");
+	try 
+	{
+		_click(_link("de-icon-workflow"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("viewTimesheetWorkflow Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setTimesheetWorkflow($inputObject)
+{
+	_log("setTimesheetWorkflow Started","success");
+	try 
+	{
+		if($inputObject.Stage1 != null)
+			_setSelected(_select(0,_near(_cell($inputObject.Project)), _under(_cell("Stage 1"))), $inputObject.Stage1);
+		if($inputObject.Stage2 != null)
+			_setSelected(_select(0,_near(_cell($inputObject.Project)), _under(_cell("Stage 2"))), $inputObject.Stage2);
+		if($inputObject.Stage3 != null)
+			_setSelected(_select(0,_near(_cell($inputObject.Project)), _under(_cell("Stage 3"))), $inputObject.Stage3);
+		if($inputObject.Stage4 != null)
+			_setSelected(_select(0,_near(_cell($inputObject.Project)), _under(_cell("Stage 4"))), $inputObject.Stage4);
+		if($inputObject.Stage5 != null)
+			_setSelected(_select(0,_near(_cell($inputObject.Project)), _under(_cell("Stage 5"))), $inputObject.Stage5);
+		
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTimesheetWorkflow Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openItemDetails($inputObject)
+{
+	_log("openItemDetails Started","success");
+	try 
+	{
+		_click(_span($inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openItemDetails Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addExistingTaskFromProject($inputObject)
+{
+	_log("addExistingTaskFromProject Started","success");
+	try 
+	{
+		_click(_link("Add Existing Task"));
+		_selectWindow("Add Task to Project");
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+		_check(_checkbox("mainCheckbox",_near(_cell($inputObject.existingTaskName))));
+		_click(_submit("QTP_KEY_BUTTON_Add"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addExistingTaskFromProject Completed","success");
+}
+
+/*************************************************************************
+* @author   Vaishali
+* @example: enterTimeLogforWeekday({ "item" : "Automate Testcases" ,  "weekday" : "monday" ,  "weekdaytimelog" : "10" });
+* @description This function is called to Enter time in time sheet
+* @param {String} None
+* @return {String}   None 
+
+*************************************************************************/
+
+function enterTimeLogforWeekday($inputObject)
+{
+	_log("enterTimeLogforWeekday Started","success");
+	try 
+	{
+		$inputObject.taskName = $inputObject.item;
+		$inputObject.days = $inputObject.weekday;
+		$inputObject.hrs = $inputObject.weekdaytimelog;
+		enterTimeLog($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enterTimeLogforWeekday Completed","success");
+}
+/*************************************************************************
+* @author Vaishali
+* @example selectProjectForTimesheet({ "lst_ProjectId_old" : "4.1QMS" });
+* @description This function is called to select project for time Timesheet
+* @param {String} Project name
+* @return {String}   None 
+*************************************************************************/
+
+function selectProjectForTimesheet($inputObject)
+{
+	_log("selectProjectForTimesheet Started","success");
+	try 
+	{
+				
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_exists(_span($inputObject.lst_ProjectId_old)));
+		}
+		else
+		{
+			_click(_link("tsForSplitProjects"));
+			_check(_image(0,_near(_span($inputObject.lst_ProjectId_old))));
+			_click(_link("Apply"));
+			if(_exists(_image("x-tree-elbow-plus x-tree-expander")))
+			{
+				_click(_image("x-tree-elbow-plus x-tree-expander"));
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectProjectForTimesheet Completed","success");
+}
+
+
+/**
+ @Function Number:27
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickRejectTimesheetIcon()
+{
+	_log("clickRejectTimesheetIcon Started","success");
+	try 
+	{
+		_click(_image("service_management.gif"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickRejectTimesheetIcon Completed","success");
+}
+
+/**
+ @Function Number:28
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function routeToApproveTimesheet()
+{
+	_log("routeToApproveTimesheet Started","success");
+	try 
+	{
+		_click(_button("QTP_KEY_BUTTON_Route"));
+		//_expectConfirm("Timesheet Approved Successfully.",true); /// Not Working
+		_assertTrue(_isVisible(_span("Timesheet Approved Successfully.")));
+		_click(_button("Yes"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("routeToApproveTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example enableTimesheet({"chk_ProjectCreator" : "Yes" , "edt_startFromDate" : "01-Jan-2010"});
+* @description This function is called to enable Timesheet for a Project
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+function enableTimesheet($inputObject)
+{
+	_log("enableTimesheet Started","success");
+	try 
+	{
+		_click(_link("de-icon-timesheet"));
+		
+		_selectWindow("Timesheet Setup Wizard");
+			var $setupWizardFieldsJSON={};
+			var $generateTimesheetFieldsJSON={};		
+			if($inputObject.rdg_trackingBy)
+	    	   $setupWizardFieldsJSON.rdg_trackingBy =$inputObject.rdg_trackingBy;
+			if($inputObject.chk_Preserve)
+	    	   $setupWizardFieldsJSON.chk_Preserve =$inputObject.chk_Preserve;
+			if($inputObject.chk_Billable)
+	    	   $setupWizardFieldsJSON.chk_Billable =$inputObject.chk_Billable;
+			if($inputObject.chk_ProjectCreator)
+	    	   $setupWizardFieldsJSON.chk_ProjectCreator =$inputObject.chk_ProjectCreator;			
+			setAllFields($setupWizardFieldsJSON);
+			_click(_submit("Next"));
+			_wait(5000,null);
+		
+		_selectWindow("Timesheet Workflow");
+			if($inputObject.stageName && $inputObject.approver)
+			_setSelected(_select("selectApprover",_near(_cell($inputObject.stageName))), $inputObject.approver);
+			_click(_submit("Next"));
+		
+		_selectWindow("Generate Timesheet");
+			if($inputObject.edt_startFromDate)
+			{
+				$generateTimesheetFieldsJSON.edt_startFromDate=$inputObject.edt_startFromDate;
+				setAllFields($generateTimesheetFieldsJSON);
+			}
+		_click(_button("finish"));
+		_wait(5000,null);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("enableTimesheet Completed","success");
+}
+
+/**
+ @Function Number:30
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function hideTaskInTimesheet($inputObject)
+{
+	_log("hideTaskInTimesheet Started","success");
+	try 
+	{
+		_click(_link("TLB_KEY_BUTTON_Show_Hide_Items"));
+		_selectWindow("Show/Hide items in timesheet");
+		
+		if($inputObject.lst_selectItemFromProject)
+		{
+			$json = {};
+			$json.lst_selectItemFromProject = $inputObject.lst_selectItemFromProject;
+			setAllFields($json);
+		}
+			
+		_check(_checkbox(0,_in(_cell(0,_near(_cell($inputObject.item)), _under(_cell("ChkBoxSlctAll"))))));
+		_click(_submit("QTP_KEY_LABEL_Hide"));
+		_selectWindow();
+		
+		_assertFalse(_isVisible(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("hideTaskInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function unHideTaskInTimesheet($inputObject)
+{
+	_log("unHideTaskInTimesheet Started","success");
+	try 
+	{
+		_click(_link("TLB_KEY_BUTTON_Show_Hide_Items"));
+		_selectWindow("Show/Hide items in timesheet");
+		if($inputObject.lst_selectItemFromProject)
+		{
+			$json = {};
+			$json.lst_selectItemFromProject = $inputObject.lst_selectItemFromProject;
+			setAllFields($json);
+		}
+
+		_check(_checkbox(0,_in(_cell(0,_near(_cell($inputObject.item)), _under(_cell("ChkBoxSlctAll"))))));
+		_click(_submit("QTP_KEY_BUTTON_Show"));
+		_selectWindow();
+		_assertTrue(_isVisible(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unHideTaskInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:32
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function generatePastTimesheet($inputObject)
+{
+	_log("generatePastTimesheet Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("savePastTimesheet"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("generatePastTimesheet Completed","success");
+}
+
+/**
+ @Function Number:33
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function markTaskAsDone($inputObject)
+{
+	_log("markTaskAsDone Started","success");
+	try 
+	{
+		_setSelected(_select(/selectStatusSubmitted_/,_near(_cell($inputObject.taskName))), "Done");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("markTaskAsDone Completed","success");
+}
+
+/**
+ @Function Number:34
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function markTaskAsRcvd($inputObject)
+{
+	_log("markTaskAsRcvd Started","success");
+	try 
+	{
+		_setSelected(_select(/selectStatusSubmitted_/,_near(_cell($inputObject.taskName))), "Rcvd");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("markTaskAsRcvd Completed","success");
+}
+
+/**
+ @Function Number:35
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function editTimesheetWorkflowStages($inputObject)
+{
+	_log("editTimesheetWorkflowStages Started","success");
+	try 
+	{
+		_setValue(_textbox("stageName"),$inputObject.stageName1);
+		_setValue(_textbox("stageName[1]"),$inputObject.stageName2);
+		_setValue(_textbox("stageName[2]"),$inputObject.stageName3);
+		_click(_submit("save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editTimesheetWorkflowStages Completed","success");
+}
+
+/**
+ @Function Number:36
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function timesheetGlobalWorkflowBatchUpdate($inputObject)
+{
+	_log("timesheetGlobalWorkflowBatchUpdate Started","success");
+	try 
+	{
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+		var $usersSet = $inputObject.users.split(";");
+		for(var $i = 0; $i < $usersSet.length; $i++)
+        {
+			_check(_checkbox(0,_near(_cell($usersSet[$i]))));
+        }	
+		_click(_button("QTP_KEY_LABEL_Batch_Update"));
+		_selectWindow("Timesheet Batch Update");
+		var $stagesSet = $inputObject.stages.split(";");
+		var $wfUsersSet = $inputObject.stage_user.split(";");
+		for(var $i = 0; $i < $stagesSet.length; $i++)
+        {
+			_setSelected(_select(0,_under($stagesSet[$i])), $wfUsersSet[$i]);
+        }
+		_click(_button("QTP_KEY_BUTTON_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("timesheetGlobalWorkflowBatchUpdate Completed","success");
+}
+
+/**
+ @Function Number:	38
+ @author:			Vaishali	
+ @example:			replaceApprover($inputObject)
+ @description: 		This function replace approver with new approver	
+ @param: 			$inputObject.lst_oldApproverId,$inputObject.lst_newApproverId
+ @return: 
+ **/
+
+function replaceApprover($inputObject)
+{
+	_log("replaceApprover Started","success");
+	try 
+	{
+		_click(_image("replace_team_member.gif"));
+		_selectWindow("replaceApprover");
+		setAllFields($inputObject);
+		_click(_button("QTP_KEY_BUTTON_Ok"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("replaceApprover Completed","success");
+}
+
+/**
+ @Function Number:39
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickProjectInTimesheetList($inputObject)
+{
+	_log("clickProjectInTimesheetList Started","success");
+	try 
+	{
+		_click(_link(0, _in(_cell($inputObject.projectName))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickProjectInTimesheetList Completed","success");
+}
+
+/**
+ @Function Number:40
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addCommentToInApprovalTimesheet($inputObject)
+{
+	_log("addCommentToInApprovalTimesheet Started","success");
+	try 
+	{
+		_click(_link("a_Comments"));
+		_click(_image("add_comment.gif"));
+		_setValue(_textarea("New_Comment"), $inputObject.Comment);
+		_click(_submit("Submit_newComment"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCommentToInApprovalTimesheet Completed","success");
+}
+
+/**
+ @Function Number:41
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ModifyTimesheetSignatureSettings($inputObject)
+{
+	_log("ModifyTimesheetSignatureSettings Started","success");
+	try 
+	{
+		_check(_checkbox("checkbox"+$inputObject.lineNo));
+		_setValue(_textbox($inputObject.TextBoxToModify),$inputObject.modifiedText);
+		_click(_submit("save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ModifyTimesheetSignatureSettings Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function generateFutureTimesheet($inputObject)
+{
+	_log("generateFutureTimesheet Started","success");
+	try 
+	{
+		_click(_image("generate-future-time-sheet.gif"));
+		
+		if($inputObject.locale === "German")
+			_selectWindow("Generate Future_de Timesheet");
+		else
+			_selectWindow("Generate Future Timesheet");
+		
+		setAllFields($inputObject);
+		
+		_click(_button("QTP_KEY_BUTTON_Save"));
+		
+		_selectWindow();
+		
+		_log("generateFutureTimesheet Verification Started","success");
+		_assertEqual($inputObject.edt_startFromDate ,_getValue(_textbox("enddate")));
+		_log("generateFutureTimesheet Verification Started","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("generateFutureTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example verifyTimesheetStatus({ "item" : "Routed" ,  "weekStartDate" :  "13-Feb-2012" });
+* @description This function is called to verify time sheet Status
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function verifyTimesheetStatus($inputObject)
+{
+	_log("verifyTimesheetStatus Started","success");
+	try 
+	{
+		_click(_image(0,_near(_bold($inputObject.weekStartDate))));
+		verifyInstanceInListing($inputObject);
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetStatus Completed","success");
+}
+
+/**
+ @Function Number:71
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchItemInTimesheet($inputObject)
+{
+	_log("searchItemInTimesheet Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+			_assertFalse(_exists(_cell($inputObject.item)));
+		else
+			_assertTrue(_exists(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchItemInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:75
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimelogforitem($inputObject)
+{
+	_log("verifyTimelogforitem Started","success");
+	try 
+	{
+		//For cell Id is in this Format "Tue 14/02" thats.
+		if($inputObject.lst_WeekStartDate_old !== null)
+			changeTimesheetWeek($inputObject);
+		
+		var $weekdayId="";
+
+		if($inputObject.weekday==="monday")
+			$weekdayId="ColHdrTS";
+		if($inputObject.weekday==="tuesday")
+			$weekdayId="ColHdrTS[1]";
+		if($inputObject.weekday==="wednesday")
+			$weekdayId="ColHdrTS[2]";
+		if($inputObject.weekday==="thursday")
+			$weekdayId="ColHdrTS[3]";
+		if($inputObject.weekday==="friday")
+			$weekdayId="ColHdrTS[4]";
+		if($inputObject.weekday==="saturday")
+			$weekdayId="ColHdrTS[5]";
+		if($inputObject.weekday==="sunday")
+			$weekdayId="ColHdrTS[6]";
+				
+		_assertEqual(_getValue(_textbox(0,_near(_span($inputObject.item),_under(_cell($weekdayId))))),$inputObject.value);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimelogforitem Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example:approveTimeSheetUnderApproval({ "TeamMemeberName" : "Anand Birla" ,  "WeekStartDate" : "15-Jan-2007" ,  "ProjectName" : "Digite Vr 4.2" ,  "Action" : "Approve" });
+* @description This function is called to approve TimesheetUnderapproval
+* @param {String} None
+* @return {String}   None 
+
+*************************************************************************/
+
+function approveTimeSheetUnderApproval($inputObject)
+{
+	_log("approveTimeSheetUnderApproval Started","success");
+	try 
+	{
+	    var $keyValue;
+		if($inputObject.routeAll === true)
+		{
+			_check(_checkbox("chk_0"));
+			_setSelected(_select("sel_0"), $inputObject.Action);
+		}
+		else
+		{
+	        for ($key in $inputObject) 
+			{
+	        	$keyValue = String([$key]);
+				 if($keyValue.indexOf(14) != -1)
+	        	{
+	        		var $temp = $keyValue.substring(14);
+	        		var $i = $temp[1];
+	        		$key1 = "TeamMemeberName"+$i;
+	        		$key2 = "ProjectName"+$i;
+	        		$key3 = "WeekStartDate"+$i;
+	        		$key4 = "Action"+$i;
+	        		_check(_checkbox(0, _near(_cell($inputObject.$key1, _near(_cell($inputObject.$key2, _near(_cell($inputObject.$key3))))))));
+	        		_setSelected(_select(0,  _near(_cell($inputObject[$key1], _near(_cell($inputObject[$key2], _near(_cell($inputObject[$key3]))))))),$inputObject[$key4]);
+	        	}
+	        }
+		}
+        _click(_link("QTP_KEY_BUTTON_Bulk_Update"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("  approveTimeSheetUnderApproval Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example: routeTimeSheetUnderApproval({ "item" : "Ophelia" , "operation" : "Delete" })
+* @description This function is called to check if the item passed is present in listing table.
+* @param {String} None
+* @return {String}   None 
+
+*************************************************************************/
+
+function routeTimeSheetUnderApproval()
+{
+	_log("routeTimeSheetUnderApproval Started","success");
+	try 
+	{
+		_click(_button("Route"));
+		//_expectConfirm("Timesheet Approved Successfully.", true);
+		_assertTrue(_isVisible(_span("Timesheet Approved Successfully.")));
+		_click(_button("OK"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("routeTimeSheetUnderApproval Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example:openTimeSheetUnderApproval({ "TeamMemeberName" : "Chetan Phanse" ,  "WeekStartDate" : "27-Nov-2007" ,  "ProjectName" : "Digite Vr 4.2" });
+* @description This function is called to open Time sheet under approval
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function openTimeSheetUnderApproval($inputObject)
+{
+	_log("openTimeSheetUnderApproval Started","success");
+	try 
+	{
+		_click(_div($inputObject.TeamMemeberName) && _div($inputObject.ProjectName) && _div($inputObject.WeekStartDate));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTimeSheetUnderApproval Completed","success");
+}
+
+/**
+ @Function Number:80
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+function verifyTimeSheetUnderApproval($inputObject)
+{
+	_log("verifyTimeSheetUnderApproval Started","success");
+	try 
+	{
+		var $rowCount = 0;
+		_set($rowCount, _byId("timetable").childNodes[2].getElementsByTagName("TR").length);
+		if($inputObject.verificationType === "Negative")
+		{
+			for(var $i = 1; $i <= $rowCount; $i++)
+			{
+	    		_assertFalse(_isVisible(_cell($inputObject.TeamMemeberName, _in(_row($i+"")))) && _isVisible(_cell($inputObject.ProjectName, _in(_row($i+"")))) && _isVisible(_cell($inputObject.WeekStartDate, _in(_row($i+"")))));
+			}
+		}
+		else
+		{
+			var $rowFound = false;
+			_set($rowFound,false);
+			for(var $k = 1; $k <= $rowCount; $k++)
+			{
+	    		if(_condition(_isVisible(_cell($inputObject.TeamMemeberName, _in(_row($k+""))) && _cell($inputObject.ProjectName, _in(_row($k+""))) && _cell($inputObject.WeekStartDate, _in(_row($k+""))))))
+	    		{
+	    			_set($rowFound,true);
+	    			break;
+	    		}
+			}
+			if(!$rowFound)
+				_assertFalse(true, "Timesheet under approval not found.");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimeSheetUnderApproval Completed","success");
+}
+
+
+/**
+ @Function Number:81
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetStatusForTask($inputObject)
+{
+	_log("verifyTimesheetStatusForTask Started","success");
+	try 
+	{
+		var $status = _getValue(_select(0,_in(_cell(2,_near(_cell($inputObject.taskName))))));
+		_assertTrue ($inputObject.status === $status);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetStatusForTask Completed","success");
+}
+
+/**
+ @Function Number:82
+ @author:sdindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyWeeklyTimesheetStatusForTask($inputObject)
+{
+	_log("verifyWeeklyTimesheetStatusForTask Started","success");
+	try 
+	{
+	    var $key;
+	    var $keyValue;
+		
+        for ($key in $inputObject) 
+		{
+            $keyValue = String([$key]);
+            if ($keyValue === "PercComp") 
+			{
+            	_assertEqual(_textbox(/pctCompleteSubmitted_/,_near(_cell($inputObject.taskName))).value, $inputObject[$key]);
+            }
+	   
+            if ($keyValue === "RemHrs") 
+			{
+            	_assertEqual(_textbox(/hoursRemainingSubmitted_/,_near(_cell($inputObject.taskName))).value, $inputObject[$key]);
+            }
+            
+            if ($keyValue === "status")
+            {
+            	verifyTimesheetStatusForTask($inputObject);
+            }
+        }
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWeeklyTimesheetStatusForTask Completed","success");
+}
+
+/**
+ @Function Number:86
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetGlobalWorkflowStages($inputObject)
+{
+	_log("verifyTimesheetGlobalWorkflowStages Started","success");
+	try 
+	{
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+
+		var $users = $inputObject.users.split(";");
+		var $stages = $inputObject.stages.split(";");
+		var $stage_user = $inputObject.stage_user.split(";");
+		
+		for(var $i = 0 ; $i < $users.length ; $i++)
+		{
+			if($inputObject.operation === "UserNotPresent")
+			{
+				_assertFalse(_exists(_cell($users[$i])));
+			}
+			else
+				_assertTrue(_assertEqual($stage_user[$i],_getText(_cell(0,_near(_cell($users[$i])),_under(_cell($stages[$i]))))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetGlobalWorkflowStages Completed","success");
+}
+
+/**
+ @Function Number:	88
+ @author:			Vaishali
+ @example:			verifyProjectTimesheetWorkflowStages($inputObject)
+ @description: 		This function verify time sheet workflow statges.
+  @param: 			$inputObject.users,$inputObject.stage_user,$inputObject.stages
+ @return: 			none
+ **/
+
+function verifyProjectTimesheetWorkflowStages($inputObject)
+{
+	_log("verifyProjectTimesheetWorkflowStages Started","success");
+	try 
+	{
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+		if(_isVisible(_cell($inputObject.users,_under(_cell("Users")))))
+		{
+			_assertTrue(_isVisible(_cell($inputObject.users,_under(_cell("Users")))));
+			if(_isVisible(_cell($inputObject.stage_user,_near(_cell($inputObject.users)),_under(_cell($inputObject.stages)))))
+				{
+				_assertTrue(_isVisible(_cell($inputObject.stage_user,_near(_cell($inputObject.users)),_under(_cell($inputObject.stages)))));
+				}
+			else
+				{
+				_assertFalse(_isVisible(_cell($inputObject.stage_user,_near(_cell($inputObject.users)),_under(_cell($inputObject.stages)))));
+				}
+		}
+		else
+		{
+			_assertFalse(_isVisible(_cell($inputObject.users,_under(_cell("Users")))));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectTimesheetWorkflowStages Completed","success");
+}
+
+/**
+ @Function Number:89
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickOnTimesheetPrint()
+{
+	_log("clickOnTimesheetPrint Started","success");
+	try 
+	{
+		_wait(2000);
+		_click(_image("print.gif"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickOnTimesheetPrint Completed","success");
+}
+
+/**
+ @Function Number:92
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function selectProjectInTimesheetPrintpreview($inputObject)
+{
+	_log("selectProjectInTimesheetPrintpreview Started","success");
+	try 
+	{
+		_selectWindow("Timesheet Print Screen");
+		setAllFields($inputObject);
+		_click(_submit("Go"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectProjectInTimesheetPrintpreview Completed","success");
+}
+
+/**
+ @Function Number:95
+ @author:Dinesh
+ @example:      $inputObject = {};
+ 				$inputObject["cell_Name:"] = $data.Name8;
+ 				$inputObject["cell_Project:"] = $data.Project8;
+ 				$inputObject["cell_Total_Hours:"] = $data.TotalHours8;
+ 				$inputObject.Item = $data.Item8; 
+ 				$inputObject.rowContents = $data.rowContents8;
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDetailsInTimesheetPrintscreen($inputObject)
+{
+	_log("verifyDetailsInTimesheetPrintscreen Started","success");
+	try 
+	{
+		_selectWindow("Popup");
+		verifyAllFields($inputObject);
+		//for table row verification .
+		if($inputObject.Item && $inputObject.rowContents)
+		{
+			if(_containsText(_parentRow(_cell($inputObject.Item)),$inputObject.rowContents))
+			{
+			 _assertTrue(_containsText(_parentRow(_cell($inputObject.Item)) ,$inputObject.rowContents));
+			}
+			else
+			{
+			 _assertFalse(_containsText(_parentRow(_cell($inputObject.Item)) ,$inputObject.rowContents));
+			}
+		}
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDetailsInTimesheetPrintscreen Completed","success");
+}
+
+/**
+ @Function Number:96
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function clickOnPrintPreview()
+{
+	_log("clickOnPrintPreview Started","success");
+	try 
+	{
+		_selectWindow("Timesheet Print Screen");
+		_click(_submit("Print Preview"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickOnPrintPreview Completed","success");
+}
+
+/**
+ @Function Number:98
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetSignatureSetting($inputObject)
+{
+	_log("verifyTimesheetSignatureSetting Started","success");
+	try 
+	{
+		_selectWindow("Show Timesheet : Current Week");
+		_assertTrue(_isVisible(_cell($inputObject.signatureModified)));
+		_assertFalse(_isVisible(_cell($inputObject.signatureHidden)));
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetSignatureSetting Completed","success");
+}
+
+/**
+ @Function Number:99
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetCancelOperation($inputObject)
+{
+	_log("verifyTimesheetCancelOperation Started","success");
+	try 
+	{
+		_selectWindow($inputObject.selectWindow);
+		_click(_button("Cancel"));
+		
+		if($inputObject.selectWindow === "Show Timesheet : Current Week")
+		{
+			_selectWindow("Timesheet Print Screen");
+			_closeWindow();
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetCancelOperation Completed","success");
+}
+
+/**
+ @Function Number:100
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addPersonalTask($inputObject)
+{
+	_log("addPersonalTask Started","success");
+	try 
+	{
+		_click(_select("glbitm"));//click on global itesm list so that the list is loaded through ajax
+		_wait(3000,null);//Wait for 3 seconds so that list of global items is loaded
+		setAllFields($inputObject);
+		_click(_image("QTP_Add"));
+		_assertTrue(_isVisible(_cell($inputObject.lst_glbitm)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPersonalTask Completed","success");
+}
+
+/**
+ @Function Number:104
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setPrintHeadersForTimesheet($inputObject)
+{
+	_log("setPrintHeadersForTimesheet Started","success");
+	try 
+	{
+		_check(_checkbox(0, _near(_cell($inputObject.HeaderList))));
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setPrintHeadersForTimesheet Completed","success");
+}
+
+/**
+ @Function Number:105
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function changePopupView($inputObject)
+{
+	_log("changePopupView Started","success");
+	try 
+	{
+		_click(_image("table_view.gif"));
+		_selectWindow("Table:View");
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changePopupView Completed","success");
+}
+
+/**
+ @Function Number:106
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openInstannceFromTimesheet($inputObject)
+{
+	_log("openInstannceFromTimesheet Started","success");
+	try 
+	{
+		_selectWindow("Item Details");
+		_click(_link($inputObject.InstannceCode));
+		_selectWindow();
+		_assertTrue(_isVisible(_cell($inputObject.InstannceCode),_near(_cell("Id:"))));
+		_assertTrue(_isVisible(_cell($inputObject.edt_name),_near(_cell("Name:"))));
+		_assertTrue(_isVisible(_cell($inputObject.lst_priority),_near(_cell("Priority*:"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openInstannceFromTimesheet Completed","success");
+}
+
+/**
+ @Function Number:109
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addLocalTaskInTimesheet($inputObject)
+{
+	_log("addLocalTaskInTimesheet Started","success");
+	try 
+	{
+		_click(_select("glbitm"));//click on global itesm list so that the list is loaded through ajax
+		_wait(3000,null);//Wait for 3 seconds so that list of global items is loaded
+		setAllFields($inputObject);
+		_click(_image("QTP_Add"));
+		_assertTrue(_isVisible(_cell($inputObject.edt_textdesc)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addLocalTaskInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:112
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteLocalTaskFromTimesheet($inputObject)
+{
+	_log("deleteLocalTaskFromTimesheet Started","success");
+	try 
+	{
+		_check(_checkbox(0,_in(_cell(0, _near(_cell($inputObject.TaskName)), _under(_cell("ColHeaderTS"))))));
+		_click(_button("QTP_KEY_BUTTON_Delete"));
+		//_expectConfirm($inputObject.ConfirmMsg, true);
+		_assertTrue(_isVisible(_span($inputObject.ConfirmMsg)));
+		_click(_button("Yes"));
+		_assertFalse(_isVisible(_cell($inputObject.TaskName)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteLocalTaskFromTimesheet Completed","success");
+}
+
+/**
+ @Function Number:116
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyItemDetailsInTimesheet($inputObject)
+{
+	_log("verifyItemDetailsInTimesheet Started","success");
+	try 
+	{
+		_click(_span($inputObject.cell_Item));
+		_selectWindow("Item Details");
+		verifyAllFields($inputObject);
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyItemDetailsInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:118
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetWorkflowInformation($inputObject)
+{
+	_log("verifyTimesheetWorkflowInformation Started","success");
+	try 
+	{
+		_click(_image("info.gif"));
+		_selectWindow("Timesheet Information");
+		_click(_link("Workflow"));
+		_assertTrue(_isVisible(_cell($inputObject.cell_Responsible,_under(_cell("Responsible")))));
+		_assertTrue(_isVisible(_cell($inputObject.cell_Approver,_under(_cell("Approver")))));
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetWorkflowInformation Completed","success");
+}
+
+/**
+ @Function Number:119
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetActivityLogInformation($inputObject)
+{
+	_log("verifyTimesheetActivityLogInformation Started","success");
+	try 
+	{
+		_click(_image("info.gif"));
+		_selectWindow("Timesheet Information");
+		_click(_link("a_Activity"));
+		_assertTrue(_isVisible(_cell($inputObject.item, _under(_cell("Comments")))));
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetActivityLogInformation Completed","success");
+}
+
+/**
+ @Function Number:120
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyWeeklyTimesheetStatus($inputObject)
+{
+	_log("verifyWeeklyTimesheetStatus Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("searchTimesheets"));
+		_click(_image("hplus.gif", _in(_cell($inputObject.edt_startdate))));
+		if($inputObject.currentUser != null)
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.projectName)), _under(_cell("Current User")))), $inputObject.currentUser);
+		
+		if($inputObject.status != null)
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.projectName)), _under(_cell("Status[1]")))), $inputObject.status);
+		
+		if($inputObject.totalHours != null)
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.projectName)), _under(_cell("Total Hours")))), $inputObject.totalHours);
+		
+		if($inputObject.billableHours != null)
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.projectName)), _under(_cell("Billable Hours")))), $inputObject.billableHours);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWeeklyTimesheetStatus Completed","success");
+}
+
+/**
+ @Function Number:121
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyModifiedTimesheetInformation($inputObject)
+{
+	_log("verifyModifiedTimesheetInformation Started","success");
+	try 
+	{
+		_click(_image("info.gif"));
+		_selectWindow("Popup");
+		_click(_link("a_Modifications"));
+		
+		if(_exists(_image("hplus.gif",_in(_row($inputObject.Project)))))
+		{
+			_click(_image("hplus.gif",_in(_row($inputObject.Project))));
+		}
+		
+		_click(_image("hplus.gif",_in(_parentRow(_cell($inputObject.item)))));
+		
+		
+		var $weekdayId="";
+		
+		if($inputObject.ColumnHeader==="monday")
+			$weekdayId="ColSubHdr";
+		if($inputObject.ColumnHeader==="tuesday")
+			$weekdayId="ColHdr[6]";
+		if($inputObject.ColumnHeader==="wednesday")
+			$weekdayId="ColSubHdr[1]";
+		if($inputObject.ColumnHeader==="thursday")
+			$weekdayId="ColHdr[7]";
+		if($inputObject.ColumnHeader==="friday")
+			$weekdayId="ColSubHdr[2]";
+		if($inputObject.ColumnHeader==="saturday")
+			$weekdayId="ColHdr[8]";
+		if($inputObject.ColumnHeader==="sunday")
+			$weekdayId="ColSubHdr[3]";
+		
+		_assertEqual(_getText(_cell(0, _in(_parentRow(_cell($inputObject.item))), _under(_cell($weekdayId)))),$inputObject.currentValue);
+		
+		_assertEqual(_getText(_cell(0, _under(_cell(0, _in(_parentRow(_cell($inputObject.item))), _under(_cell($weekdayId)))))),$inputObject.previousValue);
+		
+		_click(_button("QTP_KEY_BUTTON_Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyModifiedTimesheetInformation Completed","success");
+}
+
+/**
+ @Function Number:122
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDetailsInTimesheetUnderApproval($inputObject)
+{
+	_log("verifyDetailsInTimesheetUnderApproval Started","success");
+	try 
+	{
+		_click(_image("hplus.gif"));
+		_click(_image("hplus.gif"));
+		verifyAllFields($inputObject);
+		if($inputObject.TotalHours != null)
+			_assertEqual(_getText(_cell("ValColTotalLbl[1]")), $inputObject.TotalHours);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDetailsInTimesheetUnderApproval Completed","success");
+}
+
+/**
+ @Function Number:125
+ @author:Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyApproverStageInWorkFlow($inputObject)
+{
+	_log("verifyApproverStageInWorkFlow Started","success");
+	try 
+	{
+		_click(_link("a_Workflow"));
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyApproverStageInWorkFlow Completed","success");
+}
+
+/**
+ @Function Number:127
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetMenu($inputObject)
+{
+	_log("verifyTimesheetMenu Started","success");
+	try 
+	{
+		if($inputObject.allow_personal_task_addition === "Yes")
+			_setSelected(_select("glbitm"), "Local Tasks");
+		
+		if($inputObject.viewbillablehours === "Y")
+			_assertTrue(_isVisible(_cell("Bill Hrs")));			
+		else if($inputObject.viewbillablehours === "N")
+			_assertFalse(_isVisible(_cell("Bill Hrs")));
+		
+		if($inputObject.TSCanUsersEditTimesheetWorkflow === "Y")
+			_assertTrue(_isVisible(_link("de-icon-workflow")));
+		else if($inputObject.TSCanUsersEditTimesheetWorkflow === "N")
+			_assertFalse(_isVisible(_link("de-icon-workflow")));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetMenu Completed","success");
+}
+
+/**
+ @Function Number:128
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySwitchToUser($inputObject)
+{
+	_log("verifySwitchToUser Started","success");
+	try 
+	{
+	
+		if(_exists(_submit("QTP_KEY_BUTTON_Switch_To_User")) || $inputObject.operation != "Negative")
+		{
+			_assertTrue(_isVisible(_submit("QTP_KEY_BUTTON_Switch_To_User")));
+		}
+		else
+		{
+			_assertFalse(_isVisible(_submit("QTP_KEY_BUTTON_Switch_To_User")));
+		}
+					
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySwitchToUser Completed","success");
+}
+
+/**
+ @Function Number:142
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function cancelNewTaskinTimesheet($inputObject)
+{
+	_log("cancelNewTaskinTimesheet Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("Add Task to Project");
+		setAllFields($inputObject);
+		_click(_reset("QTP_KEY_BUTTON_Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("cancelNewTaskinTimesheet Completed","success");
+}
+
+/**
+ @Function Number:146
+ @author:Mukesh
+ @example:
+ @description: This function is used to verify workflow stages
+ @param: 
+ @return: 
+ **/
+
+function verifyTimesheetWorkflowStages($inputObject)
+{
+	_log("verifyTimesheetWorkflowStages Started","success");
+	try 
+	{
+		var $stages=$inputObject.stages.split("|");
+		var $names=$inpuObject.names.split("|");
+		_click(_link("TIMESHEET WORKFLOW"));
+		for(var $i=0 ;$i < $stages.length ; $i++){
+			
+			var $workFlowNames=_getSelectedText(_popup("Effort Capture : Workflow")._select("selectApprover",_in(_cell(0,_under(_cell($stages[$i])),_in(_parentRow(_cell($inputObject.projectName)))))));
+			_assertTrue($names[i]==$workFlowNames,"Sorry the names doesnt match");
+		}
+		_popup("Effort Capture : Workflow")._button("< Return");
+	}
+	catch(e)
+	{	_popup("Effort Capture : Workflow")._button("< Return");
+		handleFailure(e);
+	}
+	_log("verifyTimesheetWorkflowStages Completed","success");
+}
+
+/**
+ @Function Number:155
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function checkAlertInTimesheet($inputObject)
+{
+	_log("checkAlertInTimesheet Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("Add Task to Project");
+		setAllFields($inputObject);
+		//_assertEqual(_lastAlert(),"%Allocation should be greater than 0.25,");
+
+                _assert(_isVisible(_span("%Allocation should be greater than 0.25,")));
+	        _click(_button("OK"));
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkAlertInTimesheet Completed","success");
+}
+
+/**
+ @Function Number:156
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function ClickPopupView()
+{
+	_log("ClickPopupView Started","success");
+	try 
+	{
+		_click(_image("table_view.gif"));
+		_selectWindow("Table:View");
+		_setSelected(_select("AllFieldList"), "Standard Code");
+		_closeWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ClickPopupView Completed","success");
+}
+
+/*************************************************************************
+* @author Harshit
+* @example selectItemStatusFilterForTimesheet
+* @description This function is called to select the item status in timesheet like Pending,Completed etc.
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function selectItemStatusFilterForTimesheet($inputObject)
+{
+	_log("selectItemStatusFilterForTimesheet Started","success");
+	try 
+	{
+		_click(_button("In Progress"));
+		var $arrItemStatus = $inputObject.itemStatus.split(";");
+		
+		for (var $i = 0; $i < $arrItemStatus.length; $i++)
+		{
+			_click(_span($arrItemStatus[$i]));
+		}
+		_click(_button("//s*Apply/s*/",_under(_button("In Progress"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}		
+	_log("selectItemStatusFilterForTimesheet Completed","success");
+}
+
+/*************************************************************************
+* @author Mukesh
+* @example applySortingAndVerifyTMSUnderApproval
+* @description This function is called to apply sorting and check the order
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function applySortingAndVerifyTMSUnderApproval($inputObject)
+{ 
+	_log("applySortingAndVerifyTMSUnderApproval started,success");
+	try
+	{
+		var $header=$inputObject.header.split("|");
+		var $j=0;
+		for(var $i=0 ; $i<$header.length ; $i++)
+		{
+			$j=0;
+			_click($header[$i]);
+			while(_isVisible(_cell($j+1,_under(_div($header[$i])))))
+			{
+				var $pre=_getText(_cell($j,_under(_div($header[$i]))));
+				var $post=_getText(_cell($j+1,_under(_div($header[$i]))));
+					
+				if(_assertNotNull(_parentNode(_span($header),"div",2).className.match("ASC")))
+				{
+					_assertTrue($pre <= $post,"Sorry the sorting order doesnt match");
+				}
+				else if(_assertNotNull(_parentNode(_span($header),"div",2).className.match("DESC")))
+				{
+					_assertTrue($pre >= $post,"Sorry the sorting order doesnt match");
+				}
+				$j++;
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+
+	_log("applySortingAndVerifyTMSUnderApproval started,success");
+}
+
+/*************************************************************************
+* @author Mukesh
+* @example verifyProjectInTimesheet
+* @description This function is called to verify project in timesheet 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+
+function verifyProjectInTimesheet($inputObject)
+{
+	_log("verifyProjectInTimesheet started , success");
+	try
+	{
+		_click(_button(0, _near(_span("/Project/"))));
+		if($inputObject.notAvailProject !== undefined)
+		{
+			var $notAvailProject={};
+			_set($notAvailProject,$inputObject.notAvailProject.split("|"));
+			var $length=0;
+			_set($length, $notAvailProject.length);
+			for(var $i=0 ; $i < $length ; $i++)
+			{
+				_assertNotExists(_span("/"+$notAvailProject[$i]+"/"),"The Project is visible which was not suppose to be visible");
+			}
+		}
+		
+		if($inputObject.availableProject !== undefined)
+		{
+			var $availableProject={};
+			_set($availableProject,$inputObject.availableProject.split("|"));
+			for(var $i=0; $i < parseInt($availableProject.length) ; $i++)
+			{
+				_assertExists(_span("/"+$availableProject[$i]+"/"),"The Project is not visible which was suppose to be visible");
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+}
+
+/*************************************************************************
+* @author Mukesh
+* @example verifyItemInTimesheet
+* @description This function is called to verify task  in timesheet 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function verifyItemInTimesheet($inputObject){
+		_log("verifyItemInTimesheet started , success");
+	try{
+		if($inputObject.type!== undefined && $inputObject.type=="negative"){
+			_assertNotExists(_div($inputObject.Name),"Code red code red I repeat code red....The task is visble uwaaaaa");
+			return ;
+		}
+		for(var $key in $inputObject)
+		_assertExists(_div($inputObject[$key],_in(_parentNode(_div($inputObject.Name),"tr",0)),_under(_div($key))));
+	}
+	catch(e){
+		handleFailure(e);
+	}
+	_log("verifyItemInTimesheet completed , success");
+}
+
+/*************************************************************************
+* @author Mukesh
+* @example getPreviousWeekFromTS
+* @description This function is called to verify task  in timesheet 
+* @param {String} 
+* @return {String} None 
+*************************************************************************/
+function getPreviousWeekFromTS(){
+	_log("getPreviovWeekFromTS started, Success");
+	try{
+		selectPastTimesheet({"week":1});
+		return _getText(_link("tsForSplitDuration"));
+	}
+	catch(e){
+		handleFailure(e);
+	}
+	_log("getPreviovWeekFromTS completed, Success");
+}
+/*************************************************************************
+* @author Mukesh
+* @example selectPastTimesheet
+* @description This function is called to select nth week past time sheet in current week time sheet
+* @return {String} None 
+*************************************************************************/
+
+function selectPastTimesheet($inputObject){
+	_log("selectPastTimesheet started,Success");
+	try{
+		var $week=parseInt($inputObject.weeks);
+		while($week--){
+			_click(_link("tsForSplitPrev"));
+			_wait(2000);
+		}
+	}
+	catch(e){
+		handleFailure(e);
+	}
+	_log("selectPastTimesheet completed,Success");
+}
+/*************************************************************************
+* @author Mukesh
+* @example countItemInInbox
+* @description This function is called use to count number of timesheet item in inbox
+* @return {String} None 
+*************************************************************************/
+
+function countItemInInbox($inputObject)
+{
+	_log("countItemInInbox started","Success");
+	try
+	{
+		var $i=1;
+		var $itemName=$inputObject.itemName;
+        var $itemType=$inputObject.itemType;
+		var $count=$inputObject.count;
+		
+		while(_isVisible(_div($itemName,_under(_div($itemType)))))
+        {
+		
+                  $itemName=$inputObject.itemName;
+                  	$itemName=$itemName+"["+$i+"]";
+                  
+			$i++;
+		}
+                    $i--;
+		_assertTrue($i==parseInt($count),"The Count does'nt match");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("countItemInInbox completed","Success");
+	
+}
+/*************************************************************************
+* @author Mukesh
+* @example bulkUpdateMultipleTimesheet({"timesheet":"13-Aug-2012,approve|12-Aug-2012,Reject|22-Sept-2012"})
+* @description This function is called use bulk update multiple timesheet
+* @return {String} None 
+*************************************************************************/
+function bulkUpdateMultipleTimesheet($inputObject)
+{
+	_log("bulkUpdateMultipleTimesheet started","Success");
+	try
+	{ 
+		var $ID = 8;
+		var $length = 0;
+		var $i = 0;
+		var $header = "Week";
+		var $flag=0;
+		
+		if($inputObject.header!== undefined)
+			$header=$inputObject.header;
+		
+		if($inputObject.ApplyToAll!== undefined )
+		{
+			for(var $i=0;;$i++)
+			{
+				if(_isVisible(_cell($i,_under(_div($inputObject.action)))))
+			    	_click(_cell($i,_under(_div($inputObject.action))));
+			    else
+			    	break;
+			}
+		}
+		else
+		{
+			var $timesheet=$inputObject.timesheet.split("|");
+			_set($length,$timesheet.length);
+			for( var $i=0 ; $i < $length ;$i++ )
+			{	
+				
+				
+				if($timesheet[$i].split(",")[1]== "approve"){
+					$flag=1;
+					_click(_div("x-grid-row-checker",_in(_parentRow(_div($timesheet[$i].split(",")[0],_under(_div($header)))))));
+				}
+			}
+			if($flag===1){
+				_click(_button("Route"));
+				_assertTrue(_isVisible(_span("Do you want to Bulk Update the selected rows?")));
+				_click(_button("Yes"));
+				_assertTrue(_isVisible(_span("Timesheet(s) Routed Successfully.")));
+				_click(_button("OK"));
+				$flag=0;
+			}
+			for( var $i=0 ; $i < $length ;$i++ )
+			{		
+				if($timesheet[$i].split(",")[1]== "reject"){
+					$flag=1;
+					_click(_div("x-grid-row-checker",_in(_parentRow(_div($timesheet[$i].split(",")[0],_under(_div($header)))))));
+				}
+			}
+			if($flag===1){
+			_click(_button("Reject"));
+			_assertTrue(_isVisible(_span("Do you want to Bulk Update the selected rows?")));
+			_click(_button("Yes"));
+			_assertTrue(_isVisible(_span("Timesheet(s) Rejected Successfully.")));
+			_click(_button("OK"));
+			}
+		}
+		if($inputObject.type !== "ItemNotFound")
+			clickBulkUpdate($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("bulkUpdateMultipleTimesheet completed","Success");
+}
+
+/*************************************************************************
+* @author Mukesh
+* @example clickBulkUpdate($inputObject)
+* @description This function is used to click bulk update button in TMS approver
+* @return {String} None 
+*************************************************************************/
+function clickBulkUpdate($inputObject)
+{
+	_log("clickBulkUpdate started,Success");
+	try
+	{
+		_click(_button("Bulk Update"));
+		if($inputObject.type!=undefined && $inputObject.type === "Negative"){//TODO: Need to verify once DEF947 is fixed 
+			//_expectConfirm($inputObject.message, true);
+			_assertTrue(_isVisible(_span($inputObject.message)));
+			_click(_button("Yes"));
+		}
+		else if($inputObject.type === "Alert")
+		{
+			//_assertEqual($inputObject.message, _lastAlert());
+			_assert(_isVisible(_span($inputObject.msgDetails)));
+			_click(_button("OK"));
+
+		}
+		else
+		{
+			//_expectConfirm("Do you want to bulk update timesheets ?", true);
+			_assertTrue(_isVisible(_span("Do you want to bulk update timesheets ?")));
+			_click(_button("Yes"));
+			_click(_button("OK"));
+		}
+	}
+	catch(e){
+		handleFailure(e);
+	}
+	_log("clickBulkUpdate Completed,Success");
+}
+
+/*************************************************************************
+* @author Mukesh
+* @example verifyBillableHour({"project":"Agent Smith","task":"Agent Tabk","timelog":"40"});
+* @description This function is called use bulk update multiple timehsheet
+* @return {String} None 
+*************************************************************************/
+function verifyBillableHour($inputObject)
+{
+	_log("verifyBillableHour started, success;");
+	try
+	{
+		_click(_image("gif",_in(_parentNode(_div($inputObject.project),"td",1).previousSibling)));
+		_wait(1000);
+		_assertEqual($inputObject.timelog,_getText(_cell(13,_in(_parentNode(_div($inputObject.task),"tr",1)))),"Sorry the values doesnt match :(");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBillableHour completed, success;");
+}
+/*************************************************************************
+* @author Mukesh
+* @example verifyBreadCrumb($inputObject)
+* @description This function is used to verify breadcrum in timesheet
+* @return {String} None 
+*************************************************************************/
+function verifyBreadCrumb($inputObject)
+{
+	_log("verifyBreadCrumb Started,Success");
+	try
+	{
+		var $length=0;
+		var $crumb=$inputObject.crumb.split("|");
+			_set($length,_list("ux-menu-ul",_in(_div("BreadCrumbMenu"))).childNodes.length);
+		
+		for(var $i=0 ; $i<$length ; $i++)
+			_assertEqual($crumb[$i],_getText(_list("ux-menu-ul",_in(_div("BreadCrumbMenu"))).childNodes[$i]),"Sorry the Crumb Doesnt Match");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyBreadCrumb Completed,Success");
+}
+/*************************************************************************
+* @author Mukesh
+* @example routeTimesheetWithAlert($inputObject)-->  routeTimesheetWithAlert({"alertMsg":$msg,"action":"Continue"});
+* @description This function is used trouteTimesheetWithAlert
+* @return {String} None 
+*************************************************************************/
+function routeTimesheetWithAlert($inputObject){
+	_log("routeTimesheetWithAlert started,success");
+	try
+	{
+		_click(_link("Route"));
+		_assert(_isVisible(_span("Timesheet Route")),"Sorry the Alert is not visible");
+		_assertExists(_listItem($inputObject.alertMsg));
+		_click(_link($inputObject.action,_in(_div("toolbarRoutePopup"))));
+
+		if($inputObject.action === "Continue")
+		{
+			_assert(_isVisible(_span("Timesheet Routed Successfully.")));
+            _click(_link("OK"));
+        }
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("routeTimesheetWithAlert completed,success");
+}
+
+/*************************************************************************
+* @author Nilesh
+* @example verifyTimelogCellDetails($inputObject)
+* @description This function is used verify whether the user has saved the timesheet or not..
+* @return {String} None 
+*************************************************************************/
+
+function verifyTimelogCellDetails($inputObject){
+	_log("verifyTimelogCellDetails started,success");
+	try{
+		if($inputObject.operation==="Negative")
+			_assertFalse(_button("Save").disabled);
+		else
+			_assertTrue(_button("Save").disabled);
+		}
+	catch(e){
+		handleFailure(e);
+		}
+	_log("verifyTimelogCellDetails completed,success");
+}

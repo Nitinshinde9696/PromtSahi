@@ -1,0 +1,87 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("MechPD_Status_Report_ReqEftDis_05","MechPD/Status_Report");
+
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Jayesh_Potnis
+ $inputObject.edt_loginid = $data.LoginID1;//Jayesh_Potnis
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//UNIVIABS
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep3
+ OpenEformInstance($inputObject);
+ 
+   var $t = _testcase("TC_7", "Check for RequestWise Effort Distribution");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//RequestWise Effort Distribution
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1+";"+$data.table2+";"+$data.table3+";"+$data.table4;//"Request Types Selected";
+ InfyFTisVisible($inputObject);
+ 
+ /*$inputObject = {};
+ $inputObject.span_Name = $data.table2;//"Request Identified";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table3;//"Effort Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table4;//"Effort Distribution";
+ InfyFTisVisible($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RequestTypesSelected+";"+$data.RequestIdentified+";"+$data.EffortSummary+";"+$data.EffortDistribution;//
+ InfyFTisVisible($inputObject);
+ 
+ /*$inputObject = {};
+ $inputObject.span_Name = $data.RequestIdentified;//
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.EffortSummary;//
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.EffortDistribution;//
+ InfyFTisVisible($inputObject);*/
+
+ 
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 

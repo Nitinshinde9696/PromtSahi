@@ -1,0 +1,250 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data5 = readDataFromCSV("Maint_PM_Plan_Normal_Riskylogs_change_management_process_verify_fields_04","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 31", "TC 18, 19, 91, 21");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data5.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_18", "Risk Log");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowNo14;//16
+ $inputObject.colNo = $data5.colNo17;//2_lbl
+ $inputObject.fieldValues = $data5.reason6;//Reason 6
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data5.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.RiskLog;// _InfyFTclick(_link("Risk Log"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data5.RiskID;// _InfyFTclick(_link("RiskID"));
+ verifyEformListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data5.navigateToRiskMgt;//Risk Management
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.item = $data5.RiskID; 
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data5.CM_Name4;
+ $inputObject.lst_DN_RiskCategory = $data5.riskCategory4;
+ $inputObject.lst_DN_Probability = $data5.probability4;
+ $inputObject.lst_DN_Impact = $data5.impact4;
+ //$inputObject.edt_DN_ScheduleImpactDays = $data5.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data5.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data5.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data5.impactTo4;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data5.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowNo14;//16
+ $inputObject.colNo = $data5.colNo17;
+ $inputObject.fieldValues = $data5.reason6_0;//Reason 6_0
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_19_91", "Requirement / Change Management Process");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data5.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.RequirementChangeManagementProcess;//_InfyFTclick(_link("Requirement/Change Management Process"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("1")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data5.item3;
+	 OpenEformInstance($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.popup = $data5.popup;
+	 $inputObject.item = $data5.item3;
+	 InfyFTDeleteEformInstance($inputObject);
+ }
+ 
+ _wait(5000);
+ 
+/* $inputObject = {};
+ $inputObject.edt_CM_Name = $data5.CM_Name3;
+ $inputObject.txt_DN_RequirementChangeManag = "";
+ $inputObject.msgALert = "Value must be set for the following mandatory field(s):\n• Requirement / Change Management Process";
+ InfyFTcreateLinkedItemOPPS($inputObject);//For Creating New Requirement/Change Management Process
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_DN_RequirementChangeManag = $data5.DN_RequirementChangeManag;
+ $inputObject.msgALert = "Value must be set for the following mandatory field(s):\n• Name";
+ InfyFTcreateLinkedItemOPPS($inputObject);//For Creating New Requirement/Change Management Process*/
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data5.CM_Name3;
+ $inputObject.txt_DN_RequirementChangeManag = $data5.DN_RequirementChangeManag;
+ InfyFTcreateLinkedItemOPPS($inputObject);//For Creating New Requirement/Change Management Process
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.image = $data5.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowNo15;//17
+ $inputObject.colNo = $data5.colNo17;
+ $inputObject.fieldValues = $data5.reason18;//Reason 18
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data5.nodeIcon17;// _InfyFTclick(_image("nodeIcon17"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.RequirementChangeManagementProcess;//_InfyFTclick(_link("Requirement/Change Management Process"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data5.item3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data5.popup;
+ $inputObject.segment_name = $data5.attachment;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data5.popup;
+ $inputObject.fileName = $data5.DocfileName;
+ InfyADDAttachment($inputObject);
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.image = $data5.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowNo15;//17
+ $inputObject.colNo = $data5.colNo17;
+ $inputObject.fieldValues = $data5.reason18;//Reason 18
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+
+ _wait(2000); 
+
+ $t.end(); 
+ /*
+ var $t = _testcase("TC_20", "Checking for corresponding section in the PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data5.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data5.tableName2;
+ $inputObject.rowNo = $data5.rowNo0;
+ $inputObject.colNo = $data5.colNo17_0;
+ $inputObject.fieldValues = $data5.RedSignal;//Reason 18
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ */
+
+ var $t = _testcase("TC_21", "Verify Fields");
+ $t.start();
+ 
+
+ $inputObject = {};
+ $inputObject.link = $data5.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data5.tableName;//Overview
+ $inputObject.rowNo = $data5.rowNos;
+ $inputObject.colNo = $data5.colNos;
+ $inputObject.fieldValues = $data5.fieldValues;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data5.tableName;//Overview
+ $inputObject.rowNo = $data5.rowMaster;
+ $inputObject.colNo = $data5.colMaster;
+ $inputObject.fieldValues = $data5.fieldValues1;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ 

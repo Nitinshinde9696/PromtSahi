@@ -1,0 +1,107 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Testing_Request_Management_CR86_ReviewFieldValidation_37","Testing/Request_Management");
+
+ var $t = _testcase("TC_1.1.1","Login & Navigate");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $t.end();
+ 
+ var $s1 = _testcase("TC_BRD10_FU_6"," Creating a Manual Testing Request");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Manual Testing
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.icon = ""; 
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;//"Manual Testing";
+ $inputObject.txt_CM_Description = $data.descr;//descr
+ $inputObject.lst_DN_RequestOwner = $data.Owner;//Ricky_Wang
+ $inputObject.lst_DN_Complexity =  $data.Complexity;//Simple
+ $inputObject.lst_DN_TypeofTesting = $data.types;//Big Data Testing
+ $inputObject.lst_DN_TechnologyofApplicatio = $data.PTNo;//Package or Product
+ $inputObject.lst_DN_PrimaryPackage = $data.EAI;//"Yantra";
+ $inputObject.lst_DN_LCStage = $data.stage;//"Partial LC Stage";
+ ModifyEformInstance($inputObject);
+
+ $s1.end();
+
+ var $s2 = _testcase("TC_BRD10_FU_6","NEW VALUES IN THE DROPDOWN FIELD REVIEW OF");
+ $s2.start()
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Reviews;//$data.seg_linkedItem;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.icon;//KEY_Link_New_item-btnIconEl
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name1;//openLinkedItem
+ $inputObject.lst_reviewtype = $data.Dropdown;//Acceptance Test Case Review,Integration Test Case Review,System Test Case Review
+ verifyEformInstanceDetails($inputObject);
+ 
+ $s2.end();
+ 
+ var $s3 = _testcase("TC_BRD10_FU_7","REVIEW OF FIELD SELECTED AS ACCEPTANCE/INTEGRATION/SYSTEM TEST CASE REVIEW");
+ $s3.start();
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.review_name1;
+ $inputObject.lst_DN_ReviewMode  =$data.review_mode;//
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//
+ $inputObject.txt_DN_ArtifactName = $data.artifact_name;//Acceptance Test Case Review
+ $inputObject.lst_reviewtype = $data.review_type1;//
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.review_name2;
+ $inputObject.lst_DN_ReviewMode  =$data.review_mode;//
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//
+ $inputObject.txt_DN_ArtifactName = $data.artifact_name;//Integration Test Case Review
+ $inputObject.lst_reviewtype = $data.review_type2;//
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.review_name3;
+ $inputObject.lst_DN_ReviewMode  =$data.review_mode;//
+ $inputObject.lst_DN_Reviewer = $data.reviewer;//
+ $inputObject.txt_DN_ArtifactName = $data.artifact_name;//System Test Case Review
+ $inputObject.lst_reviewtype = $data.review_type3;//
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $s3.end();
+ 

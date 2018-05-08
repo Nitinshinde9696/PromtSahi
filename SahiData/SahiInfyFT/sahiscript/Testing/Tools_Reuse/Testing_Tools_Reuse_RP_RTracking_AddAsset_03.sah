@@ -1,0 +1,464 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Testing_Tools_Reuse_RP_RTracking_AddAsset_03","Testing/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer//subhashini_k03	
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer//subhashini_k03	
+$inputObject.edt_password = $data.Password1;//Allahu@1//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Testing PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//GNORDHD1
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Navigating to Reuse Tracking using Test Automation");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;//"Test Automation";
+InfyFTnavigateTo($inputObject);
+
+$t.end()
+
+var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "T_A";
+  infyFTGetValueFromExcel($inputObject);
+  $T_A_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $T_A_Id;
+OpenEformInstance($inputObject);
+
+_wait(8000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";
+SelectSegment($inputObject);
+
+var $t = _testcase("TC_6", "Available links on Reuse Tracking page");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link1;//Add from PRIME
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link2;//Add From Reuse Plan
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Link3;//Asset Usage Report
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Available columns in Summary Table in Tracking Section");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Column2;//Estimated
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Column3;//Actual
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Available possible values for Savings in Tracking Section");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Value1;//not factored in estimates
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Value2;//Factored in estimates
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_9", "Adding Values to added Row in Reuse Tracking");
+$t.start();
+
+
+ $inputObject = {};
+ $inputObject.tableName = "Actual Effort Savings";
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "1_edt|2_edt";//$data1.Acol3;//
+ $inputObject.fieldValues = "0.00|0.00";//
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tblname = "Reusable Assets";
+ $inputObject.row_id = parseInt("3");//"2";
+ $inputObject.col_id = parseInt("1_chk");//"0_chk";
+ $inputObject.btnSave ="yes";
+ InfyFTDeleteRows($inputObject);
+
+InfyFTreuseDelete();
+
+
+$inputObject = {};
+$inputObject.icon = $data.addIcon;//"Add Rows"
+clickAddIcon($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo6;//2
+$inputObject.colNo = $data.colNo8;//2_edt|5_edt|6_lst|7_lst|8_lst|9_lst|10_lst|11_lst|12_edt|13_lst|14_edt|15_lst|16_lst
+$inputObject.fieldValues = $data.fieldValues8;//Rose|1.10|Package|J2EE|Life Insurance|SD2|Sec1|Open Source|10.00|Unit1|15|Not used|Y
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_10", "Verifying the additional fields in Reuse Tracking");
+$t.start();
+
+inputObject = {};
+$inputObject.span_Name = $data.Field1;//Usage Status
+InfyFTisVisible($inputObject);
+
+inputObject = {};
+$inputObject.span_Name = $data.Field2;//Savings Factored in Estimates
+InfyFTisVisible($inputObject);
+
+inputObject = {};
+$inputObject.span_Name = $data.Field3;//Usage Remarks
+InfyFTisVisible($inputObject);
+
+inputObject = {};
+$inputObject.span_Name = $data.Field4;//Asset Rating
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_11", "Calculating the Estimated hours selecting Used with minor modification with 'Y'");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowCount = $data.rowCount6;//1
+addRowInSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo7;//3
+$inputObject.colNo = $data.colNo8;//15_lst|16_lst
+$inputObject.fieldValues = $data.fieldValues9;//Used with minor modification|Y
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+_wait(500);
+
+var $e1 = _getText(_span(0, _under(_cell("Not factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $e2 = _getText(_span(0, _under(_cell("Factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $a1 = _getText(_textbox(76));//_getText(_textbox(0, _under(_cell("Not factored in estimates")), _near(_span("Actual"))));
+
+var $a2 = _getText(_textbox(77));//_getText(_textbox(0, _under(_cell("Factored in estimates")), _near(_span("Actual"))));
+          
+
+_log(" Non factored values are " + $e1 + " , "+$a1);
+_log(" Non factored values " + $e2 + " , " + $a2 + " are 75% of total Estimated savings effort hours ");
+
+
+$t.end();
+
+var $t = _testcase("TC_12", "Calculating the Estimated hours selecting Used with Major modification with 'Y'");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowCount = $data.rowCount6;//1
+addRowInSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo8;//4
+$inputObject.colNo = $data.colNo8;//15_lst|16_lst
+$inputObject.fieldValues = $data.fieldValues10;//Used with Major modification|Y
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+_wait(500);
+
+var $e3 = _getText(_span(0, _under(_cell("Not factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $e4 = _getText(_span(0, _under(_cell("Factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $a3 = _getText(_textbox(76));//_getText(_textbox(0, _under(_cell("Not factored in estimates")), _near(_span("Actual"))));
+
+var $a4 = _getText(_textbox(77));//_getText(_textbox(0, _under(_cell("Factored in estimates")), _near(_span("Actual"))));
+          
+
+_log(" Non factored values are " + $e3 + " , " + $a3 );
+_log(" Non factored values " + $e4 + " , " + $a4 + " are 50% of total Estimated savings effort hours ");
+
+$t.end();
+
+var $t = _testcase("TC_13", "Calculating the Estimated hours selecting Used without modification with 'Y'");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowCount = $data.rowCount6;//1
+addRowInSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo9;//5
+$inputObject.colNo = $data.colNo8;//15_lst|16_lst
+$inputObject.fieldValues = $data.fieldValues11;//Used without modification|Y
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+_wait(500);
+
+var $e5 = _getText(_span(0, _under(_cell("Not factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $e6 = _getText(_span(0, _under(_cell("Factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $a5 = _getText(_textbox(76));//_getText(_textbox(0, _under(_cell("Not factored in estimates")), _near(_span("Actual"))));
+
+var $a6 = _getText(_textbox(77));//_getText(_textbox(0, _under(_cell("Factored in estimates")), _near(_span("Actual"))));
+          
+
+_log(" Non factored values are " + $e5 + " , " + $a5 + " ");
+_log(" Non factored values " + $e6 + " , " + $a6 + " are as same to total Estimated savings effort hours " + "");
+
+$t.end();
+
+var $t = _testcase("TC_14", "Calculating the Estimated hours selecting Used with minor modification with 'N'");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowCount = $data.rowCount6;//1
+addRowInSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo10;//6
+$inputObject.colNo = $data.colNo8;//15_lst|16_lst
+$inputObject.fieldValues = $data.fieldValues12;//Used with minor modification|N
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+_wait(500);
+
+var $e7 = _getText(_span(0, _under(_cell("Not factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $e8 = _getText(_span(0, _under(_cell("Factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $a7 = _getText(_textbox(76));//_getText(_textbox(0, _under(_cell("Not factored in estimates")), _near(_span("Actual"))));
+
+var $a8 = _getText(_textbox(77));//_getText(_textbox(0, _under(_cell("Factored in estimates")), _near(_span("Actual"))));
+          
+
+_log(" Non factored values are " + $e7 + " , "+$a7);
+_log(" Non factored values " + $e8 + " , " + $a8 + " are 75% of total Estimated savings effort hours ");
+
+
+$t.end();
+
+var $t = _testcase("TC_15", "Calculating the Estimated hours selecting Used with Major modification with 'N'");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowCount = $data.rowCount6;//1
+addRowInSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo11;//8
+$inputObject.colNo = $data.colNo8;//15_lst|16_lst..
+$inputObject.fieldValues = $data.fieldValues13;//Used with Major modification|Y
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+_wait(500);
+
+var $e9 = _getText(_span(0, _under(_cell("Not factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $e10 = _getText(_span(0, _under(_cell("Factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $a9 = _getText(_textbox(76));//_getText(_textbox(0, _under(_cell("Not factored in estimates")), _near(_span("Actual"))));
+
+var $a10 = _getText(_textbox(77));//_getText(_textbox(0, _under(_cell("Factored in estimates")), _near(_span("Actual"))));
+          
+
+_log(" Non factored values are " + $e9 + " , " + $a9 );
+_log(" Non factored values " + $e10 + " , " + $a10 + " are 50% of total Estimated savings effort hours ");
+
+$t.end();
+
+var $t = _testcase("TC_16", "Calculating the Estimated hours selecting Used without modification with 'N'");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowCount = $data.rowCount6;//1
+addRowInSwiftForm($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName6;//Reusable Assets
+$inputObject.rowNo = $data.rowNo12;//9
+$inputObject.colNo = $data.colNo8;//15_lst|16_lst...
+$inputObject.fieldValues = $data.fieldValues14;//Used without modification|N
+setSwiftFormData($inputObject);
+
+$inputObject = {};  saveSwiftForm($inputObject);
+
+_wait(500);
+
+var $e11 = _getText(_span(0, _under(_cell("Not factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $e12 = _getText(_span(0, _under(_cell("Factored in estimates")), _near(_span("Maximum permissible Effort Savings"))));
+
+var $a11 = _getText(_textbox(76));//_getText(_textbox(0, _under(_cell("Not factored in estimates")), _near(_span("Actual"))));
+
+var $a12 = _getText(_textbox(77));//_getText(_textbox(0, _under(_cell("Factored in estimates")), _near(_span("Actual"))));
+          
+
+_log(" Non factored values are " + $e11 + " , " + $a11 + " ");
+_log(" Non factored values " + $e12 + " , " + $a12 + " are as same to total Estimated savings effort hours " + "");
+
+$t.end();
+_wait(500);
+
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_17", "Verifying the added assets in Reuse Planning list ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset1;//Rose
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset2;//Jasmine
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset3;//Marigold
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset4;//Flowers
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset5;//Green
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset6;//Red
+verifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $data.Asset7;//Yellow
+verifyInstanceInListing($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_18", "Trying to DELETE the reusable asset from Reuse Planning list ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Asset1;
+OpenEformInstance($inputObject);
+
+$inputObject = {}; DeleteEformInstance($inputObject);
+_expectConfirm($data.Asset1 + " cannot be deleted as it is used in Requests.", true );
+
+$t.end();
+
+
+var $t = _testcase("TC_19", "To repeat the execution of this script ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $T_A_Id;
+OpenEformInstance($inputObject);
+
+_wait(8000);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";
+SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = "Actual Effort Savings";
+ $inputObject.rowNo = "2";
+ $inputObject.colNo = "1_edt|2_edt";//$data1.Acol3;//
+ $inputObject.fieldValues = "0.00|0.00";//
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tblname = "Reusable Assets";
+ $inputObject.row_id = parseInt("2");//"2";
+ $inputObject.col_id = parseInt("0_chk");//"0_chk";
+ $inputObject.btnSave ="yes";
+ InfyFTDeleteRows($inputObject);
+
+$t.end();

@@ -1,0 +1,87 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+/************************************************************************
+*creating new task under Schedule Task
+*Returning from Schedule Task & checking task report
+*creating another sub-project to test task report
+*************************************************************************/
+
+  
+ /*************************schedule task ********************************/
+ 
+ $data1 = readDataFromCSV("Package_iteration_scheduleTask1_01", "Package/Iteration");
+ $data = readDataFromCSV("Package_iteration_scheduleTask0_00", "Package/Iteration"); 
+ 
+ var $t = _testcase("TC_16", "Task report for no records found");
+ $t.start();
+ 
+ _popup("openLinkedItem"). _click(_button("Return"));
+ _wait(8000);
+ _click(_span("button-1029-btnIconEl"));//last page
+ _wait(8000);
+  
+ $inputObject = {};
+ $inputObject.item = $ID; //existing
+ OpenEformInstance($inputObject); 
+ _wait(8000);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.TaskReport;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecordsFound; // checking visibility of instance
+ InfyFTisVisibleN($inputObject);   
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_17", "navigate to schedule task for Undo option");
+ $t.start();
+
+  $inputObject = {};
+ $inputObject.link = $data.SubProjects;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name1;
+ OpenEformInstance($inputObject);  
+ 
+ _selectWindow("openLinkedItem__1");
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.ScheduledTasks;//_click(_link("Scheduled Tasks"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span = $data1.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span = $data1.Undo;
+ InfyFTclick($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_18", "END-icons");
+ $t.start();
+ 
+ _include("Package_iteration_scheduleTaskS32_iconsCheck_32.sah");
+ 
+ $t.end();

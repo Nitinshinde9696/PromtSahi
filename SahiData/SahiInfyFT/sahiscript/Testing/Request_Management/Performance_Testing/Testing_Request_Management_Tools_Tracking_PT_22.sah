@@ -1,0 +1,143 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("Testing_Request_Management_Tools_Tracking_PT_22","Testing/Request_Management/Performance_Testing");
+/*
+var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//LEADMCNI
+ selectProject($inputObject);
+
+ $s.end();
+ var $s = _testcase("TC_1.1.3"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = "Manual Testing";//
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "MtSt14";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+
+  $s.end();
+*/
+ var $s0 = _testcase("TC_1.2"," Adding Tools");
+ $s0.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.toolsegment6;//"Tools Tracking";
+ SelectSegment($inputObject);
+  
+ _click(_link("Add Standard Tools"));
+ 
+$inputObject={};
+$inputObject.lst_DN_LCStage  = $data.LCstage7;//"Test Design";
+$inputObject.lst_DN_Technology  = $data.tech8;//"ABAQUS"; 
+ModifyEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.sersegment9;//"Search Output";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.vercoloumn10;//"Tool Name;LC Stage;Purpose;Technology;Effort Savings";
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName11;//"Tool Name";
+ $inputObject.rowNo = $data.rowNo11;//"1";
+ $inputObject.colNo = $data.colNo11;//"1_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName11;// "Tool Name";
+ $inputObject.rowNo = $data.rowNo11;//"1";
+ $inputObject.colNo = $data.colNo12;//"2_lbl|3_lbl|4_lbl|5_lbl|6_lbl";
+ $inputObject.fieldValues = $data.fieldValues12;//"JUnit|Test Design|Design|ABAQUS|20.00";
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+  
+  $s0.end();
+ var $s1 = _testcase("TC_1.3"," Verify the added tools");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName13;//"Tools Tracking";
+ $inputObject.rowNo = $data.rowNo13;//"0";
+ $inputObject.colNo = $data.colNo13;//"1_lbl|3_lbl|5_lbl|9_lbl|11_lbl|12_lbl|13_lbl|14_lbl|15_lbl";
+ $inputObject.fieldValues = $data.fieldValues13;//"Delete|Tool Name|LC Stage|Purpose|Tool Type|Effort Savings|Savings factored in estimates|Estimated Effort Savings (P hrs)|Actual Effort Savings (P hrs)";
+ verifySwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName13;//"Tools Tracking";
+ $inputObject.rowNo = $data.rowNo14;//"1";
+ $inputObject.colNo = $data.colNo14;//"3_lbl|5_lbl|9_lbl|11_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues14;//"JUnit|Test Design|Design|OrgWide|20.00%";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName11;//"Tool Name";//$data.tableName1;//_span("Reusable Assets")
+ $inputObject.rowNo = $data.rowNo14;//"1";
+ $inputObject.colNo = $data.colNo15;//"13_lst";
+ $inputObject.fieldValues = $data.fieldValues15;//"No";//
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colverify16;//"Total Estimated Effort Savings (P hrs);Total Indicative savings (P hrs);Total Actual saving (P hrs)*;Remarks";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName17;//"Tools Summary";
+ $inputObject.rowNo = $data.rowNo17;//"1";
+ $inputObject.colNo = $data.colNo17;//"2_edt";
+ $inputObject.fieldValues = $data.fieldValues17;//"15";//
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.reqsumsegment18;//"Request Summary";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.colverify18;//"Reuse and Tools Summary|Reuse and Tools Savings|Actual Savings|Savings%|";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName19;//"Reuse and Tools Summary";//_span("Reuse and Tools Summary")
+ $inputObject.rowNo = $data.rowNo19;//"2";
+ $inputObject.colNo = $data.colNo19;//"0_lbl|1_lbl|2_lbl";
+ $inputObject.fieldValues = $data.fieldValues19;//"Tools Savings|15.0|100.00";
+ verifySwiftFormData($inputObject);
+ 
+ $s1.end();
+ 

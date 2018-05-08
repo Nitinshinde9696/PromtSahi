@@ -1,0 +1,413 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Package_PCB_FieldValidation_PCBVer_LCStage_05", "Package/PCB");
+ $data1 = readDataFromCSV("Package_PCB_common_csv", "Package/PCB");
+ 
+ 
+ 
+ 
+ 
+ /*****verify the rows in lc stage metric details table to verify they are the combination of track lc stage and metric*****/
+ 
+  var $t = _testcase("TC_26","verify the rows in lc stage metric details table to verify they are the combination of track lc stage and metric");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+  _wait(30000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details3;//PCB Version Details
+ SelectSegment($inputObject);
+
+ clickReturn();
+ $t.end();
+   
+ var $t = _testcase("TC_27", "navigate to pm plan version");
+  
+ $t.start();
+ $inputObject = {};
+ $inputObject.projectname = $data1.Project_name; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ _wait(5000);
+  
+ $inputObject = {}; 
+ $inputObject.name = $data1.pmplan;
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclickS($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addbutton;
+ InfyFTclickS($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $ID;
+ OpenEformInstance($inputObject);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+ SelectSegment($inputObject);
+ 
+ var $s = _getText(_cell(_table("TableData_1_0"), 1, 1))
+ var $j = _getText(_cell(_table("TableData_1_1"), 1, 1))
+ var $version = parseFloat($j);
+ var $x = parseFloat($s);
+ var $x = $x+1;
+ var $version1 = parseFloat($s);
+ var $y = parseFloat($s);
+ var $y = $y+2;
+
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goals;
+SelectSegment($inputObject);
+ 
+ _click(_span(/$version/, _near(_cell("PCB Report:"))));
+ _selectWindow("PCB Version Report : Details (PCBR1)");
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.TrackMetricsDetails;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.newcolNo;
+ $inputObject.fieldValues = $data.newfield;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.LCStageMetricsDetails;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.newcolNo12;
+ $inputObject.fieldValues = $data.newfield1;
+ verifySwiftFormData($inputObject);
+ 
+  /*$inputObject = {};
+ $inputObject.segment_name = $data.Latest_Version;
+ SelectSegment($inputObject);
+ 
+   $inputObject = {};
+ $inputObject.tableName = $data.TrackMetricsDetails;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.newcolNo;
+ $inputObject.fieldValues = $data.newfield;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.LCStageMetricsDetails;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.newcolNo12;
+ $inputObject.fieldValues = $data.newfield1;
+ verifySwiftFormData($inputObject);*/
+ 
+  $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ InfyFTReturnPopUpN($inputObject) 
+ _selectWindow();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCB_Setting;
+ $inputObject.rowNo = $data.rowno3;
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldvalues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject) 
+  
+  _selectWindow();
+  /****************navigate to process governance**********/
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo1;//process governance
+ navigateTo($inputObject);
+
+ $t.end();
+
+  var $t = _testcase("TC_28", "open development pt");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data1.package;							
+ OpenEformInstance($inputObject); 
+ 
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_29", "make all pcb version inactive and check under pm plan pcb setting and check message under iteration goals");
+ 
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo3;
+ navigateTo($inputObject); 
+ 
+   /********make all pcb verasion inactive and check under pm plan pcb setting**************/
+   
+   
+  _click(_div(/$version1/, _near(_div("/test/"))));
+	  
+ $inputObject = {};
+ $inputObject.radio = $data.f1981;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data1.Project_name; 
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.name = $data1.pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.addbutton;
+ InfyFTclickS($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $ID;
+ OpenEformInstance($inputObject);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+SelectSegment($inputObject);
+
+ var $v = _getText(_cell(_table("TableData_1_1"), 1, 1))
+ var $i = parseFloat($v);
+	
+	
+ $inputObject = {};
+ $inputObject.span_Name = $data.NA;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goals;
+SelectSegment($inputObject);
+ 
+ _click(_link(/$i/, _near(_cell("PCB Report:"))));
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Latest_Version;
+ SelectSegment($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.button = $data.rtn1;
+ InfyFTclickS($inputObject); 
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCB_Setting;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCB_Setting;
+ $inputObject.rowNo = $data.rowno3;
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldvalues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Goals;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "PCB Version is not selected or not available.";
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject) 
+ _selectWindow();
+  
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo1;//process governance
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data1.package;							
+ OpenEformInstance($inputObject); 
+	 
+ $inputObject = {}; 
+ $inputObject.name = $data1.navigateTo3;
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;						
+ OpenEformInstance($inputObject); 
+
+ $inputObject = {};
+ $inputObject.radio = $data.f198;
+ InfyFTclickS($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+ clickReturn();
+   
+ $t.end();
+ 
+ var $t = _testcase("TC_30","create new pcb version ");
+ $t.start(); 
+   
+ $inputObject = {};
+ $inputObject.link = $data.add;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//test
+ $inputObject.edt_field199 = $y;//1.5
+ $inputObject.lst_field196 = $data.apptype2;//development
+ InfyFTModifyEformInstanceP($inputObject);
+  
+ $inputObject = {};
+ $inputObject.rdg_Inactive = $data.Inactive;
+ verifyAllFields($inputObject);
+ var $IDpcb1 = _getText(_span("CM_ItemCode"))
+  
+ clickReturn()
+ $t.end();
+
+
+ /******checking status after creating new pcb version*******/
+ var $t = _testcase("TC_32", "verify instance in listing and check the status");
+ 
+ $t.start();
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb1;
+ verifyInstanceInListing($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $IDpcb;							
+ OpenEformInstance($inputObject); 
+
+ $inputObject = {};
+ $inputObject.radio = $data.f1981;
+ InfyFTclickS($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+ clickReturn();
+  
+ $inputObject = {};
+ $inputObject.item = $IDpcb1;							
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.rdg_Inactive = $data.Inactive;
+ verifyAllFields($inputObject);
+
+ $inputObject = {};
+ $inputObject.radio = $data.f198;
+ InfyFTclickS($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+
+  var $t = _testcase("TC_33", "verify the values are flown from old to new pcb version in pcb version details and reset values");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;//PCB Version Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo508;//6_edt|7_edt|8_edt|9_edt|10_edt|11_edt
+ $inputObject.fieldValues = $data.fieldValues509;//15|15|5|5|28|30
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails;
+ $inputObject.rowNo = $data.rowNoN;
+ $inputObject.colNo = $data.colNo5081;//6_edt|7_edt|8_edt|9_edt|10_edt|11_edt
+ $inputObject.fieldValues = $data.fieldValues509;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//LC Stage Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//6_edt//UCL
+ $inputObject.fieldValues = $data.fieldValues5010;//15
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo5050;//6_edt|7_edt|8_edt|9_edt
+ $inputObject.fieldValues = $data.fieldValues5010;//5|10|15|5
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo123;//1
+ $inputObject.colNo = $data.colNo123;//6_edt|7_edt|8_edt|9_edt|10_edt|11_edt
+ $inputObject.fieldValues = $data.fieldValues123;//15|15|5|5|28|30
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 

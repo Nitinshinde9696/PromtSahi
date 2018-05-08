@@ -1,0 +1,310 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_Prj_Admin_Appl_services_05","Maint/Prj_Admin"); 
+ 
+ var $t = _testcase("TC_1.1.1", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ $t.end();
+ var $t = _testcase("TC_1.1.2", "Navigate");
+ $t.start();
+ 
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+  var $t = _testcase("TC_2", "unchecking the production support check");
+ $t.start();
+ $inputObject = {};
+ $inputObject.segment_name = "Request Type Selection";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "7";//|2|3|4|5|7
+ $inputObject.colNo  = "1_unchk";//1
+ $inputObject.tableName  = "Name";// $data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.as41 +";"+ $data.ap42 +";"+ $data.am43 +";"+ "Production Support Custom Metrics";
+ $inputObject.operation = "Negative";
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+ var $t = _testcase("TC_3", "checking the production support check");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Type Selection";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "7";//|2|3|4|5|7
+ $inputObject.colNo  = "1_chk";//1
+ $inputObject.tableName  = "Name";// $data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+   $t.end();
+ var $t = _testcase("TC_4.","Check for Service catalogue/ Applicable Services Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.as41+";Summary";// 
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = "Applicable ITIL Processes";//
+ $inputObject.operation = "Negative"; 
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_5","Check for Service catalogue/ Applicable Services Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.as41;//_link("Applicable Services")
+ SelectSegment($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.as41+";"+$data.ia43+";"+$data.ser42;// _span("Applicable Services")
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2";//$data.chkrid48;
+ $inputObject.colNo  = $data.chkcid48;
+ $inputObject.tableName  = $data.tbnm48;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = "Applicable ITIL Processes";
+ InfyFTisVisible($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_6","Check for Applicable Processes Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.ap42;//_link("Applicable Processes")
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+ $inputObject = {};
+ $inputObject.link = $data.link_name48;//_link("Select Process")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ia43+";"+$data.pro44;// _cell("Is Applicable?")
+ InfyFTisVisible($inputObject); 
+	_wait(5000);
+	
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid51;
+ $inputObject.colNo  = $data.chkcid51;
+ $inputObject.tableName  = $data.tbnm51;
+ $inputObject.fieldValues = "True";;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+  $inputObject = {};
+ $inputObject.span_Name = "Applicable Metrics;Production Support Custom Metrics;SLA Category";// _cell("Process")
+ InfyFTisVisible($inputObject); 
+ 
+ 
+/*  $inputObject = {};
+ $inputObject.rowNo = $data.chkrid52;
+ $inputObject.colNo  = $data.chkcid52;
+ $inputObject.tableName  = $data.tbnm52;
+ $inputObject.fieldValues = $data.value52;
+ verifySwiftFormData($inputObject); */
+
+ $t.end();
+ var $t = _testcase("TC_7.","Check for Applicable Metrics Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.am43;// _link("Applicable Metrics")
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+ $inputObject = {};
+ $inputObject.link = $data.link_name49;//_link("Select Metrics")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ia43+";"+$data.tom46;// _cell("Is Applicable?")
+ InfyFTisVisible($inputObject); 
+/*  
+ var str = $data.value52;
+ var $res = str.replace(";", "|");
+ $inputObject = {};
+ $inputObject.rowNo = "1|2";
+ $inputObject.colNo  = "1_lbl";
+ $inputObject.tableName  = $data.tbnm53;
+ $inputObject.fieldValues = $res;
+ verifySwiftFormData($inputObject);  *///commented SAME VALURES
+ 
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "3|4|5|15|16|17|20|21|25|26|28|29|31|32|33|34|35|43|44|45";//$data.chkrid53;
+ $inputObject.colNo  = "3_chk"; //$data.chkcid53;
+ $inputObject.tableName  = "Metric Name";//$data.tbnm53;
+ $inputObject.fieldValues = "True";
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+/*  $inputObject = {};
+ $inputObject.rowNo = $data.chkrid52;
+ $inputObject.colNo  = $data.chkcid52;
+ $inputObject.tableName  = $data.tbnm54;
+ $inputObject.fieldValues = $data.value53;
+ verifySwiftFormData($inputObject); */
+
+ $inputObject = {};
+ $inputObject.segment_name = "Summary";
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = "At least one service is selected.;At least one process is selected for each service.;At least one metric must be selected for each ITIL process. For the following ITIL process no metrics is selected: Application Batch Monitoring"
+ InfyFTisVisible($inputObject); 
+ 
+ _assertVisible(_span("de-icon-green_signal EcrStrongLabel"));
+ _assertVisible(_span("de-icon-green_signal EcrStrongLabel[1]"));
+ _assertVisible(_span("de-icon-green_signal EcrStrongLabel[2]"));
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_11.4","SLA category");
+ $t.start();
+ _include("Maint_Prj_Admin_SLA_02.sah");
+ 
+ $t.end();
+ var $t = _testcase("TC_11.5","Check for Production Support Custom Metrics segment ");
+ $t.start();
+ _include("Maint_Prj_Admin_PSCM_03.sah");
+ 
+ $t.end();
+  $data = readDataFromCSV("Maint_Prj_Admin_Appl_services_05","Maint/Prj_Admin"); 
+ var $t = _testcase("TC_12","Check for Applicable Services Tab disabled");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.as41;//_link("Applicable Services")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2"//$data.chkrid48;
+ $inputObject.colNo  = "3_unchk";
+ $inputObject.tableName  = $data.tbnm48;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+  
+ _expectConfirm("Warning: De-selecting the service will result in removing all the ITIL processes and metrics selected for the service. Are your sure?",true);
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = "Applicable ITIL Processes;Applicable Metrics;Production Support Custom Metrics;SLA Category";
+ $inputObject.operation = "Negative"; 
+ InfyFTisVisible($inputObject);
+  
+  $inputObject = {};
+ $inputObject.segment_name = "Request Type Selection";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "7";//|2|3|4|5|7
+ $inputObject.colNo  = "1_unchk";//1
+ $inputObject.tableName  = "Name";// $data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.as41;
+ $inputObject.operation = "Negative";
+ InfyFTisVisible($inputObject);  
+  
+ $t.end();
+ var $t = _testcase("TC_13.","Check segments for data should be deleted ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Request Type Selection";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "7";//|2|3|4|5|7
+ $inputObject.colNo  = "1_chk";//1
+ $inputObject.tableName  = "Name";// $data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.as41;
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data.as41;
+ SelectSegment($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.rowNo = "2"//$data.chkrid48;
+ $inputObject.colNo  = "3_unchk";
+ $inputObject.tableName  = $data.tbnm48;
+ $inputObject.fieldValues = "true";
+ verifySwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 

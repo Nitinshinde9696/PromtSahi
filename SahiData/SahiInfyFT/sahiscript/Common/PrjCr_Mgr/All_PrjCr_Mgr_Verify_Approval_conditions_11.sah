@@ -1,0 +1,574 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+	$data = readDataFromCSV("All_PrjCr_Mgr_Verify_Approval_conditions_11","Common/PrjCr_Mgr"); 
+	var $s = _testcase("TC_1"," Login and Navigate to Request Inbox");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.user_name = $data.Username1;
+	$inputObject.edt_loginid = $data.LoginID1;
+	$inputObject.edt_password = $data.Password1;
+	loginIntoDigite($inputObject); 
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo2;//Project Request_home
+	navigateTo($inputObject);
+
+	$s.end();
+	var $s = _testcase("Condition 1"," PT== PDKF && RA==IA &&SPT==ProcessType");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.item = $data.RACreateP;
+	OpenEformInstance($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_RecommendedAction = $data.RACreate;
+	verifyAllFields($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RACreate;
+	$inputObject.txt_CM_Description = $data.desc;
+	$inputObject.lst_DN_PeakTeamSize = $data.PTS;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Questionnaire_Segment;//Process Selection Questionnaire
+	SelectSegment($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_IstheprojectmanagedbyI = $data.itpmbi;
+	$inputObject.lst_DN_Choosetheappropriatena = $data.ctanow;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processType;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_cell("Skip", _near(_cell("Approver"))));
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+	
+	$s.end();
+	var $s = _testcase("Condition 2"," PT== PDKF && RA == IA &&SPT != ProcessType");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processTypeAnother;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertVisible(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertEqual("UnAssigned", _getSelectedText(_select("selectsingleuser1", _near(_cell("Approver")))));
+	
+	$s.end();
+	var $s = _testcase("Condition 5"," PT== PDKF && RA != IA &&MPC != EPMC");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_InitiateAction = $data.RAMerge;
+	ModifyEformInstance($inputObject);
+
+	$inputObject = {};
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "PRJTST05 - Testing for bug fin st date";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RAMerge;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertVisible(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertEqual("UnAssigned", _getSelectedText(_select("selectsingleuser1", _near(_cell("Approver")))));
+	
+	$s.end();
+	
+	
+	var $s = _testcase("Condition 6"," PT== PDKF && RA != IA &&SPT == ProcessType");//need to pass correct EPMC id
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_InitiateAction = $data.RAMerge;
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "PC123455 - Durga panya testing";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RAMerge;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertVisible(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertEqual("UnAssigned", _getSelectedText(_select("selectsingleuser1", _near(_cell("Approver")))));
+	
+	clickReturn();
+	$s.end();
+	
+	var $s = _testcase("Condition 3"," PT != PDKF && RA==IA &&SPT==ProcessType");
+	$s.start();
+		
+	$inputObject = {};
+	$inputObject.item = $data.RACreateN;
+	OpenEformInstance($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_RecommendedAction = $data.RACreate;
+	verifyAllFields($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RACreate;
+	$inputObject.txt_CM_Description = $data.desc;
+	$inputObject.lst_DN_PeakTeamSize = $data.PTS;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Questionnaire_Segment;//Process Selection Questionnaire
+	SelectSegment($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_IstheprojectmanagedbyI = $data.itpmbi;
+	$inputObject.lst_DN_Choosetheappropriatena = $data.ctanow;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processType;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_cell("Skip", _near(_cell("Approver"))));
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+	
+	$s.end();
+	var $s = _testcase("Condition 4"," PT != PDKF && RA==IA &&SPT==ProcessType");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processTypeAnother;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processTypeAnother;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_cell("Skip", _near(_cell("Approver"))));
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+	
+	$s.end();
+	var $s = _testcase("Condition 7"," PT != PDKF && RA!=IA &&SPT==ProcessType");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_InitiateAction=  $data.RAMerge;
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "LFGHHHHH - fnlf by durga";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RAMerge;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_cell("Skip", _near(_cell("Approver"))));
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+	
+	$s.end();
+	var $s = _testcase("Condition 8"," PT != PDKF && RA!=IA &&SPT==ProcessType");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+	
+	$inputObject = {};
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "GP122222 - mp tagging";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RAMerge;
+	$inputObject.processType = $data.processTypeAnother;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_cell("Skip", _near(_cell("Approver"))));
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+	
+	clickReturn();
+	$s.end();
+	
+	var $s = _testcase("Condition 9"," PT == PDKF && RA==IA &&SPT==ProcessType");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.item = $data.RAMergeP;
+	OpenEformInstance($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_RecommendedAction = $data.RAMerge;
+	verifyAllFields($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RACreate;
+	$inputObject.txt_CM_Description = $data.desc;
+	$inputObject.lst_DN_PeakTeamSize = $data.PTS;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Questionnaire_Segment;//Process Selection Questionnaire
+	SelectSegment($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_IstheprojectmanagedbyI = $data.itpmbi;
+	$inputObject.lst_DN_Choosetheappropriatena = $data.ctanow;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processType;
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertVisible(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertEqual("UnAssigned", _getSelectedText(_select("selectsingleuser1", _near(_cell("Approver")))));
+	
+		
+	$s.end();
+	var $s = _testcase("Condition 10"," PT== PDKF && RA != IA &&SPT != ProcessType");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_InitiateAction = $data.RACreate;
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertVisible(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertEqual("UnAssigned", _getSelectedText(_select("selectsingleuser1", _near(_cell("Approver")))));
+	
+	$s.end(); 
+	var $s = _testcase("Condition 13"," PT = PDKF && RA==IA && MPC == EPMC");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RAMerge;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "LFGHHHHH - fnlf by durga";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RAMerge;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_cell("Skip", _near(_cell("Approver"))));
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+	
+	$s.end();
+	var $s = _testcase("Condition 14"," PT == PDKF && RA==IA && MPC != EPMC");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+		
+	$inputObject={};
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "GP122222 - mp tagging";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RAMerge;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertExists(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertVisible(_select("selectsingleuser1", _near(_cell("Approver"))));
+	_assertEqual("UnAssigned", _getSelectedText(_select("selectsingleuser1", _near(_cell("Approver")))));
+	
+	clickReturn();
+	
+	$s.end();
+	var $s = _testcase("Condition 11"," PT != PDKF && RA!=IA &&SPT==ProcessType");
+	$s.start();
+
+	$inputObject = {};
+	$inputObject.item = $data.RAMergeN;
+	OpenEformInstance($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_DN_RecommendedAction = $data.RAMerge;
+	verifyAllFields($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RACreate;
+	$inputObject.txt_CM_Description = $data.desc;
+	$inputObject.lst_DN_PeakTeamSize = $data.PTS;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Questionnaire_Segment;//Process Selection Questionnaire
+	SelectSegment($inputObject);
+	
+	$inputObject={};
+	$inputObject.lst_DN_IstheprojectmanagedbyI = $data.itpmbi;
+	$inputObject.lst_DN_Choosetheappropriatena = $data.ctanow;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processType;
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+			
+	$s.end();
+	var $s = _testcase("Condition 12"," PT != PDKF && RA!=IA &&SPT!=ProcessType");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.lst_PROJECTTYPE = $data.processType;
+	$inputObject.txt_DN_ReasonfornotchoosingRe = $data.RFNCRA;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+			
+	$s.end();
+	var $s = _testcase("Condition 15"," PT != PDKF && RA==IA && MPC == EPMC");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RAMerge;
+	$inputObject.txt_CM_Description = $data.desc;
+	$inputObject.lst_DN_PeakTeamSize = $data.PTS;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "GP122222 - mp tagging";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+			
+	$s.end();
+	var $s = _testcase("Condition 16"," PT != PDKF && RA==IA && MPC != EPMC");
+	$s.start();
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Details_Segment;//Details
+	SelectSegment($inputObject);
+
+	$inputObject={};
+	$inputObject.lst_DN_InitiateAction = $data.RAMerge;
+	$inputObject.txt_CM_Description = $data.desc;
+	$inputObject.lst_DN_PeakTeamSize = $data.PTS;
+	ModifyEformInstance($inputObject);
+	
+	$inputObject = {};
+	$inputObject.lst_DN_ExecutionProjectCodeLi = "LFGHHHHH - fnlf by durga";
+	ModifyEformInstance($inputObject);
+	
+	$inputObject={};
+	$inputObject.initiateAction = $data.RACreate;
+	$inputObject.processType = $data.processType;
+	var $conditon = InfyFTVerifyPrjCrMgrConditions($inputObject)
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Workflow_Segment;//Workflow
+	SelectSegment($inputObject);
+	
+	_assertVisible(_cell("Skip", _near(_cell("Approver"))));
+	_assertEqual("Skip", _getText(_cell("Skip", _near(_cell("Approver")))));
+	_assertContainsText("Skip", _cell("Skip", _near(_cell("Approver"))));
+			
+	$s.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

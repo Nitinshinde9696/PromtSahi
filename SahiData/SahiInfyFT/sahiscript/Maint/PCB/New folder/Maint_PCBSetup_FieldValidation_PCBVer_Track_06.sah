@@ -1,0 +1,56 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_PCBSetup_FieldValidation_PCBVer_Track_06", "Maint/PCB");
+ 
+ var $t = _testcase("TC_1", "go to pcb version");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PCBVersion3;
+ OpenEformInstance($inputObject);
+ _wait(5000);
+ _wait(5000);
+ var $IDpcb = _getText(_span("CM_ItemCode"));
+
+ $inputObject = {};
+ $inputObject.lst_field200 = $data.app;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_02", "checking mandatory fields in pcb version details page");
+  $t.start();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//1.5
+ $inputObject.edt_field199 = $data.version;//null
+ $inputObject.lst_field200 = $data.apptype;//null
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type of Application in Details tab \n• Field Version in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//1.5
+ $inputObject.edt_field199 = $data.version1;//1.5
+ $inputObject.lst_field200 = $data.apptype1;//None
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type of Application in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name1;//null
+ $inputObject.edt_field199 = $data.version1;//1.5
+ $inputObject.lst_field200 = $data.apptype2;//customer app
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ $t.end();
+ 
+
+ 

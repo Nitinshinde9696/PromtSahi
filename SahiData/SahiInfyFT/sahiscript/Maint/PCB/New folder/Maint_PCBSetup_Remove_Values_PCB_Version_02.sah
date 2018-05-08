@@ -1,0 +1,167 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_PCBSetup_Remove_Values_PCB_Version_02", "Maint/PCB");
+ 
+ var $t = _testcase("TC_1", "go to pcb version");
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject); 
+
+ $inputObject = {};
+ $inputObject.item = $data.PCBVersion3;
+ OpenEformInstance($inputObject);
+
+ _wait(20000);
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;
+ InfyFTSelectSegmentS($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_2", "verifing table titles");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo20;
+ $inputObject.fieldValues = $data.FIELDVALUE20;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.LCStageMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo21;
+ $inputObject.fieldValues = $data.FIELDVALUE21;
+ verifySwiftFormData($inputObject);
+ 
+ 
+ 
+ $data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_06.1", "InfyFTSahi/pcb");
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+
+ $inputObject = {};
+ $inputObject.item = $data.PCBVersion3;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+ $t.end();
+	
+ var $t = _testcase("TC_3","remove ucl value(lc stage)");
+
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//LC Stage Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo501;
+ $inputObject.fieldValues = $data.fieldValues501;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Issue in LC Stage Metric Details: \nRow 1: Please enter UCL. ";
+ saveSwiftForm($inputObject);
+ $t.end();
+ 
+ var $t = _testcase("TC_4","remove lcl value(lc stage)");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo503;
+ $inputObject.fieldValues = $data.fieldValues501;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Issue in LC Stage Metric Details: \nRow 1: Please enter UCL LCL.";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_5","remove cov value(lc stage)");
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo504;
+ $inputObject.fieldValues = $data.fieldValues501;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert ="";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_6","remove min value(lc stage)");
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo505;
+ $inputObject.fieldValues = $data.fieldValues503;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_7","remove max value(lc stage)");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo506;
+ $inputObject.fieldValues = $data.fieldValues506;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end(); 
+ var $t = _testcase("TC_8","remove mean value(lc stage)");
+ $t.start();
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues509;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end(); 
+  
+ var $t = _testcase("TC_8","remove mean value(track metrics details)");
+ $t.start();
+ $data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_02", "InfyFTSahi/pcb");
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.fieldValues601;
+ $inputObject.colNo = $data.colNoREM;
+ $inputObject.fieldValues = $data.fieldValuesrem;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end();

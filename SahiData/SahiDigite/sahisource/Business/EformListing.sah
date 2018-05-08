@@ -1,0 +1,2476 @@
+
+/**
+ @Function Number:1
+ @author:hbhuva
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function batchUpdateItem($inputObject)
+{
+	_log("batchUpdateItem Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.Instances))));
+		_click(_submit("BatchUpdate"));
+		
+		if($inputObject.fieldsToVerify)
+		{
+			var $fieldsToVerify = $inputObject.fieldsToVerify.split(";");
+			for(var $i = 0; $i < $fieldsToVerify.length; $i++)
+			{
+				_isVisible(_cell($fieldsToVerify[$i]));
+			}
+		}
+		else
+		{
+			setAllFields($inputObject);
+			_click(_submit("Update_Btn"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("batchUpdateItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: 1. To Export only one selected item :
+* 					exportEformInstance({"type" : "Issues" , "requiredfor" : "Specific" , 
+* 											"item" : "Issue2" ,	"lst_ExportFormat" : "Excel"});
+* 			2. To Export All the items :
+* 					exportEformInstance({"type" : "Issues" , "requiredfor" : "All" ,
+* 											"lst_ExportFormat" : "Excel"});
+* @description This function is called to Export Items Such as 
+* 					Issue, Defect, ChangeRequest, etc...
+* 				The Parameter "type" is used to name the File according to the Eform Instance that is downloaded.
+* 				To Export Only One Selected Item pass the Parameters as in Example 1.
+* 				To Export All the Items pass the Parameters as in Example 2.
+* @param {String} Pass the item to select from the listing and to set the fields in the pop up.
+* @return {String}   None 
+*************************************************************************/
+
+function exportEformInstance($inputObject)
+{
+	_log("exportEformInstance Started","success");
+	try 
+	{
+		var $downloadPath = _getGlobal("DOWNLOAD");
+		var $exportBtn = "KEY_TOOLTIP_Export";
+		var $extJsId = ""; 	
+		var $exportbtnKey = $exportBtn + $extJsId;
+		
+		if($inputObject.requiredfor === "Specific")
+		{
+			_check(_div("x-grid-row-checker",_near(_div($inputObject.item))));
+		}
+
+		_click(_link($exportbtnKey));
+		_selectWindow("Export");			
+		setAllFields($inputObject);
+		_click(_button("QTP_KEY_BUTTON_Ok"));
+		_wait(5000,null);
+		_click(_button("QTP_KEY_BUTTON_Close"));
+		_selectWindow();
+		_saveDownloadedAs($downloadPath+""+$inputObject.type);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("exportEformInstance Completed","success");
+}
+
+/*************************************************************************************************
+@Function importEformInstance
+@author: Ram
+@description: To importEformInstance
+@return: None
+TODO:RMAHANT Correct this Function
+****************************************************************************************************/
+
+function importEformInstance($inputObject)
+{
+	_log("importEformInstance Started","success");
+	try 
+	{
+		var $importBtn = "KEY_LABEL_Import";
+		var $extJsId = ""; 	
+		var $importbtnKey = $importBtn + $extJsId;
+		if($inputObject.type === "Negative")
+		{
+			_log("Cannot Import");
+			_assertFalse(_exists(_link($importbtnKey)));
+		}
+		else
+		{
+			_click(_link($importbtnKey));
+			
+			_selectWindow("ImportPopup");
+			
+
+			if($inputObject.type === "FileNotSelected")
+			{	
+				if($inputObject.file_file === "" || $inputObject.file_file === undefined)
+				{
+					_click(_submit("QTP_KEY_BUTTON_Upload"));
+					_assertEqual("Please select the file to be uploaded.",_lastAlert());
+					_click(_button("QTP_KEY_BUTTON_Close"));
+					_selectWindow();
+				}
+			}	
+			else
+			{			
+				var $importDIR;
+				_set($importDIR, _getGlobal("importDIR")+$inputObject.file_file);
+				_setFile(_file("file"), $importDIR);
+				_call(_file("file").type = "text");
+				_setValue(_textbox("file"),$importDIR);			
+				if($inputObject.chk_SyncAsync === "SyncAsync" || $inputObject.chk_SyncAsync === "on")
+				{
+					_check(_checkbox("SyncAsync"));
+				}
+				_click(_submit("QTP_KEY_BUTTON_Upload"));
+				_wait(10000,null);
+				
+				if($inputObject.type === "WrongFileName")
+				{
+					_assertEqual("Please ensure that the file '"+$inputObject.eform+".csv/"+$inputObject.eform+".xls' exists and is not empty.",_lastAlert());
+					_click(_button("QTP_KEY_BUTTON_Close"));
+					_selectWindow();
+				}
+				else
+				{	
+					var $errorMsg = null;
+					_set($errorMsg,$inputObject.error);
+					
+					if($errorMsg === "" || $errorMsg === null)
+					{
+						_click(_button("QTP_OK"));
+						_selectWindow();
+						verifyInstanceInListing($inputObject);	
+					}
+					else
+					{
+						_assertTrue(_containsText(_table("QTP_EformSection2"),$inputObject.error));
+						_click(_button("QTP_Close"));
+						_selectWindow();
+					}	
+				}
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importEformInstance Completed","success");
+}
+
+/*************************************************************************************************
+@Function promote
+@author: Ram
+@example: promote
+@description: To promote User Requirement
+@return: None
+****************************************************************************************************/
+
+function promote($inputObject)
+{
+	_log("promote Started","success");
+	try 
+	{
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.instance_id1))));
+		_click(_link("KEY_BUTTON_Promote"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("promote Completed","success");
+}
+
+/*************************************************************************************************
+@Function demote
+@author: Ram
+@example: demote
+@description: To demote User Requirement
+@return: None
+****************************************************************************************************/
+
+function  demote($inputObject)
+{
+	_log(" demote Started","success");
+	try 
+	{
+		var $linearBtn = "KEY_LABEL_Linear";
+		var $extJsId = ""; 
+		var $linearBtnKey = $linearBtn + $extJsId;
+		
+		if(_exists(_link($linearBtnKey)) === true)
+		{
+			_click(_link($linearBtnKey));
+		}
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.instance_id1))));
+		
+		_click(_link("KEY_LABEL_Move_Demote_Below"));
+		
+		_selectWindow("MoveAndDemote");
+		
+		setAllFields($inputObject);
+		
+		_click(_submit("QTP_KEY_BUTTON_Ok"));
+		
+		_selectWindow();
+		
+		_wait(5000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" demote Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ TODO:RMAHANT Correct this function
+ **/
+
+function deleteInstance($inputObject)
+{
+	_log("deleteInstance Started","success");
+	try 
+	{
+		_assertExists(_div("extGridDiv"));
+		if(_exists(_table("QTP_ListTable")))
+		{
+			if($inputObject.operation === "disabled")
+			{
+				_assertTrue(_exists(_link("de-icon-delete",_in(_cell("IconDisable")))));
+			}
+			else
+			{	
+				var $tableId = _table("QTP_ListTable");
+			    
+				_click(_checkbox(0, _near(_cell($inputObject.item))));
+				_click(_link("de-icon-delete"));
+				
+		        _expectConfirm("You are about to delete this item,do you still want to proceed with this action?.", true);
+				
+		        _log("deleteInstance Verification Started","success");
+		        if($inputObject.alertType === "phaseInUse")
+				{
+					_assertEqual(":  There are one or more process templates using the phase. Remove the phase from process template(s) before deleting it",_lastAlert());
+				}
+		        else if($inputObject.alertType === "withactual")
+	        	{
+	        		_expectConfirm($inputObject.error,true);
+	        	}
+		        else
+		        {
+		        	_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+		        }
+				_log("deleteInstance Verification Complete","success");
+			}
+		}
+		else
+		{
+			 
+				
+			var $deleteBtn = ($inputObject.deleteButton !== undefined)?$inputObject.deleteButton:"KEY_LABEL_DeleteItem";
+			var $extJsId = ""; 	
+			var $deletebtnKey = $deleteBtn + $extJsId;
+			
+			if($inputObject.operation === "disabled")
+			{
+				_assertTrue(_exists($deletebtnKey));
+			}
+			else
+			{	
+				//Name means they want to delete all item.		
+				if($inputObject.item === "Name")
+				{
+					_click(_span("x-column-header-text eformListGrid-checkboxcolumn"));
+					_click(_link($deletebtnKey));
+					
+			        _expectConfirm("You are about to delete this item,do you still want to proceed with this action?.", true);
+				}
+				else
+				{
+					_check(_div("x-grid-row-checker",_near(_div($inputObject.item))));
+					_click(_link($deletebtnKey));
+					
+			        _expectConfirm("You are about to delete this item,do you still want to proceed with this action?.", true);
+			        _log("deleteInstance Verification Started","success");
+			        
+			        if($inputObject.alertType === "phaseInUse")
+					{
+			        	_assertEqual(":  There are one or more process templates using the phase. Remove the phase from process template(s) before deleting it",_lastAlert());
+					}
+			        else if($inputObject.alertType == "withactual")
+			        {
+			        	_expectConfirm($inputObject.error,true);
+			        }
+			        else
+			        {
+			        	_assertFalse(_isVisible(_div($inputObject.item)));
+			        }
+					_log("deleteInstance Verification Complete","success");
+				}		       
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteInstance Completed","success");
+}
+
+/*************************************************************************************************
+@Function viewhierarchicallist
+@author: Ram
+@example: viewhierarchicallist
+@description: To viewhierarchicallist
+@param: None
+@return: None
+****************************************************************************************************/
+
+function viewhierarchicallist()
+{
+	_log("viewhierarchicallist Started","success");
+	try 
+	{
+		var $linearBtn = "KEY_LABEL_Linear";
+		var $extJsId = ""; 	
+		var $linearBtnKey = $linearBtn + $extJsId;
+		_click(_link($linearBtnKey));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("viewhierarchicallist Completed","success");
+}
+
+/*************************************************************************************************
+@Function viewlinearlist
+@author: Ram
+@example: viewlinearlist
+@description: To viewlinearlist
+@param: None
+@return: None
+****************************************************************************************************/
+
+
+function viewlinearlist()
+{
+	_log("viewlinearlist Started","success");
+	try 
+	{
+		var $linearBtn = "KEY_LABEL_Linear";
+		var $extJsId = ""; 	
+		var $linearBtnKey = $linearBtn + $extJsId;
+		_click(_button($linearBtnKey));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("viewlinearlist Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyfieldvalueofinstanceinlisting
+@author: Ram
+@example: verifyfieldvalueofinstanceinlisting
+@description: To verify field value of instance in listing
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyfieldvalueofinstanceinlisting($inputObject)
+{
+	_log("verifyfieldvalueofinstanceinlisting Started","success");
+	try 
+	{
+		 _assertEqual(_getText(_div(0,_near(_div($inputObject.item)),_under(_div($inputObject.field),5))),$inputObject.value);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyfieldvalueofinstanceinlisting Completed","success");
+}
+
+/*************************************************************************************************
+@Function clickCheckout
+@author: Ram
+@example: clickCheckout()
+@description: To clickCheckout
+@param: None
+@return: None
+TODO:RMAHANT Correct this function for alert and do the Impact on dependent scripts 
+****************************************************************************************************/
+
+function clickCheckout($inputObject)
+{
+	_log("clickCheckout Started","success");
+	try 
+	{
+			
+		var $checkoutBtn = "KEY_TOOLTIP_CheckOut";
+		var $extJsId = ""; 
+		var $checkoutBtnKey = $checkoutBtn + $extJsId;
+		
+		_click(_link($checkoutBtnKey));
+		
+		if($inputObject.alert === "CheckedIn")
+		{
+			_assertEqual("Following work-items cannot be checked out since they are already checked out : " + $inputObject.itemid, _lastAlert());
+		}
+		else
+		{	
+			_selectWindow("Check Out Item");
+			_click(_submit("QTP_CheckOut"));
+			_wait(5000,null);
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickCheckout Completed","success");
+}
+
+/*************************************************************************************************
+@Function clickCheckin
+@author: Ram
+@example: 
+	clickCheckin()
+	clickCheckin({"alert":"CheckedOut"})
+@description: To clickCheckin
+@param: None
+@return: None
+****************************************************************************************************/
+
+function clickCheckin($inputObject)
+{
+	_log("clickCheckin Started","success");
+	try 
+	{
+		var $chekinBtn = "KEY_TOOLTIP_CheckIn";
+		var $extJsId = ""; 	
+		var $chekinBtnKey = $chekinBtn + $extJsId;		
+		_click(_link($chekinBtnKey));
+		
+		if($inputObject.alert === "CheckedOut")
+		{
+			_assertEqual("Select only checked out work-items.",_lastAlert());
+		}
+		else
+		{
+			_selectWindow("eformCheckIn");
+			_click(_submit("QTP_CheckIn"));
+			_wait(5000,null);
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickCheckin Completed","success");
+}
+
+/*************************************************************************************************
+@Function checkout
+@author: Ram
+@example: checkout()
+@description: To checkout
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function checkout($inputObject)
+{
+	_log("checkout Started","success");
+	try 
+	{
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.itemid))))
+		clickCheckout($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkout Completed","success");
+}
+
+/*************************************************************************************************
+@Function checkin
+@author: Ram
+@example: checkin()
+@description: To checkin
+@param: None
+@return: None
+****************************************************************************************************/
+
+function checkin($inputObject)
+{
+	_log("checkin Started","success");
+	try 
+	{
+		_wait(5000,_exists(_div($inputObject.itemId)));
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.itemId))))
+		clickCheckin($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("checkin Completed","success");
+}
+
+/*************************************************************************************************
+@Function downloadAttachmentAtListing
+@author: Ram
+@example: downloadAttachmentAtListing
+@description: To downloadAttachmentAtListing
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function downloadAttachmentAtListing($inputObject)
+{
+	_log("downloadAttachmentAtListing Started","success");
+	try 
+	{
+		var $downloadPath;
+		_set($downloadPath, _getGlobal("DOWNLOAD") + $inputObject.FileName);
+		_check(_checkbox("/jqg_attachmentsGridTable_/", _leftOf(_cell($inputObject.FileName))));
+		_click(_submit("downloadFile"));
+		_saveDownloadedAs($downloadPath);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("downloadAttachmentAtListing Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.itemId = "New Defect"
+ @description: Selects the row in the listing
+ @param: String {None}
+ @return: String {None}
+ **/
+
+function selectRow($inputObject)
+{
+	_log("selectRow Started","success");
+	try 
+	{
+		_check(_div("x-grid-row-checker",_near(_div($inputObject.itemId))))
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectRow Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author: Hrishi
+ @example: addTaskInPackge({"edt_name" : "T1" , "lst_SUMMARYTASKID" : "SMU1", "lst_priority" : "Critical"})
+ @description: Add the task in workpakage
+ @param: Fields on task eform
+ @return: none
+ **/
+
+function addTaskInPackge($inputObject)
+{
+	_log("addTaskInPackge Started","success");
+	try
+	{
+        _wait(5000, _isVisible(_span("de-icon-add") || _span("addTaskButton-btnIconEl")));
+	    if(_isVisible(_span("de-icon-add")))
+		{
+		    _click(_span("de-icon-add"));
+			_selectWindow("AddTask");
+		}
+		else if (_isVisible(_span("addTaskButton-btnIconEl")))
+        {		 
+		    _click(_span("addTaskButton-btnIconEl"));
+			if(_isIE())
+		        _selectWindow("NewTask");
+		    else
+	            _selectWindow("New Task");
+		}
+		setAllFields($inputObject);
+		_click(_button(" Save "));
+		_selectWindow();
+		_wait(3000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTaskInPackge Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyCheckInCheckOutButton
+@author: Ram
+@example: verifyCheckInCheckOutButton()
+@description: To verifyCheckInCheckOutButton
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyCheckInCheckOutButton()
+{
+	_log("verifyCheckInCheckOutButton Started","success");
+	try 
+	{
+		var $btn1 = "KEY_TOOLTIP_CheckIn";
+		var $extJsId1 = "";
+		var $btnKey1 = $btn1 + $extJsId1;
+		
+		$inputObject.icon = $btnKey1;
+		verifyIcon($inputObject);
+		
+		var $btn2 = "KEY_TOOLTIP_CheckOut";
+		var $extJsId2 = "";
+		var $btnKey2 = $btn2 + $extJsId2;
+		
+		$inputObject.icon = $btnKey2;
+		verifyIcon($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCheckInCheckOutButton Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyFolderSequence
+@author: Ram
+@example: verifyFolderSequence
+@description: To verifyFolderSequence
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyFolderSequence()
+{
+	_log("verifyFolderSequence Started","success");
+	try 
+	{
+		var $arraySet = new Array();
+		var $sortedArraySet = new Array();
+		var $addFolderBtn = "addFolderButton";
+		var $extJsId = ""; 	
+		var $addFolderBtnKey = $addFolderBtn + $extJsId;
+		
+		_click(_link($addFolderBtnKey));
+		_selectWindow("folderprop");
+		
+		_set($arraySet,_getText(_select("ParentFolderId")));
+		_closeWindow();
+		_selectWindow();
+		
+		_log("$arraySet..."+$arraySet);
+		
+		for(var i=0; i<$arraySet.length; i++)
+		{
+			if($arraySet[i] === "All Docs")
+			{
+				$arraySet.splice(i,1);
+			}
+		}
+		 
+		_set($sortedArraySet,$arraySet.sort());
+		
+		_log("$sortedArraySet..."+$sortedArraySet);
+		  
+		var $boolean = false;
+		_set($boolean,_assertEqual($sortedArraySet, $arraySet));
+		  
+		if($boolean === true)
+		{
+			_assertTrue(_assertEqual($sortedArraySet, $arraySet));
+		}
+		else
+		{
+		 	_assertTrue(_assertNotEqual($sortedArraySet, $arraySet));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFolderSequence Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyinstanceinsplitscreen
+@author: Ram
+@example: verifyinstanceinsplitscreen
+@description: To verifyinstanceinsplitscreen
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyinstanceinsplitscreen($inputObject)
+{
+	_log("verifyinstanceinsplitscreen Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyinstanceinsplitscreen Completed","success");
+}
+
+/**
+ @Function Number:61
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function waitVerifyEformInstanceListing($inputObject)
+{
+	_log("waitVerifyEformInstanceListing Started","success");
+	try 
+	{
+		if($inputObject.name)
+			navigateTo({ "name" : $inputObject.name });
+		else
+			navigateTo({ "name" : "Project Request_home" });
+		
+		var $projectName = $inputObject.items;
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_link($projectName)) || _exists(_div($projectName)));
+		}
+		else
+		{	
+			
+			var $wait = 500000;
+			var $reloadPeriod = 15000;
+			var $counter = 0;
+			while ($counter< $wait && !(_exists(_link($projectName)) || _exists(_div($projectName))))
+			{
+				_wait($reloadPeriod, _exists(_link($projectName)) || _exists(_div($projectName)));
+				$counter = $counter + $reloadPeriod;
+				if($inputObject.name)
+					navigateTo({ "name" : $inputObject.name });
+				else
+					navigateTo({ "name" : "Project Request_home" });
+				_wait(2000,_exists(_link($projectName)) || _exists(_div($projectName)));
+			}
+			_assertTrue(_exists(_link($projectName)) || _exists(_div($projectName)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("waitVerifyEformInstanceListing Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyEformInstance
+@author: Ram
+@description: To verifyEformInstance
+@return: None
+****************************************************************************************************/
+
+function verifyEformInstance($inputObject)
+{
+	_log("verifyEformInstance Started","success");
+	try 
+	{
+		var $values =  $inputObject.Values;
+			
+		_assertTrue(_isVisible(_div($inputObject.InstanceName)));
+		if($inputObject.Values.indexOf(";") != -1)
+		{
+			$values = $inputObject.Values.split(";");
+		}	
+		
+		for(var $k=0; $k<$values.length; $k++)
+		{
+			if($values[$k] === "Medium")
+				_assertTrue(_exists(_span("de-icon-prio_med")));
+			else if($values[$k] === "Critical")
+				_assertTrue(_exists(_span("de-icon-prio_crit")));
+			else if($values[$k] === "High")
+				_assertTrue(_exists(_span("de-icon-prio_high")));
+			else if($values[$k] === "Low")
+				_assertTrue(_exists(_span("de-icon-prio_low")));
+			else
+				_assertTrue(_isVisible(_div($values[$k])));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformInstance Completed","success");
+}
+
+/*************************************************************************************************
+@Function addExistingTraceability
+@author: Ram
+@description: To addExistingTraceability
+@return: None
+****************************************************************************************************/
+
+function addExistingTraceability($inputObject)
+{
+	_log("addExistingTraceability Started","success");
+	try 
+	{
+		_setSelected(_select("NewExisting"),"Existing");
+		_setSelected(_select("Items"), $inputObject.ItemType);
+		_click(_button("gobutton"));
+		setAllFields($inputObject);
+		_click(_submit("Go"));
+		_check(_checkbox(0,_near(_cell( $inputObject.ItemIds))));
+		_click(_button("AddLink"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addExistingTraceability Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyComments
+@author: Ram
+@description: To verifyComments
+@return: None
+****************************************************************************************************/
+
+function verifyComments($inputObject)
+{
+	_log("verifyComments Started","success");
+	try 
+	{
+		var $values =  $inputObject.Comments;
+		
+		if($inputObject.Comments.indexOf(";") != -1)
+		{
+			$values = $inputObject.Comments.split(";");
+		}	
+		
+		for(var $k=0; $k<$values.length; $k++)
+		{
+			_assert(_isVisible(_div($values[$k], _in(_div("commentsTextDiv")))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyComments Completed","success");
+}
+
+/**
+@author: Harshit
+@example: isCheckedin($inputObject);
+@description: To check whether item has been checked in successfully.
+@param: String {None}
+@return: String {None}
+TODO:RMAHANT Correct this function for alert and do the Impact on dependent scripts 
+**/
+
+function isCheckedin($inputObject)
+{
+	_log("isCheckedin Started","success");
+	try 
+	{
+		var $status = _containsText(_parentRow(_cell($inputObject.itemId)), "Checked In");
+		if ($status === true)
+			_assertTrue($status === true,"Item is Already Checked In");
+		else
+			_assertFalse($status === true,"Item is Checked Out");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("isCheckedin Completed","success");
+}
+
+/**
+@author: Harshit
+@example: isCheckedout($inputObject);
+@description: To check whether item has been checked in successfully.
+@param: String {None}
+@return: String {None} 
+TODO:RMAHANT Correct this function for alert and do the Impact on dependent scripts 
+**/
+
+function isCheckedout($inputObject)
+{
+	_log("isCheckedout Started","success");
+	try 
+	{
+		var $status = _containsText(_parentRow(_cell($inputObject.itemId)), "Checked Out");
+		if ($status === true)
+			_assertTrue($status === true,"Item is Already Checked Out");
+		else
+			_assertFalse($status === true,"Item is Checked Out");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("isCheckedout Completed","success");
+}
+
+/*************************************************************************************************
+@Function verifyIconsOnEformListing
+@author: Harshit
+@example: verifyIconsOnEformListing($inputObject);
+@description: To check whether all the icons are present in the listing.
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyIconsOnProjectListing($inputObject) 
+{
+	_log("verifyIconsOnProjectListing Started", "success");
+	try 
+	{
+		verifyPrintIconOnEformListing($inputObject);
+		verifyBaselineIconOnEformListing($inputObject);
+		verifyAddIconOnEformListing($inputObject);
+		verifyExportIconOnEformListing($inputObject);
+		verifyImportIconOnEformListing($inputObject);
+		verifyPrjHierarchialList($inputObject);
+		verifyAccessiblePrjList($inputObject);
+		verifyClearFilterIconOnEformListing($inputObject);
+		verifyTableViewIconOnEformListing($inputObject);
+		verifyAdvanceFilterIconOnEformListing($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}	
+	_log("verifyIconsOnProjectListing Completed", "success");
+}
+
+/*************************************************************************************************
+@Function verifyIconsOnUserListing
+@author: Nilesh
+@example: verifyIconsOnUserListing($inputObject);
+@description: To check whether all the icons are present in the listing.
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyIconsOnUserListing($inputObject) 
+{
+	_log("verifyIconsOnUserListing Started", "success");
+	try 
+	{
+		verifyAddIconOnEformListing($inputObject);
+		verifyExportIconOnEformListing($inputObject);
+		verifyImportIconOnEformListing($inputObject);
+		verifyPrintIconOnEformListing($inputObject);
+		verifyLockUserIconOnEformListing($inputObject);  // New
+		verifyUnLockUserIconOnEformListing($inputObject);  // New
+		verifySetAcessRoleIconOnEformListing($inputObject);  // New
+		verifyUserSearchIconOnEformListing($inputObject);  // New
+		verifyPeopleSearchIconOnEformListing($inputObject);  // New
+		verifyUserOrgRelIconOnEformListing($inputObject);  // New
+		verifyResAttributeIconOnEformListing($inputObject);  // New
+		verifyUserHeirarchyIconOnEformListing($inputObject);  // New
+		verifyUserAccessLevelIconOnEformListing($inputObject);  // New
+		verifyMultilineAddIconOnEformListing($inputObject);
+		verifyMultilineEditIconOnEformListing($inputObject);
+		verifyClearFilterIconOnEformListing($inputObject);
+		verifyTableViewIconOnEformListing($inputObject);
+		verifyAdvanceFilterIconOnEformListing($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}	
+	_log("verifyIconsOnUserListing Completed", "success");
+}
+
+/*************************************************************************************************
+@Function verifyIconsOnLinkedSegmentTab
+@author: Harshit
+@example: verifyIconsOnLinkedSegmentTab($inputObject);
+@description: To check whether all the icons are present in the listing.
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyIconsOnLinkedSegmentTab($inputObject) 
+{
+	_log("verifyIconsOnLinkedSegmentTab Started", "success");
+	try 
+	{
+		verifyPrintIconOnEformListing($inputObject);
+		verifyAddIconOnEformListing($inputObject);
+		verifyBaselineIconOnEformListing($inputObject);
+		verifyExportIconOnEformListing($inputObject);
+		verifyImportIconOnEformListing($inputObject);
+		verifyClearFilterIconOnEformListing($inputObject);
+		verifyTableViewIconOnEformListing($inputObject);
+		verifyAdvanceFilterIconOnEformListing($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyIconsOnLinkedSegmentTab Completed", "success");
+}
+
+/*************************************************************************************************
+@Function verifyIconsOnLinkedTasksTabOfPEF
+@author: Harshit
+@example: verifyIconsOnLinkedTasksTabOfPEF($inputObject);
+@description: To check whether all the icons are present in the listing.
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyIconsOnLinkedTasksTabOfPEF($inputObject) 
+{
+	_log("verifyIconsOnLinkedTasksTabOfPEF Started", "success");
+	try 
+	{
+		verifyAddIconOnEformListing($inputObject);
+		verifyGanttChart($inputObject);
+		verifyDeleteTask($inputObject);
+		verifyCloseTask($inputObject) ;
+		verifyReopenTask($inputObject) ;
+		verifyManageBaseline($inputObject) ;
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyIconsOnLinkedTasksTabOfPEF Completed", "success");
+}
+
+/*************************************************************************************************
+@Function verifyIcon
+@author: Rahul Mahant
+@example: verifyIcon
+@description: To verify if the icon is present or not
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyIcon($inputObject) 
+{
+	_log("verifyIcon Started", "success");
+	try 
+	{ 
+		if($inputObject.isNotExtJsIcon === "Y")
+		{
+			if($inputObject.operation === "Negative")
+				_assertFalse(_exists(_span($inputObject.icon)));
+			else 
+				_assertTrue(_exists(_span($inputObject.icon)));
+		}	
+		else
+		{	
+			if($inputObject.operation === "DisabledButton")
+				_assertTrue(_link($inputObject.icon).disabled);
+			else if($inputObject.operation === "Negative")
+				_assertFalse(_exists(_link($inputObject.icon)));
+			else
+				_assertTrue(_exists(_link($inputObject.icon)));
+		}
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyIcon Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyAddIconOnEformListing($inputObject);
+ * @description: To check whether add icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyAddIconOnEformListing($inputObject) 
+{
+	_log("verifyAddIconOnEformListing Started", "success");
+	try 
+	{
+		if($inputObject.isNotExtJsIcon) 
+		{
+			var $btnKey = _span("de-icon-add");
+		}
+		else 
+		{
+			var $addBtn = "KEY_BUTTON_Add";
+			if ($inputObject.segmentType == "LinkedSegment") 
+			{
+				$addBtn = "KEY_Link_New_item";			
+			}
+			var $extJsId = "";
+			var $btnKey = $addBtn + $extJsId;
+		}
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyAddIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyLinkedExistingItemIconOnEformListing($inputObject);
+ * @description: To check whether add icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyLinkedExistingItemIconOnEformListing($inputObject) 
+{
+	_log("verifyLinkedExistingItemIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_Link_Existing_Item";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyLinkedExistingItemIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyDeleteIconOnEformListing($inputObject);
+ * @description: To check whether add icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyDeleteIconOnEformListing($inputObject)
+{
+	_log("verifyDeleteIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_DeleteItem";
+		if ($inputObject.segmentType == "LinkedSegment")
+		{
+			$btn = "KEY_Delete_items";
+		}
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyDeleteIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyPrintIconOnEformListing($inputObject);
+ * @description: To check whether print icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyPrintIconOnEformListing($inputObject) 
+{
+	_log("verifyPrintIconOnEformListing Started", "success");
+	try 
+	{
+		if ($inputObject.isNotExtJsIcon)
+		{
+			var $btnKey =_image("de-icon-print");
+		}
+		else
+		{
+			var $btn = "KEY_TOOLTIP_Print";
+			var $extJsId = "";
+			var $btnKey = $btn + $extJsId;
+		}
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyPrintIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyBaselineIconOnEformListing($inputObject);
+ * @description: To check whether print icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyBaselineIconOnEformListing($inputObject) 
+{
+	_log("verifyBaselineIconOnEformListing Started", "success");
+	try 
+	{
+		if ($inputObject.isNotExtJsIcon)
+		{
+			var $btnKey =_image("de-icon-baseline");
+		}
+		else
+		{
+			var $btn = "KEY_TOOLTIP_Baseline";
+			var $extJsId = "";
+			var $btnKey = $btn + $extJsId;
+		}
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyBaselineIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyLinearViewIconOnEformListing($inputObject);
+ * @description: To check whether Linear View icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyLinearViewIconOnEformListing($inputObject)
+{
+	_log("verifyLinearViewIconOnEformListing Started", "success");
+	try
+	{
+		var $btn = "KEY_LABEL_Linear";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyLinearViewIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyImportIconOnEformListing($inputObject);
+ * @description: To check whether Import icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyImportIconOnEformListing($inputObject) 
+{
+	_log("verifyImportIconOnEformListing Started", "success");
+	try
+	{
+		var $btn = "KEY_LABEL_Import";
+		if ($inputObject.itemtype === "Prj")
+		{
+			$btn = "KEY_BUTTON_Import_Project";
+		}
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyImportIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyExportIconOnEformListing($inputObject);
+ * @description: To check whether Export icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyExportIconOnEformListing($inputObject) 
+{
+	_log("verifyExportIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_TOOLTIP_Export";
+		var $extJsId = "";
+	
+		if($inputObject.itemtype=="Prj")
+		{
+			$btn="KEY_LABEL_Exported_Project";
+		}
+		
+		var $btnKey = $btn + $extJsId;
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyExportIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyOtherAccessibleProjectIconOnEformListing($inputObject);
+ * @description: To check whether Other Accessible Project icon is present in
+ *               the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyOtherAccessibleProjectIconOnEformListing($inputObject) 
+{
+	_log("verifyOtherAccessibleProjectIconOnEformListing Started", "success");
+	try
+	{
+		var $btn = "KEY_LABEL_Other_Accessible_Projects";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e)	
+	{
+		handleFailure(e);
+	}
+	_log("verifyOtherAccessibleProjectIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyExportHistoryIconOnEformListing($inputObject);
+ * @description: To check whether Export History icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyExportHistoryIconOnEformListing($inputObject)
+{
+	_log("verifyExportHistoryIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_Export_History";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{	
+		handleFailure(e);
+	}
+	_log("verifyExportHistoryIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyMultilineAddIconOnEformListing($inputObject);
+ * @description: To check whether MultiLine Add icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyMultilineAddIconOnEformListing($inputObject) 
+{
+	_log("verifyMultilineAddIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_Multiline_Add";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyMultilineAddIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyMultilineEditIconOnEformListing($inputObject);
+ * @description: To check whether MultiLine Edit icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyMultilineEditIconOnEformListing($inputObject) 
+{
+	_log("verifyMultilineEditIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "SaveExt";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyMultilineEditIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyClearFilterIconOnEformListing($inputObject);
+ * @description: To check whether Clear Filter icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyClearFilterIconOnEformListing($inputObject) 
+{
+	_log("verifyClearFilterIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "clearFilterButton";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyClearFilterIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyTableViewIconOnEformListing($inputObject);
+ * @description: To check whether Table View icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyTableViewIconOnEformListing($inputObject) 
+{
+	_log("verifyTableViewIconOnEformListing Started", "success");
+	try
+	{
+		var $btn = "KEY_LABEL_Display_Table_View";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyTableViewIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyAdvanceFilterIconOnEformListing($inputObject);
+ * @description: To check whether Advance Filter icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyAdvanceFilterIconOnEformListing($inputObject) 
+{
+	_log("verifyAdvanceFilterIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_Advanced_Filter";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyAdvanceFilterIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyLinkReviewCommentsOnEformListing($inputObject);
+ * @description: To check ReviewComment IconsIcon present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyLinkReviewCommentsOnEformListing($inputObject) 
+{
+	_log("verifyLinkReviewCommentsOnEformListing Started", "success");
+	try 
+	{
+		if ($inputObject.isNotExtJsIcon)
+		{
+			var $btnKey =_image("de-icon-copy");
+		}
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyLinkReviewCommentsOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyPrjHierarchialList($inputObject);
+ * @description: To check Hierirchial Icon present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyPrjHierarchialList($inputObject) 
+{
+	_log("verifyPrjHierarchialList Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_Linear";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyPrjHierarchialList Completed", "success");
+}
+/**
+ * @author: Nilesh
+ * @example: verifyAccessiblePrjList($inputObject);
+ * @description: To check OtherA Accesible Icon present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyAccessiblePrjList($inputObject) 
+{
+	_log("verifyAccessiblePrjList Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_Other_Accessible_Projects";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyAccessiblePrjList Completed", "success");
+}
+/**
+ * @author: Nilesh
+ * @example: verifyAdvanceFilterIconOnEformListing($inputObject);
+ * @description: To check whether Advance Filter icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyLockUserIconOnEformListing($inputObject) 
+{
+	_log("verifyLockUserIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_TOOLTIP_Lock_User";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyLockUserIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyAdvanceFilterIconOnEformListing($inputObject);
+ * @description: To verify unlock user  icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyUnLockUserIconOnEformListing($inputObject) 
+{
+	_log("verifyUnLockUserIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_UnLock_User";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyUnLockUserIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifySetAcessRoleIconOnEformListing($inputObject);
+ * @description: To verify set access role icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifySetAcessRoleIconOnEformListing($inputObject) 
+{
+	_log("verifySetAcessRoleIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "Set Access Role";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifySetAcessRoleIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyUserSearchIconOnEformListing($inputObject);
+ * @description: To verify user search icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyUserSearchIconOnEformListing($inputObject) 
+{
+	_log("verifyUserSearchIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_TOOLTIP_User_Search";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserSearchIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyPeopleSearchIconOnEformListing($inputObject);
+ * @description: To verify people search icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyPeopleSearchIconOnEformListing($inputObject) 
+{
+	_log("verifyPeopleSearchIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_TOOLTIP_People_Search";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyPeopleSearchIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyUserOrgRelIconOnEformListing($inputObject);
+ * @description: To verify user org relationship icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyUserOrgRelIconOnEformListing($inputObject) 
+{
+	_log("verifyUserOrgRelIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_User_Org_RelationShip";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserOrgRelIconOnEformListing Completed", "success");
+}
+/**
+ * @author: Nilesh
+ * @example: verifyUserOrgRelIconOnEformListing($inputObject);
+ * @description: To verify resource Attribute icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyResAttributeIconOnEformListing($inputObject) 
+{
+	_log("verifyResAttributeIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_Resource_Attributes";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyResAttributeIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyUserHeirarchyIconOnEformListing($inputObject);
+ * @description: To verify user heirarchy  icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyUserHeirarchyIconOnEformListing($inputObject) 
+{
+	_log("verifyUserHeirarchyIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_User_Hierarchy";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserHeirarchyIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyUserAccessLevelIconOnEformListing($inputObject);
+ * @description: To verify user access Level icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyUserAccessLevelIconOnEformListing($inputObject) 
+{
+	_log("verifyUserAccessLevelIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_LABEL_User_Access";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserAccessLevelIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyUnLockUserIconOnEformListing($inputObject);
+ * @description: To check whether Eform Checkin icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyEformCheckInIconOnEformListing($inputObject) 
+{
+	_log("verifyEformCheckInIconOnEformListing Started", "success");
+	try
+	{
+		if ($inputObject.isNotExtJsIcon)
+		{
+			var $btnKey = _image("de-icon-checkin"); 
+		}
+		else 
+		{
+			var $btn = "KEY_TOOLTIP_CheckIn";
+			var $extJsId = "";
+			var $btnKey = $btn + $extJsId;
+			
+		}	
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformCheckInIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyEformCheckOutIconOnEformListing($inputObject);
+ * @description: To check whether Eform CheckOut icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyEformCheckOutIconOnEformListing($inputObject) 
+{
+	_log("verifyEformCheckOutIconOnEformListing Started", "success");
+	try
+	{	
+		if ($inputObject.isNotExtJsIcon)
+		{
+			var $btnKey = _image("grid_edit.gif");
+		}
+		else 
+		{
+			var $btn = "KEY_TOOLTIP_CheckOut";
+			var $extJsId = "";
+			var $btnKey = $btn + $extJsId;
+		}
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformCheckOutIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyWordCheckInIconOnEformListing($inputObject);
+ * @description: To check whether Word Checkin icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyWordCheckInIconOnEformListing($inputObject) 
+{
+	_log("verifyWordCheckInIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_TOOLTIP_CheckIn";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWordCheckInIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyWordCheckOutIconOnEformListing($inputObject);
+ * @description: To check whether Word Checkin icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyWordCheckOutIconOnEformListing($inputObject) 
+{
+	_log("verifyWordCheckOutIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_TOOLTIP_CheckOut";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWordCheckOutIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyWordSkeletonCheckOutIconOnEformListing($inputObject);
+ * @description: To check whether Word Skeleton Checkin icon is present in the
+ *               listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyWordSkeletonCheckOutIconOnEformListing($inputObject) 
+{
+	_log("verifyWordSkeletonCheckOutIconOnEformListing Started", "success");
+	try 
+	{
+		var $btn = "KEY_Skeletal_CheckOut";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWordSkeletonCheckOutIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyUndoWordCheckOutIconOnEformListing($inputObject);
+ * @description: To check whether Word Checkin icon is present in the listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyUndoWordCheckOutIconOnEformListing($inputObject) 
+{
+	_log("verifyUndoWordCheckOutIconOnEformListing Started", "success");
+	try
+	{
+		var $btn = "KEY_TOOLTIP_Undo_Checkout";
+		var $extJsId = "";
+		var $btnKey = $btn + $extJsId;
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUndoWordCheckOutIconOnEformListing Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyListingColumn($inputObject); pass item : column name like
+ *           ID,Name, By (name which appears on eform listing)
+ * @description: To check whether all the mentioned columns are present in the
+ *               listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyListingColumn($inputObject) 
+{
+	_log("verifyListingColumn Started", "success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyListingColumn Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyAddNewRecurrentTask($inputObject);
+ * @description: To check whether Add new Recurrent Task icon is present in the
+ *               linked task.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyAddNewRecurrentTask($inputObject) 
+{
+	_log("verifyAddNewRecurrentTask Started", "success");
+	try
+	{
+		var $btnKey = _image("de-icon-year");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyAddNewRecurrentTask Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyCopyTask($inputObject);
+ * @description: To check whether copy Task icon is present in the linked task.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyCopyTask($inputObject) 
+{
+	_log("verifyCopyTask Started", "success");
+	try
+	{
+		var $btnKey = _image("de-icon-copy[1]");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyCopyTask Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyGanttChart($inputObject);
+ * @description: To check whether Gantt Chart icon is present in the linked
+ *               task.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyGanttChart($inputObject)
+{
+	_log("verifyGanttChart Started", "success");
+	try
+	{
+		var $btnKey = _link("ganttViewToggleButton");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyGanttChart Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyListingWithTaskAllocation($inputObject);
+ * @description: To check whether listing with task allocation icon is present
+ *               in the linked task.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyListingWithTaskAllocation($inputObject) 
+{
+	_log("verifyListingWithTaskAllocation Started", "success");
+	try 
+	{
+		var $btnKey = _image("user.gif");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyListingWithTaskAllocation Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyDeleteTask($inputObject);
+ * @description: To verify whether the task has been deleted.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyDeleteTask($inputObject) 
+{
+	_log("verifyDeleteTask Started", "success");
+	try
+	{
+		var $btnKey = _link("deleteTaskButton");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyDeleteTask Completed", "success");
+}
+
+
+/**
+ * @author: Nilesh
+ * @example: verifyCloseTask($inputObject);
+ * @description: To verify the close task
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyCloseTask($inputObject) 
+{
+	_log("verifyCloseTask Started", "success");
+	try
+	{
+		var $btnKey = _link("closeTimeButton");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyCloseTask Completed", "success");
+}
+
+
+/**
+ * @author: Nilesh
+ * @example: verifyReopenTask($inputObject);
+ * @description: To verify the re-opened task
+ * @param: String {None}
+ * @return: String {None}
+ */
+ 
+function verifyReopenTask($inputObject) 
+{
+	_log("verifyReopenTask Started", "success");
+	try
+	{
+		var $btnKey = _link("reopenTimeButton");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyReopenTask Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyManageBaseline($inputObject);
+ * @description: To verify the MangeBaseline Icon
+ * @param: String {None}
+ * @return: String {None}
+ */
+ 
+function verifyManageBaseline($inputObject) 
+{
+	_log("verifyManageBaseline Started", "success");
+	try
+	{
+		var $btnKey = _link("baselineButton");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyManageBaseline Completed", "success");
+}
+
+/**
+ * @author: Nilesh
+ * @example: verifyRescheduling($inputObject);
+ * @description: To verify the Rescheduling Icon
+ * @param: String {None}
+ * @return: String {None}
+ */
+ 
+function verifyRescheduling($inputObject) 
+{
+	_log("verifyRescheduling Started", "success");
+	try
+	{
+		var $btnKey = _image("reschedule_task.gif");
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+
+	_log("verifyRescheduling Completed", "success");
+} 
+/*************************************************************************
+* @author Nilesh
+* @example: verifyCloseOnSummaryTask({ "item" : "Ophelia" , "operation" : "Negative" })
+* @description This function is called to check if the Close Time-Entry button is disabled or not.
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function verifyCloseOnSummaryTask($inputObject)
+{
+	_log("verifyCloseOnSummaryTask Started","success");
+	try
+	{
+		var $btnKey ="Close Time-Entry";
+		
+		$inputObject.icon = $btnKey;
+		verifyIcon($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCloseOnSummaryTask Completed","success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifySortOptions($inputObject);
+ * @description: To check whether list of field in the multiple sort is present
+ *               at column level.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifySortOptions($inputObject) 
+{
+	_log("verifySortOptions Started", "success");
+	try 
+	{
+		var $extJsId = "-triggerEl";
+		var $filterName = $inputObject.filterName;
+		var $filterNameKey = $filterName + $extJsId;
+		$filterNameKey = $filterName + $extJsId;
+		_click(_div($filterNameKey));
+		_click(_span("Multiple Sort"));
+		var $items = $inputObject.item.split("#");
+		var $filters=$inputObject.fliterlist.split(";");
+		for(var $j = 0; $j < $filters.length; $j++)
+		{
+			for ( var $i = 0; $i < $items.length; $i++) 
+			{
+				if($inputObject.operation === "NoColumnNameForSorting")
+					_assertFalse(_exists(_listItem($items[$i])));
+				else
+					_assertTrue(_exists($items[$i]));
+			}
+		}
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifySortOptions  Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyMultipleSortOption($inputObject);
+ * @description: To check whether Multiple Sorting icon is present in the every
+ *               column of eform listing.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyMultipleSortOption($inputObject) 
+{
+	_log("verifyMultipleSortOption Started", "success");
+	try 
+	{
+		var $colNameBtn = $inputObject.item;
+		var $extJsId = "-triggerEl";
+		var $colNameKey = $colNameBtn + $extJsId;
+		
+		_click(_div($colNameKey))
+		_assertTrue(_exists(_link("Multiple Sort")));
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyMultipleSortOption  Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyClearSort($inputObject);
+ * @description: To check whether Multiple Sorting icon is present and reset
+ *               filter setting is present.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyClearSort($inputObject) 
+{
+	_log("verifyClearSort Started", "success");
+	try 
+	{
+		_click(_link("Multiple Sort"));
+		_assertTrue(_exists(_button("Clear")));
+		var $items = $inputObject.item.split(";");
+		for ( var $i = 0; $i < $items.length; $i++) 
+		{
+			_assertTrue(_exists(_listItem(items[$i])));
+		}
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyClearSort  Completed", "success");
+}
+
+/**
+ * @author: Harshit
+ * @example: verifyClearSort($inputObject);
+ * @description: To check whether Multiple Sorting icon is present and reset
+ *               filter setting is present.
+ * @param: String {None}
+ * @return: String {None}
+ */
+
+function verifyInstanceCount($inputObject) 
+{
+	_log("verifyInstanceCount Started", "success");
+	try 
+	{
+		var $count;
+		if($inputObject.count > 0)
+		{
+		    $count = "of " + $inputObject.count;
+		    _assertTrue(_containsText(_div("x-toolbar-text x-box-item x-toolbar-item x-toolbar-text-default[2]"),$count));
+		}
+		else
+		{
+		    _assert(_isVisible(_div("No Records Found.")));
+		}
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyInstanceCount  Completed", "success");
+}

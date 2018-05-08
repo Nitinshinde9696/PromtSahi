@@ -1,0 +1,306 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TestManagement.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Pro_CheckRiskStatus_04", "Maint\Rsk_Pro");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC = _testcase("TC_13.2","Checking for the Status Baselined By PM."); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.field199;
+ $inputObject.value = $data.field199Value0;//Baselined By PM
+ InfyFTisGetValue($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();
+ 
+ var $TC = _testcase("TC_6.1","Checking for the Error message when all the mandatory fields of Risk are not filled."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Work-flow Tab
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.approver;
+ $inputObject.workflow_stage = $data.workflow_stage;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Please fill in all the Mandatory fields in the linked Risks added through profiler before the submission of Profiler.";
+ InfyFTClickRouteOnlyAlertMsg($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;//Risk Tab
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.RiskID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ //$inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.lst_field1 = $data.field1Prob;
+ $inputObject.lst_field2 = $data.field2Imp;
+ //$inputObject.edt_field5 = $data.field5SchImp;
+ $inputObject.txt_field14 = $data.field14MitPlan;
+ $inputObject.edt_field198 = $data.field198Owner;
+ $inputObject.lst_field13 = $data.field13ImpactTo;
+ $inputObject.lst_field12 = $data.field12Status;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ InfyFTReturnPopUp();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Work-flow Tab
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.comment;
+ ClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ $TC.end();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;
+ $inputObject.edt_loginid = $data.LoginID2;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Work-flow Tab
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ var $TC = _testcase("TC_13.5","Checking for the Risk Status when it is rejected by approver."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.approver;
+ $inputObject.workflow_stage = $data.workflow_stage;
+ WorkflowSet($inputObject);
+ 
+ ClickReject();
+  
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name3;//Details Tab
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.field199;
+ $inputObject.value = $data.field199Value2;//Pending with PM
+ InfyFTisGetValue($inputObject);
+ 
+ _wait(2000);
+ 
+ logOut();
+ 
+ $TC.end();
+  
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Work-flow Tab
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.msgAlert = "Risk Profiler responses must be submitted before routing the instance. Kindly Freeze the responses in the Risk Questionnaire section.";
+ InfyFTClickRouteOnlyAlertMsg($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name0;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.DomainName = $data.DomainName;
+ $inputObject.link = $data.link3;//Freeze Response
+ InfyFTclickRiskProfiler($inputObject);
+ 
+ _wait(10000);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(2000)
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;//Risk Tab
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.RiskID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ //$inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.lst_field1 = $data.field1Prob;
+ $inputObject.lst_field2 = $data.field2Imp;
+ //$inputObject.edt_field5 = $data.field5SchImp;
+ $inputObject.txt_field14 = $data.field14MitPlan;
+ $inputObject.edt_field198 = $data.field198Owner;
+ $inputObject.lst_field13 = $data.field13ImpactTo;
+ $inputObject.lst_field12 = $data.field12Status;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ InfyFTReturnPopUp();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Work-flow Tab
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.comment;
+ ClickRoutewithComments($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name3;//Details Tab
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.field199;
+ $inputObject.value = $data.field199Value;//Submitted
+ InfyFTisGetValue($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;
+ $inputObject.edt_loginid = $data.LoginID2;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Work-flow Tab
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.comment;
+ ClickRoutewithComments($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name3;//Details Tab
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.field199;
+ $inputObject.value = $data.field199Value1;//Approved
+ InfyFTisGetValue($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.green_signal;
+ InfyFTisVisible1($inputObject);
+ 
+ _wait(2000);
+ 
+ $TC.end();
+
+ 
+
+
+
+ 
+ 

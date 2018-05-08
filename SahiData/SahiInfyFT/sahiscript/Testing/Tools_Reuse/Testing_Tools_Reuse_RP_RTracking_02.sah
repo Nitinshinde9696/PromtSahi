@@ -1,0 +1,167 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("Testing_Tools_Reuse_RP_RTracking_02","Testing/Tools_Reuse");
+
+// USER SET UP AS UQH & LOGIN INTO SWIFT ALM// 
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer//subhashini_k03
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer//subhashini_k03	
+$inputObject.edt_password = $data.Password1;//Allahu@1//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+//navigate To PQM // 
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Testing PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//3IPEROPS
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Manual Testing");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+_wait(1000);
+
+ var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "M_T";
+  infyFTGetValueFromExcel($inputObject);
+  $M_T_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $M_T_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";//Reuse Tracking
+SelectSegment($inputObject);
+
+var $t = _testcase("TC_6", "Navigating to Reuse Tracking using Performance Testing");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = "Performance Testing";//$data.navigateTo6;//"Performance Testing";
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "P_T";
+  infyFTGetValueFromExcel($inputObject);
+  $P_T_Id  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.item = $P_T_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";//Reuse Tracking
+SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Navigating to Reuse Tracking using Automated Testing");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo7;
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "A_T";
+  infyFTGetValueFromExcel($inputObject);
+  $A_T_Id  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.item = $A_T_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";//Reuse Tracking
+SelectSegment($inputObject);
+
+
+$t.end();
+
+var $t = _testcase("TC_8", "Navigating to Reuse Tracking using Other Request");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo8;//"Other Request";//"Other Request";
+InfyFTnavigateTo($inputObject);
+
+ var $GetExcel = _testcase("GetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "OR";
+  infyFTGetValueFromExcel($inputObject);
+  $OR_Id  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.item = $OR_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";//Reuse Tracking
+SelectSegment($inputObject);
+
+$t.end();
+
+
+
+
+
+
+
+
+
+

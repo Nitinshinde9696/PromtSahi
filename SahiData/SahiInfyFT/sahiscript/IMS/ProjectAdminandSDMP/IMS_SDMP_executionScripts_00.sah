@@ -1,0 +1,60 @@
+﻿ var $t = _testcase("IMS_SDMP_ScopeDescription_01.sah");
+ $t.start();
+_include("IMS_SDMP_ScopeDescription_01.sah");
+ $t.end();
+ 
+  var $t = _testcase("IMS_SDMP_OperationalSegment_02.sah");
+ $t.start();
+_include("IMS_SDMP_OperationalSegment_02.sah");
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_GoalSection_03.sah");
+ $t.start();
+_include("IMS_SDMP_GoalSection_03.sah");
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_CommunicationPlan_06.sah");
+ $t.start();
+ _include("IMS_SDMP_CommunicationPlan_06.sah"); 
+ $t.end();
+ 
+  var $t = _testcase("IMS_SDMP_OLA_07.sah");
+ $t.start();
+ _include("IMS_SDMP_OLA_07.sah"); 
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_requirmentSection_08.sah");
+ $t.start();
+ _include("IMS_SDMP_requirmentSection_08.sah"); 
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_exportFunctionality_09.sah");
+ $t.start();
+ _include("IMS_SDMP_exportFunctionality_09.sah"); 
+ $t.end(); 
+ 
+ var $t = _testcase("IMS_SDMP_Client_Commitments_11.sah");
+ $t.start();
+ _include("IMS_SDMP_Client_Commitments_11.sah");
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_serviceInScope_12.sah");
+ $t.start();
+ _include("IMS_SDMP_serviceInScope_12.sah");
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_Overview_13.sah");
+ $t.start();
+ _include("IMS_SDMP_Overview_13.sah");
+ $t.end();
+ 
+ var $t = _testcase("IMS_SDMP_risklog_05.sah");
+ $t.start();
+ _include("IMS_SDMP_risklog_05.sah"); 
+ $t.end();
+  
+ var $t = _testcase("IMS_SDMP_workflow_04.sah");
+ $t.start();
+ _include("IMS_SDMP_workflow_04.sah"); 
+ $t.end();
+

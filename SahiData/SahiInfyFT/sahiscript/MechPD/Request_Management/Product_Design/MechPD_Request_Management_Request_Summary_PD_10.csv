@@ -1,0 +1,2 @@
+seg1,seg2,sec01,row1,col1,val01,sec02,row2,col02,val02,sec03,segments,row3,col3,val03,row4,col4,val4,row5,col5,val05
+Details,Request Summary,Schedule Summary,3,0_lbl|2_lbl,First TS Entry Date|Last TS Entry Date,Declaration,2,1_lst,--None--#Bad Data#Normal,Reason for Bad Data,Schedule Summary;Effort Summary;Defect Summary;Request performance;Reuse and Tools Summary;Declaration,2,1_lst,Bad Data,2,1_txt,Bad Data,3,1_txt,Closure Comments

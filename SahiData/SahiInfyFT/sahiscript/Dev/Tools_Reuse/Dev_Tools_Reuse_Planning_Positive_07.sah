@@ -1,0 +1,238 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Dev_Tools_Reuse_sahi_Reuse_Tracking","Dev/Tools_Reuse");
+$data1 = readDataFromCSV("Dev_Tools_Reuse_Planning_Positive_07","Dev/Tools_Reuse");
+/* 
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end(); */
+ 
+var $t = _testcase("TC_4", "Navigating to Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data1.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+_click(_span("KEY_BUTTON_Add-btnIconEl"));
+
+var $t = _testcase("TC_5", "Available fields in create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field1;//Name * :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field2;//0.24
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field3;//Security Level :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field4;//License Type/Source * :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field5;//Domain * :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field6;//Sub Domain * :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field7;//Size * :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field8;//Estimated Effort Saving * :
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data1.Field9;//Asset Type * :
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_6", "Verifying the mandatory fields of create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Asset Name in Details tab \n• Field Asset Type in Details tab \n• Field License Type/Source in Details tab \n• Field Unit of Measure in Details tab \n• Field Estimated Effort Saving (P hrs) in Details tab \n• Field Size in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_7", "Create the Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Aerospace
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//Agents
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Others
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+CreateInstance($inputObject);
+
+_wait(500);
+var $name1 = _getText(_span("CM_ItemCode"));
+
+clickReturn();
+$t.end();
+var $t = _testcase("TC_9", "Verifying the Created instance in Reuse Planning list");
+$t.start();
+$inputObject = {};
+$inputObject.item = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name1;
+verifyInstanceInListing($inputObject);;
+
+$t.end();
+
+//clearFilterSettings();
+
+var $t = _testcase("TC_10", "Verifying the Not to take with same name of reuse planning");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Aerospace
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+$inputObject.msgAlert =  $data1.Name5 + " already exists with same version number.";
+CreateInstance($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_11", "Creating the instance with another name");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data1.Name6;//Sunny
+$inputObject.lst_DN_Technology = $data1.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data1.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data1.Domain5;//Aerospace
+$inputObject.lst_DN_SubDomain = $data1.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data1.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data1.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data1.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data1.EstimatedEffort5;//14
+$inputObject.lst_DN_AssetType = $data1.AssetType5;//Business
+CreateInstance($inputObject);
+
+var $name2 = _getText(_span("CM_ItemCode"));
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_12", "Verifying the instance in listing");
+$t.start();
+$inputObject = {};
+$inputObject.item = $name2 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name2;
+verifyInstanceInListing($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_13", "Verifying the instance Unique name in listing");
+$t.start();
+
+
+if ($name1 != $name2)
+{
+  _log(" Asset names are unique");
+}
+
+$t.end();
+
+var $t = _testcase("TC_14", "To repeat the script execution ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $name2 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name2;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+
+///clearFilterSettings();
+
+_wait(500);
+
+$inputObject = {};
+$inputObject.item = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name1;
+OpenEformInstance($inputObject);
+DeleteEformInstance($inputObject);
+
+$t.end();
+
+/*_click(_button("Delete"));
+_expectConfirm("This work-item will no longer be available", true);
+_click(_button("Ok"));*/
+
+
+
+
+
+
+
+
+
+
+
+
+

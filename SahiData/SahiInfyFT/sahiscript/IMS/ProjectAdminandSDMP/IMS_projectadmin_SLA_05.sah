@@ -1,0 +1,188 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; // Niklesh_Wankhade
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //BESINSOD
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to Project Tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject);
+ _wait(6000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject); 
+
+ $t.end();
+ 
+ /***********************************************************
+ * SLA Category
+ ***********************************************************/
+ 
+ var $t = _testcase("TC_4", "Selecting SLA category");
+ $t.start(); 
+ 
+ _wait(6000);
+ $inputObject = {};
+ $inputObject.segment_name =  $data.sla;// _click(_link("SLA Category"));
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Categories;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category_Name;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Comma_Separated;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category1;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category2;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category3;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category4;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.Category5;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues71; //space
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues61; //space
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(8000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.sla;// _click(_link("SLA Category"));
+ SelectSegment($inputObject);  
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues72; //4$
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter a valid value in Category Name column for Category 1. Special characters apart from Underscore Plus and Space are not allowed.";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; 
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues62; //#,$
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter a valid value in Values Comma Separated column for Category 1. Special characters apart from Comma Hyphen Dot Percent Brackets Star Space and / are not allowed.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues7; //country
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues6; //India,korea
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.slacategory; //sla category
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo61;
+ $inputObject.fieldValues = $data.fieldValues61S; //India,korea
+ InfyFTsetSwiftFormDataN($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please remove the duplicates from the values in Category 1.";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ 
+ 

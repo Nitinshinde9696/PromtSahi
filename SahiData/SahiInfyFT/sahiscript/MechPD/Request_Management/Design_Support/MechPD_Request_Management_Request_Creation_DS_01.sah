@@ -1,0 +1,240 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+
+
+ $data = readDataFromCSV("MechPD_Request_Management_Request_Creation_DS_01","MechPD/Request_Management/Design_Support");
+ 
+ $review_type= "Product Design Requirements Review";
+ $bTN = $data.requestTitle;
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+  
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//PROJECT OAK- APPLICATION SI-PCC SUPPORT
+ selectProject($inputObject);
+
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_1.1.3"," Check the Fields");
+ $s2.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Design Support Request
+ navigateTo($inputObject);
+
+ var $navigation = $data.navigateTo4;
+ _wait(5000);
+
+  _click(_span("KEY_BUTTON_Add-btnIconEl"));
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name5;
+ InfyFTisVisible($inputObject);
+ 
+  clickReturn();
+  
+  $s2.end();
+  
+ var $s3 = _testcase("TC_1.2"," Check Mandatory the Fields");
+ $s3.start();
+
+$inputObject={};
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field Customer Job Code in Details tab \n• Field Job Type in Details tab \n• Field Request Owner in Details tab \n• Field Task Assigned To in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab \n• Field LC Stage in Details tab";
+CreateInstance($inputObject);
+
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = "";
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Description in Details tab \n• Field Customer Job Code in Details tab \n• Field Job Type in Details tab \n• Field Request Owner in Details tab \n• Field Task Assigned To in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject);
+
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Customer Job Code in Details tab \n• Field Job Type in Details tab \n• Field Request Owner in Details tab \n• Field Task Assigned To in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ ModifyEformInstance($inputObject);
+
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Customer Job Code in Details tab \n• Field Job Type in Details tab \n• Field Task Assigned To in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject);
+ 
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.edt_DN_CustomerJobCode = $data.desc12; 
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Job Type in Details tab \n• Field Task Assigned To in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.lst_DN_JobType = $data.Vjobtype14;//need to check
+ verifyEformInstanceDetails($inputObject);
+  
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.edt_DN_CustomerJobCode = $data.desc12; 
+$inputObject.lst_DN_JobType = $data.jobtype14;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Task Assigned To in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject);
+ 
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.edt_DN_CustomerJobCode = $data.desc12; 
+$inputObject.lst_DN_JobType = $data.jobtype14;
+$inputObject.lst_DN_TaskAssignedTo = $data.user_name1;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject); 
+ 
+ $inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.edt_DN_CustomerJobCode = $data.desc12; 
+$inputObject.lst_DN_JobType = $data.jobtype14;
+$inputObject.lst_DN_TaskAssignedTo = $data.user_name1;
+$inputObject.edt_DN_PlannedStartDate = $StartDate1;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Planned End Date in Details tab \n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject);
+ 
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.edt_DN_CustomerJobCode = $data.desc12; 
+$inputObject.lst_DN_JobType = $data.jobtype14;
+$inputObject.lst_DN_TaskAssignedTo = $data.user_name1;
+$inputObject.edt_DN_PlannedStartDate = $StartDate1;
+$inputObject.edt_DN_PlannedEndDate = $EndDate2;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Estimated effort (Phrs) in Details tab";
+ModifyEformInstance($inputObject);
+
+$inputObject={};
+$inputObject.edt_CM_Name  = $data.requestTitle13;
+$inputObject.txt_CM_Description = $data.desc12;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.edt_DN_CustomerJobCode = $data.desc12; 
+$inputObject.lst_DN_JobType = $data.jobtype14;
+$inputObject.lst_DN_TaskAssignedTo = $data.user_name1;
+$inputObject.edt_DN_PlannedStartDate = $StartDate1;
+$inputObject.edt_DN_PlannedEndDate = $EndDate2;
+$inputObject.edt_DN_EstimatedeffortPhrs = "40";
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+ModifyEformInstance($inputObject);
+
+ var $id = _getText(_span("CM_ItemCode"));
+
+ $s3.end();
+
+ var $s4 = _testcase("TC_3.8","verify the captured Field");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fields15;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segments16;
+ InfyFTisVisible($inputObject);
+ 
+ $s4.end();
+ 
+/* var $t = _testcase("TC-5.3", "CHEK THE REQUEST TITLE FIELD");
+$t.start();
+$inputObject = {};
+$inputObject.filterName = "CM_NAME"; 
+$inputObject.value = "Request Title";
+InfyFTverifySpanFilterValue($inputObject);
+$t.end();*/
+
+
+var $t = _testcase("TC-5.6", "CHECK THE REQUEST OWNER FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_RequestOwner = $data.user_name1;//Additional users if required
+verifyEformInstanceDetails($inputObject);
+
+
+$t.end();
+
+var $t = _testcase("TC-5.7", "CHECK THE SOW FIELD");
+
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_SOW = $data.SOW1;
+verifyAllFields($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC-5.8", "CHECK THE JOB TYPE FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_JobType = $data.Vjobtype14;
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+var $n1 = _testcase("TC-5.9", "CHECK THE TASK ASSINGNED TO FIELD");
+
+$n1.start();
+$inputObject = {};
+$inputObject.lst_DN_TaskAssignedTo = $data.user_name1;//Additional members if required
+verifyEformInstanceDetails($inputObject);
+
+$n1.end();
+
+var $s1 = _testcase("TC_5.13","verify the Status Field");
+
+$s1.start();
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.status14;
+verifyEformInstanceDetails($inputObject);
+$s1.end();
+
+ var $s1 = _testcase("Print-Icon"," Check Printing the Request");
+ $s1.start();
+ 
+ InfyFTprint();
+ 
+_include("../MechPD_Request_Management_Request_Closure_Common_18.sah");
+_include("MechPD_Request_Management_Request_Summary_DS_02.sah");
+ 
+  $s1.end();

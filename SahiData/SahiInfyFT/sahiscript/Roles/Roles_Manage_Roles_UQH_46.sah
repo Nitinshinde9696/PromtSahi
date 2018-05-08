@@ -1,0 +1,202 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformListing.sah");
+
+
+$data = readDataFromCSV("Roles_Manage_Roles_UQH_46","Roles");
+
+// COMMENTS :LOGIN INTO SWIFT ALM// 
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 :  Nethravathi_r02
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Nethravathi_r02	
+$inputObject.edt_password = $data.Password1;//Password1 :123456
+loginIntoDigite($inputObject);
+
+//Navigate To UQH // 
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Navigate To2 :Manage Roles
+navigateTo($inputObject);
+
+
+//CREATE UQH//
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;//ITWF
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;//ITWF
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;//nethravathi_r02
+CreateInstance($inputObject);
+
+
+var $UQH= _getText(_span("CM_ItemCode"));
+_wait(500);
+
+clickReturn();
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $UQH;// Verify created UQH
+verifyInstanceInListing($inputObject);
+
+
+$inputObject = {};
+$inputObject.item = $UQH;// Open Created UQH
+OpenEformInstance($inputObject);
+
+//CHECK THE VISIBLE FIELDS//
+
+
+$inputObject = {};
+$inputObject.lbl_CM_ItemCode =  $UQH;
+$inputObject.ele_DN_UnitLABEL = "Unit * :";
+$inputObject.ele_DN_SubUnitLABEL = "Sub Unit :" ;
+$inputObject.ele_DN_userLABEL = "User * :";
+$inputObject.ele_DN_UserStatusLABEL = "Status * :";
+verifyEformInstanceDetails($inputObject);
+
+//SELECT SEGMENT COMMENTS AND ADD COMMENTS//
+
+$inputObject = {};
+$inputObject.txt_New_Comment = $data.Comments7;//Comments //
+addComment($inputObject);
+ 
+
+//SELECT SEGMENT PREVIOUS VERSION//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2; // Previous Version
+SelectSegment($inputObject);
+
+
+if(_isVisible(_table("QTP_versionlog")))
+{
+_highlight(_table("QTP_versionlog"));
+_wait(500);
+}
+//SELECT SEGMENT ACTIVITY LOGS//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name3; // Activity logs
+SelectSegment($inputObject);
+
+//VERIFY COMMENTS ARE BEING LOGGED//
+
+$inputObject = {};
+var $activitylog = 0;
+if(_isVisible(_row("RowOdd")))
+	{
+		$activitylog = _getText(_row("RowOdd"));
+		_highlight(_row("RowOdd"));
+		$inputObject.Comments = $activitylog;
+		verifyActivityLogComments($inputObject);
+	}
+//SELECT SEGMENT DETAILS//
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name4; // Details
+SelectSegment($inputObject);
+
+//CREATE UQH BUT DON'T SELECT UNIT AND USER ID UNIT PASSED AS NONE//
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit4;
+CreateInstance($inputObject);
+
+_assertEqual("Value is not set for the below fields. Please enter the values and save:\n• Field Unit in Details tab \n• Field User in Details tab", _lastAlert());
+
+	
+//CLICK RETURN :ITSELF VERIFYS THAT BUTTON IS PRESENT //
+
+clickReturn();
+
+//CREATE UQH BEFORE THAT CLICK RESET AND CHECK AGAIN AND //REPLACE IT WITH INVALID EMAIL ID //
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;//ITWF
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;//ITWF
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser7;//nit@infosys.com
+CreateInstance($inputObject);
+
+_assertEqual("Please enter valid User.", _lastAlert());
+
+clickReturn();
+
+//CHECKING WHETHER IT IS JL 7 //
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;//ITWF
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;//ITWF
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser8;//nitin_shinde05
+CreateInstance($inputObject);
+
+//_assertEqual("Only users with JL equivalent to the JL of AQM or above can be setup as UQH.", _lastAlert());
+
+ clickReturn();
+
+//CREATE SAME UQH //
+
+$inputObject = {};
+$inputObject.lst_DN_Unit = $data.DN_Unit5;//ITWF
+$inputObject.lst_DN_SubUnit = $data.SubUnit5;//ITWF
+$inputObject.edt_SearchCriteria_DN_user = $data.SearchUser5;//nethravathi_r02
+CreateInstance($inputObject);
+
+_assertEqual("Selected User is already set as a UQH for this unit.", _lastAlert());
+
+clickReturn();
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.item = $UQH;// Open Created UQH
+OpenEformInstance($inputObject);
+
+_wait(10000);
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_user = $data.user7;//"Navdeep_Ghotra";
+$inputObject.rdg_Inactive = $data.Inactive6;//"Inactive";
+ModifyEformInstance($inputObject);
+
+//_assertEqual("Inactive assignments will no longer be accessible for replacement. If you wish to replace the user.Please select the assignment and change the user and save. Do you wish to continue inactivating the assignment ?", _lastConfirm());
+
+$inputObject = {};
+$inputObject.lbl_DN_UserStatus = $data.InActiveChk; //_isVisible(_span("Inactive"));
+verifyEformInstanceDetails($inputObject);
+
+
+clickReturn();
+
+clearFilterSettings();
+
+ //Exporting the UQH whole in Excel Format //
+
+$inputObject = {};
+$inputObject.rdg_ExportFormat = $data.filetype1;
+$inputObject.type = $data.fileName1;//"UQH.xls";
+exportEformInstance($inputObject);
+
+clearFilterSettings();
+
+$inputObject = {};
+$inputObject.filterName =$data.filterName3;
+$inputObject.status = $data.name3;
+setFilter($inputObject);
+
+_setValue(_textbox("searchTextBox-inputEl"),$UQH);
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+
+$inputObject = {};
+$inputObject.requiredfor = "Specific";
+$inputObject.item = $UQH;
+$inputObject.rdg_ExportFormat = $data.extntype1;//XLS pass from csv
+$inputObject.type = $data.fileNameA;//"UQH1.xls"; 
+exportEformInstance($inputObject);

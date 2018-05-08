@@ -1,0 +1,1144 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Package_Iteration_rules_05", "Package/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",999,$dateObj);
+ var $endDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",1000,$dateObj);
+ var $endDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to pmplan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_4", "creating new instance of iteration and check under closure checks for subproject message");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.span = $data.nodeIcon1;
+ InfyFTclick($inputObject); 
+
+ //_selectWindow("newListing")
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data.Global;
+ InfyFTModifyEformInstance2($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTgettingValueforIDCheck($inputObject); 
+ 
+ var $ID = $inputObject.eformID;
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject); 
+  
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.span_Name = $data.Iteration_Closure_Checks;
+ InfyFTisVisiblep($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.tableName = $data.Iteration_level_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are no sub-project in the Iteration.Please add at least one sub-project.";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5", "linking new sub project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Schedule;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.lst_DN_Status = $data.status3;
+ InfyFTverifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.span = $data.nodeIcon12;
+ InfyFTclickpopup($inputObject)
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_6", "create one subnproject and check in closure checks for the message ");
+ $t.start();
+ 
+ //_selectWindow("newListing__1")
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.lst_isPackageDigiteStart = $data.start;
+ InfyFTModifyEformInstance2($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ InfyFTgetpopupid($inputObject)
+
+ var $createdID1 = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ //_selectWindow("newListing")
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+
+ _wait(5000);
+_wait(5000);
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.operation =  $data.Negative;   
+ $inputObject.span_Name = "There are no sub-project in the Iteration.Please add at least one sub-project.";
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.tableName = $data.Iteration_level_checks;
+ $inputObject.rowNo = $data.value38;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "Schedule is not available for the following sub-project(s): "+ $createdID1 +". Please add a schedule and baseline.";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $t.end(); 
+
+ /*var $t = _testcase("TC_7", "creating one more subtask under schedule Task and check for  schedule not baselined message");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.edit;
+ InfyFTclickpopup($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.addTaskButton;
+ InfyFTclickpopup($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.item_name = $data.item_name;
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.openLinkedItem;
+ $inputObject["edt_NAME[1]"] = $data.subtaskname;
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.item_name = $data.date;
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.openLinkedItem;
+ $inputObject["edt_NAME[1]"] = $endDate;
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.item_name = $data.activityTask;
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.openLinkedItem;
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.Save;
+ InfyFTclickpopup($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.ok2;
+ InfyFTclickpopup($inputObject) 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject)	
+
+ //_selectWindow("newListing")
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.span_Name = "Schedule is not baselined for "+ $createdID1 +". Please baseline Schedule";
+ InfyFTisVisible($inputObject);
+ 
+ var $t = _testcase("TC_7", "baseline schedule task and check for message");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Details;
+ InfyFTSelectSegment($inputObject);
+
+ //_selectWindow("newListing");
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Schedule;
+ InfyFTSelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.item = $createdID1;
+ OpenEformInstance($inputObject);
+// _selectWindow("openLinkedItem");
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.scheduled_task;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.item_name = $data.activityTask;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.openLinkedItem;
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.Save_Checkin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclickpopup($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.ok1;
+ InfyFTclickpopup($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.ok2;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject)	
+// _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Details;
+ InfyFTSelectSegment($inputObject);
+ 
+ _wait(5000);
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.operation =  $data.Negative; 
+ $inputObject.span_Name = "Schedule is not baselined for "+ $createdID1 +". Please baseline Schedule";
+ InfyFTisVisible($inputObject);
+ $t.end();*/
+ 
+ 
+ var $t = _testcase("TC_08", "check for no review message under closure checks ");
+
+ $t.start();
+
+ //_selectWindow("newListing")
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.operation =  $data.Negative;
+ $inputObject.span_Name =  $data.one;// checking for one review
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are no reviews and defects logged for the iterations. Please provide reasons or log reviews and defect.";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing; 
+ $inputObject.msgAlert = "";
+ InfyFTsaveSwiftForm($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_09", "create normal review and check whether an instance is created in defects");
+
+ $t.start();
+
+ //_selectWindow("newListing")
+ $inputObject = {};
+  $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+
+  _wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.span = $data.addreview;
+ InfyFTclickpopup($inputObject)
+
+ //_selectWindow("newListing__1");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.lst_DN_ReviewMode = $data.One_Person_Review;
+ $inputObject.lst_DN_Reviewer   = $data.Ayush_Kaushik01;
+ $inputObject.txt_DN_ArtifactName = $data.artifact;
+ $inputObject.lst_reviewtype  = $data.System;
+ InfyFTModifyEformInstance2($inputObject)
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ InfyFTgetpopupid($inputObject)
+ var $createdIDn = $inputObject.createdID;
+
+ //_selectWindow("newListing__1");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ $inputObject.segment_name = "Defect";
+ InfyFTSelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ $inputObject.operation =  $data.Negative;
+ $inputObject.span_Name =  $data.one;
+ InfyFTisVisiblep($inputObject)
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ InfyFTReturnPopUpN($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "abandon review and check for message and check for iteration closure message about defects and create a defect");
+ 
+ $t.start();
+ 
+ //_selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ 
+ _wait(5000);
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.operation =  $data.Negative; 
+ $inputObject.span_Name = "There are no reviews and defects logged for the iterations. Please provide reasons or log reviews and defect.";
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are no defects logged for the iteration but reviews exists. Please log defects, if found or provide explanation for no defects identified.";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues5;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.msgAlert = "";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ //aban changed the flow so commenting//
+ /* $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.item = $createdIDn;// open non uat
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.span = $data.addreview;
+ InfyFTclickpopup($inputObject)
+
+ //_selectWindow("newListing__1");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.lst_DN_ReviewMode = $data.One_Person_Review;
+ $inputObject.lst_DN_Reviewer   = $data.Ayush_Kaushik01;
+ $inputObject.txt_DN_ArtifactName = $data.artifact;
+ $inputObject.lst_reviewtype  = $data.System;
+ InfyFTModifyEformInstance2($inputObject)
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing1;
+ InfyFTgetpopupid($inputObject)
+ var $createdIDn = $inputObject.createdID;
+
+ //_selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ _wait(5000);
+	  
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are no reviews and defects logged for the iterations. Please provide reasons or log reviews and defect.";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.span = $data.FILTER;
+ InfyFTclickpopup($inputObject)  
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.item = $createdIDn;
+ OpenEformInstance($inputObject);
+ 
+ //_selectWindow("openLinkedItem");
+  $inputObject = {};
+  $inputObject.popup_name = $data.openLinkedItem;
+  InfyFTreopenpopupInstance($inputObject);
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.defect;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.nodeIcon12;
+ InfyFTclickpopup($inputObject);
+  
+ //_selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.lst_DN_Severity  = $data.DN_Severity;
+ $inputObject.lst_DN_DefectDetectedBy = $data.DN_DefectDetectedBy;
+ $inputObject.lst_DN_Owner = $data.DN_Owner;
+ InfyFTModifyEformInstance2($inputObject);
+  
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTgetpopupid($inputObject)
+ 
+ var $createdIDnd = $inputObject.createdID;
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTReturnPopUpN($inputObject);
+
+ //_selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject);
+  
+ _wait(5000);
+ //_selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclick($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.span = $data.nxt;
+ InfyFTclickpopup($inputObject)  
+
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "check for iteration closure message about for review effort and for no uat review");
+
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $ID;// open non uat
+ OpenEformInstance($inputObject);
+ 
+ //_selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ _wait(5000);
+  $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.operation =  $data.Negative; 
+ $inputObject.span_Name = "There are no defects logged for the iteration but reviews exists. Please log defects, if found or provide explanation for no defects identified.";
+InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are defects logged but there is no review or testing effort. Please log review or testing effort or provide reasons for no review or testing effort.";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues5;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There is no UAT review. Please confirm that there was no UAT performed.";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues3;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.msgAlert = "";
+ InfyFTsaveSwiftForm($inputObject);
+  $t.end();
+ 
+ var $t = _testcase("TC_12", "create uat review and check iteration closure message also check for actual start and end date message");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.operation =  $data.Negative;
+ $inputObject.span_Name =  $data.Acceptance_Test;// checking for one review
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.addreview1;
+ InfyFTclickpopup($inputObject);
+ 
+ //_selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.lst_DN_ReviewMode = $data.One_Person_Review;
+ $inputObject.lst_DN_Reviewer   = $data.Ayush_Kaushik01;
+ $inputObject.txt_DN_ArtifactName = $data.artifact;
+ $inputObject.lst_reviewtype  = $data.Acceptance_Test;
+ InfyFTModifyEformInstance2($inputObject);
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTgetpopupid($inputObject)
+ var $createdIDu = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.segment_name = $data.defect;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.operation =  $data.Negative;
+ $inputObject.span_Name =  $data.one;
+ InfyFTisVisiblep($inputObject);
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTReturnPopUpN($inputObject);
+
+ _wait(5000);
+// _selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.operation =  $data.Negative; 
+ $inputObject.span_Name = "There is no UAT review. Please confirm that there was no UAT performed.";
+InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are UAT Reviews but no UAT defects. Please confirm that there were zero UAT defects or log the UAT defects before iteration closure.";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Iteration_level_checks;
+ $inputObject.rowNo = $data.rowNo6;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "Actual Start Date in Details page is blank. Please fill the actual start date. It should >= project start date ( 1-Jan-2008 ) and <= project end date ( 31-Mar-2020 ).";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Iteration_level_checks;
+ $inputObject.rowNo = $data.rowNo7;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "Actual End Date in Details page is blank. Please fill the actual end date. It should >= project start date ( 1-Jan-2008 ) and <= project end date ( 31-Mar-2020 ).";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;  
+ $inputObject.msgAlert = "";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_12", "fill actual start and date and check for message");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.segment_name = $data.Details;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_ActualStartDate = $currentDate;
+ $inputObject.edt_DN_ActualEndDate = $currentDate;
+ InfyFTModifyEformInstance2($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.operation =  $data.Negative;	
+ $inputObject.span_Name = "Actual Start Date in Details page is blank. Please fill the actual start date. It should >= project start date ( 1-Jan-2008 ) and <= project end date ( 31-Mar-2020 ).";
+InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.operation =  $data.Negative;	
+ $inputObject.span_Name =  "Actual End Date in Details page is blank. Please fill the actual end date. It should >= project start date ( 1-Jan-2008 ) and <= project end date ( 31-Mar-2020 ).";
+ InfyFTisVisiblep($inputObject);
+ 
+ $t.end();
+ 
+
+ var $t = _testcase("TC_13", "abandon uat review and check for message under closure check ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.item = $createdIDu;// open  uat review
+ OpenEformInstance($inputObject);
+ 
+
+// _selectWindow("openLinkedItem__1");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1; 
+ $inputObject.lst_DN_Status = $data.status2;
+ InfyFTModifyEformInstance2($inputObject)
+  
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ //_selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject);
+ _wait(5000);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There is no UAT review. Please confirm that there was no UAT performed.";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.FILTER;
+ InfyFTclickpopup($inputObject)  
+
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.item = $createdIDu;// open  uat review
+ OpenEformInstance($inputObject);
+ 
+ //_selectWindow("openLinkedItem__1");
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ InfyFTreopenpopupInstance($inputObject);
+ 
+ var $t = _testcase("TC_13", "create uat defect and check message under closure checks");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ $inputObject.segment_name = $data.defect;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ $inputObject.span = $data.nodeIcon12;
+ InfyFTclickpopup($inputObject);
+ 
+// _selectWindow("newListing");
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.lst_DN_Severity  = $data.DN_Severity;
+ $inputObject.lst_DN_DefectDetectedBy = $data.DN_DefectDetectedBy;
+ $inputObject.lst_DN_Owner = $data.DN_Owner;
+ InfyFTModifyEformInstance2($inputObject);
+ _wait(5000); 
+ var $createdID3 = $inputObject.createdID;
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTgetpopupid($inputObject);
+
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ //_selectWindow("openLinkedItem__1");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ //_selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ //_selectWindow();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Iterations;
+ InfyFTclick($inputObject); 
+   
+  $inputObject = {};
+ $inputObject.span = $data.nxt;
+ InfyFTclickpopup($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ID;// open non uat
+ OpenEformInstance($inputObject);
+ 
+ //_selectWindow("openLinkedItem");
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.operation =  $data.Negative;	
+ $inputObject.span_Name =  "There are UAT Reviews but no UAT defects. Please confirm that there were zero UAT defects or log the UAT defects before iteration closure.";
+InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {}; 
+  $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are defects logged but there is no review or testing effort. Please log review or testing effort or provide reasons for no review or testing effort.";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues5;
+ InfyFTsetSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.link = $data.dt1;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.valuesd0;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.valuesd2;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.button = $data.rtn1;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.link = $data.dt2;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.valuesd0;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+/* $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.valuesd2;
+ InfyFTverifySwiftFormData($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.button= $data.rtn1;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {}; 
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.msgAlert = "";
+ InfyFTsaveSwiftForm($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_14", " Set review efforts for the 2 reviews ");
+
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.item = $createdIDn;
+ OpenEformInstance($inputObject);
+ 
+// _selectWindow("openLinkedItem__1");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1; 
+ $inputObject.span_Name =  $data.DN_ActualReviewEffort; 
+ InfyFTisVisiblep($inputObject)
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1; 
+ $inputObject.edt_DN_ActualReviewEffort = $data.DN_ActualReviewEffort1;
+ InfyFTModifyEformInstance2($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ _wait(5000);
+ //_selectWindow("openLinkedItem");
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.segment_name = $data.Reviews;
+ InfyFTSelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.item = $createdIDu;
+ OpenEformInstance($inputObject);
+
+ //_selectWindow("openLinkedItem__1");
+ $inputObject = {};
+  $inputObject.popup_name = $data.openLinkedItem1; 
+ $inputObject.span_Name =  $data.DN_ActualReviewEffort; 
+ InfyFTisVisiblep($inputObject);
+  
+ $inputObject = {};
+  $inputObject.popup_name = $data.openLinkedItem1; 
+ $inputObject.edt_DN_ActualReviewEffort = $data.DN_ActualReviewEffort1;
+ InfyFTModifyEformInstance2($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem1;
+ InfyFTReturnPopUpN($inputObject);
+
+ //_selectWindow("openLinkedItem");
+ $inputObject = {};
+  $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ InfyFTSelectSegment($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.operation =  $data.Negative;	
+ $inputObject.span_Name =  "There are defects logged but there is no review or testing effort. Please log review or testing effort or provide reasons for no review or testing effort.";
+ InfyFTisVisiblep($inputObject)
+ 
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo102;
+ $inputObject.fieldValues = $data.fieldValues4;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end();
+ 
+ var $t = _testcase("TC_15", " check rework efforts messages and last effort fetch message ");
+
+ $t.start();
+ 
+ _wait(5000);
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = "There are defects logged but there is no rework effort. Please log rework effort or provide reasons for no rework effort.";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Iteration_level_checks;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = " Last effort fetch done earlier than yesterday for following sub-project(s) : "+ $createdID1 +"";
+ InfyFTverifySwiftFormData($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.LC_Stage_wise_checks;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo102;
+ $inputObject.fieldValues = $data.fieldValue;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.link = $data.dt1;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.valuesd;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.valuesd1;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem; 
+ $inputObject.button = $data.rtn1;
+ InfyFTclickpopup($inputObject)  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ InfyFTReturnPopUpN($inputObject);
+ $t.end();
+ 
+ 
+ 
+ 
+
+
+

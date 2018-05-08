@@ -1,0 +1,360 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("Agile_PMPlan_Normal_Login_Overview_DevOps_Sprint","Agile/PMPlan_Normal"); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_1", "PROMT should open successfully with inbox details as default");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.inCorrectUser;
+ $inputObject.edt_loginid = $data.inCorrectId;
+ $inputObject.edt_password = $data.inCorrectId;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name;
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("TC_BRD27_FU1_2", "PM Plan eform must be displayed with the default to the Summary section");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;
+ selectProject($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_3", "User clicks on overview link from Project Profile on left panel");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_4", "Check for a note section in the header of the Overview page.");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.overviewHeader1;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_5", "Check for a the fields in Overview section");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.projectCode;
+ $inputObject.colNo = $data.colNames;
+ $inputObject.fieldValues = $data.fieldValues;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.MasterProjectCode;
+ $inputObject.colNo = $data.colNames1;
+ $inputObject.fieldValues = $data.fieldValues1;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_6", "Validations for Part of large deal program and LRP");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowPartDeal;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.fieldValue1;//Yes|No
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowPartDeal;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.fieldValue2;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";//Name of large deal Program
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowNameDeal;
+ $inputObject.colNo = $data.colNo;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Project Profile
+ navigateTo($inputObject);  
+ 
+ var $projectStartDate = _getText(_span("STARTDATE"));
+ var $projectEndDate = _getText(_span("ENDDATE"));
+ 
+ _wait(1000);
+
+ $inputObject = {}; 
+ $inputObject.date1 = $projectStartDate;
+ $inputObject.date2 = $projectEndDate;
+ dateDifference($inputObject);
+
+ _log("The difference between"+$projectStartDate+"and"+$projectEndDate+"is"+$inputObject.dateDifference+"and is >=365");
+ 
+ var dateVar = parseInt($inputObject.dateDifference);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ if( dateVar >= 365 )
+ {
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowLRP;
+ $inputObject.colNo = $data.mortagaeLbl;
+ $inputObject.fieldValues = $data.fieldValue2;//Yes
+ verifySwiftFormData($inputObject);
+ }
+ else
+{
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowLRP;
+ $inputObject.colNo = $data.mortagaeLbl;
+ $inputObject.fieldValues = $data.fieldValue3;//No
+ verifySwiftFormData($inputObject);
+ } 
+ 
+ //Values of all fields
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.projectCode;
+ $inputObject.colNo = $data.colNames;
+ $inputObject.fieldValues = $data.fieldValues;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(5000);
+
+ $t.end(); 
+ 
+ var $t = _testcase("New_CR", "Validations for No. of Scrum masters and No. of Agile Coaches");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowNoOfScrum;
+ $inputObject.colNo = $data.coledtProject;
+ $inputObject.fieldValues = $data.minusOne;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a positive integer between 0 to 100 for No of Scrum Masters.";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoOfScrum;
+ $inputObject.colNo = $data.coledtProject;
+ $inputObject.fieldValues = $data.hunderdOne;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a positive integer between 0 to 100 for No of Scrum Masters.";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoOfScrum;
+ $inputObject.colNo = $data.coledtProject;
+ $inputObject.fieldValues = $data.hunderdOne;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a positive integer between 0 to 100 for No of Scrum Masters.";
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoAgile;
+ $inputObject.colNo = $data.coledtProject1;
+ $inputObject.fieldValues = $data.minusOne;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a positive integer between 0 to 100 for No of Agile Coaches.";
+ InfyFTsaveSwiftForm($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoAgile;
+ $inputObject.colNo = $data.coledtProject1;
+ $inputObject.fieldValues = $data.hunderdOne;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a positive integer between 0 to 100 for No of Agile Coaches.";
+ InfyFTsaveSwiftForm($inputObject);  
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoAgile;
+ $inputObject.colNo = $data.coledtProject1;
+ $inputObject.fieldValues = $data.zeroPointOne;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a positive integer between 0 to 100 for No of Agile Coaches.";
+ InfyFTsaveSwiftForm($inputObject);  
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoOfScrum;
+ $inputObject.colNo = $data.coledtProject;
+ $inputObject.fieldValues = $data.twenty;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Overview;
+ $inputObject.rowNo = $data.rowNoAgile;
+ $inputObject.colNo = $data.coledtProject1;
+ $inputObject.fieldValues = $data.twenty;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_Login_Overview_DevOps_SprintValidations_02");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_Login_Overview_DevOps_SprintValidations_02.sah");
+ 
+ $t.end();  
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_clientScopeDescription_mandatoryFieldsCheck_03");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_clientScopeDescription_mandatoryFieldsCheck_03.sah");
+ 
+ $t.end();  
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_clientCommitment_Validation_adding_checkingReason_04");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_clientCommitment_Validation_adding_checkingReason_04.sah");
+ 
+ $t.end();   
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_Assumptions_Validation_adding_checkingSummary_05");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_Assumptions_Validation_adding_checkingSummary_05.sah");
+ 
+ $t.end();   
+
+ var $t = _testcase("Agile_PMPlan_Normal_Assumptions_Riskfilling_RiskLog_Summary_06");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_Assumptions_Riskfilling_RiskLog_Summary_06.sah");
+ 
+ $t.end();  
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_Goalsfilling_Validations_Summary_07");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_Goalsfilling_Validations_Summary_07.sah");
+ 
+ $t.end();   
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_Goalsfilling_SLAPenaltyValidations_08");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_Goalsfilling_SLAPenaltyValidations_08.sah");
+ 
+ $t.end();    
+ 
+ var $t = _testcase("Agile_PMPlan_Normal_Goalsfilling_SLAPenaltyFilling_09");
+ $t.start();
+ 
+ _include("Agile_PMPlan_Normal_Goalsfilling_SLAPenaltyFilling_09.sah");
+ 
+ $t.end();   
+ 

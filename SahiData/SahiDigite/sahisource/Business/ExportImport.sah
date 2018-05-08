@@ -1,0 +1,142 @@
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function compareCSV($inputObject)
+{
+	_log("compareCSV Started","success");
+	try 
+	{
+		var $arrFile1;
+		var $arrFile2;
+		var $file1;
+		var $file2;
+		var $dirPath;
+		var $rowLength1;
+		var $rowLength2;
+		var $colLength1;
+		var $colLength2;
+		var $funcStatus = false;
+		//operation
+		_log("compareCSV","operation");
+		_set($file1,_getGlobal("importDIR")+$inputObject.BaseCSV);
+		_set($file2 ,_getGlobal("DOWNLOAD")+$inputObject.DumpCSV);
+		// read file content and return 2D array
+		$arrFile1 = _readCSVFile($file1);
+		$arrFile2 = _readCSVFile($file2);
+		
+		//Define array size 
+	    $rowLength1 = $arrFile1.length ;//file 1 row length
+		$colLength1 = $arrFile1[0].length ;//col length
+		
+		$rowLength2 = $arrFile2.length ;//file 2 row length
+		$colLength2 = $arrFile2[0].length ;//col length
+			
+		// verify length of row and col
+		if ($rowLength1 === $rowLength2 && $colLength1 === $colLength2 )
+		{
+			for ( var $j = 0; $j <$rowLength1; $j++) 
+			{  	
+				for (var $i = 0; $i<$colLength1; $i++)
+				{
+					if (($arrFile1[$j][$i])!== ($arrFile2[$j][$i]))
+					{
+					    _log("Cell " + [$j][$i] + " value not matched","failure");  
+					    _log("file1 = "  + $arrFile1[$j][$i] + " file2 = "  + $arrFile2[$j][$i] ,"failure"); 
+					    $funcStatus = false;
+				        break;
+				    }
+					else
+					{
+						//_log( "Cell " + [$j][$i] +" value matched","success");
+						$funcStatus = true ;
+					}	
+				}   
+				if ($funcStatus === false)
+				{
+					$funcStatus = false;
+				    break;
+				}
+			}
+		}
+	    else
+	    {
+		    $funcStatus = false;
+			_log("Row and/or Col length not matched","failure");
+		}    		
+		return ($funcStatus);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("compareCSV Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function compareExcel($inputObject)
+{
+	_log("compareExcel Started","success");
+	try 
+	{
+		_log("compareExcel Started","success");
+		try {
+			
+			var $colLength1;
+			var $colLength2;
+			var $dirPath;
+			var $file1;
+			var $file2;
+			var $rowLength1;
+			var $rowLength2;
+			var $rs1;
+			var $rs2;
+			
+			$dirPath = _getGlobal("importDIR");
+
+			$file1 = $dirPath + $inputObject.file1;
+			$file2 = $dirPath + $inputObject.file2;
+			
+			$rs1 = _readExcelFile ($file1, $inputObject.file1sheet);
+			$rs2 = _readExcelFile ($file2, $inputObject.file2sheet);
+			
+		    $rowLength1 = $rs1.length;
+			$colLength1 = $rs1[0].length;
+			
+			$rowLength2 = $rs2.length;
+			$colLength2 = $rs2[0].length;
+			
+			for(var $j = 0; $j < $rowLength1; $j++) {  	
+				for(var $i = 0; $i < $colLength1; $i++) {
+					if($rs1[$j][$i] !== $rs2[$j][$i]) {
+				        _log("Cell" + [$j][$i] + " value not matched","failure");  
+						_log("File1 Value = "  + $rs1[$j][$i] + " and File2 Value = "  + $rs2[$j][$i] ,"failure"); 
+					} 	
+			    }   
+			}
+			 
+		} catch (e) {
+			handleFailure(e);
+		}
+		_log("compareExcel Completed","success");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("compareExcel Completed","success");
+}

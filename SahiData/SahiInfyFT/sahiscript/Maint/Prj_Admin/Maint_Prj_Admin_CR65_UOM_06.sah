@@ -1,0 +1,453 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_Prj_Admin_CR65_UOM_06","Maint/Prj_Admin"); 
+ 
+ var $t = _testcase("TC_1.1.1", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1.2", "Navigate");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//ARTLLBOM
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1.3", "Select the Request Types in Request Type Selection Segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.RTS;//"Request Type Selection";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.row1;//"7";
+ $inputObject.colNo  = $data.col1;//"1_chk";//1
+ $inputObject.tableName  = $data.Table1;//"Name";// $data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1.4","Check for Applicable Services Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.AS;//_link("Applicable Services")
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.tbnm2;//Applicable Services[1]
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.chkrid2;//Application Support
+ $inputObject.colNo = $data.chkcid2;//Is Applicable?_chk
+ $inputObject.fieldValues = "true";//
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.AIP;//"Applicable ITIL Processes";
+ InfyFTisVisible($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1.5","Check for Applicable ITIL Processes Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.AIP;//"Applicable ITIL Processes";
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link_name1;//_link("Select Process")
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.tbnm3;//ITIL Process Selection
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.chkrid3;//Event Management|Incident Management|Request Fulfillment
+ $inputObject.colNo = $data.chkcid3;//Is Applicable?_chk
+ $inputObject.fieldValues = "true";//
+ setSwiftFormData($inputObject); 
+	
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1.6","Check for Applicable Metrics Tab");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.am43;// _link("Applicable Metrics")
+ SelectSegment($inputObject);
+ 
+  _wait(5000);
+ $inputObject = {};
+ $inputObject.link = $data.link_name2;//_link("Select Metrics")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tbnm4;//Metrics Selection
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.chkrid4;//Average Resolution Time - Incident|Average Response Time|Average request fulfillment Time
+ $inputObject.colNo = $data.chkcid4;//Is Applicable?_chk
+ $inputObject.fieldValues = "true";//
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+  
+ $t.end();
+
+ var $t = _testcase("TC_1.1.7", "Selecting Production Support Custom Metrics segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.PSCM;//Production Support Custom Metrics
+ SelectSegment($inputObject);
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row1;//"1";
+ $inputObject.colNo = $data.PSCM_col12;//"ITIL Process*_lst|Metric UOM*_lst|Metric Name*_edt|Metric Type*_lst";
+ $inputObject.fieldValues = $data.PSCM_val12;//"Incident Management|~Time|Metric0|Positive";
+ setSwiftFormData($inputObject);
+ 
+ _assertEqual("Can not save Inactive values.",_lastAlert());
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row1;//"1";
+ $inputObject.colNo = $data.PSCM_col11;//"ITIL Process*_lst|Clone Of Existing Metric_lst|Metric Name*_edt";
+ $inputObject.fieldValues = $data.PSCM_val11;//"Incident Management|Average Response Time|Metric1";
+ setSwiftFormData($inputObject);
+ 
+  _wait(8000);
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row1;//"1";
+ $inputObject.colNo = $data.PSCM_col1;//"ITIL Process*_lst|Clone Of Existing Metric_lst|Metric Name*_edt|Metric UOM*_lst|Metric Type*_lst";
+ $inputObject.fieldValues = $data.PSCM_val1;//"Incident Management|Average Response Time|Metric1|Hours|Negative";
+ verifySwiftFormData($inputObject);
+ 
+  _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row2;//"2";
+ $inputObject.colNo = $data.PSCM_col2;//"ITIL Process*_lst|Clone Of Existing Metric_lst|Metric Name*_edt";
+ $inputObject.fieldValues = $data.PSCM_val2;//"Incident Management|Average Resolution Time - Incident|Metric2";
+ setSwiftFormData($inputObject);
+ 
+  _wait(8000);
+  
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row2;//"2";
+ $inputObject.colNo = $data.PSCM_col21;//"ITIL Process*_lst|Clone Of Existing Metric_lst|Metric Name*_edt|Metric UOM*_lst|Metric Type*_lst";
+ $inputObject.fieldValues = $data.PSCM_val21;//"Incident Management|Average Resolution Time - Incident|Metric2|Hours|Negative";
+ verifySwiftFormData($inputObject);
+ 
+  _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row3;//"3";
+ $inputObject.colNo = $data.PSCM_col3;//"ITIL Process*_lst|Clone Of Existing Metric_lst|Metric Name*_edt";
+ $inputObject.fieldValues = $data.PSCM_val3;//"Request Fulfillment|Average request fulfillment Time|Metric3";
+ setSwiftFormData($inputObject);
+ 
+  _wait(8000);
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.PSCM_tab1;//"Production Support Custom Metrics[1]";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.PSCM_row3;//"3";
+ $inputObject.colNo = $data.PSCM_col31;//"ITIL Process*_lst|Clone Of Existing Metric_lst|Metric Name*_edt|Metric UOM*_lst|Metric Type*_lst";
+ $inputObject.fieldValues = $data.PSCM_val31;//"Request Fulfillment|Average request fulfillment Time|Metric3|Hours|Negative";
+ verifySwiftFormData($inputObject);
+ 
+  $t.end();
+
+ var $t = _testcase("TC_1.1.8","Check for Metric UOM reflection in Production Support Goals");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.PMP;//"PM Plan";
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//"nodeIcon11";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.PSG;//"Production Support Goals";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.setGoals;//"Setup Goals";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.GoalTable;//"Goal Selection";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.goal_row1;//"1";
+ $inputObject.colNo = $data.goal_col1;//"ITIL Process_lbl|Metric Name_lbl|UOM_lbl";
+ $inputObject.fieldValues = $data.Goal_value1;//"Incident Management|Average Resolution Time - Incident|Hours";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.GoalTable;//"Goal Selection";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.goal_row2;//"2";
+ $inputObject.colNo = $data.goal_col1;//"ITIL Process_lbl|Metric Name_lbl|UOM_lbl";
+ $inputObject.fieldValues = $data.Goal_value2;//"Incident Management|Average Response Time|Hours";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.GoalTable;//"Goal Selection";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.goal_row3;//"3";
+ $inputObject.colNo = $data.goal_col1;//"ITIL Process_lbl|Metric Name_lbl|UOM_lbl";
+ $inputObject.fieldValues = $data.Goal_value3;//"Request Fulfillment|Average request fulfillment Time|Hours";
+ verifySwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.GoalTable;//"Goal Selection";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.goal_row1;//"1";
+ $inputObject.colNo = $data.setGoals_col1;//"Goal_edt|Goal Type_lst";
+ $inputObject.fieldValues = $data.setGoals_val1;//"10|Internal";
+ setSwiftFormData($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.GoalTable;//"Goal Selection";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.goal_row2;//"1";
+ $inputObject.colNo = $data.setGoals_col1;//"Goal_edt|Goal Type_lst";
+ $inputObject.fieldValues =  $data.setGoals_val2;//"20|SLA";
+ setSwiftFormData($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.GoalTable;//"Goal Selection";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.goal_row3;//"1";
+ $inputObject.colNo = $data.setGoals_col1;//"Goal_edt|Goal Type_lst";
+ $inputObject.fieldValues =  $data.setGoals_val3;//"30|SLA with Financial Impact";
+ setSwiftFormData($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("1.1.9","Baselining of PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.workflow;//"Workflow";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage0;//"0";
+ $inputObject.multiple_member = $data.user_name1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage1;//"1";
+ $inputObject.multiple_member = $data.skip;//"Skip";
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage2;//"2";
+ $inputObject.multiple_member = "nitin_shinde05";
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.comments1;//"Submitter";
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ 
+ logout();
+ 
+  $inputObject = {};
+ $inputObject.user_name = "nitin_shinde05";;
+ $inputObject.edt_loginid = "nitin_shinde05";;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//ARTLLBOM
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.PMP;//"PM Plan";
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.workflow;//"Workflow";
+ InfyFTclick($inputObject);
+  
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.comments1;//"Approver";
+ InfyFTClickRoutewithComments($inputObject);
+  
+ logout();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//ARTLLBOM
+ selectProject($inputObject);
+  
+ $t.end();
+/*  
+ var $t = _testcase("TC_1.1.10","Check for the Goals values in Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.SR;//"Status Report";
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "SRep1";
+ OpenEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Production Support Performance";
+ SelectSegment($inputObject);
+ 
+  _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "SLA Performance Summary;Internal Goal Performance Summary";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "SLA Performance Summary";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "Service Domain_lbl|ITIL Processes_lbl|Metric Name_lbl|Metrics UOM_lbl|Goal_lbl";
+ $inputObject.fieldValues = "Application Support|Request Fulfillment|Average request fulfillment Time|Hours|30.00";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Internal Goal Performance Summary";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "Service Domain_lbl|ITIL Processes_lbl|Metric Name_lbl|Metrics UOM_lbl|Goal_lbl";
+ $inputObject.fieldValues = "Application Support|Incident Management|Average Resolution Time - Incident|Hours|10.00";
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); */
+ 
+ var $t = _testcase("TC_12","Reopen PMP and Un select Production support");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.PMP;//"PM Plan";
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ InfyFTreopenPMP($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.RTS;//"Request Type Selection";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.row1;//"7";
+ $inputObject.colNo  = "1_unchk";//1
+ $inputObject.tableName  = $data.Table1;//"Name";// $data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+  
+ $t.end();

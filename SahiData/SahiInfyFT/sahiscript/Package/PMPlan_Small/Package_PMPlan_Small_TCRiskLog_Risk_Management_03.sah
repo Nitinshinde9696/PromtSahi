@@ -1,0 +1,110 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+ $gen = readDataFromCSV("Package_PMPlan_Small_Gen","Package/PMPlan_Small");
+ $data1 = readDataFromCSV("Package_PMPlan_Small_TailoringDev_RCM_Risk","Package/PMPlan_Small"); 
+ 
+ /*
+ $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject); 
+ 
+ _wait(2000);
+ 
+ */
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("Risk Log","Checking for the Auto created Risk in Risk log");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.lblRisk;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.reasonRisk2;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon14;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.riskLog;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data1.RiskID;
+ verifyEformListing($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Risk Management","Filling all the Mandatory fields of Risk");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo4;//Risk Management
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data1.RiskID; 
+ OpenEformInstance($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.RiskID;
+ $inputObject.lst_DN_RiskCategory = $data1.riskCategory;
+ $inputObject.txt_CM_Description = $data1.fieldValueTest;
+ $inputObject.lst_DN_Probability = $data1.riskProb;
+ $inputObject.lst_DN_Impact = $data1.riskImpact;
+ //$inputObject.edt_DN_ScheduleImpactDays = $data1.riskScheduled;
+ $inputObject.txt_DN_MitigationPlan = $data1.fieldValueTest;
+ $inputObject.edt_DN_RiskOwner = $data1.riskOwner;
+ $inputObject.lst_DN_ImpactTo = $data1.riskTo;
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.lblRisk;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.reasonRisk2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $t.end();

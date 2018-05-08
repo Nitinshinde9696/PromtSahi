@@ -1,0 +1,260 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+ 
+ $data = readDataFromCSV("IMS_ZDP_CR99_Common_SubmitZDtoDMfor", "IMS/ZDP");
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",7,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_44;//ZD Closure
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.item = "ZDP677";//$ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject); */ 
+ 
+ /****************************************************
+ *routing ZD to DM Approval
+ *****************************************************/
+ 
+ var $t = _testcase("TC_11", "Routing ZD to DM");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_32;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Team_member41;
+ $inputObject.workflow_stage = $data.stage_name41;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+   
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_95_TS_1", "Check the Workflow status field after routing to DM");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_31;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Closure submitted to DM for approval";//$data.WorkflowStatusValue47;
+ $inputObject.cell_Name = $data.WorkflowStatus4N;//"Workflow Status :";//$data.WorkflowStatus4;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_95_TS_4", "Check the Workflow status field after PM Recall the ZD");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RecallButton4;//"Recall";
+ InfyFTClickButtonS($inputObject);
+ 
+ //_assertExists(_cell("Workflow Status :"), _near(_span("")));
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_44;//ZD Closure
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_95_TS_2", "Check the Workflow status field after DM Rejects the ZD");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username12;
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ _wait(500);
+ 
+ ClickReject();
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Closure rejected by DM";//$data.WorkflowStatusValue48;
+ $inputObject.cell_Name = $data.WorkflowStatus4N;//"Workflow Status :";//$data.WorkflowStatus4;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_95_TS_3", "Check the Workflow status field after DM Approves the ZD");
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments5;
+ ClickRoutewithComments($inputObject); */
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;//snehal_ghodeswar
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_44;//ZD Closure
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username12;//sunitha_muthukumar
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ /* _setValue(_textbox("searchTextBox-inputEl"), "ZDP677");
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = "ZDP677";
+ OpenEformInstance($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Closure approved by DM";//$data.WorkflowStatusValue46;
+ $inputObject.cell_Name = $data.WorkflowStatus4N;//"Workflow Status :";//$data.WorkflowStatus4;
+ InfyFTisReadOnly($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.span_Name = "Reopen";
+ InfyFTisVisibleS($inputObject); */
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD48_FU1_95_TS_5", "Check the Workflow status field after PM Reopens the ZD");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Please note that you will be able to edit and reclose only within 90 days from the First Closure/ Abandoned Date ("+$currentDate+").";
+ InfyFTreopenInstanceS($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.span_Name = "";//
+ $inputObject.cell_Name = $data.WorkflowStatus;//"Workflow Status :";
+ InfyFTisReadOnly($inputObject);  */ 
+ 
+ //_assertExists(_span("", _near(_cell("Workflow Status :"))));
+ 
+ _wait(500);
+ 
+ $t.end();

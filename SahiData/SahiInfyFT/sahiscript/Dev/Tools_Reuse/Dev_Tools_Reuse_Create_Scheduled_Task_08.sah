@@ -1,0 +1,93 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ /***********************************************************************
+ *Navigating to schedule Task
+ *Trying to create subtask under schedule Task
+ *creating subtask under schedule Task
+ *creating one more subtask under schedule Task
+ *deleting one subtask under schedule Task
+ ***********************************************************************/
+ 
+ /*************************schedule task ********************************/
+ 
+ $data1 = readDataFromCSV("Dev_Tools_Reuse_Create_Scheduled_Task_08", "Dev/Tools_Reuse");
+ 
+ var $t = _testcase("TC_9", "Navigating to schedule Task");
+ $t.start();
+  
+	$inputObject = {};
+	$inputObject.segment_name = "Schedule";
+	SelectSegment($inputObject);  
+  
+  _click(_span("KEY_Link_New_item-btnIconEl"));
+    
+   _selectWindow("newListing");
+  
+   $inputObject = {};
+ $inputObject.edt_CM_Name = "Subproject";
+ $inputObject.lst_isPackageDigiteStart = "STaRT";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.ScheduledTasks;//_click(_link("Scheduled Tasks"));
+ InfyFTclick($inputObject);  
+  
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "Trying to create subtask under schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_11", "creating subtask under schedule Task");
+ $t.start();
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name;//_doubleClick(_div($data1.item_name)); 38
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data1.subtaskname;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.activityTask;//_doubleClick(_div($data1.activityTask)); 44
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+ 
+ $t.end();
+ 
+  
+//_popup("newListing")._closeWindow();
+_click(_button("CancelBtn"));
+		_selectWindow();
+_wait(5000);
+ //_selectWindow();

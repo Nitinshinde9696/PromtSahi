@@ -1,0 +1,301 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Enhancement_Request_Summary_Request_Performance_18","Maint/Request_Management/Enhancements");
+ /*
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_1.1.3"," Check the Fields");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ $s.end();
+
+ $inputObject = {};
+ $inputObject.item = "Enh57";
+ OpenEformInstance($inputObject);
+*/
+
+ var $s1 = _testcase("TC_2.1","Sizing Details- Nesma FP");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sdetails;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.s_col01;//"0_lst|1_lst|8_lst"
+ $inputObject.fieldValues = $data.val01; //"Custom Application|C++|Nesma FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Nesma;//"Nesma FP";
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo =  $data.O_col02;//"0_edt|1_edt"
+ $inputObject.fieldValues = $data.val02;//"64|54";
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  $s1.end();
+ 
+ var $s2 = _testcase("TC_3"," Verify Request Performance- Nesma FP");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery03;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = $data.RS_row05;//"0";
+ $inputObject.colNo = $data.RS_col05;//"0_cell|1_cell|2_cell|3_cell|4_cell|5_cell";
+ $inputObject.fieldValues = $data.values05;//"Metric Name|UOM|Goal|Actual|% Deviation|Reason for deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = "4";
+ $inputObject.colNo = $data.RS_col06;//"0_lbl"; 
+ $inputObject.fieldValues = "Enhancement Productivity – NESMA FP";
+ InfyFTverifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = $data.RS_row06;//"4|9|10|12|13|14|15|16|17|18|19"
+ $inputObject.colNo = $data.RS_col06;//"0_lbl"; 
+ $inputObject.fieldValues = $data.values06;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Defect Injection Rate|Defect Injection Rate in Coding - Effort|COQ|Preventive COQ|Appraisal COQ|Failure COQ|Effort Deviation|Schedule Deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+
+ $s2.end();
+
+ var $s3 = _testcase("TC_3"," Sizing Details- IFPUG FP");
+ $s3.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sdetails;;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol07;// "0_lst|1_lst|8_lst"
+ $inputObject.fieldValues = $data.values08;//"Custom Application|C++|IFPUG FP";
+ setSwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.IFPUG;//"IFPUG FP"
+ $inputObject.rowNo = $data.Irow09;//"0"
+ $inputObject.colNo = $data.Icol09;//"1_edt"
+ $inputObject.fieldValues = $data.values10;//"20";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_3"," Verify Request Performance- IFPUG FP");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery03;//_link("Request Summary")
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = $data.RS_row66;//"3|9|11|12|13|14|15|16|17|18|19"
+ $inputObject.colNo = $data.RS_col06;//"0_lbl"; 
+ $inputObject.fieldValues = $data.values11;//"Productivity - IFPUG FP|Quality - Effort|Quality - FP|Defect Injection Rate|Defect Injection Rate in Coding - Effort|COQ|Preventive COQ|Appraisal COQ|Failure COQ|Effort Deviation|Schedule Deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+
+ $s4.end();
+ 
+ var $s5 = _testcase("TC_3"," Sizing Details- Others");
+ $s5.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sdetails;;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol13;//"0_lst"
+ $inputObject.fieldValues = $data.D_val12;//"Custom Application";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol14;//"1_lst"
+ $inputObject.fieldValues = $data.D_val13;//"C++";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo =$data.Dcol15;//"8_lst"
+ $inputObject.fieldValues = $data.D_val14;//"Others";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Others13;//"Others"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo =  $data.O_col13;//"0_edt|1_edt"
+ $inputObject.fieldValues = $data.O_values14;//"2|test";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  $s5.end();
+  
+ var $s6 = _testcase("TC_3"," Verify Request Performance- Others");
+ $s6.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery03;//_link("Request Summary")
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = $data.RS_row62;//"9|12|13|14|15|16|17|18|19"
+ $inputObject.colNo = $data.RS_col06;//"0_lbl"; 
+ $inputObject.fieldValues = $data.values15;//"Quality - Effort|Defect Injection Rate|Defect Injection Rate in Coding - Effort|COQ|Preventive COQ|Appraisal COQ|Failure COQ|Effort Deviation|Schedule Deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+
+ $s6.end();
+ 
+ var $s7 = _testcase("TC_3"," Sizing Details- No Standard Sizing Technique Applicable");
+ $s7.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sdetails;;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol13;//"0_lst"
+ $inputObject.fieldValues = $data.D_val12;//"Custom Application";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol14;//"1_lst"
+ $inputObject.fieldValues = $data.D_val13;//"C++";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo =$data.Dcol15;//"8_lst"
+ $inputObject.fieldValues = $data.D_values16;//"No Standard Sizing Technique Applicable";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $s7.end();
+  
+ var $s8 = _testcase("TC_3"," Verify Request Performance- No Standard Sizing Technique Applicable");
+ $s8.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery03;//_link("Request Summary")
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = $data.RS_row07;//"5|9|12|13|14|15|16|17|18|19"
+ $inputObject.colNo = $data.RS_col06;//"0_lbl"; 
+ $inputObject.fieldValues = $data.values17;//"Productivity Improvement|Quality - Effort|Defect Injection Rate|Defect Injection Rate in Coding - Effort|COQ|Preventive COQ|Appraisal COQ|Failure COQ|Effort Deviation|Schedule Deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+
+ $s8.end();
+ 
+ var $s9 = _testcase("TC_3"," Sizing Details- Backward FP");
+ $s9.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sdetails;;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol13;//"0_lst"
+ $inputObject.fieldValues = $data.D_val12;//"Custom Application";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo = $data.Dcol14;//"1_lst"
+ $inputObject.fieldValues = $data.D_val13;//"C++";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab;//"Details"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo =$data.Dcol15;//"8_lst"
+ $inputObject.fieldValues = $data.values18;//"Backward FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.language;//"Language List as per PM Plan"
+ $inputObject.rowNo = $data.Drow01;//"1"
+ $inputObject.colNo =  $data.O_col19;//"2_edt|3_edt"
+ $inputObject.fieldValues = $data.O_values20;//"2|test";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  $s9.end();
+  
+ var $s10 = _testcase("TC_3"," Verify Request Performance- Backward FP");
+ $s10.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery03;//_link("Request Summary")
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tbl_RS04;//"Request Performance";
+ $inputObject.rowNo = $data.RS_row41;//"9|12|13|14|15|16|17|18|19"
+ $inputObject.colNo = $data.RS_col06;//"0_lbl"; 
+ $inputObject.fieldValues = $data.values21;//"Quality - Effort|Defect Injection Rate|Defect Injection Rate in Coding - Effort|COQ|Preventive COQ|Appraisal COQ|Failure COQ|Effort Deviation|Schedule Deviation";
+ InfyFTverifySwiftFormData($inputObject); 
+
+ $s10.end();

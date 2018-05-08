@@ -1,0 +1,137 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+
+$data = readDataFromCSV("Roles_PrjLvl_4_Reviewer_SQA_21","Roles"); 
+
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",5,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+ /*$inputObject = {};
+ $inputObject.user_name = $data.UserName;//siddharth_kale
+ $inputObject.edt_loginid = $data.LoginID;//siddharth_kale
+ $inputObject.edt_password = $data.Password;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home//Projects
+ navigateTo($inputObject);
+ 
+  if(_isVisible(_div("INFY000029PrjM")))
+ 
+ {
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//INFY000029PrjM
+ selectProject($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Team members
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id2;//anilp
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles2;//Reviewer
+ //$inputObject.edt_startdateInput = $StartDate1;
+ //$inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject); 
+ 
+ } */
+ 
+ /**********************************************************************
+ LOGINNG WITH Reviewer TEST CASE 10 //ALTSBF10
+ **********************************************************************/ 
+ 
+ var $t = _testcase("TC_1", "Reviewer login  ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//anilp
+ $inputObject.edt_loginid = $data.LoginID2;//anilp
+ $inputObject.edt_password = $data.Password2;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home//Projects
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name4;//3IPEROPS
+ selectProject($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo6;//Enhancements
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ _click(_div("1"));
+ 
+  _wait(10000);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name7;//Reviews
+ SelectSegment($inputObject); 
+ 
+ var $t = _testcase("TC_5", "Create the Reviews  ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name8;//Review1 
+ $inputObject.lst_DN_ReviewMode = $data.reviewmode8;//Group Review/One Person Review
+ $inputObject.lst_DN_Reviewer = $data.Reviewer8;//subhashini_k03 
+ $inputObject.txt_DN_ArtifactName = $data.artifatName8;//Creating the review
+ $inputObject.lst_reviewtype = $data.testingof8;//Test Case Review
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+  
+ _wait(10000);
+ 
+ if(_isVisible(_span("x-btn-icon-el x-tbar-page-last ")))
+{_click(_span("x-btn-icon-el x-tbar-page-last "));}
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_6", "Verifying the Defect Management available functionalities");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = "openLinkedItem";
+ $inputObject.segment_name = $data.Segment_Name8;//Defect
+ SelectSegment($inputObject);
+  
+ $inputObject = {};//
+ $inputObject.popup_name = "openLinkedItem";
+ $inputObject.edt_CM_Name = $data.Name9;//Defect1
+ $inputObject.txt_CM_Description = $data.Description9;//Creating the defect
+ $inputObject.lst_DN_DefectDetectedBy = $data.Decetedby9;//Rahul_Garg 
+ $inputObject.lst_DN_Owner = $data.Owner9;//subhashini_k03
+ $inputObject.lst_DN_Severity = $data.Severity9;//Minor
+ InfyFTcreateLinkedItem1($inputObject); 
+ 
+ _wait(2000); 
+ _popup("openLinkedItem")._closeWindow(); 
+ _wait(2000);
+ 
+ $t.end();  
+ 

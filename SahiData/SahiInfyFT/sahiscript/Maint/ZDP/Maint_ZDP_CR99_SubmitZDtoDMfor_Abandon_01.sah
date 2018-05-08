@@ -1,0 +1,358 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+ 
+ $data = readDataFromCSV("Maint_ZDP_CR99_Common_SubmitZDtoDMfor", "Maint/ZDP");
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM for ZDP SubmitZDtoDMfor_Abandon");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to ZDP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /********************************************************
+ * ZDP fields visibility 
+ ********************************************************/
+
+ var $t = _testcase("TC_BRD48_FU1_8", "Submit ZD to DM for field Validation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.SubmitZDtoDMfor4;//Submit ZD to DM for :
+ InfyFTisVisibleN($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.span_Name = $data.SubmitZDtoDMfor;
+ $inputObject.cell_Name = $data.SubmitZDtoDMforValue_1;//--None--
+ InfyFTisReadOnly($inputObject); */
+ 
+ _assertEqual($data.SubmitZDtoDMforValue_41, _getSelectedText(_select("DN_SubmitZDtoDMfor")));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMfor_List4;//--None--;Plan Approval;ZD Closure;Abandon
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;//CR_ZDP
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_42;//Plan Approval
+ InfyFTModifyEformInstanceS($inputObject); 
+ 
+ var $ZDP_ID = _getText(_span("CM_ItemCode"));
+ 
+ $t.end();
+  
+ /*******************************************************
+ * Submit ZD to DM is selected as 'Abandon'
+ ********************************************************/
+ 
+ var $t = _testcase("TC_BRD48_FU1_9", "Submit ZD to DM is selected as 'Abandon'");
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_43;//Abandon
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Reason for Abandon in Details tab"
+ InfyFTModifyEformInstanceS($inputObject);  */
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_43;//Abandon
+ $inputObject.txt_DN_ReasonforAbandon = $data.Comments4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $t.end();
+ 
+ /***********************************************************************
+ * “Submit ZD to DM for” is “None”.
+ ************************************************************************/
+ 
+ var $t = _testcase("TC_BRD48_FU1_103", "Submit ZD to DM for” is None.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;//CR_ZDP
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_41;//--None--
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_32;//Workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name41; 
+ $inputObject.multiple_member = $data.Team_member41;
+ WorkflowSet($inputObject);
+
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name42; 
+ $inputObject.multiple_member = $data.Team_member42;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ $inputObject.msgAlert = "In Details Tab, please select Submit ZD to DM for as Plan Approval or ZD Closure or Abandon before Submitting."
+ InfyFTClickRoutewithCommentsN($inputObject);
+ 
+ $t.end();
+ 
+ /**********************************************************************
+ * “Submit ZD to DM for” is selected as “Abandon"
+ ***********************************************************************/
+ 
+ var $t = _testcase("TC_BRD48_FU1_108", "Submit ZD to DM for is selected as Abandon");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_31;//Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_43;//Abandon
+ $inputObject.txt_DN_ReasonforAbandon = $data.Comments4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_32;//Workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name41; 
+ $inputObject.multiple_member = $data.Team_member41;
+ WorkflowSet($inputObject);
+
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name42; 
+ $inputObject.multiple_member = $data.Team_member42;
+ WorkflowSet($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ $t.end(); 
+ 
+ /*****************************************************************
+ * CR 29 ***** PM/SPM recalls the instance of ZDP.
+ * CR 99 ***** PM/SPM recalls the instance of ZDP.
+ *****************************************************************/
+ 
+ var $t = _testcase("TC_BRD48_FU1_11_TS_2 & TC_BRD48_FU1_117", "PM/SPM recalls the instance of ZDP.");
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_31;//Details;
+ SelectSegment($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.WorkflowStatusValue_41;//Abandon submitted to DM for approval
+ $inputObject.cell_Name = $data.WorkflowStatus4;//--None--
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RecallButton4;//Recall
+ InfyFTClickButtonS($inputObject);
+  
+ _assertEqual($data.SubmitZDtoDMforValue_43, _getSelectedText(_select("DN_SubmitZDtoDMfor")));
+ 
+ $t.end();
+ 
+ /*****************************************************************
+ *CR99***** Submit ZD to DM for is selected as 'Abandon'
+ *****************************************************************/
+ 
+ var $t = _testcase("TC_BRD48_FU1_12", "Submit ZD to DM for is selected as Abandon");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_43;//Abandon
+ $inputObject.txt_DN_ReasonforAbandon = $data.Comments4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.span_Name = "";//
+ $inputObject.cell_Name = $data.WorkflowStatus;//"Workflow Status :";
+ InfyFTisReadOnly($inputObject); */  
+ 
+// _assertExists(_span("", _near(_cell("Workflow Status :"))));
+ 
+ /* $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_32;//Workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name41; 
+ $inputObject.multiple_member = $data.Team_member41;
+ WorkflowSet($inputObject);
+
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name42; 
+ $inputObject.multiple_member = $data.Team_member42;
+ WorkflowSet($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username12;//Sunitha.Muthukumar
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.WorkflowStatusValue_41;//Abandon submitted to DM for approval
+ $inputObject.cell_Name = $data.WorkflowStatus4;//"Workflow Status :";
+ InfyFTisReadOnly($inputObject);
+ 
+ ClickReject();
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.WorkflowStatusValue_42;//Abandon rejected by DM
+ $inputObject.cell_Name = $data.WorkflowStatus4;//"Workflow Status :";
+ InfyFTisReadOnly($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;//Prashanth_Ballal
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.SubmitZDtoDMforValue_43;//Abandon
+ $inputObject.txt_DN_ReasonforAbandon = $data.Comments4;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_32;//Workflow;
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name41; 
+ $inputObject.multiple_member = $data.Team_member41;
+ WorkflowSet($inputObject);
+
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name42; 
+ $inputObject.multiple_member = $data.Team_member42;
+ WorkflowSet($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username12;//Sunitha.Muthukumar
+ $inputObject.edt_loginid = $data.LoginID12;
+ $inputObject.edt_password = $data.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ZDP_ID;
+ InfyFTOpenEformInstanceForLastPageS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments4;
+ ClickRoutewithComments($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName_31;//Details;
+ SelectSegment($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.WorkflowStatusValue_43;//Abandon approved by DM
+ $inputObject.cell_Name = $data.WorkflowStatus4;//"Workflow Status :";
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Please note that you will be able to edit and reclose only within 90 days from the First Closure/ Abandoned Date ("+$currentDate+").";
+ InfyFTreopenInstanceS($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("Script_2", "SubmitZDtoDMfor_Plan_Approval");
+ $t.start();
+ 
+ _include("Maint_ZDP_CR99_SubmitZDtoDMfor_PlanApproval_02.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("Script_3", "SubmitZDtoDMfor_ZD_Closure");
+ $t.start();
+ 
+ _include("Maint_ZDP_CR99_SubmitZDtoDMfor_ZDClosure_03.sah");
+ 
+ $t.end();

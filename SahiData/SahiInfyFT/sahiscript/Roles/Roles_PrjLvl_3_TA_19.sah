@@ -1,0 +1,138 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+$data = readDataFromCSV("Roles_PrjLvl_3_TA_19","Roles"); 
+
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",5,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+ /**********************************************************************
+ LOGINNG WITH TA & SE or TEST CASES 7//TJCSTMEP
+ **********************************************************************/ 
+ 
+ var $t = _testcase("TC_1", "TA login  ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//AnanthaKumar_S01 4A
+ $inputObject.edt_loginid = $data.LoginID1;//AnanthaKumar_S01
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home//Projects
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//TJCSTMEP
+ selectProject($inputObject); 
+
+ var $t = _testcase("TC_2", " Adding issue ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Issue Management
+ navigateTo($inputObject); 
+ 
+ _assertFalse(_span("KEY_BUTTON_Add-btnIconEl").disabled);
+ 
+// InfyFTverifyAddButtonAvaiabilty();
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name5;//Issue1
+ $inputObject.txt_CM_Description = $data.Description5;//Creating the issue
+ $inputObject.lst_DN_RaisedBy = $data.RaisedBy5;//vaadmin
+ $inputObject.lst_DN_Assignee = $data.Assignee5;//subhashini_k03
+ $inputObject.lst_DN_IssueSeverity = $data.Severity5;//Minor
+ CreateInstance($inputObject); 
+ var $issue = _getText(_span("CM_ItemCode"));
+ $t.end();
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $issue;//
+ InfyFTverifyInstanceInListing($inputObject);
+ 
+ 
+ var $t = _testcase("TC_2.2", "Modifying the created issue ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $issue;//
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.Description6;//Modifying the issue
+ ModifyEformInstance($inputObject);
+ $t.end();
+ 
+ var $t = _testcase("TC_2.3", "closing(delete) the created issue ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.Status6;//Closed
+ $inputObject.edt_DN_Issueclosuredate = $StartDate1;//current date
+ ModifyEformInstance($inputObject);
+ clickReturn();
+ $t.end();
+
+ var $t = _testcase("TC_3", " Verifying the Action item  ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Action Items
+ navigateTo($inputObject); 
+ 
+ _assertFalse(_span("KEY_BUTTON_Add-btnIconEl").disabled);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name8;//ActionItem1
+ $inputObject.txt_CM_Description = $data.Description8;//Creating the Action Item
+ $inputObject.lst_DN_Owner = $data.Owner8;//vaadmin
+ $inputObject.lst_DN_Assignee = $data.Assignee5;//subhashini_k03
+ $inputObject.edt_CM_DUEDATE = $StartDate1;//current date
+ CreateInstance($inputObject);
+
+ var $aitem = _getText(_span("CM_ItemCode"));
+ 
+ $t.end();
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $aitem;//
+ InfyFTverifyInstanceInListing($inputObject);
+ 
+ var $t = _testcase("TC_3.2", "Modifying the action item ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $aitem;//
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.Description9;//Modifying the action item
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_3.3", "Complete(delete) the action item ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status10;//Completed
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 

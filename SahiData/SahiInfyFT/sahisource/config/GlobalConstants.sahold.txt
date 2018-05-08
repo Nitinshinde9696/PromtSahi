@@ -1,0 +1,39 @@
+
+_setGlobal("importDIR", "E:/SahiData/SahiInfyFT/sahisource/importDir/");
+_setGlobal("MAILURL", "http://karina"); //durga mail server url
+_setGlobal("ADMINURL", "http://isvwlapt01:7009/digite/Request?Key=login"); //Admin server url
+_setGlobal("DOWNLOAD", "E:/SahiData/SahiInfyFT/Downloads/"); //Path of Downloaded File
+_setGlobal("datatDIR", "E:/SahiData/SahiInfyFT/sahiscript/"); //CSV file Path
+_setGlobal("URL_ENV", "http://isvwlapt01:7009/digite/Request?Key=login"); //url
+_setGlobal("ECRURL", "http://isvwlapt01:7009/digite/Request?Key=login");
+
+
+/*
+_setGlobal("importDIR", "D:/SahiData/SahiInfyFT/sahisource/importDir/");
+_setGlobal("MAILURL", "http://karina"); //durga mail server url
+_setGlobal("ADMINURL", "http://isvwlapt01:7003/digite/Request?Key=login"); //Admin server url
+_setGlobal("DOWNLOAD", "D:/SahiData/SahiInfyFT/Downloads/"); //Path of Downloaded File
+_setGlobal("datatDIR", "D:/SahiData/SahiInfyFT/sahiscript/"); //CSV file Path
+_setGlobal("URL_ENV", "http://isvwlapt01:7003/digite/Request?Key=login"); //url
+_setGlobal("ECRURL", "http://isvwlapt01:7003/digite/Request?Key=login");
+
+
+
+_setGlobal("importDIR", "D:/SahiData/SahiInfyFT/sahisource/importDir/");
+_setGlobal("MAILURL", "http://karina"); //durga mail server url
+_setGlobal("ADMINURL", "http://10.66.22.21:7003/digite/Request?Key=login"); //Admin server url
+_setGlobal("DOWNLOAD", "D:/SahiData/SahiInfyFT/Downloads/"); //Path of Downloaded File
+_setGlobal("datatDIR", "D:/SahiData/SahiInfyFT/sahiscript/"); //CSV file Path
+_setGlobal("URL_ENV", "http://10.66.22.21:7003/digite/Request?Key=login"); //url
+_setGlobal("ECRURL", "http://10.66.22.21:7003/digite/Request?Key=login");
+
+
+
+_setGlobal("importDIR", "D:/SahiData/SahiInfyFT/sahisource/importDir/");
+_setGlobal("MAILURL", "http://karina"); //durga mail server url
+_setGlobal("ADMINURL", "http://isvwl2d1/digite/"); //Admin server url
+_setGlobal("DOWNLOAD", "D:/SahiData/SahiInfyFT/Downloads/"); //Path of Downloaded File
+_setGlobal("datatDIR", "D:/SahiData/SahiInfyFT/sahiscript/"); //CSV file Path
+_setGlobal("URL_ENV", "http://isvwl2d1/digite/"); //url
+_setGlobal("ECRURL", "http://isvwl2d1/digite/");
+*/

@@ -1,0 +1,134 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+if(_getGlobal("New_UI")==="yes")
+	$data = readDataFromCSV("Testing_PrjCr_Mgr_Help_segment_03_NewUI","Testing/PrjCr_Mgr"); 
+else
+	$data = readDataFromCSV("Testing_PrjCr_Mgr_Help_segment_03","Testing/PrjCr_Mgr"); 
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Priyanka Patel
+ $inputObject.edt_loginid = $data.LoginID1;//priyanka_patel01
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Project Request_enterprise or Create and Merge Project
+ navigateTo($inputObject); 
+
+  $prnum = 1;
+
+	 $s = _testcase("TC_1.2"," Navigate to Request Inbox");
+	$s.start();
+ 
+	$s.end();
+	_wait(10000, _isVisible(_div($prnum.toString())));
+     
+if(_isVisible(_div($prnum.toString())))
+{
+		 $s = _testcase("TC_1.3"," Verifiy the Project Request");
+		$s.start();
+		
+		$inputObject = {};
+		$inputObject.item = $prnum.toString();
+		infyFTOpenProjectRequest($inputObject);
+		$s.end();
+		 $t = _testcase("TC_2", "selecting the Recommended Action Segment"); 
+		$t.start();
+ 
+		$inputObject = {};
+		$inputObject.segment_name = $data.segment_Name4;//Recommended Action
+		SelectSegment($inputObject);
+ 
+		$t.end();
+	 
+		 $t = _testcase("TC_3", "verifying the System Recommended Action"); 
+		$t.start();
+	 
+		$t.end(); 
+
+		 $t = _testcase("TC_4", "Selecting the Help Segment"); 
+		$t.start();
+ 
+		 $inputObject = {};
+		 $inputObject.segment_name = $data.Segment_Name7;//Help[1]
+		 SelectSegment($inputObject);
+ 
+	 $t.end();
+	 
+	  $t = _testcase("TC_5", "Available Sections in Help Segment"); 
+	 $t.start(); 
+	 
+	 _wait(1000);
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.Section1;//Scenarios when to create project codes
+	 InfyFTisVisible($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.Section2;//Scenarios when to merge project codes
+	 InfyFTisVisible($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.Section3;//Mapping of services to process type
+	 InfyFTisVisible($inputObject);
+	 
+	 $t.end();
+	 
+	  $t = _testcase("TC_6", "Available content in Scenarios when to create project codes section"); 
+	 $t.start();
+	 
+	 $inputObject = {};
+	 $inputObject.message = $data.Content1;//This a new engagement and not just a new SOW for an existing work
+	 // $item = parseInt($data.span_Name1);
+	 $inputObject.table_name = $data.span_Name1;
+	 InfyFTverifyValue($inputObject);
+	  
+	 $t.end();
+	  
+	  $t = _testcase("TC_7", "Available content in Scenarios when to merge project codes section"); 
+	 $t.start();
+
+	 $inputObject = {};
+	 $inputObject.message = $data.Content6;//This a new engagement and not just a new SOW for an existing work
+	 // $item = parseInt($data.span_Name2);
+	 $inputObject.table_name = $data.span_Name2;
+	 InfyFTverifyValue($inputObject);
+	 
+	 $t.end();
+	 
+	  $t = _testcase("TC_8", "Available content in Scenarios when to merge project codes section"); 
+	 $t.start();
+	  
+	 $inputObject = {};
+	 $inputObject.span_Name = $data.span_Name3;//_span("Mapping of services to process type")
+	 InfyFTisVisible($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.message = "Nature of work/ service \n\n\n\t\nProcess to be chosen \n\n\n\nProject managed by Infosys\nPackage (SAP, Oracle, Sterling Commerce, Finacle etc.) implementation or rollout or upgrade either end to end or part of the implementation/ rollout life cycle\tPackage & PLM Implementation\nPLM Implementation\tPackage & PLM Implementation\nNew Development project (Java, .Net, Portal, content, collaboration, e-commerce, Finacle) using non-Agile methodology (waterfall or iterative of phased delivery)\tDevelopment\nNew Development project (Java, .Net, Portal, content, collaboration, e-commerce, Finacle) using Agile methodology\tAgile Development\nEAI, BPM implementation\tDevelopment\nDW/BI development and/ or BI reports development using tools like Informatica, Data Stage, Business Objects etc.\tDevelopment\nMaintenance and Production support of custom built applications (e.g., Java, .Net, C, C++, Mainframe), Packages/ COTS (e.g., SAP, Oracle, Siebel), DW/BI application (e.g., Informatica, Datastage), e-commerce platform, content/ collaboration portals, BPM/ EAI Packages (e.g., TIBCO)\tMaintenance\nIndependent Validation\tTesting\nInfrastructure Service Delivery (e.g., incident management, change management, problem management etc.)\tIMS Service Management\nMechanical Product Design\tMechanical Product Design\nHardware design or installation, Installation of software, embedded software design & development, embedded software maintenance, PACS\tOther Process\nConsulting assignment (domain, technology, process or business)\tConsulting\nProject managed by client\nProject managed by client. Infosys provides people and client does the task assignment, tracking and reporting to the management\tCustomer managed";
+	 //$inputObject.message = $data.Content7;
+	 $inputObject.table_name = $data.span_Name4;
+	 InfyFTverifyValue($inputObject)
+	
+}
+else
+{
+		_assert(true,"There is no Project Request");
+}
+  
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

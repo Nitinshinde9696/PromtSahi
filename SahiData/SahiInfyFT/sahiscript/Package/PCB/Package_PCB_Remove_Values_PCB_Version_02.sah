@@ -1,0 +1,52 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Package_PCB_Remove_Values_PCB_Version_02", "Package/PCB");
+  $data1 = readDataFromCSV("Package_PCB_common_csv", "Package/PCB");
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ _wait(5000);
+
+ var $t = _testcase("TC_1", "verifing table titles in track metrics table");
+ 
+ $t.start();
+ 
+  inputObject = {};
+ $inputObject.span_Name = $data.TableName51;
+ InfyFTisVisibleN($inputObject);
+ 
+  inputObject = {};
+ $inputObject.span_Name = $data.LCStageMetricsDetails4;
+ InfyFTisVisibleN($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo20;
+ $inputObject.fieldValues = $data.FIELDVALUE20;
+ verifySwiftFormData($inputObject);
+ 
+ 
+  $t.end();
+
+   var $t = _testcase("TC_2", "verifing table titles in lc stage metric tables");
+   
+  $t.start();
+  
+  $inputObject = {};
+ $inputObject.tableName = $data.LCStageMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo21;
+ $inputObject.fieldValues = $data.FIELDVALUE21;
+ verifySwiftFormData($inputObject);
+ 
+  
+  $t.end();
+  

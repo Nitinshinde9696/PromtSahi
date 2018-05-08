@@ -1,0 +1,188 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("MechPD_Status_Report_ProjTailoring_01","MechPD/Status_Report"); 
+
+ var $Script1 = _testcase("Script1", "MechPD_Status_Report_ProjTailoring_01");
+ $Script1.start();
+
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username2;//Jayesh_Potnis
+ $inputObject.edt_loginid = $data.LoginID2;//Jayesh_Potnis
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_2", "Navigate to project tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//CGUIBINS
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_3", "Status Report Frequency segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name2;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Monthly = $data.rdg1;//Monthly
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Request Type Selection segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name3;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName  = $data.table1;//"Name";
+ $inputObject.rowNo = $data.rowname1;//"Design Support|Other Request|Product Design";
+ $inputObject.colNo  = $data.colname1;//"Selected_unchk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName  = $data.table1;//"Name";
+ $inputObject.rowNo = $data.rowname1;//"Design Support|Other Request|Product Design";
+ $inputObject.colNo  = $data.colname2;//"Selected_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_5", "Project Specific Metrics segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno2;//2
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value2;//Design Support|DsRsrch|Negative|Number|Research
+ setSwiftFormData($inputObject);
+ 
+ _click(_link("Add Rows"));
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno3;//3
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value3;//Other Request|ORRsrch|Negative|Number|Research
+ setSwiftFormData($inputObject);
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno4;//4
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value4;//Product Design|PRRsrch|Negative|Number|Research
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+  $Script1.end();
+  
+  var $Script2 = _testcase("Script2", "MechPD_Status_Report_PMPlan_02");
+ $Script2.start();
+ 
+	 _include("MechPD_Status_Report_PMPlan_02.sah")
+ 
+ 
+ $Script2.end(); 
+
+ var $Script3 = _testcase("Script3", "MechPD_Status_Report_Details_Hlt_and_NeedAct_03");
+ $Script3.start();
+ 
+	//_include("MechPD_Status_Report_Details_Hlt_and_NeedAct_03.sah")
+ 
+ $Script3.end(); 
+ 
+ var $Script4 = _testcase("Script4", "MechPD_Status_Report_Cmt_and_PrjSpcfMtrics_04");
+ $Script4.start();
+ 
+	//_include("MechPD_Status_Report_Cmt_and_PrjSpcfMtrics_04.sah")
+ 
+ $Script4.end();
+
+ var $Script5 = _testcase("Script5", "MechPD_Status_Report_ReqEftDis_05");
+ $Script5.start();
+ 
+	//_include("MechPD_Status_Report_ReqEftDis_05.sah")
+ 
+ $Script5.end(); 
+ 
+ var $Script6 = _testcase("Script6", "MechPD_Status_Report_Risk_Issues_Compl_06");
+ $Script6.start();
+ 
+	//_include("MechPD_Status_Report_Risk_Issues_Compl_06.sah")
+ 
+ $Script6.end();
+
+ var $Script7 = _testcase("Script7", "MechPD_Status_Report_SummaryofReq_07");
+ $Script7.start();
+ 
+	//_include("MechPD_Status_Report_SummaryofReq_07.sah")
+ 
+ $Script7.end();
+
+ var $Script8 = _testcase("Script8", "MechPD_Status_Report_Workflow_Comments_08");
+ $Script8.start();
+ 
+	//_include("MechPD_Status_Report_Workflow_Comments_08.sah")
+ 
+ $Script8.end(); 
+ 
+ var $Script9 = _testcase("Script9", "MechPD_Status_Report_pj_StatusReportFreq_09");
+ $Script9.start();
+ 
+	//_include("MechPD_Status_Report_pj_StatusReportFreq_09.sah")
+ 
+ $Script9.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

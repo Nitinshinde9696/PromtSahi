@@ -1,0 +1,91 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+//_include("../../../sahisource/Business/ECRNethra.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-2,$dateObj);
+ var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+ $data = readDataFromCSV("Agile_ELF_ELFComplete_Flow_01", "Agile/ELF");
+ $data1 = readDataFromCSV("Agile_questionarySegment_values", "Agile/ELF");
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ /**********************************************************************************************************
+ * Login with rite userID and password 
+ **********************************************************************************************************/ 
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//maint
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to ELF");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "END-create ELF and check Abandoned option");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.CM_Name;
+ $inputObject.edt_DN_Organization = $data1.DN_Organization;
+ $inputObject.edt_DN_Milestone = $data1.DN_Milestone;
+ $inputObject.edt_DN_FromDate = $startDate;
+ $inputObject.edt_DN_ToDate = $currentDate;
+ $inputObject.edt_DN_Feedbackby = $data1.DN_Feedbackby;
+ $inputObject.edt_DN_Designation = $data1.DN_Designation;
+ $inputObject.edt_DN_EngagementFeedbackRece = $currentDate;
+ CreateInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.chk_DN_Abandon = "TRUE";
+ InfyFTModifyEformInstance1($inputObject);
+ _expectConfirm("You are about to abandon this ELF and abandoned ELF cannot be reopened later. Do you want to continue?");
+ 
+ _wait(1000); //Abandon function added
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Abans;
+ $inputObject.cell_Name = $data1.Abancell;
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = "0";// manually able to see correct opt 
+ $inputObject.button = $data1.reopen;
+ InfyFTcheckingButtons($inputObject);
+ 
+ $t.end();

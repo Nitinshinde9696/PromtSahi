@@ -1,0 +1,337 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Testing_Reviews_Defects_performance_testing_defectFields_reviewAssignDefect_dropDownStatus_detectedStage_injectedStage_10", "Testing/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ //Tab Defects
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.DefName;
+ $inputObject.txt_CM_Description = $data.DefDescription;
+ //$inputObject.lst_DN_DefectDetectedBy = $data.Deffield198;
+ $inputObject.lst_PhaseDetected = $data.PhaseDetected;
+ $inputObject.lst_DN_Owner = $data.Deffield199;
+ $inputObject.lst_DN_Severity = $data.Deffield196;
+ InfyFTcreateLinkedItem1($inputObject);
+ var $createdDefID = $inputObject.createdID;
+ 
+ _wait(2000);
+    
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ var $TC = _testcase("TC_BRD10_FU1_5__26","Checking for fields available in Defect."); 
+ $TC.start(); 
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.item = $createdDefID;
+ InfyFTOpenEformInstancePopupForDefect($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefID;
+ InfyFTisVisible($inputObject);  
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.lblDefName;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefType;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefDesc;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefDetBy;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefIngBy;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefLCStageDetBy;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefLCStageIngBy;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefOwner;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefSeverity;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefClosingCom;
+ InfyFTisVisible($inputObject); 
+   
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.span_Name =  $data.DefStatus;
+ InfyFTisVisible($inputObject);  
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name1;
+ InfyFTcloseWin($inputObject);
+ 
+ _wait(1000);
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(5000);
+   
+ $TC.end();  
+ 
+ var $TC = _testcase("TC_27_28","Reviewer assign the defect to the member of the project and it should only be available in assignee inbox."); 
+ $TC.start();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Inbox
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ verifyEformListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC.end();  
+ 
+ var $TC = _testcase("TC_30","Checking for the values appearing in the Status drop down."); 
+ $TC.start();
+  
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.statusDetails;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_31","Checking for the value should auto populate in the Detected stage."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.fieldName = $data.fieldName;
+ $inputObject.fieldValue = $data.detectedStageValue;
+ InfyFTAssertEqual($inputObject);
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_32","Checking for the value should auto populate in the injected stage."); 
+ $TC.start(); 
+
+ _setSelected(_select("DN_Status"), "Closed"); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_PhaseInjected = $data.PhaseInjectedValue;
+ verifyEformInstanceDetails($inputObject); 
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_33","Checking for the list of team members in Defect detected by and Defect injected by."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_DefectDetectedBy = $data.defDetByList;
+ verifyEformInstanceDetails($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_DefectInjectedBy = $data.defDetByList;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _setSelected(_select("DN_Status"), "Open"); 
+ 
+ _wait(5000);
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_34","Checking for the fields when the status is closed or fixed."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.closedStatus;
+ $inputObject.msgAlert = "Please fill the following fields:  Defect Type,   Defect Injected By,   LC Stage Injected,   Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.closedStatus;
+ $inputObject.lst_DN_DefectType = $data.defectType;
+ $inputObject.msgAlert = "Please fill the following fields:  Defect Injected By,   LC Stage Injected,   Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.closedStatus;
+ $inputObject.lst_DN_DefectType = $data.defectType;
+ $inputObject.lst_DN_DefectInjectedBy = $data.defInjectedBy;
+ $inputObject.msgAlert = "Please fill the following fields:  LC Stage Injected,   Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.closedStatus;
+ $inputObject.lst_DN_DefectType = $data.defectType;
+ $inputObject.lst_DN_DefectInjectedBy = $data.defInjectedBy;
+ $inputObject.lst_PhaseInjected = $data.PhaseInjected;
+ $inputObject.msgAlert = "Please fill the following fields:  Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject); 
+  
+ _wait(5000); 
+  
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.closedStatus;
+ $inputObject.lst_DN_DefectType = $data.defectType;
+ $inputObject.lst_DN_DefectInjectedBy = $data.defInjectedBy;
+ $inputObject.lst_PhaseInjected = $data.PhaseInjected;
+ $inputObject.txt_DN_ClosingComments = $data.closingComment;
+ InfyFTModifyEformInstance($inputObject);   
+ 
+ _wait(5000);
+  
+ $TC.end(); 
+  
+ 
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+
+
+
+ 
+ 

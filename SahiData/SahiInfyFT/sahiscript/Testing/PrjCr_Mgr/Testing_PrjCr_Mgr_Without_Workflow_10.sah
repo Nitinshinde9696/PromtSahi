@@ -1,0 +1,298 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+  _include("Testing_PrjCr_Mgr_Delete_Project_11.sah");
+	if(_getGlobal("New_UI")==="yes")
+		$data = readDataFromCSV("Testing_PrjCr_Mgr_Without_Workflow_10_NewUI","Testing/PrjCr_Mgr");
+	else 
+		$data = readDataFromCSV("Testing_PrjCr_Mgr_Without_Workflow_10","Testing/PrjCr_Mgr");
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//Project Request_home
+ navigateTo($inputObject);
+ 
+  $inputObject = {}; 
+  $inputObject["edt_searchTextBox-inputEl"] = $data.Project_code4;
+  setAllFields($inputObject);
+  
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+infyFTverifyProjectRequestInstanceInListing($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ $t.end();
+ var $t3 = _testcase("TC_4.4"," verify Route Button");
+ $t3.start();
+ 
+  InfyFTverifyRouteButton();
+
+ $t3.end();
+ var $t4 = _testcase("TC_4.5"," verify Recommended Action");
+ $t4.start();
+ 
+
+ var $Recaction = _getSelectedText(_select("DN_RecommendedAction"));
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Recommended Action";//_link("Recommended Action")
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.raction = $Recaction;
+  InfyFTVerifyRecommendedAction($inputObject);
+  
+ $t4.end(); 
+ 
+ var $t5 = _testcase("TC_5.1"," Project request Workflow");
+ $t5.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Details";//_link("Details")
+ SelectSegment($inputObject);
+ 
+ var $proj_code=  _getValue(_textbox("PROJECTCODE"));
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.field12;
+ $inputObject.lst_PROJECTTYPE = $data.projecttype13;
+ $inputObject.txt_CM_Description = $data.desc14;
+ //$inputObject.lst_field61 = $data.peak_team_size14;
+ ModifyEformInstance($inputObject);
+   
+ $t5.end();
+ 
+ var $s6 = _testcase("TC_7.2"," Open Inbox");
+ $s6.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//Project Request_home
+ navigateTo($inputObject);
+ $s6.end();
+ 
+ var $s7 = _testcase("TC_7.3"," open request");
+ $s7.start();
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ $s7.end();
+ _wait(5000);
+ var $t8 = _testcase("TC_7.4"," Verify segment");
+ $t8.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name14;//Questionnaire
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name15;//workflow
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name16;//attachment
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment_name17;//comments
+ InfyFTisVisible($inputObject);
+ 
+ $t8.end();
+ 
+ var $t9 = _testcase("TC_9.5"," Verify Question list");
+ $t9.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name14;//Questionnarie segment
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name18;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name181;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name182;
+ //InfyFTisVisible($inputObject);
+ 
+ $t9.end();
+ var $t10 = _testcase("TC_9.6"," Verify Questions");
+ $t10.start();
+  
+ $inputObject = {};
+ $inputObject.lst_DN_IstheprojectmanagedbyI = $data.item_Name19;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _setSelected(_select("DN_IstheprojectmanagedbyI"), $data.item_Name19);
+  
+ _wait(2000);
+ $inputObject = {};
+ $inputObject.lst_DN_Choosetheappropriatena = $data.item_Name20;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _setSelected(_select("DN_Choosetheappropriatena"), $data.item_Name20);//"Maintenance"
+ _wait(2000);
+
+ if(_isVisible(_select("DN_Methodology")))
+ {
+	$inputObject = {};
+	$inputObject.lst_DN_Methodology = $data.item_Name21;
+	verifyEformInstanceDetails($inputObject);
+ }
+ $t10.end();
+
+ var $t11 = _testcase("TC_11.0"," select Questionnaire segment");
+ $t11.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name14;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IstheprojectmanagedbyI = $data.item_Name19;
+ $inputObject.lst_DN_Choosetheappropriatena = $data.item_Name20;
+ $inputObject.lst_DN_Methodology = $data.item_Name21;//WARNING: The suggested process type "Agile" is not yet available in SwiftALM. Please create the project in IPM+ if you want to choose the suggested process type
+ InfyFTProcessSelectionQuestionnaire($inputObject);
+ 
+ //clickReturn();
+ 
+ $t11.end();
+ var $s12 = _testcase("TC_9.2"," Open Inbox");
+ $s12.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//Project Request_home
+ navigateTo($inputObject);
+ $s12.end();
+ 
+ var $s13 = _testcase("TC_9.3"," open request");
+ $s13.start();
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ $s13.end();
+ _wait(5000);
+
+ var $chk = InfyFTverifyProjectType();//check project type
+
+ if($chk == false)
+ {
+
+	 var $t14 = _testcase("TC_14.3"," Route with comments");
+	 $t14.start();
+  
+	 $inputObject = {};
+	 $inputObject.segment_name = $data.segment_name15;
+	 SelectSegment($inputObject);
+	  
+	 $inputObject = {};
+	 $inputObject.bold_Name = $data.approval16;//_bold("Approver")
+     $inputObject.cell_Name = $data.skip17;//_cell("Skip")
+	 InfyFTverifyValue($inputObject);
+
+	 $inputObject = {};
+	 $inputObject.txt_Comments = $data.Comments18;
+	 InfyFTClickRoutewithComments($inputObject);
+	
+	_wait(10000);
+	 
+    logOut();
+   $t14.end();
+    var $t15 = _testcase("TC_14.4","Login");
+	$t15.start();
+ 
+ 	$inputObject = {};
+ 	$inputObject.user_name = $data.user_name1;
+ 	$inputObject.edt_loginid = $data.LoginID1;
+	$inputObject.edt_password =$data.Password1;
+	loginIntoDigite($inputObject);
+ 
+ 	$t15.end();
+	var $s16 = _testcase("TC_14.5"," verify Project");
+	$s16.start();
+
+	
+	$inputObject = {};
+	$inputObject.projectname = $proj_code;
+	selectProject($inputObject);
+	$s16.end();
+	
+	_wait(5000);
+	/* _mouseOver(_link("Inbox"))
+	_click(_link("View My Inbox"))
+	
+	var $temp = $proj_code + "_PMP";
+	
+	_wait(10000);
+	
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo4;//All Items
+	navigateTo($inputObject);
+	
+	_wait(10000);
+	
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo4;//All Items
+	navigateTo($inputObject);
+	
+	$inputObject = {};
+	$inputObject.item = $temp;
+	infyFTverifyProjectRequestInstanceInListing($inputObject);;
+	
+	$inputObject = {};
+	$inputObject.item = $temp;
+	infyFTOpenProjectRequest($inputObject);
+		
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo22;//Profile_usp
+	navigateTo($inputObject);
+	
+	/*$inputObject = {};
+	$inputObject.span_Name = $data.proc_type23;//_span("PROJECTTYPE")
+	$inputObject.cell_Name = $data.proc_typec23;//_cell("Process Type :")
+	InfyFTisReadOnly($inputObject);*/ 
+		/* 
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo24;//All Items
+	navigateTo($inputObject);
+	
+	$inputObject = {};
+	$inputObject.item = $proj_code;
+	infyFTverifyProjectRequestInstanceInListing($inputObject);;
+	
+	$inputObject = {};
+	$inputObject.item = $proj_code;
+	infyFTOpenProjectRequest($inputObject); */
+	
+	
+ }
+
+  
+ 
+ 
+ 
+
+ 

@@ -1,0 +1,116 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("Testing_PrjCr_Mgr_Delete_Project_11.sah");
+
+ if(_getGlobal("New_UI")==="yes")
+	$data = readDataFromCSV("Testing_PrjCr_Mgr_Route_negative_07_NewUI","Testing/PrjCr_Mgr");
+ else
+	$data = readDataFromCSV("Testing_PrjCr_Mgr_Route_negative_07","Testing/PrjCr_Mgr");
+ 
+  $dateObj1 = new Date();
+  $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+  $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+  $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+  $t = _testcase("TC_1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+  $s = _testcase("TC_1.4"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ verifyInstanceInListing($inputObject);
+ 
+  $inputObject = {}; 
+  $inputObject["edt_searchTextBox-inputEl"] = $data.Project_code4;
+  setAllFields($inputObject);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ $s.end();
+  $s = _testcase("TC_2.1"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ verifyInstanceInListing($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.ini_act5;//initiate action None
+ $inputObject.lst_DN_PeakTeamSize = $data.peak_tm_size6;//Peack team size
+ ModifyEformInstance($inputObject);
+ 
+ $s.end();
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = "Merge";//$data.ini_act6;//Create
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Reason for not choosing Recommended Action in Details tab \n• Field Peak Team Size in Details tab";
+ ModifyEformInstance($inputObject); 
+ 
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.ini_act6;//Create
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Peak Team Size in Details tab";
+ ModifyEformInstance($inputObject);
+
+ $inputObject={};
+ $inputObject.lst_DN_InitiateAction = $data.ini_act6;//Create
+ $inputObject.txt_CM_Description = "desc";
+  $inputObject.lst_DN_PeakTeamSize = $data.peak_tm_size12;//<=5
+ ModifyEformInstance($inputObject);
+ 
+ $s.end();
+  $s = _testcase("TC_3.1"," check project Type");
+ $s.start();
+ 
+  $chk = InfyFTverifyProjectType();//check project type
+  if($chk == true) 
+{
+	_assert(true, _button("Route ").disabled);
+ 
+ 	$inputObject = {};
+	$inputObject.segment_name = $data.workflow_Segment7;// _link("Workflow")
+	SelectSegment($inputObject);
+ 
+	_assertEqual(_getText(_cell("CurrentWorkflowStage")),"Submitter");
+ 
+	$inputObject = {};
+	$inputObject.workflow_stage = $data.stage8;
+	$inputObject.multiple_member = $data.user_name9;
+	WorkflowSet($inputObject);
+ }
+	
+ $s.end();
+  $s = _testcase("TC_4.1"," check alert message");
+ $s.start();  
+	$inputObject = {};
+	$inputObject.segment_name = $data.Detail_Segment10;// _link("Details")
+	SelectSegment($inputObject);
+
+	$inputObject={};
+	$inputObject.lst_PROJECTTYPE = $data.process_type6;//Mech PD
+	ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = "";
+ $inputObject.txt_DN_ReasonfornotchoosingRe = "";
+ ModifyEformInstance($inputObject);
+
+ $s.end();

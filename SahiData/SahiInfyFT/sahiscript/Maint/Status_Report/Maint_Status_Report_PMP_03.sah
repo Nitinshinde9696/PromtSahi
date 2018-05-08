@@ -1,0 +1,455 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+/*********************************
+DATASETUP: PM Plan PART
+**********************************/
+ $data = readDataFromCSV("Maint_Status_Report_PMP_03","Maint/Status_Report"); 
+ 
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname  = $data.Project_name1;//TJCSTMEP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //PM Plan
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+
+
+ var $t = _testcase("TC_3", "Goals section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//"nodeIcon11";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//"Goals";
+ InfyFTclick($inputObject);
+
+ //MAJOR ENHANCEMENT GOALS
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Major Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname1;//"Baseline Value_edt";
+ $inputObject.fieldValues = $data.value1;//"12|45|23|32";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Major Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname2;//"Percent Improvement_edt";
+ $inputObject.fieldValues = $data.value2;//"14|44|24|34";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//"Major Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname3;//"Commitment to Client_lst";
+ $inputObject.fieldValues = $data.value3;//"No|Yes with no financial impact|No|Yes with no financial impact";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;//"Select Leading Metrics[5]";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Applicable Leading Metrics";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowname2;//"Effort deviation|Effort savings through accelerators";
+ $inputObject.colNo = $data.colname4;//"Select Leading Metric_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link3;//"Select Leading Metrics[9]";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Applicable Leading Metrics";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowname3;//"Defect detection rate";
+ $inputObject.colNo = $data.colname4;//"Select Leading Metric_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ /*$inputObject = {};
+ $inputObject.link = $data.link4;//"Select Leading Metrics[11]";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Applicable Leading Metrics";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowname4;//"Effort deviation";
+ $inputObject.colNo =  $data.colname4;//"Select Leading Metric_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ clickReturn();*/
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //MINOR ENHANCEMENT GOALS
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//"Minor Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname1;//"Baseline Value_edt";
+ $inputObject.fieldValues = $data.value2;//"14|44|24|34";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//"Minor Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname2;//"Percent Improvement_edt";
+ $inputObject.fieldValues = $data.value1;//"12|45|23|32";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//"Minor Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname3;//"Commitment to Client_lst";
+ $inputObject.fieldValues = $data.value4;//"Yes with financial impact|Yes with financial impact|Yes with financial impact|Yes with financial impact";
+ setSwiftFormData($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//"Minor Enhancement Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname1;//"Productivity - Nesma FP|Quality - Effort|Quality - Nesma FP|Schedule Adherence";
+ $inputObject.colNo = $data.colname5;//"Minimum value with no financial impact[2]_edt";
+ $inputObject.fieldValues = $data.value5;//"32|42|54|14";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link5;//"Select Leading Metrics[26]";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Applicable Leading Metrics";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowname2;//"Effort deviation|Effort savings through accelerators";
+ $inputObject.colNo = $data.colname4;//"Select Leading Metric_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link6;//"Select Leading Metrics[28]";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Applicable Leading Metrics";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowname3;//"Effort deviation";
+ $inputObject.colNo = $data.colname4;//"Select Leading Metric_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ /*$inputObject = {};
+ $inputObject.link = $data.link7;//"Select Leading Metrics[29]";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Applicable Leading Metrics";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowname4;//"Defect detection rate";
+ $inputObject.colNo = $data.colname4;//"Select Leading Metric_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();*/
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ //BUG FIX GOALS
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//"Bug Fix Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname5;//"Productivity BugFix|Quality BugFix";
+ $inputObject.colNo = $data.colname1;//"Baseline Value_edt";
+ $inputObject.fieldValues = $data.value6;//"12|45";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//"Bug Fix Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname5;//"Productivity BugFix|Quality BugFix";
+ $inputObject.colNo = $data.colname2;//"Percent Improvement_edt";
+ $inputObject.fieldValues = $data.value7;//"14|44";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//"Bug Fix Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname5;//"Productivity BugFix|Quality BugFix";
+ $inputObject.colNo = $data.colname3;//"Commitment to Client_lst";
+ $inputObject.fieldValues = $data.value8;//"No|Yes with no financial impact";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ 
+ //PROJECT SPECIFIC GOALS
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table5;//"Project Specific Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname6;//"Analysis and Research|Major Enhancement|Bug Fix|Minor Enhancement|Other Request|Testing Request";
+ $inputObject.colNo = $data.colname6;//"Goal[6]_edt";
+ $inputObject.fieldValues = $data.value9;//"14.0|44.0|21.0|32.0|43.0|54.0";
+ setSwiftFormData($inputObject); 
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table5;//"Project Specific Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname6;//"Analysis and Research|Major Enhancement|Bug Fix|Minor Enhancement|Other Request|Testing Request";
+ $inputObject.colNo = $data.colname7;//"Commitment to Client[6]_lst";
+ $inputObject.fieldValues = $data.value10;//"No|Yes with no financial impact|No|Yes with no financial impact|No|Yes with no financial impact";
+ setSwiftFormData($inputObject);
+
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table5;//"Project Specific Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname6;//"Analysis and Research|Major Enhancement|Bug Fix|Minor Enhancement|Other Request|Testing Request";
+ $inputObject.colNo = $data.colname8;//"Leading Metrics_txt";
+ $inputObject.fieldValues = $data.value11;//"test|test1|test2|test3|test4|test5";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _click(_link("Add Rows[2]"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table6;//"Strategies"
+ $inputObject.rowNo = $data.rowno1;//"2";
+ $inputObject.colNo = $data.colno1;//"1_txt"
+ $inputObject.fieldValues = $data.value12;//"test";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_4", "Production Support Goals section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link8;//"Production Support Goals";
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ _wait(5000);
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.link = $data.link9;//"Setup Goals";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table7;//"Goal Selection";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname7;//"1|12"
+ $inputObject.colNo = $data.colname9;//"Goal_edt"
+ $inputObject.fieldValues = $data.value13;//"12|23";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table7;//"Goal Selection";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname7;//"1|12"
+ $inputObject.colNo = $data.colname10;//"Goal Type_lst"
+ $inputObject.fieldValues = $data.value14;//"Internal|SLA";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table7;//"Goal Selection";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname7;//"1|12"
+ $inputObject.colNo = $data.colname11;//"Minimum SL Target_edt"
+ $inputObject.fieldValues = $data.value15;//"23|34";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName =  $data.table7;//"Goal Selection";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.rowname7;//"1|12"
+ $inputObject.colNo = $data.colname12;//"Is Applicable_chk"
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ _wait(10000);
+
+ $t.end();
+
+ var $t = _testcase("TC_5", "Commitment to client section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node2;//"nodeIcon6";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link10;//"Client Commitment";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table8;//"Client Commitments";
+ $inputObject.rowNo = $data.rowno1;//"2";
+ $inputObject.colNo = $data.colno1;//"1_txt"
+ $inputObject.fieldValues = $data.value12;//"test";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_6", "Baselining the PM Plan");
+ $t.start();
+ 
+ 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link11;//"Workflow";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username1;//"a_radhakrishnan";
+ $inputObject.workflow_stage = $data.stage0;//"1";
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username2;//"Nethravathi_r02";
+ $inputObject.workflow_stage = $data.stage1;//"2";
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Username3;//"Nethravathi_r02";
+ $inputObject.workflow_stage = $data.stage2;//"2";
+ WorkflowSet($inputObject);
+ 
+ $inputObject={};
+ saveInstance($inputObject)
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.comment1;//"test";
+ InfyFTClickRoutewithComments($inputObject);
+ 
+ $inputObject={};
+ saveInstance($inputObject);
+ 
+ 
+  var $t = _testcase("TC_1", "Login with SDM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username3;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID3;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link11;//"Workflow";
+ InfyFTclick($inputObject);
+ 
+    
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.comment1;//"test";
+ InfyFTClickRoutewithComments($inputObject);
+ 
+ $t.end();
+ 
+ 

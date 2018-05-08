@@ -1,0 +1,466 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/ResourceManagement.sah");
+//_include("../../sahisource/Business/EformInstance.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+ $data = readDataFromCSV("Roles_Delegation_01","Roles");
+ var $dateObj1 = new Date();
+ var $ttartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ var $t = _testcase("TC_1.1.1","Login into Digite");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;//subhashini_k03
+ $inputObject.edt_loginid = $data.LoginID1;//subhashini_k03
+ $inputObject.edt_password =$data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_1.1.2"," Navigation to Project");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//INbox
+ //navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.projectname4;//TJCSTMEP
+ //verifyInstanceInListing($inputObject)
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//TJCSTMEP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Team Members
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1.3"," Invite user for SDM Role success");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Membername6;//Sudipta_300499
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;//Member Allocations
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles6;//SDM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_1.2"," Invite user for SDM Role unsuccessful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername7;//Mihir_300495
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles6;//SDM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;//"12-Sep-2080";//
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_2.1"," Invite user for DM Role success");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername8;//satyendra_kumar
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles8;//DM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+  
+ $t.end();
+ var $t = _testcase("TC_2.2"," Invite user for DM Role unsuccessful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername9;//Mihir_300495
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles8;//DM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3.1"," Invite user for GPM Role success");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Membername10;//Dushyant_300494//lohith_krishnarao
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+/*  $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles10;//GPM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_3.2"," Invite user for GPM Role unsuccessful");
+ $t.start();
+ 
+/*  $inputObject = {};
+ $inputObject.item = $data.Membername11;//Mihir_300495
+ OpenEformInstance($inputObject); */
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles10;//GPM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_4.1"," Invite user for SPM Role success");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Membername12;//Jorawer_Mann//Prateek_Bhargava
+ OpenEformInstance($inputObject);
+ 
+ _wait(3000);
+ 
+/*  $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles12;//SPM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_4.2"," Invite user for SPM Role unsuccessful");
+ $t.start();
+ 
+/*   $inputObject = {};
+ $inputObject.item = $data.Membername13;//Mehak_Gupta04
+ OpenEformInstance($inputObject); */
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles12;//SPM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_5.1"," Invite user for PM Role success");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Membername14;//Priyanka_Patel01//Praween_300493
+ OpenEformInstance($inputObject);
+ 
+ _wait(3000);
+ 
+/*  $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles14;//PM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_5.2"," Invite user for PM Role unsuccessful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername15;//Mihir_300495
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles14;//PM
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ $t.end();
+ 
+ var $t = _testcase("TC_6.1"," Invite user for TL Role success");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername16;//Vishal_Gera01//Jyotika_Gulati01
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles16;//TL
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_6.2"," Invite user for TL Role unsuccessful");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.item = $data.Membername17;//Mihir_300495
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles16;//TL
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_7.1"," Invite user for TA Role success");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Membername18;//Harinder_aulakh//Shalika_Katial
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles18;//TA
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_7.2"," Invite user for TA Role unsuccessful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername19;//Tanmai_Sharma
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles18;//Harinder_aulakh
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_8.1"," Invite user for Software Engineer Role successful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername20;//rahul_mahant//Tanmai_Sharma
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles20;//SE
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_9.1"," Invite user for CC Role success");
+ $t.start();
+
+/*  $inputObject = {};
+ $inputObject.item = $data.Membername21;//Vishal_Gera01//Milan_300491
+ OpenEformInstance($inputObject); */
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles21;//Configurator Controller
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_9.2"," Invite user for CC Role unsuccessful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername22;//Mihir_300495
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles21;//Configurator Controller
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_10.1"," Invite user for DP Prime Role success");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Membername23;//Vishal_Gera01
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles23;//DP Prime
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_10.2"," Invite user for DP Prime Role unsuccessful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername24;//Mihir_300495
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ $inputObject = {};
+ 
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles23;//DP Prime
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ clickReturn();
+ 
+ $t.end();
+ var $t = _testcase("TC_11.1"," Invite user for Reviewer Role successful");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Membername25;//Mehak_Gupta04//Chasham_Kaur
+ OpenEformInstance($inputObject);
+ 
+  _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Name6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles25;//Reviewer
+ $inputObject.edt_allocstartdate = $ttartDate1;
+ $inputObject.edt_allocenddate = $EndDate2;
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ 
+ $t.end();
+ 

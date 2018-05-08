@@ -1,0 +1,581 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+//_include("../../../sahisource/Business/ECRNethra.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("IMS_ELF_Create_ELF_01", "IMS/ELF");
+ $gen = readDataFromCSV("IMS_ELF_Common", "IMS/ELF");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-2,$dateObj);
+ var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",2,$dateObj);
+ var $toDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-7,$dateObj);
+ var $startDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-6,$dateObj);
+ var $endDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ /**********************************************************************************************************
+ * Login with rite userID and password 
+ **********************************************************************************************************/ 
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+
+ var $t = _testcase("TC_1", "Login to Digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ //$data = readDataFromCSV("InfyFT_sahi3_ELF_P_notagile", "InfyFTSahi/ELFfirefox");
+ 
+ var $t = _testcase("TC_2", "Select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;//
+ selectProject($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to ELF");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;//ELF
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end(); 
+ 
+ /*****************************************************************************************************************************
+ * for the project type P' but project process is not among 1. InfyAgile Global Process Template 2. Infy Agile Process Template
+   3. Scrum Process Template 
+ ******************************************************************************************************************************/ 
+ //$data = readDataFromCSV("InfyFT_BR32F5_sahi1_2_create_ELF", "InfyFTSahi/ELFfirefox");
+ 
+ var $t = _testcase("TC_4", "checking mandatory fields of ELF");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name4;//Name * :
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.Organization4;//Organization * :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Milestone4;//Milestone * :
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.FromDate4;//
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ToDate4;//
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Feedbackby4;//
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Designation4; //
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.EngagementFeedbackRece4; //
+ InfyFTisVisibleN($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Organization in Details tab \n• Field Milestone in Details tab \n• Field From Date in Details tab \n• Field To Date in Details tab \n• Field Feedback Received Date in Details tab \n• Field Feedback by in Details tab \n• Field Designation in Details tab \n";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Organization = $data.OrganizationValue4;//
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Milestone in Details tab \n• Field From Date in Details tab \n• Field To Date in Details tab \n• Field Feedback Received Date in Details tab \n• Field Feedback by in Details tab \n• Field Designation in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Milestone = $data.MilestoneValue4;//
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field From Date in Details tab \n• Field To Date in Details tab \n• Field Feedback Received Date in Details tab \n• Field Feedback by in Details tab \n• Field Designation in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_FromDate = $currentDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field To Date in Details tab \n• Field Feedback Received Date in Details tab \n• Field Feedback by in Details tab \n• Field Designation in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_ToDate = $currentDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Feedback Received Date in Details tab \n• Field Feedback by in Details tab \n• Field Designation in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Feedbackby = $data.FeedbackbyValue4;//
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Feedback Received Date in Details tab \n• Field Designation in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_Designation = $data.DesignationValue4;//
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Feedback Received Date in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.edt_DN_EngagementFeedbackRece = $currentDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Date Validation");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//
+ $inputObject.edt_DN_FromDate = $currentDate;
+ $inputObject.edt_DN_ToDate = $currentDate;
+ $inputObject.edt_DN_EngagementFeedbackRece = $currentDate;
+ $inputObject.msgAlert = "To Date should be greater than From Date (" + $currentDate + ").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue42;//
+ $inputObject.edt_DN_FromDate = $currentDate;
+ $inputObject.edt_DN_ToDate = $toDate1;
+ $inputObject.edt_DN_EngagementFeedbackRece = $currentDate;
+ $inputObject.msgAlert = "From Date (" + $currentDate + ") and To Date (" + $toDate1 + ") should be within Project Start Date (1-Feb-2013) and Project End Date (30-Dec-2020). Both dates should be earlier than or equal to Feedback Received Date  (" + $currentDate + "). Either of them cannot be a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue43;//
+ $inputObject.edt_DN_FromDate = $currentDate;
+ $inputObject.edt_DN_ToDate = $toDate1;
+ $inputObject.edt_DN_EngagementFeedbackRece = $toDate1;
+ $inputObject.msgAlert = "Feedback Received Date (" + $toDate1 + ") cannot be earlier than Project Start Date (1-Feb-2013) or a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue44;//
+ $inputObject.edt_DN_FromDate = $startDate1;
+ $inputObject.edt_DN_ToDate = $endDate1;
+ $inputObject.edt_DN_EngagementFeedbackRece = $startDate1;
+ $inputObject.msgAlert = "From Date (" + $startDate1 + ") and To Date (" + $endDate1 + ") should be within Project Start Date (1-Feb-2013) and Project End Date (30-Dec-2020). Both dates should be earlier than or equal to Feedback Received Date (" + $startDate1 + "). Either of them cannot be a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//
+ $inputObject.edt_DN_FromDate = $endDate1;
+ $inputObject.edt_DN_ToDate = $startDate1;
+ $inputObject.edt_DN_EngagementFeedbackRece = $endDate1;
+ $inputObject.msgAlert = "To Date should be greater than From Date (" + $endDate1 + ").";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//
+ $inputObject.edt_DN_FromDate = $startDate1;
+ $inputObject.edt_DN_ToDate = $endDate1;
+ $inputObject.edt_DN_EngagementFeedbackRece = $toDate1;
+ $inputObject.msgAlert = "Feedback Received Date (" + $toDate1 + ") cannot be earlier than Project Start Date (1-Feb-2013) or a Future Date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end();
+ 
+ /**************************************************************************************************************************
+ * creating ELF 
+ ***************************************************************************************************************************/
+ 
+ //$data = readDataFromCSV("InfyFT_sahi3_ELF_P_notagile", "InfyFTSahi/ELFfirefox");
+ 
+ var $t = _testcase("TC_6", "create ELF");
+ $t.start();
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.NameValue41;//
+ $inputObject.edt_DN_Organization = $data.OrganizationValue4;//
+ $inputObject.edt_DN_Milestone = $data.MilestoneValue4;//
+ $inputObject.edt_DN_FromDate = $startDate;//
+ $inputObject.edt_DN_ToDate = $currentDate;//
+ $inputObject.edt_DN_Feedbackby = $data.FeedbackbyValue4;//
+ $inputObject.edt_DN_Designation = $data.DesignationValue4;//
+ $inputObject.edt_DN_EngagementFeedbackRece = $currentDate;
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ var $IDelf1 =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Please enter the values for Rating field under Engagement Feedback tab.";
+ InfyFTCloseEformInstanceN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name31;//Engagement Feedback
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {}; //1-PRODUCT OR WORK
+ $inputObject.tableName = $data.tableName51;//PRODUCT OR WORK
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt
+ $inputObject.fieldValues = $data.fieldValues51;//6.5|Test1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table PRODUCT OR WORK, PROJECT MANAGEMENT AND COMMUNICATION, PEOPLE, VALUE AND DIFFERENTIATION, Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table PRODUCT OR WORK in Engagement Feedback tab\n• Field Rating in table PROJECT MANAGEMENT AND COMMUNICATION in Engagement Feedback tab\n• Field Rating in table PROJECT MANAGEMENT AND COMMUNICATION in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};//2
+ $inputObject.tableName = $data.tableName51;//
+ $inputObject.rowNo = $data.rowNo52;//2 //3,2
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt
+ $inputObject.fieldValues = $data.fieldValues51;//6.5|Test1
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table PROJECT MANAGEMENT AND COMMUNICATION, PEOPLE, VALUE AND DIFFERENTIATION, Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table PROJECT MANAGEMENT AND COMMUNICATION in Engagement Feedback tab\n• Field Rating in table PROJECT MANAGEMENT AND COMMUNICATION in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; //1-PROJECT MANAGEMENT AND COMMUNICATION
+ $inputObject.tableName = $data.tableName52;//PROJECT MANAGEMENT
+ $inputObject.rowNo = $data.rowNo51;//1 //2,2
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt 
+ $inputObject.fieldValues = $data.fieldValues52;//7|Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table PROJECT MANAGEMENT AND COMMUNICATION, PEOPLE, VALUE AND DIFFERENTIATION, Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table PROJECT MANAGEMENT AND COMMUNICATION in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};//2
+ $inputObject.tableName = $data.tableName52;//PROJECT MANAGEMENT
+ $inputObject.rowNo = $data.rowNo52;//2 //3,2
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt 
+ $inputObject.fieldValues = $data.fieldValues52;//7|Test2
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; //1-PEOPLE
+ $inputObject.tableName = $data.tableName53;//PEOPLE
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt
+ $inputObject.fieldValues = $data.fieldValues52;//7|Test3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};//2
+ $inputObject.tableName = $data.tableName53;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues52;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table PEOPLE, VALUE AND DIFFERENTIATION, Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table PEOPLE in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};//3
+ $inputObject.tableName = $data.tableName53;
+ $inputObject.rowNo = $data.rowNo53;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues52;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table VALUE AND DIFFERENTIATION, Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; //1-VALUE AND DIFFERENTIATION
+ $inputObject.tableName = $data.tableName54;//VALUE AND DIFFERENTIATION
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt
+ $inputObject.fieldValues = $data.fieldValues52;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table VALUE AND DIFFERENTIATION, Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table VALUE AND DIFFERENTIATION in Engagement Feedback tab\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};//2
+ $inputObject.tableName = $data.tableName54;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues52;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Rating(s) are not filled in table Overall Satisfaction in Engagement Feedback tab. Please enter the values and save.";
+ //"Value is not set for the below fields.Please enter the values and save:\n• Field Rating in table Overall Satisfaction in Engagement Feedback tab\n";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; //1-Overall Satisfaction
+ $inputObject.tableName = $data.tableName55;//Overall Satisfaction
+ $inputObject.rowNo = $data.rowNo51;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValues52;//7|Test4
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};//1-Qualitative Feedback
+ $inputObject.tableName = $data.tableName56;//Qualitative Feedback
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo52;//1_txt
+ $inputObject.fieldValues = $data.fieldValues53;//Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};//2
+ $inputObject.tableName = $data.tableName56;//Qualitative Feedback
+ $inputObject.rowNo = $data.rowNo52;//2
+ $inputObject.colNo = $data.colNo52;///1_txt
+ $inputObject.fieldValues = $data.fieldValues53;//Test
+ setSwiftFormData($inputObject);
+ 
+ /* $inputObject = {}; //1-Comparative Feedback
+ $inputObject.tableName = $data.tableName57;//Comparative Feedback
+ $inputObject.rowNo = $data.rowNo51;//1
+ $inputObject.colNo = $data.colNo51;//2_lst|3_txt
+ $inputObject.fieldValues = $data.fieldValues54;//Much Better|Test
+ setSwiftFormData($inputObject); */
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+ clickReturn();
+  
+ $t.end();
+   
+ /**************************************************************************************************************
+ *checking inbox of the logged on user 
+ ***************************************************************************************************************/
+ 
+ //$data = readDataFromCSV("InfyFT_BR32F5_sahi1_2_create_ELF", "InfyFTSahi/ELFfirefox");
+ 
+ var $t = _testcase("TC_7", "navigate to INBOX");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo32;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "checking instance presented in logged on user or not");
+ $t.start();
+ 
+ _wait(6000);
+ $inputObject = {};
+ $inputObject.item = $IDelf1;
+ $inputObject.operation = $data.operation7;
+ verifyInstanceInListing($inputObject);
+  
+ $t.end();
+ 
+ /****************************************************************************
+ *close the instance which created
+ ****************************************************************************/
+ //$data = readDataFromCSV("InfyFT_sahi3_ELF_P_notagile", "InfyFTSahi/ELFfirefox");
+ 
+ var $t = _testcase("TC_9", "close the instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;//team isha
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDelf1;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDelf1;
+ OpenEformInstance($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.msgAlert = "";
+ InfyFTCloseEformInstanceN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.filter;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDelf1;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDelf1;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.reopen;//reopen
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ InfyFTreopenInstance(); 
+  
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.button = $data.Save;//save
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Addnew;//save&addnew
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T1;
+ $inputObject.reset = $data.Reset;//reset
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.return;//return
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.true = $data.T0;
+ $inputObject.button = $data.Complete;//complete
+ InfyFTcheckingButtons($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.notExists = $data.T1;
+ $inputObject.button = $data.Delete;//delete
+ InfyFTcheckingButtons($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.msgAlert = "";
+ InfyFTCloseEformInstanceN($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

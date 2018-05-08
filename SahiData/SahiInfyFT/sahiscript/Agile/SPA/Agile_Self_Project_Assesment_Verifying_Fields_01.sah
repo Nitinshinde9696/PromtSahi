@@ -1,0 +1,183 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("Agile_Self_Project_Assesment_Verifying_Fields_01","Agile/SPA"); 
+
+	var $Script1 = _testcase("Script1", "Agile_Self_Project_Assesment_Verifying_Fields_01");
+	$Script1.start();
+
+	var $t1 = _testcase("TC_1", "Login with PM");
+	$t1.start();
+
+	$inputObject = {};
+	$inputObject.user_name = $data.Username2;
+	$inputObject.edt_loginid = $data.LoginID2;
+	$inputObject.edt_password = $data.Password2;
+	loginIntoDigite($inputObject);
+
+	$t1.end();
+
+
+	var $t2 = _testcase("TC_2", "Navigate to Self Project Assessment");
+	$t2.start();
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo1; //Projects_home
+	navigateTo($inputObject);
+
+	$inputObject = {};
+	$inputObject.item  = $data.Project_name1;
+	OpenEformInstance($inputObject);
+
+	$inputObject = {};
+	$inputObject.name = $data.navigateTo2;
+	InfyFTnavigateTo($inputObject);
+	
+	$inputObject = {};
+	$inputObject.segment_name = $data.Segment_Name2;//Details
+	SelectSegment($inputObject);
+	
+	$inputObject = {};
+	$inputObject.lst_selectsingleuser0 = $data.LoginID2;
+	setAllFields($inputObject);
+	
+	$inputObject = {};
+	$inputObject.button = "SaveBtn";
+	InfyFTclick($inputObject);
+	
+	$t2.end();
+
+	var $t3 = _testcase("TC_3", "Verify Details segment");
+	$t3.start();
+
+	$inputObject = {};
+	$inputObject.span_Name = $data.Segments;
+	InfyFTisVisible($inputObject);
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.Segment_Name1;//Details
+	SelectSegment($inputObject);
+
+	$inputObject = {};
+	$inputObject.span_Name = $data.Details_segment_fields;
+	InfyFTisVisible($inputObject);
+
+
+	var $SPAProject_name = $data.Project_name1 + $data.SPA_name_value;
+	$inputObject = {};
+	$inputObject.edt_name = $data.SPA_name;
+	$inputObject.edt_value = $SPAProject_name;
+	InfyFTverifyValue($inputObject)
+
+	$t3.end();
+ 
+	var $t4 = _testcase("TC_5", "Verifying the Values of Behavioral Practice and Engineering Practice");
+	$t4.start();
+
+	$inputObject = {};
+	$inputObject.segment_name = $data.SPA;
+	SelectSegment($inputObject);
+
+
+	$inputObject = {};
+	$inputObject.span_Name = $data.SPA_metrics;
+	InfyFTisVisible($inputObject);
+
+	$inputObject = {};
+	$inputObject.span_Name = $data.SPA_metrics_columns;
+	InfyFTisVisible($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.rowname1;
+	$inputObject.colNo  = $data.colname1;
+	$inputObject.fieldValues = $data.BP_Value;
+	verifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;;
+	$inputObject.rowNo = $data.rowname1;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.BP_selectValue;
+	verifySwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.rowname2;
+	$inputObject.colNo  = $data.colname2;
+	$inputObject.fieldValues = $data.EP_Value;
+	verifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.rowname2;
+	$inputObject.colNo  = $data.selectbox_EPvalues1;
+	$inputObject.fieldValues = $data.EP_selectbox_Value;
+	verifySwiftFormData($inputObject);
+
+	$t4.end();
+
+	var $TC5 = _testcase("default None", " Verify the default None")
+	$TC5.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.rowname1;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = "--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--";
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.rowname1;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = " | | | | | | | | | | | ";
+	InfyFTverifySwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.rowname2;
+	$inputObject.colNo  = $data.selectbox_EPvalues1;
+	$inputObject.fieldValues = "--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--|--None--";
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.rowname2;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = " | | | | | | | | | ";
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$TC5.end();
+	$Script1.end();
+	
+	var $Script2 =  _testcase("Script2", "Agile_Self_Project_Assesment_Verifying_Values_02");
+	$Script2.start();
+	
+		_include("Agile_Self_Project_Assesment_Verifying_Values_02.sah");
+		
+	$Script2.end();
+	
+	var $Script3 =  _testcase("Script3", "Agile_Self_Project_Assesment_Calculate_Overall_score_03");
+	$Script3.start();
+	
+		_include("Agile_Self_Project_Assesment_Calculate_Overall_score_03.sah");
+		
+	$Script3.end();	
+
+
+
+
+
+
+

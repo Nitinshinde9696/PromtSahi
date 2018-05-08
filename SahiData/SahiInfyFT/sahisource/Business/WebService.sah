@@ -1,0 +1,2 @@
+_include("../../../SahiDigite/sahisource/Business/WebService.sah");
+_setGlobal("AXISURL","http://sahi1:8080/axis/services"); //wsdl Login URL

@@ -1,0 +1,27 @@
+
+/*************************************************************************
+* @author Ram
+* @example modifyDocumentSet
+* @description This function is called to modifyDocumentSet
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function modifyDocumentSet($inputObject)
+{
+	_log("modifyDocumentSet Started","success");
+	try 
+	{
+		_selectWindow("Document Set : Details");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		_selectWindow("Document Management : Document Sets");
+		_click(_button("QTP_Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyDocumentSet Completed","success");
+}

@@ -1,0 +1,152 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_SDMP_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //AVDGESTP
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ $data = readDataFromCSV("IMS_SDMP_OperationalSegment_02", "IMS/ProjectAdminandSDMP");
+ 
+ /***********************************************************
+ *Requirement/ Change Management Process
+ ***********************************************************/
+ 
+ var $t = _testcase("TC_4", "Requirement/ Change Management Process");
+ $t.start();
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ }
+ else
+ {
+ $inputObject = {};
+ $inputObject.span = $data.listprop;// _click(_span("de-iconshow_listprop collapseTreeMenu[1]"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.X14;//_click(_link("X-14[1]"));
+ InfyFTclick($inputObject); 
+ }
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.req; //Scope Description
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.Keyall =$data.keyall;
+ $inputObject.item = $data.RCM1;
+ $inputObject.delete = $data.delete;
+ InfyFTsdmpDelete($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ { 
+ _highlight(_span(62));//green colour will indicate there 
+ var $req = _getText(_span(63));
+ _assertEqual($req, _getText(_span(63))); 
+ 
+ $inputObject = {};
+ $inputObject.nodeIcon14 = $data.nodeIcon14;
+ InfyFTnodeiconSDMP($inputObject);
+ }
+ else
+ {
+ _highlight(_span(90));//green colour will indicate there 
+ var $req = _getText(_span(91));
+ _assertEqual($req, _getText(_span(91))); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.listprop;// _click(_span("de-iconshow_listprop collapseTreeMenu[1]"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.X14;//_click(_link("X-14[1]"));
+ InfyFTclick($inputObject); 
+ }
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.req; 
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.key;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_DN_RequirementChangeManag = $data.CM_Description;
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ _popup("newListing")._click(_button("Return"));
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //sdmp
+ InfyFTnavigateTo($inputObject);
+ 
+ if(_isVisible(_link($data.Username1)))
+ {  
+ _highlight(_span(62));//red colour will indicate there 
+ var $req1 = _getText(_span(63));
+ _assertEqual($req1, _getText(_span(63))); 
+ }
+ else
+ {
+ _highlight(_span(90));//red colour will indicate there 
+ var $req1 = _getText(_span(91));
+ _assertEqual($req1, _getText(_span(91))); 
+ }
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();

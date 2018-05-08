@@ -1,0 +1,291 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Dev_Iteration_Iteration_summary_02","Dev/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",1,$dateObj);
+ var $ActualStartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",3,$dateObj);
+ var $ActualEndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $Review_Type ="Requirements Review - DM";
+  
+ /* var $t = _testcase("Step_1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username11;//snehal_ghodeswar
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Step_2","Select Project");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectName2;//1410DPOZ
+ selectProject($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Step_3","Navigate to Iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Iterations
+ navigateTo($inputObject);
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR4";
+ OpenEformInstance($inputObject);
+  */
+ _wait(500); 
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Details;//Details;
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.edt_DN_ActualStartDate = $ActualStartDate;
+ $inputObject.edt_DN_ActualEndDate = $ActualEndDate;
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ //$t.end();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Schedule;//Sub_Projects;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.newlink;//"KEY_Link_New_item-btnIconEl";
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing"); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Test;//"test1";
+ $inputObject.lst_isPackageDigiteStart = $data.isPackageDigiteStart;//"STaRT"
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+ var $IDsp = _getText(_span("CM_ItemCode")); 
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Scheduled_Tasks;
+ SelectSegment($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.span = "Edit";
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "addTaskButton-btnIconEl";
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "x-grid-cell-inner [16]";
+ InfyFTDoubleClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = "Test1";
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "x-grid-cell-inner [20]";
+ InfyFTDoubleClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.span = "Save and Checkin";
+ InfyFTclick($inputObject);
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.span = "button-1006-btnIconEl";
+ InfyFTclick($inputObject);
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data.popupnName1;//newListing;//"newListing";
+ InfyFTclickReturnInAddItemPopup();
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName501;//"Details";
+ $inputObject.rowNo = $data.rowNo502;//"2"
+ $inputObject.colNo = $data.colNo501;//"0_lst|1_lst|6_lst"
+ $inputObject.fieldValues = $data.fieldValues501;//"DM and BI|Re-Engineering|Backward FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add[1]";//$data.AddRow;
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName502;//"Add Additional Languages";
+ $inputObject.rowNo = $data.rowNo503;//"3"
+ $inputObject.colNo = $data.colNo502;//"2_lst|3_edt|4_edt";
+ $inputObject.fieldValues = $data.fieldValues502;//"Basic|23|20";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Iteration_Summary;//"Iteration Summary"
+ SelectSegment($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName503;//Schedule Summary
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo503;//0_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues503;//Baseline Start Date|Baseline End Date
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName503;//Schedule Summary
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo504;//1_lbl
+ $inputObject.fieldValues = $ActualStartDate;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName503;//Schedule Summary
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo505;//3_lbl
+ $inputObject.fieldValues = $ActualEndDate;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName504;//Effort Summary
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo506;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl
+ $inputObject.fieldValues = $data.fieldValues504;//Effort Category|Task Effort(hrs)|Review Effort(hrs)|Rework Effort(hrs)|Total Effort(hrs)|Estimated Effort(hrs)|% Deviation|Reason for deviation
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName504;//Effort Summary
+ $inputObject.rowNo = $data.rowNo504;//2|3|4|5|6
+ $inputObject.colNo = $data.colNo507;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues505;//Engineering effort|Non Engineering effort|Total effort considered for metrics|Non Iteration effort|Total Effort
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName505;//Base Measure
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo508;//0_lbl|1_lbl
+ $inputObject.fieldValues = $data.fieldValues506;//Base Measure|Effort(hrs)
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName505;//Base Measure
+ $inputObject.rowNo = $data.rowNo504;//2|3|4|5|6
+ $inputObject.colNo = $data.colNo507;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues507;//Preventive COQ Effort|Appraisal COQ Effort|Failure COQ Effort|ARC Effort|Total COQ Effort
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName506;//Defect Summary
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo509;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl
+ $inputObject.fieldValues = $data.fieldValues508;//Defect category|Critical|Major|Minor|Cosmetic
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName506;//Defect Summary
+ $inputObject.rowNo = $data.rowNo505;//1|2|3|4
+ $inputObject.colNo = $data.colNo507;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues509;//Defect category|In process defects|Acceptance test defects|Total Defects
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName507;//Size Summary
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo508;//0_lbl|1_lbl
+ $inputObject.fieldValues = $data.fieldValues510;//UOM of Size|FP
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName507;//Size Summary
+ $inputObject.rowNo = $data.rowNo506;//2|3
+ $inputObject.colNo = $data.colNo507;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues511;//UOM of Size|Size
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName508;//Iteration Performance
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo510;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.fieldValues512;//Metric Name|UOM|Goal|Actual|% Deviation|Reason for deviation
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName509;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo510;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl
+ $inputObject.fieldValues = $data.fieldValues516;//MetricName|UOM|Goal|Actual|% Deviation|Reason for deviation
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName510;//Reuse and Tools Savings
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo511;//0_lbl|1_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues513;//Reuse and Tools Savings|Actual Savings|Savings%
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName510;//Reuse and Tools Savings
+ $inputObject.rowNo = $data.rowNo509;//2|3|4
+ $inputObject.colNo = $data.colNo507;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues514;//Reuse Savings|Tools Savings|Total Savings
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName511;//Declaration
+ $inputObject.rowNo = $data.rowNo502;//2|3
+ $inputObject.colNo = $data.colNo507;//0_lbl
+ $inputObject.fieldValues = $data.fieldValues515;//Type of Data|Closure Comments
+ verifySwiftFormData($inputObject); 
+  
+ //_dynamicInclude("InfyFT_sahi_03_BR49_Dev_PT_Verify_Iteration_Summary.sah");
+ 
+ //_dynamicInclude("InfyFT_BR49_Dev_PT_Sizing_details_Estimation.sah");

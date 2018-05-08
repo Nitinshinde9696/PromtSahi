@@ -1,0 +1,74 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("MechPD_Request_Management_Request_Summary_PD_10","MechPD/Request_Management/Product_Design");
+ 
+  
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg2;//"Request Summary";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.sec01;//"Schedule Summary";//
+ $inputObject.rowNo =  $data.row1;
+ $inputObject.colNo = $data.col1;//"0_lbl|2_lbl";
+ $inputObject.fieldValues = $data.val01;//"First TS Entry Date|Last TS Entry Date";
+ verifySwiftFormData($inputObject);
+  
+ var $s1 = _testcase("TC 4.8"," Check the Type of Data Field");
+ $s1.start();
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.sec02;//"Declaration";
+ $inputObject.rowNo = $data.row2;//"0";
+ $inputObject.colNo = $data.col02;// "1_lst";
+ $inputObject.fieldValues = $data.val02;//"--None--#Bad Data#Normal";
+ verifySwiftFormData($inputObject);
+ 
+ $s1.end();
+ 
+ var $s2 = _testcase("TC 17.1"," Check the sections in Request Summary");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segments;//"Schedule Summary;Effort Summary;Defect Summary;Request performance;Reuse and Tools Summary;Declaration";
+ InfyFTisVisible($inputObject);
+ 
+ $s2.end();
+ 
+ var $s3 = _testcase("TC 4.9"," Check the Reason for Bad Data");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.sec02;//"Declaration";
+ $inputObject.rowNo = $data.row3;//"0";
+ $inputObject.colNo = $data.col3;//"1_lst";
+ $inputObject.fieldValues = $data.val03;//"Bad Data";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.sec03;//Reason for Bad Data;
+ $inputObject.rowNo = $data.row4;//"2";
+ $inputObject.colNo = $data.col4;//"1_edt";
+ $inputObject.fieldValues = $data.val4;//"Bad Data";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.sec03;//Reason for Bad Data;
+ $inputObject.rowNo = $data.row5;//"3";
+ $inputObject.colNo = $data.col5;//"1_edt";
+ $inputObject.fieldValues = $data.val05;//"Closure Comments";
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  $s3.end();
+ 
+ 

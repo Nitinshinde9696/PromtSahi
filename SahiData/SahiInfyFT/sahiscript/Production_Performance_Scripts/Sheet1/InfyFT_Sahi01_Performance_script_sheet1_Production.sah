@@ -1,0 +1,279 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah")
+
+$data = readDataFromCSV("InfyFT_Sahi01_Performance_script_sheet1_Production","Production_Performance_Scripts/Sheet1");
+
+var $s = _testcase("TC_1"," Inbox Navigation");
+ $s.start();
+var $Starts_seconds = new Date().getTime() / 1000;
+
+ _wait(50000, _isVisible(_div("x-grid-cell-inner [3]")));
+ var $end_Seconds =new Date().getTime() / 1000;
+ var $per_time = ($end_Seconds - $Starts_seconds);
+ _log("Inbox Navigation Time "+ $per_time.toFixed(2));
+ 
+ $s.end();
+ 
+
+ /********************************************************************************************************/
+ /* var $s = _testcase("TC_3.1"," Navigation to Project Request");
+ $s.start();
+	 _click(_link("Create and Merge Project"));
+	 var $Starts_seconds = new Date().getTime() / 1000;
+	 _wait(50000, _isVisible(_div("x-grid-cell-inner [2]")));
+ $s.end();
+ 
+ var $end_Seconds =new Date().getTime() / 1000;
+ var $per_time = ($end_Seconds - $Starts_seconds);
+	_log("Project Request Time "+ $per_time.toFixed(2));
+
+ var $s = _testcase("TC_3.2"," Open Project Request");
+ $s.start();
+	_click(_div($data.Project_requestName6));
+ var $Starts_seconds = new Date().getTime() / 1000;
+	_wait(50000, _isVisible(_cell("Project Code * :")));
+ $s.end();
+ 
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("Project Request Opening Time "+ $per_time.toFixed(2));
+
+ var $s = _testcase("TC_4"," Save on Project Request");
+ $s.start();
+
+	 _setSelected(_select("DN_InitiateAction"),"Create");
+	 _setValue(_textarea("DN_ReasonfornotchoosingRe"),"asdf");
+	 _click(_button(" Save "));
+
+  var $Starts_seconds = new Date().getTime() / 1000;
+ _assertExists(_button("ScrnButtonDis"));
+ 
+ $s.end();
+ 
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("Project Request Save Time "+ $per_time.toFixed(2));
+*/
+/********************************************************************************************************/
+
+ var $s = _testcase("TC_2"," Navigation to Project");
+ $s.start();
+  
+  _click(_link("Projects[1]"));
+  var $Starts_seconds = new Date().getTime() / 1000;
+ 
+
+  _wait(50000, _isVisible(_div("ISPPIMS3")));
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+  
+  $s.end();
+_log("All Projects landing page Time "+ $per_time.toFixed(2));
+
+ var $s = _testcase("TC_2.1"," Open Project");
+ $s.start();
+ _click(_div($data.Project_code4));
+ var $Starts_seconds = new Date().getTime() / 1000;
+
+ _wait(50000, _isVisible(_cell("Project Code :")));
+ $s.end();
+ 
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+  _log("Project Opening Time "+ $per_time.toFixed(2));
+/********************************************************************************************************/
+ var $s = _testcase("TC_11"," Open Linked Project");
+ $s.start();
+ _click(_link("Linked Projects"));
+ var $Starts_seconds = new Date().getTime() / 1000;
+ _wait(50000, _isVisible(_span("PPMM5")));//due to production env
+ $s.end();
+ 
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+ _log("Linked Projects landing page Time "+ $per_time.toFixed(2));
+ 
+/********************************************************************************************************/
+ 
+ var $s = _testcase("TC_5"," Navigation to PM Plan");
+ $s.start();
+ _click(_link("PM Plan"));
+ var $Starts_seconds = new Date().getTime() / 1000;
+ _wait(50000, _isVisible(_link("PM Plan Summary")));
+$s.end();
+
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+  _log("PMP landing page Time "+ $per_time.toFixed(2));
+
+ var $s = _testcase("TC_6"," PM Plan Save Operation");
+ $s.start();
+ _wait(5000);
+  _click(_image("nodeIcon15"));
+  _click(_link("Applicable LC Stages"));
+  _click(_checkbox("false"));
+ _click(_button(" Save "));
+  var $Starts_seconds = new Date().getTime() / 1000;
+  _assertExists(_button("ScrnButtonDis"));
+  
+$s.end();
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("PMP save Time "+ $per_time.toFixed(2));
+var $s = _testcase("TC_ReSave"," PM Plan ReSave Operation");
+ $s.start();
+_click(_checkbox("true[4]"));
+ _click(_button(" Save "));
+ $s.end();
+
+ var $s = _testcase("TC_7"," PM Plan Route Operation");
+ $s.start();
+
+  _click(_link("Workflow"));
+  
+  _wait(2000);
+  
+  _setSelected(_select("selectsingleuser0"), "Himanshu_Bhayana");
+  
+  _setSelected(_select("selectsingleuser0"), "Vishnu.A03");
+  
+  _click(_button(" Save "));
+  _wait(5000);
+  
+	$inputObject = {};
+	$inputObject.txt_Comments = "test";
+	InfyFTClickRoutewithComments($inputObject);
+var $Starts_seconds = new Date().getTime() / 1000;
+_wait(50000, _isVisible(_button("Recall")));
+$s.end();
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+  
+_log("PMP Route Time "+ $per_time.toFixed(2));
+ var $s = _testcase("TC_7.1"," PM Plan Recall Operation");
+ $s.start();
+_click(_button("Recall")); 
+$s.end();
+/********************************************************************************************************/
+ var $s = _testcase("TC_8"," Navigation to Enhancement");
+ $s.start();
+ _click(_link("LOCK_Enhancements"));
+
+ var $Starts_seconds = new Date().getTime() / 1000;
+ _wait(50000, _isVisible(_div("Enh1")));
+
+ $s.end();
+    var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+//_log("Navigation to Enhancementlanding page Time "+ $per_time.toFixed(2));
+
+ var $s = _testcase("TC_8.1"," Open an Enhancement");
+ $s.start();
+ _click(_div("Enh1"));
+
+ var $Starts_seconds = new Date().getTime() / 1000;
+ _wait(50000, _isVisible(_cell("ID :")));
+
+ $s.end();
+    var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("Open an Enhancement page Time "+ $per_time.toFixed(2));
+
+/********************************************************************************************************/
+var $s = _testcase("TC_9"," Team Members Listing");
+ $s.start();
+
+ _click(_link("Team Members"));
+
+var $Starts_seconds = new Date().getTime() / 1000;
+_wait(50000, _isVisible(_div("x-grid-cell-inner [1]")));
+$s.end();
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+  
+_log("Team Members Listing Time "+ $per_time.toFixed(2));
+
+
+/* var $s = _testcase("TC_10.1"," Team Member Invitation Operation");
+ $s.start();
+
+	_click(_span("x-btn-icon-el de-icon-invite_user "));
+	_selectWindow("AddTeamMember");
+	_click(_radio("loginidradio"));
+	_setValue(_textbox("loginid"),"nethravathi_r02")
+	var $stdate = _getValue(_textbox("startdateInput"));
+	_setValue(_textbox("enddateInput"),$stdate);
+	_click(_button("Go"));
+	var $stdate = _getValue(_textbox("startdateInput"));
+	_setValue(_textbox("startdateInput"),$stdate);
+	_setSelected(_select("Assigned_Roles"),"PM");
+	_click(_button(" Invite "));
+	
+var $Starts_seconds = new Date().getTime() / 1000;
+_wait(50000,_assertEqual("", _getText(_textbox("loginid"))));
+
+$s.end();
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+  
+_log("Team Member Invitation Operation "+ $per_time.toFixed(2));
+var $s = _testcase("TC_10.2"," Main window Navigation");
+ $s.start();
+_closeWindow("AddTeamMember");
+_selectWindow();
+
+$s.end();
+ */
+/********************************************************************************************************/
+var $s = _testcase("TC_12"," Navigation to QA Plan");
+ $s.start();
+ _click(_link("QA Plan"));
+ var $Starts_seconds = new Date().getTime() / 1000; 
+_wait(50000, _isVisible(_div("x-grid-cell-inner [2]")));
+$s.end();
+
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("QA plan Navigation Time "+ $per_time.toFixed(2));
+
+var $s = _testcase("TC_12.1"," Opening the QA Plan");
+ $s.start();
+ _click(_div("QAP1"));
+ var $Starts_seconds = new Date().getTime() / 1000;
+_wait(50000, _isVisible(_cell("ID :")));
+$s.end();
+
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("QA Plan Opening Time "+ $per_time.toFixed(2));
+/********************************************************************************************************/
+var $s = _testcase("TC_13"," Saving the QA Plan");
+ $s.start();;
+ _setValue(_textbox("CM_Name"),"QAP Name");
+ _click(_button(" Save "));
+ _wait(1000);
+ var $Starts_seconds = new Date().getTime() / 1000;
+_assertExists(_button("ScrnButtonDis"));
+$s.end();
+
+  var $end_Seconds =new Date().getTime() / 1000;
+  var $per_time = ($end_Seconds - $Starts_seconds);
+_log("QA Plan Saving Time "+ $per_time.toFixed(2));
+
+var $s = _testcase("TC_8.2"," reSaving the QA Plan");
+ $s.start();
+  _setValue(_textbox("CM_Name"),"QAP Name back");
+ _click(_button(" Save "));
+$s.end();
+/********************************************************************************************************/
+var $s = _testcase("Sheet 2"," Production_Scenarios");
+ $s.start();
+
+_include("../../../sahiscript/Production_Performance_Scripts/Sheet2/Production_Scenarios.sah");
+
+$s.end();
+	

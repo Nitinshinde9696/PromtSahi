@@ -1,0 +1,1888 @@
+
+/**
+ @Function Number:1
+ @author:hbhuva
+ @example:
+ @description:  Search a item in listing
+ @param: 
+ @return: 
+ **/
+
+function AdvancedFilterSearchTextInListing($inputObject)
+{
+	_log("AdvancedFilterSearchTextInListing Started","success");
+	try 
+	{
+		_setValue(_textbox("/searchTextBox/"), $inputObject.TextSearchStr);
+		_keyPress(_textbox("/searchTextBox/"),[13,13]);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("AdvancedFilterSearchTextInListing Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: setFilter({"filterName" : "FIRSTNAME" , "itemType" : "User"});
+* @description This function is called to check if the item passed is present in listing table.
+* @param {String}
+* $inputObject.filterName = "CM_OVERALLSTATUS"/"CM_Priority" -- Column name 
+* 							in which you want to apply filter
+* @return {String}   None 
+*************************************************************************/
+
+function setFilter($inputObject)
+{
+	_log("setFilter Started","success");
+	try 
+	{
+		if($inputObject.filterName)
+		{
+			var $extJsId = "-triggerEl";
+			var $extJsId2 = "-bodyEl";
+			var $filterName = $inputObject.filterName;
+			var $filterNameKey = $filterName + $extJsId;
+			
+			_click(_div($filterNameKey));
+			_mouseOver(_link("Filters"));
+			
+			if($inputObject.text)
+			{
+				_setValue(_textbox($filterName), $inputObject.text);
+				_wait(1000);
+			}
+			else if ($inputObject.type === 'Date') // set its value as 'Date' 
+			{
+				var $mouseOverToDate;
+				if ($inputObject.clickondate === "Before")
+				{
+					$mouseOverToDate = _link("Before");
+					
+				}
+				else if ($inputObject.clickondate === "After")
+				{
+					$mouseOverToDate = _link("After");
+				}
+				else
+				{
+					$mouseOverToDate = _link("On"); 	// dateon
+				}
+				_mouseOver($mouseOverToDate);
+				
+				//Select Year
+				var $todayDate = new Date();
+				var $monthArray = new Array();
+				$monthArray[0]="January";
+				$monthArray[1]="February";
+				$monthArray[2]="March";
+				$monthArray[3]="April";
+				$monthArray[4]="May";
+				$monthArray[5]="June";
+				$monthArray[6]="July";
+				$monthArray[7]="August";
+				$monthArray[8]="September";
+				$monthArray[9]="October";
+				$monthArray[10]="November";
+				$monthArray[11]="December";
+				var $fullMonthName = $monthArray[$todayDate.getMonth()];
+				var $todayYear = $todayDate.getFullYear();
+				
+		        var $buttomTOClick = $fullMonthName + " " + $todayYear;
+				
+			   _click(_button("/" + $buttomTOClick+ "/"));
+			   
+			    var $arrSelectDate = $inputObject.selectDate.split("-");
+				$date = $arrSelectDate[0];
+				$month = $arrSelectDate[1];
+				$year = $arrSelectDate[2];
+				
+				_click(_link($month));
+				_click(_link($year));
+				_click(_button("OK"));
+				_click(_span("/" + $date +"/"));
+			}
+			else	
+			{	
+				if($inputObject.status)
+				{
+					var $splitValue = $inputObject.status.split(";"); 	
+					for (var $i = 0; $i <$splitValue.length; $i++)
+					{
+						if($inputObject.operation === "Negative")
+							_assertFalse(_exists(_span($splitValue[$i])));	
+						else
+							_click(_span($splitValue[$i]));
+					}
+				}
+			}
+			
+			_click(_link("Apply"));		
+		}
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setFilter Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setTeamMemberFilter($inputObject)
+{
+	_log("setTeamMemberFilter Started","success");
+	try 
+	{
+		setFilter($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTeamMemberFilter Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setFilterForProjectList($inputObject)
+{
+	_log("setFilterForProjectList Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_Filter_Go"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setFilterForProjectList Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setSubOrganizationFilter($inputObject)
+{
+	_log("setSubOrganizationFilter Started","success");
+	try 
+	{
+		_click(_image("filtertabIcon"));
+		setAllFields($inputObject);
+		_click(_button("QTP_Filter_Go"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setSubOrganizationFilter Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author:shashank
+ @example:
+ @description:1) function would add new datatable view and check for the columns added,in the listing
+ 			  2) Multiple options to be selected from one box to another box should separated by ";"
+ @param: 
+ @return: 
+ **/
+
+function addNewTableView($inputObject)
+{
+	_log("addNewTableView Started","success");
+	try 
+	{
+		_wait(5000,null);
+		var $tableViewId = "tableViewCreateButton-KEY_LABEL_Display_Table_View";
+		var $extJsId = "";
+		var $addbtableViewKey = $tableViewId + $extJsId;
+		_click(_xy(_link("KEY_LABEL_Display_Table_View"), -5, 5));
+		// @Author : Harshit : This code written because when we click on table view icon,there is one default table
+		// view is selected so because of that CREATE button is not available.So first we uncheck that table view and 
+		// then create new table view. so pass $inputObject.unCheckAll = "ur able view name which you want to unselect" 
+		if($inputObject.unCheckAll)
+		{
+			_click(_span($inputObject.unCheckAll));
+		}
+		_click(_link($addbtableViewKey));
+		
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		else
+			_selectWindow("Table");
+		
+		setAllFields($inputObject);
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+			_click(_button("Add >"));
+		_click(_submit("SaveB")); //id passed
+		
+		if($inputObject.operation === "ValidNameAlert")
+		{
+			_assertEqual("Please enter a valid View name.", _lastAlert());
+			_click(_button("Submit3"));
+			_selectWindow();
+		}
+		else if($inputObject.operation === "DefaultNameAlert")
+		{
+			_assertEqual("View Name cannot beDefault", _lastAlert());
+			_click(_button("Submit3"));
+			_selectWindow();
+		}
+		else
+		{
+			_selectWindow();
+			var $fieldNames = $inputObject.slb_AllFieldList;
+			_log("$fieldNames " + $fieldNames + $fieldNames.length);
+			var $values = $fieldNames.split(";");
+			_log("$values " + $values + $values[0]);
+			
+			for(var $k=0; $k< $values.length; $k++)
+				_assertTrue(_exists(_div($values[$k])));			
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addNewTableView Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: applyTableView
+* @description This function is called to applyTableView
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function applyTableView($inputObject)
+{
+	_log("applyTableView Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Display_Table_View"), -5, 5));
+		_click(_span($inputObject.SelectViews));
+		var $applyBtn = "tableViewApplyButton-KEY_LABEL_Display_Table_View";
+		var $extJsId = ""; 	
+		var $applyBtnKey = $applyBtn + $extJsId;
+		_click(_link($applyBtnKey));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("applyTableView Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example: applySorting({"PrimarySort" "Name", "PrimarySortOrder":"Descending", 
+* 						"datatype": "String", "sortOrder":"desc" });
+* @description This function is called to verify String Sort
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function applySorting($inputObject)
+{
+	_log("applySorting Started","success");
+	try 
+	{
+		clearFilterSettings($inputObject);
+		_click(_link("multipleSortButton"));
+		_click(_link("Clear"));
+		var $i=0;
+		if($inputObject.count)
+			$i= parseInt($inputObject.count);
+		
+		if($inputObject.PrimarySort)
+		{
+			_setValue(_textbox(4+$i), $inputObject.PrimarySort);
+			_click(_listItem($inputObject.PrimarySort));
+			_setValue(_textbox(5+$i), $inputObject.PrimarySortOrder);
+			_click(_listItem($inputObject.PrimarySortOrder));
+		}	
+		if($inputObject.SecondarySort)
+		{	
+			_setValue(_textbox(6+$i), $inputObject.SecondarySort);
+			_click(_listItem($inputObject.SecondarySort));
+			_setValue(_textbox(7+$i), $inputObject.SecondarySortOrder);
+			_click(_listItem($inputObject.SecondarySortOrder));
+		}
+		if($inputObject.TertiarySort)
+		{
+			_setValue(_textbox(8+$i), $inputObject.TertiarySort);
+			_click(_listItem($inputObject.TertiarySort));
+			_setValue(_textbox(9+$i), $inputObject.TertiarySortOrder);
+			_click(_listItem($inputObject.TertiarySortOrder));
+		}	
+		_click(_link("Go"));
+
+		//This would only check for Primary sorting
+		verifySortedOrder($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("applySorting Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example addNewAdvancedFilter
+* @description This function is called to addNewAdvancedFilter
+* @param {String}
+* @return {String}None 
+*************************************************************************/
+
+function addNewAdvancedFilter($inputObject)
+{
+	_log("addNewAdvancedFilter Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		var $addBtn = "advanceFilterCreateButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		_click(_link($addbtnKey));
+		addModifyAdvancedFilter($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addNewAdvancedFilter Completed","success");
+}
+
+
+/*************************************************************************
+* @author Harshit
+* @example addModifyAdvancedFilter
+* @description This function is called to addModifyAdvancedFilter
+* @param {String}
+* @return {String}None 
+* TODO:RMAHANT break the function into smaller functions
+*************************************************************************/
+
+
+function addModifyAdvancedFilter($inputObject)
+{
+	_log("addModifyAdvancedFilter Started","success");
+	try 
+	{
+		_selectWindow("Table");
+		var $fieldName,$operator,$compareValue,$lstcompareValue,$LeftBrace,$RightBrace,$logicalOperator;
+		
+		if($inputObject.lst_FieldName) // Propery name in the UI
+			$fieldName = $inputObject.lst_FieldName.split(";");
+		if($inputObject.lst_Operator) // Operation like =,<> etc
+			$operator = $inputObject.lst_Operator.split(";");
+		if ($inputObject.edt_CompareValue) // it comes when there is any textbox field selected
+			$compareValue = $inputObject.edt_CompareValue.split(";");
+		if ($inputObject.lst_select) // it comes when we have drop down list field and want to select again values by clicking on icon and then selecting values
+			$lstcompareValue = $inputObject.lst_select.split(";");
+	
+		if($inputObject.LeftBrace) // adding left braces in the filter
+			$LeftBrace = $inputObject.LeftBrace.split(";");
+		if($inputObject.RightBrace) // adding right braces in the filter
+			$RightBrace = $inputObject.RightBrace.split(";");
+		if($inputObject.LogicalOperator) // Adding multiple rows and giving value like AND,OR
+			$logicalOperator = $inputObject.LogicalOperator.split(";");
+		
+		var $tempJson = {};
+		if($inputObject.edt_filtername) // Name of the filter
+			$tempJson.edt_filtername = $inputObject.edt_filtername;
+		if($inputObject.txt_filterdesc) // Description of the filter
+			$tempJson.txt_filterdesc = $inputObject.txt_filterdesc;
+		if($inputObject.chk_isGlobalFilter) // global filter check
+			$tempJson.chk_isGlobalFilter = $inputObject.chk_isGlobalFilter;
+		
+		var $leftAssignment;
+		if($fieldName)
+		{
+			for (var $i = 0; $i<$fieldName.length;$i++)
+			{
+				$leftAssignment = $i + 1;
+				
+				$tempJson["lst_FieldName" + $leftAssignment] = $fieldName[$i];
+				$tempJson["lst_Operator" + $leftAssignment]= $operator[$i];
+				if($compareValue)
+				{
+					$tempJson["edt_CompareValue" + $leftAssignment] = $compareValue[$i];
+				}
+				if($logicalOperator)
+				{
+					if($logicalOperator.length >= $leftAssignment)
+					{
+						_click(_span("de-icon-add"));
+						$tempJson["lst_LogicalOperator" + $leftAssignment] = $logicalOperator[$i];
+					}				
+				}
+				if($LeftBrace && $RightBrace)
+				{
+				$tempJson["lst_LeftBrace" + $leftAssignment] = $LeftBrace[$i];
+				$tempJson["lst_RightBrace" + $leftAssignment] = $RightBrace[$i];
+				}
+			}
+		}
+		setAllFields($tempJson);
+		
+		if($inputObject.cancel)
+		{
+			_click(_button("QTP_KEY_BUTTON_Cancel"));
+			_selectWindow();
+			return;
+		}
+		if($inputObject.reset)
+		{
+			_click(_button("QTP_KEY_BUTTON_Reset"));
+			_selectWindow();
+			return;
+		}
+		if($lstcompareValue)
+		{
+			for(var $j = 0; $j<$lstcompareValue.length;$j++)
+			{
+				if($j == 0)
+					_click(_link("de-icon-open_dropdown_list"));
+				else
+				{
+					var $imageId = "de-icon-open_dropdown_list[" +$j +"]";
+					_click(_link($imageId));
+				}
+				_selectWindow("AvailableValues");
+				_setSelected(_select("select"), $lstcompareValue[$j]);
+				_click(_submit("QTP_KEY_BUTTON_Ok"));
+				_selectWindow("Table");
+			}
+		}
+		
+		if($inputObject.operation === "MoreThan60CharAlert")
+		{
+			 var $tempFilterNameJson = {};
+			 var $filterNameLength = $inputObject.edt_filtername.substring(0,60);
+			 $tempFilterNameJson.edt_filtername = $filterNameLength;
+			 verifyAllFields($tempFilterNameJson);
+			 _click(_button("QTP_KEY_BUTTON_Cancel"));
+		}
+		else
+			_click(_button("QTP_KEY_LABEL_Save_&_Apply"));
+			
+		if($inputObject.operation === "ValidNameAlert")
+		{
+			_assertEqual("Please enter the Filter name.", _lastAlert());
+			_click(_button("QTP_KEY_BUTTON_Cancel"));
+		}
+		
+		if($inputObject.operation === "SpecialCharFilterAlert")
+		{
+		 	var $alertMsg;
+		 	_set($alertMsg, _lastAlert());
+		 	_assertTrue($alertMsg.indexOf("Invalid Filter Name: Please do not specify special characters like") != -1);
+		 	_click(_button("QTP_KEY_BUTTON_Cancel"));
+		}
+		
+		if($inputObject.operation === "IncompleteDataAlert")
+		{
+		 	var $alertMsg;
+		 	_assertEqual("Please enter values for all fields in the filter definition.", _lastAlert());
+			_click(_button("QTP_KEY_BUTTON_Cancel"));
+		}
+		if($inputObject.operation === "UniqueAdvancedFilter")
+		{
+		 	var $alertMsg;
+		 	_assertEqual("Please enter a unique filter name.", _lastAlert());
+			_click(_button("QTP_KEY_BUTTON_Cancel"));
+		}
+		//_click(_button("QTP_KEY_BUTTON_Save"));
+		//_wait(2000);.
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addModifyAdvancedFilter Completed","success");
+}
+
+/**
+ @Function Number:12
+ @author: Hrishi
+ @example: deleteFilter({"lst_filterList","Filter1"})
+ @description: Delete the filter and verifies. 
+ @param: Json object contaiing filter name.
+ @return: none
+ **/
+
+function deleteFilter($inputObject)
+{
+	_log("deleteFilter Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+		_click(_submit("QTP_KEY_BUTTON_Delete"));
+		$inputObject.operation = "Delete";
+		verifyFilter($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example addProjectFilter
+* @description This function is called to addProjectFilter 
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function addProjectFilter($inputObject)
+{
+	_log("addProjectFilter Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_wait(5000,_exists(_link("de-icon-add")));
+		setAllFields($inputObject);		
+		 if($inputObject.lst_projSelect === "Dynamic Search Criteria")
+		  {
+			 _click(_button("QTP_Define_Search_Criteria"));
+			 _selectWindow("Search");
+			 if($inputObject.Status)
+				 _setValue(_textbox("Status"), $inputObject.Status);
+			 if($inputObject.projectType)
+			 {
+				 var $tempJson = {};
+				 $tempJson.lst_ProjectType = $inputObject["projectType"];
+				 setAllFields($tempJson);
+			 }
+			 _click(_submit("QTP_Submit"));
+			 _selectWindow();	 
+		  }
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+		_wait(5000,_exists(_link("de-icon-add")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addProjectFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example addResourceFilter
+* @description This function is called to add new resource filter 
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function addResourceFilter($inputObject)
+{
+	_log("addResourceFilter Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		
+		var $filterJson = {};
+		$filterJson.edt_fltrName = $inputObject.edt_fltrName;
+		$filterJson.lst_projSelect = $inputObject.lst_projSelect;
+		if($inputObject.slb_selectFrom)
+		{
+			$filterJson.slb_selectFrom = $inputObject.slb_selectFrom;
+			if($inputObject.operation === "Negative")
+			{
+				_assertNotEqual($inputObject.slb_selectFrom, _getSelectedText(_select("selectFrom")));
+				return;
+			}
+		}
+		
+		setAllFields($filterJson);
+		
+		if($filterJson.lst_projSelect === "Dynamic Search Criteria")
+		{
+			_click(_button("QTP_Define_Search_Criteria"));
+			_selectWindow("Search");
+			
+			var $searchJson = {};
+			$searchJson.lst_country = $inputObject.country;
+			setAllFields($searchJson);
+			
+			_click(_submit("QTP_Submit"));
+			_wait(3000,null);
+			_selectWindow();	 
+		}
+		
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+		_wait(5000,_exists(_link("de-icon-add")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addResourceFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyAdvancedFilter
+* @description This function is called to modifyAdvancedFilter 
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function modifyAdvancedFilter($inputObject)
+{
+	_log("modifyAdvancedFilter Started","success");
+	try 
+	{
+		var $editBtn = "advanceFilterEditButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $editBtnKey = $editBtn + $extJsId;
+		
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_link($editBtnKey)));
+		}
+		else
+		{
+			_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+			if($inputObject.filterList)
+			_click(_span($inputObject.filterList));
+			_wait(4000, _isVisible(_link($editBtnKey)));
+			_click(_link($editBtnKey));
+			addModifyAdvancedFilter($inputObject);
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyAdvancedFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: applyAdvancedFilter
+* @description This function is called to deleteAdvancedFilter
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function applyAdvancedFilter($inputObject)
+{
+	_log("applyAdvancedFilter Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		_click(_span($inputObject.filterList));
+		var $applyBtn = "advanceFilterApplyButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $applyBtnKey = $applyBtn + $extJsId;		
+		_click(_link($applyBtnKey));		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("applyAdvancedFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: deleteAdvancedFilter
+* @description This function is called to deleteAdvancedFilter
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function deleteAdvancedFilter($inputObject)
+{
+	_log("deleteAdvancedFilter Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		_click(_span($inputObject.filterList));
+		var $editBtn = "advanceFilterEditButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $editBtnKey = $editBtn + $extJsId;
+		_click(_link($editBtnKey));
+		_selectWindow("Table");
+		_click(_button("KEY_BUTTON_Delete"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteAdvancedFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: copyAdvancedFilter
+* @description This function is called to deleteAdvancedFilter
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function copyAdvancedFilter($inputObject)
+{
+	_log("copyAdvancedFilter Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		_click(_span($inputObject.filterList));
+		var $editBtn = "advanceFilterEditButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $editBtnKey = $editBtn + $extJsId;
+		_click(_link($editBtnKey));
+		_selectWindow("Table");
+		_click(_button("KEY_BUTTON_Save_As"));
+		_selectWindow("copyFilter");
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+		_wait(3000);
+		_selectWindow("Table");
+		_click(_button("QTP_KEY_BUTTON_Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyAdvancedFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyResourceFilter
+* @description This function is called to modifyResourceFilter 
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function modifyResourceFilter($inputObject)
+{
+	_log("modifyResourceFilter Started","success");
+	try 
+	{
+		_setSelected(_select("filterList"),$inputObject.filterList);
+		_click(_submit("QTP_KEY_BUTTON_Go"));
+		
+		var $filterJson = {};
+		$filterJson.lst_projSelect = $inputObject.lst_projSelect;
+		setAllFields($filterJson);
+		
+		if($filterJson.lst_projSelect === "Dynamic Search Criteria")
+		{
+			_click(_button("QTP_Define_Search_Criteria"));
+			_selectWindow("Search");
+			 
+			var $searchJson = {};
+			$searchJson.edt_lastName = $inputObject.firstName;
+			setAllFields($searchJson);
+			
+			_click(_submit("SaveBtn"));
+			_wait(3000,null);
+			_selectWindow();
+			_assertEqual(_getText(_cell(1,_near(_cell("First Name:")))), $inputObject.firstName);
+		}
+		
+		_click(_submit("Save"));
+		_wait(5000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyResourceFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyTableView
+* @description This function is called to modifyTableView 
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function modifyTableView($inputObject)
+{
+	_log("modifyTableView Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Display_Table_View")|| _span("/tableViewButton/"), -5, 5));
+		
+		if($inputObject.SelectViews)
+			_click(_span($inputObject.SelectViews));
+		
+		var $editBtn = "/tableViewEditButton/";
+		var $extJsId = ""; 	
+		var $editBtnKey = $editBtn + $extJsId;
+
+		if($inputObject.Operation === "Negative") 
+		{
+			_assertFalse(_exists(_link($editBtnKey)));
+		}
+		else
+		{
+			_click(_link($editBtnKey));
+			_selectWindow("Table");
+			
+			var $values = $inputObject.slb_AllFieldList.split(";");
+			
+			for(var $k=0; $k<$values.length; $k++)
+			{
+				if(_getText(_select("ViewFieldList")) == undefined || _containsText(_select("ViewFieldList"),$values[$k]) == false)
+				{
+					if($inputObject.operation === "FldNotInAllFieldList")
+					{
+						_assertFalse(_containsText(_select("AllFieldList"),$values[$k]));
+					}
+					else
+					{
+						_setSelected(_select("AllFieldList"), $values[$k]);
+						_click(_button("QTP_Add_With_Arrow"));
+					}
+				
+				}
+				else if(_containsText(_select("AllFieldList"),$values[$k]) == false)
+				{
+					if($inputObject.operation === "FldNotInAllFieldList")
+					{
+						_assertFalse(_containsText(_select("ViewFieldList"),$values[$k]));
+					}
+					else
+					{
+						_setSelected(_select("ViewFieldList"), $values[$k]);
+						_click(_button("QTP_Remove_With_Arrow"));
+					}
+					
+				}
+			}	
+			
+			if(_submit("SaveB").disabled)
+				_click(_submit("SaveB"));
+			else
+				_click(_button("< Return"));
+			
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyTableView Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example navigateToEditAdvancedFilter
+* @description This function is called to navigateTo Edit or  AdvancedFilter 
+* @param {String} 
+* @return {String} 
+*************************************************************************/
+
+function navigateToEditAdvancedFilter($inputObject)
+{
+	_log("navigateToEditAdvancedFilter Started","success");
+	try 
+	{
+		clearFilterSettings($inputObject);
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		
+		var $Btn = "advanceFilterCreateButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = "";
+		var $popupName = "Table";
+		
+		if($inputObject.filterList)
+		{
+			_click(_span($inputObject.filterList));
+			_set($Btn, "advanceFilterEditButton-KEY_LABEL_Advanced_Filter");
+			$popupName = "Table";
+		}
+		var $BtnKey = $Btn + $extJsId;
+		_click(_link($BtnKey));
+		_selectWindow($popupName);
+		if($inputObject.filterType)
+		{
+			_assertEqual(_getText(_cell(1,_near(_cell("Global Filter:")))),$inputObject.filterType) ;
+			_click(_button("Cancel"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToEditAdvancedFilter Completed","success");
+}
+
+/**
+ @Function Number:36
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToEditTableView($inputObject)
+{
+	_log("navigateToEditTableView Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Display_Table_View"), -5, 5));
+		
+		if($inputObject.SelectViews)
+			_click(_span($inputObject.SelectViews));
+		
+		var $editBtn = "tableViewEditButton-KEY_LABEL_Display_Table_View";
+		var $extJsId = ""; 	
+		var $editBtnKey = $editBtn + $extJsId;
+		_click(_link($editBtnKey));
+		_selectWindow("Table");
+		
+		if($inputObject.checkEditability)
+		{
+			setAllFields($inputObject);
+			_click(_button("< Return"));
+			_selectWindow();
+		}
+			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToEditTableView Completed","success");
+}
+
+/**
+ @Function Number:37
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyTableView($inputObject)
+{
+	_log("verifyTableView Started","success");
+	try 
+	{
+		var $columns = $inputObject.lst_AllFieldList.split(";");
+		
+		for(var $i = 0 ; $i < $columns.length; $i++)
+		{
+			if($inputObject.operation == "Negative")
+				_assertFalse(_isVisible(_div($columns[$i])));
+			else
+				_assertTrue(_isVisible(_div($columns[$i])));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTableView Completed","success");
+}
+
+/**
+ @Function Number:38
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySorting($inputObject)
+{
+	_log("verifySorting Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_image(0,_near(_div($inputObject.lst_PrimarySort)))) || _isVisible(_image(0,_near(_link($inputObject.lst_PrimarySort)))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySorting Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyAdvancedFilter
+* @description This function is called to verifyAdvancedFilter
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyAdvancedFilter($inputObject)
+{
+	_log("verifyAdvancedFilter Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		_assertTrue(_isVisible(_span($inputObject.filterList)));
+		_click(_span($inputObject.filterList));
+		var $applyBtn = "advanceFilterApplyButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $applyBtnKey = $applyBtn + $extJsId;		
+		_click(_link($applyBtnKey));		
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAdvancedFilter Completed","success");
+}
+
+/***************************************************************************************************************
+* @author Rahul Mahant
+* @example: verifySortedOrder({"colNo":"3", "sortOrder":"desc", "datatype":"String" });
+* @description This function is called to verify Sort Order
+* @param {String}
+* @return {String}   None 
+***************************************************************************************************************/
+function numOrdA(a, b){ return (a-b); }
+
+function verifySortedOrder($inputObject)
+{
+	_log("verifySortedOrder Started","success");
+    try 
+    {
+		var $arrValues;
+		var $arrSorted;
+		var $i;
+		var $j;
+	    var $rowEle;
+		var $rowno;
+        var $value;
+        
+        var $colNo = parseInt($inputObject.colNo);
+
+		var $tableEle = _table(0);
+		if($inputObject.displayType === "FolderListView")
+			$tableEle = _table(1);
+		
+		var $tsk = 0;
+		if($inputObject.itemtype === "Tsk")
+			$tsk = 1;
+		
+		 $rowEle = $tableEle.rows;
+        _set($rowno,$rowEle.length);
+        
+        $arrValues = new Array($rowno-1);
+		$arrSorted = new Array($rowno-1);
+        
+		//Reading column values before js sorting
+		$j = 0;
+		for ($i=1+$tsk; $i<$rowno; $i++) 
+		{
+		    $value = _getText(_cell($tableEle, $i, $colNo));
+		    if($inputObject.datatype === "Numeric")
+		    {
+		    	if($value === '')
+		    		$value = "99999";
+		    }
+		    //Special Case Handling
+		    if($inputObject.PrimarySort === "Access")
+		    {	
+		        if($value === "Public")
+			    	$value = "1";
+			    else if($value === "Internal")
+			    	$value = "2";
+			    else if($value === "Private")
+			    	$value = "3";
+			}
+		    
+		    $arrValues[$j] = $value;
+			if($inputObject.datatype === "String")
+				$arrValues[$j] = $arrValues[$j].toLowerCase();
+			else if($inputObject.datatype === "Numeric")
+				$arrValues[$j] = $arrValues[$j].replace(",","");
+			
+			$j = $j + 1;
+		}
+		
+		if($inputObject.datatype === "String" || $inputObject.datatype === "Date")
+			$arrValues.sort();
+		else if($inputObject.datatype === "Numeric")
+			$arrValues.sort(numOrdA);
+		else
+			$arrValues.sort();
+		if($inputObject.sortOrder === "desc" )
+		{
+			$arrValues.reverse();
+		} 
+		
+		//Reading column values after sorting from UI
+		$j = 0;
+		for ($i=1+$tsk; $i<$rowno; $i++) 
+		{
+		    $value = _getText(_cell($tableEle, $i, $colNo));
+		    if($inputObject.datatype === "Numeric")
+		    {
+		    	if($value == '')
+		    		$value = "99999";
+		    }
+			//Special Case Handling
+		    if($inputObject.PrimarySort === "Access")
+		    {	
+		    	if($value === "Public")
+			    	$value = "1";
+			    else if($value === "Internal")
+			    	$value = "2";
+			    else if($value === "Private")
+			    	$value = "3";
+		    }
+			
+		    $arrSorted[$j] = $value;
+		    if($inputObject.datatype === "String")
+		    	$arrSorted[$j] = $arrSorted[$j].toLowerCase();
+		    else if($inputObject.datatype === "Numeric")
+		    	$arrSorted[$j] = $arrSorted[$j].replace(",","");
+			
+			$j = $j + 1;
+		}
+		
+		//Comparison
+		for ($i=0; $i<$arrValues.length-$tsk; $i++) 
+		{
+			//log only for debugging purpose  
+			//_log("Expected Value = " + $arrValues[$i] + ", Actual Value = " + $arrSorted[$i]);
+			_assertEqual($arrValues[$i], $arrSorted[$i]);
+		}
+	}
+    catch(e)
+	{
+		handleFailure(e);
+	}
+    _log("verifySortedOrder Completed","success");
+}
+
+/**
+ @Function Number:41
+ @author: Hrishi
+ @example: verifyFilter({"lst_filterList","Filter1"})
+ @description: Verifies if the filter is deleted
+ @param: Json object containing filter name 
+ @return: none
+ **/
+
+function verifyFilter($inputObject)
+{
+	_log("verifyFilter Started","success");
+	try 
+	{
+    	if($inputObject.operation === "Delete")
+    		_assertFalse(_isVisible(_option($inputObject.lst_filterList, _in(_select("filterList")))));
+    	else
+    		_assertTrue(_isVisible(_option($inputObject.lst_filterList, _in(_select("filterList")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFilter Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: setInboxFilter{$inputObject.lst_ProjId = $data.ProjectName8,$inputObject.lst_type = $data.Type8}
+ @description: sets the filter in the inbox 
+ @param: String {None}
+ @return: String {None}
+ **/
+
+function setInboxFilter($inputObject)
+{
+	_log("setInboxFilter Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_containsText(_select("ProjId"),$inputObject.lst_ProjId));
+		}
+		else
+		{
+			if($inputObject.inboxstatus)
+			{
+				_click(_xy(_link("Views"), -5, 5));
+				_click(_span($inputObject.inboxstatus));
+			}			
+			setFilter($inputObject);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setInboxFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyFilterAlphabeticalOrder
+* @description This function is called to verifyFilterAlphabeticalOrder
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+
+function verifyFilterAlphabeticalOrder()
+{
+	_log("verifyFilterAlphabeticalOrder Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		
+		var $arraySet = new Array();
+		var $sortedArraySet = new Array();
+		  
+		_set($arraySet,_getText(_select("FilterId")));
+		 
+		for(var i=0; i<$arraySet.length; i++)
+		{
+			if($arraySet[i] === "Select One")
+			{
+				$arraySet.splice(i,1);
+			}
+		}
+		 
+		_set($sortedArraySet,$arraySet.sort());
+		  
+		var $boolean = false;
+		_set($boolean,_assertEqual($sortedArraySet, $arraySet));
+		  
+		if($boolean === true)
+		{
+			_assertTrue(_assertEqual($sortedArraySet, $arraySet));
+		}
+		else
+		{
+			_assertTrue(_assertNotEqual($sortedArraySet, $arraySet));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFilterAlphabeticalOrder Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyAdvancedFilterDetails
+* @description This function is called to verifyAdvancedFilterDetails
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyAdvancedFilterDetails($inputObject)
+{
+	_log("verifyAdvancedFilterDetails Started","success");
+	try 
+	{
+		if($inputObject.filterList)
+		{
+			_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+			_assertTrue(_isVisible(_span($inputObject.filterList)));
+			_click(_span("Select One"));
+			_click(_span($inputObject.filterList));
+			var $editBtn = "advanceFilterEditButton-KEY_LABEL_Advanced_Filter";
+			var $extJsId = ""; 	
+			var $editBtnKey = $editBtn + $extJsId;
+			_click(_link($editBtnKey));
+			_selectWindow("Table");
+		}
+		if($inputObject.operation=="Invalid_CustomFieldDeletion")
+			_assertTrue(_containsText(_select("FieldName1"),"--undefined--"));
+		else
+			verifyAllFields($inputObject);
+		
+		_closeWindow();
+		_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAdvancedFilterDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyProjectFilterDetails
+* @description This function is called to verifyProjectFilterDetails
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyProjectFilterDetails($inputObject)
+{
+	_log("verifyProjectFilterDetails Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectFilterDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example: verifyResourceFilterDetails
+* @description This function is called to verifyResourceFilterDetails
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function verifyResourceFilterDetails($inputObject)
+{
+	_log("verifyResourceFilterDetails Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyResourceFilterDetails Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  verifyColumnsInEditTableView($inputObject);		    
+@description : $inputObject.item will be ";" seperated column list. 
+			   $inputObject.unselectedCol will be "Yes",if it is present then unselectedColumn list will be checked else selected column list will be checked. 
+@param : String {None}
+@return : String {None}
+**/
+
+function verifyColumnsInEditTableView($inputObject)
+{
+	_log("verifyColumnsInEditTableView Started","success");
+	try 
+	{
+		var $items = $inputObject.item.split(";");
+		for ( var $i = 0; $i < $items.length; $i++) 
+		{
+			if($inputObject.unselectedCol == "Yes")
+				_assertTrue(_containsText(_select("AllFieldList"),$items[$i]));
+				
+			else
+				_assertTrue(_containsText(_select("ViewFieldList"),$items[$i]));	
+		}	
+		_click(_button("< Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyColumnsInEditTableView Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  VerifyOptionsForDefaultView($inputObject);		    
+@description : no need to pass any input 
+@param : String {None}
+@return : String {None}
+**/
+
+function VerifyOptionsForDefaultView($inputObject)
+{
+	_log("VerifyOptionsForDefaultView Started","success");
+	try 
+	{
+		_wait(5000,null);
+		var $tableViewId = "tableViewCreateButton-KEY_LABEL_Display_Table_View";
+		var $tableEditId = "tableViewEditButton-KEY_LABEL_Display_Table_View";
+		var $tableApplyId="tableViewApplyButton-KEY_LABEL_Display_Table_View";
+		var $extJsId = "";
+		var $addbtableViewKey = $tableViewId + $extJsId;
+		var $tableEditIdKey = $tableEditId + $extJsId;
+		var $tableApplydKey = $tableApplyId + $extJsId;
+		_click(_xy(_link("KEY_LABEL_Display_Table_View"), -5, 5));
+		// @Author : Harshit : This code written because when we click on table view icon,there is one default table
+		// view is selected so because of that CREATE button is not available.So first we uncheck that table view and 
+		// then create new table view. so pass $inputObject.unCheckAll = "ur able view name which you want to unselect" 
+		
+		if($inputObject.check)
+		{
+			_click(_span("Default"));
+			_assertTrue(_exists(_link($addbtableViewKey)));
+		}
+		else
+		{
+			_assertTrue(_exists(_link($tableApplydKey)));
+			_assertTrue(_exists(_link($tableEditIdKey)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("VerifyOptionsForDefaultView Completed","success");
+}
+
+
+/**
+@author : Harshit
+@example:  clickLinkGroupBy($inputObject);		    
+@description : no need to pass any input 
+@param : String {None}
+@return : String {None}
+**/
+
+function clickLinkGroupBy($inputObject)
+{
+	_log("clickLinkGroupBy Started","success");
+	try 
+	{
+		_selectWindow("ViewAssociatedDefs");
+		_click(_link("Group By"));	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickLinkGroupBy Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  verifyTableViewList($inputObject);		    
+@description : just need to pass the Table view name which are appearing in the UI with ";" seperated names
+@param : String {None}
+@return : String {None}
+**/
+
+function verifyTableViewList($inputObject)
+{
+	_log("verifyTableViewList Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Display_Table_View"), -5, 5));
+		var $items = $inputObject.item.split(";");
+		for(var $i = 0; $i < $items.length; $i++)
+		{
+			if($inputObject.operation=="Negative")
+				_assertFalse(_isVisible(_link($items[$i])) || _isVisible(_span($items[$i])));
+			else
+				_assertTrue(_isVisible(_link($items[$i])) || _isVisible(_span($items[$i])));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTableViewList Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  deleteView($inputObject);		    
+@description : a Pop will be selected and delete button will be clicked.
+@param : String {None}
+@return : String {None}
+**/
+
+function deleteView($inputObject)
+{
+	_log("deleteView Started","success");
+	try 
+	{
+		_selectWindow("Table");
+		_click(_submit("DeleteB"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteView Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  clearFilterSettings($inputObject);		    
+@description : this will clear the advanced filter or the filter applied on the column header of any eform instance listing
+@param : String {None}
+@return : String {None}
+**/
+
+function clearFilterSettings($inputObject)
+{
+	_log("clearFilterSettings Started","success");
+	try 
+	{
+		_click(_link("clearFilterButton"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clearFilterSettings Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  verifyEditabilityOfButtons($inputObject);		    
+@description : 
+@param : String {None}
+@return : String {None}
+TODO:RMAHANT need to verify this function
+**/
+
+function verifyEditabilityOfButtons($inputObject)
+{
+	_log("verifyEditabilityOfButtons Started","success");
+	try 
+	{
+		_selectWindow("Table");
+		if($inputObject.operation=="Negative")
+		{
+			if(_isVisible(_button("KEY_BUTTON_Delete")))
+				{
+				_assertTrue(_button("KEY_BUTTON_Delete").disabled);
+				}
+			else
+				_assertTrue(_submit("Delete").disabled) ;
+		}
+		else
+		{
+			_assertTrue(_exists(_button("QTP_KEY_LABEL_Save_&_Apply")));
+			_assertTrue(_exists(_button("QTP_KEY_BUTTON_Save")));
+			_assertTrue(_exists(_button("QTP_KEY_BUTTON_Reset")));
+			_assertTrue(_exists(_button("KEY_BUTTON_Delete")));
+			_assertTrue(_exists(_button("KEY_BUTTON_Save_As")));
+			_assertTrue(_exists(_button("QTP_KEY_BUTTON_Cancel")));
+		}
+		_click(_button("< Return") || _button("Cancel"));
+		_selectWindow();	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEditabilityOfButtons Completed","success");
+}
+
+
+/**
+@author : Harshit
+@example:  verifyFilterValues($inputObject);		    
+@description : pass $inputObject.filterName as COLUMN NAME and ITEM as its list of values
+@param : String {None}
+@return : String {None}
+**/
+
+function verifyFilterValues($inputObject)
+{
+	_log("verifyFilterValues Started","success");
+	try 
+	{
+		var $extJsId = "-triggerEl";
+		var $filterName = $inputObject.filterName;
+		var $filterNameKey = $filterName + $extJsId;
+		
+		_click(_div($filterNameKey));
+		_mouseOver(_link("Filters"));
+		
+		var $items = $inputObject.item.split(";");
+		for (var $i = 0; $i < $items.length; $i++)
+		{
+			_assertTrue(_exists(_link($items[$i])));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFilterValues Completed","success");
+}
+
+
+
+/**
+@author : Harshit
+@example:  verifyEditFilterWindowTitle($inputObject);		    
+@description : No need to pass anything
+@param : String {None}
+@return : String {None}
+**/
+
+function verifyEditFilterWindowTitle($inputObject)
+{
+	_log("verifyEditFilterWindowTitle Started","success");
+	try 
+	{
+		_selectWindow("Table");
+		_assertTrue(_isVisible(_cell("Edit Advanced Filter")));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEditFilterWindowTitle Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  verifyAdvancedFilterList($inputObject);		    
+@description : pass the name of the new filter added as { filterList : "ABC"}. 
+@param : String {None}
+@return : String {None}
+**/
+
+function verifyAdvancedFilterList($inputObject)
+{
+	_log("verifyAdvancedFilterList Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		if($inputObject.operation=="LocalFilterNegative")
+			_assertFalse(_exists(_span($inputObject.filterList)));
+		else
+			_assertTrue(_exists(_span($inputObject.filterList)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAdvancedFilterList Completed","success");
+}
+
+
+/**
+@author : Harshit
+@example:  openAdvancedFilterPopup($inputObject);		    
+@description : 
+@param : String {None}
+@return : String {None}
+**/
+
+function openAdvancedFilterPopup($inputObject)
+{
+	_log("openAdvancedFilterPopup Started","success");
+	
+	try 
+	{
+		clearFilterSettings($inputObject);
+		_click(_xy(_link("KEY_LABEL_Advanced_Filter"), -5, 5));
+		var $addBtn = "advanceFilterCreateButton-KEY_LABEL_Advanced_Filter";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		_click(_link($addbtnKey));		
+		_selectWindow("Table");
+		
+		setAllFields($inputObject);
+		var $tempJson = {};
+		if($inputObject.openDropDownList)
+		{
+			_click(_link("de-icon-open_dropdown_list"));
+			_selectWindow("AvailableValues");
+			$tempJson.lst_select = $inputObject.select;
+			verifyAdvancedFilterDetails($tempJson);
+		}
+		else if($inputObject.imagecheck)
+		{
+			var $tempJson = {};
+			$tempJson.img_imagecheck = $inputObject.imagecheck;
+			verifyAdvancedFilterDetails($tempJson);	
+		}
+		
+		else if($inputObject.textBoxcheck)
+		{
+			var $tempJson = {};
+			$tempJson.textBoxcheck = $inputObject.textBoxcheck;
+			verifyAdvancedFilterDetails($tempJson);	
+		}
+		else if($inputObject.propertyCheck)
+		{
+			_click(_button("QTP_KEY_BUTTON_Cancel"));
+			_selectWindow();
+		}
+		else if($inputObject.propertyClick)
+		{
+			$tempJson.lst_FieldName1= $inputObject.FieldName1;
+			$tempJson.propertyClick=$inputObject.propertyClick;
+			verifyAdvancedFilterDetails($tempJson);
+			_selectWindow();
+		}
+		else
+			verifyAdvancedFilterDetails($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	
+	_log("openAdvancedFilterPopup Completed","success");
+}
+
+/**
+@author : Harshit
+@example:  verifyInvalidFilterNameAlert($inputObject);		    
+@description : Pass which type of error are expecting and pass the filtername which u want to pass.
+@param : String {None}
+@return : String {None}
+**/
+
+function verifyInvalidFilterNameAlert($inputObject)
+{
+	_log("verifyInvalidFilterNameAlert Started","success");
+	
+	try 
+	{
+		addNewAdvancedFilter($inputObject);	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	
+	_log("verifyInvalidFilterNameAlert Completed","success");
+}
+
+function openTableViewPopup($inputObject)
+{
+	_log("openTableViewPopup Started","success");
+	try 
+	{
+		_click(_xy(_link("KEY_LABEL_Display_Table_View"), -5, 5));
+		
+		if($inputObject.SelectViews)
+			_click(_span($inputObject.SelectViews));
+		
+		var $editBtn = "tableViewEditButton-KEY_LABEL_Display_Table_View";
+		var $extJsId = ""; 	
+		var $editBtnKey = $editBtn + $extJsId;
+		_click(_link($editBtnKey));
+		_selectWindow("Table");
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTableViewPopup Completed","success");
+}
+
+function resetAdvancedFilterSettings($inputObject)
+{  		
+	_log("ResetAdvancedFilterSettings Started","success");
+	try 
+	{
+		_selectWindow("Table");
+		_click(_button("QTP_KEY_BUTTON_Reset"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("ResetAdvancedFilterSettings Completed","success");
+}
+
+function verifyAdvancedFilterFields($inputObject)
+{
+	_log("verifyAdvancedFilterFields Started","success");
+	
+	try 
+	{
+		if ($inputObject.cell) 
+		{
+			$cellValue = $inputObject.cell.split(";");
+			for(var $i=0; $i<$cellValue.length; $i++)
+			{
+				_assertTrue(_isVisible(_cell($cellValue[$i])));
+			}
+		}
+		
+		if ($inputObject.select) 
+		{
+			$selectValue = $inputObject.select.split(";");
+			for(var $i=0; $i<$selectValue.length; $i++)
+			{
+				_assertTrue(_isVisible(_select($selectValue[$i])));
+			}
+		}
+		
+		if ($inputObject.image) 
+		{
+			$imageValue = $inputObject.image.split(";");
+			for(var $i=0; $i<$imageValue.length; $i++)
+			{
+				_assertTrue(_isVisible(_image($imageValue[$i])));
+			}
+		}
+		_click(_button("QTP_KEY_BUTTON_Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	
+	_log("verifyAdvancedFilterFields Completed","success");
+}
+
+function clickViewAssociatedDefects($inputObject)
+{
+	_log("clickViewAssociatedDefects Started","success");
+	try
+	{
+		_click(_link("de-icon-trace_defect"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	
+	_log("clickViewAssociatedDefects Completed","success");
+}

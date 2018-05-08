@@ -1,0 +1,321 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Testing_PMPlan_Small_Project_setup_verify_details_description_section_client_commitment_assumption_01","Testing/PMPlan_Small"); 
+ var $t = _testcase("Script 28", "System Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Navigate", "Navigate");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000);
+
+ var $t = _testcase("TC_1", "Verifying available details in the PM Plan summary and Additional Note.");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.note3;// Additional Note.
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.note3_1;// Additional Note.
+ InfyFTisVisible($inputObject);
+  
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Scope Description Section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link42;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.field1;
+ $inputObject.txt_DN_ClientsObjectives = $data.field2;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.field2; 
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = ""; 
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.Reasonlbl;
+ $inputObject.fieldValues = $data.reason1;//Reason 1
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link42;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.field1;
+ $inputObject.txt_DN_ClientsObjectives = $data.field2;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.field2;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.Reasonlbl;
+ $inputObject.fieldValues = $data.reason2;//Reason 2
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_5", "Client Commitment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.clientCommitment;// _InfyFTclick(_link("Client Commitment"));
+ InfyFTclick($inputObject);
+ 
+ if(_isVisible(_checkbox("false[1]")))
+ {
+ _wait(2000);
+
+ _click(_checkbox("on")); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);	
+}
+_wait(5000);
+
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowDelete;
+ $inputObject.colNo = $data.colClient;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+  _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);   
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.commitment;//4
+ $inputObject.colNo = $data.Reasonlbl;//2_lbl
+ $inputObject.fieldValues = $data.reason12;//At least one commitment is entered.
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+  
+ $t.end();
+ 
+  var $t = _testcase("TC_6", "Assumptions");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumptions;// _InfyFTclick(_link("Assumptions[1]"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("1")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data.item;
+	 OpenEformInstance($inputObject);
+ 
+	 _wait(2000);
+ 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.item;
+	 InfyFTDeleteEformInstance($inputObject); 
+ }
+ 
+  _wait(5000);
+ 
+/* $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.assumption;//Assumption
+ $inputObject.colNo = $data.Reasonlbl;//Reason_lbl
+ $inputObject.fieldValues = $data.reason3;//Reason 3
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumptions;// _InfyFTclick(_link("Assumptions[1]"));
+ InfyFTclick($inputObject);
+ */
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.txt_DN_BasisofAssumption = $data.DN_BasisofAssumption;
+ $inputObject.chk_DN_ConverttoRisk = $data.DN_ConverttoRisk;
+ InfyFTcreateLinkedItem($inputObject);//For creating the assumptions.
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.assumption;//Assumption
+ $inputObject.colNo = $data.Reasonlbl;//Reason_lbl
+ $inputObject.fieldValues = $data.reason4;//Reason 3
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+  _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Testing_PMPlan_Small_Project_Basis_of_goals_fill_availabe_fields_02");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_Basis_of_goals_fill_availabe_fields_02.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("Testing_PMPlan_Small_Project_available_req_type_LC_stage_03");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_available_req_type_LC_stage_03.sah");
+ 
+ $t.end();
+  
+ var $t = _testcase("Testing_PMPlan_Small_Project_fill_the_goals_04");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_fill_the_goals_04.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("Testing_PMPlan_Small_Project_penality_and_reward_details_LC_stages_05");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_penality_and_reward_details_LC_stages_05.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("Testing_PMPlan_Small_Project_Risk_logs_verify_fields_06");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_Risk_logs_verify_fields_06.sah");
+ 
+ $t.end();
+
+ var $t = _testcase("Testing_PMPlan_Small_Project_setup_OMS_project_details_07");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_setup_OMS_project_details_07.sah");
+ 
+ $t.end();
+
+ var $t = _testcase("Testing_PMPlan_Small_Project_fields_available_for_penality_and_reward_details_help_section_08");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_fields_available_for_penality_and_reward_details_help_section_08.sah");
+ 
+ $t.end();
+ /*
+ var $t = _testcase("Testing_PMPlan_Small_Project_workflow_09");
+ $t.start();
+ 
+ _include("Testing_PMPlan_Small_Project_workflow_09.sah");
+
+ $t.end(); */

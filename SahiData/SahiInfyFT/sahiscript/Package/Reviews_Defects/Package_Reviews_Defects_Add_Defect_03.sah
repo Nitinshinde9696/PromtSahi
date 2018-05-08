@@ -1,0 +1,299 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+ var $data = readDataFromCSV("Package_Reviews_Defects_Generic_00","Package/Reviews_Defects");
+ var $data1 = readDataFromCSV("Package_Reviews_Defects_Add_Defect_03","Package/Reviews_Defects");
+  
+ var $TC1 = _testcase("TC_BRD10_FU_27-30","ADDING DEFECT TO THE CREATED REVIEW"); 
+ $TC1.start();
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment2;//Defect
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.txt_CM_Description = $data1.def_descr04;//descr
+ $inputObject.lst_DN_Owner = $data1.def_owner05;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data1.def_sev06;//Critical
+ $inputObject.msgAlert="Value is not set for the below fields. Please enter the values and save:\n•  Field Name in Details tab";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name03;//Defect1
+ $inputObject.lst_DN_Owner = $data1.def_owner05;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data1.def_sev06;//Critical
+ $inputObject.msgAlert="Value is not set for the below fields. Please enter the values and save:\n•  Field Description in Details tab";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name03;//Defect1
+ $inputObject.txt_CM_Description = $data1.def_descr04;//descr
+ $inputObject.lst_DN_Severity = $data1.def_sev06;//Critical
+ $inputObject.msgAlert="Value is not set for the below fields. Please enter the values and save:\n•  Field Owner in Details tab";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name03;//Defect1
+ $inputObject.txt_CM_Description = $data1.def_descr04;//descr
+ $inputObject.lst_DN_Owner = $data1.def_owner05;//Sreya_Chatterjee
+ $inputObject.msgAlert="Value is not set for the below fields. Please enter the values and save:\n•  Field Severity in Details tab";
+ InfyFTcreateLinkedItem1($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.edt_CM_Name = $data1.def_name03;//Defect1
+ $inputObject.txt_CM_Description = $data1.def_descr04;//descr
+ $inputObject.lst_DN_Owner = $data1.def_owner05;//Sreya_Chatterjee
+ $inputObject.lst_DN_Severity = $data1.def_sev06;//Critical
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $DefectID = $inputObject.createdID;
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("TC_BRD10_FU_31","VERIFY DEFECT STATUS DROPDOWN"); 
+ $TC2.start();
+ 
+  _wait(3000);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.Dropdown07;//--None--,Open,Fixed,Abandoned,Not a defect,Deferred,Closed
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC2.end();
+ 
+ var $TC3 = _testcase("TC_BRD10_FU_32_33","VERIFY LC STAGE DETECTED & LC STAGE INJECTED FIELDS"); 
+ $TC3.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix =  $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_PhaseDetected = $data1.lc_detect08;//Requirement Analysis
+ $inputObject.lst_PhaseInjected = $data1.lc_inject09;//Requirement Analysis
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC3.end();
+ 
+ var $TC4 = _testcase("TC_BRD10_FU_34","VERIFY DEFECT DETECTED BY & DEFECT INJECTED BY FIELDS"); 
+ $TC4.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix =  $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_DefectDetectedBy = $data1.def_detect10;//Sreya_Chatterjee;TO BE INCLUDED
+ $inputObject.lst_DN_DefectInjectedBy = $data1.def_inject11;//Arjun.R02;TO BE INCLUDED
+ verifyEformInstanceDetails($inputObject);
+ 
+ //*****CHECK FOR THE VISIBLITY OF THE WORKFLOW SEGMENT*****//TC_BRD10_FU_26.3
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.span_Name = $data1.workflow12;//Workflow
+ $inputObject.operation = $data.operation;//Negative
+ InfyFTisVisible($inputObject);
+ 
+ $TC4.end();
+ 
+ var $TC5 = _testcase("TC_BRD10_FU_34","CHECKING MANDATORY FOR CLOSING THE DEFECT"); 
+ $TC5.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.closed13;//Closed
+ $inputObject.msgAlert = "Please fill the following fields:  Defect Type,   Defect Injected By,   LC Stage Injected,   Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_DefectType = $data1.deftype14;//Configuration
+ $inputObject.msgAlert = "Please fill the following fields:   Defect Injected By,   LC Stage Injected,   Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_DefectInjectedBy = $data1.def_injec_by15;//Sreya_Chatterjee
+ $inputObject.msgAlert = "Please fill the following fields:    LC Stage Injected,   Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_PhaseInjected = $data1.lc_injectd16;//Requirements Analysis
+ $inputObject.msgAlert = "Please fill the following fields:     Closing Comments,  before closing the Defect.";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ //*****DEFECT WILL GET CLOSED AFTER GIVING THE CLOSING COMMENTS*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.closed13;//Closed
+ $inputObject.lst_DN_DefectType = $data1.deftype14;//Configuration
+ $inputObject.lst_DN_DefectInjectedBy = $data1.def_injec_by15;//Sreya_Chatterjee
+ $inputObject.lst_PhaseInjected = $data1.lc_injectd16;//Requirements Analysis
+ $inputObject.txt_DN_ClosingComments = $data1.comts17;//Closing the Defect
+ InfyFTModifyEformInstance($inputObject);
+ 
+ //*****CHECKING FOR THE REOPEN BUTTON TO CONFIRM THAT THE REVIEW IS CLOSED*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.span_Name = $data1.reopen18;//Reopen
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.span_Name = $data1.save19;//Save
+ $inputObject.operation = $data.operation;//Negative
+ InfyFTisVisible($inputObject);
+
+ //*****CHECKING FOR THE STATUS FIELD - CLOSED*****//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $DefectID;
+ InfyFTclick($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lbl_DN_Status = $data1.closed20;//Closed
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC5.end();
+ 
+ var $TC6 = _testcase("TC_BRD10_FU_4","CHECKING FOR THE NO OF DEFECTS FIELD"); 
+ $TC6.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment6;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject.lbl_DN_NoofDefects = $data1.Defects21;//1
+ verifyEformInstanceDetails($inputObject);
+ 
+ //******CHECKING THE STATUS OF THE REVIEW AFTER ADDING REVIEW******//
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node;//nodeIcon10
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.navigateTo2;//Iterations
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $Itr_ID;;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.Inprog22;//In-Progress
+ verifyEformInstanceDetails($inputObject);
+ 
+ $TC6.end();
+ 
+ var $TC7 = _testcase("TC_BRD10_FU_37","CHECKING FOR THE STATUS AS CLOSED OR ABANDONED"); 
+ $TC7.start();
+ 
+  //******CLOSING THE REVIEW - DEFECT STATUS-CLOSED******//
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.item = $ReviewID;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.abandon24;//Abandoned
+ $inputObject.msgAlert = "You cannot abandon this Review since there are defects logged.";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ $inputObject.lst_DN_Status = $data1.closed23;//Closed
+ InfyFTModifyEformInstance($inputObject);
+ 
+  //******DELETING THE REVIEW******//
+  
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name3;//openLinkedItem__1
+ $inputObject.msgAlert = "Review cannot be deleted if there are Defects linked or if Review Effort is greater than zero";
+ InfyFTDeleteEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name3;//openLinkedItem__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $TC7.end();
+
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 

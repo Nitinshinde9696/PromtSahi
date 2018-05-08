@@ -1,0 +1,252 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data7 = readDataFromCSV("Testing_PMPlan_Small_Project_available_req_type_LC_stage_03","Testing/PMPlan_Small"); 
+ 
+ var $t = _testcase("Script 36", "TC 77, 78, 82");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_77", "Checking for the available Request Type and LC stage in this section.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data7.segment_name;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";         
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName1;//1
+ $inputObject.colNo = $data7.colNo0;
+ $inputObject.fieldValues = $data7.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+  
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo4; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon12;// _image("nodeIcon13")
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.applicableLCStage;//  _link("applicableLCStage")
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.AutoTest;
+ InfyFTassertNotVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data7.segment_name;
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";     
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo4; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon12;//  _image("nodeIcon13")
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.applicableLCStage;//  _link("applicableLCStage")
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data7.tableName8;//Applicable LC Stages for Automated Testing
+ $inputObject.rowNo = $data7.rowName2;
+ $inputObject.colNo = $data7.colName1;
+ $inputObject.fieldValues = $data7.fieldValues13;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+
+ _wait(2000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_78", "Request types should be available in this section.");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data7.TestAuto;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.PerfTest;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.AutoTest;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.manualTest;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data7.segment_name;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName1;//1
+ $inputObject.colNo = $data7.colNo0;
+ $inputObject.fieldValues = $data7.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName3;//2
+ $inputObject.colNo = $data7.colNo0;
+ $inputObject.fieldValues = $data7.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName4;//4
+ $inputObject.colNo = $data7.colNo0;
+ $inputObject.fieldValues = $data7.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName5;//7
+ $inputObject.colNo = $data7.colNo0;
+ $inputObject.fieldValues = $data7.fieldValues0;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo4; //PM Plan
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon12;//  _image("nodeIcon13")
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.applicableLCStage;//  _link("applicableLCStage")
+ InfyFTassertNotVisible($inputObject); 
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data7.segment_name;
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName1;//1
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName3;//2
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName4;//4
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName0;
+ $inputObject.rowNo = $data7.rowName5;//7
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo4; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon12;//  _image("nodeIcon13")
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.applicableLCStage;//  _link("applicableLCStage")
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_82", "Checking for Build is available or not in Applicable LC stage.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.build;//  _link("build")
+ InfyFTassertNotVisible($inputObject);
+ 
+ $t.end();
+ 
+
+ 

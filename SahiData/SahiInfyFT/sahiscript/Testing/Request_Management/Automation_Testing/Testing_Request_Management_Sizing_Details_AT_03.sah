@@ -1,0 +1,110 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceSiddharth.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformEditor.sah");
+_include("../../../../sahisource/Business/TestManagement.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+
+
+ $data = readDataFromCSV("Testing_Request_Management_Sizing_Details_AT_03", "Testing/Request_Management/Automation_Testing");
+ 
+/*
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};		
+ $inputObject.name = $data.navigateTo1;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "AutT13"; 
+ OpenEformInstance($inputObject)
+*/
+
+ var $t = _testcase("TC-20.1 To 20.3", "SET VALUES FOR SIZE SUMMARY");
+ $t.start();
+ 
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name2;
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_NoOfTestScriptsExecute = $data.fieldValueAA;
+$inputObject.edt_DN_NoOfTestScriptsExecute1 = $data.fieldValueBB;
+$inputObject.edt_DN_NoOfTestUnitsPreparedP = $data.fieldValueCC;
+$inputObject.edt_DN_NoOfTestUnitsExecutedP = $data.fieldValueDD;
+$inputObject.edt_DN_NoOfTestScriptsPrepare = $data.fieldValueEE;
+$inputObject.edt_DN_NoOfTestScriptsPrepare1 = $data.fieldValueFF;
+$inputObject.edt_DN_NoOfTestUnitsPreparedA = $data.fieldValueGG;
+$inputObject.edt_DN_NoOfTestUnitsExecutedA = $data.fieldValueHH;
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.segment_name1;
+SelectSegment($inputObject);
+
+/*
+var $t = _testcase("TC-22.1 To 22.3", "SIZE SUMMARY-VERFYING SET VALUES");
+$t.start();
+  
+ 
+$inputObject = {};
+$inputObject.byColRowName = "yes";
+$inputObject.tableName = $data.SizeSummary;
+$inputObject.rowNo = $data.RowNameAA+"|"+$data.RowNameBB+"|"+$data.RowNameCC+"|"+$data.RowNameDD;
+$inputObject.colNo = $data.ColoumPlannedlbl;
+$inputObject.fieldValues = $data.fieldValueEE+"|"+$data.fieldValueAA+"|"+$data.fieldValueCC+"|"+$data.fieldValueDD;
+verifySwiftFormData($inputObject);
+ 
+$inputObject = {};
+$inputObject.byColRowName = "yes";
+$inputObject.tableName = $data.SizeSummary;
+$inputObject.rowNo = $data.RowNameAA+"|"+$data.RowNameBB+"|"+$data.RowNameCC+"|"+$data.RowNameDD;
+$inputObject.colNo = $data.ColoumActuallbl;
+$inputObject.fieldValues = $data.fieldValueFF+"|"+$data.fieldValueBB+"|"+$data.fieldValueGG+"|"+$data.fieldValueHH;
+verifySwiftFormData($inputObject);
+
+$t.end();
+*/
+
+var $t = _testcase("TC-22.1 To 22.3", "SIZE SUMMARY-VERFYING SET VALUES");
+$t.start();
+  
+  
+$inputObject = {};
+$inputObject.byColRowName = "yes";
+$inputObject.tableName = $data.SizeSummary;
+$inputObject.rowNo = $data.sizerow1;//"Test Scripts Prepared|Test Scripts Cases Executed|Test Units Prepared|Test Units Executed";
+$inputObject.colNo = $data.sizecol1;//"Planned";
+$inputObject.fieldValues = $data.sizeval1//"321|456|741|1";
+verifySwiftFormData($inputObject);
+ 
+$inputObject = {};
+$inputObject.byColRowName = "yes";
+$inputObject.tableName = $data.SizeSummary;
+$inputObject.rowNo = $data.sizerow2;//"Test Scripts Prepared|Test Scripts Cases Executed|Test Units Prepared|Test Units Executed";
+$inputObject.colNo = $data.sizecol2;//"Actual[1]";
+$inputObject.fieldValues = $data.sizeval2;//"123|789|321|59";
+verifySwiftFormData($inputObject);
+ 
+$t.end();
+  
+  

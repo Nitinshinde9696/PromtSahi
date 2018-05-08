@@ -1,0 +1,1490 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("Agile_Self_Project_Assesment_Verifying_Values_02","Agile/SPA");
+
+	var $TC6 = _testcase("Behavioral Practice", " To check for the changing of the score based on the Behavioral Practice being selected")
+	$TC6.start();
+	
+	var $Project_Setup1 = _testcase("Project_Setup", " To check for the changing of the score based on the practice of Project_Setup")
+	$Project_Setup1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value101;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value102;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value103;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value104;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Project_Setup;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Project_Setup1.end();
+	
+	var $Backlog_Grooming1 = _testcase("Backlog_Grooming", " To check for the changing of the score based on the practice of Backlog_Grooming")
+	$Backlog_Grooming1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value201;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value202;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value203;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value204;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Backlog_Grooming;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Backlog_Grooming1.end();
+	
+	var $Estimation_lbl1 = _testcase("Estimation_lbl", " To check for the changing of the score based on the practice of Estimation_lbl")
+	$Estimation_lbl1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value301;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value302;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value303;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value304;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Estimation_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Estimation_lbl1.end();
+	
+	var $Work_items_Sizing1 = _testcase("Work_items_Sizing", " To check for the changing of the score based on the practice of Work_items_Sizing")
+	$Work_items_Sizing1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value401;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value402;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value403;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value404;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Work_items_Sizing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Work_items_Sizing1.end();
+	
+	var $Team_Composition1 = _testcase("Team_Composition", " To check for the changing of the score based on the practice of Team_Composition")
+	$Team_Composition1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value501;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value502;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value503;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value504;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Team_Composition;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Team_Composition1.end();
+	var $Planning_lbl1 = _testcase("Planning_lbl", " To check for the changing of the score based on the practice of Planning_lbl")
+	$Planning_lbl1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value601;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value602;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value603;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value604;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Planning_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Planning_lbl1.end();
+	var $Daily_Stand_ups1 = _testcase("Daily_Stand_ups", " To check for the changing of the score based on the practice of Daily_Stand_ups")
+	$Daily_Stand_ups1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value701;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value702;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value703;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value704;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Daily_Stand_ups;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Daily_Stand_ups1.end();
+	var $Collaboration_lbl1 = _testcase("Collaboration_lbl", " To check for the changing of the score based on the practice of Collaboration_lbl")
+	$Collaboration_lbl1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value801;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value802;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value803;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value804;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Collaboration_lbl;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Collaboration_lbl1.end();
+	var $Continuous_Feedback1 = _testcase("Continuous_Feedback", " To check for the changing of the score based on the practice of Continuous_Feedback")
+	$Continuous_Feedback1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value901;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value902;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value903;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value904;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Feedback;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Continuous_Feedback1.end();
+	var $Continuous_Improvement1 = _testcase("Continuous_Improvement", " To check for the changing of the score based on the practice of Continuous_Improvement")
+	$Continuous_Improvement1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1001;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1002;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1003;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1004;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Continuous_Improvement;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Continuous_Improvement1.end();
+	var $Agile_Metrics1 = _testcase("Agile_Metrics", " To check for the changing of the score based on the practice of Agile_Metrics")
+	$Agile_Metrics1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1101;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1102;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1103;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1104;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Metrics;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Agile_Metrics1.end();
+	var $Agile_Charting1 = _testcase("Agile_Charting", " To check for the changing of the score based on the practice of Agile_Charting")
+	$Agile_Charting1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1201;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1202;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1203;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.value1204;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table1;
+	$inputObject.rowNo = $data.Agile_Charting;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Agile_Charting1.end();
+	
+$TC6.end();
+var $TC7 = _testcase("Engineering Practice", " To check for the changing of the score based on the Engineering Practice being selected")
+$TC7.start();
+
+	var $Configuration_Management1 = _testcase("Configuration_Management", " To check for the changing of the score based on the practice of Configuration_Management")
+	$Configuration_Management1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval101;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval102;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval103;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval104;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Configuration_Management;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Configuration_Management1.end();
+	
+	var $Automation_Unit_Test1 = _testcase("Automation_Unit_Test", " To check for the changing of the score based on the practice of Automation_Unit_Test")
+	$Automation_Unit_Test1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval201;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval202;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval203;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval204;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Unit_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Automation_Unit_Test1.end();
+	
+	var $Automation_Functional_Test1 = _testcase("Automation_Functional_Test", " To check for the changing of the score based on the practice of Automation_Functional_Test")
+	$Automation_Functional_Test1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval301;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval302;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval303;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval304;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Functional_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Automation_Functional_Test1.end();
+	
+	var $Automation_Regession_Test1 = _testcase("Automation_Regession_Test", " To check for the changing of the score based on the practice of Automation_Regession_Test")
+	$Automation_Regession_Test1.start();
+
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval401;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval402;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval403;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval404;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Regession_Test;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Automation_Regession_Test1.end();
+	
+	var $Automation_Built_in_Quality1 = _testcase("Automation_Built_in_Quality", " To check for the changing of the score based on the practice of Automation_Built_in_Quality")
+	$Automation_Built_in_Quality1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval501;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval502;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval503;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval504;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automation_Built_in_Quality;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Automation_Built_in_Quality1.end();
+	var $Continous_Integration1 = _testcase("Continous_Integration", " To check for the changing of the score based on the practice of Continous_Integration")
+	$Continous_Integration1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval601;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval602;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval603;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval604;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Continous_Integration;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Continous_Integration1.end();
+	var $Virtualised_Services1 = _testcase("Virtualised_Services", " To check for the changing of the score based on the practice of Virtualised_Services")
+	$Virtualised_Services1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval701;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval702;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval703;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval704;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Virtualised_Services;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Virtualised_Services1.end();
+	var $Automated_Deployments1 = _testcase("Automated_Deployments", " To check for the changing of the score based on the practice of Automated_Deployments")
+	$Automated_Deployments1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval801;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval802;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval803;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval804;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Automated_Deployments;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Automated_Deployments1.end();
+	var $Functional_Smoke_Testing1 = _testcase("Functional_Smoke_Testing", " To check for the changing of the score based on the practice of Functional_Smoke_Testing")
+	$Functional_Smoke_Testing1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval901;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval902;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval903;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval904;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Functional_Smoke_Testing;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Functional_Smoke_Testing1.end();
+	var $Release_Frequency1 = _testcase("Release_Frequency", " To check for the changing of the score based on the practice of Release_Frequency")
+	$Release_Frequency1.start();
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval1001;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_5;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval1002;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_3;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval1003;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_1;
+	InfyFTverifySwiftFormData($inputObject); 
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.selectbox_values1;
+	$inputObject.fieldValues = $data.Eval1004;
+	setSwiftFormData($inputObject);
+
+	$inputObject = {};
+	$inputObject.byColRowName = "yes";
+	$inputObject.tableName  = $data.table2;
+	$inputObject.rowNo = $data.Release_Frequency;
+	$inputObject.colNo  = $data.colname_Score1;
+	$inputObject.fieldValues = $data.Score_0;
+	InfyFTverifySwiftFormData($inputObject); 
+
+	$Release_Frequency1.end();
+
+$TC7.end();
+

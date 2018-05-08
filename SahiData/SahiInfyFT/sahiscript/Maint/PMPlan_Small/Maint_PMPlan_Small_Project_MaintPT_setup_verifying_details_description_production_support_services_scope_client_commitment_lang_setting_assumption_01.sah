@@ -1,0 +1,557 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_PMPlan_Small_Project_MaintPT_setup_verifying_details_description_production_support_services_scope_client_commitment_lang_setting_assumption_01","Maint/PMPlan_Small"); 
+ 
+ var $t = _testcase("System", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Navigate", "Navigate");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000);
+
+ var $t = _testcase("TC_1", "Verifying available details in the PM Plan summary and Additional Note.");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.note3;// Additional Note.
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.note3_1;// Additional Note.
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Sizing Details for Maint PT");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.link262;//_link("Sizing Details")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.link262;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colName3;//Type of Application Maintained*_lst
+ $inputObject.fieldValues = $data.fieldValues3;
+ setSwiftFormData($inputObject); 
+
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName6;
+ $inputObject.rowNo = $data.rowName1_1;
+ $inputObject.colNo = $data.colNo12_2;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName6;
+ $inputObject.rowNo = $data.rowName1_1;
+ $inputObject.colNo = $data.colNo12_1;
+ $inputObject.fieldValues = $data.fieldValues8;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName6;
+ $inputObject.rowNo = $data.rowName1_1;
+ $inputObject.colNo = $data.colNo12_3;
+ $inputObject.fieldValues = $data.fieldValues9;
+ setSwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.link262;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colName3;//Type of Application Maintained*_lst
+ $inputObject.fieldValues = $data.fieldValues3_1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName6;
+ $inputObject.rowNo = $data.rowName1_1;
+ $inputObject.colNo = $data.colNo12_4;
+ $inputObject.fieldValues = "--None--";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName6;
+ $inputObject.rowNo = $data.rowName1_1;
+ $inputObject.colNo = $data.colNo12_1;
+ $inputObject.fieldValues = "--None--";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.link262;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colName3;//Type of Application Maintained*_lst
+ $inputObject.fieldValues = $data.fieldValues3;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";  
+ $inputObject.tableName = $data.tableName6;
+ $inputObject.rowNo = $data.rowName1_1;
+ $inputObject.colNo = $data.colNo12_1;
+ $inputObject.fieldValues ="--None--";
+ setSwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ _wait(2000);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_3", "Description Section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link42;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.field1;
+ $inputObject.txt_DN_ClientsObjectives = $data.field2;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.field2;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = ""; 
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data.tableName2;//Reason
+ $inputObject.rowNo = $data.link42;//Scope Description
+ $inputObject.colNo = $data.colNo7;//Reason_lbl
+ $inputObject.fieldValues = $data.reason1;//Reason 1
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link42;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.field1;
+ $inputObject.txt_DN_ClientsObjectives = $data.field2;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.field2; 
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;//Reason
+ $inputObject.rowNo = $data.link42;//Scope Description
+ $inputObject.colNo = $data.colNo7;//Reason_lbl
+ $inputObject.fieldValues = $data.reason2;//Reason 1
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $t.end();
+ 
+
+ var $t = _testcase("TC_4", "Production Support Service scope");
+ $t.start();
+
+ _include("Maint_PMPlan_Small_Project_MaintPT_Project_Tailoring.sah");
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link43;// _InfyFTclick(_link("Production Support Service Scope"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.servicelbl;//TC no 39
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.processlbl;//TC no 39
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.remarkslbl;//TC no 39
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName0;
+ $inputObject.colNo = $data.colName0;
+ $inputObject.fieldValues = $data.fieldValues6;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5", "Client Commitment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.clientCommitment;// _InfyFTclick(_link("Client Commitment"));
+ InfyFTclick($inputObject);
+ 
+ 
+ if(_isVisible(_checkbox("false[1]")))
+ {
+   _wait(2000);
+   _click(_checkbox("on"));
+	
+	$inputObject = {};
+	InfyFTsaveSwiftForm($inputObject);	
+	}
+	
+ _wait(5000);
+
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowDelete;
+ $inputObject.colNo = $data.colClient;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+  _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);   
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;//Reason
+ $inputObject.rowNo = $data.clientCommitment;//client Commitment
+ $inputObject.colNo = $data.colNo7;//Reason_lbl
+ $inputObject.fieldValues = $data.reason8_1;//Reason 8_1
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+  
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_6", "Assumptions");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.link = $data.assumptionsLink;// _InfyFTclick(_link("Assumptions[1]"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("2")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data.item;
+	 OpenEformInstance($inputObject);
+ 
+	 _wait(2000);
+ 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.item;
+	 InfyFTDeleteEformInstance($inputObject); 
+ }
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.assumption;//Assumption
+ $inputObject.colNo = $data.colNo7;//Reason_lbl
+ $inputObject.fieldValues = $data.reason3;//Reason 3
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumptionsLink;// _InfyFTclick(_link("Assumptions[1]"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.txt_CM_Description = $data.CM_Description;
+ $inputObject.txt_DN_BasisofAssumption = $data.DN_BasisofAssumption;
+ $inputObject.chk_DN_ConverttoRisk = $data.DN_ConverttoRisk;
+ InfyFTcreateLinkedItem($inputObject);//For creating the assumptions.
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.assumption;//Assumption
+ $inputObject.colNo = $data.colNo7;//Reason_lbl
+ $inputObject.fieldValues = $data.reason4;//Reason 3
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "Language Setting");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableName2;//Reason
+ $inputObject.rowNo = $data.langSet;//Language Setting
+ $inputObject.colNo = $data.colNo7;//Reason_lbl
+ $inputObject.fieldValues = $data.reason7;//Reason 7
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.link262;//_link("Sizing Details")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data.link262;
+ $inputObject.rowNo = $data.rowName2;
+ $inputObject.colNo = $data.colName2;
+ $inputObject.fieldValues = $data.fieldValues4;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;//  _image("nodeIcon11")
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.link36;//  _link("Language Settings")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;//_image("nodeIcon2")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.langSet;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.reason9;//Reason 9
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_fill_the_goals_02");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_fill_the_goals_02.sah");
+ 
+ $t.end(); 
+  
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_operational_process_underpinning_contracts_03");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_operational_process_underpinning_contracts_03.sah");
+ 
+ $t.end();
+
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_Risk_logs_verify_fields_04");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_Risk_logs_verify_fields_04.sah");
+ 
+ $t.end();
+
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_setup_project_details_maintanace_template_content_management_05");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_setup_project_details_maintanace_template_content_management_05.sah");
+ 
+ $t.end();
+  
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_verify_values_validation_fields_link_CTS_lang_setting_06");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_verify_values_validation_fields_link_CTS_lang_setting_06.sah");
+ 
+ $t.end();
+
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_productivity_UOM_quality_goals_alert_msg_07");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_productivity_UOM_quality_goals_alert_msg_07.sah");
+ 
+ $t.end();
+
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_fill_penality_and_reward_details_help_section_08");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_fill_penality_and_reward_details_help_section_08.sah");
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_available_request_type_enhance_req_project_tailoring_09");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_available_request_type_enhance_req_project_tailoring_09.sah");
+ 
+ $t.end();
+ 
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPT_setup_production_support_goal_fill_goal_section_10");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPT_setup_production_support_goal_fill_goal_section_10.sah");
+ 
+ $t.end();
+ 
+ /*
+ var $t = _testcase("Maint_PMPlan_Small_Project_MaintPTworkflow_11");
+ $t.start();
+ 
+ _include("Maint_PMPlan_Small_Project_MaintPTworkflow_11.sah");
+ 
+ $t.end();
+ */ 

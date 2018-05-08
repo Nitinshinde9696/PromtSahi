@@ -1,0 +1,494 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",7,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Agile_ZDP_Comp_Flow_07", "Agile/ZDP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/
+ /* 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();*/
+ 
+ var $t = _testcase("TC_3", "navigate to ZDP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+
+ $t.end(); 
+ 
+ /***********************************************************
+ * Create Instance of ZDP
+ ***********************************************************/ 
+ 
+var $t = _testcase("TC_4", "create instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name; //ZZZ
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMforP;//ZD closure
+ CreateInstance($inputObject);
+ 
+ _wait(1000);
+ 
+ var $IDZ = _getText(_span("CM_ItemCode"));
+ $inputObject = {};
+ $inputObject.span_Name = $IDZ;//system generated value 
+ $inputObject.cell_Name = $data.ID;
+ InfyFTisReadOnly($inputObject);
+
+ $t.end();
+  
+ /*********************************************************************
+ * set some values in planning segment by leaving one fields
+ *********************************************************************/
+ 
+ var $t = _testcase("TC_5", "set values to planning segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.planning;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textarea of left side
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //check box left side
+ $inputObject.rowNo = $data.rowNo6;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textarea of right side
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.fieldValues2;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textbox of left side
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues31;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textbox of left side
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues31;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //listBox
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo5;
+ $inputObject.fieldValues = $data.fieldValues5;
+  setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //list box rgt side
+ $inputObject.rowNo = $data.rowNo7;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //date filed
+ $inputObject.rowNo = $data.rowNo8;
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $startDate;
+ setSwiftFormData($inputObject);
+
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //date filed
+ $inputObject.rowNo = $data.rowNo101;
+ $inputObject.colNo = $data.colNo101;
+ $inputObject.fieldValues = $data.fieldValues101;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+  _wait(5000); 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName1; //textarea of right side
+ $inputObject.rowNo = $data.workflow_stage1;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.tableName1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+ 
+ /*********************************************************
+ * What Improvement and How Improvement table Delete check
+ **********************************************************/
+ 
+ var $t = _testcase("TC_6", "what improvement Table ");
+ $t.start();
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; //checking field negative part
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo23;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo24;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo25;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName2; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo26;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "How Improvements Parameters");
+ $t.start();
+ 
+ _click(_link("Add Rows[1]"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; //checking field negative part
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo23;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo24;
+ $inputObject.fieldValues = $data.fieldValues22;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo25;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName3; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo26;
+ $inputObject.fieldValues = $data.fieldValues25;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ /****************************************************
+ * Delete the created row in both table
+ *****************************************************/
+ 
+ var $t = _testcase("TC_8", "Deleting Row");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.WimprPara; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.workflow_stage1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.HimpPara; 
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.workflow_stage1;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ _wait(8000);
+ 
+ $t.end(); 
+ 
+ /*********************************************************************
+ * checking status value in Detail, Planning, Execution segment
+ **********************************************************************/
+ 
+ var $t = _testcase("TC_9", "Checking Status value in 3 tabs");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details;
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.open;//system generated value open
+ $inputObject.cell_Name = $data.status; 
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.execution;
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ /**********************************************************************
+ * Execution segment
+ ***********************************************************************/
+ 
+ var $t = _testcase("TC_10", "filling values in Execution segment");
+ $t.start();
+ 
+ _wait(2000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableNameD; //text box of right side
+ $inputObject.rowNo = $data.rowNoE1;
+ $inputObject.colNo = $data.colNoE1;
+ $inputObject.fieldValues = $data.fieldValuesE2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableNameD; //text area 
+ $inputObject.rowNo = $data.rowNoE3;
+ $inputObject.colNo = $data.colNoE3;
+ $inputObject.fieldValues = $data.fieldValuesE3;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableNameD; //text area 
+ $inputObject.rowNo = $data.rowNoE4;
+ $inputObject.colNo = $data.colNoE4;
+ $inputObject.fieldValues = $data.fieldValuesE3;
+  setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableNameD; //text area 
+ $inputObject.rowNo = $data.rowNoE5;
+ $inputObject.colNo = $data.colNoE5;
+ $inputObject.fieldValues = $data.fieldValuesE3;
+  setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableNameD; //date filed
+ $inputObject.rowNo = $data.rowNoE6;
+ $inputObject.colNo = $data.colNoE5;
+ $inputObject.fieldValues = $startDate;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+ 
+ /****************************************************
+ *routing ZD to DM Approval
+ *****************************************************/
+ 
+ var $t = _testcase("TC_11", "Routing ZD to DM");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ $t.end();
+ 
+ /*************************************************************
+ *DM rejects the Approval at first stage of routing
+ **************************************************************/
+ 
+ var $t = _testcase("TC_12", "Rejecting approval of Plan Approval");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;//rejecting
+ $inputObject.alert = $data.fieldValues7;
+ ClickRejectwithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Details; //workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMfor1;//-None--
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();
+ 
+ /************************************************************
+ *Routing from ZD to DM for Approval
+ ************************************************************/
+ 
+ var $t = _testcase("TC_13", "Routing for approval of Plan Approval");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMforP;//ZD closure
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ $t.end();
+ 
+ /**************************************************************
+ *DM routing Again for confirmation of Plan Approval
+ **************************************************************/
+ 
+ var $t = _testcase("TC_14", "Routing for ZD plan Approved");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Details; //workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMfor1;//-None--
+ verifyEformInstanceDetails($inputObject);
+  
+ $t.end();
+ 
+ /*********************************************************************
+ *ZD to DM for closure
+ **********************************************************************/
+ 
+ var $t = _testcase("TC_15", "Routing for ZD closure");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMfor;//ZD closure
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Segment_Details; //workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.StatusC;//system generated value open
+ $inputObject.cell_Name = $data.status; 
+ InfyFTisReadOnly($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.planning;
+ SelectSegment($inputObject);
+ 
+ var $msg = _getText(_span("eformHeaderContent[1]"));//
+ 
+ $inputObject = {};
+ $inputObject.span_name = $data.span_name1;//eformHeaderContent[1]
+ $inputObject.message = $msg;
+ InfyFTverifyValue($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.execution;
+ SelectSegment($inputObject);
+ 
+ var $msg = _getText(_span("eformHeaderContent[2]"));//_span("eformHeaderContent[2]")
+ 
+ $inputObject = {};
+ $inputObject.span_name = $data.span_Name2;
+ $inputObject.message = $msg;
+ InfyFTverifyValue($inputObject);
+ 
+ _assertExists(_button("Reopen"));
+ 
+ $t.end();

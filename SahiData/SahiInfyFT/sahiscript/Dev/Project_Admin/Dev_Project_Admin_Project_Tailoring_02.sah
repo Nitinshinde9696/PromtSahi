@@ -1,0 +1,221 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ //$data = readDataFromCSV("Dev_Project_Admin_Project_Tailoring_02,"Dev/Project_Admin");
+ $data1 = readDataFromCSV("Dev_Project_Admin_Project_Tailoring_02","Dev/Project_Admin");
+ /* var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname2;//projectname
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//
+ navigateTo($inputObject);
+ 
+ $s.end(); */
+ var $t = _testcase("TC_3","Check Sizing Details segment");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.ver_sizing_details;//
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid1;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_TOAD1;//Type of Application Developed*
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid2;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_TOW2;//Type of Application Developed*
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+  var $t = _testcase("TC_3.1","verify Development Sizing Details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid1;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.Dev1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.PL1;// 
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid3;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_pl2;//Primary Language
+ verifySwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ //$inputObject.msgAlert = $data1.alert1;
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Type of Work in table Sizing Details in Sizing Details tab\n• Field Sizing Technique in table Sizing Details in Sizing Details tab";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid2;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.Tow2;
+ setSwiftFormData($inputObject); 
+ 
+  $inputObject = {};
+ //$inputObject.msgAlert = $data1.alert2;
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n•  Field Sizing Technique in table Sizing Details in Sizing Details tab";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid7;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_ST;//
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid3+"|"+$data1.chkcid7;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.PLSTVal;
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+  saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid7;
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.sto;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.dostu;// 
+ InfyFTisVisible($inputObject);
+  
+ $inputObject = {};
+ $inputObject.msgAlert = "Details of other sizing techniques used is mandatory if Sizing technique chosen is Others";
+ saveSwiftForm($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.others;
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.otherSTValues;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid7;
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.nssta;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data1.RONUST;// 
+ InfyFTisVisible($inputObject);
+  
+ $inputObject = {};
+ $inputObject.msgAlert = "Reason for not using standard sizing technique is mandatory if Sizing technique chosen is \"No Standard Sizing Technique Applicable\"";
+ saveSwiftForm($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.RNUText;
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.RONUST;
+ setSwiftFormData($inputObject);
+  
+  $inputObject = {};
+  saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3.2","verify Portal or Content Management site");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid1;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.PCMS;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.PT_TPD;// 
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid4;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_PT;//Primary Language
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid5;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_TPD;//Primary Language
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+ /* var $t = _testcase("TC_3.3","verify Package or Product");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid1;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.PP;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.PP_Val;// 
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data1.chkrid1;
+ $inputObject.colNo  = $data1.chkcid6;//"";
+ $inputObject.tableName  = $data1.tbnm1;
+ $inputObject.fieldValues = $data1.lst_PP;//Primary Language
+ verifySwiftFormData($inputObject);
+  */
+ $t.end();
+ 

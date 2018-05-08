@@ -1,0 +1,1508 @@
+_include("../Business/EformInstance.sah");
+
+/**
+ @Function Number:1
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function renameFolderInTreeview($inputObject)
+{
+	_log("renameFolderInTreeview Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		if($inputObject.operation === "Negative")
+		{
+			var $msg = "Rename Error: Folder with this name already exists in parent Folder , please try again";
+			if(_exists(_span($msg)))
+			{ 
+				_log("Cannot rename Folder");
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("renameFolderInTreeview Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifySectionTreeview($inputObject)
+{
+	_log("modifySectionTreeview Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifySectionTreeview Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function DeleteSection($inputObject)
+{
+	_log("DeleteSection Started","success");
+	try 
+	{
+		if($inputObject.IsStandartdsection === "Yes")
+		{
+			_log("Can not delete this section as this is standard section.");
+			return;
+		}
+		else
+		{
+			_click(_submit("Delete"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("DeleteSection Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author: hbhuva
+ @example:
+ @description: Use to check the fields and its value
+ @param: 
+ @return: 
+ **/
+
+function verifyEformDetails($inputObject)
+{
+	_log("verifyEformDetails Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_log("This Fields/Buttons are not available at this level.");
+			return;
+		}
+		
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformDetails Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifySection($inputObject)
+{
+	_log("modifySection Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("ScrnButton"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifySection Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openFolderHierarchy($inputObject)
+{
+	_log("openFolderHierarchy Started","success");
+	try 
+	{
+		var $folderHierarchy = $inputObject.folderHierarchy.split(";");
+		if($folderHierarchy.length > 1)
+		{
+			for(var $i = 0; $i <$folderHierarchy.length; $i++)
+			{
+				if(_exists(_image("ftv2plastnode.gif",_near(_link($folderHierarchy[$i])))))
+					_click(_image("ftv2plastnode.gif",_near(_link($folderHierarchy[$i]))));
+			}
+		}
+		else
+			_click(_image("ftv2plastnode.gif",_near(_link($inputObject.folderHierarchy))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openFolderHierarchy Completed","success");
+}
+
+/**
+ @author: hbhuva
+ @example:
+ @description: Moving any section to perticular folder in eform configuration
+ @param: 
+ @return: 
+ **/
+
+function moveSectionToFolder($inputObject)
+{
+	_log("moveSectionToFolder Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("moveSectionToFolder Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: associateCheckListToSection($inputObject.edt_Question = "Checklist")
+ @description: Searches the checklist and associates it to checklist segment
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function associateCheckListToSection($inputObject)
+{
+	_log("associateCheckListToSection Started","success");
+	try 
+	{
+		_selectWindow("fieldPos");
+		_click(_link("de-icon-checklist_eform_assoc"));
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Search"));
+		_click(_radio("listdata"));
+		_click(_button("SelectCode"));
+		_click(_button("QTP_KEY_BUTTON_Close"));
+		_selectWindow();		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("associateCheckListToSection Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: editSectionProperties();
+ @description: Clicks on Edit property of checkList Segment
+ @param: {None}
+ @return: {None} 
+ **/
+
+function editSectionProperties()
+{
+	_log("editSectionProperties Started","success");
+	try 
+	{
+		_click(_link("de-icon-edit"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editSectionProperties Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: $inputObject.item  = "abc";
+ @description: Delete the Project Level Field
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function deletePLF($inputObject)
+{
+	_log("deletePLF Started","success");
+	try 
+	{
+		_click(_link($inputObject.item));
+		_selectWindow("projFldMod");
+		
+		var $isDisabled;
+		_set($isDisabled,_submit("QTP_Delete").disabled);
+		
+		if($inputObject.operation === "Negative")
+		{
+			_assertTrue(_submit("QTP_Delete").disabled);
+			_click(_button("QTP_Cancel"));
+		}
+		else
+		{
+			_click(_submit("QTP_Delete"));
+			_assertEqual("Deleting this field may result into loss of some data.Are you sure you want to delete this field?", _lastAlert());
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deletePLF Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author:
+ @example: 
+ @description: 
+ @param: rdg_timesheetradiobutton
+ @return: 
+ **/
+
+function modifyEformDetails($inputObject)
+{
+	_log("modifyEformDetails Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyEformDetails Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: deleteHierarchyField($inputObject.item = $data.item4;);
+ @description: Delete Admin level Hierarchy Field
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function deleteHierarchyField($inputObject)
+{
+	_log("deleteHierarchyField Started","success");
+	try 
+	{
+		_click(_radio(0, _near(_cell($inputObject.item))));
+		_click(_submit("QTP_Delete"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteHierarchyField Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example createEform({ "winprefix" : "Add New eForm" ,
+		"edt_eFormName" : "base" ,  "edt_eFormPrefix" : "base" ,
+		"edt_ItemType" : "bass" });
+* @description This function is called to create Eform
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+function createEform($inputObject)
+{
+	_log("createEform Started","success");
+	try 
+	{
+		// When the base Eform is not present in the List and For those cases you cannot add Eforms.
+		if($inputObject.type === "BaseEformNegative")
+		{
+			_wait(15000,_exists(_link("de-icon-add")));
+			_click(_link("de-icon-add"));
+			_selectWindow("createEform");
+			_click(_radio($inputObject.rdg_eFormScope));
+			_assertFalse(_containsText(_select("BaseEForm"),$inputObject.lst_BaseEForm));
+			_click(_button("cancel"));
+			_selectWindow();
+		}	
+		else
+		{
+			$inputObject.winprefix  = "createEform";
+			createInstanceForPopUp($inputObject);
+			_selectWindow("createEform");
+			if($inputObject.type === "Negative" || $inputObject.operation === "Negative")
+			{
+				var $alertMsg;
+				_set($alertMsg,"The Specified ItemType: ' "+ $inputObject.edt_ItemType +" ' already in use, please choose some other ItemType for your new eForm");
+				_assertEqual($alertMsg, _lastAlert());
+				_click(_button("cancel"));
+				_selectWindow();
+			}
+			else if($inputObject.alert === "PrefixNegative")
+			{
+				var $alertMsg;
+				_set($alertMsg,"The Specified Prefix: ' "+ $inputObject.edt_ItemType +" ' already in use, please choose some other prefix for your new eForm");
+				_assertEqual($alertMsg, _lastAlert());
+				_click(_button("cancel"));
+				_selectWindow();
+			}
+			else
+			{	
+			    _wait(5000, _isVisible(_submit("OK")));
+				_click(_submit("OK"));
+				_selectWindow();
+				_wait(5000, _isVisible(_link($inputObject.edt_eFormName)));
+				var $json = {};
+				$json.item = $inputObject.edt_eFormName;
+				verifyEformListing($json);
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createEform Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function navigateToSectionListing()
+{
+	_log("navigateToSectionListing Started","success");
+	try 
+	{
+		_click(_link("de-icon-section"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToSectionListing Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example openSection
+* @description This function is called to openSection
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function openSection($inputObject)
+{
+	_log("openSection Started","success");
+	try 
+	{
+		_click(_link($inputObject.sectionname));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openSection Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function createSection($inputObject)
+{
+	_log("createSection Started","success");
+	try 
+	{
+		_click(_link("Add Section"));
+		_selectWindow("AddSection");
+		setAllFields($inputObject);
+		_click(_submit("//s*Save/s*/"));
+		
+		if($inputObject.operation === "Negative")
+		{
+			if(_assertEqual("Segment"+ $inputObject.edt_sectionName + "already exist. Please enter another Segment name",_lastAlert()))
+			{
+			 	_log("Default section already exists so again the same name should not get added in base folder");
+			 	_click(_button("Cancel"));
+			 	_selectWindow();
+				return;
+			}
+		}
+		_selectWindow();
+		_wait(5000, _isVisible(_link($inputObject.edt_sectionName)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createSection Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: createField{"edt_dispLength" : "100","edt_fieldLabel" : "abc", "edt_maxLength" : "100"}
+ @description:  a field in perticular segment 
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function createField($inputObject)
+{
+	_log("createField Started","success");
+	try 
+	{
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_exists(_link("Add Field")));
+		}
+		else
+		{	
+			_click(_link("Add Field"));
+			
+			_selectWindow("AddField");
+			setAllFields($inputObject);
+			_click(_submit("Save"));
+			if($inputObject.operation === "Negative")
+			{	
+				if(_isVisible(_span("Field Name already exists by this name " + $inputObject.edt_fieldLabel +".")))
+				{
+					_log("Can not create field as it is already exists.");
+					_selectWindow();
+					return;
+				}	
+				var $alert = _lastAlert();
+				var $alertMsg = "Lower Range value can not be less than or equal to Upper Range value";
+				if(_assertEqual($alertMsg, _lastAlert()))
+				{
+					_log("can not add field");
+					_click(_button("Cancel"));
+				}
+			}
+			_selectWindow();
+			_wait(5000, _isVisible(_link($inputObject.edt_fieldLabel)));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createField Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: createSpecialField({"edt_fieldLabel" : "Field_Label6", "lst_dataType" : "Datatype6","txt_Script" : "script6"}); 
+ @description: Adding calculated field
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function createSpecialField($inputObject)
+{
+	_log("createSpecialField Started","success");
+	try 
+	{
+		var $firstJson = {};
+		var $secondJson = {};
+		_click(_link("de-icon-add"));
+		_selectWindow("AddField");
+		$firstJson.edt_fieldLabel = $inputObject.edt_fieldLabel;
+		$firstJson.lst_dataType = $inputObject.lst_dataType;
+		$secondJson.txt_Script = $inputObject.txt_Script;
+		
+		setAllFields($firstJson);
+		_click(_link("Settings"));
+		_selectWindow("CalculatedSetting");
+		setAllFields($secondJson);
+		_click(_submit("QTP_Validate"));
+				
+		if($inputObject.type === "Negative")
+		{
+			_assertTrue(_containsText(_textarea("Error"),$inputObject.txt_Error));
+			_click(_button("QTP_Cancel"));
+			_selectWindow("AddField");
+			_wait(5000, null);
+			_click(_button("cancel"));
+			
+		}
+		else
+		{
+			_assertTrue(_containsText(_textarea("Error"),$inputObject.txt_Error));
+			_click(_submit("Save"));
+			_selectWindow("AddField");
+			_wait(5000, null);
+			_click(_submit("save"));
+		}
+		_selectWindow();
+		_wait(5000, _isVisible(_link($inputObject.edt_fieldLabel)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createSpecialField Completed","success");
+}
+
+/**
+ @Function Number:23
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteEform($inputObject)
+{
+	_log("deleteEform Started","success");
+	try 
+	{
+		_click(_submit("Delete"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteEform Completed","success");
+}
+
+/**
+ @Function openEform
+ @author:shashank
+ @example:openEform{ "eformname" : "Defect" }
+ @description: the function is used to click on the eform name provided in the "eformname"
+ @param: json $inputObject
+ @return: 
+ **/
+
+function openEform($inputObject)
+{
+	_log("openEform Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_isVisible(_link($inputObject.eformname)));
+			_log("Can not open " + $inputObject.eformname + "eform, as this eform is not present in the listing");
+		}
+		else
+		{	
+			var $tableId  = _table("QTP_eformlist");
+			if($inputObject.prefix)
+				_click(_link($inputObject.eformname,_near(_cell($inputObject.prefix))));
+			else
+				_click(_link($inputObject.eformname,_in($tableId)));
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openEform Completed","success");
+}
+
+/**
+ @Function Number:27
+ @author: Rahul Mahant
+ @example:
+ @description: Clicks on Publish Button
+ @param: 
+ @return: 
+ **/
+
+function publishEform()
+{
+	_log("publishEform Started","success");
+	try 
+	{
+		if(_submit("Publish"))
+			_click(_submit("Publish"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("publishEform Completed","success");
+}
+
+/**
+ @Function Number	:28
+ @author			: Vaishali  	
+ @example			:	$inputObject.Field_Name = $data.Field_Name11;
+ 						$inputObject.Can_Rename = $data.Can_Rename11;
+ 						$inputObject.Can_Change_Value = $data.Can_Change_Value11;
+ 						$inputObject.Can_Mark_Mandatory = $data.Can_Mark_Mandatory11;
+ @description		: This function call to set or modify PLF setting.
+ @param				: 
+ @return			: None
+ **/
+
+function modifyPLFSettings($inputObject)
+{
+	_log("modifyPLFSettings Started","success");
+	try 
+	{
+		_click(_link("de-icon-section_settings"));
+		_selectWindow("FldSetting");
+		if($inputObject.Can_Rename === "ON")
+			_check(_checkbox("/chkRename/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Rename"))));
+		else
+			_uncheck(_checkbox("/chkRename/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Rename"))));
+		if($inputObject.Can_Change_Value === "ON")
+			_check(_checkbox("/chkChgValue/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Change Value"))));
+		else
+			_uncheck(_checkbox("/chkChgValue/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Change Value"))));
+		if($inputObject.Can_Mark_Mandatory === "ON")
+			_check(_checkbox("/chkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Mark Mandatory"))));
+		else
+			_uncheck(_checkbox("/chkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Mark Mandatory"))));
+		if($inputObject.Can_Hide === "ON")
+			_check(_checkbox("/chkHide/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Hide"))));
+		else
+			_uncheck(_checkbox("/chkHide/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Hide"))));
+		if($inputObject.Can_Delete === "ON")
+			_check(_checkbox("/chkDelete/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Delete"))));
+		else
+			_uncheck(_checkbox("/chkDelete/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Delete"))));
+		if($inputObject.Can_Chk_Mark_Visible === "ON")
+			_check(_checkbox("/chkMarkVisible/",_near(_cell($inputObject.Field_Name)),_under(_cell("Hide"))));
+		else
+			_uncheck(_checkbox("/chkMarkVisible/",_near(_cell($inputObject.Field_Name)),_under(_cell("Hide"))));
+		if($inputObject.Can_Chk_Mark_Mandatory === "ON")
+			_check(_checkbox("/chkMarkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Mandatory"))));
+		else
+			_uncheck(_checkbox("/chkMarkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Mandatory"))));
+		_click(_submit("save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPLFSettings Completed","success");
+}
+
+/**
+ @Function Number:29
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifySpecialField($inputObject)
+{
+	_log("modifySpecialField Started","success");
+	try 
+	{
+		_selectWindow("fieldMod");
+		_click(_link("Settings"));
+		_selectWindow("CalculatedSetting");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Validate"));
+		_assertTrue(_containsText(_textarea("Error"),$inputObject.hidden_Error));
+		_click(_submit("Save"));
+		_selectWindow("fieldMod");
+		_wait(5000, null);
+		_click(_submit("save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifySpecialField Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example VerifyListOfFields
+* @description This function is called to VerifyListOfFields
+* @param {String}None
+* @return {String} None 
+*************************************************************************/
+
+function VerifyListOfFields()
+{
+	_log("VerifyListOfFields Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_table("QTP_ListTable")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("VerifyListOfFields Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example deleteField
+* @description This function is called to deleteField
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+
+function deleteField($inputObject)
+{
+	_log("deleteField Started","success");
+	try 
+	{
+		if ($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_link($inputObject.item)));
+		}
+		else
+		{	
+			_click(_link($inputObject.item));
+			_selectWindow("fieldMod");
+			_click(_submit("QTP_Delete"));
+			_wait(2000);
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteField Completed","success");
+}
+
+/**
+ @author:Harshit
+ @example: createListField($inputObject)
+ @description: Adding field
+ @param: String {None}
+ @return: String {None}
+ **/
+
+function createListField($inputObject)
+{
+	_log("createListField Started","success");
+	try 
+	{
+		createField($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("createListField Completed","success");
+}
+
+/**
+ @Function Number:51
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function waitVerifyEformListing($inputObject)
+{
+	_log("waitVerifyEformListing Started","success");
+	try 
+	{
+		var $wait = 500000;
+		var $reloadPeriod = 15000;
+		var $counter = 0;
+		var $eformName = $inputObject.eform_name;
+		while (($counter< $wait) && !(_exists(_link($eformName))))
+		{
+			_wait($reloadPeriod, _exists(_link($eformName)));
+			$counter = $counter + $reloadPeriod;
+			if($inputObject.navigateTo)
+				navigateTo({ "name" : $inputObject.navigateTo });
+			else
+				navigateTo({ "name" : "eForms_usp" });
+			_wait(2000, _exists(_link($eformName)));
+		}
+		_assertTrue(_isVisible(_link($eformName)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("waitVerifyEformListing Completed","success");
+}
+
+/**
+ @Function Number:52
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyEformListing($inputObject)
+{
+	_log("verifyEformListing Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete" || $inputObject.operation === "Negative")
+    		_assertFalse(_isVisible(_link($inputObject.item)));
+    	else 
+    		_assertTrue(_isVisible(_link($inputObject.item)) || _isVisible(_cell($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyEformListing Completed","success");
+}
+
+/**
+ @Function Number:53
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  verifyaddFolder($inputObject)
+{
+	_log(" verifyaddFolder Started","success");
+	try 
+	{
+	    _wait(5000, _isVisible(_select("folderList")));
+		if(_containsText(_select("folderList"), $inputObject.newFolderName))
+			_log("Added Folder exist in folder list = " + $inputObject.newFolderName,"success");
+		else
+			_log("Added Folder doesn't exist in folder list = " + $inputObject.newFolderName,"failure");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyaddFolder Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyFieldListing
+* @description This function is called to verifyFieldListing
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function verifyFieldListing($inputObject)
+{
+	_log("verifyFieldListing Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFieldListing Completed","success");
+}
+
+/**
+ @author: Harshit 
+ @example: addProjectLevelField($inputObject)
+ @description: Adding the project level field for the eforms.$inputObject.template_check_id is Siu for Issue.
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function addProjectLevelField($inputObject)
+{
+	_log("addProjectLevelField Started","success");
+	try 
+	{
+		var $tableId  = _table("QTP_ListTable");
+		_wait(35000,_exists(_image("QTP_Section_Settings")));
+		_click(_link("de-icon-add"));  
+		_selectWindow("AddField");
+		setAllFields($inputObject);
+		// provide template_check_id : for Defect write 'Dft' in Excel 
+		// previously we were providing checkbox id like 8 for defect and so on.
+		// for custom eform append _f to itemtype eg. PLFq_f
+		if($inputObject.operation === "Negative")
+		{
+			if(_isVisible(_checkbox($inputObject.template_check_id)))
+				_assertTrue(_isVisible(_checkbox($inputObject.template_check_id)));
+			else
+				_assertFalse(_isVisible(_checkbox($inputObject.template_check_id)));
+			_click(_button("cancel"));
+			_selectWindow();
+		} 
+		else
+		{
+			_click(_checkbox($inputObject.template_check_id,_near(_cell($inputObject.template_name,_in($tableId)))));
+			_click(_submit("save"));
+			_selectWindow();
+			_wait(25000,_exists(_cell($inputObject.edt_fieldLabel, _in(_table("QTP_ListTable")))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addProjectLevelField Completed","success");
+}
+
+/**
+ @Function Number:59
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setDefaultSegment($inputObject)
+{
+	_log("setDefaultSegment Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setDefaultSegment Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: setTraceability($inputObject.eformname = $data.eformname5)
+ @description: Setting the traceability in eform
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function setTraceability($inputObject)
+{
+	_log("setTraceability Started","success");
+	try 
+	{
+		_click(_link("de-icon-trace_setup"));
+		_selectWindow("TraceabilitySetup");
+		_check(_checkbox(0,_near(_cell($inputObject.eformname))));
+		 setAllFields($inputObject);// This method has been called to set values in particular cases.
+		_click(_button("save"));
+		_click(_button("Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTraceability Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:  openField($inputObject)
+ @description: Opening the eform field.
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function  openField($inputObject)
+{
+	_log(" openField Started","success");
+	try 
+	{
+		_click(_link($inputObject.fieldname));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" openField Completed","success");
+}
+
+/**
+ @author: Harshit 
+ @example: modifyField($inputObject)
+ @description: Modifying the opened eforms fields
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function modifyField($inputObject)
+{
+	_log("modifyField Started","success");
+	try 
+	{
+		_selectWindow("Modify Field");
+		if($inputObject.operation === "Negative")
+		{
+			var $isDisabled; 
+			if($inputObject.edt_fieldLabel)
+			{
+				_set($isDisabled,_textbox("fieldLabel").disabled);
+			}
+			else
+				_set($isDisabled,_textbox("newValue").disabled);
+			if($isDisabled)
+			{
+				_assertTrue($isDisabled,"Can not edit this as it is disabled");
+				_click(_button("QTP_Cancel"));
+				_selectWindow();
+				return;
+			}
+			else 
+				_assertFalse($isDisabled);
+		}
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		_selectWindow();
+		_wait(3000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyField Completed","success");
+}
+
+/**
+ @Function Number:63
+ @author:
+ @example:
+ @description: This is to add the folder in the folder eform
+ @param: 
+ @return: 
+ **/
+
+function addFolder($inputObject)
+{
+	_log("addFolder Started","success");
+	try 
+	{
+		_click(_link("QTP_AddFolder"));
+		_selectWindow("folderprop");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		if($inputObject.operation === "Negative")
+		{
+			var $alertMsg = "Folder with this name already exists in parent Folder"+ $inputObject.edt_newFolderName + ", please try again";
+			_assertEqual($alertMsg, _lastAlert());
+			_closeWindow();
+		}
+		_selectWindow();
+		_wait(2000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addFolder Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: deleteFolder()
+ @description: Deleting the Folder
+ @param: {None}
+ @return: {None} 
+ **/
+
+function deleteFolder()
+{
+	_log("deleteFolder Started","success");
+	try 
+	{
+		if(_contains(_cell("IconDisable"),_link("QTP_DeleteFolder")))
+		{
+			_assertTrue(_contains(_cell("IconDisable"),_link("QTP_DeleteFolder")));
+			_log("Folder contains segments : It should not get deleted,Folder did not get deleted");
+			return;
+		}
+		else
+			_click(_link("QTP_DeleteFolder"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteFolder Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: reorderFolder(lst_moveList = $data.parentFolder6)
+ @description: Rearrange Folder
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function reorderFolder($inputObject)
+{
+	_log("reorderFolder Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		if($inputObject.operation === "Negative")
+		{
+			var $msg = "Move Error: Folder Name is not unique in the parent folder it is being moved under.Could not move Folder"; 
+			if(_exists(_span($msg)))
+			{ 
+				_log("Cannot move Folder");
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("reorderFolder Completed","success");
+}
+
+/**
+ @Function Number:66
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openFolder($inputObject)
+{
+	_log("openFolder Started","success");
+	try 
+	{
+	    _wait(2000, _isVisible(_link($inputObject.foldername)));
+		_click(_link($inputObject.foldername));
+		_wait(1000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openFolder Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: verifyHierarchyFieldListing($inputObject)
+ @description: Verifying Hierarchical list item is present or not
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function verifyHierarchyFieldListing($inputObject)
+{
+	_log("verifyHierarchyFieldListing Started","success");
+	try 
+	{
+		if($inputObject.operation === "Delete")
+    		_assertFalse(_isVisible(_link($inputObject.item)));
+    	else 
+    		_assertTrue(_isVisible(_link($inputObject.item)));	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyHierarchyFieldListing Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:setTraceabilityLink($inputObject.item = $data.item4;)
+ @description: Setting the traceability to an eform
+ @param:  String {None}
+ @return: String {None}
+ **/
+
+function setTraceabilityLink($inputObject)
+{
+	_log("setTraceabilityLink Started","success");
+	try 
+	{
+		_click(_link("de-icon-trace_setup"));
+		_selectWindow("TraceabilitySetup");
+		
+		if(_exists(_cell($inputObject.item)))
+		{
+			_check(_checkbox(0,_near(_cell($inputObject.item))));
+			_click(_button("save"));
+			_closeWindow();
+			_selectWindow();
+		}
+		else
+		{
+			_log("Traceability Eform does not exist.");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTraceabilityLink Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example modifyProjectLevelField
+* @description This function is called to modifyProjectLevelField
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function modifyProjectLevelField($inputObject)
+{
+	_log("modifyProjectLevelField Started","success");
+	try 
+	{
+		_wait(25000,_exists(_image("QTP_Add")));
+		_click(_link($inputObject.item));
+		_selectWindow("projFldMod");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		_selectWindow();
+		_wait(25000,null);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyProjectLevelField Completed","success");
+}
+
+/**
+ @Function Number:76
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyProjectLevelFieldListing($inputObject)
+{
+	_log("verifyProjectLevelFieldListing Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectLevelFieldListing Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: verifyProjectLevelSettings($inputObject)
+ @description: Verifying the project level setting of section
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function verifyProjectLevelSettings($inputObject)
+{
+	_log("verifyProjectLevelSettings Started","success");
+	try 
+	{
+		
+		if($inputObject.operation === "Negative")			
+		{
+			_assertFalse(_exists(_radio("renameOption")) && _exists(_radio("hideOption")) && _exists(_radio("deleteOption")));
+		}	
+		else
+			_assertTrue(_exists(_radio("renameOption")) && _exists(_radio("hideOption")) && _exists(_radio("deleteOption")));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyProjectLevelSettings Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example 	verifyTimesheetFlag{"disableStatus":"1", "defaultValue":"Y"}
+* 			verifyTimesheetFlag{"disableStatus":"1", "defaultValue":"N"}
+* 			verifyTimesheetFlag{"disableStatus":"0", "defaultValue":"Y"}
+* 			verifyTimesheetFlag{"disableStatus":"0", "defaultValue":"N"}
+* @description This function is called to verify the Timesheet flag value and whether it is disabled/enabled
+* @param {String}
+* @return {String} None 
+*************************************************************************/
+
+function verifyTimesheetFlag($inputObject)
+{
+	_log("verifyTimesheetFlag Started","success");
+	try 
+	{   
+		if($inputObject.disableStatus === "1")
+			_assertTrue(_radio("timesheetradiobutton").disabled);//Check that the radio button is disabled
+		else if($inputObject.disableStatus === "0")
+			_assertFalse(_radio("timesheetradiobutton").disabled); //Check that the radio button is enabled
+		
+		if($inputObject.defaultValue === "Y")
+			_assertTrue(_radio("timesheetradiobutton").checked);
+		else if($inputObject.defaultValue === "N")
+			_assertTrue(_radio("timesheetradiobutton[1]").checked);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyTimesheetFlag Completed","success");
+}
+
+/**
+ @Function Number:85
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setTraceabilitytoDefect($inputObject)
+{
+	_log("setTraceabilitytoDefect Started","success");
+	try 
+	{
+		setTraceability($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setTraceabilitytoDefect Completed","success");
+}
+
+/**
+ @Function Number:86
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyPLFSettings($inputObject)
+{
+	_log("verifyPLFSettings Started","success");
+	try 
+	{
+		_click(_link("de-icon-section_settings"));
+		_selectWindow("FldSetting");
+		if($inputObject.Can_Rename === "ON")
+			_assertTrue(_checkbox("/chkRename/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Rename"))).checked);
+		else
+			_assertFalse(_checkbox("/chkRename/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Rename"))).checked);
+		if($inputObject.Can_Change_Value === "ON")
+			_assertTrue(_checkbox("/chkChgValue/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Change Value"))).checked);
+		else
+			_assertFalse(_checkbox("/chkChgValue/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Change Value"))).checked);
+		if($inputObject.Can_Mark_Mandatory === "ON")
+			_assertTrue(_checkbox("/chkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Mark Mandatory"))).checked);
+		else
+			_assertFalse(_checkbox("/chkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Mark Mandatory"))).checked);
+		if($inputObject.Can_Hide === "ON")
+			_assertTrue(_checkbox("/chkHide/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Hide"))).checked);
+		else
+			_assertFalse(_checkbox("/chkHide/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Hide"))).checked);
+		if($inputObject.Can_Delete === "ON")
+			_assertTrue(_checkbox("/chkDelete/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Delete"))).checked);
+		else
+			_assertFalse(_checkbox("/chkDelete/",_near(_cell($inputObject.Field_Name)),_under(_cell("Can Delete"))).checked);
+		if($inputObject.Can_Chk_Mark_Visible === "ON")
+			_assertTrue(_checkbox("/chkMarkVisible/",_near(_cell($inputObject.Field_Name)),_under(_cell("Hide"))).checked);
+		else
+			_assertFalse(_checkbox("/chkMarkVisible/",_near(_cell($inputObject.Field_Name)),_under(_cell("Hide"))).checked);
+		if($inputObject.Can_Chk_Mark_Mandatory === "ON")
+			_assertTrue(_checkbox("/chkMarkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Mandatory"))).checked);
+		else
+			_assertFalse(_checkbox("/chkMarkMandatory/",_near(_cell($inputObject.Field_Name)),_under(_cell("Mandatory"))).checked);
+		_click(_button("cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPLFSettings Completed","success");
+}
+
+/**
+ @Function Number:89
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyFieldDetails($inputObject)
+{
+	_log("verifyFieldDetails Started","success");
+	try 
+	{
+		_selectWindow("fieldMod");
+		verifyAllFields($inputObject);
+		_click(_button("Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFieldDetails Completed","success");
+}

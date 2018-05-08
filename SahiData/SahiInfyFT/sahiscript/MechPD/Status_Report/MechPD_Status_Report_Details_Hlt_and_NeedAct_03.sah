@@ -1,0 +1,111 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("MechPD_Status_Report_Details_Hlt_and_NeedAct_03","MechPD/Status_Report"); 
+ 
+  var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Jayesh_Potnis
+ $inputObject.edt_loginid = $data.LoginID1;//Jayesh_Potnis
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep3
+ OpenEformInstance($inputObject);
+
+ var $t = _testcase("TC_3", "Check for segment availability");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segment1+";"+$data.segment2+";"+$data.segment3+";"+$data.segment4+";"+$data.segment5;
+ InfyFTisVisible($inputObject); 
+ 
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_4", "Check for details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span1+";"+$data.span2+";"+$data.span3+";"+$data.span4+";"+$data.span5+";"+$data.span6;
+ InfyFTisVisible($inputObject); 
+ 
+ /*$inputObject = {};
+ $inputObject.span_Name = $data.span2;
+ InfyFTisVisible($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span3;
+ InfyFTisVisible($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span4;
+ InfyFTisVisible($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span5;
+ InfyFTisVisible($inputObject);  
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.span6;
+ InfyFTisVisible($inputObject);*/
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_5", "Check for Highlighs and Need Attention segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment2;//Highlighs and Need Attention
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span7+";"+$data.span8;
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = $data.tdata1;
+ $inputObject.txt_DN_NeedsAttentionitems = $data.tdata2;
+ ModifyEformInstance($inputObject);
+  
+ $t.end();
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,933 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Package_PMPlan_Normal_Gen","Package/PMPlan_Normal");
+ $data3 = readDataFromCSV("Package_PMPlan_Normal_Iteration_Planning","Package/PMPlan_Normal"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ var $endCurrent = new java.text.SimpleDateFormat("yyyy-MM-dd").format($dateObj1); 
+ 
+ var $d = new Date();
+ $d = $d.setDate($d.getDate() - 1);
+ var $yesterdayDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($d);
+ var $newCurrent = new java.text.SimpleDateFormat("yyyy-MM-dd").format($d);
+ 
+/* 
+ 
+ var $t = _testcase("Login with Correct ID");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject); 
+ 
+ _wait(2000);
+ 
+ */
+ /*
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ /*var $projectStartDate = _getText(_span("STARTDATE"));
+ var $NegativeStart = $NegativeStart.setDate($NegativeStart.getDate()-1);
+ $NegativeStart = new java.text.SimpleDateFormat("dd-MMM-yyyy").parse($projectStartDate);
+ 
+ var $projectEndDate = _getText(_span("ENDDATE"));
+ var $NegativeEndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").parse($projectEndDate);
+ $NegativeEndDate = $NegativeEndDate.setDate($NegativeEndDate.getDate()+1);
+ 
+ */
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("Iteration Planning", "Checking all the Validations in Iteration Creation Page");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+/* $inputObject = {};
+ $inputObject.span_Name = $data3.addButton;
+ InfyFTclick($inputObject);
+ */
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = "";
+ $inputObject.edt_DN_PlannedEndDate = "";
+ $inputObject.lst_DN_IterationType = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab \n• Field Iteration Type in Details tab"
+ InfyFTcreateLinkedItem($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.edt_DN_PlannedStartDate = "";
+ $inputObject.edt_DN_PlannedEndDate = "";
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Planned Start Date in Details tab \n• Field Planned End Date in Details tab"
+ InfyFTcreateLinkedItem($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = $data3.wrongFormat;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ $inputObject.msgAlert = "Please enter date in the correct format.( dd-MMM-yyyy )";
+ InfyFTcreateLinkedItem($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = $data3.projectStartBefore;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ $inputObject.msgAlert = "Planned Start Date and Planned End Date must be in the range of project Start and End date";
+ InfyFTcreateLinkedItem($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = $yesterdayDate;
+ $inputObject.edt_DN_PlannedEndDate = $data3.projectendBefore;
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ $inputObject.msgAlert = "Planned Start Date and Planned End Date must be in the range of project Start and End date";
+ InfyFTcreateLinkedItem($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = $yesterdayDate;
+ $inputObject.edt_DN_PlannedEndDate = $data3.wrongFormat;
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ $inputObject.msgAlert = "Please enter date in the correct format.( dd-MMM-yyyy )";
+ InfyFTcreateLinkedItem($inputObject) 
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ /*SIZING DETAILS WILL BE UNEDITABLE WHEN A ITERATION IS CREATED.
+ var $t = _testcase("Iteration Planning", "Validation for Iteration type drop down Values");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePackage;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.singleSiteImpl;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType1;//Package Implementation;Package Implementation - ORC
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePLM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.singleSiteImpl;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType2;//PLM implementation
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePackage;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValueMultiSite;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType3;//Global rollout;Local Rollout
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePLM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValueMultiSite;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType2;//PLM Implementation
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePLM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValuesUpgrade;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType4;//PLM Upgrade
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePackage;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValuesUpgrade;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType5;//Package Upgrade
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePackage;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValueImplRoll;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType6;//Global rollout;Local Rollout;Package Implementation;Package Implementation - ORC;Package Upgrade
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePLM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValueImplRoll;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_IterationType = $data3.iterationType7;//PLM Implementation;PLM Upgrade
+ InfyFTVerifyLinkedItem($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo4;//Project tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.sizingDetails;//Sizing details
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowImpl;
+ $inputObject.colNo = $data3.colImpl;
+ $inputObject.fieldValues = $data3.fieldValuePackage;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowNat;
+ $inputObject.colNo = $data3.colNatureWork;
+ $inputObject.fieldValues = $data3.fieldValueImplRoll;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowSizing;
+ $inputObject.colNo = $data3.colSizing;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.rowCustTech;
+ $inputObject.colNo = $data3.colCustom;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data3.nodeIcon10;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.linkIterations;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000); 
+ */
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data3.iterationName;
+ $inputObject.edt_DN_PlannedStartDate = $yesterdayDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.lst_DN_IterationType = $data3.iterationType;
+ InfyFTcreateLinkedItem($inputObject)
+ 
+ var $createdID = $inputObject.createdID;
+ 
+ //_popup("newListing")._click(_button("Return"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Milestones and Deliverables", "Checking Iteration PLanning summary and Creating Milestones");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.lblMilestone;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.mileReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segMilestone;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.edt_CM_Name = $data3.milName;
+ $inputObject.edt_DN_MilestoneEndDate = $endDate;
+ InfyFTcreateLinkedItemForDeliverables($inputObject);
+ 
+ var $mileID = $inputObject.createdID;
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Milestones and Deliverables", "Date Validations of Milestone");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.item = $mileID;
+ OpenEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_DN_MilestoneEndDate = $yesterdayDate;
+ $inputObject.msgAlert = "Milestone End Date cannot be a past date.";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_DN_MilestoneEndDate = $data3.dueDate;
+ $inputObject.msgAlert = "Error : Please enter the date within Iteration Planned Start Date ("+$newCurrent+") and Iteration Planned End Date ("+$endCurrent+") .";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_DN_MilestoneEndDate = $endDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.span_Name = $data3.Deliverable;
+ InfyFTisVisiblePopup($inputObject);
+ 
+ _wait(1000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Deliverables", "Creating a Deliverable");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.segment_name = $data3.Deliverable;
+ SelectSegment($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.edt_CM_Name = $data3.delName;
+ $inputObject.edt_CM_DUEDATE = $currentDate;
+ $inputObject.chk_DN_GatingbySrMgmt = $data3.fieldValuesYes;
+ $inputObject.chk_DN_SignOff = $data3.fieldValuesYes;
+ InfyFTcreateLinkedItemForDeliverables($inputObject);
+ 
+ var $delID = $inputObject.createdID;
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup2;
+ $inputObject.item = $delID;
+ OpenEformInstance($inputObject);
+
+ _wait(2000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("Deliverables", "Checking whether Actual delivery date is editable/Non-editable");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst_DN_Status = $data3.status1;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+
+ _textbox("DN_ActualDeliveryDate").readOnly; 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst_DN_Status = $data3.status1;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+
+ _textbox("DN_ActualDeliveryDate").readOnly;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst_DN_Status = $data3.status3;
+ $inputObject.edt_DN_ActualDeliveryDate = $currentDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+
+ $t.end();
+ 
+ var $t = _testcase("Deliverables", "Actual Delivery date cannot be Future date");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.edt_DN_ActualDeliveryDate = $endDate;
+ $inputObject.msgAlert = "Actual Delivery Date cannot be a future date.";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.edt_DN_ActualDeliveryDate = $currentDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTReturnPopUpPara($inputObject);
+
+ _wait(2000);
+ 
+ _popup("openLinkedItem__1")._closeWindow();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.lblMilestone;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.mileReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(1000); 
+ 
+ $t.end(); 

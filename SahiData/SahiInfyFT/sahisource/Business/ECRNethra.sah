@@ -1,0 +1,249 @@
+_include("../../../SahiDigite/sahisource/Business/ECR.sah");
+
+/*SWIFT FORMS FUNCTIONS*/
+/*************************************************************************
+* @author Nethra
+* @example setSwiftFormData({"tableName":"Project Summary","rowNo":"2|3","colNo":"4_edt","fieldValues":"value1|value2"});
+           setSwiftFormData({"tableName":"Project Summary","rowNo":"2","colNo":"2_edt|3_lst","fieldValues":"value1|value2"});
+		   setSwiftFormData({"byColRowName":"yes","tableName":"Project Summary","rowNo":"2","colNo":"col1_edt|col2_lst","fieldValues":"value1|value2"});
+* @description This function is called to set ECR SwiftForms data
+* @param {String} Row starts from 1 and Column from 2
+* @return {String} None 
+*************************************************************************/
+function InfyFTsetSwiftFormDataN($inputObject) 
+{
+    _log("setSwiftFormData Started","success");
+    try 
+	{
+	    var $tableName = $inputObject.tableName;
+	    var $pnode = _parentNode(_span($tableName), "DIV", 2);
+        var $table = _table(0, _in($pnode));
+		var $arrRowCount = $inputObject.rowNo.split("|");
+		var $arrColCount = $inputObject.colNo.split("|");
+		var $arrFieldValues = $inputObject.fieldValues.split("|");
+		var $k = 0;
+		
+		if ($inputObject.byColRowName)
+		{
+			for (var $i = 0; $i < $arrRowCount.length; $i++)
+			{		
+				for (var $j = 0; $j < $arrColCount.length; $j++)
+				{
+					$colFieldType = $arrColCount[$j].split("_");
+					
+					if ($colFieldType[1] === "edt") 
+					{
+						_setValue(_textbox(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))), $arrFieldValues[$k]);
+					}
+					if ($colFieldType[1] === "lst") 
+					{
+						_setSelected(_select(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))), $arrFieldValues[$k]);
+					}
+					if ($colFieldType[1] === "txt") 
+					{
+						_setValue(_textarea(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))), $arrFieldValues[$k]);
+					}
+					if ($colFieldType[1] === "chk") 
+					{
+						_check(_checkbox(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))));
+					}
+					if ($colFieldType[1] === "unchk") 
+					{
+						_uncheck(_checkbox(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))));
+					}
+					if ($colFieldType[1] === "ssl") 
+					{
+						_setValue(_textbox(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))), $arrFieldValues[$k]);
+						_wait(1000);
+						_click(_span("de-icon-search", _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))));
+						_click(_listItem($arrFieldValues[$k], _near(_textbox(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))))));
+					}
+					if ($colFieldType[1] === "alink") 
+					{
+						_click(_image(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))));
+						_assertEqual($arrFieldValues[$k], _getText(_span("CM_ItemCode")));
+						_click(_button("CancelBtn"));
+					}
+					if ($colFieldType[1] === "dlink") 
+					{
+						_expectConfirm("The selected Link(s) will no longer be available", true);
+						_click(_image(0, _in(_cell(0, _under(_cell($colFieldType[0])), _near(_cell($arrRowCount[$i], _in($table)))))));
+						_assertFalse(_link($arrFieldValues[$k]));
+					}
+					$k++;
+				}
+			}
+		}
+		else
+		{
+			for (var $i = 0; $i < $arrRowCount.length; $i++)
+			{
+				if(_isIE())
+					$arrRowCount[$i] = parseInt($arrRowCount[$i]);
+				else
+					$arrRowCount[$i] = parseInt($arrRowCount[$i]);
+						
+				for (var $j = 0; $j < $arrColCount.length; $j++)
+				{
+					$colFieldType = $arrColCount[$j].split("_");
+					$colFieldType[0] = parseInt($colFieldType[0]);
+					
+					if ($colFieldType[1] === "edt") 
+					{
+						_setValue(_textbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))), $arrFieldValues[$k]);
+					}
+					if ($colFieldType[1] === "lst") 
+					{
+						_setSelected(_select(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))), $arrFieldValues[$k]);
+					}
+					if ($colFieldType[1] === "txt") 
+					{
+						_setValue(_textarea(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))), $arrFieldValues[$k]);
+					}
+					if ($colFieldType[1] === "chk") 
+					{
+						_check(_checkbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))));
+					}
+					if ($colFieldType[1] === "unchk") 
+					{
+						_uncheck(_checkbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))));
+					}
+					if ($colFieldType[1] === "ssl") 
+					{
+						_setValue(_textbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))), $arrFieldValues[$k]);
+						_wait(1000);
+						_click(_span("de-icon-search", _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))));
+						_click(_listItem($arrFieldValues[$k],_near(_textbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))))));
+					}
+					if ($colFieldType[1] === "alink") 
+					{
+						_click(_image(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))));
+						_assertEqual($arrFieldValues[$k], _getText(_span("CM_ItemCode")));
+						_click(_button("CancelBtn"));
+					}
+					if ($colFieldType[1] === "dlink") 
+					{
+						_expectConfirm("The selected Link(s) will no longer be available", true);
+						_click(_image(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))));
+						_assertFalse(_link($arrFieldValues[$k]));
+					}
+					$k++;
+				}
+			}
+		}
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("setSwiftFormData Completed","success");	
+}
+
+
+/*************************************************************************
+* @author Nethra
+* @example verifySwiftFormFieldDisability({"tableName":"Project Summary","rowNo":"2|3","colNo":"4_edt","disable":"true"});
+* @description This function is called to verify Swift Form Field Disability
+* @param {String} Row starts from 1 and Column from 2
+* @return {String} None 
+*************************************************************************/
+function InfyFTverifySwiftFormFieldDisabilityN($inputObject) 
+{
+    _log("verifySwiftFormFieldDisability Started","success");
+    try 
+	{
+	    var $tableName = $inputObject.tableName;
+	    var $pnode = _parentNode(_span($tableName), "DIV", 2);
+        var $table = _table(0, _in($pnode));
+		
+		var $arrRowCount = $inputObject.rowNo.split("|");
+		var $arrColCount = $inputObject.colNo.split("|");
+		
+		var $disable = $inputObject.disable;
+		for (var $i = 0; $i < $arrRowCount.length; $i++)
+		{		
+			if(_isIE() || _isChrome())
+					$arrRowCount[$i] = parseInt($arrRowCount[$i]) + 1;
+				else
+					$arrRowCount[$i] = parseInt($arrRowCount[$i]);					
+		    for (var $j = 0; $j < $arrColCount.length; $j++)
+			{
+			    $colFieldType = $arrColCount[$j].split("_");
+				$arrRowCount[$i] = parseInt($arrRowCount[$i]);
+				$colFieldType[0] = parseInt($colFieldType[0]);
+				
+				if ($colFieldType[1] === "edt") 
+				{
+					_assertEqual($disable, _textbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))).disabled);
+				}
+				if ($colFieldType[1] === "lst") 
+				{
+				    _assertEqual($disable, _select(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))).disabled);
+				}
+				if ($colFieldType[1] === "txt") 
+				{
+				    _assertEqual($disable, _textarea(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))).disabled);
+				}
+				if ($colFieldType[1] === "chk") 
+				{
+				    _assertEqual($disable, _checkbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))).disabled);
+				}
+				if ($colFieldType[1] === "ssl") 
+				{
+					_assertEqual($disable, _textbox(0, _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))).disabled);
+					_assertEqual($disable, _span("de-icon-search", _in(_cell($table,$arrRowCount[$i],$colFieldType[0]))).disabled);
+				}
+			}
+		}
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("verifySwiftFormFieldDisability Completed","success");	
+}
+
+
+/**************************************************************
+*Delete swift form data value change from 0 to 1
+**************************************************************/
+
+function InfyFTdeleteRowInSwiftFormN($inputObject) 
+{
+    _log("deleteRowInSwiftForm Started","success");
+    try 
+	{
+	    var $beforeDeleteRowCount,$afterDeleteRowCount;
+		
+        var $tableName = $inputObject.tableName;
+	    var $pnode = _parentNode(_span($tableName), "DIV", 3);
+        var $table = _table(0, _in($pnode));
+
+		_set($beforeDeleteRowCount, $table.rows.length);
+		var $arrRowNo = $inputObject.rowNo.split("|");
+		
+		var $newRowCount = parseInt($beforeDeleteRowCount - ($arrRowNo.length));
+		
+		
+		for (var $i = 0; $i < $arrRowNo.length; $i++)
+		{
+		    _check(_checkbox(0, _in(_cell($table,$arrRowNo[$i],1))));
+		}
+		/* _expectConfirm("This row will no longer be available", true);
+		_click(_link("Delete Rows", _in($pnode))); */
+		_click(_button("SaveBtn"));
+		
+	/* 	_set($afterDeleteRowCount, $table.rows.length);
+		
+		if ($newRowCount !== $afterDeleteRowCount)
+		    _log("Row Count, Before = " + $beforeDeleteRowCount + " and After Deleting Rows = " + $arrRowNo.length + " is "+ $afterDeleteRowCount, "failure");
+		else
+		    _log("Row Count, Before = " + $beforeDeleteRowCount + " and After Deleting Rows = " + $arrRowNo.length + " is "+ $afterDeleteRowCount, "success");
+	 */
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("deleteRowInSwiftForm Completed","success");	
+} 

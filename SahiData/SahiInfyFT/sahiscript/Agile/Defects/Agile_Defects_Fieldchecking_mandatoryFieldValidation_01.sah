@@ -1,0 +1,176 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Agile_Defects_Fieldchecking_mandatoryFieldValidation_01", "Agile/Defects");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ var $TC = _testcase("TC_01","Click on Defects under Execute menu"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.addButton;
+ InfyFTisVisible($inputObject);
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check the presence of fields while creating a new defect"); 
+ $TC.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.addButton;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblName;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblDefectType;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblID;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblDescription;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblRelease;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSprint;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblOwner;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblDefectCategory;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSeverity;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblStatus;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblReviewType;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(5000);
+ 
+ $TC.end(); 
+ 
+ var $TC = _testcase("TC_02","To check for the mandatory field"); 
+ $TC.start();  
+ 
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = $data.fieldReviewType;
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab";
+ InfyFTsaveInstance($inputObject); 
+ 
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = "";
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = $data.fieldReviewType;
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Description in Details tab";
+ InfyFTsaveInstance($inputObject); 
+ 
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = "--None--";
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = $data.fieldReviewType;
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Owner in Details tab";
+ InfyFTsaveInstance($inputObject);  
+ 
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = "--None--";
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = $data.fieldReviewType;
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Defect Category in Details tab";
+ InfyFTsaveInstance($inputObject); 
+ 
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = "--None--";
+ $inputObject.lst_DN_ReviewType = $data.fieldReviewType;
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Severity in Details tab";
+ InfyFTsaveInstance($inputObject); 
+ 
+ /*
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = "--None--";
+ $inputObject.edt_DN_UserStoryID = $data.defStory;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Review Type in Details tab";
+ InfyFTsaveInstance($inputObject); 
+ */
+ 
+ $inputObject.edt_CM_Name = $data.defName;
+ $inputObject.txt_CM_Description = $data.fieldValueTest;
+ $inputObject.lst_DN_Owner = $data.defOwner;
+ $inputObject.lst_DN_DefectCategory = $data.defCategory;
+ $inputObject.lst_DN_Severity = $data.defSeverity;
+ $inputObject.lst_DN_ReviewType = $data.fieldReviewType;
+ $inputObject.edt_DN_UserStoryID = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field User Story ID in Details tab";
+ InfyFTsaveInstance($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.button = $data.returnButton;
+ InfyFTclick($inputObject);
+
+ _wait(5000); 
+ 
+ $TC.end();

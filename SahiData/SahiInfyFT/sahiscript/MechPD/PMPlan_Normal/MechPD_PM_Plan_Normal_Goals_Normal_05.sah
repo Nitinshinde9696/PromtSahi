@@ -1,0 +1,988 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+
+ $data = readDataFromCSV("MechPD_PM_Plan_Normal_Goals_Normal_05","MechPD/PMPlan_Normal"); 
+ 
+ /*var $t = _testcase("System", "Login");
+ $t.start();
+
+ $inputObject = {};              
+ $inputObject.user_name = $data.user_name1;//subhashini_k03
+ $inputObject.edt_loginid = $data.LoginID1;//subhashini_k03
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Navigate", "PM Plan");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//HEFPSHL1
+ selectProject($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end(); 
+*/
+
+ var $t = _testcase("Opening the PM Plan with MechPD ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.LSettings; //Language Settings
+ InfyFTassertNotVisible($inputObject);// 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon13;// _InfyFTclick(_image("Project Process"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.AName; //Applicable LC Stages
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//Name
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Design Support|Other Request|Product Design or 1|2
+ $inputObject.colNo = $data.colName2;//Selected_unchk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);  
+ 
+ var $t = _testcase("TC_1", "Verifying the summary of Applicable Request Types before select the Request Type Selection ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName2c;//Applicable Request Types
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2c;//Applicable Request Types
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason1;//Please select atleast one request type other than Project Management Request in Project Tailoring.
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "PM selecting the Design Support Request,Other Request in Request Type Selection ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ //checking
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//Name
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2a;//Design Support|Other Request or 1|2
+ $inputObject.colNo = $data.colName2a;//Selected_chk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_3", "Verifying the Applicable LC Stages link is not available in Project Process node ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon13;// _InfyFTclick(_image("Project Process"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.AName; //Applicable LC Stages
+ InfyFTassertNotVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "PM selects Product Design Request in Request Type Selection");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ //checking
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//Name
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2b;//Product Design
+ $inputObject.colNo = $data.colName2a;//Selected_chk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon13;// _InfyFTclick(_image("nodeIcon14"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.AName; //Applicable LC Stages
+ InfyFTassertVisible($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("TC_5", "Verifying the Applicable LC Stages are unchecked by default");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName3;//Applicable LC Stages for Product Design Request
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName3;//Product Design Requirements / Specifications|Analysis of Product Design Requirements / Specifications|Design(Modeling Analysis Verification)|Optimize|Validation and Delivery or 1|2|3|4|5
+ $inputObject.colNo = $data.colName3;//Applicable_unchk
+ $inputObject.fieldValues = "true";//$data.reason6;//Reason 1
+ verifySwiftFormData($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName2c;//Section Wise Summary
+ $inputObject.byColRowName = "yes";//Reason
+ $inputObject.rowNo = $data.rowName2c;//Applicable Request Types
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason3;//Request types other than Project Management Request is selected in Project Tailoring. Following are selected: Product Design ,Design Support ,Other Request.
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Section Wise Summary
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName4;//Applicable LC Stages
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason4;//At least one LC stage must be in scope. For the below listed tracks no LC stage is selected: Product Design Request.
+ verifySwiftFormData($inputObject);
+ 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", "Checking the Applicable LC Stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon13;// _InfyFTclick(_image("nodeIcon14"));
+ infyFTClickForPmPlan($inputObject);
+  
+ $inputObject = {};
+ $inputObject.link = $data.AName;// _InfyFTclick(_image("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName3;//Applicable LC Stages for Product Design Request
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.rowName13;//1|2|3|4|5
+ $inputObject.colNo = $data.colName3a;//Applicable_chk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Section Wise Summary
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.rowName4;//Applicable LC Stages
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason5;//Atleast one LC Stage is selected for all applicable Tracks.
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_10", "Project Tailoring ,Setting Project Specific Metrics ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;//Project Specific Metrics
+ SelectSegment($inputObject);
+
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.icon = "Add Rows";//$data.addIcon;//"Add Rows"
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName4;//Project Specific Metrics
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName90;//$data.rowNo3;//2
+ $inputObject.colNo = $data.colName90;//$data.colNo3;//1_lst|2_edt|3_lst|4_lst|edt_5|6_txt
+ $inputObject.fieldValues = $data.fieldValues;//Design Support|testPMP|Positive|Number|Unit|Add Metric
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $t.end(); 
+ 
+ /////////////////////////////////////////////////////////////////////// 
+ 
+ var $t = _testcase("TC_11", "Verifying the data of Product Design Request Goals and Select Leading Metrics is available in Product Design Request Goals");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.goals;//  _link("Goals")
+ InfyFTclick($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;// Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowQuality;//Quality - Effort
+ $inputObject.colNo = $data.colName6;//Metric Name_lbl
+ $inputObject.fieldValues = $data.fieldQuality;//Quality - Effort
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6b;//DPMO
+ $inputObject.colNo = $data.colName6;//Metric Name_lbl
+ $inputObject.fieldValues = $data.fieldValues2;//DPMO
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6c;//Schedule Adherence
+ $inputObject.colNo = $data.colName6;//Metric Name_lbl
+ $inputObject.fieldValues = $data.fieldValues3;//Schedule Adherence
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6d;//Productivity Improvement
+ $inputObject.colNo = $data.colName6;//Metric Name_lbl
+ $inputObject.fieldValues = $data.fieldValues4;//Productivity Improvement
+ verifySwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SLMetrics; //Select Leading Metrics
+ InfyFTassertVisible($inputObject);
+ 
+ $t.end();
+ 
+ /////////////////////////////////////////////////////////////////////// 
+ 
+ var $t = _testcase("TC_13", "Verifying the data of Design Support Request Goals");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;// Design Support Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowQuality;//Quality - Effort
+ $inputObject.colNo = $data.colName6a;//Metric Name[2]_lbl
+ $inputObject.fieldValues = $data.fieldQuality;//Quality - Effort
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6c;//Schedule Adherence
+ $inputObject.colNo = $data.colName6a;//Metric Name[2]_lbl
+ $inputObject.fieldValues = $data.fieldValues3;//Schedule Adherence
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6d;//Productivity Improvement
+ $inputObject.colNo = $data.colName6a;//Metric Name[2]_lbl
+ $inputObject.fieldValues = $data.fieldValues4;//Productivity Improvement
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6b;//DPMO
+ $inputObject.colNo = $data.colName6a;//Metric Name[2]_lbl
+ $inputObject.fieldValues = $data.fieldValues2;//DPMO
+ verifySwiftFormData($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_14", "Deleting the data in Goals section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName12;//Basis of Goals:.
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName91;//$data.rowNo1;//0
+ $inputObject.colNo = $data.colName91;//$data.colNo0;//1_lst
+ $inputObject.fieldValues = "--None--";
+ InfyFTsetSwiftFormDataForGoals($inputObject);
+ 
+ 
+ _wait(5000);
+ if(_isVisible(_checkbox("false[1]")))
+ {
+  _click(_checkbox("on"));
+ }
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ if(_isVisible(_checkbox(1)))
+ {
+ _click(_checkbox(1));
+ 
+ _click(_link("Delete Rows"));
+ 
+ _wait(2000);
+ }
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//Name
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Design Support|Other Request|Product Design or 1|2
+ $inputObject.colNo = $data.colName2;//Selected_unchk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.goals;//  _link("Goals")
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Goals13;//Section Wise Summary
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.Goals13;//Goals
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason15;//
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name1;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//Name
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName2;//Design Support|Other Request|Product Design or 1|2
+ $inputObject.colNo = $data.colName13;//Selected_chk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name2;//Project Specific Metrics
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.icon = "Add Rows";//$data.addIcon;//"Add Rows"
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName4;//Project Specific Metrics
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName90;//$data.rowNo3;//2
+ $inputObject.colNo = $data.colName90;//$data.colNo3;//1_lst|2_edt|3_lst|4_lst|edt_5|6_txt
+ $inputObject.fieldValues = $data.fieldValues;//Design Support|testPMP|Positive|Number|Unit|Add Metric
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Goals13;//Section Wise Summary
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.Goals13;//Goals
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason13;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("TC_15", "Verifying the SLA Penalty and Reward Details (assertNotVisible) and Filling the GOALS");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SLAdetails; //SLA Penalty and Reward Details
+ InfyFTassertNotVisible($inputObject); 
+ 
+//////////////////////**********************************Basis of Goals:************************/////////////////////
+
+
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.goals;//  _link("Goals")
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName12;//Basis of Goals:.
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.tableName12;//0
+ $inputObject.colNo = $data.colName91;//$data.colNo0;//1_lst
+ $inputObject.fieldValues = $data.fieldValues0;//Similar projects in the account
+ InfyFTsetSwiftFormDataForGoals($inputObject);
+
+ _wait(1000);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ 
+  if(_isVisible(_checkbox(1)))
+ {
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.rowNo = $data.rowNoSeven;//7
+ $inputObject.colNo = $data.colNo2;//0_chk
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.delete;
+ InfyFTclick($inputObject);
+
+	
+ _wait(5000);
+ 
+ }
+ 
+ ///////////////////***********************Product Design Request Goals*******************//////////////////////////////
+ 
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.RowPdrg1;//$data.rowNo8a;//2
+ $inputObject.colNo = $data.ColPdrg1234;//$data.colNo4;//"4_edt|5_edt|7_lst|8_edt";//
+ $inputObject.fieldValues = $data.fieldValues5;//"10|5|Yes with financial impact|10";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.RowPdrg2;//$data.rowNo8b;//3
+ $inputObject.colNo = $data.ColPdrg1234;//$data.ColNo4;//4_edt|5_edt|7_lst|8_edt
+ $inputObject.fieldValues = $data.fieldValues5;//"10|5|Yes with financial impact|10";
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals 
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.RowPdrg3;//$data.rowNo8c;//4
+ $inputObject.colNo = $data.ColPdrg1234;//$data.colNo4;//4_edt|5_edt|7_lst|8_edt
+ $inputObject.fieldValues = $data.fieldValues5;//10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.RowPdrg4;//$data.rowNo8d;//5
+ $inputObject.colNo = $data.ColPdrg1234;//$data.colNo4;//4_edt|5_edt|7_lst|8_edt
+ $inputObject.fieldValues = $data.fieldValues5;//10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject); 
+ 
+ ///////////////////////////*************************Defect Injection Rate***********************/////////////////////////////
+
+ $inputObject = {};
+ $inputObject.icon = $data.addIcon;//"Add Rows"
+ clickAddIcon($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName6c;//$data.rowNo9;//6
+ $inputObject.colNo = $data.colSchdeuleAdh;//$data.colNo9;//1_lst|4_edt|5_edt|7_lst|8_edt
+ $inputObject.fieldValues = $data.StratagyValues1;//Defect Injection Rate|10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName7;//Product Design Request Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName92_1;//$data.rowNo9;//6
+ $inputObject.colNo = $data.colName92_1;//$data.colNo9;//1_lst|4_edt|5_edt|7_lst|8_edt
+ $inputObject.fieldValues = $data.StratagyValues1_1;//Defect Injection Rate|10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment5;//showLink[5]
+ SelectSegment($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName10;//Applicable Leading Metrics
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName10;//estimated defect injection vs. actual defect injection
+ $inputObject.colNo = $data.colName10;//Select Leading Metric_chk
+ $inputObject.fieldValues = "true";//
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ clickReturn();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Goals13;//Section Wise Summary
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.Goals13;//Goals
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason14;//Design Support Request Goals: For some of the metrics mandatory fields are not filled. Mandatory fields are: Baseline Value, Percent Improvement, Commitment to Client. Project Specific Metrics: For some of the metrics mandatory fields are not filled. Mandatory fields are: Goal, Commitment to Client.
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ _wait(1000);
+ 
+ /////////////////////////////////////////////////////////////////////////////// 
+ 
+ var $t = _testcase("TC_20", "PM filling the goals of Design Support Request Goals ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.goals;//  _link("Goals")
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals 
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.RowPdrg1;//$data.rowNo8;//1
+ $inputObject.colNo = $data.Coldsrg1234;//$data.colNo5;//3_edt|4_edt|6_lst|7_edt;//
+ $inputObject.fieldValues = $data.fieldValues5;//10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals 
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.Rowdsrg2;//$data.rowNo8a;//2
+ $inputObject.colNo = $data.Coldsrg1234;//$data.colNo5;//3_edt|4_edt|6_lst|7_edt
+ $inputObject.fieldValues = $data.fieldValues5;//10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals 
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.Rowdsrg3;//$data.rowNo8b;//3
+ $inputObject.colNo = $data.Coldsrg1234;//$data.colNo5;//3_edt|4_edt|6_lst|7_edt
+ $inputObject.fieldValues = $data.fieldValues5;//10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName8;//Design Support Request Goals 
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.Rowdsrg4;//$data.rowNo8c;//4//"DPMO[1]";//
+ $inputObject.colNo = $data.Coldsrg1234;//$data.colNo5;//3_edt|4_edt|6_lst|7_edt
+ $inputObject.fieldValues = $data.fieldValues5;//10|5|Yes with financial impact|10
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $t.end(); 
+
+ 
+ /////////////////////////////////////////////////////////////////////
+ 
+ var $t = _testcase("TC_21", "PM filling the goals of Project Specific Goals ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName9;//Project Specific Goals
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName7;//Design Support
+ $inputObject.colNo = $data.colName8;//"Goal[4]_edt|Commitment to Client[4]_lst|Leading Metrics_txt";//
+ $inputObject.fieldValues = $data.fieldValues6;//10|Yes with financial impact|10|PmP
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName5;// Section Wise Summary
+ $inputObject.byColRowName = "yes";//$data.byColRowName3;//Metric Name
+ $inputObject.rowNo = $data.rowName5;//Goals
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason9;//Strategies are not defined. Please add atleast one Strategy.
+ verifySwiftFormData($inputObject);
+
+_wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.goals;//_link("Goals")
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName11;//Strategies 
+ $inputObject.rowCount = $data.rowCount;//1
+ InfyFTaddRowInSwiftFormForStrategies($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName11;//Strategies
+ $inputObject.byColRowName = "yes"; 
+ $inputObject.rowNo = $data.rowName93;//$data.rowNo11;//2
+ $inputObject.colNo = $data.colName93;//$data.colNo11;//1_txt
+ $inputObject.fieldValues = "true";//
+ InfyFTsetSwiftFormDataForGoals($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.rowName5;
+ $inputObject.rowNo = $data.rowName5;//Goals
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason10;//Reason 11
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon13;// _InfyFTclick(_image("nodeIcon14"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.AName;// _InfyFTclick(_image("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName3;//Applicable LC Stages for Product Design Request
+ $inputObject.byColRowName = "yes";//$data.byColRowName1;//Reason
+ $inputObject.rowNo = $data.rowName13;//1|2|3|4|5
+ $inputObject.colNo = $data.colName3a;//Applicable_chk
+ $inputObject.fieldValues = "true";//$data.fieldValues;//true
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ $t.end();
+ 
+ /****************************************************************************
+ Goals ended and SLA Penalty and Reward Details started
+ ****************************************************************************/
+
+ var $t = _testcase("TC_72", "Verifying the SLA Penalty and Reward Details ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link7;// _InfyFTclick(_link("SLA Penalty and Reward Details"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldRsk;//At Risk % :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldMsp;//Measurement Period :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldSeb;//Subject to earn back :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldPf;//Penalty Framework :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldPp;//Pool Percentage :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldCc;//Currency :
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldSbpo;//SLA responsibility shared with another vendor or IBPO team :
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_73", "Checking the available options in the penalty framework");
+ $t.start();
+ 
+ $inputObject = {}
+ $inputObject.lst_DN_PenaltyFramework = $data.PenaltyFramework1;
+ InfyFTverifyEformInstanceDetails($inputObject);
+ 
+ $t.end();  
+ 
+ var $t = _testcase("", "Filling all data of SLA Penalty and Rewards Details");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data.AtRisk;//50
+ $inputObject.edt_DN_PoolPercentage = $data.PoolPercentage;//20
+ $inputObject.lst_DN_MeasurementPeriod = $data.MeasurementPeriod;//Quarterly
+ $inputObject.edt_DN_Currency = $data.Currency;//rupee
+ $inputObject.lst_DN_Subjecttoearnback = $data.Subjecttoearnback;//Yes
+ $inputObject.lst_DN_SLAresponsibilityshare = $data.SLAresponsibilityshare;//Yes //
+ $inputObject.lst_DN_PenaltyFramework = $data.PenaltyFramework;//Other//Simple Framework
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName8;//Section Wise Summary
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName8;//6//SLA penalty and rewards details
+ $inputObject.colNo = $data.colName2c;//Reason_lbl
+ $inputObject.fieldValues = $data.reason8;//
+ verifySwiftFormData($inputObject);
+
+ $t.end(); 
+ 
+ 

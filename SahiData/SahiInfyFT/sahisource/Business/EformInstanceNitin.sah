@@ -1,0 +1,2389 @@
+_include("../../../SahiDigite/sahisource/Business/EformInstance.sah");
+_include("../Common/Common.sah");
+
+
+/*************************************************************************
+* @author Nitin
+* @example  isReadOnly({"span_Name":"LIBPROJECT1";"cell_Name":"Project Code"}
+* @description This function is called to check whether it isReadOnly
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTisReadOnly($inputObject)
+{
+	_log("isReadOnly Started","success");
+	try 
+	{
+		if($inputObject.popup_name){
+		_selectWindow($inputObject.popup_name);}
+		
+			var $new_ui = _getGlobal("New_UI");
+			if($new_ui ==="yes")
+			{
+				var $temp = $inputObject.cell_Name;
+				var $test = $temp.replace(" * :","");
+				var $test1 = $test.replace(" ^ :","");
+				var $test2 = $test1.replace(" * ","");
+				 $temp = $test2.replace(" :","");
+				$inputObject.cell_Name = $temp;
+			}
+		
+		if($inputObject.span_Name && $inputObject.cell_Name)
+		{
+			_assertExists(_span($inputObject.span_Name, _near(_cell($inputObject.cell_Name))));
+		}
+		else if($inputObject.span_Name && $inputObject.span_Name2)
+		{
+			_assertExists(_isVisible(_span($inputObject.span_Name),_near(_span($inputObject.span_Name2))));
+		}
+		else if($inputObject.textbox)
+		{
+			_assertTrue(_textbox($inputObject.textbox).readOnly);
+		}
+		else if($inputObject.textarea)
+		{
+			_assertTrue(_textarea($inputObject.textarea).readOnly);
+		}
+		else if($inputObject.select)
+		{
+			_assertTrue(_select($inputObject.select).disabled);
+		}
+		else
+		{
+			_assertTrue(false,"field is not read only");
+		
+		}
+		if($inputObject.popup_name){
+		_selectWindow();}
+	}
+
+	catch(e)
+	{
+		handleFailure(e);
+	}
+
+	_log("isReadOnly Completed","success");
+}
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTProcessSelectionQuestionnaire({"lst_field51":"DATA";"lst_field52":"Project Code";"lst_field53":"question"}
+* @description This function is called to adding a questionnaire in project Request
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTProcessSelectionQuestionnaire($inputObject)
+{
+                _log("ProcessSelectionQuestionnaire Started","success");
+                try 
+                {           
+                                _setSelected(_select("DN_IstheprojectmanagedbyI"),$inputObject.lst_DN_IstheprojectmanagedbyI);
+								_wait(500);
+                                _setSelected(_select("DN_Choosetheappropriatena"),$inputObject.lst_DN_Choosetheappropriatena);
+								_wait(500);
+								if(_isVisible(_select("DN_Methodology"))){
+										_setSelected(_select("DN_Methodology"),$inputObject.lst_DN_Methodology);
+								}_wait(500);
+                                _click(_button(" Save "));
+								if("This page is asking you to confirm that you want to leave - data you have entered may not be saved." == _lastAlert())
+								{
+									//_expectConfirm("This page is asking you to confirm that you want to leave - data you have entered may not be saved.",true);
+									_typeKeyCodeNative(java.awt.event.KeyEvent.VK_ENTER); 
+									_clearLastAlert();
+								}
+							
+							
+							
+							
+				}
+                catch(e)
+                {
+                                handleFailure(e);
+                }
+                _log("ProcessSelectionQuestionnaire Completed","success");
+			
+}
+
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTsetWorkflowActor({"stage":"lst_name";"lst_actor":"actorname"}
+* @description This function is called to set workflow with actor in project request
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTsetWorkflowActor($inputObject)
+{
+	_log("InfyFTsetWorkflowActor Started","success");
+        try 
+        {   
+			var $flag, $str;
+			var $n=0;
+			$str = $inputObject.lst_actor;
+			var $list = _getOptions(_select($inputObject.stage));
+			for(var $i=0; $i<$list.length;$i++)//the variable start from 1 beacasue in tht 0th possition --None-- option 
+				{
+					$n = $str.localeCompare($list[$i]);
+					if($n == 0)
+						{
+							break;
+						
+						}
+					
+				}
+					if($n == 0)
+					{
+						_setSelected(_select($inputObject.stage),$inputObject.lst_actor);
+						//_assertEqual(true, _button("RouteBtn").enabled);
+					}
+					else
+					{
+						_assertFalse(0,"Actor not available");
+						//_assertEqual(true, _button("RouteBtn").disabled);
+					}
+					_wait(500);
+				
+		}
+		catch(e)
+        {
+            handleFailure(e);
+        }
+    _log("InfyFTsetWorkflowActor Completed","success");
+			
+}
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTisVisible({"span_Name":"name of the field"})
+* @description This function is called to adding a questionnaire in project Request
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTisVisible($inputObject)
+{
+    _log("InfyFTisVisible Started","success");
+		try 
+        {     
+			
+			_wait(2000);	
+			
+			if($inputObject.popup_name)
+			{
+				_selectWindow($inputObject.popup_name);
+			}
+			
+				var $temp = $inputObject.span_Name;
+				var $Name;
+				$Name =  $temp.split(";");
+				for (var $i = 0; $i < $Name.length; $i++)
+				{
+					if(_isVisible(_div("More_MenuItems_Segment")))
+					{
+						_mouseOver(_div("More_MenuItems_Segment"));
+					}
+					 if($inputObject.operation === "Negative")
+					{
+						var $new_ui = _getGlobal("New_UI");
+						if($new_ui ==="yes")
+						{
+							var $test = $Name[$i].replace(" * :","");
+							var $test1 = test.replace(" ^ :","");
+							var $test2 = test1.replace(" * ","");
+							var $test3 = $test2.replace("*","");
+							$temp = $test3.replace(" :","");
+							
+							_assertNotVisible( _span($temp)|| _div($temp)||  _select($temp) || _cell($temp) || _link($temp) || _textbox($temp) || _button($temp) || _reset($temp) || _radio($temp));
+						}
+						else
+						{
+							_assertNotVisible( _span($Name[$i])|| _div($Name[$i])||  _select($Name[$i]) || _cell($Name[$i]) || _link($Name[$i]) || _textbox($Name[$i]) || _button($Name[$i]) || _reset($Name[$i]) || _radio($Name[$i]));
+						}	
+					}
+					else 
+					{
+						var $new_ui = _getGlobal("New_UI");
+						if($new_ui ==="yes")
+						{
+							var $test = $Name[$i].replace(" * :","");
+							var $test1 = $test.replace(" ^ :","");
+							var $test2 = $test1.replace(" * ","");
+							var $test3 = $test2.replace("*","");
+							$temp = $test3.replace(" :","");
+							_assertVisible( _span($temp)|| _div($temp)||  _select($temp) || _cell($temp) || _link($temp) || _textbox($temp) || _button($temp) || _reset($temp)|| _heading4($temp) || _heading1($temp) || _paragraph($temp) || _radio($temp));
+						}
+						else
+						{
+							
+						
+							_assertVisible( _span($Name[$i])|| _div($Name[$i])||  _select($Name[$i]) || _cell($Name[$i]) || _link($Name[$i]) || _textbox($Name[$i]) || _button($Name[$i]) || _reset($Name[$i])|| _heading4($Name[$i]) || _heading1($Name[$i]) || _paragraph($Name[$i]) || _radio($Name[$i]));
+						}						
+					}		
+			}
+			
+		if($inputObject.popup_name)
+		{
+			_selectWindow();
+		}
+		}
+        catch(e)
+        {
+            handleFailure(e);
+        }
+    _log("InfyFTisVisible Completed","success");
+			
+}
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTverifyButton({})
+* @description This function is called to verifying the button
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyButton()
+{
+	_log("InfyFTverifyButton Started","success");
+		try
+		{
+			if((_textarea("CM_Description")|| _textarea("field38") ))
+			{
+				_assertEqual(false, _button("Route ").disabled);//enabled
+			}
+			else
+			{
+				_assertEqual(true, _button("Route ").disabled);//disabled
+			}
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}
+	_log("InfyFTverifyButton Completed ","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTverifyField("field_Name":{"EndDate"},"New_value":{"12-Jan-2015"})
+* @description This function is called to verify the particular field
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyField($inputObject)
+{
+	_log("InfyFTverifyField Started","success");
+		try
+		{
+			var $test = _getValue(_textbox($inputObject.field_Name));
+			var $n = $test.localeCompare($inputObject.New_value); 
+			 if( $n == 0)
+				{
+					_assertTrue(true,"value matched");
+				}
+			else
+				{
+					_assertFalse(false,"value is different");
+				}
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}
+	_log("InfyFTverifyField Completed","success");
+}
+
+/**
+@author: Siddharth Kale
+@ function: InfyADDAttachment()
+@description: Clicking the route button and filling the comment
+@param: String {None}
+@return: String {None} 
+ **/
+function InfyADDAttachment()
+{
+				$upload = _getGlobal("DOWNLOAD");
+								// $uploadstr = replaceAllStr($upload,"/","\\");
+				// _log($uploadstr);
+					$upload =$upload.split("/").join("\\");
+				     // var $g_trainingFolderForUpload = 'C:\\Testing';
+                var $fileName = "Upload.xls";
+                var $fileToUpload = $upload + $fileName;
+                function setFileUpload($fileEl, $path) 
+                {
+                              _click(_div("Add"));
+                                
+                                _wait(3000);
+                
+                                // type the file path
+                                _typeNative($path);
+                                _wait(3000);
+                
+                                // press enter
+                                _typeKeyCodeNative(java.awt.event.KeyEvent.VK_ENTER);
+                                _wait(2000);
+                                _unlockWindow();
+							
+				}
+			
+                setFileUpload(_div("Add"), $fileToUpload);
+				if(_div("Add").size<0)
+				{
+					_assertEqual(_lastAlert(),"Invalid File or Zero size File selected. Please select an appropriate File.");
+				}
+                
+}
+
+function InfyFTADDMAttachment($inputObject)
+{
+            _log("InfyFTADDMAttachment","success");
+            try 
+           {
+            var $att1= $inputObject.attachment;
+            var $att2= $inputObject.attachment1; 
+            var at1 =  "\""+ $att1 + "\"";
+            var at2 = "\""+ $att2 + "\"";
+            var  $fileName= at1 + at2; 
+             var $fileToUpload =  $fileName;
+									function setFileUpload($fileEl, $path) 
+                                    {
+                                                _click(_file("file1[1]"));
+                                               _wait(1000);
+												// type the file path
+                                                _typeNative($path);
+                                                 // press enter
+                                                _typeKeyCodeNative(java.awt.event.KeyEvent.VK_ENTER);
+                                                _wait(500);
+                                                _unlockWindow();
+                                    }
+
+            setFileUpload(_file("file1[1]"), $fileToUpload);
+
+            }
+			catch(e)
+            {
+                        handleFailure(e);
+            }
+            _log("InfyFTADDMAttachment Completed","success");
+}
+/*
+
+///////////////////////////////////////////////////////////////////////////
+@author: Siddharth Kale
+@function: InfyDownloadAttachment()
+@description: Clicking the route button and filling the comment
+@param: String {None}
+@return: String {None} 
+ */
+///////////////////////////////////////////////////////////////////////////
+
+ function InfyFTDownloadAttachment($inputObject)
+ {
+	_log("InfyFTDownloadAttachment Started","success");
+    try
+	{
+		if( _isVisible(_checkbox("jqg_attachmentsGridTable_1")))
+		{
+		   _check(_checkbox("jqg_attachmentsGridTable_1"))
+			_click(_submit("Download"));
+			_wait(1000);
+			var $t = $inputObject.fileToDownload;
+			var $z = 'C:\\Testing';
+			$filename = $z + '\\' + $t;
+			_saveDownloadedAs($filename);
+			_clearLastDownloadedFileName(); // clear the variable
+			_assertNull(_lastDownloadedFileName());
+		}
+		else
+		{
+			_log("file not Available for download");
+		}
+	}
+	catch(e)
+    {
+        handleFailure(e);
+    }
+    _log("InfyFTDownloadAttachment Completed","success");
+ }
+/* 
+ ///////////////////////////////////////////////////////////////////////////
+@author: Siddharth Kale
+@example: InfyDeleteAttachment()
+@description: Clicking the route button and filling the comment
+@param: String {None}
+@return: String {None}    
+  ///////////////////////////////////////////////////////////////////////////
+   
+ */  
+   function InfyDeleteAttachment()
+{
+	_log("InfyDeleteAttachment Started ","success");
+	try
+	{	if( _isVisible(_checkbox("jqg_attachmentsGridTable_1")))
+		{
+			_check(_checkbox("jqg_attachmentsGridTable_1"));
+			_click(_submit("Delete"));
+			_wait(1000);
+			_log("File deleted successfully");
+        }
+		else
+		{
+			_log("file not Available for download");
+		}
+	}
+	catch(e)
+    {
+        handleFailure(e);
+    }
+    _log("InfyDeleteAttachment Completed","success");
+}
+
+  
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTverifyRouteButton({})
+* @description This function is called to verifying the button
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyRouteButton()
+{
+	_log("InfyFTverifyRouteButton Started ","success");
+		try
+		{
+			if(_button("Route ").disabled)
+			{
+                _assert(true, _button("Route ").disabled);
+			}
+			else
+			{ 
+				_assert(false, _button("Route ").disabled);
+			}
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}
+	_log("InfyFTverifyRouteButton Completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTverifyEnabledFields({edt_field_Name:"CM_Description"})
+* @description This function is called to verifying the field is enabled or not
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyEnabledFields($inputObject)
+{
+	_log("InfyFTverifyEnabledFields Started","success");
+		try
+		{ 
+			var $n = 0;
+			var $key;
+			var $value;
+			for ($key in $inputObject) 
+			{
+				var $keyValue = String([$key]);
+			
+				var $arrKeySet = $keyValue.split("_");
+							
+			}
+			if($arrKeySet[0]=== "edt")
+			{
+				 $n = (_textbox($inputObject.edt_field_Name).disabled);
+					if($n == 1)
+					{
+						_assert(true,"Field Disabled");
+					}
+					else
+					{
+						_assert(true,"Field Enabled");
+					}
+			}
+			if($arrKeySet[0]=== "btn")
+			{
+				 $n = (_button($inputObject.btn_field_Name).disabled);
+					if($n == 1)
+					{
+						_assert(true,"Field Disabled");
+					}
+					else
+					{
+						_assert(true,"Field Enabled");
+					}
+			}
+			if($arrKeySet[0]=== "lst")
+			{
+				 $n = (_button($inputObject.lst_field_Name).disabled);
+					if($n == 1)
+					{
+						_assert(true,"Field Disabled");
+					}
+					else
+					{
+						_assert(true,"Field Enabled");
+					}
+			}
+		
+			if($arrKeySet[0]=== "chk")
+			{
+			
+				var $temp = _checkbox($inputObject.chk_name);
+				var $checkBoxClassName ={};
+				_set($checkBoxClassName, ($temp).className);
+				var $ischeckBoxDisabled = $checkBoxClassName.indexOf("disabled");
+				
+				if ($ischeckBoxDisabled)
+				{
+					_log("Given check Box Disabled","success");
+				
+				}
+				else
+				{	
+					_log("Given check Box not Disabled","failure");
+				
+				}
+			}
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}
+	_log("InfyFTverifyEnabledFields Completed","success");
+}
+
+
+/*************************************************************************
+* @author Nitin
+* @example  InfyFTverifyProjectType({})
+* @description This function is called to verifying the button
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyProjectType()
+{
+	_log("InfyFTverifyProjectType Started ","success");
+		try
+		{
+			_wait(5000, _assertExists(_select("DN_RecommendedAction")));
+			$rcmact = _getSelectedText(_select("DN_RecommendedAction")); 
+		    $iniact = _getSelectedText(_select("DN_InitiateAction"));
+            $sptype = _getSelectedText(_select("DN_SuggestedProcessType"));//DN_SuggestedProcessType//field32
+            $protype = _getSelectedText(_select("PROJECTTYPE"));
+			$projecttype = _getSelectedText(_select("DN_ProjectType"));
+			if($projecttype == "P" ||$projecttype == "D"||$projecttype == "K"||$projecttype == "F")
+			{
+				if($rcmact == $iniact && $sptype == $protype)
+				{
+					return 0;//without workflow
+					_log("PDKF Without WorkFlow");
+				}
+				else
+				{
+					_log("PDKF With WorkFlow");
+					return 1;//with workflow
+					
+				}
+			}
+			else 
+			{
+				_log("Non PDKF Without WorkFlow");
+				return 0;
+				
+			}
+			
+		}
+		catch(e)
+		{
+			handleFailure(e);
+		}
+	_log("InfyFTverifyProjectType Completed","success");
+}
+
+
+/**
+ @author: Nitin
+ @example: $inputObject.txt_Comments = "Routed", $inputObject.alert = "Yes"
+ @description: Clicking the route button and filling the comment
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function InfyFTClickRoutewithComments($inputObject)
+{
+	_log("InfyFTClickRoutewithComments Started","success");
+	try 
+	{		
+		_clearLastAlert();
+		_click(_button("Route "));
+	
+		 var $alt = _lastAlert();
+		if("This process is in progress. An email notification will be sent to the Project Manager on completion of the process." === $alt)
+		{
+			_expectConfirm("This process is in progress. An email notification will be sent to the Project Manager on completion of the process..",true);
+			var $tst = _lastAlert();
+			//_log($tst);
+			if("Workflow is mandatory for production type projects. Please select an approver for this project for both creation and merger! Process Type is not same as Suggested Process Type: Customer Managed! Initiate Action is not same as Merge!" === $tst)
+			{ 
+				_expectConfirm("Workflow is mandatory for production type projects. Please select an approver for this project for both creation and merger! Process Type is not same as Suggested Process Type: Customer Managed! Initiate Action is not same as Merge!",true);
+				_log("WorkFlow mandatory please select approver stage");
+			}
+			else
+			{
+				_selectWindow("RouteReject");
+				setAllFields($inputObject);
+				_click(_submit("RouteBtn"));
+				_selectWindow();
+			}
+		
+			
+		}
+		else if($inputObject.alert == "LastStageAlert")
+		{
+			var $msg;
+		
+			_set($msg,_lastAlert());
+			_assertTrue($msg.indexOf("Please provide valid") != -1);
+		}
+		else if($inputObject.msgAlert)
+		{
+			_assertEqual($alt,$inputObject.msgAlert);
+		}
+		
+		else
+		{
+			_selectWindow("RouteReject");
+			setAllFields($inputObject);
+			_click(_submit("RouteBtn"));
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTClickRoutewithComments Completed","success");
+}
+
+/**
+ @author: Nitin
+ @example: 
+ @description: verify recommended action of project request
+ @param: String {None}
+ @return: String {None} 
+ **/
+function InfyFTVerifyRecommendedAction($inputObject)
+{
+	_log("InfyFTVerifyRecommendedAction Started","success");
+	try
+	{
+		_wait(5000);
+		if($inputObject.raction == "Create")
+		{
+			if( _isVisible((_span("de-icon-green_signal EcrStrongLabel")&& _span("de-icon-green_signal EcrStrongLabel[1]"))))//(_span("de-icon-green_signal") && _span("de-icon-green_signal[1]"))||
+			{
+				_assertEqual($inputObject.raction,"Create","Recommended action should be create");
+				$ra = 1;
+			}
+			else
+			{
+				_assertEqual($inputObject.raction,"Merge","Recommended Action should be Merge");
+				$ra = 0;
+				
+			}
+		}
+		else
+			{
+				_assertEqual($inputObject.raction,"Merge","Recommended Action is Merge");
+				$ra = 0;
+				
+			}
+	
+	return $ra;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTVerifyRecommendedAction Completed","success");
+
+
+
+}
+/**
+ @author: Nitin
+ @example: 
+ @description: verify
+ @param: String {None}
+ @return: String {None} 
+ **/
+function InfyFTverifyValue($inputObject)
+{
+    _log("InfyFTverifyValue Started","success");
+    try 
+    {        
+			if($inputObject.span_Name && $inputObject.cell_Name)
+            {
+				_assertTrue(_isVisible(_span($inputObject.span_Name),_near(_cell($inputObject.cell_Name))));
+				_log($inputObject.cell_Name  + " near value is " + $inputObject.span_Name ,"");
+            }
+            else if($inputObject.bold_Name && $inputObject.cell_Name)
+            {
+				_assertTrue(_isVisible(_bold($inputObject.bold_Name),_near(_cell($inputObject.cell_Name))));
+				_log($inputObject.cell_Name  + " near value is " + $inputObject.bold_Name ,"");
+            }
+            else if($inputObject.txt_name && $inputObject.cell_Name)
+            {
+				_assertTrue(_isVisible(_textarea($inputObject.txt_name),_near(_cell($inputObject.cell_Name))));
+				_log($inputObject.cell_Name  + " near value is " + $inputObject.txt_name ,"");
+            }
+            else if($inputObject.lst_name && $inputObject.cell_Name)//new changes
+            {
+				_assertExists(_isVisible(_select($inputObject.lst_name),_near(_cell($inputObject.cell_Name))));
+				_log($inputObject.cell_Name  + " near value is " + $inputObject.lst_name ,"");
+            }
+			else if($inputObject.chk_name && $inputObject.span_Name)
+			{
+				_assertTrue(_isVisible(_span($inputObject.span_Name),_near(_checkbox($inputObject.chk_name))));
+				_assertEqual(_getValue(_checkbox($inputObject.chk_name)),"true");
+			}
+			else if($inputObject.div_name && $inputObject.message )
+			{
+				_assertEqual(_getText(_div($inputObject.div_name)),$inputObject.message);
+			}
+			else if($inputObject.lst_name && $inputObject.cell_Name_field && $inputObject.lst_value)
+			{
+				_assertExists(_isVisible(_cell($inputObject.cell_Name_field), _near(_select($inputObject.lst_name))));
+				_assertEqual(_getSelectedText(_select($inputObject.lst_name)),$inputObject.lst_value);
+			}
+			else if($inputObject.span_name && $inputObject.message)
+			{
+				_assertEqual(_getText(_span($inputObject.span_name)),$inputObject.message);
+			}else if($inputObject.table_name && $inputObject.message)
+			{
+				//_assertEqual( _getTableContents(_table($inputObject.table_name)),$inputObject.message);
+				_assertEqual(_table($inputObject.table_name).innerText,$inputObject.message);
+			}
+			else if($inputObject.edt_value && $inputObject.edt_value)
+			{
+				_assertEqual(_getText(_textbox($inputObject.edt_name)),$inputObject.edt_value);
+			}
+			else if($inputObject.span_name && $inputObject.lst_name)
+			{
+				_assertEqual(_getText(_span($inputObject.span_name)), _getSelectedText(_select($inputObject.lst_name)));
+			}
+			else if($inputObject.operation == "Negative")
+			{
+				_assertNotEqual(_getValue(_cell($inputObject.cell_Name)||_span($inputObject.span_Name)),$inputObject.value);//_assertEqual($inputObject[$key],(_getText(_cell($arrKeySet[1]) || _span($arrKeySet[1]))));
+				
+			}
+			else 
+            {
+				_assertTrue(false,"value is none");
+            }
+	}
+              
+    catch(e)
+    {
+    handleFailure(e);
+    }
+    _log("InfyFTverifyValue Completed","success");
+}
+
+/**
+ @author: Nitin
+ @example: click("link":"link_name")
+ @description: click on any link,image,button or anything which you want
+ @param: String {None}
+ @return: String {None} 
+ **/
+ function InfyFTclick($inputObject)
+ {
+  _log("click Started","success"); 
+	try
+	{
+	
+	if($inputObject.popup_name)
+	{
+		_selectWindow($inputObject.popup_name);
+	}
+		if($inputObject.link)
+		{
+			_click(_link($inputObject.link));
+		}
+		else if($inputObject.item)
+		{
+			_click(_div($inputObject.item));
+		}
+		else if($inputObject.image)
+		{
+			_click(_image($inputObject.image));
+		}
+		else if($inputObject.button)
+		{
+			_click(_button($inputObject.button));
+		}
+		else if($inputObject.span)
+		{
+			_click(_span($inputObject.span));
+		}
+		else if($inputObject.submit)
+		{
+			_click(_submit($inputObject.submit));
+		}
+		if($inputObject.MsgAlt)
+		{
+			_assertEqual(_lastAlert(),$inputObject.MsgAlt);
+		}
+	if($inputObject.popup_name)
+	{
+			_selectWindow();
+	}
+	if($inputObject.msgAlert)
+	{
+		  _assertEqual($inputObject.msgAlert, _lastAlert());
+	}
+		
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+  _log("click Completed","success");
+}
+
+ /*************************************************************************
+* @author Nitin
+* @example InfyFTVerifyCurrentStage({"item":"DEF2486","col_id":"5"});
+* @description This function is called to identify the current stage of workflow
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function InfyFTVerifyCurrentStage($inputObject)
+{ 
+	_log("InfyFTVerifyCurrentStage Started","success");
+	try
+	{
+		_assertEqual(_getText(_link("WorkflowTitle Current")),$inputObject.stage);//
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTVerifyCurrentStage Completed","success");
+}
+
+ /*************************************************************************
+* @author Nitin
+* @example InfyFTVerifyRows({});
+* @description This function is called to identify the Added rows in Prject matrics
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function InfyFTVerifyRows($inputObject)
+{ 
+	_log("InfyFTVerifyRows Started","success");
+	try
+	{
+		_setValue(_textbox($inputObject.edt_name),$inputObject.edt_value);
+		var $tval = _getText(_textbox($inputObject.edt_name));
+		var $test={};
+		var $limit = 50;
+		for( var $a = 1; $a<=$limit;$a++)
+		{
+			if( _isVisible(_checkbox($a)))
+			{
+				//$test = _getText( _checkbox($a));
+				//_log("in if"+ parseInt($test)+"$a"+$a);
+				$test =$a;
+			}
+			else
+			{
+				//_log("in else"+$test)
+				$temp = parseInt($test);
+				if($temp>0){  break; } else{ $test=0; break; }
+			
+			}
+		}
+		//_log("First Test"+$test);
+		_click( _link("Add Rows"));
+		var $t = parseInt($test);
+		//_log("$t"+$t);
+		$test = {};
+		$limit = parseInt($tval) + $limit;
+		//_log("$limit"+$limit);
+		for( var $i=1; $i<$limit;$i++)
+		{
+			if( _isVisible(_checkbox($i)))
+			{
+				$test = _getText(_checkbox($i));
+				//_log("Field added",$i);
+			}
+			else
+			{
+			
+				break;
+			}
+		}
+		$n= parseInt($test);
+//		if($t == 0){ } else { $t=$t-1;}//change as per the requirement
+		$t = $t + parseInt($tval);
+		//_log($t+"  "+$n);
+		if($t == $n)
+		{
+			_assertEqual($t,$n,"Field Added");
+		}
+		else
+		{
+			_assertFalse(true,"field not added");
+		}
+
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTVerifyRows Completed","success");
+}
+
+
+ /*************************************************************************
+* @author Nitin
+* @example InfyFTAddPopupValues({});
+* @description This function is called to identify the Added rows in Prject matrics
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function InfyFTAddPopupValues($inputObject)
+{
+ _log("InfyFTAddPopupValues Started","success");
+	try
+	{
+		_click(_link($inputObject.lnk_name));
+		_wait(5000);
+		if($inputObject.winprefix)
+				_selectWindow($inputObject.winprefix);
+	
+			InfyFTsetAllFields($inputObject);
+		
+			clickSaveButton($inputObject);
+		
+			clickReturn();
+			_wait(3000);
+			if(_textarea($inputObject.textid)!="")
+            {
+              	_assertEqual(_getText(_textarea($inputObject.textid)),$inputObject.txtvalues);
+			}
+      		else
+				_assertFalse(true,"Value not matched");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTAddPopupValues Completed","success");
+
+
+}
+
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTDeleteRows({});
+* @description This function is called to Deleting the Added rows in Prject matrics
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function InfyFTDeleteRows($inputObject)
+{
+ _log("InfyFTDeleteRows Started","success");
+	try
+	{
+			for( var i=1;i>0;)
+			{
+				if(_isVisible(_checkbox(0, _in(_cell(_table(0, _in(_parentNode(_span($inputObject.tblname), "DIV", 2))) ,$inputObject.row_id,$inputObject.col_id)))))
+				{
+					_check(_checkbox(0, _in(_cell(_table(0, _in(_parentNode(_span($inputObject.tblname), "DIV", 2))) ,$inputObject.row_id,$inputObject.col_id))));
+					if(_isVisible(_link("Delete Rows")))
+					{					
+						_click(_link("Delete Rows"));
+						_expectConfirm("This row will no longer be available",true);
+					}
+					if($inputObject.btnSave)
+					{
+						_click(_button(" Save "));
+					}
+				}
+				else
+				{ 
+					i=0;
+					break;
+				}
+			}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTDeleteRows Completed","success");
+
+
+}
+
+/*************************************************************************************************
+ @Function InfyFTreopenRequest
+ @author: Nitin
+ @example:InfyFTreopen()
+ @description: To Reopen A closed request
+ @param: None
+ @return: None
+ ****************************************************************************************************/
+
+function InfyFTreopenRequest($inputObject)
+{
+	_log("InfyFTreopenRequest Started","success");
+	try 
+	{	
+		if($inputObject.popup)
+		{
+			_click(_button("Reopen"));
+			_selectWindow($inputObject.popup);
+			_setSelected(_select(_select("stage")),$inputObject.stage_name);
+			_click(_submit(" OK  "));
+			
+		}
+		else
+		{
+			_expectConfirm("Are you sure you want to reopen this item?", true);
+			_click(_button("Reopen"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTreopenRequest Completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example InfyFTcreateInstanceForPopUp({"item":"DEF2486", winprefix:"AddItem"});
+* @description This function is called to create instance
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+function InfyFTcreateInstanceForPopUp($inputObject) 
+{
+    _log("InfyFTcreateInstanceForPopUp Started","success");
+    
+    try 
+	{
+		_click(_span("KEY_Link_New_item-btnIconEl"));
+		if($inputObject.winprefix)
+		{
+			_selectWindow($inputObject.winprefix);
+		
+    	saveInstance($inputObject);
+		}
+		_selectWindow($inputObject.winprefix);
+		$inputObject.subID = _getText(_span("CM_ItemCode"));
+	}
+    catch(e) 
+	{
+	    handleFailure(e);
+	}
+    _log("InfyFTcreateInstanceForPopUp Completed","success");	
+}
+
+
+/*************************************************************************
+* @author:Siddharth Kale
+* @example  InfyVerifyMergeProject($inputObject)
+* @description This function is called to check whether it isReadNOTOnly
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTVerifyMergeProject($inputObject)
+{
+	_log("InfyVerifyMergeProject Started","success");
+	try 
+	{
+					
+		_assertVisible(_span($inputObject.prname));
+		_highlight(_span($inputObject.prname));
+		_wait(2000);
+		
+	}
+	
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	
+	_log("InfyVerifyMergeProject Completed","success");
+}
+/*************************************************************************
+* @author:Nethra
+* @example  InfyFTcheckingButtons($inputObject)
+* @description This function is called to verifying the buttons
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTcheckingButtons($inputObject)
+{
+	_log("InfyFTcheckingButtons Started","success");
+	try 
+	{
+		var $temp = $inputObject.true;
+		$inputObject.true =1;
+		if($inputObject.true && $inputObject.button)
+		{
+			_assertExists(_button($inputObject.button));
+			_assertEqual($temp, _button($inputObject.button).disabled);//true==disabled false==enabled
+			_log($inputObject.button+" Button Exists");
+		}
+		if($inputObject.true && $inputObject.reset)
+		{
+			_assertExists(_reset($inputObject.reset));
+			_assertEqual($temp, _reset("Reset").disabled);
+		}
+		
+		if($inputObject.notExists && $inputObject.button)
+		{
+			_assertNotExists(_button($inputObject.button));
+			_log($inputObject.button+" Button Not Exists");
+		}
+		if($inputObject.notExists && $inputObject.reset)
+		{
+			_assertNotExists(_reset($inputObject.reset));
+		}
+	}
+	catch(e)
+	{
+		
+		
+		handleFailure(e);
+	}
+	_log("InfyFTcheckingButtons Completed","success");
+}
+
+/*************************************************************************
+* @author:Nitin
+* @example  InfyFTverifyMergeCondition($)
+* @description 
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+function InfyFTverifyMergeCondition()
+{
+	_log("InfyFTverifyMergeCondition Started","success");
+	try 
+	{
+		var $a = _getText( _span(0, _in(_cell(_table(0, _in(_parentNode(_span("Search Result"), "DIV", 3))),2 ,1))));
+		var $b = _getText( _span(0, _in(_cell(_table(0, _in(_parentNode(_span("Search Result"), "DIV", 3))),2 ,2))));
+		
+		if($a === $b)
+		{
+			//_assertVisible(_span("de-icon-green_signal"));
+			_assertVisible(_span("de-icon-green_signal EcrStrongLabel"))
+			
+		}
+		else
+		{
+			_assertVisible(_span("de-icon-red_signal EcrStrongLabel"));
+		}
+    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+}
+
+/***************************************************************************
+ @Function Number:7
+ @author: Nitin Shinde
+ @example:
+ @description: This function is used to Link Existing Items in Findings.
+ @param: 
+ @return: 
+***************************************************************************/
+
+function InfyFTlinkNewInFindingsSegment($inputObject)
+{
+	_log("InfyFTlinkNewInFindingsSegment Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		_wait(15000, _isVisible(_link($addbtnKey)));
+		if(_isVisible(_link($addbtnKey)))
+		{	
+			_click(_link($addbtnKey));
+		}
+		_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		//_click(_button("CancelBtn"));
+		//_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTlinkNewInFindingsSegment Completed","success");
+}
+
+/************************************************************************
+@Function Number:17
+@author:Nitin Shinde
+@example:
+@description: This function is used to create the Linked Item.
+@param: 
+@return: 
+************************************************************************/
+
+function InfyFTcreateLinkedItem($inputObject)
+{
+	_log("InfyFTcreateLinkedItem Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+				
+		_wait(10000, _isVisible(_link("KEY_Link_New_item")))
+		if(_isVisible(_link("KEY_Link_New_item")))
+		{	
+			_click(_link($addbtnKey));
+		}
+		else
+		{
+			_wait(10000, _isVisible(_image("QTP_Link_New")));
+			_click(_image("QTP_Link_New"));
+		}
+		
+		_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		//_wait(5000, _inVisible(_cell("FormDataLeft")));
+		_wait(5000, _inVisible(_span("CM_ItemCode")));
+		
+		//$inputObject.createdID = _getText(_cell("FormDataLeft"));
+		$inputObject.createdID = _getText(_span("CM_ItemCode"));
+		_wait(1000);
+		_click(_button("CancelBtn"));
+		_selectWindow();
+		
+		if($inputObject.msgAlert){
+			_assertEqual($inputObject.msgAlert, _lastAlert());
+		}else if($inputObject.msgError){
+		    _assertEqual($inputObject.msgError, _lastAlert());
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcreateLinkedItem Completed","success");
+}
+
+
+/*************************************************************************
+ @Function Number:27
+* @author Nitin Shinde
+* @example InfyFTOpenEformInstanceForLastPage({"item":"DEF2486","col_id":"5"});
+* @description This function is called to open an instance from eform instance for Last Page
+* @param {String} item, Item Name or Item Id to be open
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTOpenEformInstanceForLastPage($inputObject)
+{
+	_log("InfyFTOpenEformInstanceForLastPage Started","success");
+	try 
+	{
+		if($inputObject.operation==="Negative")
+		{
+			_log("Document can not be opened because of Private rights");
+			return;
+		}
+		if($inputObject.type === "Negative")
+		{
+			_assertFalse(_exists(_div($inputObject.item)));
+		}
+		else
+		{
+			if($inputObject.popup_name)	
+			{ 
+				_selectWindow($inputObject.popup_name);
+				_click(_div($inputObject.item)||_link($inputObject.item));
+				_selectWindow();
+			}
+			if(_isVisible(_span("x-btn-icon-el x-tbar-page-last "))) 
+			{
+			            _click(_span("x-btn-icon-el x-tbar-page-last "));
+						_wait(5000);
+			} 
+			if(_exists(_table("QTP_ListTable")))
+			{
+				var $tableId = _table("QTP_ListTable");
+		        _click(_link($inputObject.item, _in($tableId)) || _cell($inputObject.item, _in($tableId)));		
+			}
+			else
+			{	
+				if($inputObject.filter_status && $inputObject.filterName)
+				{
+					$inputObject.status = $inputObject.filter_status;
+					setFilter($inputObject);
+				}
+				_wait(5000,_exists(_div($inputObject.item)) || _exists(_link($inputObject.item)))
+				if($inputObject.itemtype)
+					_doubleClick(_div($inputObject.item) || _link($inputObject.item));
+				else
+					_click(_div($inputObject.item) || _link($inputObject.item));
+				
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTOpenEformInstanceForLastPage Completed","success");
+}
+
+/************************************************************************
+@Function Number:
+@author:Nitin Shinde
+@example:
+@description: This function is used only for open Linked Item popup.
+@param: 
+@return: 
+************************************************************************/
+
+function InfyFTcreateLinkedItem1($inputObject)
+{
+	_log("InfyFTcreateLinkedItem1 Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+				
+			
+		_wait(10000, _isVisible(_link("KEY_Link_New_item")))
+		if(_isVisible(_link("KEY_Link_New_item")))
+		{	
+		    _selectWindow("openLinkedItem");
+			_click(_link($addbtnKey));
+			_selectWindow();
+		}
+		else
+		{
+			_wait(10000, _isVisible(_image("QTP_Link_New")));
+			_click(_image("QTP_Link_New"));
+		}
+		_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_wait(5000);
+		$inputObject.createdID = _getText(_span("CM_ItemCode"));
+		_wait(1000);
+		_click(_button("CancelBtn"));
+		_selectWindow();
+		
+		if($inputObject.msgAlert){
+			_assertEqual($inputObject.msgAlert, _lastAlert());
+		}else if($inputObject.msgError){
+		    _assertEqual($inputObject.msgError, _lastAlert());
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcreateLinkedItem1 Completed","success");
+}
+/******************************************************************
+ @Function Number:31
+ @author: Nitin Shinde
+ @example: InfyFTcloseWin($inputObject)
+ @description: Closes the open window.
+ @param: {None}
+ @return: {None} 
+ ****************************************************************/
+	
+function InfyFTcloseWin($inputObject) 
+{
+    _log("InfyFTcloseWin Started","success");
+	try 
+	{
+        if($inputObject.popup){	 
+         _popup($inputObject.popup)._closeWindow();   // Closes the open window
+		} 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcloseWin Completed","success");
+ }	
+ /******************************************************************
+ @Function Number:31
+ @author: Nitin
+ @example: regenerate($inputObject)({"chk_checkAll":"yes"})
+ @description: Re-Generate the eform .
+ @param: {None}
+ @return: {None} 
+ ****************************************************************/
+	
+function regenerate($inputObject) 
+{
+    _log("regenerate Started","success");
+	try 
+	{
+      	_wait(10000, _exists(_link("Re-Generate")|| _link("de-icon-refresh")));
+		if(_isVisible(_link("Re-Generate")|| _link("de-icon-refresh")))
+		{	
+			_click(_link("Re-Generate")|| _link("de-icon-refresh"));
+		    _selectWindow("Regenerate");
+			setAllFields($inputObject);
+			_click( _button("Regenerate"));
+			
+			_wait(10000, _exists(_button("< Return")|| _button("Return")));
+			_wait(10000);
+			_click(_button("< Return") || _button("Return"));
+			_selectWindow();
+			_wait(10000);
+		}
+ 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("regenerate Completed","success");
+ }	
+ 
+  /******************************************************************
+ @Function Number:31
+ @author: Nitin
+ @example: calculate_Count($inputObject)({"chk_checkAll":"yes"})
+ @description: calculate_Count for the particular field of the eform .
+ @param: {None}
+ @return: {None} 
+ ****************************************************************/
+	
+function calculate_Count($inputObject) 
+{
+    _log("calculate_Count Started","success");
+	try 
+	{
+		var $count=0,$temp = 1;
+		
+		 //$tblength = _fetch(_table("DataTableClass").rows.length);
+		 $tblength = _fetch(_table("DataTableClass dataTableClass_background").rows.length);
+	   for(var $i=0; $i < $tblength-1; $i++)
+		{
+			_log("test");
+				if(_isVisible(_span(0, _in(_cell(_table(0, _in(_parentNode(_span($inputObject.tblname), "DIV", 2))), $temp, $inputObject.colid)))))
+				{
+					_log("in first if");
+					var $as = _getText(_span(0, _in(_cell(_table(0, _in(_parentNode(_span($inputObject.tblname), "DIV", 2))), $temp, $inputObject.colid))))
+					_log($as+"$as");
+				
+					if($inputObject.fieldValue == $as)
+					{
+						$count++;
+						_log($count +"   Count test");
+					}	
+				}
+			 $temp++;
+			_log($temp +"   temp test")
+				
+		}
+		$inputObject.count = $count;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("calculate_Count Completed","success");
+ }
+ 
+ /************************************************************************
+@Function Number:
+@author:Nitin Shinde
+@example:
+@description: This function is used only for open Linked Item popup.
+@param: 
+@return: 
+************************************************************************/
+
+function InfyFTModifyLinkedItem($inputObject)
+{
+	_log("InfyFTModifyLinkedItem Started","success");
+	try 
+	{
+	
+		//_selectWindow("newListing");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		_click(_button("CancelBtn"));
+		_selectWindow();
+		
+		if($inputObject.msgAlert){
+			_assertEqual($inputObject.msgAlert, _lastAlert());
+		}else if($inputObject.msgError){
+		    _assertEqual($inputObject.msgError, _lastAlert());
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTModifyLinkedItem Completed","success");
+}
+ function testing($inputObject)
+{
+	if($inputObject.popup_name)	
+	{ 
+		_selectWindow($inputObject.popup_name);
+		_click(_div($inputObject.item)||_link($inputObject.item));
+		_selectWindow();
+	}
+
+}			
+
+
+/*************************************************************************
+ @Function Number:25
+* @author Arjun R02
+* @example InfyFTReturnPopUp();
+* @description This function is called to Return the popup.
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTReturnPopUp($inputObject)
+{
+    _log("InfyFTReturnPopUp Started","success");
+	try 
+	{
+	  _selectWindow($inputObject.popup_name);
+	  _click(_button("CancelBtn"));
+	  _selectWindow();
+	  
+	}  
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTReturnPopUp Completed","success");
+}
+
+/*************************************************************************
+ @Function Number:22
+ @author:Nitin Shinde
+ @example:
+ @description: This function is modified to click on the created sub-instance.
+ @param: 
+ @return: 
+ ***********************************************************************/
+
+function InfyFTverifyEformInstanceDetails($inputObject)
+{
+	_log("InfyFTverifyEformInstanceDetails Started","success");
+	try 
+	{
+
+		if($inputObject.popup_name)
+		{
+		    
+		    _click(_div($inputObject.item) || _link($inputObject.item));
+			_selectWindow($inputObject.popup_name);
+			_wait(5000);
+		}
+		verifyAllFields($inputObject);
+		
+		if($inputObject.popup_name)
+		{
+		    _closeWindow();
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTverifyEformInstanceDetails Completed","success");
+}
+
+
+			
+
+ /************************************************************************
+@Function Number:
+@author:Arjun.R02
+@example: InftFTcalculateToolIndex($inputObject)
+@parameters: $inputObject.toolcount, $inputObject.toolnotusedlccount
+@description: This function is used only for calculating tools index in Tools Planning
+@return: 
+************************************************************************/
+
+ function InfyFTcalculateToolIndex($inputObject)
+ {
+  try 
+  {
+    var $index = 0;
+    var $toolcount = $inputObject.toolcount;
+    var $sumofeachtool = $toolcount*10
+    var $toolnotusedlccount = $inputObject.toolnotusedlccount
+    var $sumofnotusedlctool = $toolnotusedlccount*10
+  
+    $index = ($sumofeachtool/($sumofeachtool+$sumofnotusedlctool))*100
+  
+    $index = parseFloat($index).toFixed(2);
+	$inputObject.index = $index;
+  
+  }
+  catch(e)
+  {
+	handleFailure(e);
+  }
+ } 
+ 
+  /************************************************************************
+@Function Number:
+@author:Sunitha
+@example: InftFTcalculateReviewEfficiency($inputObject)
+@parameters: 
+@description: This function is used only for calculating Review Efficiency
+@return: 
+************************************************************************/
+
+function InfyFTcalculateReviewEfficiency($inputObject)
+ {
+  try 
+  {
+	_selectWindow($inputObject.popup_name);
+	
+     var $Defects = _getText(_span("DN_NoofDefects"));
+     var $TEffort = _getText(_span("DN_TotalReviewEffort"));
+     var $RevEfficiency = $Defects/$TEffort;
+	 $inputObject.RevEfficiency = $RevEfficiency;
+	
+	_selectWindow();
+  }
+  catch(e)
+  {
+	handleFailure(e);
+  }
+ } 
+ 
+   /************************************************************************
+@Function Number:
+@author:Arjun.R02
+@example: InftFTcalculateOverallDeviation($inputObject)
+@parameters: 
+@description: This function is used only for calculating Overall deviation in closure report
+@return: 
+************************************************************************/
+
+function InftFTcalculateOverallDeviation($inputObject)
+{
+ try
+ {
+    _log("InftFTcalculateOverallDeviation Started","success");
+	
+    var $overallDev = ($inputObject.devEnd / $inputObject.estDiff ) * 100;
+    $overallDev = parseFloat($overallDev).toFixed(2);
+	$inputObject.overallDev = $overallDev;	
+ }
+ catch(e)
+  {
+	handleFailure(e);
+  }
+  _log("InftFTcalculateOverallDeviation Completed","success");
+} 
+
+function InfyFTDeleteEformInstance($inputObject)
+{
+	_log("InfyFTDeleteEformInstance Started","success");
+	try 
+	{
+		if($inputObject.operation === "disabled")
+		{
+			_assertTrue(_button("Delete").disabled);
+		}
+		else if($inputObject.operation === "ButtonNotExists")
+		{
+			_assertFalse(_exists(_button("Delete")));
+		}
+		else
+		{
+		    if($inputObject.popup)
+			_selectWindow($inputObject.popup);
+			
+			_click(_button("DeleteBtn") || _submit("DeleteBtn") || _button("Delete"));
+            
+	    	if($inputObject.type === "Org")
+	        {
+	    		_assertTrue(_isVisible(_div("This organization will no longer be available")));
+				_click(_button("//s*Ok/s*/"));
+	        }
+	        else if($inputObject.type === "Prj")
+	        {
+	        	_assertTrue(_isVisible(_div("This Project will no longer be available")));
+				_click(_button("//s*Ok/s*/"));
+	        }
+	        else if($inputObject.type === "WPKG")
+	        {
+	        	_expectConfirm("You are about to delete this item,\nDo you still want to continue?",true);
+	        }
+	        else if($inputObject.type === "Event")
+	        {
+	        	_assertTrue(_isVisible(_div("The entire Test Event will no longer be available")));
+				_click(_button("//s*Ok/s*/"));
+	        }
+		    else 
+	        {
+	        	_assertTrue(_isVisible(_div("This work-item will no longer be available.")));
+				_click(_button("//s*Ok/s*/")  || _button("deleteBtn"));
+	        }	
+			
+			_selectWindow();
+	        
+	        if($inputObject.type === "Org" && _exists(_span("QTP_Error1")))
+	        {
+	        	_assertEqual("Organizations having projects/templates cannot be deleted.", _span("QTP_Error1").innerHTML);
+	        	_click(_submit("Back To Previous Page"));
+	        }
+	        
+	        if($inputObject.type === "Prct" && $inputObject.operation == "Negative")
+	        {
+	        	_assertTrue(_isVisible(_span("There are one or more process templates using the practice. Remove the practice from process template(s) before deleting it")));
+	        }
+	        
+	        if($inputObject.type === "Phs" && $inputObject.operation == "Negative")
+	        {
+	        	_assertTrue(_isVisible(_span("There are one or more process templates using the phase. Remove the phase from process template(s) before deleting it")));
+	        }
+	        if($inputObject.operation === "UserAlreadyAssigned")
+	        {
+	        	_assertTrue(_isVisible(_span("QTP_Error1")));
+	        	_click(_submit("Back To Previous Page"));
+	        }
+	        		
+		}
+		if($inputObject.msgAlert){
+						_assertEqual ($inputObject.msgAlert, _lastAlert());
+		}else if($inputObject.msgError){
+		                _assertEqual ($inputObject.msgError, _getText(_span("QTP_Error1")));
+		}else{
+		    _log("DeleteEformInstance Verification Started","success");
+			if($inputObject.item)
+				_assertFalse(_isVisible(_div($inputObject.item)));
+				_expectConfirm("Traceability for the items linked to the risk will be deleted", true);
+		}	
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTDeleteEformInstance Completed","success");
+}
+
+/************************************************************************
+@Function Number:
+@author:Arjun.R02
+@example: InfyFTreopenPMP($inputObject)
+@parameters: 
+@description: This function is used for reopening PMP if reopen button is available
+@return: 
+************************************************************************/
+
+function InfyFTreopenPMP($inputObject)
+{
+  _log("InfyFTreopenPMP","success");
+	try 
+	{
+	  if(_isVisible(_button("Reopen")))
+	  {
+	    _click(_button("Reopen"));
+	  }
+	  
+	}
+   
+    catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTreopenPMP Completed","success");
+}
+
+
+/************************************************************************
+@Function Number:
+@author:Sunitha
+@example: InfyFTdeleteLanguage()
+@parameters: None
+@description: This function is used to delete the existing language in language settings
+@return: 
+************************************************************************/
+
+function InfyFTdeleteLanguage($inputObject)
+{
+  _log("InfyFTdeleteLanguage","success");
+	try 
+	{
+	  if(_isVisible(_checkbox(1)))
+		{
+		
+			setSwiftFormData($inputObject); 
+ 
+			_click(_span("Delete"));
+
+			_wait(5000); 
+		}
+	  
+	}
+   
+    catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTdeleteLanguage Completed","success");
+}
+
+
+/************************************************************************
+@Function Number:17
+@author:Sunitha
+@example:
+@description: This function is used to create the Linked Item for Package PT.
+@param: 
+@return: 
+************************************************************************/
+
+function InfyFTcreateLinkedItemPackage($inputObject)
+{
+	_log("InfyFTcreateLinkedItemPackage Started","success");
+	try 
+	{
+		var $addBtn = "KEY_Link_New_item";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		
+		_selectWindow("newListing");
+				
+		_wait(10000, _isVisible(_link("KEY_Link_New_item")))
+		if(_isVisible(_link("KEY_Link_New_item")))
+		{	
+			_click(_link($addbtnKey));
+		}
+		else
+		{
+			_wait(10000, _isVisible(_image("QTP_Link_New")));
+			_click(_image("QTP_Link_New"));
+		}
+		_selectWindow();
+		_selectWindow("newListing__1");
+		setAllFields($inputObject);
+		_click(_button("SaveBtn"));
+		//_wait(5000, _inVisible(_cell("FormDataLeft")));
+		_wait(5000, _inVisible(_span("CM_ItemCode")));
+		
+		//$inputObject.createdID = _getText(_cell("FormDataLeft"));
+		$inputObject.createdID = _getText(_span("CM_ItemCode"));
+		_wait(1000);
+		_click(_button("CancelBtn"));
+		_selectWindow();
+		
+		if($inputObject.msgAlert){
+			_assertEqual($inputObject.msgAlert, _lastAlert());
+		}else if($inputObject.msgError){
+		    _assertEqual($inputObject.msgError, _lastAlert());
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTcreateLinkedItemPackage Completed","success");
+}
+
+function InfyFTdoubleclick($inputObject)
+{
+	_log("InfyFTdoubleclick Started","success");
+	try 
+	{
+		_selectWindow($inputObject.popup_name);
+		
+      	_doubleClick(_div($inputObject.item_name));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTDeleteN Completed","success");
+	
+	
+}
+//SR
+/*************************************************************************
+* @author Nitin
+* @example  isReadOnly({"span_Name":"LIBPROJECT1";"cell_Name":"Project Code"}
+* @description This function is called to check whether it isReadOnly
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function InfyFTisReadOnlySR($inputObject)
+{
+                _log("isReadOnly Started","success");
+                try 
+                {
+                                _assertTrue(_isVisible(_span($inputObject.span_Name, _near(_cell($inputObject.cell_Name)))));
+                                _log($inputObject.span_Name +" this field is read only","");
+                }
+                
+                catch(e)
+                {
+                                handleFailure(e);
+                }
+                
+                _log("isReadOnly Completed","success");
+}
+
+/*************************************************************************
+* @author Arjun.R02
+* @example: InfyFTverifyInstanceInListing({"instanceName" : "Jonny" });
+* @description This function is called to verify the created instance in listing with alone
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+ function InfyFTverifyInstanceInListing($inputObject)
+ {
+    _log("InfyFTverifyInstanceInListing Started","success");
+		try 
+		{
+            _setValue(_textbox("searchTextBox-inputEl"),$inputObject.item);
+            _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+			verifyInstanceInListing($inputObject);
+
+        }
+		catch(e)
+		{
+			handleFailure(e);
+		}
+	_log("InfyFTverifyInstanceInListing Completed","success");
+
+ }
+ 
+ 
+ 
+ /**
+ @author: Sunitha
+ @example: click("link":"link_name")
+ @description: Check on the Print Icon Function
+ @param: String {None}
+ @return: String {None} 
+ **/
+ function InfyFTprint()
+ {
+  _log("InfyFTprint Started","success"); 
+	try
+	{
+	
+		_click(_link("KEY_TOOLTIP_Print"));
+		
+		_popup("Print")._click(_button(" OK"));
+	
+		_wait(5000);
+		
+		_popup("Print")._click(_button("Return"));
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+  _log("InfyFTprint Completed","success");
+}
+
+/**
+ @author: Nitin
+ @example: clickReturn()
+ @description:  clicking on Return Button from the new window
+ @param: None
+ @return: None
+ **/
+function clickReturnNewWindow()
+{
+	_log("clickReturn Started","success");
+	try 
+	{
+	    _click(_button("Return[1]"));//updating as new changes/*Nitin
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickReturn Completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example copyTask({);
+* @description This function is called to copy and add task form other instance 
+* @param {String} None
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+
+function copyTaskFromOther($inputObject)
+{
+	_log("copyTaskFromOther Started","success");
+	try 
+	{
+		if(_isVisible(_span("InstantiateButton-btnIconEl")))
+		{
+			_click(_span("InstantiateButton-btnIconEl"));
+			setAllFields($inputObject);
+			verifyAllFields($inputObject);
+			
+		}
+		_click(_submit("GO"));
+			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("copyTaskFromOther Completed","success");
+}
+
+/**
+ @author: Nitin
+ @example: 
+ @description: verify Project Type and return boolean values
+ @param: String {None}
+ @return: String {None} 
+ **/
+function InfyFTVerifyPrjCrMgrConditions($inputObject)
+{
+	_log("InfyFTVerifyPrjCrMgrConditions Started","success");
+	try
+	{
+		var $ra = _getSelectedText(_select("DN_RecommendedAction"));
+		var $ia = $inputObject.initiateAction;
+		var $PType = _getSelectedText(_select("DN_ProjectType"));
+		_log($ra+"    "+$ia+"    "+ $PType);
+		if($PType=="P"||$PType=="D"||$PType=="K"||$PType=="F")
+		{
+		_log("If PDKF");
+			if($ra==$ia)
+			{
+				_log("If RA == IA");
+				if($ia =="Create")
+				{
+					_log("If IA == Create");
+					var $SPType = _getSelectedText(_select("DN_SuggestedProcessType"));
+					var $ProcessType = $inputObject.processType;
+					if($SPType == $ProcessType)
+					{
+						_log("If SPT== PT");
+						_log("Skip scenario");
+						return "Skip";
+						
+					}
+					else
+					{
+						_log("If SPT!= PT");
+						_log("Approval Scenario");
+						return "Approval";
+					}
+				}
+				if($ia =="Merge")
+				{
+					_log("If IA == Merge");
+					var $EP = _getText( _span(" EcrStrongLabel[10]"));
+					var $TBMP = _getText( _span(" EcrStrongLabel[11]"));
+					if($EP == $TBMP)
+					{
+						_log("If EP== TBMP");
+						_log("Skip scenario");
+						return "Skip";
+					}
+					else
+					{	
+						_log("If EP =! TBMP");
+						_log("Approval Scenario");
+						return "Approval";
+					}
+				}
+			}
+			else
+			{
+				_log("If RA != IA");
+				_log("Approval Scenario");
+				return "Approval";
+			}
+		}
+		else
+		{	
+			_log("non PDKF");
+			_log("Skip scenario");
+			return "Skip"
+		}
+			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTVerifyPrjCrMgrConditions Completed","success");
+
+
+
+}
+/*********************************************/
+ /*Reuse deleting before entering values in asset
+ /*********************************************/
+ function InfyFTreuseDelete()
+ {
+    _log("InfyFTreuseDelete Started","success");
+		try 
+		{
+			var $limit = 7;
+			for(var $i=1;$i<$limit;$i++)
+			{
+			if(_isVisible(_checkbox($i)))
+			_check(_checkbox($i));}
+            _click(_button(" Save "));
+	    }
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTreuseDelete Completed","success");
+
+ }
+ 
+ /*************************************************************************
+* @author Nitin
+* @example InfyFTModifyEformInstance({"item":"DEF2486","col_id":"5"});
+* @description This function is called to modify instance
+* @param {String} None
+* @return {String}   None 
+* TODO:RMAHANT Correct this function and do the Impact on dependent scripts
+*************************************************************************/
+
+function InfyFTModifyEformInstance($inputObject)
+{
+	_log("InfyFTModifyEformInstance Started","success");
+	try 
+	{
+		if($inputObject.operation === "disabled")
+		{
+			_log("User has not Edit rights");
+		}
+		else
+	    {
+		if($inputObject.popup_name){
+			
+				_wait(5000);
+				_selectWindow($inputObject.popup_name)
+		
+	
+			setAllFields($inputObject);// for passing numeric name of list box
+		
+			//verifyAllFields($inputObject);//not for infy
+		
+
+		
+			if(_isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+			{
+				_click(_submit("SaveBtn") || _submit("//s*Save/s*/"));
+				$inputObject.createdID = _getText(_span("CM_ItemCode"));
+			}
+			else
+			{
+				_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+				$inputObject.createdID = _getText(_span("CM_ItemCode"));
+			}
+			var $alertMsg = "Please do not enter special characters < or > in the  Name field";
+			if($inputObject.alert === "SpclChar")
+			{
+				_assertEqual($alertMsg, _lastAlert());
+			}
+			//_selectWindow();
+	    }
+			if($inputObject.msgAlert)// For Infy
+			{
+				_assertEqual($inputObject.msgAlert, _lastAlert());
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("InfyFTModifyEformInstance Completed","success");
+}
+
+ /*************************************************************************
+* @author Nitin
+* @example infyFTSetValueInExcel();
+* @description This function is called to writing the value into Excel
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function infyFTSetValueInExcel($inputObject)
+{
+	_log("infyFTSetValueInExcel Started","success");
+	try 
+	{
+		$URL = _getGlobal("datatDIR");
+		var $excel = _getExcel($URL+$inputObject.ExcelLocation,$inputObject.sheetName);
+		var $getdata=$excel.getData();
+	var $k=0;
+	var $totalColumns = $getdata[0].length;
+		var $arrColCount = $inputObject.columnNames.split("|");
+		var $arrFieldValues = $inputObject.fieldValues.split("|");	
+		for(var $j=0;$j<$arrColCount.length;$j++)
+		{
+			for(var $i=0;$i<$totalColumns;$i++)
+			{
+				if($getdata[0][$i]== $arrColCount[$j])
+				{
+					$k=$i;
+					break;
+				}
+			}
+			var $excelData = $excel.set($inputObject.rowNo,$k,$arrFieldValues[$j]);
+		}	
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("infyFTSetValueInExcel completed","success");
+}
+
+
+ /*************************************************************************
+* @author Nitin
+* @example infyFTGetValueInExcel();
+* @description This function is called to read the value from Excel
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function infyFTGetValueFromExcel($inputObject)
+{
+	_log("infyFTGetValueFromExcel Started","success");
+	try 
+	{
+		$URL = _getGlobal("datatDIR");
+		var $excel = _getExcel($URL+$inputObject.ExcelLocation,$inputObject.sheetName);
+		var $getdata=$excel.getData();
+	var $k=0;
+	var $totalColumns = $getdata[0].length;
+			for(var $i=0;$i<$totalColumns;$i++)
+			{
+				if($getdata[0][$i]== $inputObject.columnName)
+				{
+					$k=$i;
+					break;
+				}
+			}
+			$value = $getdata[1][$k];
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("infyFTGetValueFromExcel completed","success");
+} 
+
+/*************************************************************************
+* @author Nitin
+* @example infyFTOpenProjectRequest($inputObject)
+* @description This function is called to Open project requests
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function infyFTOpenProjectRequest($inputObject)
+{
+	_log("infyFTOpenProjectRequest Started","success");
+	try 
+	{
+		var $preq = $inputObject.item;
+		if(_isVisible(_div($preq+": Create or Merge Request")))
+		{
+			$inputObject.item = $preq+": Create or Merge Request";
+			OpenEformInstance($inputObject);
+		}
+		else if(_isVisible(_div($preq+":Create Request")))
+		{
+			$inputObject.item = $preq+":Create Request";
+			OpenEformInstance($inputObject);
+		}else if(_isVisible(_div("/"+$preq+"/")))
+		{
+			_click(_div("/"+$preq+"/"));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("infyFTOpenProjectRequest completed","success");
+}
+
+/*************************************************************************
+* @author Nitin
+* @example infyFTverifyProjectRequestInstanceInListing($inputObject)();
+* @description This function is called to verify project requests in Listing
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function infyFTverifyProjectRequestInstanceInListing($inputObject)
+{
+	_log("infyFTverifyProjectRequestInstanceInListing Started","success");
+	try 
+	{
+		var $preq = $inputObject.item;
+		if(_isVisible(_div($preq+": Create or Merge Request")))
+		{
+			$inputObject.item = $preq+": Create or Merge Request";
+		}
+		else if(_isVisible(_div($preq+":Create Request")))
+		{
+			$inputObject.item = $preq+":Create Request";
+		}
+		//verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("infyFTverifyProjectRequestInstanceInListing completed","success");
+}

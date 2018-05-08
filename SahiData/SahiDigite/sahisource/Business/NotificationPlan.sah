@@ -1,0 +1,237 @@
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyNotificationPlan($inputObject)
+{
+	_log("modifyNotificationPlan Started","success");
+	try 
+	{
+		if($inputObject.operation === "disabled")
+		{
+			_assertTrue(_submit("Save").disabled);
+		}
+		else
+		{
+			setAllFields($inputObject);
+			_click(_submit("Save"));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyNotificationPlan Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example deleteNotificationPlan({ "item" : "abc"  });
+* @description This function is called to delete notification Plan
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function deleteNotificationPlan($inputObject)
+{
+	_log("deleteNotificationPlan Started","success");
+	try 
+	{
+		if($inputObject.operation === "disabled")
+		{
+			_assertTrue(_submit("Delete").disabled);
+		}
+		else
+		{ 
+			var $tableId = _table("QTP_ListTable");
+			_click(_link($inputObject.item));
+			_click(_submit("Delete"));
+			_expectConfirm("Are you sure you want to delete the selected Notification Plan?", true);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteNotificationPlan Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addUserLevelNotification($inputObject)
+{
+	_log("addUserLevelNotification Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+		
+		$inputObject.item = $inputObject.edt_title;
+		
+		verifyUserLevelNotificationListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addUserLevelNotification Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyUserLevelNotificationListing($inputObject)
+{
+	_log("verifyUserLevelNotificationListing Started","success");
+	try 
+	{
+		var $items = $inputObject.item.split(";");
+
+		var $tableId = _table("QTP_NotificationTable");
+			
+		for(var $i = 0 ; $i < $items.length ; $i++)
+		{
+	    	if($inputObject.operation === "Negative" )
+	    		_assertFalse(_isVisible(_cell($items[$i], _in($tableId))));
+	    	else 
+	    		_assertTrue(_isVisible(_cell($items[$i], _in($tableId))));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyUserLevelNotificationListing Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openNotificationPlan($inputObject)
+{
+	_log("openNotificationPlan Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openNotificationPlan Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyNotificationPlanDetails($inputObject)
+{
+	_log("verifyNotificationPlanDetails Started","success");
+	try 
+	{
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyNotificationPlanDetails Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewNotificationPlan($inputObject)
+{
+	_log("saveAndAddNewNotificationPlan Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_submit("saveandaddnew")));
+		}
+		else
+		{
+			_click(_link("de-icon-add"));
+			setAllFields($inputObject);
+			_click(_submit("saveandaddnew"));
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewNotificationPlan Completed","success");
+}
+
+/**
+ @Function Number:22
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function resetNotificationPlan($inputObject)
+{
+	_log("resetNotificationPlan Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_reset("reset")));
+		}
+		else
+		{
+			_click(_link("de-icon-add"));
+			setAllFields($inputObject);
+			_click(_reset("Reset"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resetNotificationPlan Completed","success");
+}
+

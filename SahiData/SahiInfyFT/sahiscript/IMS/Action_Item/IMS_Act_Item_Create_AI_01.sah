@@ -1,0 +1,503 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",-3,$dateObj);
+ var $previousDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",1500,$dateObj);
+ var $projendDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ $data = readDataFromCSV("IMS_Act_Item_Create_AI_01", "IMS/Action_Item");
+ $gen = readDataFromCSV("IMS_Act_Item_Common", "IMS/Action_Item");
+ 
+ var $t = _testcase("START"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Login to digite");//trying with wrong password
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.user_name = $data.Username01;
+ $inputObject.edt_loginid = $data.LoginID01;
+ $inputObject.edt_password = $data.Password01;
+ loginIntoDigite($inputObject); */
+
+ $t.end();
+ 
+ /**********************************************************************************************************
+ * Login with rite userID and password 
+ **********************************************************************************************************/ 
+
+ var $t = _testcase("TC_1", "Login to digite");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username11; //Nethra
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(300);
+ 
+ var $ProjectStartDate = _getText(_span("STARTDATE"));
+ var $ProjectEndDate = _getText(_span("ENDDATE"));
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to action item");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Fields visibility");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.icon = $data.icon;
+ clickAddIcon($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.CM_Name;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Source;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CM_Description;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Owner;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Assignee;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.percentage;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.status;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.DueDate;
+ InfyFTisVisibleN($inputObject);
+ 
+ $t.end();
+ 
+ /***************************************************************************************************
+ * checking mandatory fields
+ ****************************************************************************************************/
+ 
+ var $t = _testcase("TC_5", "checking mandatory fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ //$inputObject.lst_DN_Owner = $data.Username11;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Description in Details tab \n• Field Due Date in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.Desc;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Due Date in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert(); 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name1;
+ $inputObject.edt_CM_DUEDATE = $currentDate; //$data.duedate
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+  $t.end();
+  
+ var $t = _testcase("TC_6", "Date validation");  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ $inputObject.edt_CM_DUEDATE = $previousDate;
+ $inputObject.msgAlert = "ERROR: Action Item Due Date (" + $previousDate +") should be less than Project End Date ("+$ProjectEndDate+") and cannot be past date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ $inputObject.edt_CM_DUEDATE = $projendDate;
+ $inputObject.msgAlert = "ERROR: Action Item Due Date (" + $projendDate + ") should be less than Project End Date ("+$ProjectEndDate+") and cannot be past date.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+  $t.end();
+ 
+ /*****************************************************************************************************
+ * creating Action Item
+ ******************************************************************************************************/
+ 
+ var $t = _testcase("TC_7", "create action item");  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_DUEDATE = $endDate; 
+ ModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+  var $IDact =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $data.Assign_value;
+ verifyEformDetails($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.edt_DN_Source = $data.souce_value; //edt_field196
+ $inputObject.lst_DN_Assignee = $gen.Username11;//field199
+ ModifyEformInstance($inputObject);
+  
+ $t.end();
+ 
+ /****************************************************************************************************************
+ * verifying values for status, Assignee, percentage field and checking for status and percentage complete field
+ *****************************************************************************************************************/
+ 
+ var $t = _testcase("TC_8", "verifying values for status, Assignee, percentage field");  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $gen.Username11;
+ $inputObject.edt_DN_PercentageComplete = $data.percent_value;//field197
+ $inputObject.lst_DN_Status = $data.status_value;//lst_field198
+ verifyEformDetails($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_9", "checking for status and percentage complete field");  
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status0_value;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Status in Details tab \n";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ $inputObject = {};
+ $inputObject.edt_DN_PercentageComplete = $data.percentage1_value; //50%
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status1_value; //in-progress
+ verifyEformDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status2_value; //waiting
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_PercentageComplete = $data.percentage1_value; //50%
+ verifyEformDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status =  $data.Deferred; //deferred 
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_PercentageComplete = $data.percent_value;//0//percentage1_value; /50%
+ verifyEformDetails($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status =  $data.status3_value; //"Completed";deferred changed to completed...
+ ModifyEformInstance($inputObject);
+ 
+ _assertEqual(false, _button("Reopen").disabled);
+  
+ InfyFTreopenInstance();
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $gen.Username11;
+ $inputObject.edt_DN_PercentageComplete = $data.percent_value;
+ $inputObject.lst_DN_Status = $data.status_value;
+ verifyEformDetails($inputObject); 
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ /****************************************************************************************************
+ * checking Inbox of assignee 
+ *****************************************************************************************************/
+ 
+ var $t = _testcase("TC_10", "navigate to assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateAI;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "checking inbox of logged on user");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ /****************************************************************************************
+ * navigating to other user's to check the instance is presented in their inbox or not
+ *****************************************************************************************/
+ 
+ var $t = _testcase("TC_12", "navigate to assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username12; //User_DH
+ $inputObject.edt_loginid = $gen.LoginID12;
+ $inputObject.edt_password = $gen.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateAI;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact;
+ $inputObject.operation = $data.operation;
+ verifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2; //Team_r_testing_maint
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //action item
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDact;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ _clearLastAlert();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact; 
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $data.Assignee1_value;
+ $inputObject.msgAlert = "Assignee and Owner can only be self assign by users apart from Project Manager, Assignee and Owner.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ _clearLastAlert();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "checking new assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $gen.Username12;
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_PercentageComplete = $data.percentage1_value; //50%
+ ModifyEformInstance($inputObject);
+ 
+ clickReturn();
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateAI;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ /***********************************************************************************
+ * checking old assignee INBOX whether instance is appearing or not
+ ************************************************************************************/
+ 
+ var $t = _testcase("TC_14", "checking old assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateAI;
+ navigateTo($inputObject);
+
+ _wait(7000);
+ $inputObject = {};
+ $inputObject.item = $IDact;
+ $inputObject.operation = $data.operation;
+ verifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2; //Team_r_testing_maint
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDact;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact; 
+ OpenEformInstance($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.edt_DN_PercentageComplete = $data.percentage2_value; //100%
+ ModifyEformInstance($inputObject);  
+ 
+ _wait(8000);
+ _assertEqual(false, _button("Reopen").disabled);
+ _assertEqual(false, _button("Return").disabled);
+ 
+ $t.end();
+ 
+ /******************************************************************************************************
+ * once status is set as 100 instance should not appear in any one's inbox,so checking Assignee INBOX.
+ *******************************************************************************************************/
+ 
+ var $t = _testcase("TC_15", "checking assignee inbox");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username12; //User_DH
+ $inputObject.edt_loginid = $gen.LoginID12;
+ $inputObject.edt_password = $gen.Password12;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateAI;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact;
+ $inputObject.operation = $data.operation;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ /******************************************************************************************
+ *checking msg alert for assignee field
+ *******************************************************************************************/
+ var $t = _testcase("TC_16", "Login to Other user apart from PM and owner");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.Username13;
+ $inputObject.edt_loginid = $gen.LoginID13;
+ $inputObject.edt_password = $gen.Password13;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_18", "select project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2; //team isha
+ selectProject($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_19", "navigate to AI");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_20", "open instance");
+ $t.start();
+ 
+ $inputObject = {};//clearFilterButton-btnIconEl
+ $inputObject.span = $data.clearfilter;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDact;//"rule";
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $IDact; 
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000); 
+ InfyFTreopenInstance();
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $gen.Username11;
+ //$inputObject.msgAlert = "Assignee and Owner can only be self assign by users apart from Project Manager, Assignee and Owner.";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Assignee = $gen.Username13;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.lst_DN_Status =  $data.status3_value; //"Completed";deferred changed to completed...
+ ModifyEformInstance($inputObject); */
+ 
+ clickReturn();
+ _wait(1000);
+ 
+ $t.end();

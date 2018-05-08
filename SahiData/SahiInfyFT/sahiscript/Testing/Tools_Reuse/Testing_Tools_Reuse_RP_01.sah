@@ -1,0 +1,231 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Testing_Tools_Reuse_RP_01","Testing/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the Testing PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//3IPEROPS
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end(); 
+_click(_span("KEY_BUTTON_Add-btnIconEl"));
+
+var $t = _testcase("TC_5", "Available fields in create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.span_Name = $data.Field1;//sname * :
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_6", "Verifying the mandatory fields of create Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Asset Name in Details tab \n• Field Asset Type in Details tab \n• Field License Type/Source in Details tab \n• Field Unit of Measure in Details tab \n• Field Estimated Effort Saving (P hrs) in Details tab \n• Field Size in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_7", "Create the Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data.Domain5;//Life Insurance
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;//Agents
+$inputObject.lst_DN_UnitofMeasure = $data.Unit5;//Others
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;//15
+$inputObject.lst_DN_AssetType = $data.AssetType5;//Business
+CreateInstance($inputObject);
+
+var $name1 = _getText(_span("CM_Name"));
+
+$t.end();
+
+var $t = _testcase("TC_8", "Verifying the 'Activity Log' in newly created asset ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//Activity Log
+SelectSegment($inputObject);
+
+var $activitylog = _getText(_row(18));
+
+_log( $activitylog );
+
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_9", "Verifying the Created instance in Reuse Planning list");
+$t.start();
+
+$inputObject = {};
+$inputObject.instanceName = $name1 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$t.end();
+
+clearFilterSettings();
+
+var $t = _testcase("TC_10", "Verifying the Not to take with same name of reuse planning");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name5;//Jonny
+$inputObject.lst_DN_Technology = $data.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data.Domain5;//Life Insurance
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;//15
+$inputObject.lst_DN_AssetType = $data.AssetType5;//Business
+$inputObject.msgAlert = " "+ $name1 + " already exists with same version number." + "";
+CreateInstance($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_11", "Creating the instance with another name");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name6;//Sunny
+$inputObject.lst_DN_Technology = $data.Technology5;//JAVA
+$inputObject.lst_DN_LicenseType = $data.LicenseType5;//Infosys IP
+$inputObject.lst_DN_Domain = $data.Domain5;//Life Insurance
+$inputObject.lst_DN_SubDomain = $data.SubDomain5;//SD1
+$inputObject.lst_DN_UnitofMeasure = $data.Unit5;//Unit1
+$inputObject.edt_DN_AssetVersion = $data.AssetVersion5;//10
+$inputObject.edt_DN_Size = $data.Size5;//20
+$inputObject.edt_DN_EstimatedEffortSavingP = $data.EstimatedEffort5;//15
+$inputObject.lst_DN_AssetType = $data.AssetType5;//Business
+CreateInstance($inputObject);
+
+var $name2 = _getText(_span("CM_Name"));
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_12", "Verifying the instance in listing");
+$t.start();
+
+$inputObject = {};
+$inputObject.instanceName = $name2;
+InfyFTverifyInstanceInListing($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_13", "Verifying the instance Unique name in listing");
+$t.start();
+
+
+if ($name1 != $name2)
+{
+  _log(" Asset names are unique");
+}
+
+$t.end();
+ 
+var $t = _testcase("TC_14", "To repeat the script execution ");
+$t.start();
+
+$name2 = "Jonny";
+$name1 = "Sunny";
+
+$inputObject = {};
+$inputObject.instanceName = $name2 ;
+InfyFTverifyInstanceInListing($inputObject);
+
+$inputObject = {};
+$inputObject.item = $name2;
+OpenEformInstance($inputObject);
+
+$inputObject = {}; DeleteEformInstance($inputObject);
+
+_wait(500);
+
+$inputObject = {};
+$inputObject["edt_searchTextBox-inputEl"] = $name1;
+setAllFields($inputObject);
+ 
+_keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+
+$inputObject = {};
+$inputObject.item = $name1;
+OpenEformInstance($inputObject);
+
+
+$inputObject = {}; DeleteEformInstance($inputObject);
+
+
+
+$t.end();
+
+/*_click(_button("Delete"));
+_expectConfirm("This work-item will no longer be available", true);
+_click(_button("Ok"));*/
+
+
+
+
+
+
+
+
+
+
+
+
+

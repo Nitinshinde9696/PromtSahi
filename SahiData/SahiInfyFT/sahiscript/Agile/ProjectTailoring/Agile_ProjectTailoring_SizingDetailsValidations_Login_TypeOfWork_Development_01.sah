@@ -1,0 +1,319 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("Agile_ProjectTailoring_SizingDetailsValidations","Agile/ProjectTailoring"); 
+ 
+ var $t = _testcase("Login", "Login as Project Manager");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name;
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;
+ selectProject($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Navigating to Sizing details and checking the tabs");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.sizingDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblCustomerManaged;//Customer Managed*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTypeOfWork;//Type of Work*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblALMTool;//ALM Tool*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSizingTechniques;//Sizing Technique*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAgileMethods;//Agile Methods / Practices
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTimesheetModule;//Timesheet Module*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAppDefectTracking;//Application for Defects Tracking*
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = "--None--";//Type of Work
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowALM;
+ $inputObject.colNo = $data.colALM;
+ $inputObject.fieldValues = $data.fieldValuePro;//ALM tool
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSizingDetails;
+ $inputObject.rowNo = $data.rowSizingTechnique;
+ $inputObject.colNo = $data.colSizingTechnique;
+ $inputObject.fieldValues = "--None--";//Sizing technique
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOthers;
+ $inputObject.rowNo = $data.rowAgileMethods;
+ $inputObject.colNo = $data.colAgileMethods;
+ $inputObject.fieldValues = "--None--";// Agile Methods/Practices
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOthers;
+ $inputObject.rowNo = $data.rowTImesheetModule;
+ $inputObject.colNo = $data.colTimesheetModule;
+ $inputObject.fieldValues = "--None--";//Timesheet Module
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOthers;
+ $inputObject.rowNo = $data.rowApplicationDefects;
+ $inputObject.colNo = $data.colApplicationDefect;
+ $inputObject.fieldValues = "--None--";//Application for Defects Tracking
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("New CR", "Customer Managed");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableTypeOfProject;
+ $inputObject.rowNo = $data.rowCustomermanaged;
+ $inputObject.colNo = $data.colCustomerManaged;
+ $inputObject.fieldValues = $data.fieldYes;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldValueOtherALM;//Other ALM Tool
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableTypeOfProject;
+ $inputObject.rowNo = $data.rowCustomermanaged;
+ $inputObject.colNo = $data.colCustomerManaged;
+ $inputObject.fieldValues = $data.fieldNo;
+ setSwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_02", "Selecting Type of work as Development");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = $data.fieldValueDev;//Development
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTypeOfWork;//Type of Work*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblALMTool;//ALM Tool*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSizingTechniques;//Sizing Technique*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAgileMethods;//Agile Methods / Practices
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTimesheetModule;//Timesheet Module*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAppDefectTracking;//Application for Defects Tracking*
+ InfyFTisVisible($inputObject);
+
+ //*** Extra 1 fields when type of work is selected as Development ***\\ 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblProjectLanguage;//Project Language
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowProjLang;
+ $inputObject.colNo = $data.colProjectLang;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValues;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowProjLang;
+ $inputObject.colNo = $data.colProjectLang;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValues;
+ $inputObject.fieldValues = $data.proLangFieldValues;//1 values
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowProjLang;
+ $inputObject.colNo = $data.colProjectLang;
+ $inputObject.fieldValues = $data.proLangFieldValues;
+ InfyFTverifySwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+
+ var $t = _testcase("Agile_ProjectTailoring_SizingDetailsValidations_Enhancement_Portal_Package_02");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_SizingDetailsValidations_Enhancement_Portal_Package_02.sah");
+ 
+ $t.end(); 
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Agile_ProjectTailoring_SizingDetailsValidations_Testing_Others_03");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_SizingDetailsValidations_Testing_Others_03.sah");
+ 
+ $t.end(); 
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Agile_ProjectTailoring_SizingDetails_FillingtheFields_ALMTool_Sizing_AgileMethods_04");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_SizingDetails_FillingtheFields_ALMTool_Sizing_AgileMethods_04.sah");
+ 
+ $t.end();  
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Agile_ProjectTailoring_SizingDetails_FillingtheFields_MandatoryFields_DM_BI_05");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_SizingDetails_FillingtheFields_MandatoryFields_DM_BI_05.sah");
+ 
+ $t.end();  
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Agile_ProjectTailoring_StatusReportFrequency_verifyRadioButtons_06");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_StatusReportFrequency_verifyRadioButtons_06.sah");
+ 
+ $t.end();  
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Agile_ProjectTailoring_ProjectSpecificMetrics_Adding_NegativeChecks_07");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_ProjectSpecificMetrics_Adding_NegativeChecks_07.sah");
+ 
+ $t.end();  
+ 
+ _wait(5000); 
+ 
+ var $t = _testcase("Agile_ProjectTailoring_PSM_ActivityCodeCustomizationValidations_08");
+ $t.start();
+ 
+ _include("Agile_ProjectTailoring_PSM_ActivityCodeCustomizationValidations_08.sah");
+ 
+ $t.end();  
+ 
+ _wait(5000);  
+ 

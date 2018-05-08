@@ -1,0 +1,210 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_Project_Tailoring_Data_Setup_TS_Proj_01", "IMS/Performance_Scorecard");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for SetUp - Project Tailoring
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+  
+ /*****************************************************************************
+ *  TestCase_8  : Stage is being marked as steady state
+ *****************************************************************************
+  
+ var $t = _testcase("TC_8_TS_1","Fromdate should not be Less than To Date of Previous Scorecard");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TicketDataSource = $data.TicketDataSource4;
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStageOfProject42;// Steady state
+ $inputObject.edt_DN_StartofSteadyState = $endDate;
+ $inputObject.msgAlert = "ERROR: The current stage is set to Steady State. Start date of Steady State cannot be set to future. Please change start date to today or past date.";
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ //var $CDdate = _getText(_textbox($currentDate));
+ 
+ $t.end();
+ 
+ /*****************************************************************************
+ *  TestCase_11  : Steady State Date Should be Always Greater than Project Start Date
+ *****************************************************************************
+ 
+ var $t = _testcase("TC_11_TS_1","Steady State Date Should be Always Greater than Project Start Date");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TicketDataSource = $data.TicketDataSource4;
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStageOfProject41;// Steady state
+ $inputObject.edt_DN_StartofSteadyState = $currentDate1;
+ $inputObject.msgAlert = "ERROR: Steady Start Date should be greater than Project Start Date";
+ InfyFTModifyEformInstance1($inputObject); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_TicketDataSource = $data.TicketDataSource4;
+ $inputObject.lst_DN_CurrentStageoftheProje = $data.CurrentStageOfProject42;// Steady state
+ $inputObject.edt_DN_StartofSteadyState = $currentDate;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ /**********Applicable Services**********/
+ 
+ $inputObject = {};//Applicable Services
+ $inputObject.segment_name = $data.SegmentName31;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tablename31;//Applicable Services
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo51;//3_chk
+ $inputObject.fieldValues = $data.fieldValues51;//True
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ /**********Applicable Technologies**********/
+  
+ $inputObject = {};//Applicable Technology
+ $inputObject.segment_name = $data.SegmentName32;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ _click(_link("Select Technology[2]"));
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//Technology Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo52;//2_chk
+ $inputObject.fieldValues = $data.fieldValues51;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ _wait(7000);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ /**********Applicable ITIL Process**********/
+ 
+ $inputObject = {};//Applicable ITIL Process
+ $inputObject.segment_name = $data.SegmentName33;
+ SelectSegment($inputObject);
+ 
+ _wait(300);
+ _click(_link("Select Process[2]"));
+ _wait(300);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52;//ITIL Process Selection
+ $inputObject.rowNo = $data.rowNo51;//9|14
+ $inputObject.colNo = $data.colNo52;//2_chk
+ $inputObject.fieldValues = $data.fieldValues51;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ /**********Project Specific Metrics**********/
+ 
+ $inputObject = {};//Project Specific Metrics
+ $inputObject.segment_name = $data.SegmentName34;
+ SelectSegment($inputObject);
+ 
+ _wait(3000);
+ _click(_link("Add Rows"));
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53; //Project Specific Metrics
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo53;//7|11|13|14|15|16
+ $inputObject.fieldValues = $data.fieldValues52;//Incident Management|Incident Productivity|Metric A|Number|Positive|Succes
+ setSwiftFormData($inputObject);  
+  
+ _wait(3000);
+ _click(_link("Add Rows[1]"));
+ _wait(3000);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName54; //Project Level Metrics
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo54;//2|3|4|5
+ $inputObject.fieldValues = $data.fieldValues53;//Metric B|ABAP Points|Positive|In Process
+ setSwiftFormData($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ /**********Applicable Metrics**********/
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName35;
+ SelectSegment($inputObject);
+ 
+ _wait(3000);
+ _click(_link("Select Metrics[2]"));
+ _wait(3000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName55;//Metrics Selection
+ $inputObject.rowNo = $data.rowNo52;//1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20
+ $inputObject.colNo = $data.colNo51;//3
+ $inputObject.fieldValues = $data.fieldValues51;//true
+ setSwiftFormData($inputObject);
+  
+ _wait(3000);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+   
+ /**********SLA Category**********/
+ 
+ $inputObject = {};//SLA Category
+ $inputObject.segment_name = $data.SegmentName36;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName56;//Category 1
+ $inputObject.rowNo = $data.rowNo500;//0
+ $inputObject.colNo = $data.colNo55;//1|2
+ $inputObject.fieldValues = $data.fieldValues54;//Priority|High
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000); 

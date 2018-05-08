@@ -1,0 +1,228 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Maint_Status_Report_Commitmnt_and_ProjSpcfMetrics_05","Maint/Status_Report"); 
+ 
+var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//Arjun.R02
+ $inputObject.edt_loginid = $data.LoginID1;//Arjun.R02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name1;//TJCSTMEP
+ OpenEformInstance($inputObject);
+ 
+  $t.end();
+ var $t = _testcase("TC_2", "Navigate to Status Report");
+ $t.start();
+
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+ 
+ var $t = _testcase("TC_3", "Check for available grids");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment3;//Commitments and Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tablenames;//Client Commitments
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Check for Client Commitments table and verify RYG status");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.theaders1;//Commitment Description;Due date;RYG Status;Remarks/ Details
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowno3;//2
+ $inputObject.colNo = $data.colno2;
+ $inputObject.fieldValues = $data.value10;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowno4;//2
+ $inputObject.colNo = $data.colno2;
+ $inputObject.fieldValues = $data.value10;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowno3;//2
+ $inputObject.colNo = $data.colno5;
+ $inputObject.fieldValues = $data.status;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;
+ $inputObject.rowNo = $data.rowno4;//2
+ $inputObject.colNo = $data.colno6;
+ $inputObject.fieldValues = $data.value1;
+ setSwiftFormData($inputObject);
+ $t.end();
+
+ var $t = _testcase("TC_4", "Check for Value add to client during the reporting period");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//"Value add to client during the reporting period";
+ $inputObject.rowNo = $data.rowno1;//"0";
+ $inputObject.colNo = $data.colno1;//"0_txt";
+ $inputObject.fieldValues = $data.value1;//"test";
+ //setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "Check for Project Specific Metric");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.theaders2;
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowno2;//"1|2|3|4|5|6";
+ $inputObject.colNo = $data.colno2;//"1_lbl";
+ $inputObject.fieldValues = $data.value2;//"AnRsrch|MajE|BFix|MinE|OReq|TReq";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowno2;//"1|2|3|4|5|6";
+ $inputObject.colNo = $data.colno3;//"2_lbl";
+ $inputObject.fieldValues = $data.value3;//"14.00|44.00|21.00|32.00|43.00|54.00";
+ verifySwiftFormData($inputObject);
+ 
+ //Mandatory field checking
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowno2;//"1|2|3|4|5|6";
+ $inputObject.colNo = $data.colno4;//"3_edt";
+ $inputObject.fieldValues = $data.value4;//"23.00|28.00|16.00|28.00|48.00|44.00";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _assertEqual("Reason for deviation is mandatory when deviation is >= -10 or +10", _lastAlert());
+ 
+ //valid data
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.rowNo = $data.rowno2;//"1|2|3|4|5|6";
+ $inputObject.colNo = $data.colno4;//"3_edt";
+ $inputObject.fieldValues = $data.value5;//"15.00|43.00|23.00|33.00|44.00|50.00";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ //Check for goals 
+ _wait(5000);
+ 
+ var $argoal = _getText(_span(0, _in(_cell(0, _under(_cell("Goal"), 20), _near(_cell("1", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $argoal1 = (parseFloat($argoal)).toFixed(1);
+ var $majgoal = _getText(_span(0, _in(_cell(0, _under(_cell("Goal"), 20), _near(_cell("2", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $majgoal1 = (parseFloat($majgoal)).toFixed(1);
+ var $bfgoal = _getText(_span(0, _in(_cell(0, _under(_cell("Goal"), 20), _near(_cell("3", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $bfgoal1 = (parseFloat($bfgoal)).toFixed(1);
+ var $mingoal = _getText(_span(0, _in(_cell(0, _under(_cell("Goal"), 20), _near(_cell("4", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $mingoal1 = (parseFloat($mingoal)).toFixed(1);
+ var $orgoal = _getText(_span(0, _in(_cell(0, _under(_cell("Goal"), 20), _near(_cell("5", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $orgoal1 = (parseFloat($orgoal)).toFixed(1);
+ var $trgoal = _getText(_span(0, _in(_cell(0, _under(_cell("Goal"), 20), _near(_cell("6", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $trgoal1 = (parseFloat($trgoal)).toFixed(1);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//"nodeIcon11";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//"Goals";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//"Project Specific Goals";
+ $inputObject.byColRowName="Yes";
+ $inputObject.rowNo = $data.pmrow1//"Analysis and Research|Major Enhancement|Bug Fix|Minor Enhancement|Other Request|Testing Request";
+ $inputObject.colNo = $data.pmcol1;//"Goal[6]_edt";
+ $inputObject.fieldValues = $argoal1 +"|"+ $majgoal1 +"|"+ $bfgoal1 +"|"+ $mingoal1 +"|"+ $orgoal1 +"|"+ $trgoal1;
+ //verifySwiftFormData($inputObject); 
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Status Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.instance1;//SRep2
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment3;//Commitments and Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ var $aract = _getText(_textbox(0, _in(_cell(0, _under(_cell("Actual"), 20), _near(_cell("1", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $majact = _getText(_textbox(0, _in(_cell(0, _under(_cell("Actual"), 20), _near(_cell("2", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ 
+ var $ardev = _getText(_span(0, _in(_cell(0, _under(_cell("Deviation"), 20), _near(_cell("1", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ var $majdev = _getText(_span(0, _in(_cell(0, _under(_cell("Deviation"), 20), _near(_cell("2", _in(_table(0, _in(_parentNode(_span("Project Specific Metric"), "DIV", 2))))))))));
+ 
+ 
+ var $arcalc = (parseFloat((($aract - $argoal)*100)/$argoal)).toFixed(2);
+ var $majcalc = (parseFloat((($majact - $majgoal)*100)/$majgoal)).toFixed(2);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = $data.rowname1;//"1|2";
+ $inputObject.colNo = $data.colname1;//"Deviation_lbl";
+ $inputObject.fieldValues = $arcalc +"|"+ $majcalc;
+ //InfyFTverifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ 

@@ -1,0 +1,110 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+var $projectbeyondStart = "1-Jan-2014"; //	30-Oct-2015   	30-Oct-2019  
+var $projectbeyondEnd = "1-Jan-2020";
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",2,$dateObj1);
+var $EndDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",7,$dateObj1);
+var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",8,$dateObj1);
+var $startDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",45,$dateObj1);
+var $sixweekDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+/* Release*/
+$data = readDataFromCSV("Agile_ReleaseAndSprint_Sprint_Duplicate_06","Agile/ReleaseAndSprint");
+$data1 = readDataFromCSV("Agile_ReleaseAndSprint_ReleaseDetailPage_01","Agile/ReleaseAndSprint");
+$data2 = readDataFromCSV("Agile_ReleaseAndSprint_SprintDetailPage_02","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Select Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.Project_name2;
+selectProject($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Navigating to Sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "click on add icon");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = $data.icon;
+clickAddIcon($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Duplicate Check");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data2.CM_Name;
+$inputObject.lst_DN_TypeOfWork = $data.Others;
+$inputObject.lst_DN_TypeofSprint1 = $data.Initiation;
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate;
+$inputObject.lst_CM_Release = $data1.CM_Name;//$data.CM_Release;
+$inputObject.txt_DN_DetailsifTypeofWorkisO = $data.Others;
+$inputObject.msgAlert = "Duplicate sprint (Name) cannot be created under the same release ("+$data1.CM_Name+"). Please provide another name for the sprint.";
+InfyFTModifyEformInstance1($inputObject);
+_expectConfirm("Once the type of sprint is selected as Others :\n 1. Type of Sprint cannot be changed later.\n 2. Sprint will not be a part of any Release.\nDo you want to continue?");
+
+$t.end();
+
+var $t = _testcase("TC_6", "Tpye of sprint is Others Check");
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_CM_Release = "--None--";
+$inputObject.lst_DN_TypeofSprint1 = $data.Others;
+InfyFTModifyEformInstance1($inputObject);
+_expectConfirm("Once the type of sprint is selected as Others :\n 1. Type of Sprint cannot be changed later.\n 2. Sprint will not be a part of any Release.\nDo you want to continue?");
+
+$inputObject = {};
+$inputObject.span_Name = $data.CM_ReleaseReadonly;
+$inputObject.cell_Name = $data.releasereadonly;
+InfyFTisReadOnly($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Others;
+$inputObject.cell_Name = $data.tpyeofsprintRead;
+InfyFTisReadOnly($inputObject);
+
+$t.end();

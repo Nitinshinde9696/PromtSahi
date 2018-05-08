@@ -1,0 +1,406 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Dev_Iteration_SizingDetails_Estimation_01", "Dev/Iteration");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",999,$dateObj);
+ var $endDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",1000,$dateObj);
+ var $endDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ /********************************************************************************************************
+ * Login 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//jyothi_rajan
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.projectName;//1300CTD //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to project tailoring");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1;//Iterations
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Sizing_Details;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.seg_Sizing_Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNoNEW;
+ $inputObject.fieldValues = $data.pt;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo; 
+ InfyFTnavigateTo($inputObject);
+ 
+ _wait(8000);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_4", " open iteration");
+ 
+ $t.start();
+ 
+ /* $inputObject = {};
+ $inputObject.span = $data.button;
+ InfyFTclick($inputObject); */
+
+ $inputObject = {};
+ $inputObject.item = "ITR57";//$createdIDx;
+ OpenEformInstance($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_5", "select segment sizing details and set dm and bi and check for service tables");
+ $t.start();
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Sizing_Details;
+ SelectSegment($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo00;
+ $inputObject.fieldValues = $data.lst_one11;//SET DM AND BI
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo001;
+ $inputObject.fieldValues = $data.lst_one12;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo6s;
+ $inputObject.fieldValues = $data.lst_one;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Service_Selection; //CHECK FOR 2 SU SERVICE TABLES
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Service_Selection2; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Sub; 
+ InfyFTisVisibleN($inputObject);
+
+ $t.end(); 
+  
+ var $t = _testcase("TC_6", "set backward FP and check for added,deleted line of code and modified line of code and set values");
+  
+ $t.start(); 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo00;
+ $inputObject.fieldValues = $data.lst_oneDM;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo001;
+ $inputObject.fieldValues = $data.lst_oneNewDevelopment;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo6s;
+ $inputObject.fieldValues = $data.lst_one;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Service_Selection; //CHECK FOR 2 SU SERVICE TABLES
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Language_List_as_per_PM_Plan;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo916;
+ $inputObject.fieldValues = $data.Added_LOC;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Language_List_as_per_PM_Plan;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo619;
+ $inputObject.fieldValues = $data.ModifiedorDeletedLOC;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Language_List_as_per_PM_Plan;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo619a;
+ $inputObject.fieldValues = $data.fieldValues31;
+ setSwiftFormData($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_7", "set backward FP and check for adding additional languages and loc");
+  
+ $t.start(); 
+  
+  $inputObject = {};
+ $inputObject.span = $data.Add;
+ InfyFTclick($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Add_Additional_Languages;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNo101;
+ $inputObject.fieldValues = $data.languageloc;//langauage|addedloc
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Add_Additional_Languages;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.languageloc1;
+ setSwiftFormData($inputObject);
+  _wait(5000);
+  $inputObject = {};
+ $inputObject.span = $data.Add;
+ InfyFTclick($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Add_Additional_Languages;
+ $inputObject.rowNo = $data.rowNo3;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.languageloc2;
+ setSwiftFormData($inputObject);
+  _wait(5000);
+   $inputObject = {};
+ $inputObject.span = $data.Add;
+ InfyFTclick($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Add_Additional_Languages;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.languageloc3;
+ setSwiftFormData($inputObject);
+  _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Add_Additional_Languages;
+ $inputObject.rowNo = $data.rowNod;
+ $inputObject.colNo = $data.colNod;
+ $inputObject.fieldValues = $data.languageloc4;
+ setSwiftFormData($inputObject);
+  _wait(5000);
+  
+   $inputObject = {};
+ $inputObject.link = $data.delete;
+ InfyFTclick($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+   $inputObject = {};
+ $inputObject.span_Name =  $data.Total_Backward_FP; 
+ InfyFTisVisibleN($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.Technology_Selection;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo  = $data.colNolbl;
+ $inputObject.disable = $data.TRUE;
+ InfyFTverifySwiftFormFieldDisabilityN($inputObject) 
+
+  $t.end(); 
+
+ /*****************IFPUG FP*************/
+ 
+  var $t = _testcase("TC_8", "set IFPUG FP and check for final adjusted fp");
+  
+  $t.start();
+  $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo6s;
+ $inputObject.fieldValues = $data.IFPUG_FP;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoy;
+ $inputObject.fieldValues = $data.Adjusted_Function_Points;//Adjusted Function Points
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32A;
+ setSwiftFormData($inputObject);
+ 
+ //_assertEqual("Error : Please enter a positive numeric value for Adjusted Function Points", _lastAlert())
+ 
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Adjusted Function Points";
+ InfyFTassertmessage($inputObject);
+   
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32cha;
+ setSwiftFormData($inputObject);
+ 
+ // _assertEqual("Error : Please enter a positive numeric value for Adjusted Function Points", _lastAlert())
+  
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Adjusted Function Points";
+ InfyFTassertmessage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Service_Selection; //CHECK FOR 2 SU SERVICE TABLES
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Sub; 
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.IFPUG_FP;
+ $inputObject.rowNo = $data.rowNo0;
+ $inputObject.colNo = $data.colNoh;
+ $inputObject.fieldValues = $data.fieldValues32;
+ setSwiftFormData($inputObject);
+ 
+ $t.end();
+   
+ var $t = _testcase("TC_9", "when sizing technique is others");
+ 
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Details;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo6s;
+ $inputObject.fieldValues = $data.Others;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo7A;
+ $inputObject.fieldValues = $data.fieldValues33A;
+ setSwiftFormData($inputObject);
+ 
+ //_assertEqual("Error : Please enter a positive numeric value for Size", _lastAlert())
+  
+ $inputObject = {}; 
+ $inputObject.msg = "Error : Please enter a positive numeric value for Size";
+ InfyFTassertmessage($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo7B;
+ $inputObject.fieldValues = $data.fieldValues33B;
+ setSwiftFormData($inputObject);
+ 
+ _assertEqual(" Error : Please enter valid UOM", _lastAlert())
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Others;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.fieldValues33;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+ _wait(9000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Sub; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.size; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name =  $data.UOM; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $t.end();

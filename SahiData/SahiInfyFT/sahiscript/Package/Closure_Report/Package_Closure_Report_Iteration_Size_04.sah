@@ -1,0 +1,88 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/TaskGrid.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Iteration_Size_04","Package/Closure_Report");
+ 
+/*
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Iteration");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "HIGH5";//$generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR54";//$data.iter1;//ITR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ */
+ 
+ var $t = _testcase("TC_2", "Adding the Sizing Details values");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = "Sizing Details";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "Sizing Technique*_lst";
+ $inputObject.fieldValues = "IFPUG FP";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = "1";
+ $inputObject.colNo = "Customization Sizing Technique*_lst";
+ $inputObject.fieldValues = "IFPUG FP";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.tableName = "Size Details";
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = "Technical Size|Functional Size";
+ $inputObject.colNo = "Size in UOM_edt";
+ $inputObject.fieldValues = "20|30";
+ InfyFTsetSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ 
+ 

@@ -1,0 +1,138 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+
+$data = readDataFromCSV("Maint_PrjCr_Mgr_Merge_field_Negative_08","Maint/PrjCr_Mgr");
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : 
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : 
+$inputObject.edt_password = $data.Password1;//Password1 :
+loginIntoDigite($inputObject);
+
+var $s = _testcase("TC_1.4"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Project Request_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+ 
+ _setValue(_textbox("searchTextBox-inputEl"),$data.Project_code4);
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_2.1"," verify Request");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTverifyProjectRequestInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Project_requestName4;
+ infyFTOpenProjectRequest($inputObject);
+ $s.end();
+
+
+$inputObject = {};
+$inputObject.ele_eformHeaderContent = $data.EHC;
+verifyAllFields($inputObject);
+
+
+$inputObject = {};
+$inputObject.true =1;
+$inputObject.button = " Save ";
+InfyFTcheckingButtons($inputObject);
+
+$inputObject = {};
+$inputObject.true =0;
+$inputObject.button = "Return";
+InfyFTcheckingButtons($inputObject);
+
+
+
+_setSelected(_select("DN_InitiateAction"),$data.IA);
+_wait(500);
+_assertVisible(_select("DN_ExecutionProjectCodeLi"));
+
+$inputObject = {};
+$inputObject.lst_DN_InitiateAction = $data.IA;
+ModifyEformInstance($inputObject);
+
+if(_isVisible(_select("DN_PeakTeamSize")))
+{
+	$inputObject = {};
+    $inputObject.lst_DN_PeakTeamSize = "--None--";
+    ModifyEformInstance($inputObject);
+
+}
+
+$inputObject = {};
+$inputObject.ele_DN_ExecutionProjectCodeLiLABEL = $data.epcl;
+verifyAllFields($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_ExecutionProjectCodeLi = "--None--";
+verifyAllFields($inputObject);
+
+
+ $inputObject = {};
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Reason for not choosing Recommended Action in Details tab \n• Field Peak Team Size in Details tab \n• Field Reason for Action Taken in Details tab";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ReasonfornotchoosingRe = "test";
+ $inputObject.txt_CM_Description = "test";
+ $inputObject.lst_DN_PeakTeamSize = $data.tps10;
+ ModifyEformInstance($inputObject);
+ 
+$inputObject = {};
+$inputObject.segment_name = $data.workflow_Segment7;// _link("Workflow")
+SelectSegment($inputObject);
+
+_assertEqual(_getText(_cell("CurrentWorkflowStage")),"Submitter");
+ 
+ $inputObject = {};
+$inputObject.workflow_stage = $data.stage8;
+$inputObject.multiple_member = $data.user_name9;
+WorkflowSet($inputObject);
+
+$inputObject = {};
+$inputObject.msgAlert ="ERROR: \n->SOW is mandatory for submitting the request. Please upload the attachment\n->Please mention the Execution Project Code with which you want to merge";
+InfyFTClickRoutewithComments($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_ExecutionProjectCodeLi = $data.MPCL;
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.workflow_Segment7;// _link("Workflow")
+SelectSegment($inputObject);
+
+_assertEqual(_getText(_cell("CurrentWorkflowStage")),"Submitter");
+ 
+$inputObject = {};
+$inputObject.workflow_stage = $data.stage8;
+$inputObject.multiple_member = "UnAssigned";
+WorkflowSet($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.workflow_Segment8;// _link("Details")
+SelectSegment($inputObject);
+
+$inputObject = {};
+
+$inputObject.txt_CM_Description ="";
+$inputObject.txt_DN_ReasonfornotchoosingRe ="";
+$inputObject.lst_DN_PeakTeamSize ="--None--";
+$inputObject.lst_DN_InitiateAction = "--None--";
+ModifyEformInstance($inputObject);

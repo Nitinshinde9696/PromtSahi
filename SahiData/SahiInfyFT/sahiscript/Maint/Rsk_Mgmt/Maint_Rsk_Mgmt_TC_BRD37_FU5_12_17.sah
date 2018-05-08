@@ -1,0 +1,70 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU5_12_17", "Maint/Rsk_Mgmt"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC = _testcase("TC_BRD37_FU5_12","Check for the condition to change the status of the Risk to Closed."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.chk_DN_RiskMaterialized = $data.field3;
+ $inputObject.txt_DN_ContingencyPlan = $data.contigencyPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4;
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ InfyFTConfirmExpect();
+   
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ var $CM_Name   =  _getText(_textbox("CM_Name"));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.field12;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status5;
+ $inputObject.msgAlert = "Risk cannot be Closed as there are open linked Issues.";
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ $TC.end();
+ 
+ 
+
+ 
+
+
+
+ 
+ 

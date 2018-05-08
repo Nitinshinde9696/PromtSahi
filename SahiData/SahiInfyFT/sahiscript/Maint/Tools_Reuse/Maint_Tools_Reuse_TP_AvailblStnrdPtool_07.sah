@@ -1,0 +1,135 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Maint_Tools_Reuse_TP_AvailblStnrdPtool_07","Maint/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1;// Arjun R02	
+$inputObject.edt_loginid = $data.LoginID1;// a_radhakrishnan
+$inputObject.edt_password = $data.Password1;// 111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects_home ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the MainPT project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//TXSHTP15
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating the Tools Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Navigating to Tools Tracking section through Major/Minor Enhancement ");
+$t.start();
+
+$inputObject={};
+$inputObject.item = $data.TPname1;//Tools Plan for Minor Enhancement
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.navigateTo6;//Tools Planning[2]
+SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Adding the asset from Available Standard Tools ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name7;//Available Standard Tools
+SelectSegment($inputObject);
+
+_wait(2000); 
+
+$inputObject = {};
+$inputObject.lst_DN_LCStage = $data.LCStage8;
+$inputObject.lst_DN_Technology = $data.Technology8;
+ModifyEformInstance($inputObject);
+_wait(1000); 
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name8;
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.tableName = "Add[1]";
+$inputObject.rowNo = $data.row0;
+$inputObject.colNo = $data.colNo8;
+$inputObject.fieldValues = $data.LCStage9;
+setSwiftFormData($inputObject);
+
+$inputObject ={}; 
+saveSwiftForm($inputObject);
+
+clickReturn();
+ 
+_wait(5000);
+$t.end();
+ 
+var $t = _testcase("TC_7", "Verifying the asset ");
+$t.start();
+
+_wait(3000);
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName10;
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;
+$inputObject.colNo = $data.colName8;
+$inputObject.fieldValues = $data.LCStage9;
+verifySwiftFormData($inputObject);
+
+$t.end();
+
+_wait(5000);
+ 
+var $t = _testcase("TC_9", "deleting the asset from Planned Tools list");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName10;
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;
+$inputObject.colNo = "Delete_chk";
+$inputObject.fieldValues = $data.LCStage9;
+setSwiftFormData($inputObject);
+
+$inputObject ={};
+saveSwiftForm($inputObject);
+
+/* $inputObject = {};
+$inputObject.tableName = $data.tableName10;//Planned Tools list 
+$inputObject.rowNo = "2";
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+
+$inputObject ={};
+saveSwiftForm($inputObject); */
+
+$t.end();

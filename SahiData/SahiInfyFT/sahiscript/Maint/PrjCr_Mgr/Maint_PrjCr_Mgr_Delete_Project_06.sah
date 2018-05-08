@@ -1,0 +1,124 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Maint_PrjCr_Mgr_Delete_Project_06","Maint/PrjCr_Mgr");
+
+ $deleteJSP = _getGlobal("JSP_URL");
+
+_navigateTo($deleteJSP,true);
+
+ var $t = _testcase("TC_1","First Project");
+ $t.start();
+ 
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code1;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+
+$t.end();
+var $t = _testcase("TC_2","2nd Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code2;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+
+var $t = _testcase("TC_3","3rd Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code3;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+
+var $t = _testcase("TC_4","Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code4;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+
+var $t = _testcase("TC_5","Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code5;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+
+var $t = _testcase("TC_6","Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code6;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+
+var $t = _testcase("TC_7","Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code7;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+
+var $t = _testcase("TC_8","Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code8;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();
+var $t = _testcase("TC_9","Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code9;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+$t.end();

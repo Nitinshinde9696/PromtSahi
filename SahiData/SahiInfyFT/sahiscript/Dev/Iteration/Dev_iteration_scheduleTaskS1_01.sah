@@ -1,0 +1,220 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ _include("Dev_iteration_scheduleTaskS0_00.sah"); //calling script 2 & 1 for navigation purpose 
+ 
+ /***********************************************************************
+ *Navigating to schedule Task
+ *Trying to create subtask under schedule Task
+ *creating subtask under schedule Task
+ *creating one more subtask under schedule Task
+ *deleting one subtask under schedule Task
+ ***********************************************************************/
+ 
+ /*************************schedule task ********************************/
+ 
+ $data1 = readDataFromCSV("Dev_iteration_scheduleTask1_01", "Dev/Iteration");
+ 
+ var $t = _testcase("TC_9", "Navigating to schedule Task");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.link = $data1.ScheduledTasks;//_click(_link("Scheduled Tasks"));
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing");
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CM_Name1;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Save;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.SaveandCheckin;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.Undo;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Undo;
+ InfyFTclick($inputObject); 
+ 
+ _wait(3500);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "Trying to create subtask under schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = " The plan is saved. You need to click on 'Save and Checkin' to checkin the plan.";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Plan is not baselined. Do you want to Baseline the plan on checkin?";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.msg = "Task Name is mandatory for each task. For the below listed Task Ids Task Name is not assigned. Please fill the Task Name " +  _getText(_listItem(10)) +" ";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Plan is not baselined. Do you want to Baseline the plan on checkin?";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msg = "Activity code is a mandatory field and it is not setup for the listed tasks. Please assign activity code for the below listed tasks. "  + _getText(_listItem(11)) +" ";
+ InfyFTassertExists($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_11", "creating subtask under schedule Task");
+ $t.start();
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name;//_doubleClick(_div($data1.item_name)); 38
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data1.subtaskname;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.activityTask;//_doubleClick(_div($data1.activityTask)); 44
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_12", "creating one more subtask under schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name;//_doubleClick(_div($data1.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data1.subtaskname;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.activityTask;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data1.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "deleting one subtask under schedule Task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.Edit;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data1.item_name;//_doubleClick(_div($data1.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.deletebutton;//_click(_span("deleteTaskButton-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.SaveandCheckin;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data1.ok2;
+ InfyFTclick($inputObject);  
+  
+ $t.end();

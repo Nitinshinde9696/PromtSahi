@@ -1,0 +1,329 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Testing_Prj_Admin_Testing_PT_01","Testing/Prj_Admin"); 
+ 
+ var $t = _testcase("TC_1.1.1", "Login");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_1.1.2", "Navigate");
+ $t.start();
+   
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Projects
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item  = $data.Project_name3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_1.1.3","Verify Request Type segment");
+ $t.start();
+
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.rtseg4;
+ InfyFTisVisible($inputObject);
+ 
+
+ $t.end();
+ var $t = _testcase("TC_2","Verify Request Type Segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.rtseg4;
+ SelectSegment($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.span_Name = $data.message_span4;// _span("eformHeaderContent")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_name = $data.message_span4;//_span("eformHeaderContent")
+ $inputObject.message = $data.message4;
+ InfyFTverifyValue($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkvrid10;
+ $inputObject.colNo  = $data.chkvcid8;//1
+ $inputObject.tableName  = $data.tbnm8;
+ $inputObject.fieldValues = $data.tbvnm8;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid10;
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  = $data.tbnm8;
+ $inputObject.disable = 1;
+ verifySwiftFormFieldDisability($inputObject);//only for project mgmt request
+
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//2
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  = $data.tbnm8;
+ $inputObject.disable = 0;
+ verifySwiftFormFieldDisability($inputObject); 
+
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//|2|3|4|5|7
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+  $inputObject = {};
+ $inputObject.rowNo = "2|3|4";//|2|3|4|5|7
+ $inputObject.colNo  = "1_unchk";//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//|2|3|4|5|7
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2|3|4";//|2|3|4|5|7
+ $inputObject.colNo  = "1_chk";//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.rtseg4;
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.rtseg4;
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.rowNo = "2|3|4";//|2|3|4|5|7
+ $inputObject.colNo  = "1_unchk";//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//|2|3|4|5|7
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = "2|3|4";//|2|3|4|5|7
+ $inputObject.colNo  = "1_chk";//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+  $t.end();
+  
+ var $t = _testcase("TC_5","Check Project Specific metrics segment");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Tailoring
+ navigateTo($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.rtseg4;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//|2|3|4|5|7
+ $inputObject.colNo  = $data.chkcid8;//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Psm24;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.msg+";"+$data.spm25+";"+$data.add26+";"+$data.del27+";"+$data.trk29+";"+$data.mn30+";"+$data.muom31+";"+$data.mtype32+";"+$data.md33;//   +";"+$data.rset34;// _span("Project Specific Metrics")
+ InfyFTisVisible($inputObject);
+
+ 
+ $t.end();
+var $t = _testcase("TC_5.","Check Add field of Project Specific metrics segment");
+ $t.start();
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.Psm24;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_name = 34;
+ $inputObject.edt_value = "1";
+ InfyFTverifyValue($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5.2","Check Mandatory fields of Project Specific metrics segment");
+ $t.start();
+ 
+ _clearLastAlert();
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid41;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.lst_trkvrfy41;//Track value
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid42;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.lst_mtypevrfy42;//Metric Type*
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid43;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.matric_name37;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = " There are mandatory fields which are not filled. Please fill before saving the form. ";
+ saveSwiftForm($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid44;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.lst_value41;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid43;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = "";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = " There are mandatory fields which are not filled. Please fill before saving the form. ";
+ saveSwiftForm($inputObject);
+
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid45;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.matric_value45;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = " There are mandatory fields which are not filled. Please fill before saving the form. ";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid46;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.matric_value46;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = " There are mandatory fields which are not filled. Please fill before saving the form. ";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid41;
+ $inputObject.colNo  = $data.chkcid47;
+ $inputObject.tableName  = $data.tbnm41;
+ $inputObject.fieldValues = $data.matric_value47;
+ setSwiftFormData($inputObject); 
+  
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.tblname = "Track";
+ $inputObject.row_id =2;
+ $inputObject.col_id=0;
+ $inputObject.btnSave = "yes";
+ InfyFTDeleteRows($inputObject);
+ 
+ $t.end();
+ var $t = _testcase("TC_5.5","Negative part");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.rtseg4;
+ SelectSegment($inputObject);
+  
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//|2|3|4|5|7
+ $inputObject.colNo  = $data.unchkcid8;//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rowNo = $data.chkrid9;//|2|3|4|5|7
+ $inputObject.colNo  = $data.unchkcid8;//1
+ $inputObject.tableName  =$data.tbnm8;
+ $inputObject.fieldValues = "true";
+ verifySwiftFormData($inputObject);
+   
+ $t.end();
+ 
+ 

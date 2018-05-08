@@ -1,0 +1,400 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Dev_genericcsv_ToolsPlanning_ToolsTracking","Dev/Tools_Reuse");
+ $data = readDataFromCSV("Dev_Tools_Reuse_FLW516_ToolsTracking_addTools_03","Dev/Tools_Reuse");
+
+  
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",0,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+
+ var $t = _testcase("TC_3", "Navigating to Tools Tracking for Iterations");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "ITR";
+  infyFTGetValueFromExcel($inputObject);
+  $ITR_Id  = $value;
+
+$inputObject = {};
+$inputObject.item = $ITR_Id;
+OpenEformInstance($inputObject);
+  
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment6;//Tools Tracking
+ SelectSegment($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_4", "Checking for Tools Tracking segment details"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $generic.link1;//Add from PRIME
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $generic.link2;//Add Standard Tools
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $generic.link3;//Add Planned Tools
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1;//Tools Tracking
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.theaders1;//Delete;Tool Name;LC Stage;Purpose;Tool Type;Effort Savings;Estimated Effort;Actual effort;Savings factored in estimates;Estimated Effort Savings (P hrs);Actual Effort Savings (P hrs)
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table2;//Tools Summary
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.theaders2;//Total Estimated Effort Savings (P hrs);Total Indicative savings (P hrs);Total Actual saving (P hrs)*;Remarks
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5", "Adding Tools from Add Standard Tools"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $generic.tlsegment4;//Search Criteria
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $generic.tlsegment5;//Search Output
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.name1;//Name
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.lcstage1;//LC Stage
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tech1;//Technology
+ InfyFTisVisible($inputObject); 
+ 
+/*  $inputObject = {};
+ $inputObject.lst_DN_LCStage = $data.lcstage2;//Coding;High Level Design;Coding
+ verifyAllFields($inputObject);
+ */
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Verifying the Search Output segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = $data.lcstage3;//Coding
+ $inputObject.lst_DN_Technology = $data.tech2;//Billing
+ ModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment5;//Search Output
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1]
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname1;//Tool Name_lbl
+ $inputObject.fieldValues = $data.toolname1;//Quest Code Tester
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1]
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname2;//LC Stage_lbl
+ $inputObject.fieldValues = $data.lcstage3;//Coding
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1]
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname3;//Purpose_lbl
+ $inputObject.fieldValues = $data.purpose1;//Analysis
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1]
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname4;//Technology_lbl
+ $inputObject.fieldValues = $data.tech2;//Billing
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1]
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname5;//Effort Savings
+ $inputObject.fieldValues = "3";
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "Adding Tool from Search Output segment");
+ $t.start();
+ 
+ _wait(3000);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1] 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname6;//Add[1]_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ _wait(1000);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+  
+ var $t = _testcase("TC_8", "Verifying the added tool");
+ $t.start();
+ 
+ _wait(1000);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname_tool_name;//Tool Name_lbl
+ $inputObject.fieldValues = $data.toolname1;//Quest Code Tester
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_9", "Trying to add the same Tool again");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.link2;//Add Standard Tools
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_LCStage = $data.lcstage3;//High Level Design
+ $inputObject.lst_DN_Technology = $data.tech2;//Mac OS X
+ ModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment5;//Search Output
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add[1] 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname6;//Add_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ _wait(2000);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_10", "Checking for estimated and actual savings value based on efforts");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname7;//Savings factored in estimates_lst
+ $inputObject.fieldValues = $data.value1;//Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname8;//Estimated Effort Savings (P hrs)_lbl
+ $inputObject.fieldValues = "0.00";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname9;//Actual Effort Savings (P hrs)_lbl
+ $inputObject.fieldValues = "0.00";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname7;//Savings factored in estimates_lst
+ $inputObject.fieldValues = $data.value2;//No
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname8;//Estimated Effort Savings (P hrs)_lbl
+ $inputObject.fieldValues = "0.24"
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname9;//Estimated Effort Savings (P hrs)_lbl
+ $inputObject.fieldValues = "0.00";
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_11", "Checking for Tools Summary table");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Tools Summary
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = "Total Estimated Effort Savings (P hrs)"
+ $inputObject.colNo = "Total Estimated Effort Savings (P hrs)_lbl"
+ $inputObject.fieldValues = "0.24";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Tools Summary
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = "Total Indicative savings (P hrs)"
+ $inputObject.colNo = "Total Indicative savings (P hrs)_lbl"
+ $inputObject.fieldValues = "0.00";
+ verifySwiftFormData($inputObject); 
+ _wait(500);
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Tools Summary
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = "Total Actual saving (P hrs)*"
+ $inputObject.colNo = "Total Actual saving (P hrs)*_edt"
+ $inputObject.fieldValues = "0.00";
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Tools Summary
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = "Remarks"
+ $inputObject.colNo = "Remarks_txt"
+ $inputObject.fieldValues = "Remarks";
+ setSwiftFormData($inputObject)
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "Verifying the added tool in Tools Planning and deleting it");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo4;//Tools Planning
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $generic.topl1;//Tools plan for Iterations
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment2;//Tools Planning[2]
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//	
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.toolname1;//$data.rowname1;//1
+ $inputObject.colNo = $data.colname_tool_name;//Tool Name_lbl
+ $inputObject.fieldValues = $data.toolname1;//AHS-NPS_Integration_Tool
+ verifySwiftFormData($inputObject);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_12", "Deleting the added tool from Tools Tracking");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo5;//Iterations
+ InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $ITR_Id;
+OpenEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.tlsegment6;//Tools Tracking
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Tools Tracking 
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowname1;//1
+ $inputObject.colNo = $data.colname10;//Delete_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+  $t.end();
+ 
+ 
+ 
+ 
+ 

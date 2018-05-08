@@ -1,0 +1,128 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ var $Date1 = new Date();
+ var $presentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($Date1);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",30,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("Agile_statusReport_SummaryOfSprints_06", "Agile/StatusReport");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ var $TC18 = _testcase("TC 18.1 and 18.2","Summary of Sprints tab"); 
+ $TC18.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.segmentSummaryOfsprints;
+ InfyFTisVisible($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentSummaryOfsprints;//Summary of Sprints
+ SelectSegment($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.summarySprintsLabels;
+ InfyFTisVisible($inputObject);  
+ 
+ _wait(2000);
+ 
+ $TC18.end();
+
+ var $TC20 = _testcase("TC 20.1 and 20.4","Summary of Sprints tab"); 
+ $TC20.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.summarySprintsLabels;
+ InfyFTisVisible($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.rowNSprints;
+ $inputObject.colNo = $data.colSprintN;
+ $inputObject.fieldValues = $data.fieldValueN;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.rowNSprints1;
+ $inputObject.colNo = $data.colSprintN;
+ $inputObject.fieldValues = $data.fieldValueN1;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.rowNASprints;
+ $inputObject.colNo = $data.colSprintN;
+ $inputObject.fieldValues = $data.fieldValueNA;
+ verifySwiftFormData($inputObject); 
+ 
+ _wait(5000);
+
+ $TC20.end();
+ 
+ var $TC21 = _testcase("TC 21.1 and 21.2","Sprint ID"); 
+ $TC21.start();  
+ 
+ if(_isVisible(_span("SPR1")))
+ {
+ 
+  _wait(2000);
+  
+  _click(_span("SPR1"));
+  
+  _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popupID1
+ $inputObject.span_Name = $data.labelsprintID;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(2000);
+ 
+ _popup("Sprint : Details (SPR1-S708)")._click(_button("Return"));
+ 
+ _wait(5000);
+ 
+ }
+ 
+ $TC21.end();
+ 

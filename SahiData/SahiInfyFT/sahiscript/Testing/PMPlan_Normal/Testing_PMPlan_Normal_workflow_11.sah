@@ -1,0 +1,94 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data1 = readDataFromCSV("Testing_PMPlan_Normal_workflow_11","Testing/PMPlan_Normal"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkWrkFlow;// _InfyFTclick(_link("Workflow"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data1.reviewer;
+ $inputObject.workflow_stage = $data1.workflow_stage1;//1
+ WorkflowSet($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data1.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data1.reviewer;
+ $inputObject.edt_loginid = $data1.reviewer;
+ $inputObject.edt_password = $data1.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data1.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkWrkFlow;// _InfyFTclick(_link("Workflow"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.multiple_member = $data1.approver;
+ $inputObject.workflow_stage = $data1.workflow_stage2;//2
+ WorkflowSet($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data1.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ logOut();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data1.approver;
+ $inputObject.edt_loginid = $data1.approver;
+ $inputObject.edt_password = $data1.Password2;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data1.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.linkWrkFlow;// _InfyFTclick(_link("Workflow"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data1.DN_ClosingComments7;
+ InfyFTClickRoutewithComments($inputObject); 
+ 
+ _wait(2000);

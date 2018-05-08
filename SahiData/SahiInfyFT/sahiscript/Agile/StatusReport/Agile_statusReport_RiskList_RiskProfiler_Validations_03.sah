@@ -1,0 +1,214 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ var $Date1 = new Date();
+ var $presentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($Date1);
+ 
+ $data = readDataFromCSV("Agile_statusReport_RiskList_RiskProfiler_Validations_03", "Agile/StatusReport");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+  
+ 
+ var $TC7 = _testcase("TC 7.1 to 7.6","Risk List validations"); 
+ $TC7.start();  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tableRiskList;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.riskListlabels;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToRisk;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.riskAdd;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.riskName;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory;
+ $inputObject.txt_CM_Description = $data.riskDescription;
+ $inputObject.lst_DN_Probability = $data.riskProbability;
+ $inputObject.lst_DN_Impact = $data.riskImpact;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.riskDays;
+ $inputObject.txt_DN_MitigationPlan = $data.fieldValueTest;
+ $inputObject.edt_DN_RiskOwner = $data.Username1;
+ $inputObject.lst_DN_ImpactTo = $data.riskImpact1;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000); 
+ 
+ if(_isVisible(_span("RiskExposure")))
+ {
+ var $Exposure = _isVisible(_span("RiskExposure"));
+ 
+ }
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskList;
+ $inputObject.rowNo = $data.rowRisk;
+ $inputObject.colNo = $data.colriskDescription;
+ $inputObject.fieldValues = $data.riskDescription;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskList;
+ $inputObject.rowNo = $data.rowRisk;
+ $inputObject.colNo = $data.colProbability;
+ $inputObject.fieldValues = $data.riskProbability;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskList;
+ $inputObject.rowNo = $data.rowRisk;
+ $inputObject.colNo = $data.colImpact;
+ $inputObject.fieldValues = $data.riskImpact;
+ verifySwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskList;
+ $inputObject.rowNo = $data.rowRisk;
+ $inputObject.colNo = $data.colExposure;
+ $inputObject.fieldValues = $Exposure;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskList;
+ $inputObject.rowNo = $data.rowRisk;
+ $inputObject.colNo = $data.colMitigationPlan;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ verifySwiftFormData($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableRiskList;
+ $inputObject.rowNo = $data.rowRisk;
+ $inputObject.colNo = $data.colShowDM;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ logOut();
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.UserNameDM;
+ $inputObject.edt_loginid = $data.LoginDM;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentRiskIssues;//Risks Issues and Complaints
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.rowRisk;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $TC7.end(); 
+ 
+ var $TC8 = _testcase("TC 8.1 to 8.4","Risk List validations"); 
+ $TC8.start();  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.spanShowDm;
+ InfyFTassertNotVisible($inputObject)
+ 
+ _wait(2000);
+ 
+ $TC8.end();

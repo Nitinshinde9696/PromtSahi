@@ -1,0 +1,177 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+
+
+ $data = readDataFromCSV("IMS_QAPlan_SQA_Reports03", "IMS/QA_Plan");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TS_01","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $t.end(); 
+ 
+ var $t = _testcase("TS_02","Navigate to Reports");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $TC = _testcase("TC No 18","Checking for 3 available reports."); 
+ $TC.start();
+ 
+ var $t = _testcase("TS_03","Check Reports");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoReport;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.QAAndFDReport;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.QADueReport;
+ InfyFTisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_04","Click Report Link Fields");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.NoReportLink;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.reportSeg;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ProjectCode;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ProjectName;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.StartDate;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.EndDate;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.CreatedDate;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ElapsedDay;
+ InfyFTisVisible($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.QAAndFDReportLink;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.reportSeg;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Project;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.QAFDID;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.QAFDName;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.WorkflowQueue;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Owner;
+ InfyFTisVisible($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.QADueReportLink;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.reportSeg;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.RevActPldDate;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Project;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ID;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Name;
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.TypeOfRevAct;
+ InfyFTisVisible($inputObject);
+ 
+ $TC.end();

@@ -1,0 +1,213 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/TaskGrid.sah");
+ _include("../../../sahisource/Business/ECRGoals.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Iteration_Scheduled_Task_02","Package/Closure_Report");
+ /*
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",2,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR3";//$data.iter1;//ITR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ */ 
+ var $t = _testcase("TC_2", "Adding scheduled task from schedule");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment14;//Schedule
+ SelectSegment($inputObject);
+ 
+ _wait(9000);
+ 
+ // *****ADDING SUBPROJECT*****
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.span = $data.addIteration;//KEY_Link_New_item-btnIconEl
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.edt_CM_Name = $data.subname1;//subtest
+ $inputObject.lst_isPackageDigiteStart = $data.schedmode1;//STaRT
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $subId = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ //*****ADDING SCHEDULED TASK*****
+ $inputObject = {};
+ $inputObject.popup_name =$generic.popup_name4;//newListing__1
+ $inputObject.segment_name = $generic.segment15;//Scheduled Tasks
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ InfyFTcheckOutProjectInGridForPopup($inputObject);
+ 
+ _wait(1000);
+ 
+ var $baseTaskID = $subId+"_TSK1";
+
+  _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.span= $data.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.item_name = $data.item_name1;//x-grid-cell-inner [18]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data.taskname1;//CRep
+ setAllFields($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.item_name = $data.activityTask;//x-grid-cell-inner [24]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.actcode1;//PCD
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.item_name = $data.Pland_Start;//x-grid-cell-inner [20]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_PREF_ST[1]"] = $StartDate;
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name4;//newListing__1
+ $inputObject.item_name = $data.Pland_Finish;//x-grid-cell-inner [21]
+ InfyFTdoubleclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_PREF_FN[1]"] = $EndDate;
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name4;//newListing__1
+ InfyFTcheckInProjectFromGrid($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name4;//newListing__1
+ InfyFTReturnPopUp($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Iteration Goals", "Iteration Goals Data Setup for the metrics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.segment_name = $generic.segment20;//Schedule
+ SelectSegment($inputObject);
+ 
+ //Adding rows for COQ, Cycle Time Deviation,Schedule Deviation
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.link = "Add Rows";
+ InfyFTclick($inputObject);
+ 
+  _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.link = "Add Rows";
+ InfyFTclick($inputObject);
+ 
+  _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.link = "Add Rows";
+ InfyFTclick($inputObject);
+ 
+  _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName ="Iteration Goals";
+ $inputObject.rowNo = "/RowIndexLeft/[1]|/RowIndexLeft/[2]|/RowIndexLeft/[3]";
+ $inputObject.colNo = "Metric Name_lst";
+ $inputObject.fieldValues = "COQ|Cycle Time(Deviation)|Schedule Deviation";
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ //Setting the Baseline value
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName ="Iteration Goals";
+ $inputObject.rowNo ="Quality - Effort|Schedule Adherence|Overall Defect Injection Rates - Effort|Package Productivity - IFPUG FP|Customization Productivity - IFPUG FP|Quality - IFPUG FP|Productivity - IFPUG FP|/RowIndexLeft/[1]|/RowIndexLeft/[2]|/RowIndexLeft/[3]"; 
+ $inputObject.colNo = "Baseline Value_edt|Percent Improvement_edt";
+ $inputObject.fieldValues = "1|1|2|1|3|1|4|1|5|1|6|1|7|1|8|1|9|1|2|3";
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $generic.popup_name2;//newListing
+ InfyFTsaveSwiftForm($inputObject);
+
+  $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 

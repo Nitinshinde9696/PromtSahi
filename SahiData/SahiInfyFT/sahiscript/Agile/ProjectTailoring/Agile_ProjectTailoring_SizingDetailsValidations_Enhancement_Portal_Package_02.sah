@@ -1,0 +1,284 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data = readDataFromCSV("Agile_ProjectTailoring_SizingDetailsValidations","Agile/ProjectTailoring"); 
+ 
+ var $t = _testcase("TC_03", "Selecting Type of work as Enhancement/Bug Fixes Technology");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = $data.fieldValueenh;//Enhancement/Bug Fixes Technology
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTypeOfWork;//Type of Work*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblALMTool;//ALM Tool*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSizingTechniques;//Sizing Technique*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAgileMethods;//Agile Methods / Practices
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTimesheetModule;//Timesheet Module*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAppDefectTracking;//Application for Defects Tracking*
+ InfyFTisVisible($inputObject);
+
+ //*** Extra 1 fields when type of work is selected as Enhancement/Bug fixes ***\\ 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblEnhbugf;//Enhancement/Bug Fixes Technology
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowenhbug;
+ $inputObject.colNo = $data.colenhbug;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValues2;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply2;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowenhbug;
+ $inputObject.colNo = $data.colenhbug;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValues2;
+ $inputObject.fieldValues = $data.fieldValueenh1;
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply2;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_04", "Selecting Type of work as Portal and content management");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = $data.fieldPortalContent;//Portal and Content Management
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTypeOfWork;//Type of Work*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblALMTool;//ALM Tool*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSizingTechniques;//Sizing Technique*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAgileMethods;//Agile Methods / Practices
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTimesheetModule;//Timesheet Module*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAppDefectTracking;//Application for Defects Tracking*
+ InfyFTisVisible($inputObject);
+
+ //*** Extra 2 fields when type of work is selected as Portal and Content Management ***\\ 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.fieldProjectTechnology;//Project Technology
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblPortalDevelopement;//Type of Portal Development
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.fieldProjectTechnology;
+ $inputObject.colNo = $data.colProjectTech;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValues1;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply1;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.fieldProjectTechnology;
+ $inputObject.colNo = $data.colProjectTech;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValues1;
+ $inputObject.fieldValues = $data.fieldPortalServer;
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply1;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ //Type of Portal Development
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypePortalDevelopment;
+ $inputObject.colNo = $data.rowTypePortalDevelopment;
+ $inputObject.fieldValues = $data.fieldCodeIntensive;//Code Intensive
+ setSwiftFormData($inputObject); 
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_05", "Selecting Type of work as Package or Product");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.rowTypeOfWork;
+ $inputObject.colNo = $data.colTypeOfWork;
+ $inputObject.fieldValues = $data.fieldValuePackage;//Package or Product
+ setSwiftFormData($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTypeOfWork;//Type of Work*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblALMTool;//ALM Tool*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblSizingTechniques;//Sizing Technique*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAgileMethods;//Agile Methods / Practices
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblTimesheetModule;//Timesheet Module*
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblAppDefectTracking;//Application for Defects Tracking*
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000); 
+ 
+ //*** Extra 2 fields when type of work is selected as Package or Product ***\\  
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.lblProjectPackage;//Project Package
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.lblProjectPackage;
+ $inputObject.colNo = $data.colProjectPackage;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValue5;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply5;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableNatureOfWork;
+ $inputObject.rowNo = $data.lblProjectPackage;
+ $inputObject.colNo = $data.colProjectPackage;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject) 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data.tableSelectValue5;
+ $inputObject.fieldValues = $data.fieldValuesariba;
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply5;
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000); 
+ 
+  $t.end(); 

@@ -1,0 +1,110 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Package_ClosureReport_Generic_00","Package/Closure_Report");
+ $data = readDataFromCSV("Package_Closure_Report_Size_10","Package/Closure_Report");
+ /*
+ var $TC = _testcase("TC_1", "Logging in with valid user and navigate to Closure Report");
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Sreya_Chatterjee
+ $inputObject.edt_loginid = $generic.LoginID1;// Sreya_Chatterjee
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.projectname = $generic.projectname1;//BGGSZ199
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "CRep58";// $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ $TC.end();
+ */
+ var $t = _testcase("TC_2", "Verifying the Applicable Sizing Technique table with Project Tailoring");
+ $t.start();
+ 
+ _wait(40000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment5;//Size
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table1;//Sizing Details
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.theader1;//Applicable Sizing Technique
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno1;//0_lbl
+ $inputObject.fieldValues = "IFPUG FP|IFPUG FP";
+ verifySwiftFormData($inputObject);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Size in UOM
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowno2;//Technical Size[2]|Functional Size[2]
+ $inputObject.colNo = $data.colno2;//UOM of Size[4]_lbl|Size in UOM[5]_lbl
+ $inputObject.fieldValues = "IFPUG FP|20.00|IFPUG FP|30.00";
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Size in UOM
+ $inputObject.rowNo = "1|2";
+ $inputObject.colNo = "1_lbl|2_lbl";
+ $inputObject.fieldValues = "IFPUG FP|20.00|IFPUG FP|30.00";
+ verifySwiftFormData($inputObject);
+  */
+  
+ $inputObject = {};
+ $inputObject.span_Name = "IFPUG FP[12];IFPUG FP[13];20.00[2];30.00[2];50.00";
+ InfyFTisVisible($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment1;//Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ReportMode = "Manual";
+ ModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment5;//Size
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Size in UOM
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = "Technical Size[2]|Functional Size[2]";
+ $inputObject.colNo = "UOM of Size[4]_edt";
+ $inputObject.fieldValues = "20.00|30.00";
+ verifySwiftFormData($inputObject);
+ */
+ $t.end();
+ 
+  
+ 
+ 
+ 
+ 
+ 

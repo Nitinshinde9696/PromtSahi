@@ -1,0 +1,445 @@
+
+/**
+ @Function Number:1
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyWorkflowStangeDetails($inputObject)
+{
+	_log("verifyWorkflowStangeDetails Started","success");
+	try 
+	{
+		_assertTrue(_exists(_link($inputObject.stageName),_under(_cell("Stage"))));
+		if($inputObject.escalationPeriod)
+		{
+			var $escalationPer;
+			var $text = _getText(_cell(0,_near(_cell($inputObject.stageName)),_under(_cell("Escalation Period (Days)"))));
+			_assertEqual(_getText(_cell(0,_near(_cell($inputObject.stageName)),_under(_cell("Escalation Period (Days)")))),$inputObject.escalationPeriod);
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyWorkflowStangeDetails Completed","success");
+}
+
+/**
+ @Function: addStage
+ @author: shashank
+ @example:{ "edt_stageName" : "DB" }
+ @description: The following function would click on the add workflow icon and save a stage.
+ @param: 
+ @return: 
+ **/
+
+function addStage($inputObject)
+{
+	_log("addStage Started","success");
+	try 
+	{
+		_click(_link("de-icon-workflow"));
+		_click(_link("de-icon-add_stage"));
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addStage Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addRole($inputObject)
+{
+	_log("addRole Started","success");
+	try 
+	{
+		
+		var $roleObject = {};
+		_click(_link(0,_in(_cell(5,_near(_link($inputObject.item))))));
+		_selectWindow("modifyRole");
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_containsText(_select("PLR_Roles"),$inputObject["role_list"]));
+			_selectWindow();
+		}
+		else
+		{	
+			$roleObject.slb_PLRRoles = $inputObject["role_list"];
+			setAllFields($roleObject);
+			_click(_submit("ok"));
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addRole Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openStageDetails($inputObject)
+{
+	_log("openStageDetails Started","success");
+	try 
+	{
+		_click(_link($inputObject.item));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openStageDetails Completed","success");
+}
+
+/**
+ @Function modifyStageDetails
+ @author:shashank
+ @example: modifyStageDetails{ "lst_selInitialAct" : "act1" ,  "lst_selNextAct" : "act2" }
+ @description: the following function would open an instance and modify it
+ @param: 
+ @return: 
+ **/
+
+function modifyStageDetails($inputObject)
+{
+	_log("modifyStageDetails Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyStageDetails Completed","success");
+}
+
+/**
+ @Function deleteStage
+ @author: shashank
+ @example:deleteStage { "item" : "DB2" ,  "col_id" : "2.0" }
+ @description: The following function can be used to delete a stage.
+ @param: 
+ @return: 
+ **/
+
+function deleteStage($inputObject)
+{
+	_log("deleteStage Started","success");
+	try 
+	{
+		openStageDetails($inputObject);
+		_click(_button("Delete"));
+		_selectWindow("popup");
+		_click(_submit("OK"));
+		_wait(3000);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteStage Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setVerifyPerformerStage($inputObject)
+{
+	_log("setVerifyPerformerStage Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("save"));
+		verifyPerformerStage($inputObject);		
+		_assertTrue(_checkbox(0, _near(_cell($inputObject.lst_performerstage,_in(_table("QTP_workflowstagelist"))))).disabled);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setVerifyPerformerStage Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addTeamMember($inputObject)
+{
+	_log("addTeamMember Started","success");
+	try 
+	{
+		if($inputObject.member_type === "Suggested")
+		{
+			if(_isVisible(_link("de-icon-show_listprop")))
+			{
+				_click(_link("imgSuggSpan"));
+			}
+			
+			if($inputObject.operation === "Negative")
+			{
+				_assertFalse(_contains(_select("selFromStageMember"),$inputObject.member_name));
+			}
+			else
+			{
+				_setSelected(_select("selFromStageMember"), $inputObject.member_name);
+				_click(_button("addsmr"));		
+			}
+		}
+		else if ($inputObject.member_type === "Default")
+		{
+			if(_isVisible(_link("de-icon-show_listprop")))
+			{
+				_click(_link("imgDefSpan"));
+			}
+			
+			if($inputObject.operation === "Negative")
+			{
+				_assertFalse(_contains(_select("selFromDefaultStageMember"),$inputObject.member_name));
+			}
+			else
+			{
+				_setSelected(_select("selFromDefaultStageMember"), $inputObject.member_name);
+				if($inputObject.member_status === "Optional")
+				{
+					_click(_button("addmo"));
+				}
+				else
+					_click(_button("adddmr"));	
+			}
+			
+		}
+		else if ($inputObject.member_type === "Escalation")
+		{
+			if(_isVisible(_link("de-icon-show_listprop")))
+			{
+				_click(_link("imgEscSpan"));
+			}
+			if($inputObject.operation === "Negative")
+			{
+				_assertFalse(_contains(_select("selectFromEM"),$inputObject.member_name));
+			}
+			else
+			{
+				_setSelected(_select("selectFromEM"), $inputObject.member_name);
+				_click(_button("addem"));
+			}
+			
+		}
+		
+		if($inputObject.operation !== "Negative")
+		_click(_submit("save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTeamMember Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  navigateToWorkflow()
+{
+	_log(" navigateToWorkflow Started","success");
+	try 
+	{
+		_click(_link("de-icon-workflow"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" navigateToWorkflow Completed","success");
+}
+
+/**
+ @Function Number:12
+ @author: Hrishi
+ @example: skipWorkFlowStage({"stagename" : "Assigner"})
+ @description: Set can skip workflow to no.
+ @param: Stage Name
+ @return: none
+ **/
+
+function skipWorkFlowStage($inputObject)
+{
+	_log("skipWorkFlowStage Started","success");
+	try 
+	{
+		_uncheck(_checkbox(0,_near(_cell($inputObject.stagename))));
+		_click(_submit("Save"));
+		verifyskipWorkFlowStage($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("skipWorkFlowStage Completed","success");
+}
+
+/**
+ @Function Number:22
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyPerformerStage($inputObject)
+{
+	_log("verifyPerformerStage Started","success");
+	try 
+	{
+		_assertTrue(_exists(_link($inputObject.lst_performerstage,_in(_table("QTP_workflowstagelist")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPerformerStage Completed","success");
+}
+
+/**
+ @Function Number:26
+ @author:sgoja
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDefaultStages($inputObject)
+{
+	_log("verifyDefaultStages Started","success");
+	try 
+	{
+		_assertTrue(_exists(_link($inputObject.stages,_in(_table("QTP_workflowstagelist")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDefaultStages Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: verifyAddedStage($inputObject)
+ @description: Verify Added Stage
+ @param: String {None}
+ @return: String {None} 
+ **/
+
+function verifyAddedStage($inputObject)
+{
+	_log("verifyAddedStage Started","success");
+	try 
+	{
+		if ($inputObject.operation === "Deleted")
+			_assertFalse(_isVisible(_link($inputObject.item)));
+		else
+			_assertTrue(_isVisible(_link($inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAddedStage Completed","success");
+}
+
+/**
+ @Function Number:28
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyStageDetails($inputObject)
+{
+	_log("verifyStageDetails Started","success");
+	try 
+	{
+		if(_exists(_link("de-icon-show_listprop")))
+		{
+			_click(_link("de-icon-show_listprop"));			
+		}
+		verifyAllFields($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyStageDetails Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author: Hrishi
+ @example:skipWorkFlowStage({"stagename" : "Assigner"})
+ @description: verifies the skip check box of the stage name is uncheked.
+ @param:Stage name 
+ @return: none
+ **/
+
+function verifyskipWorkFlowStage($inputObject)
+{
+	_log("verifyskipWorkFlowStage Started","success");
+	try 
+	{
+		_assertFalse(_checkbox(0,_near(_cell($inputObject.stagename))).checked);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyskipWorkFlowStage Completed","success");
+}

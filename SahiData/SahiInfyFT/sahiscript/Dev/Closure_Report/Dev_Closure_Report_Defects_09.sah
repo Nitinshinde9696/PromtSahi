@@ -1,0 +1,151 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Dev_Closure_Report_Generic_00","Dev/Closure_Report");
+ $data = readDataFromCSV("Dev_Closure_Report_Defects_09","Dev/Closure_Report");
+
+
+ var $TC = _testcase("LOGIN & NAVIGATION", "LOGGING WITH VALID USER");
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Ricky_Wang
+ $inputObject.edt_loginid = $generic.LoginID1;// Ricky_Wang
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Closure Report
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $generic.report1;//MTR1
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $generic.report1;//MTR1
+ OpenEformInstance($inputObject);
+ 
+ $TC.end();
+
+ var $TC1 = _testcase("TC_1", "CHECK THE TABLE NAMES");
+ $TC1.start();
+ 
+ _wait(40000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment4;//"Defects";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.table_name;//Stage Detected;Stage Injected;Review Effectiveness and Efficiency;Stage wise defect data
+ InfyFTisVisible($inputObject);
+
+ $TC1.end();
+
+ var $TC2 = _testcase("TC_2,3,4", "VERIFYING THE STAGE WISE DEFECT DATA TABLE");
+ $TC2.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//Stage wise defect data
+ $inputObject.rowNo = $data.row7;//1|2|3|4
+ $inputObject.colNo = $data.col7;//0_lbl
+ $inputObject.fieldValues = $data.val7;//Requirements Analysis|High Level Design|Detailed Design|Coding
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//Stage wise defect data
+ $inputObject.rowNo = $data.row8;//0
+ $inputObject.colNo = $data.col8;//0_lbl|1_lbl|3_lbl|5_lbl|8_lbl|9_lbl|10_lbl|12_lbl|14_lbl|16_lbl|19_lbl
+ $inputObject.fieldValues = $data.val8;//Stage Injected / Stage Detected|Requirements Analysis|High Level Design|Detailed Design|Coding|Unit Testing|Integration Test|System Test|Acceptance and Installation|Post Implementation|Total
+ verifySwiftFormData($inputObject);
+
+ //VERIFYING THE TOTAL NO OF DEFECTS COLUMN//
+ /*
+ $inputObject = {};
+ $inputObject.tableName = $data.table4;//Stage wise defect data
+ $inputObject.rowNo = $data.inrow1;//1|2|3|4|5|6
+ $inputObject.colNo = $data.incol1;//19_lbl
+ $inputObject.fieldValues = $data.inval1;//1|2|1|1|0|5
+ verifySwiftFormData($inputObject);
+ */
+ $TC2.end();
+
+ 
+ var $TC3 = _testcase("TC_3", " VERIFYING THE STAGE DETECTED TABLE");
+ $TC3.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Stage Detected
+ $inputObject.rowNo = $data.row1;//1|2|3|4|5|6|7|8|9";
+ $inputObject.colNo = $data.col1;//"0_lbl";
+ $inputObject.fieldValues = $data.val1;//"Requirements Analysis|High Level Design|Detailed Design|Coding|Unit Testing|Integration Test|System Test|Acceptance and Installation|Post Implementation";
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Stage Detected
+ $inputObject.rowNo = $data.row2;//0
+ $inputObject.colNo = $data.col2;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|6_lbl|5_lbl
+ $inputObject.fieldValues = $data.val2;//Stage Detected[1]|Critical|Major|Minor|Cosmetic|Total Stage Defects|% of Total Defects
+ verifySwiftFormData($inputObject);
+ 
+ $TC3.end();
+ 
+ var $TC4 = _testcase("TC_3", "VERIFYING THE STAGE INJECTED TABLE");
+ $TC4.start();
+ 
+ // VERIFYING THE STAGE INJECTED TABLE//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Stage Injected
+ $inputObject.rowNo = $data.row3;//1|2|3|4|5
+ $inputObject.colNo = $data.col3;//0_lbl
+ $inputObject.fieldValues = $data.val3;//Requirements Analysis|High Level Design|Detailed Design|Coding
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Stage Injected
+ $inputObject.rowNo = $data.row4;//0
+ $inputObject.colNo = $data.col4;//0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl
+ $inputObject.fieldValues = $data.val4;//Stage Injected|Critical|Major|Minor|Cosmetic|Total Stage Defects|% of Total Defects
+ verifySwiftFormData($inputObject);
+ 
+ $TC4.end();
+ 
+ var $TC5 = _testcase("TC_3", "VERIFYING THE REVIEW EFFECTIVENESS AND EFFICIENCY TABLE");
+ $TC5.start();
+ 
+ //VERIFYING THE REVIEW EFFECTIVENESS AND EFFICIENCY TABLE//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Review Effectiveness and Efficiency
+ $inputObject.rowNo = $data.row5;//1|2|3|4|5|6|7|8|9";
+ $inputObject.colNo = $data.col5;//"0_lbl";
+ $inputObject.fieldValues = $data.val5;//Requirements Analysis|High Level Design|Detailed Design|Coding|Unit Testing|Integration Test|System Test|Acceptance and Installation|Post Implementation
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Review Effectiveness and Efficiency
+ $inputObject.rowNo = $data.row6;//0
+ $inputObject.colNo = $data.col6;//0_lbl|1_lbl|2_lbl|7_lbl|8_lbl|9_lbl
+ $inputObject.fieldValues = $data.val6;//Stage Injected / Stage Detected|Number of Defects Detected|Number of Defects Injected|Review Effectiveness(%)|Review Effort|Review Efficiency
+ verifySwiftFormData($inputObject);
+ 
+ $TC5.end();
+ 
+
+ 
+
+ 
+ 

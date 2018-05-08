@@ -1,0 +1,249 @@
+
+/**
+ @Function Number:1
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addCommunicationPlan($inputObject)
+{
+	_log("addCommunicationPlan Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCommunicationPlan Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addCommunicationPlanWithAllTeamMembers($inputObject)
+{
+	_log("addCommunicationPlanWithAllTeamMembers Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		_click(_submit("QTP_KEY_BUTTON_Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCommunicationPlanWithAllTeamMembers Completed","success");
+}
+
+/**
+ @Function Number:	3
+ @author:			Vaishali	
+ @example:			openCommunicationPlan($inputObject)
+ @description:      Open Specific Communication Plan
+ @param: 			Communication Plan name
+ @return: 
+ **/
+
+function openCommunicationPlan($inputObject)
+{
+	_log("openCommunicationPlan Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openCommunicationPlan Completed","success");
+}
+
+/**
+ @Function Number:	4
+ @author:			Vaishali	
+ @example:			clickCommunicationReportTab()
+ @description: 		This function Opens Reports Tab.
+ @param: 			none
+ @return: 			none
+ **/
+
+function clickCommunicationReportTab()
+{
+	_log("clickCommunicationReportTab Started","success");
+	try 
+	{
+		_click(_link("a_Reports"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickCommunicationReportTab Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example deleteCommunicationPlan({ "item" : "abc"  });
+* @description This function is called to delete communication Plan
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function deleteCommunicationPlan($inputObject)
+{
+	_log("deleteCommunicationPlan Started","success");
+	try 
+	{  
+		if($inputObject.operation === "Negative")
+		{
+			_assertTrue(_submit("Delete").disabled);
+		}
+		else
+		{
+			var $tableId = _table("QTP_ListTable");
+			_click(_checkbox(0, _near(_cell($inputObject.item))));
+			_click(_submit("Delete"));
+	        
+			_expectConfirm("Are you sure you want to delete the selected Communication Plan(s)?", true);
+			
+	        _log("deleteCommunicationPlan Verification Started","success");
+			_assertFalse(_isVisible(_cell($inputObject.item, _in($tableId))));
+			_log("deleteCommunicationPlan Verification Complete","success");
+		}
+		
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteCommunicationPlan Completed","success");
+}
+
+/**
+ @Function Number:	7
+ @author:			Vaishali
+ @example:			resetCommunicationPlan($inputObject)
+ @description:      Resets Communication Plan
+ @param: 			
+ @return: 
+ **/
+
+function resetCommunicationPlan($inputObject)
+{
+	_log("resetCommunicationPlan Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_reset("reset")));
+		}
+		_click(_reset("Reset"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resetCommunicationPlan Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyCommunicationPlan($inputObject)
+{
+	_log("modifyCommunicationPlan Started","success");
+	try 
+	{
+		ModifyEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyCommunicationPlan Completed","success");
+}
+
+/**
+ @Function Number:	18
+ @author:			Vaishali	
+ @example:		    verifyCommunicationPlanReportsTips($inputObject)
+ @description: 		This function Verifies Communication Plan Reports Tips 
+ @param:			report_note
+ @return: 			
+ **/
+
+function verifyCommunicationPlanReportsTips($inputObject)
+{
+	_log("verifyCommunicationPlanReportsTips Started","success");
+	try 
+	{
+		_click(_link("QTP_Report_Tips"));
+		_selectWindow("pop_comm_plan_note");
+		var $reportNote=_getCellText(_cell("SrchTpsSmlTxt"));
+	  	if($reportNote===$inputObject.report_note)
+			_assertTrue($reportNote===$inputObject.report_note);
+		else
+			_assertFalse($reportNote===$inputObject.report_note);
+	  	_click(_submit("Close This Window"));
+	  	_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCommunicationPlanReportsTips Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewCommunicationPlan($inputObject)
+{
+	_log("saveAndAddNewCommunicationPlan Started","success");
+	try 
+	{
+		if($inputObject.operation === "Negative")
+		{
+			_assertFalse(_exists(_submit("QTP_KEY_BUTTON_Save_&_Add_New")));
+		}
+		else
+		{
+			_click(_link("de-icon-add"));
+			setAllFields($inputObject);
+			
+			_click(_submit("QTP_KEY_BUTTON_Save_&_Add_New"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewCommunicationPlan Completed","success");
+}

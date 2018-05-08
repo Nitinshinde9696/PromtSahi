@@ -1,0 +1,118 @@
+
+/*************************************************************************
+* @author shashank
+* @example addCategory();
+* @description This function is called to navigate to addCategory and create an instance of it
+* @param {String} None
+* @return {String} None 
+*************************************************************************/
+
+function addCategory($inputObject)
+{
+	_log("addCategory Started","success");
+	try 
+	{
+		_click(_link("de-icon-create_new_folder"));
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addCategory Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description:  
+ @param: 
+ @return: 
+ **/
+
+function addParameter($inputObject)
+{
+	_log(" addParameter Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		setAllFields($inputObject);
+		var $ResponseValues;
+		var $ScoreValues;
+		//send the response and score like this 
+		//For Multiple input = LOV_response=good;ok and $inputObject.LOV_score=100;50 
+		if($inputObject.LOV_response.indexOf(";") != -1 &&  $inputObject.LOV_score.indexOf(";") != -1)
+		{
+			$ResponseValues =$inputObject.LOV_response.split(";");
+			$ScoreValues =$inputObject.LOV_score.split(";");
+			for(var $click = 1 ; $click < $ResponseValues.length; $click ++)
+			{
+				_click(_link("de-icon-add",_in(_table("responsedetails"))));
+			}			
+			for(var $i = 0 ; $i < $ResponseValues.length; $i ++)
+			{
+				 var $j=$i+1;
+				_setValue(_textbox("LOV_response_"+$j), $ResponseValues[$i]);
+				_setValue(_textbox("LOV_score_"+$j), $ScoreValues[$i]);
+						
+			}
+		}
+		_click(_button("QTP_KEY_BUTTON_Add"));	
+		_wait(5000);
+		verifyaddParameter($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" addParameter Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyaddParameter($inputObject)
+{
+	_log("verifyaddParameter Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_link($inputObject.edt_parameterName)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyaddParameter Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: addPortfolio({ "edt_CM_Name" : "testing" ,  "lst_PortfolioTemplateId" : "PT1" ,  "lst_PortfolioManager" : "Piyush Mistry" ,  "txt_CM_Description" : "testing" });
+ @description:  Add Portfolio Instance
+ @param: {String}
+ @return: None
+ **/
+
+function addPortfolio($inputObject)
+{
+	_log("addPortfolio Started","success");
+	try 
+	{
+		_click(_link("KEY_BUTTON_Add"));
+		setAllFields($inputObject);
+		_click(_button(" Save "));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPortfolio Completed","success");
+}

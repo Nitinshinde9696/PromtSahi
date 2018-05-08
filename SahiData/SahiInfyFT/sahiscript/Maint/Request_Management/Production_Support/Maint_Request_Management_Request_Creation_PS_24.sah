@@ -1,0 +1,83 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Request_Creation_PS_24","Maint/Request_Management/Production_Support");
+ 
+ $bTN= $data.requestTitle322;
+ $review_type = $data.rev_type;//"Impact Analysis Review";
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s1.end();
+ var $s2 = _testcase("TC_3.1"," Creating a Production Support for Maint PT");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo311;//Production Support
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.add;//_click(_span("KEY_BUTTON_Add-btnIconEl"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name312;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name313;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.span_Name314;
+ InfyFTisVisible($inputObject);
+ 
+ 
+ clickReturn();
+ $s2.end();
+ var $s3 = _testcase("TC_3.2"," Check mandatory fields of Production Support");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc321;//Cost
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab";
+ CreateInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle322;
+ $inputObject.txt_CM_Description = $data.desc321;//Cost
+ $inputObject.lst_isPackageDigiteStart = $data.val_Start;//"STaRT";
+ ModifyEformInstance($inputObject);
+ 
+ var $id = _getText(_span("CM_ItemCode"));
+ 
+ $s3.end();
+
+ 
+  _include("Maint_Request_Management_Scheduled_Task_Report_PS_32.sah");
+  

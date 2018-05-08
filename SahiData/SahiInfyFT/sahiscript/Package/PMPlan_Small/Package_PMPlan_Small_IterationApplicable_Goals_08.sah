@@ -1,0 +1,788 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/ECRGoals.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Package_PMPlan_Small_Gen","Package/PMPlan_Small");
+ $data3 = readDataFromCSV("Package_PMPlan_Small_Iteration_Planning","Package/PMPlan_Small"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);  
+
+ var $t = _testcase("Applicable LC stages", "Checking for iteration summary and Filling Applicable LC stages");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.rowApplicable;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.ApplicableReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.sizingDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName="Yes";
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.tableName = $data3.tableSizing;
+ $inputObject.rowNo = $data3.mandRowCustTech
+ $inputObject.colNo = $data3.madcolCustom;
+ $inputObject.fieldValues = $data3.fieldValuesizing;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segApplicable;
+ SelectSegment($inputObject); 
+ 
+_wait(5000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableApplicable1;
+ $inputObject.rowNo = $data3.rowGlobal;
+ $inputObject.colNo = $data3.colApplicable;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(10000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject); 
+ 
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.rowApplicable;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.ApplicableReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000); 
+ 
+ $t.end(); 
+
+ var $t = _testcase("Iteration Goals","Selecting the Leading Metrics");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.rowIteration;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.goalReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.rowIteration;
+ SelectSegment($inputObject);  
+ 
+ _wait(5000);
+ 
+ //Assertions//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.spanNote;
+ InfyFTisVisiblePopup($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.rowIteration;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.spanMandatory;
+ InfyFTisVisiblePopup($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.spanSelected;
+ InfyFTisVisiblePopup($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.spanNature;
+ InfyFTisVisiblePopup($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.spanIteration;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.span_Name = $data3.tableBasis;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ //End of assertions//
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Schedule Adherence
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal1;
+ $inputObject.fieldValues = $data3.fieldValueSelect1;
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply18;
+ InfyFTclickPopup($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Package Productivity - IFPUG FP
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowPackFP;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal2;
+ $inputObject.fieldValues = $data3.fieldValueSelect1;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply12;
+ InfyFTclickPopup($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Quality - Effort
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQuality;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal3;
+ $inputObject.fieldValues = $data3.rowRevEff;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply14;
+ InfyFTclickPopup($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Quality - IFPUG FP
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQualityFP;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal4;
+ $inputObject.fieldValues = $data3.rowRevEff;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply15;
+ InfyFTclickPopup($inputObject);  
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Overall Defect Injection Rates - Effort
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowDefEff;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal5;
+ $inputObject.fieldValues = $data3.rowEstimatedDef;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply5;
+ InfyFTclickPopup($inputObject);  
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Productivity - IFPUG FP
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowProductivityFP;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal6;
+ $inputObject.fieldValues = $data3.fieldValueSelect1;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply8;
+ InfyFTclickPopup($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;//Customization Productivity - IFPUG FP
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowCustFp;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectVal7;
+ $inputObject.fieldValues = $data3.fieldValueSelect1;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply17;
+ InfyFTclickPopup($inputObject);  
+ 
+ _wait(2000);  
+ 
+ $t.end();  
+ 
+ //***End of Selecting Leading Metrics***//
+ 
+ var $t = _testcase("Iteration Goals","Filling the Goals and Validating PM plan summary");
+ $t.start();   
+ 
+ //**Schedule Adherence**//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ //**Package Productivity - IFPUG FP**//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowPackFP;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowPackFP;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowPackFP;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ //**Quality - Effort**// 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQuality;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQuality;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQuality;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ //**Quality - IFPUG FP**//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQualityFP;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQualityFP;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQualityFP;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ //**Overall Defect Injection Rates - Effort**// 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowDefEff;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowDefEff;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowDefEff;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ //**Productivity - IFPUG FP**// 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowProductivityFP;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowProductivityFP;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowProductivityFP;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ //**Customization Productivity - IFPUG FP**//
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowCustFp;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowCustFp;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTen;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowCustFp;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.rowIteration;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.goalReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.rowIteration;
+ SelectSegment($inputObject);
+
+ _wait(10000); 
+ 
+ _popup("openLinkedItem")._setSelected(_select(1), "Similar projects in the account");
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.rowIteration;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.goalReason3;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.rowIteration;
+ SelectSegment($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowPackFP;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQuality;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowQualityFP;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowDefEff;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowProductivityFP;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowCustFp;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.segSummary;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableSummary;
+ $inputObject.rowNo = $data3.rowIteration;
+ $inputObject.colNo = $data3.colReason;
+ $inputObject.fieldValues = $data3.goalReason4;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.segment_name = $data3.rowIteration;
+ SelectSegment($inputObject);
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.link = $data3.linkAddRows;
+ InfyFTclickPopup($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colSchedule;
+ $inputObject.fieldValues = $data3.fieldValueRowIndex;
+ InfyFTverifySwiftFormData($inputObject) 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowSchedule;
+ $inputObject.colNo = $data3.colSchedule;
+ $inputObject.fieldValues = $data3.fieldValueCOQ;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowRowIndex;
+ $inputObject.colNo = $data3.colBaseline;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowRowIndex;
+ $inputObject.colNo = $data3.colPercent;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowRowIndex;
+ $inputObject.colNo = $data3.colCommitment;
+ $inputObject.fieldValues = $data3.fieldValueFinancial;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.iterationOne;
+ $inputObject.rowNo = $data3.rowRowIndex;
+ $inputObject.colNo = $data3.colMinVal;
+ $inputObject.fieldValues = $data3.fieldValueTwenty;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.rowIteration;
+ $inputObject.rowNo = $data3.rowRowIndex;
+ $inputObject.colNo = $data3.colLeadingMetrics;
+ $inputObject.fieldValues = $data3.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data3.selectValues20;
+ $inputObject.fieldValues = $data3.rowRevEff;
+ InfyFTsetData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup = $data3.popup;
+ $inputObject.button = $data3.apply20;
+ InfyFTclickPopup($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data3.popup;
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+ 
+ _wait(5000);
+  
+ InfyFTReturnPopUp(); 
+ 
+ $t.end();

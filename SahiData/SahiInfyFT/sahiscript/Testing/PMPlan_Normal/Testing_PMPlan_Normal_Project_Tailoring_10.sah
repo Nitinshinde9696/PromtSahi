@@ -1,0 +1,184 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data0 = readDataFromCSV("Testing_PMPlan_Normal_Project_Tailoring_10","Testing/PMPlan_Normal"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data0.navigateTo4; //Project Tailoring
+ navigateTo($inputObject);
+/*
+ $inputObject = {};
+ $inputObject.lst_DN_CurrentStageoftheProje = $data0.currentState;//Steady State
+ InfyFTsaveInstance($inputObject);
+*/ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data0.segment_name0;
+ SelectSegment($inputObject);
+ 
+ //Unchecking
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName1;
+ $inputObject.colNo = $data0.colName1;
+ $inputObject.fieldValues = $data0.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName2;
+ $inputObject.colNo = $data0.colName1;
+ $inputObject.fieldValues = $data0.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName3;
+ $inputObject.colNo = $data0.colName1;
+ $inputObject.fieldValues = $data0.fieldValues0;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName4;
+ $inputObject.colNo = $data0.colName1;
+ $inputObject.fieldValues = $data0.fieldValues0;
+ setSwiftFormData($inputObject); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName5;
+ $inputObject.colNo = $data0.colName1;
+ $inputObject.fieldValues = $data0.fieldValues0;
+ setSwiftFormData($inputObject);//End of Un-checking
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName1;
+ $inputObject.colNo = $data0.colName2;
+ $inputObject.fieldValues = $data0.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName2;
+ $inputObject.colNo = $data0.colName2;
+ $inputObject.fieldValues = $data0.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName3;
+ $inputObject.colNo = $data0.colName2;
+ $inputObject.fieldValues = $data0.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName4;
+ $inputObject.colNo = $data0.colName2;
+ $inputObject.fieldValues = $data0.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data0.tableName0;
+ $inputObject.rowNo = $data0.rowName5;
+ $inputObject.colNo = $data0.colName2;
+ $inputObject.fieldValues = $data0.fieldValues1;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data0.segment_name1;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_checkbox("false[1]")))
+ {
+ $inputObject = {};
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowNo1;
+ $inputObject.colNo = $data0.colNo18;
+ $inputObject.fieldValues = $data0.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ }
+ _wait(5000);
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowDelete;
+ $inputObject.colNo = $data0.colTrack;
+ $inputObject.fieldValues = $data0.fieldValues2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowDelete;
+ $inputObject.colNo = $data0.colMetric;
+ $inputObject.fieldValues = $data0.fieldValues3;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowDelete;
+ $inputObject.colNo = $data0.colType;
+ $inputObject.fieldValues = $data0.fieldValues4;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowDelete;
+ $inputObject.colNo = $data0.colExpressed;
+ $inputObject.fieldValues = $data0.fieldValues5;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowDelete;
+ $inputObject.colNo = $data0.colUOM;
+ $inputObject.fieldValues = $data0.fieldValues6;
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data0.tableName1;
+ $inputObject.rowNo = $data0.rowDelete;
+ $inputObject.colNo = $data0.colDescription;
+ $inputObject.fieldValues = $data0.fieldValues10;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+ 
+ 
+ 
+ 

@@ -1,0 +1,87 @@
+/**
+ @Function Number:
+ @author:Roma
+ @example:
+ @description: to find difference between dates
+ @param: 
+ @return: 
+ **/
+
+function dateDiff( $date1,$date2)
+	 {		
+  		//Get 1 day in milliseconds
+  		var $one_day=86400000;
+
+  		// Convert both dates to milliseconds
+  		var $date1_ms = Date.parse($date1);
+ 		 var $date2_ms = Date.parse($date2);
+
+ 		 // Calculate the difference in milliseconds
+  		var $difference_ms = parseInt($date2_ms - $date1_ms);
+    
+  		// Convert back to days and return
+  		return Math.round($difference_ms/$one_day) ; 
+	}
+
+/**
+ @Function Number:
+ @author:Roma
+ @example:
+ @description: to verify task in Gantt
+ @param: 
+ @return: 
+ **/
+
+function verifyTaskInGantt($inputObject)
+	{
+		_log("verify Task In Gantt Started","success");
+		try
+			{
+			//tooltip verification
+				var  $a="Name:".concat($inputObject.tskname);
+				var $b="Start Date:".concat($inputObject.strtdate);
+				var $c="Finish Date:".concat($inputObject.endate);
+				var $s1=$a.concat($b,$c);
+				var $s2;
+				_set($s2,_div("tooltipTSK1").textContent);
+				_assertEqual($s1,$s2);
+		     //no of cells verification
+		     		var $date1,$date2;
+				$date1=valueOf($inputObject.strtdate);
+				$date2=valueOf($inputObject.endate);
+				var $noofdays=dateDiff($date1,$date2);
+				var $noofcells=$inputObject.plndeffrt / ($inputObject.noofhrsperday  * $inputObject.noofusers);
+																			
+				if($noofdays==$noofcells)
+					{
+						var $width=$noofcells * 20;
+						var  $w=window.frames[1];
+						var $width1;
+						_set($width1,$w.document.getElementById($inputObject.tskId).getAttribute("width"));
+						_assertEqual($width,$width1);
+					}
+				else
+					{
+						var $diff=$noofdays - $noofcells;
+						$width=($noofcells + $diff) * 20;
+						var  $w=window.frames[1];
+						var $width1;
+						_set($width1,$w.document.getElementById($inputObject.tskId).getAttribute("width"));
+						_assertEqual($width,$width1);
+				        }
+		//row verification
+		//first expand all tasks
+				var $row;
+				_set($row,window.frames[1].document.getElementById("treeview-1063-record-94689").getAttribute("data-recordindex"));
+				var $rw= $row  * 25+10;
+				var $ycoord;
+				_set($ycoord,window.frames[1].document.getElementById($inputObject.tskId).getAttribute("y"));
+				_assertEqual($rw,$ycoord);	
+			}
+		catch(e)
+			{
+				handleFailure(e);
+			}
+
+		_log("verify Task In Gantt Completed","success");
+	}

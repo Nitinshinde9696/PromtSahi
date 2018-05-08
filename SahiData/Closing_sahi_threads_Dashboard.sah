@@ -1,0 +1,7 @@
+
+_log("Closing_sahi_threads_Dashboard Started");
+	_wait(30000);
+		_navigateTo("http://localhost:9999/_s_/dyn/pro/EditorUI_killAll");
+	_wait(30000);
+		_navigateTo("http://localhost:9999/_s_/dyn/pro/stopserver");
+_log("Closing_sahi_threads_Dashboard Completed");

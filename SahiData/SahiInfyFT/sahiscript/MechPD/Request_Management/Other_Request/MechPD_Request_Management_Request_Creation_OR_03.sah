@@ -1,0 +1,201 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("MechPD_Request_Management_Request_Creation_OR_03","MechPD/Request_Management/Other_Request"); 
+
+ $bTN = "Request Title";
+ $review_type = "Others";
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ 
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Siddharth Kale	
+$inputObject.edt_loginid = $data.LoginID1;//siddharth_kale
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEAGLAGIS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+$navigation = $data.navigateTo1;
+
+var $t = _testcase("TC-3.2", "CHECK THE MANDATORY FIELDS FOR CREATING A OTHERS TASK");
+
+
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+$t.end();
+
+var $s1 = _testcase("2.11","verify the Scheduling Module Used Field");
+
+$s1.start();
+$inputObject = {};
+$inputObject = {};
+$inputObject.lst_isPackageDigiteStart = $data.SMU;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject={};
+$inputObject.txt_CM_Description = $data.Desc2;
+ModifyEformInstance($inputObject);
+
+_assertEqual("Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field Request Owner in Details tab \n• Field Complexity in Details tab", _lastAlert());
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name;
+$inputObject.lst_DN_RequestOwner = $data.Owner2;
+$inputObject.lst_DN_Complexity =  $data.Complexity2;
+ModifyEformInstance($inputObject);
+
+var $id = _getText(_span("CM_ItemCode"));
+
+clickReturn();
+
+$inputObject = {};
+$inputObject.item = $id;
+InfyFTOpenEformInstanceForLastPage($inputObject);
+
+$s1.end();
+
+var $t = _testcase("TC-3.1", "CHECK THE FIELDS AVAILABLE WHILE CREATING A OTHERS TASK ");
+$t.start();
+$inputObject = {};
+$inputObject.ele_CM_NameLABEL = "Request Title * :";
+$inputObject.ele_CM_DescriptionLABEL = "Request Description * :";
+$inputObject.ele_DN_RequestOwnerLABEL = "Request Owner * :"; 
+$inputObject.ele_DN_SOWLABEL = "SOW :"; 
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+var $s2 = _testcase("TC_2.5","verify the Complexity Field");
+$s2.start();
+ 
+$inputObject = {};
+$inputObject.lst_DN_Complexity = $data.Complexity;
+verifyEformInstanceDetails($inputObject); 
+  
+$s2.end();
+
+var $t = _testcase("TC-2.6", "CHECK THE APPLICATION CODE FIELD");
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_ApplicationCode = "--None--";
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+
+var $t = _testcase("TC-2.7", "CHECK THE MODULE CODE FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_ModuleCode = "--None--";
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+var $t = _testcase("TC-2.8", "CHECK THE CUSTOMER REQUEST CODE FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.edt_DN_CustomerRequestCode = "";
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+var $t = _testcase("TC-2.9", "CHECK THE REQUEST OWNER FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_RequestOwner = $data.Username1;//Additional user if required
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+var $t = _testcase("TC-2.10", "CHECK THE SOW FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_SOW = $data.SOW1;
+verifyAllFields($inputObject);
+$t.end();
+
+
+
+/*
+var $t = _testcase("COMMENTS", "ADDING COMMENTS IN THE COMMENTS SEGMENT");
+
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name ="Comments";
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.span = "de-icon-add_comment"; 
+InfyFTclick($inputObject);
+
+ 
+$inputObject={};
+$inputObject.txt_addCommentTextArea = "Comments Segment";
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+saveSwiftForm($inputObject);
+
+$t.end();
+*/
+
+var $t = _testcase("SCHEDULE TASK", "CHECK THE SCHEDULE TASK SEGMENT");
+
+$t.start();
+
+_include("/../MechPD_Request_Management_Scheduled_Task_Report_Common_14.sah");
+
+$t.end();
+
+var $t = _testcase("Reviews[1]", "CHECK THE Reviews SEGMENT");
+
+$t.start();
+
+_include("MechPD_Request_Management_Rev_Def_OR_04.sah");
+
+$t.end();
+
+var $t = _testcase("REQUEST SUMMARY SEGMENT", "CHECK THE REQUEST SUMMARY SEGMENT");
+
+$t.start();
+
+_include("MechPD_Request_Management_Req_Summary_OR_07.sah");
+
+$t.end();
+
+var $t = _testcase("REUSE TRACKING", "CHECK THE REUSE TRACKING SEGMENT");
+
+$t.start();
+
+_include("MechPD_Request_Management_Reuse_Tracking_Positive_OR_06.sah");
+
+
+$t.end();
+
+
+var $s3 = _testcase("Print-Icon"," Check Printing the Request");
+$s3.start();
+ 
+InfyFTprint();
+ 
+$s3.end();

@@ -1,0 +1,115 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+$data = readDataFromCSV("MechPD_Tools_Reuse_RP_RTracking_02","MechPD/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer//Niharika Karingula
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer//Niharika.Karingula	
+$inputObject.edt_password = $data.Password1;//Allahu@1//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the MechPD PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//UNIVIBCH
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Reuse Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Reuse Planning
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+_wait(5000);
+var $t = _testcase("TC_5", "Navigating to Reuse Tracking through Product Design Request");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo5;//Product Design
+InfyFTnavigateTo($inputObject);
+
+var $GetExcel = _testcase("GetExcel"," Getting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "P_D";
+  infyFTGetValueFromExcel($inputObject);
+  $P_D_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $P_D_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";//Reuse Tracking
+SelectSegment($inputObject);
+
+
+$t.end();
+
+var $t = _testcase("TC_6", "Navigating to Reuse Tracking using Other Request");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo6;//Other Request
+InfyFTnavigateTo($inputObject);
+
+_wait(500);
+
+var $GetExcel = _testcase("GetExcel"," Getting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "MechPD/Tools_Reuse/MechPD_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "OR";
+  infyFTGetValueFromExcel($inputObject);
+  $OR_Id  = $value;
+ 
+ $GetExcel.end();
+
+$inputObject = {};
+$inputObject.item = $OR_Id;
+OpenEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_Name6;//"Reuse Tracking";//Reuse Tracking
+SelectSegment($inputObject);
+
+$t.end();
+
+/**********************************************************************
+Design Support Request there is no Reuse tracking section.
+**********************************************************************/
+
+
+
+

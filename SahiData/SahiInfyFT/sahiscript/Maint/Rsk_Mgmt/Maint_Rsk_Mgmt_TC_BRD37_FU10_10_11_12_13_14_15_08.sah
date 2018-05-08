@@ -1,0 +1,527 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU10_10_11_12_13_14_15_08", "Maint/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",-10,$dateObj2);
+ var $previousDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+
+ var $TC = _testcase("InfyFT_sahi9_TC_BRD37_FU10_10","Check for the financial impact questions to be shown to the GPM/DM."); 
+ $TC.start();
+ 
+ //Questions is not visible to roles other than DM/GPM.
+ $inputObject = {};
+ $inputObject.user_name = $data.Username0;
+ $inputObject.edt_loginid = $data.LoginID0;
+ $inputObject.edt_password = $data.Password0;
+ loginIntoDigite($inputObject);
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Classifytherisklevelof = $data.classify4;//High
+ $inputObject.lst_DN_IsLegalReviewdone = $data.field2;
+ $inputObject.lst_DN_IsFinancialProvisionin = $data.field3;
+ $inputObject.txt_DN_Reasonforclassifyingth = $data.field4;
+ $inputObject.txt_DN_Actiontomovetheproject = $data.field5;
+ InfyFTModifyEformInstanceAlert($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment4;
+ SelectSegment($inputObject);
+ 
+ _log("Questions is not visible to roles other than DM/GPM.","success");
+ _wait(2000);
+ 
+ logOut();
+ 
+ //Questions to be shown only to DM/GPM.
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment4;
+ SelectSegment($inputObject);
+ 
+ //Empty the fields.
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;//Are there any effort over-runs in the project?
+ $inputObject.colNo = $data.colName13;//Response
+ $inputObject.fieldValues = $data.fieldValues1;//1. Are there any effort over-runs in the project? ==>Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;//Are there any effort over-runs in the project?
+ $inputObject.colNo = $data.colName14;//Reason
+ $inputObject.fieldValues = $data.fieldValues1_2;//1. Are there any effort over-runs in the project? ==>Scope Change
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+// $inputObject.msgError = "Please answer the following questions before saving the form: Question2";	
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment4;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colName13;
+ $inputObject.fieldValues = "--None--";//1. Are there any effort over-runs in the project? ==>None
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colName14;//Reason
+ $inputObject.fieldValues = "--None--";//1. Are there any effort over-runs in the project? ==>None
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.rowName2;
+ $inputObject.colNo = $data.colName13_1;//Response
+ $inputObject.fieldValues = "--None--";//2. Are these over-runs already budgeted in PBS? ==>None
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.rowName2;
+ $inputObject.colNo = $data.colName14_1;//Reason[2]_txt
+ $inputObject.fieldValues = "";//2. Are these over-runs already budgeted in PBS? ==>Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName13_2;//Response
+ $inputObject.fieldValues = "--None--";//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>Yes
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName14_2;//Reason
+ $inputObject.fieldValues = "";//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName15_3;
+ $inputObject.fieldValues = "0.00";//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>12.00
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo4;
+ $inputObject.fieldValues = " ";//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>INR
+ setSwiftFormData($inputObject);   
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName17_3;
+ $inputObject.fieldValues = "--None--";//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>Q1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName18_3;
+ $inputObject.fieldValues = "--None--";//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>2015
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName13_3;//Response
+ $inputObject.fieldValues = "--None--";//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName4_2;
+ $inputObject.fieldValues = "";//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>234TT
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName15_4;
+ $inputObject.fieldValues = "0.00";//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>12.00
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName16_4;
+ $inputObject.fieldValues = "";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>INR
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName17_4;
+ $inputObject.fieldValues = "--None--";//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>Q1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName18_4;
+ $inputObject.fieldValues = "--None--";//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>FY2017
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName13_4;
+ $inputObject.fieldValues = "--None--";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName14_3;
+ $inputObject.fieldValues = "";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName15_5;
+ $inputObject.fieldValues = "0.00";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>12.00
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName16_5;
+ $inputObject.fieldValues = "";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>INR
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName17_5;
+ $inputObject.fieldValues = "--None--";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Q1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName18_5;
+ $inputObject.fieldValues = "--None--";//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>FY2017
+ setSwiftFormData($inputObject);
+ 
+ _wait(5000);
+  
+ //End of empty fields.
+
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;//Are there any effort over-runs in the project?
+ $inputObject.colNo = $data.colName13;
+ $inputObject.fieldValues = $data.fieldValues1;//1. Are there any effort over-runs in the project? ==>Yes
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.msgAlert = " Please answer the following questions: Question 2, Question 3, Question 4, Question 5 ";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.rowName2;
+ $inputObject.colNo = $data.colName13_1;
+ $inputObject.fieldValues = $data.fieldValues1;//2. Are these over-runs already budgeted in PBS? ==>Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName13_2;
+ $inputObject.fieldValues = $data.fieldValues1;//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName13_3;
+ $inputObject.fieldValues = $data.fieldValues1;//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>Yes
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName13_4;
+ $inputObject.fieldValues = $data.fieldValues1;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Yes
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowName1;
+ $inputObject.colNo = $data.colName13;
+ $inputObject.fieldValues = $data.fieldValues100;//1. Are there any effort over-runs in the project? ==>No
+ setSwiftFormData($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.msgAlert = " Please answer the following questions: Question 1, Question 2, Question 3, Question 4, Question 5 ";
+ InfyFTsaveSwiftForm($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName2;
+ $inputObject.rowNo = $data.rowName2;
+ $inputObject.colNo = $data.colName14_1;
+ $inputObject.fieldValues = $data.fieldValues2;//2. Are these over-runs already budgeted in PBS? ==>Test
+ setSwiftFormData($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.msgAlert = " Please answer the following questions: Question 1, Question 2, Question 3, Question 4, Question 5 ";
+ InfyFTsaveSwiftForm($inputObject);
+ */
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName14_2;
+ $inputObject.fieldValues = $data.fieldValues2;//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>Test
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName15_3;
+ $inputObject.fieldValues = $data.fieldValues3;//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>12.00
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo4;
+ $inputObject.fieldValues = $data.fieldValues4;//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>INR
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName17_3;
+ $inputObject.fieldValues = $data.fieldValues5;//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>Q1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName3;
+ $inputObject.rowNo = $data.rowName3;
+ $inputObject.colNo = $data.colName18_3;
+ $inputObject.fieldValues = $data.fieldValues6;//3. Is there any risk if client not accepting future invoices? If yes quantity the risk ==>2015
+ setSwiftFormData($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.msgAlert = " Please answer the following questions: Question 1, Question 2, Question 3, Question 4, Question 5 ";
+ InfyFTsaveSwiftForm($inputObject);
+ */
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName4_2;
+ $inputObject.fieldValues = $data.fieldValues7;//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>234TT
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName15_4;
+ $inputObject.fieldValues = $data.fieldValues3;//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>12.00
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName16_4;
+ $inputObject.fieldValues = $data.fieldValues4;//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>INR
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName17_4;
+ $inputObject.fieldValues = $data.fieldValues5;//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>Q1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName4;
+ $inputObject.rowNo = $data.rowName4;
+ $inputObject.colNo = $data.colName18_4;
+ $inputObject.fieldValues = $data.fieldValues6;//4. Is there any risk of AR collection for invoices raised and yet to be paid? If Yes quantity the risk ==>FY2017
+ setSwiftFormData($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.msgAlert = " Please answer the following questions: Question 1, Question 2, Question 3, Question 4, Question 5 ";
+ InfyFTsaveSwiftForm($inputObject);
+ */
+
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+  $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName14_2;
+ $inputObject.fieldValues = $data.fieldValues2;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName15_5;
+ $inputObject.fieldValues = $data.fieldValues3;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>12.00
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName16_5;
+ $inputObject.fieldValues = $data.fieldValues4;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>INR
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName17_5;
+ $inputObject.fieldValues = $data.fieldValues5;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Q1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName18_5;
+ $inputObject.fieldValues = $data.fieldValues6;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>FY2017
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName19_5;
+ $inputObject.fieldValues = $previousDate;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Current Date
+ $inputObject.msgAlert = "Error : Due date cannot be older than Todays date.";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.tableName5;
+ $inputObject.rowNo = $data.rowName5;
+ $inputObject.colNo = $data.colName19_5;
+ $inputObject.fieldValues = $currentDate;//5. Is there any risk of client asking us to refund the money already paid by him? If Yes quantify the risk ==>Current Date
+ setSwiftFormData($inputObject);
+ 
+ _click(_button("SaveBtn"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name;
+ SelectSegment($inputObject);
+ 
+ InfyFTClickVersion();
+ 
+ $inputObject = {};
+ $inputObject.popup = $data.popupName;
+ InfyFTcloseWin($inputObject);
+ 
+ _wait(2000);
+
+ 
+ $TC.end();
+ 
+ 
+
+ 
+
+
+
+ 
+ 

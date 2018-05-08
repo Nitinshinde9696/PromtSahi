@@ -1,0 +1,474 @@
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function is called to select WorkSpace in ModuleTree.
+* 				  It is called in traverseModuleTree and takes 1st param of FolderList.
+* @param:
+* @return:
+*******************************************************************************************/
+function selectWorkSpace($inputObject)
+{
+	_log("selectWorkSpace Started","success");
+	try 
+	{
+		var $isButtonDisabled;
+		_set($isButtonDisabled,_link("workSpace").disabled);
+		
+		if($isButtonDisabled)
+		{	
+			navigateTo({"name":"Project Configuration"});
+		}
+		else
+		{
+			_click(_link("workSpace"));
+			if (_isVisible(_link("Working Project",_under(_span("Filter Options")))))
+			    _click(_link($inputObject.Workspace,_under(_span("Filter Options"))));
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectWorkSpace Completed","success");
+}
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function is called to traverse through the ModuleTree path
+*   $inputObject.FolderList should contain the entire navigation string
+*    When user wants to view the access configuration tree of a project,
+*   "Working Project"  should be the first string in the $inputObject.FolderList
+* @param:
+* @return:
+*******************************************************************************************/
+function traverseModuleTree($inputObject)
+{
+	_log("traverseModuleTree Started","success");
+	try 
+	{
+		var $values = $inputObject.FolderList.split(";");
+		
+		$inputObject.Workspace = $values[0];
+		selectWorkSpace($inputObject);
+			
+		if (!_isVisible(_span($values[$values.length-1])))
+		{
+		    for(var $k=1; $k < $values.length; $k++)
+		    {
+			    _doubleClick(_span($values[$k]));
+			    _wait(500);
+		    }	
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("traverseModuleTree Completed","success");
+}
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function verifies role exists in list.
+* @param {String} None
+* @return {String} None 
+*******************************************************************************************/
+function verifyRolesInModuleTree($inputObject)
+{
+	_log("verifyRolesInModuleTree Started","success");
+	try 
+	{
+		if($inputObject.Level === "Project")
+		{			
+			$inputObject.Workspace = "Working Project";
+			selectWorkSpace($inputObject);
+		}
+		
+		if($inputObject.operation === "Negative")
+			_assertFalse(_containsText(_div("headercontainer-1040"),$inputObject.Role));
+		else
+		{
+			var $values = $inputObject.Role.split("#");
+			
+			for(var $k=0; $k<$values.length; $k++)
+			{
+				_assertTrue(_containsText(_div("headercontainer-1040"),$values[$k]));
+			}	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRolesInModuleTree Completed","success");
+}
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function is called to verify Moduletree path by traversing through it.
+* @param:
+* @return:
+*******************************************************************************************/
+function verifyModuleTree($inputObject)
+{
+	_log("verifyModuleTree Started","success");
+	try 
+	{
+		traverseModuleTree($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyModuleTree Completed","success");
+}
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function is called to set Moduletree Feature settings
+* @param:
+* @return:
+*******************************************************************************************/
+function setModuleTreeFeatureSetting($inputObject)
+{
+	_log("setModuleTreeFeatureSetting Started","success");
+	try 
+	{
+		traverseModuleTree($inputObject);
+		
+		if($inputObject.Role == undefined || $inputObject.Role == null || $inputObject.Role == "Organization")
+		{
+			if(_isVisible(_span("Organization[1]")))
+			    $inputObject.Role = "Organization[1]";
+			else
+			    $inputObject.Role = "Organization";
+		}
+		
+		if($inputObject.Role === "Working Project")
+		{
+			if(_isVisible(_span("Working Project[1]")))
+			    $inputObject.Role = "Working Project[1]";
+			else
+			    $inputObject.Role = "Working Project";
+		
+		}
+		
+		if($inputObject.modulecode && $inputObject.featureSettingAvailability)
+		{
+			var $arrayModuleCode = $inputObject.modulecode.split(";");
+			var $arrayYOrN = $inputObject.featureSettingAvailability.split(";");
+			
+			for(var $i = 0 ; $i < $arrayModuleCode.length ; $i++)
+			{
+				var $ValuesToSet = $arrayYOrN[$i].split(":");
+				
+				
+				_click(_div(0,_near(_span($arrayModuleCode[$i])),_under(_div($inputObject.Role))));
+
+                               _wait(2000);
+				_click(_textbox(0,_in(_div(0,_near(_span($arrayModuleCode[$i])),_under(_div($inputObject.Role))))));
+                                   _wait(5000);
+
+				
+				if ("Y" === $ValuesToSet[0] || "Yes" === $ValuesToSet[0])
+				{	
+					_click(_listItem("Yes"));
+				}
+				if ("N" === $ValuesToSet[0] || "No" === $ValuesToSet[0])
+				{	
+					_click(_listItem("No"));
+				}
+				_click(_span("Name"));
+			}
+		}
+		
+		_click(_link("Save"));
+		if (_isVisible(_span("Saved Successfully.")))
+		{
+		    _assert(_isVisible(_span("Saved Successfully.")));
+		    _click(_link("OK"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setModuleTreeFeatureSetting Completed","success");
+}
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function is called to set Moduletree Detail settings
+* @param:
+* @return:
+*******************************************************************************************/
+function setModuleTreeDetailSetting($inputObject)
+{
+	_log("setModuleTreeDetailSetting Started","success");
+	try 
+	{
+		traverseModuleTree($inputObject);
+		
+		if($inputObject.Role == undefined ||  $inputObject.Role == null || $inputObject.Role == "Organization")
+	    {
+		    if(_isVisible(_span("Organization[1]")))
+			    $inputObject.Role = "Organization[1]";
+			else
+			    $inputObject.Role = "Organization";
+		}
+		
+		if($inputObject.Role === "Working Project")
+		{
+			if(_isVisible(_span("Working Project[1]")))
+			    $inputObject.Role = "Working Project[1]";
+			else
+			    $inputObject.Role = "Working Project";
+		}
+		
+		var $folderList = $inputObject.FolderList.split(";");
+		
+		var $folderLength = $folderList.length;
+		var $lastIndex = $folderLength-1;
+		
+		_click(_div(0,_near(_span($folderList[$lastIndex])),_under(_div($inputObject.Role))));
+		_click(_textbox(0,_in(_div(0,_near(_span($folderList[$lastIndex])),_under(_div($inputObject.Role))))));
+		
+		if ("Y" === $inputObject.lst_isAvailable || "Yes" === $inputObject.lst_isAvailable)
+		{	
+			_click(_listItem("Yes"));
+		}
+		if ("N" === $inputObject.lst_isAvailable || "No" === $inputObject.lst_isAvailable)
+		{
+			_click(_listItem("No"));
+		}
+		
+		_click(_span("Name"));
+			
+		_click(_link("Save"));
+		if (_isVisible(_span("Saved Successfully.")))
+		{
+		    _assert(_isVisible(_span("Saved Successfully.")));
+		    _click(_link("OK"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setModuleTreeDetailSetting Completed","success");
+}
+
+/*******************************************************************************************
+* @author: rmahant
+* @example: 
+* @description: This function is called to verify Moduletree Feature settings
+* @param:
+* @return:
+*******************************************************************************************/
+function verifyModuleTreeDetailSetting($inputObject)
+{
+	_log("verifyModuleTreeDetailSetting Started","success");
+	try 
+	{
+		traverseModuleTree($inputObject);
+		
+		if($inputObject.Role == undefined ||  $inputObject.Role == null || $inputObject.Role == "Organization")
+	    {
+		    if(_isVisible(_span("Organization[1]")))
+			    $inputObject.Role = "Organization[1]";
+			else
+			    $inputObject.Role = "Organization";
+		}
+		
+		if($inputObject.Role === "Working Project")
+		{
+			$inputObject.Role = "Working Project[1]";
+		}
+		
+		var $folderList = $inputObject.FolderList.split(";");
+		
+		var $YesOrNo;
+		
+		var $folderLength = $folderList.length;
+		var $lastIndex = $folderLength-1;
+		
+		if($inputObject.lst_isAvailable.indexOf(":") != -1)
+		{
+			var $values = $inputObject.lst_isAvailable.split(":");
+			
+			_set($YesOrNo,$values[0]);
+			
+			if($values[1] === "disabled")
+			{
+				_click(_div(0,_near(_span($folderList[$lastIndex])),_under(_div($inputObject.Role))));
+
+				_assertFalse(_isVisible(_textbox(0,_in(_div(0,_near(_span($folderList[$lastIndex])),_under(_div($inputObject.Role)))))));
+
+			}
+		}
+		else
+		{
+			_set($YesOrNo, $inputObject.lst_isAvailable);
+		}
+		
+		if( $inputObject.operation === "Negative")
+			_assertNotEqual($YesOrNo, _getText(_div(0,_near(_span($folderList[$lastIndex])),_under(_div($inputObject.Role)))));
+		else
+			_assertEqual($YesOrNo,_getText(_div(0,_near(_span($folderList[$lastIndex])),_under(_div($inputObject.Role)))));
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyModuleTreeDetailSetting Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyModuleTreeFeatureSetting($inputObject)
+{
+	_log("verifyModuleTreeFeatureSetting Started","success");
+	try 
+	{
+		traverseModuleTree($inputObject);
+		
+		if($inputObject.Role == undefined ||  $inputObject.Role == null || $inputObject.Role == "Organization")
+	    {
+		    if(_isVisible(_span("Organization[1]")))
+			    $inputObject.Role = "Organization[1]";
+			else
+			    $inputObject.Role = "Organization";
+		}
+		
+		if($inputObject.Role === "Working Project")
+		{
+			$inputObject.Role = "Working Project[1]";
+		}
+		
+		//Set FeatureSetting Values and check for feature setting values
+		if($inputObject.modulecode && $inputObject.featureSettingAvailability)
+		{
+			var $arrayModuleCode = $inputObject.modulecode.split(";");
+			var $arrayYOrN = $inputObject.featureSettingAvailability.split(";");
+			
+			for(var $i = 0 ; $i < $arrayModuleCode.length ; $i++)
+			{
+				var $ValuesToCheck = $arrayYOrN[$i].split(":");
+				
+				if($ValuesToCheck.length === 3)
+				{
+					if("disabled" === $ValuesToCheck[2])
+					{	
+						_click(_div(0,_near(_span($arrayModuleCode[$i])),_under(_div($inputObject.Role))));
+ 
+						_assertFalse(_isVisible(_textbox(0,_in(_div(0,_near(_span($arrayModuleCode[$i])),_under(_div($inputObject.Role)))))));
+
+					}	
+				}
+				else
+				{
+					if ("Y" === $ValuesToCheck[0] || "Yes" === $ValuesToCheck[0])
+					   _assertEqual("Yes",_getText(_div(0,_near(_span($arrayModuleCode[$i])),_under(_div($inputObject.Role)))));
+
+					if ("N" === $ValuesToCheck[0] || "No" === $ValuesToCheck[0])
+					  _assertEqual("No",_getText(_div(0,_near(_span($arrayModuleCode[$i])),_under(_div($inputObject.Role)))));
+
+				}
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyModuleTreeFeatureSetting Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function setCustomUCP($inputObject)
+{
+	_log("setCustomUCP Started","success");
+	try 
+	{
+		traverseModuleTree($inputObject);
+		
+	 	_setSelected(_select("FormFieldLeft",_near(_cell($inputObject.CustomUCPName))),$inputObject.WebList);
+		if($inputObject.WebCheckBox === "ON")
+	 	{
+			_check(_checkbox("Y",_near(_select("FormFieldLeft",_near(_cell($inputObject.CustomUCPName))))));
+	 	}
+	 	else if($inputObject.WebCheckBox === "OFF")
+	 	{	 		
+	 		_uncheck(_checkbox("Y",_near(_select("FormFieldLeft",_near(_cell($inputObject.CustomUCPName))))));
+	 	}
+		_click(_button("SaveBtn"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("setCustomUCP Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:  Vaishali
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyCustomUCP($inputObject)
+{
+	_log("verifyCustomUCP Started","success");
+	try 
+	{
+		var $webListValue;
+	    var $webCheckFlag;
+	    
+	    traverseModuleTree($inputObject);
+	 	
+	 	if($inputObject.operation === "Negative")
+	   	{
+	 		_assertFalse(_exists(_span($inputObject.CustomUCPName)));
+		}
+	 	else
+	 	{
+	 		$webListValue=$inputObject.WebList;
+		 	while($webListValue.indexOf(";") != -1 )
+		 	{
+		 		$webListValue =$webListValue.replace(";",",");
+		 	}	 	
+		 	_assertEqual($webListValue,_getSelectedText(_select("FormFieldLeft",_near(_cell($inputObject.CustomUCPName)))));
+		 	
+		}	 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCustomUCP Completed","success");
+}

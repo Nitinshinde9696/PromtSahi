@@ -1,0 +1,145 @@
+_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/ResourceManagement.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+$data = readDataFromCSV("Roles_PrjLvl_1_SPM_PM_16","Roles"); 
+
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1", "login with SPM for the project ");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.user_name = $data.UserName1;//Nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID1;//Nethravathi_r02
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name3;//INFY000029PrjM
+ selectProject($inputObject);
+ 
+ $t.end();  
+ 
+ var $t = _testcase("TC_2", "Verifying the basic details in selected project ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field1;//Project Code :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field2;//Project Start Date :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field3;//Project End Date :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field4;//Unit :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field5;//Sub Unit :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field6;//PU :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field7;//Delivery Unit :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field8;//Customer Code :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field9;//Project Manager :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field10;//Senior Project Manager :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field11;//Group Project Manager :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field12;//SQA :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "Inviting the QD member as a SQA for the project ");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Team Members
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_loginid = $data.Invitee_id4;//srinivasp 6B
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles4;//SQA
+ $inputObject.edt_startdateInput = $StartDate1;
+ $inputObject.edt_enddateInput = $EndDate2;
+ InfyFTinviteTeamMemberToProject($inputObject); 
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Invitee_id4;//srinivasp
+ verifyInstanceInListing($inputObject);
+ 
+ var $t = _testcase("TC_4", "Extending the allocation date of the team member for project. ");
+ $t.start();  
+ 
+ var $dateObj1 = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",30,$dateObj2);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.User1;//subhashini_k03
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Member Allocations
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_Assigned_Roles = $data.Assigned_Roles5;//SPM
+ $inputObject.edt_allocstartdate = $StartDate;
+ $inputObject.edt_allocenddate = $EndDate; 
+ InfyFTAllocateRoleToTeamMember($inputObject);
+ 
+ _wait(2000); 
+ //_popup("Allocation")._closeWindow(); 
+
+ 
+ //clickReturn();
+ 
+ $t.end();
+  

@@ -1,0 +1,228 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Package_Tools_Reuse_Tools_Planning_Generic","Package/Tools_Reuse");
+ $data = readDataFromCSV("Package_Tools_Reuse_FLW527_ToolsPlanning_08","Package/Tools_Reuse");
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",30,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+  var $script1 = _testcase("script1", "Package_BR34_Tools_Reuse_FLW527_ToolsPlanning_08");
+ $script1.start();
+ 
+ var $t = _testcase("TC_1", "Logging with valid user");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.Username1; // Arjun.R02
+ $inputObject.edt_loginid = $generic.LoginID1;// Arjun.R02
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigating to Project Tailoring for a Dev PT project ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.Projectname1;//SYAMCHCH
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject ={};
+ InfyFTreopenPMP($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_3", "Setting Sizing details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.ptsegment1;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno1;//0_lst
+ $inputObject.fieldValues = $data.value0;//"--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno1;//0_lst
+ $inputObject.fieldValues = $data.value1;//PackagePT
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno2;//1_lst
+ $inputObject.fieldValues = $data.value2;//New PackagePT
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno3;//2_lst
+ $inputObject.fieldValues = $data.value3;//3rd Generation default
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Sizing Details
+ $inputObject.rowNo = $data.rowno1;//1
+ $inputObject.colNo = $data.colno4;
+ $inputObject.fieldValues = $data.value4;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_4", "Navigating to PM Plan and setting Applicable LC stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//nodeIcon15
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.iteation;//iteration
+ InfyFTclick($inputObject);
+ 
+/*  $inputObject = {};
+ $inputObject.edt_CM_Name ="MyItr";
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.edt_DN_PlannedStartDate = $endDate;
+ $inputObject.lst_DN_IterationType = "Local Rollout";
+ InfyFTcreateLinkedItem($inputObject)
+  var $itrid2 = $inputObject.createdID;
+ 
+ clickReturn(); */
+ 
+  $inputObject = {};
+ $inputObject.item = "ITR1";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+	_selectWindow("openLinkedItem");
+	$t.end();
+  var $s = _testcase("TC_Tools Tracking"," Tools Tracking segment");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.ALS_segment;
+ SelectSegment($inputObject);
+  _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//Applicable LC Stages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.pmrow1;//Requirements Analysis|Detailed Design|Coding
+ $inputObject.colNo = $data.pmcol1;//Applicable_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ _closeWindow();
+ _selectWindow();
+ $s.end(); 
+ var $t = _testcase("TC_4", "Navigating to PM Plan and setting Applicable LC stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//nodeIcon15
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $generic.iteation;//iteration
+ InfyFTclick($inputObject);
+ 
+/*  $inputObject = {};
+ $inputObject.edt_CM_Name ="MyItr";
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.edt_DN_PlannedStartDate = $endDate;
+ $inputObject.lst_DN_IterationType = "Local Rollout";
+ InfyFTcreateLinkedItem($inputObject)
+  var $itrid2 = $inputObject.createdID;
+ 
+ clickReturn(); */
+ 
+  $inputObject = {};
+ $inputObject.item = "ITR2";
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+	_selectWindow("openLinkedItem");
+	$t.end();
+  var $s = _testcase("TC_Tools Tracking"," Tools Tracking segment");
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.ALS_segment;
+ SelectSegment($inputObject);
+  _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//Applicable LC Stages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.pmrow2;//Requirements Analysis|Detailed Design|Coding
+ $inputObject.colNo = $data.pmcol1;//Applicable_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ _closeWindow();
+ _selectWindow();
+ $s.end();
+ $script1.end();
+ var $t = _testcase("Script 2","Package_Tools_Reuse_FLW527_ToolsPlanning_Tool_04");
+ $t.start();
+  
+  _include("Package_Tools_Reuse_FLW527_ToolsPlanning_Tool_04.sah");
+  
+ $t.end();  
+ 
+ var $t = _testcase("Script 3","Package_Tools_Reuse_FLW516_ToolsTracking_addPlanned_05");
+ $t.start();
+  
+  _include("Package_Tools_Reuse_FLW516_ToolsTracking_addPlanned_05.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 4","Package_Tools_Reuse_FLW527_ToolsPlanning_addTools_06");
+ $t.start();
+  
+  _include("Package_Tools_Reuse_FLW527_ToolsPlanning_addTools_06.sah");
+  
+ $t.end(); 
+ var $t = _testcase("Script 5","Package_Tools_Reuse_FLW516_ToolsTracking_addTools_07");
+ $t.start();
+  
+  _include("Package_Tools_Reuse_FLW516_ToolsTracking_addTools_07.sah");
+  
+ $t.end(); 

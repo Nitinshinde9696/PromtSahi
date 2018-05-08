@@ -1,0 +1,891 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data7 = readDataFromCSV("Maint_PM_Plan_Normal_verify_values_field_validation_tracking_system_lang_setting_06","Maint/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 33", "29,30,31,32,33,38,47,50,52,53,54");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+
+ $t.end();
+ 
+ var $t = _testcase("Script 33", "29,30,31,32,33,38,47,50,52,53,54");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_29", "Verifying values available in the drop down.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ 
+  var $t = _testcase("TC_CR CHANGES", "VERIFYING IPR AND CONFIDENTIALITY FIELDS OF OVERVIEW SECTION");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.overview;//"Overview[1]";
+ $inputObject.rowNo = $data7.conf;//"Confidentiality";
+ $inputObject.colNo = $data7.Proj1;//"TJCPZMEP_lst";
+ $inputObject.fieldValues = $data7.Conf_values;//"NOT OK to use any form of case study of this project#--None--#OK to use case study only without name of client#OK to use case study with client name only on explicit permission from Account Manager/BDM#OK to use case study with client name only on explicit permission from Client#OK to use case study with client name without any further permission";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.overview;//"Overview[1]";
+ $inputObject.rowNo = $data7.conf;//"Confidentiality";
+ $inputObject.colNo = $data7.Proj1;//"TJCPZMEP_lst";
+ $inputObject.fieldValues = $data7.Conf_setval;//"NOT OK to use any form of case study of this project";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName =$data7.overview;//"Overview[1]";
+ $inputObject.rowNo = $data7.IPR;//"IPR";
+ $inputObject.colNo = $data7.Proj2;//"TJCPZMEP[1]_chk";
+ $inputObject.fieldValues = "Y";
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_30", "Check the validation for the field Details of sizing technique.");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues2_1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName5;
+ $inputObject.rowNo = $data7.overviewlbl;
+ $inputObject.colNo = $data7.colNo17;
+ $inputObject.fieldValues = $data7.reason1;//Reason 1
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_2;
+ $inputObject.fieldValues = $data7.fieldValues2_2;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_31", "Check the Validation for the fields Reason for not using standard sizing Technique.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues2_3;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.link = $data7.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data7.tableName5;
+ $inputObject.rowNo = $data7.overviewlbl;
+ $inputObject.colNo = $data7.colNo17;
+ $inputObject.fieldValues = $data7.reason2;//Reason 2
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_3;
+ $inputObject.fieldValues = $data7.fieldValues2_2;
+ InfyFTsetSwiftFormData($inputObject);
+
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_32", "Checking for Package Maintenance");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_2;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_0;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_2;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_3;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_4;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_5;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject); 
+
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes"; 
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_6;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_1;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Primary Package
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues3_7;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};   //Sizing technique for enhancement
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_2;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_33", "Checking the validation for the fields Type of Application Maintained and Applicable sizing Technique.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;//Custom Application
+ InfyFTsetSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colName3_1;
+ $inputObject.fieldValues = $data7.fieldValues4_3;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_10;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_3;//BPM or EAI
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3_2;
+ $inputObject.fieldValues = $data7.fieldValues4_4;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_11;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_4;//ETL only
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colSub;
+ $inputObject.fieldValues = $data7.fieldValues4_5;
+ verifySwiftFormData($inputObject);
+ 
+ /*$inputObject = {}; DNA Implementation
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_12;
+ verifySwiftFormData($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_5;//ETL Reports only
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colSub;
+ $inputObject.fieldValues = $data7.fieldValues4_6;
+ verifySwiftFormData($inputObject); 
+ 
+/* $inputObject = {};
+ $inputObject.byColRowName = "Yes";  DNA Implementation  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_13;
+ verifySwiftFormData($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_6;//ETL & Reports only
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colSub;
+ $inputObject.fieldValues = $data7.fieldDMBI;
+ verifySwiftFormData($inputObject); 
+ 
+/* $inputObject = {};
+ $inputObject.byColRowName = "Yes";   DNA Implementation
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3_4;
+ $inputObject.fieldValues = $data7.fieldValues4_6;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_14;
+ verifySwiftFormData($inputObject);*/
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_7;//Portal or content management site
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3_5;
+ $inputObject.fieldValues = $data7.fieldValues4_7;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3_6;
+ $inputObject.fieldValues = $data7.fieldValues4_8;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_15;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = "--None--";
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1_8;//Package or Product
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3;
+ $inputObject.fieldValues = $data7.fieldValues4_17;//Amdocs
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo3_7;
+ $inputObject.fieldValues = $data7.fieldValues4_9;
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo2_1;
+ $inputObject.fieldValues = $data7.fieldValues4_16;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_1_New Changes", "The field DevOps Applicability should be available as a multi-select field in the Overview section.");
+ $t.start(); 
+ 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableOverview1;
+ $inputObject.rowNo = $data7.devOps;
+ $inputObject.colNo = $data7.underProject;
+ $inputObject.fieldValues = $data7.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ //Checking for the Drop down Values of DevOps
+ 
+ _wait(2000);
+ 
+ _setSelected(_select(8), "CD");
+ 
+ _setSelected(_select(8), "--All--");
+ 
+ _wait(2000);
+ 
+ _assertEqual("CD,CI", _getSelectedText(_select(8)));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data7.apply;
+ InfyFTclick($inputObject)
+ 
+ _wait(5000);
+ 
+ //Checking Whether the DevOps section is mandatory
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableOverview1;
+ $inputObject.rowNo = $data7.devOps;
+ $inputObject.colNo = $data7.underProject;
+ $inputObject.fieldValues = $data7.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+
+ _wait(2000); 
+
+ _setSelected(_select(8), "--None--");
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data7.apply;
+ InfyFTclick($inputObject)
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_38", "Verifying the fields available in Scope Description.");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.link4;// _InfyFTclick(_link("Scope Description"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data7.field1;//Project Scope
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.span_Name = $data7.field2;//Clients Objectives
+ InfyFTisVisible($inputObject);
+ 
+
+ $t.end(); 
+ 
+ var $t = _testcase("TC_40", "Add Multiple Client Commitment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.clientCommitment;// _InfyFTclick(_link("Client Commitment"));
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data7.tableName2;
+ $inputObject.rowCount = $data7.rowCount;
+ addRowInSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data7.tableName2;
+ $inputObject.rowNo = $data7.rowDelete;
+ $inputObject.colNo = $data7.colClient;
+ $inputObject.fieldValues = $data7.fieldValues3;
+ setSwiftFormData($inputObject); 
+
+ _wait(2000);
+  
+ if(_isVisible(_checkbox("false[1]")))
+ {
+     $inputObject = {};
+	 $inputObject.tableName = $data7.tableName2;
+	 $inputObject.rowNo = $data7.rowNo4;//3
+	 $inputObject.colNo = $data7.colNo3_9;//0_chk
+	 $inputObject.fieldValues = $data7.fieldValues3_9;
+	 setSwiftFormData($inputObject); 
+	 
+	 $inputObject = {};
+     InfyFTsaveSwiftForm($inputObject);
+ }
+ _wait(5000);
+ 
+ if(_isVisible(_checkbox("false[2]")))
+ {
+     $inputObject = {};
+	 $inputObject.tableName = $data7.tableName2;
+	 $inputObject.rowNo = $data7.rowNo5;//4
+	 $inputObject.colNo = $data7.colNo3_9;//0_chk
+	 $inputObject.fieldValues = $data7.fieldValues3_9;
+	 setSwiftFormData($inputObject); 
+	 
+	 $inputObject = {};
+     InfyFTsaveSwiftForm($inputObject);
+ }
+ _wait(5000); 
+ $t.end(); 
+ 
+ /*var $t = _testcase("TC_47", "Click on Link CTS"); Compliance Tracking system not found from backend
+ $t.start();
+ 
+ _click(_link("Click here to navigate to CTS to view MSA level clauses."));
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup = $data7.popupName;
+ InfyFTcloseWin($inputObject);
+ 
+ $t.end(); */
+  
+ var $t = _testcase("TC_50", "Checking for the availability of Language Setting");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+   
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon11;// _InfyFTclick(_image("nodeIcon11"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ _wait(500);
+ 
+ _assertNotVisible(_link("Language Settings"),"This link is not visible.");
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.link3;// _InfyFTclick(_link("Overview"));
+ InfyFTclick($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colNo1;
+ $inputObject.fieldValues = $data7.fieldValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data7.tableName1;
+ $inputObject.rowNo = $data7.rowNo1;
+ $inputObject.colNo = $data7.colName3_1;
+ $inputObject.fieldValues = $data7.fieldValues4_18;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data7.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data7.nodeIcon11;// _InfyFTclick(_image("nodeIcon11"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.linkLS;//_link(Language Setting)
+ InfyFTisVisible($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_52", "PM adds multiple languages.");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data7.linkLS;//_link(Language Setting)
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+
+ if(_isVisible(_checkbox(1)))
+{
+  _click(_checkbox(1));
+
+ 
+ }
+ _wait(2000);
+
+ if(_isVisible(_checkbox(2)))
+ {
+ _click(_checkbox(2));
+ 
+ }
+ _wait(2000);
+  if(_isVisible(_checkbox(3)))
+ {
+ _click(_checkbox(3));
+ 
+ }
+ _wait(2000);
+ _click(_span("Delete"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data7.tableName3;// Language
+ $inputObject.rowCount = $data7.rowCount;
+ addRowInSwiftForm($inputObject); 
+ 
+ _wait(1000);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data7.tableName3;
+ $inputObject.rowNo = $data7.rowNo4_1;
+ $inputObject.colNo = $data7.colName3_2;
+ $inputObject.fieldValues = $data7.fieldValues4_19;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Language in table Language in Language Settings tab\n";
+ InfyFTsaveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data7.tableName3;
+ $inputObject.rowNo = $data7.rowCount;
+ $inputObject.colNo = $data7.colName3_2;
+ $inputObject.fieldValues = $data7.fieldValues4_20;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();  
+ 
+ var $t = _testcase("TC_53", "Checking the Language level and conversion factor.");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.span_Name = $data7.langLevel;//_span(Language level)
+ InfyFTisVisible1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data7.conversionFactor;//_span(Conversion Factor)
+ InfyFTisVisible1($inputObject); 
+ 
+ $t.end();   
+ 
+ var $t = _testcase("TC_54", "Checking for duplicate Language");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data7.tableName3;// Language
+ $inputObject.rowCount = $data7.rowCount1;
+ addRowInSwiftForm($inputObject); 
+ 
+ _wait(1000);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data7.tableName3;
+ $inputObject.rowNo = $data7.rowNo4;
+ $inputObject.colNo = $data7.colName3_2;
+ $inputObject.fieldValues = $data7.fieldValues4_19;
+ $inputObject.msgAlert = "Error : The selected language is already present in this table.Please select a different value.";
+ InfyFTsetSwiftFormData($inputObject); 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";    
+ $inputObject.tableName = $data7.tableName3;
+ $inputObject.rowNo = $data7.rowNo4;
+ $inputObject.colNo = $data7.colName3_2;
+ $inputObject.fieldValues = $data7.fieldValues4_21;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end();  
+ 
+ 
+ 
+  
+ 
+ 

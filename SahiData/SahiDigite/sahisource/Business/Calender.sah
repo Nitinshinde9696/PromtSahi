@@ -1,0 +1,232 @@
+
+/*************************************************************************
+* @author Vaishali
+* @example $inputObject = {};
+ $inputObject.ExceptionFilter = $data.ExceptionFilter7;
+ $inputObject.edt_fromDate = $data.From7;
+ $inputObject.edt_toDate = $data.To7;
+ $inputObject.chk_isworkingEx = $data.IsWorking7;
+ $inputObject.edt_fromExTime = $data.ToTime7;
+ $inputObject.edt_toExTime =$data.FromTime7;
+ $inputObject.lst_reasonCode = "Holiday at Goa";
+ addDailyExceptionInCalender($inputObject);
+* @description This function is called to set Daily Exception in calender
+* @param {String} 
+* @return {String}   None 
+*************************************************************************/
+
+function addDailyExceptionInCalender($inputObject)
+{
+	_log("addDailyExceptionInCalender Started","success");
+	try 
+	{	
+		SelectSegment({ "segment_name" :  "Daily Exception"});
+		_setSelected(_select("ExceptionFilter"), $inputObject.ExceptionFilter);
+		var $fieldIndex = 0;
+		
+		for(var $i = 0; $i < 200; $i++)
+		{
+			if(!_condition(_isVisible(_textbox("fromDate_lm"+$i))))
+			{
+				$fieldIndex = $i+1;
+				break;
+			}
+		}
+		var $fieldIndexForTime = $fieldIndex +1;
+		_click(_link("de-icon-add_entry"));
+		$inputObjectNew = {};
+		$inputObjectNew["edt_fromDate_lm"+ $fieldIndex] = $inputObject.edt_fromDate;
+		$inputObjectNew["edt_toDate_lm"+ $fieldIndex] = $inputObject.edt_toDate;
+		if($inputObject.lst_reasonCode)
+		$inputObjectNew["lst_reasonCode_lm"+ $fieldIndex] = $inputObject.lst_reasonCode;
+		if($inputObject.chk_isworkingEx === "ON")
+		{
+			$inputObjectNew["chk_isworkingEx_lm"+ $fieldIndex] = $inputObject.chk_isworkingEx;
+			$inputObjectNew["edt_fromExTime_lm"+ $fieldIndex + "1"] = $inputObject.edt_fromExTime;
+			$inputObjectNew["edt_toExTime_lm"+ $fieldIndex + "1"] = $inputObject.edt_toExTime;
+		}
+		else
+		{
+			$inputObjectNew["unchk_isworkingEx_lm"+ $fieldIndex] = $inputObject.chk_isworkingEx;
+		}		
+		setAllFields($inputObjectNew);
+		_click(_button("save"));
+		
+		if($inputObject.alertType === "Date")
+		{
+			_assertEqual("The starting date of a date interval should not be later than the ending date.",_lastAlert());
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addDailyExceptionInCalender Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyDailyExceptionInCalender($inputObject)
+{
+	_log("verifyDailyExceptionInCalender Started","success");
+	try 
+	{
+		SelectSegment({ "segment_name" :  "Daily Exception"});
+		setAllFields($inputObject);
+		var $rowCount = 0;
+		//_set($rowCount, _byId("DailyExTable").getElementsByTagName("TR").length);
+		_set($rowCount, _table("DailyExTable").rows.length);
+		var $w_fromdate = "";
+		var $w_toDate = "";
+		var $rowFound = false;
+		_set($rowFound,false);
+		for(var $i = 0; $i < $rowCount - 2; $i++)
+		{
+			var $string1 = "DailyExRow_";
+			var $string2 = $i;
+			var $actualString = $string1 + $string2;
+			if(!_isVisible(_row($actualString)))
+				break;
+			
+			_set($w_fromdate, _getValue(_textbox(0, _in(_cell(0, _in(_row($actualString)))))));
+			_set($w_toDate, _getValue(_textbox(0, _in(_cell(1, _in(_row($actualString)))))));
+						
+			if($w_fromdate === $inputObject.startDate && $w_toDate === $inputObject.endDate)
+			{
+				_set($rowFound,true);
+				verifyAllFields($inputObject);
+	    		break;
+			}
+		 }
+		
+		if($inputObject.verificationType)
+		{
+			if($inputObject.verificationType === "Negative")
+				_assertFalse($rowFound, "Org exception found.");
+			else
+				_assertTrue($rowFound, "Org exception not found.");
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDailyExceptionInCalender Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author: Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function  changeWorkingDay($inputObject)
+{
+	_log(" changeWorkingDay Started","success");
+	try 
+	{
+		if($inputObject.IsWorking ==="No")
+			_uncheck(_checkbox(0,_under(_cell($inputObject.weekdayname))));
+		else
+		{
+			_check(_checkbox(0,_under(_cell($inputObject.weekdayname))));
+			setAllFields($inputObject);
+			
+		}
+		_click(_button("Save"));
+		if($inputObject.operation==="Negative")
+		{
+			_log("Changes cannot be made, Invalid data entry");
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" changeWorkingDay Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author: Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function VerifyOrgException($inputObject)
+{
+	_log("VerifyOrgException Started","success");
+	try 
+	{
+		SelectSegment({ "segment_name" :  "Organization Exception"});
+		setAllFields($inputObject);
+		var $rowCount = 0;
+		//_set($rowCount, _byId("DailyExTable").getElementsByTagName("TR").length);
+		_set($rowCount, _table("DailyExTableOrg").rows.length);
+		var $w_fromdate = "";
+		var $w_toDate = "";
+		var $rowFound = false;
+		_set($rowFound,false);
+		for(var $i = 0; $i < $rowCount - 2; $i++)
+		{
+			if(_condition(!_isVisible(_row("DailyExRow_uuu["+$i+"]"))))
+				break;
+			
+			_set($w_fromdate, _getValue(_textbox(0, _in(_cell(0, _in(_row("DailyExRow_uuu["+$i+"]")))))));
+			_set($w_toDate, _getValue(_textbox(0, _in(_cell(1, _in(_row("DailyExRow_uuu["+$i+"]")))))));
+			if($w_fromdate === $inputObject.startDate && $w_toDate === $inputObject.endDate)
+			{
+				_set($rowFound,true);
+    			break;
+			}
+		}
+		
+		if($inputObject.verificationType === "Negative")
+			_assertFalse($rowFound, "Org exception found.");
+		else
+			_assertTrue($rowFound, "Org exception not found.");
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("VerifyOrgException Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author:Sheetal Dindorkar
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyCalendarLocaleDetails($inputObject)
+{
+	_log("verifyCalendarLocaleDetails Started","success");
+	try 
+	{
+		_click(_image("calendar.gif"));
+		_selectWindow("Calendar");
+		_closeWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCalendarLocaleDetails Completed","success");
+}

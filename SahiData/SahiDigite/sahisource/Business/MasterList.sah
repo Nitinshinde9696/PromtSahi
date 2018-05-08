@@ -1,0 +1,487 @@
+
+/*************************************************************************
+* @author Ram
+* @example deleteMasterListItem
+* @description This function is called to delete MasterList Item
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function deleteMasterListItem($inputObject)
+{
+	_log("deleteMasterListItem Started","success");
+	try 
+	{ 
+		if($inputObject.operation === "Disabled")
+		{
+			_assertTrue(_checkbox(0,_near(_cell($inputObject.item))).disabled);
+		}
+		else
+		{
+			_click(_checkbox(0,_near(_cell($inputObject.item))));
+			_click(_link("de-icon-delete"));
+			_expectConfirm("Are you sure you want to delete the selected Item(s)?", true);
+			
+			if($inputObject.operation === "Negative")
+			{
+				_assertEqual("You cannot delete this Item", _lastAlert());
+			}
+		}
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteMasterListItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example verifyMasterList_Listing
+* @description This function is called to verifyMasterList_Listing
+* @param {String} item
+* @return {String}   None 
+*************************************************************************/
+
+function verifyMasterList_Listing($inputObject)
+{
+	_log("verifyMasterList_Listing Started","success");
+	try 
+	{
+		
+		if($inputObject.type === "Negative")
+			_assertFalse(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))));
+		else
+		{
+			//for pagination, code is modified.
+			if(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))) == false)
+			{
+			
+				var $values = _getCellText(_cell("BodyTextBoldLeft[1]"),_in(_table("pagination"))).split(" ");
+					for(var $i=1 ; $i<$values.length; $i++)
+					{
+						_click(_link($values[$i]));
+						if(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))) == true)
+						{
+							_assertTrue(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))));
+							return;
+						}
+					}
+			}
+			else
+			{
+				_assertTrue(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))));
+			}
+		}
+			
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMasterList_Listing Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example openMasterListdetails({ "item" : "PauseCode" });
+* @description This function is called to open MasterListItem Details
+* @param {String} item
+* @return {String}   None 
+*************************************************************************/
+
+function openMasterListdetails($inputObject)
+{
+	_log("openMasterListDetails Started","success");
+	try 
+	{
+		//for pagination, code is modified.
+		if(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))) == false)
+		{
+		
+			var $values = _getCellText(_cell("BodyTextBoldLeft[1]"),_in(_table("pagination"))).split(" ");
+				for(var $i=1 ; $i<$values.length; $i++)
+				{
+					_click(_link($values[$i]));
+					if(_isVisible(_cell($inputObject.item, _in(_table("QTP_ListTable")))) == true)
+					{
+						_click(_link("Detail",_near(_cell($inputObject.item)),_under(_cell("Full Detail"))));
+						return;
+					}
+				}
+		}
+		else
+		{
+			_click(_link("Detail",_near(_cell($inputObject.item)),_under(_cell("Full Detail"))));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openMasterListDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example modifyMasterListItem
+* @description This function is called to modify a MasterListItem
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function modifyMasterListItem($inputObject)
+{
+	_log("modifyMasterListItem Started","success");
+	try 
+	{
+		openMasterListItem($inputObject);
+		
+		$inputObject.winprefix = "AddItem";		
+		
+		if($inputObject.operation === "DisabledActionButton")
+		{	
+			_selectWindow($inputObject.winprefix);
+			_assertFalse(_isVisible(_textbox("name")));
+			_click(_button("QTP_Close"));
+			_selectWindow();
+		}
+		else
+			saveInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyMasterListItem Completed","success");
+}
+
+/**
+ @Function modifyMasterList
+ @author: shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyMasterList($inputObject)
+{
+	_log("modifyMasterList Started","success");
+	try 
+	{
+		_click(_link($inputObject.itemToClick)); //added to click on the link, data added in csv file as item:nameofthelinktoclick e.g JOB
+		_selectWindow("AddItem");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		_wait(5000,null);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyMasterList Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteMasterList($inputObject)
+{
+	_log("deleteMasterList Started","success");
+	try 
+	{
+		_click(_link($inputObject.item));
+		_selectWindow("AddItem");
+		_click(_submit("QTP_Delete"));
+		_selectWindow();
+		_assertEqual("Do you want to delete this?", _lastConfirm());
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteMasterList Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addMasterList($inputObject)
+{
+	_log("addMasterList Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("Add Dynamic Master Code");
+		setAllFields($inputObject);
+		_click(_submit("Save"));
+		if($inputObject.operation === "Code Already Exists Alert")
+		{
+			_expectConfirm("The Specified Prefix Code: "+$inputObject.edt_code+" is already in use, please choose some other Code for the Master Code Type.",true);
+			_click(_submit("Cancel"));
+		}
+		_selectWindow();
+		_wait(3000);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addMasterList Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example addMasterListItem
+* @description This function is called to add a MasterList Item
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function addMasterListItem($inputObject)
+{
+	_log("addMasterListItem Started","success");
+	try 
+	{
+		$inputObject.winprefix = "AddItem";
+		$inputObject.icon = "KEY_LABEL_Add";
+		createInstanceForPopUp($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addMasterListItem Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author: Rahul Mahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyMasterListItem_Listing($inputObject)
+{
+	_log("verifyMasterListItem_Listing Started","success");
+	try 
+	{
+		verifyInstanceInListing($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyMasterListItem_Listing Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example closeAddMasterListItem
+* @description This function is called to close Add MasterList Item
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function closeAddMasterListItem($inputObject)
+{
+	_log("closeAddMasterListItem Started","success");
+	try 
+	{
+		_click(_link(0,_near(_cell($inputObject.item))));
+		setAllFields($inputObject);
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		_click(_button("QTP_Close"));
+		if($inputObject.winprefix)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeAddMasterListItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example resetAddMasterListItem
+* @description This function is called to reset Add MasterListItem
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function resetAddMasterListItem($inputObject)
+{
+	_log("resetAddMasterListItem Started","success");
+	try 
+	{
+		_click(_link(0,_near(_cell($inputObject.item))));
+		setAllFields($inputObject);
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+		_click(_reset("QTP_Reset"));
+		_click(_button("QTP_Close"));
+		if($inputObject.winprefix)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("resetAddMasterListItem Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example saveAndAddNewMasterListItem
+* @description This function is called to saveAndAddNewMasterListItem
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function saveAndAddNewMasterListItem($inputObject)
+{
+	_log("saveAndAddNewMasterListItem Started","success");
+	try 
+	{
+		createInstanceForPopUp($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewMasterListItem Completed","success");
+}
+
+/**
+ @Function Number:	15
+ @author:			Vaishali	
+ @example:			verifyCancelandRejectFunctionality()	
+ @description: 		This function verifies Reset and cancel functionality.
+ @param: 			None
+ @return: 			None
+ **/
+
+function verifyCancelandRejectFunctionality()
+{
+	_log("verifyCancelandRejectFunctionality Started","success");
+	try 
+	{
+		_click(_link("de-icon-add"));
+		_selectWindow("AddItem");
+		_setValue(_textbox("name"), "tempValue");
+		_setValue(_textbox("code"), "CODE");
+		_setValue(_textarea("description"), "Description temp");
+		_setSelected(_select("sortby"), "Index - wise");
+		_click(_checkbox("canAdd"));
+		_click(_reset("Reset"));
+		_assertTrue(_getText(_textbox("name"))==="");
+		_assertTrue(_getText(_textbox("code"))==="");
+		_assertTrue(_getText(_textarea("description"))==="");
+		_assertTrue(_getSelectedText(_select("sortby"))==="Alphabetically");
+		_assertFalse(_checkbox("canAdd").checked);
+		_click(_submit("Cancel"));;
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyCancelandRejectFunctionality Completed","success");
+}
+
+/**
+ @Function Number:	16
+ @author:			Vaishali	
+ @example:			VerifyAddDeleteIcon()
+ @description: 		This Funxction verify delete and add icon
+ @param: 			None
+ @return: 			None
+ **/
+
+function VerifyAddDeleteIcon()
+{
+	_log("VerifyAddDeleteIcon Started","success");
+	try 
+	{
+		if(_exists(_link("de-icon-delete")) === true)
+			_assertTrue(_exists(_link("de-icon-delete"))); 
+		else
+			_assertFalse(_exists(_link("de-icon-delete")));
+	
+		if(_exists(_link("de-icon-delete")) === true)
+			_assertTrue(_exists(_link("de-icon-delete"))); 
+		else
+			_assertFalse(_exists(_link("de-icon-delete")));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("VerifyAddDeleteIcon Completed","success");
+}
+
+/**
+ @Function Number:24
+ @author:shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyopenMasterListItemDetails()
+{
+	_log("verifyopenMasterListItemDetails Started","success");
+	try 
+	{
+		_popup("AddItem")._assertTrue(_textbox("sortindex").disabled);
+		_popup("AddItem")._click(_button("QTP_Close"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyopenMasterListItemDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Rahul Mahant
+* @example openMasterListItem
+* @description This function is called to Open masterlist item
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function openMasterListItem($inputObject)
+{
+	_log("openMasterListItem Started","success");
+	try 
+	{
+		_click(_link(0,_near(_cell($inputObject.item))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openMasterListItem Completed","success");
+}

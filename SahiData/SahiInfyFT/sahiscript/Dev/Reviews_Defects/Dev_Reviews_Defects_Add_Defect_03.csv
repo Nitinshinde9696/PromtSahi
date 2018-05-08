@@ -1,0 +1,2 @@
+Def_closing_commen01,def_name03,def_descr04,def_owner05,def_sev06,Dropdown07,lc_detect08,lc_inject09,def_detect10,def_inject11,workflow12,closed13,deftype14,def_injec_by15,lc_injectd16,comts17,reopen18,save19,closed20,Defects21,Inprog22,closed23,abandon24
+test,Defect1,descr,Ricky_Wang,Critical,Open;Fixed;Abandoned;Not a defect;Deferred;Closed;--None--,Requirements Analysis,Requirements Analysis,Ricky_Wang,Ricky_Wang,Workflow,Closed,Configuration,Ricky_Wang,Requirements Analysis,Closing the Defect,Reopen,Save,Closed,1,In-Progress,Closed,Abandoned

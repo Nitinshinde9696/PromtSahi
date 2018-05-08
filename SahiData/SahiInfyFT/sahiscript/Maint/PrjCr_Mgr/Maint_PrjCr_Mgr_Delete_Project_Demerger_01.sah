@@ -1,0 +1,50 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Maint_PrjCr_Mgr_Delete_Project_Demerger_01","Maint/PrjCr_Mgr");
+ 
+ $deleteJSP = _getGlobal("JSP_URL");
+
+_navigateTo($deleteJSP,true);
+
+ var $t = _testcase("TC_1","First Project");
+ $t.start();
+ 
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code1;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+
+$t.end();
+
+ var $t = _testcase("TC_2","Second Project");
+ $t.start();
+ 
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code2;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+
+$t.end();
+
+ var $t = _testcase("TC_2","Second Project");
+ $t.start();
+ 
+$inputObject = {};
+$inputObject.edt_projectCode = $data.prj_code3;//_textbox("projectCode")
+$inputObject.chk_reOpenProjectRequest = "true";//_checkbox("reOpenProjectRequest")
+setAllFields($inputObject); 
+
+$inputObject = {};
+$inputObject.submit = $data.btn_name2;//_submit("Go")
+InfyFTclick($inputObject);
+
+$t.end();

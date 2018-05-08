@@ -1,0 +1,147 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data1 = readDataFromCSV("Agile_PMPlan_Small_clientCommitment_scopeDescription","Agile/PMPlan_Small"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_15", "User goes to Client Commitments");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.clientCommitement; //Client Commitments
+ InfyFTclick($inputObject); 
+ 
+ _wait(3000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_17,20,21,22", "User tests Client Commitments for both small and normal project");
+ $t.start();  
+ 
+ if(_isVisible(_checkbox("false[1]")))
+ {
+ _click(_checkbox("on"));
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ }
+ 
+ _wait(5000)
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.clientAmber;//Amber signal
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.clientReason1;//No commitments are added.
+ InfyFTisVisible($inputObject);
+
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data1.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.PmPlanSummary; //PM Plan Summary
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSummary;
+ $inputObject.rowNo = $data1.clientCommitement;
+ $inputObject.colNo = $data1.colReason;
+ $inputObject.fieldValues = $data1.clientReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_18", "User tests Client Commitments for normal project");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data1.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.clientCommitement; //Client Commitments
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data1.addRows;
+ InfyFTclick($inputObject); 
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableClientCommitments;
+ $inputObject.rowNo = $data1.rowDelete;
+ $inputObject.colNo = $data1.colCommitment;
+ $inputObject.fieldValues = $data1.fieldValueTest ;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableClientCommitments;
+ $inputObject.rowNo = $data1.rowDelete;
+ $inputObject.colNo = $data1.colCommitment;
+ $inputObject.fieldValues = $data1.twothousand;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);  
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_19", "User tests multiple Client Commitment addition scenario");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.rowDelete;//Delete
+ InfyFTisVisible($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_23", "User tests the CTS link");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.ctslink;//Click here to navigate to CTS to view MSA leve
+ InfyFTisVisible($inputObject); 
+
+ $t.end(); 

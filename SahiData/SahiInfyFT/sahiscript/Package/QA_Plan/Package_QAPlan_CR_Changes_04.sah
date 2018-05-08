@@ -1,0 +1,191 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/Inbox.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+ $data = readDataFromCSV("Package_QAPlan_CR_Changes_04", "Package/QA_Plan");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ _log($endDate);
+ 
+ /* var $s = _testcase("TC_01","Valid user credentials"); 
+ $s.start();
+ 
+ var $t = _testcase("TS_01","Login to Digite"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ $s.end(); */
+ 
+ var $s = _testcase("TC_02_TS_01_02","Create a new QA Plan instance in any project"); 
+ $s.start();
+ 
+ var $t = _testcase("TS_02","Select Project");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//IMS_Project
+ selectProject($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TS_03","Navigate to QA Plan");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $t.end(); 
+ 
+ var $s = _testcase("TC_03","Verify the note is Visible"); 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.operation = $data.Operation;
+ clickAddIcon($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Note1;//Only the latest CMMI Level of QAP from above fields combination will be considered for project.
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Note2;//Only the latest CMMI Level of QAP from above fields combination will be considered for project.
+ InfyFTisVisibleS($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Note3;//Only the latest CMMI Level of QAP from above fields combination will be considered for project.
+ InfyFTisVisibleS($inputObject);
+ 
+ clickReturn();
+ 
+ $s.end();
+ 
+ var $t = _testcase("TS_04","Create Instance of QA Plan");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name4;
+ $inputObject.lst_DN_TypeofReviewActivity = $data.TypeofReviewActivity41;//Compliance Check 
+ $inputObject.edt_DN_PlannedDateofReviewAct = $currentDate;
+ //$inputObject.edt_DN_ActualDateofReviewActi = $currentDate;
+ $inputObject.lst_DN_Auditee = $data.Auditee9;
+ CreateInstance($inputObject)//Creating a QA plan.
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_RemarksClosingComments = $data.DN_RemarksClosingComments;
+ $inputObject.lst_DN_CMMILevel = $data.DN_CMMILevel;
+ $inputObject.lst_DN_Status = $data.DN_Status;
+ $inputObject.msgAlert = "Please fill the below mandatory fields before closing the QA Plan:\nActual Review / Activity Date";
+ InfyFTModifyEformInstance($inputObject);
+
+ _wait(300); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TS_05","Navigate to Home Page");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo32;
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ var $s = _testcase("TC_3","QAP items cannot be rejected, error is shown now"); 
+ $s.start();
+
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.item =  $CreatedID;//"QAP107;QAP108";
+ $inputObject.action = $data.Action1;//"Reject";
+ $inputObject.msgAltFail= $data.msgAltFail1;//"Cannot Reject from the Initial Workflow Stage"; 
+ $inputObject.Item_type = $data.Item_type;//"QA Plan"; 
+ $inputObject.Item_code = $CreatedID;//"QAP107";//
+ Bulkupdate($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.Action1;//"Reject"; //_click(_div("x-grid-row-checker"));
+ InfyFTClickButton($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "button-1063-btnIconEl";
+ InfyFTClickButton($inputObject);
+ 
+ $s.end();
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;//IMS_Project
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo31;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name  = $data.Workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject ={};
+ $inputObject.txt_Comments = $data.DN_ClosingComments;
+ //$inputObject.msgAlert = "Routing the QA Plan will lead to routing all the linked findings to the auditee. Do you want to continue?";
+ ClickRoutewithComments($inputObject);
+ 
+ logOut();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Auditee9;
+ $inputObject.edt_loginid = $data.Auditee9;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo32;
+ navigateTo($inputObject);
+ 
+ var $s = _testcase("TC_04","If QAP item is in auditee stage and route is clicked, error is shown now"); 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.item =  $CreatedID;//"QAP107;QAP108";
+ $inputObject.action = $data.Action2;//"Route";
+ $inputObject.msgAltFail= $data.msgAltFail2;//"Cannot Reject from the Initial Workflow Stage"; 
+ $inputObject.Item_type = $data.Item_type;//"QA Plan"; 
+ $inputObject.Item_code = $CreatedID;//"QAP107";//
+ Bulkupdate($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Action2;//"Route"; //_click(_div("x-grid-row-checker"));
+ InfyFTClickButton($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "button-1063-btnIconEl";
+ InfyFTClickButton($inputObject);
+ 
+ $t.end();

@@ -1,0 +1,235 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data3 = readDataFromCSV("Agile_ProjectTailoring_ProjectSpecificMetrics_activityCodeCustomization","Agile/ProjectTailoring");
+
+ var $t = _testcase("TC_01", "Test step 1: Click on Project Specific Metrics Tab");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data3.navigateTo3;//Project Tailoring
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data3.SegmentProjectSpecific;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data3.tableProjectSpecificMetrics;
+ InfyFTisVisible($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ if(_isVisible(_checkbox("false[1]")))
+ {
+ 
+  _click(_checkbox("on"));
+  
+  $inputObject = {};
+  InfyFTsaveSwiftForm($inputObject);
+  
+  _wait(5000);
+ 
+ }
+ 
+ var $t = _testcase("TC_01", "Test step 2: Check for Project Specific Metrics labels");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data3.lablesPSM;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.addRows;
+ InfyFTclick($inputObject)
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colMetricName;
+ $inputObject.fieldValues = $data3.fieldValueName;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colMetricType;
+ $inputObject.fieldValues = $data3.fieldValueMetricType;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colExpressed;
+ $inputObject.fieldValues = $data3.fieldVlaueExpressed;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colMetricUOM;
+ $inputObject.fieldValues = $data3.fieldMetricUOM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colMetricDesc;
+ $inputObject.fieldValues = $data3.fieldVlaueTest;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+  
+ _wait(5000); 
+ 
+ var $t = _testcase("TC_01", "Test step 3: Check for Metric UOM, no special characters are accepted in the text box");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colMetricUOM;
+ $inputObject.fieldValues = "/*-+";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a valid value in Metric UOM column for row 1. Only the following characters are allowed: alphanumeric - . ? , and %";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_01", "Test step 4: No special Characters should be accepted in Metric name except for -,?.%");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.rowDelete;
+ $inputObject.colNo = $data3.colMetricName;
+ $inputObject.fieldValues = "/*-+";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Error : Please enter a valid value in Metric Name column for row 1. Only the following characters are allowed: alphanumeric - . ? , and %";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_01", "Test step 5,6: Duplicate Metric Name and Metric Type should not be allowed while creating a new Metric in Project Specific Metrics and add rows");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.link = $data3.addRows;
+ InfyFTclick($inputObject)
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colMetricName;
+ $inputObject.fieldValues = $data3.fieldValueName;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colMetricType;
+ $inputObject.fieldValues = $data3.fieldValueMetricType;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colExpressed;
+ $inputObject.fieldValues = $data3.fieldVlaueExpressed;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colMetricUOM;
+ $inputObject.fieldValues = $data3.fieldMetricUOM;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colMetricDesc;
+ $inputObject.fieldValues = $data3.fieldVlaueTest;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "There are duplicate data in combination of Metric Name and Metric Type. Please delete or modify them.";
+ InfyFTsaveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colMetricName;
+ $inputObject.fieldValues = $data3.fieldValueName2;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data3.tableProjectSpecificMetrics;
+ $inputObject.rowNo = $data3.newRow;
+ $inputObject.colNo = $data3.colMetricType;
+ $inputObject.fieldValues = $data3.fieldValueMetricType2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_01", "Test step 7: to check the delete of rows from the Project Specific table");
+ $t.start();  
+ 
+ if(_isVisible(_checkbox("false[2]")))
+ {
+ 
+  _click(_checkbox("false[2]"));
+  
+  $inputObject = {};
+  InfyFTsaveSwiftForm($inputObject);
+  
+  _wait(5000);
+ 
+ } 
+ 
+$t.end(); 

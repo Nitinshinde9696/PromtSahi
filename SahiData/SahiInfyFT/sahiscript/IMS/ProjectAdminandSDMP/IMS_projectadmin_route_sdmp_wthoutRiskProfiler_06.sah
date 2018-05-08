@@ -1,0 +1,175 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/ECRNethra.sah");
+
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ *********************************************************************************************************/ 
+
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ $data = readDataFromCSV("IMS_SDMP_workflow_04", "IMS/ProjectAdminandSDMP");
+  
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /***********************************************************
+ * workflowset for sdmp
+ ************************************************************/
+ 
+ var $t = _testcase("TC_4", "workflowset");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.workflow;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage0;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members;
+ $inputObject.workflow_stage = $data.workflow_stage2;
+ WorkflowSet($inputObject);
+ 
+ /*$inputObject = {};
+ $inputObject.msgAlert = "Error: SDMP cannot be submitted since no risk profiling is done.";
+ InfyFTClickRoutewithCommentsN($inputObject);
+ _wait(5000);*/
+ 
+ $t.end();
+ 
+ /***********************************************************
+ * workflowset for sdmp
+ ************************************************************/
+ 
+ $data = readDataFromCSV("IMS_SDMP_workflow_04", "IMS/ProjectAdminandSDMP");
+ 
+ var $t = _testcase("TC_5", "workflowset");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;//rejecting
+ $inputObject.alert = $data.fieldValues7;
+ ClickRejectwithComments($inputObject);
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;//rejecting
+ $inputObject.alert = $data.fieldValues7;
+ ClickRejectwithComments($inputObject);
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000); 
+ 
+ $data = readDataFromCSV("IMS_projectadmin_service_02", "IMS/ProjectAdminandSDMP");
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //project tailoring
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Applicable_service;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;
+ $inputObject.rowNo = $data.rowNo01;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.disable = "0";//$data.rowNo01;
+ InfyFTverifySwiftFormFieldDisabilityN($inputObject);
+ 
+ $data = readDataFromCSV("IMS_projectadmin_01", "IMS/ProjectAdminandSDMP");
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.specific_metrix1;
+ SelectSegment($inputObject);
+ 
+ _assertNotExists(_link("Add Rows"));
+ _assertNotExists(_link("Add Rows[1]"));
+ 
+ $data = readDataFromCSV("IMS_SDMP_workflow_04", "IMS/ProjectAdminandSDMP");
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22;
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000); 
+ 
+ InfyFTreopenInstance();
+ 
+ $t.end();
+ 
+ var $t = _testcase("END"); 
+ $t.start();
+ 
+ $t.end();
+ 
+ 

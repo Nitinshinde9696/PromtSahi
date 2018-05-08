@@ -1,0 +1,418 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Dev_PMPlan_Small_Gen","Dev/PMPlan_Small");
+ $data = readDataFromCSV("Dev_PMPlan_Small_mileStones_Assumptions_03","Dev/PMPlan_Small"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1); 
+ 
+ /* var $t = _testcase("TC_1.1_1.3", "Login with PM/SPM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;//
+ $inputObject.edt_loginid = $gen.LoginID1;//
+ $inputObject.edt_password = $gen.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ $t.end();
+ */
+ 
+ var $t = _testcase("TC_5", "Milestone and Deliverables section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;// _InfyFTclick(_link("Milestones and Deliverables"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ if(_isVisible(_div("2")))
+{
+	 $inputObject = {};
+	 $inputObject.item = $data.Mile1;
+	 OpenEformInstance($inputObject);
+ 
+	 _wait(2000);
+ 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.Mile1;
+	 InfyFTDeleteEformInstance($inputObject); 
+ }
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Milestones and Deliverables
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.tableName1;//Milestones and Deliverables
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason1;
+ verifySwiftFormData($inputObject);
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon6;//_InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.tableName1;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Mile1;
+ $inputObject.edt_DN_MilestoneEndDate = $endDate;
+ InfyFTcreateLinkedItem($inputObject);
+ 
+  var $MileID = $inputObject.createdID;
+ 
+ //clickReturn();
+  
+ $inputObject = {};
+ $inputObject.item = $data.Mile1;
+ verifyLinkedItem($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $MileID;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.edt_DN_MilestoneEndDate = $data.pastDate;
+ $inputObject.msgAlert = "Error : Milestone End Date cannot be a past date.";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.edt_DN_MilestoneEndDate = $data.dueDate;
+ $inputObject.msgAlert = "Please enter the date within Project Start date (2008-10-01) and Project End Date (2020-12-31) .";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.edt_DN_MilestoneEndDate = $endDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;//"openLinkedItem";
+ $inputObject.span_Name = $data.Deliverable;
+ InfyFTisVisiblePopup($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;//"openLinkedItem";
+ $inputObject.segment_name = $data.Deliverable;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ //_selectWindow("openLinkedItem");
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Mile1;
+ $inputObject.edt_CM_DUEDATE = $currentDate;
+ $inputObject.chk_DN_GatingbySrMgmt = "true";
+ $inputObject.chk_DN_SignOff = "true";
+ $inputObject.edt_DN_ActualDeliveryDate = $endDate;
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $Idgenerated = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ //clickReturn();
+ 
+ //_selectWindow();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.item = $Idgenerated;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(5000);
+ /*
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1;
+ $inputObject.item = $Idgenerated;
+ $inputObject.cell_DN_StatusLABEL = $data.statuslbl;
+ $inputObject.cell_DN_GatingbySrMgmtLABEL = $data.signlbl;
+ $inputObject.cell_DN_SignOffLABEL = $data.signOfflbl;
+ $inputObject.cell_CM_NameLABEL = $data.namelbl;
+ InfyFTverifyEformInstanceDetails($inputObject);
+ */
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1;
+ $inputObject.lst_DN_Status = "Delivered";
+ $inputObject.edt_DN_ActualDeliveryDate = $currentDate;
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup1;
+ InfyFTReturnPopUpPara($inputObject);
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ InfyFTReturnPopUpPara($inputObject);
+ /*
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;//"openLinkedItem";
+ $inputObject.segment_name = $data.SubProjects;
+ SelectSegment($inputObject);
+ 
+ _selectWindow("openLinkedItem");
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName2;//
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName1;//Risk 
+ $inputObject.colNo = $data.colName2;//Reason_lbl
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ 
+ _selectWindow();
+ 
+ _wait(2000);
+ 
+ _popup("openLinkedItem")._click(_button("Return"));
+*/
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName1;//Milestones and Deliverables
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.tableName1;//Milestones and Deliverables
+ $inputObject.colNo = $data.colName1;//Reason_lbl
+ $inputObject.fieldValues = $data.reason1_1;
+ verifySwiftFormData($inputObject);
+ 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Assumption section");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumtion1;// _InfyFTclick(_link("Assumption"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("2")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data.Assm1;
+	 OpenEformInstance($inputObject);
+ 
+	 _wait(2000);
+ 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.Assm1;//Assm1
+	 InfyFTDeleteEformInstance($inputObject); 
+ }
+ 
+ _wait(5000);
+
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName3;//Assumption
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName3;//Assumption
+ $inputObject.colNo = $data.colName13;//Reason_lbl
+ $inputObject.fieldValues = $data.reason4;//No assumptions are added. At least one assumption must be added.
+ verifySwiftFormData($inputObject);
+
+ _wait(1000);
+
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumtion1;// _InfyFTclick(_link("Assumption"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Assm1;
+ $inputObject.txt_CM_Description = $data.fieldValues6;//creating assumption for pmp 
+ $inputObject.chk_DN_ConverttoRisk = $data.aCRisk;//true
+ $inputObject.chk_DN_CommunicatedtoClient = $data.aCClient;//true
+ createLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Assm1;
+ verifyLinkedItem($inputObject);
+ 
+_wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $gen.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link2;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName3;//Assumption
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName3;//Assumption
+ $inputObject.colNo = $data.colName13;//Reason_lbl
+ $inputObject.fieldValues = $data.reason5;//At least one assumption is added.
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_14", "Risk Log");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Risk
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName4;//Risk 
+ $inputObject.colNo = $data.colName13;//Reason_lbl
+ $inputObject.fieldValues = $data.reason5a;//Mandatory fields are not filled for the Risks.
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4; //Risk Management
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("2")))
+ 
+ {
+ _click(_div("2"));
+ 
+ //Modifying the risk(assumption)
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;//Risk1
+ $inputObject.lst_DN_RiskCategory = $data.Rcategory;//Customer
+ $inputObject.lst_DN_Probability = $data.Probability;//0.3
+ $inputObject.lst_DN_Impact = $data.Impact;//3
+ //$inputObject.edt_DN_ScheduleImpactDays = $data.Days;//5
+ //$inputObject.edt_DN_CostImpactduetoSchedul = $data.CImapct;//4
+ //$inputObject.edt_DN_CostofRiskMitigationUS = $data.CRisk;//5
+ //$inputObject.edt_DN_OtherCostofRiskUSD = $data.ORisk;//8
+ $inputObject.txt_DN_MitigationPlan = $data.MPlan;//modify risk
+ $inputObject.lst_DN_ImpactTo = $data.ImpactTo;//Others
+ $inputObject.edt_DN_RiskOwner = $gen.user_name1;
+ ModifyEformInstance($inputObject); 
+ 
+ }
+ $t.end();
+ 
+ var $t = _testcase("TC_16", " Verifying the summary of risk after modify ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $gen.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link4;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);//
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.rowName4;//Risk
+ $inputObject.byColRowName = "yes";
+ $inputObject.rowNo = $data.rowName4;//Risk
+ $inputObject.colNo = $data.colName13;//Reason_lbl
+ $inputObject.fieldValues = $data.reason6;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ 

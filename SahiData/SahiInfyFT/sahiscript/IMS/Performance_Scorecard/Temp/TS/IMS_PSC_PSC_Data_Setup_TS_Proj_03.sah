@@ -1,0 +1,242 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceSnehal.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_PSC_Data_Setup_TS_Proj_03", "IMS/Performance_Scorecard");
+  
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo3; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSCName4;//"SDMS1";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName41;//SLA Performance
+ SelectSegment($inputObject);
+ 
+ _click(_link("Click Here"));
+ 
+ /*************************************************************/
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo51;////11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues510;//61|3
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo61;//11_edt|12_edt|17_txt
+ $inputObject.fieldValues = $data.fieldValues510;//71|3|abcd
+ setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo61;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues504;//91|3
+ setSwiftFormData($inputObject);
+
+
+$inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo504;//3
+ $inputObject.colNo = $data.colNo61;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues504;//91|3
+ setSwiftFormData($inputObject);
+  
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo505;//4
+ $inputObject.colNo = $data.colNo61;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues502;//1|61|abcd
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo506;//5
+ $inputObject.colNo = $data.colNo51;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues590;//3|67
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo507;//6
+ $inputObject.colNo = $data.colNo53;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues502;//91|3
+ setSwiftFormData($inputObject);
+ 
+ /*$inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo507;//1
+ $inputObject.colNo = $data.colNo51;////11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues504;//61|3
+ setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+ $inputObject.tableName = $data.tableName51;//SLA Enabled Goals
+ $inputObject.rowNo = $data.rowNo507;//1
+ $inputObject.colNo = $data.colNo51;////11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues504;//61|3
+ setSwiftFormData($inputObject);*/
+  
+ /***********************************************************/
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName52;//SLA Enabled TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo72;//11_edt|12_edt|20_edt|17_txt
+ $inputObject.fieldValues = $data.fieldValues697;//3|83|5
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+
+ clickReturn();
+ /***************************Internal Efficiency********************************/
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName42;//Internal Efficiency
+ SelectSegment($inputObject);
+
+ _click(_link("Click Here[1]"));
+
+ _wait(7000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt|16_txt
+ $inputObject.fieldValues = $data.fieldValues703;//61|3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues703;//71|3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues703;//71|3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt|16_txt
+ $inputObject.fieldValues = $data.fieldValues703;//71|3
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues704;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues704;//1|61
+ setSwiftFormData($inputObject);
+
+ 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo507;//7
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues704;
+ setSwiftFormData($inputObject);
+
+
+
+/* $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo508;//8
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues704;//91|3
+ setSwiftFormData($inputObject);*/
+ 
+
+/* $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo509;//8
+ $inputObject.colNo = $data.colNo71;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues701;//91|3
+ setSwiftFormData($inputObject);
+
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName53;//Internal Goals
+ $inputObject.rowNo = $data.rowNo510;//8
+ $inputObject.colNo = $data.colNo51;//11_edt|12_edt
+ $inputObject.fieldValues = $data.fieldValues503;//91|3
+ setSwiftFormData($inputObject);*/
+
+
+ /***************************************************************************/
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName54;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo73;//11_edt|12_edt|19_edt
+ $inputObject.fieldValues = $data.fieldValues607;//7|93|5
+ setSwiftFormData($inputObject);
+ 
+ /*$inputObject = {}; 
+ $inputObject.tableName = $data.tableName54;//Internal TAT Goals
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo53;//11_edt|12_edt|19_edt
+ $inputObject.fieldValues = $data.fieldValues506;//7|93|5
+ setSwiftFormData($inputObject);*/
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+
+
+
+ clickReturn();
+ 
+ /***************************Project Level Metrics***************************/
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName43;//Project Level Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.tableName55;//Project Level Metrics
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo54;//4_edt
+ $inputObject.fieldValues = $data.fieldValues508;//9
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);

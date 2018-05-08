@@ -1,0 +1,273 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",7,$dateObj1);
+ var $startDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj1 = new Date();
+ var $currentDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+ 
+ $data = readDataFromCSV("IMS_ZDP_Testinomails_07","IMS/ZDP");
+ 
+ /********************************************************************************************************
+ * Login with rite password and userID, selecting project, navigation 
+ Note : Setup feature has been removed
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "select Project");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; //HEFPMYS ims-pt
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_3", "navigate to SDMP");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /***********************************************************
+ * Create Instance of ZDP
+ ***********************************************************/ 
+ 
+ var $t = _testcase("TC_4", "create instance");
+ $t.start();
+ 
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.span = $data.key11
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name; //PDZ
+ $inputObject.lst_DN_SubmitZDtoDMfor = $data.DN_SubmitZDtoDMfor;//ZD closure
+ ModifyEformInstance($inputObject); 
+ 
+ _wait(1000);
+ var $IDZ = _getText(_span("CM_ItemCode"));
+
+ $inputObject = {};
+ $inputObject.span_Name = $IDZ;//system generated value 
+ $inputObject.cell_Name = $data.ID;
+ InfyFTisReadOnly($inputObject);
+ 
+ $t.end();
+
+/********************testimonials*****************/
+
+ /*var $t = _testcase("TC_5", "navigating to testimonial under setup and creating testimonial");
+
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.name = $data.navigateTotm; //testimonial
+ InfyFTnavigateTo($inputObject);
+
+ _wait(1000);
+ $inputObject = {};
+ $inputObject.span = $data.key11
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name64;
+ InfyFTModifyEformInstance1($inputObject);
+
+ var $cDZ = _getText(_span("CM_ItemCode"));
+ 
+ $t.end();
+
+ var $t = _testcase("TC_6", "navigating to zdp and opening eform");
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //ZDP
+ InfyFTnavigateTo($inputObject);
+
+ _wait(1000);
+ $inputObject = {};
+ $inputObject["edt_searchTextBox-inputEl"] = $IDZ;
+ setAllFields($inputObject);
+ 
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]); 
+
+ $inputObject = {};
+ $inputObject.item = $IDZ;
+ OpenEformInstance($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "checking whether testimonial segment and icons should be present");
+
+ $t.start();
+ $inputObject = {};
+ $inputObject.segment_name = $data.testimonials;
+ SelectSegment($inputObject); 
+
+ _assertExists(_link("Testimonials"));
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tt0;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tt1;
+ InfyFTisVisibleN($inputObject);
+
+  $inputObject = {};
+ $inputObject.span_Name = $data.tt2;
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.tt3;
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.tt4;
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.tt5;
+ InfyFTisVisibleN($inputObject); 
+ 
+ $t.end();
+/************link existing item************/
+
+ /*var $t = _testcase("TC_8", "linking existing item to zdp and deleting the same");
+
+ $inputObject = {};
+ $inputObject.span = $data.key12
+ InfyFTclick($inputObject);
+
+ _popup("newListing")._click(_submit("Search"));
+ _popup("newListing")._click(_checkbox("ItemID"));
+ _popup("newListing")._click(_submit("Link Testimonial"));
+
+ _click(_div("1"));
+
+ $inputObject = {};
+ $inputObject.item = $cDZ;
+ InfyFTDeleteEformInstanceS($inputObject);
+
+ $t.end();
+/****************linking existing to show no records found**************/
+
+ /*var $t = _testcase("TC_9", "linking existing to show no records found");
+
+ $inputObject = {};
+ $inputObject.span = $data.key12
+ InfyFTclick($inputObject);
+
+_popup("newListing")._setValue(_textbox("CM_Name"), "Tml6");
+_popup("newListing")._click(_submit("Search"));
+_popup("newListing")._assertEqual("No Records Found", _getText(_span("No Records Found")));
+_popup("newListing")._click(_submit("Return"));
+
+ $t.end();*/
+/******link new item**************************/
+
+ var $t = _testcase("TC_10", "linking new item and checking the fields are visible");
+ $t.start();
+
+ $inputObject = {}; 
+ $inputObject.segment_name = $data.testimonials;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.span = $data.key
+ InfyFTclick($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.ttt;
+ $inputObject.popup_name = $data.NewListing;//"newListing";
+ to_modifyEFormPopupDetails($inputObject);
+ 
+ var $IDcus =  _getText(_span("CM_ItemCode"));
+
+ _popup("newListing")._isVisible(_textbox("CM_Name"))
+ _popup("newListing")._isVisible(_select("DN_Classification"))
+ _popup("newListing")._isVisible(_textarea("CM_Description"))
+ _popup("newListing")._isVisible(_textbox("DN_GivenBy"))
+ _popup("newListing")._isVisible(_textbox("DN_ClientDesignation"))
+  
+ $t.end();
+  
+/*************checking  dropdown**************/
+
+var $t = _testcase("TC_11", "verifing drop down values");
+
+ $t.start();
+
+_assertEqual("--None--,Infosys Internal Use,Other Clients,Public,Within Client - can be used for other departments of client",_popup("newListing")._getText(_select("DN_Classification")))
+
+_popup("newListing")._click(_button("Return"));
+
+
+ $t.end();
+/***select segment and attaching**/
+
+ var $t = _testcase("TC_12", "select segment,checking attachment is visible and attaching attachment");
+ $t.start();
+ 
+_click(_div("1"));
+ _selectWindow("openLinkedItem");  
+
+ $inputObject = {};
+ $inputObject.segment_name =  $data.tt13; 
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.attfilename = $data.attfilename2;//BR2final
+ InfyMyADDAttachment($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Details; 
+ SelectSegment($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_13", "deleting the linked item");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.item = $IDcus;
+ InfyFTDeleteEformInstanceS($inputObject);
+  
+ _selectWindow();
+ 
+ $t.end();
+
+ /* var $t = _testcase("TC_14", "checking the instance in testimonial under setup");
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTotm; //ZDP
+ InfyFTnavigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item= $IDcus;
+ $inputObject.operation = $data.operation27;
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end(); */
+ 

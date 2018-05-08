@@ -1,0 +1,27 @@
+_include("/sahisource/Business/DigiteCommon.sah");
+
+/**********************************************************************************************/
+var $TC1 = _testcase("Read file","Read the Failure suite file"); 
+$TC1.start();
+
+		var $suitename = "SwiftALM";// Suite name
+		var $a = _readFile($suitename+"_failed_firefox.suite");
+		
+$TC1.end();
+/**********************************************************************************************/
+var $TC2 = _testcase("Replace URL","Replace URL from Failure suite file"); 
+$TC2.start();
+
+		var $url = _getGlobal("URL_ENV");
+		$scriptname = replaceAllStr($a,$url,"");//Replace the URL from the file
+
+
+$TC2.end();
+/**********************************************************************************************/
+var $TC3 = _testcase("Write File","Write the script Name in another file"); 
+$TC3.start();
+
+		_writeFile($scriptname, "SwiftALM_failure_Rerun.suite", true);//Target Failure file
+
+$TC3.end();
+/**********************************************************************************************/

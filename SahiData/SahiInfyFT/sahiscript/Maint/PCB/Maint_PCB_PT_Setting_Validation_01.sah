@@ -1,0 +1,543 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $s = _testcase("Script_01", "Maint_PCB_PT_Setting_Validation_01");
+ $s.start();
+ 
+ $data = readDataFromCSV("Maint_PCB_PT_Setting_Validation_01", "Maint/PCB");
+ 
+ var $t = _testcase("TC_1", "Login to digite");
+
+ $t.start();
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ var $t = _testcase("TC_2", "navigate to maintenance pt");
+
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;//Process Template
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject); 
+ $t.end();
+
+ var $t = _testcase("TC_3", "navigate to pt setting");
+
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo22;//PT Setting
+ InfyFTnavigateTo($inputObject);   
+ 
+ $t.end();
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "PTS1";
+ $inputObject.cell_Name = "ID :";
+ InfyFTisReadOnlyS($inputObject);
+
+ var $t = _testcase("TC_4", "select Type of Application - Technology Group");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName42;//Type of Application - Technology Group
+ SelectSegment($inputObject);
+ 
+ $t.end();
+ 
+ _wait(300);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PTSettingSegments4;//Details;Type of Application - Technology Group;Activity Log
+ InfyFTisVisibleS($inputObject);
+  
+ var $t = _testcase("TC_5", "add row and verify values in technology group and type of application");
+ $t.start();
+ 
+ //check values in "type of application"
+ /* 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowCount = "1";
+ addRowInSwiftForm($inputObject); */
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues500;//--None--|--None--
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Type of Application - Technology Group
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues501;//TypeOfApplicatioList;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues500;//--None--|--None--
+ verifySwiftFormData($inputObject);
+ 
+ //set bi and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues502;//BI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues503;//TechnologyGroup_BI_List
+ verifySwiftFormData($inputObject);
+ 
+ //set both dm and bi and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues504;//Both_BI_and_DI//bdb;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues505;//TechnologyGroup_Both_BI_DI_List;
+ verifySwiftFormData($inputObject);
+ 
+ //set  bpm/eai and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues506;//BPM_EAI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues507;//TechnologyGroup_BPM_EAI_List;
+ verifySwiftFormData($inputObject);
+ 
+ //set  Custom Application and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues508;//CustomerApplication;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues509;//TechnologyGroup_CA_List;
+ verifySwiftFormData($inputObject);
+ 
+ //set  DM and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues510;//DM;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues511;//TechnologyGroup_DM_List;
+ verifySwiftFormData($inputObject);
+ 
+ //set OTHERS and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues512;//Others;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues513;//TechnologyGroup_Others_List;
+ verifySwiftFormData($inputObject);
+ 
+ //set package  or product and check technology group 
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues514;//PackageOrProduct;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues515;//TechnologyGroup_POP_List;
+ verifySwiftFormData($inputObject);
+ 
+ //set portal or content management site and check technology group
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValues516;//PortalContentMgntSite;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//9
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValues517;//TechnologyGroup_PCMS_List;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo22;//PT Setting
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName42;//Type of Application - Technology Group
+ SelectSegment($inputObject);
+ 
+ /* 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowCount = "4";
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowCount = "3";
+ addRowInSwiftForm($inputObject);
+  */
+ var $t = _testcase("TC_6", "inserting values in ecr form");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues518;//BI|BI
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues519;//Custom Application|LL
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues520;//BPM / EAI|BPM / EAI
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues521;//Custom Application|HL
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues522;//DM|DM
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues523;//Others|Others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo507;//7
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues524;//Package or Product|Oracle Others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//8
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues525;//Both DM & BI|BI
+ setSwiftFormData($inputObject);
+ _wait(3000); 
+ 
+ saveSwiftForm($inputObject);
+ 
+ _wait(3000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_7", "verifing values in type of application technology group");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues518;//BI|BI
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues519;//Custom Application|LLApplication |HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues520;//BPM / EAI|BPM / EAI
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues521;//Custom Application|HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues522;//DM|DM
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues523;//Others|Others
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo507;//7
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues524;//Package or Product|Oracle Others
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo508;//8
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues525;//Both DM & BI|BI
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ //navigate to PCB Setup  
+ 
+ /* var $t = _testcase("TC_8", "navigate to PCB Setup");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo23;//PCB Setup
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PCBSetupSegments4;//Details;PCB Setup
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.link = $data.AddRow;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo501;//12
+ $inputObject.colNo = $data.colNo53;//2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues500;//--None--|--None--
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1", "Inserting values in ECR form");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;//Request Type - Technology Group Mapping
+ $inputObject.rowNo = $data.rowNo501;//12
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues530;//Analysis and Research|Others
+ setSwiftFormData($inputObject);
+ 
+ _wait(3000); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ _wait(3000); 
+ 
+ var $t = _testcase("TC_9", "verifing values in pcb setup");
+
+ $t.start();
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues531;//Major Enhancement|.NET
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues532;//Minor Enhancement|HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo503;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues533;//Major Enhancement|HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo504;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues532;//Minor Enhancement|HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo505;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues534;
+ verifySwiftFormData($inputObject);//Major Enhancement|Ebiz
+
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo506;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues535;//Minor Enhancement|Oracle Others
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo507;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues536;//Minor Enhancement|LL
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo508;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues537;//Major Enhancement|Oracle Others
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo508;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues538;//Major Enhancement|BPM / EAI
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo510;
+ $inputObject.colNo = $data.colNo53;
+ $inputObject.fieldValues = $data.fieldValues539;//Minor Enhancement|BPM / EAI
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); */
+ 
+ $s.end();
+	
+ var $n = _testcase("Script_02", "Maint_PCB_PCB_Setup_Validation_02");
+ 
+ $n.start();
+   
+ _include("Maint_PCB_PCB_Setup_Validation_02.sah");
+ 
+ $n.end();
+
+ var $p = _testcase("Script_03", "Maint_PCB_PCB_Version_Details_Validation_03");
+ 
+ $p.start();
+ 
+ _include("Maint_PCB_PCB_Version_Details_Validation_03.sah");
+ 
+ $p.end();
+	
+ var $o = _testcase("Script_04", "Maint_PCB_PCBVersion_TrackMetricDetails_Vallidation_04");
+ 
+ $o.start();
+ 
+ _include("Maint_PCB_PCBVersion_TrackMetricDetails_Vallidation_04.sah");
+ 
+ $o.end();
+	
+ var $l = _testcase("Script_05", "Maint_PCB_PCBVersion_LCStageMetricDetails_Vallidation_05");
+ 
+ $l.start();
+ 
+ _include("Maint_PCB_PCBVersion_LCStageMetricDetails_Vallidation_05.sah");
+ 
+ $l.end();
+	
+ var $m = _testcase("Script_06", "Maint_PCB_PM_Plan_Validation_06");
+ 
+ $m.start();
+ 
+ _include("Maint_PCB_PM_Plan_Validation_06.sah");
+ 
+ $m.end();
+ /*
+ var $s = _testcase("Script_07", "InfyFT_sahi_BRD_38_PCBsetup_maint_07");
+ 
+ $s.start();
+ 
+ _Include("InfyFT_sahi_BRD_38_PCBsetup_maint_07.sah");
+ 
+ $s.end(); */ 

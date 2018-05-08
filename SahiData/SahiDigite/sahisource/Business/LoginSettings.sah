@@ -1,0 +1,325 @@
+﻿
+/**
+ @Function Number:1
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function passwordSettings($inputObject)
+{
+	_log("passwordSettings Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("SubmitSave"));
+		verifyPasswordSettings($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("passwordSettings Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function changePassword($inputObject)
+{
+	_log("changePassword Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		verifyChangePassword();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changePassword Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function changePasswordFailingPreference($inputObject)
+{
+	_log("changePasswordFailingPreference Started","success");
+	try 
+	{
+		var $setFieldObj = {};
+		$setFieldObj.pwd_oldPassword = $inputObject.pwd_oldPassword;
+		$setFieldObj.pwd_newPassword = $inputObject.pwd_newPassword;
+		$setFieldObj.pwd_confirmPassword = $inputObject.pwd_confirmPassword;
+		$setFieldObj.edt_question = $inputObject.edt_question;
+		$setFieldObj.pwd_answer = $inputObject.pwd_answer;
+		setAllFields($setFieldObj);
+		
+		_click(_submit("QTP_Save"));
+		
+		var $verifyFieldObj = {};
+		$verifyFieldObj.alertType = $inputObject.alertType;
+		verifychangePasswordFailingPreference($verifyFieldObj);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("changePasswordFailingPreference Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function unlockPassword($inputObject)
+{
+	_log("unlockPassword Started","success");
+	try 
+	{
+		_assertTrue(_exists(_link("de-icon-unlock_user")));
+		_click(_link("de-icon-unlock_user"));
+		_assertFalse(_exists(_link("de-icon-unlock_user")));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("unlockPassword Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function forgotPwd($inputObject)
+{
+	_log("forgotPwd Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		_click(_link("QTP_Forgot_Your_Password_Question"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("forgotPwd Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author: Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function forgotyourpassword($inputObject)
+{
+	_log("forgotyourpassword Started","success");
+	try 
+	{
+	    if(_isVisible(_link("QTP_Forgot_Your_Password_Question")))
+		    _click(_link("QTP_Forgot_Your_Password_Question"));
+			
+		_setValue(_textbox("loginId"),$inputObject.loginId);
+		_click(_submit("QTP_KEY_BUTTON_Submit"));	
+		setAllFields($inputObject);
+		_click(_submit("QTP_SubmitBtn"));
+		
+		if($inputObject.operation=== "Negative")
+		{
+			_assertTrue(_getText(_cell("CmnValLft")).indexOf("Your answer for the Recall Question does not match our records or the First Name/Last Name is incorrect. Click OK to return to the previous page or Contact Digité Support.") != -1);
+			_click(_submit("OthrButton"));
+		}
+		else
+		{
+			_expectConfirm("Your password has been reset successfully.", true);
+			_click(_submit("QTP_OkBtn"));
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("forgotyourpassword Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyPasswordSettings($inputObject)
+{
+	_log("verifyPasswordSettings Started","success");
+	try 
+	{
+		if($inputObject.edt_MinLength < 4)
+			_assertEqual("Please enter a numeric value between 4 and 50 for Minimum length of password.", _lastAlert());
+		else if($inputObject.edt_MaxLength > 50)
+			_assertEqual("Please enter a numeric value between 4 and 50 for Maximum length of password.", _lastAlert());
+		else
+		{	
+			verifyAllFields($inputObject);
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPasswordSettings Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:rmahant
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyChangePassword()
+{
+	_log("verifyChangePassword Started","success");
+	try 
+	{
+		_assertTrue(_exists(_cell("Your password has been changed successfully.")));
+		_click(_submit("QTP_Ok"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyChangePassword Completed","success");
+}
+
+/**
+ @Function Number:	15
+ @author: rmahant	
+ @example:			
+ @description: This function Verify Failed Change Password preferences for different types of alerts
+ @param: 
+ @return: 
+ **/
+
+function verifychangePasswordFailingPreference($inputObject)
+{
+	_log("verifychangePasswordFailingPreference Started","success");
+	try 
+	{
+		if($inputObject.alertType === "PswdLength")
+			_assertEqual("Length of the password should be between 4 and 20 characters.", _lastAlert());
+		else if($inputObject.alertType === "PswdLength6")
+			_assertEqual("Length of the password should be between 6 and 20 characters.", _lastAlert());
+		else if ($inputObject.alertType === "BlankSpaces")
+			_assertEqual("Please do not enter spaces in Password.", _lastAlert());
+		else if($inputObject.alertType === "OnlyAlphabets")
+			_assertEqual("Please enter only alphabets in password.", _lastAlert());
+		else if($inputObject.alertType === "NumUpLowCase")
+			_assertEqual("Please enter at least one Numeric, one Uppercase and one Lowercase letter in password.", _lastAlert());
+		else if($inputObject.alertType === "NumSpclCase")
+			_assertEqual("Please enter at least one Numeric and one Special symbol in password.", _lastAlert());
+		else if($inputObject.alertType === "NumUpLowSpclCase")
+			_assertEqual("Please enter at least one Numeric, one Uppercase, one Lowercase and one Special symbol in password.", _lastAlert());
+		else if($inputObject.alertType === "LoginIdFirstLastName")
+			_assertEqual("Please ensure that LoginId, FirstName, LastName is not present in password.", _lastAlert());
+		else if($inputObject.alertType === "LoginIdFirstLastNameVariants")
+			_assertEqual("Please ensure that variants of LoginId, FirstName, LastName is not present in password.", _lastAlert());
+		else if($inputObject.alertType === "Last1Pswd")
+			_assertEqual("Last 1 used passwords cannot be repeated from password history.", _lastAlert());
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifychangePasswordFailingPreference Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyChangePasswordPage($inputObject)
+{
+	_log("verifyChangePasswordPage Started","success");
+	try 
+	{
+		_setValue(_textbox("loginId"), $inputObject.edt_loginid);
+        _setValue(_password("password"), $inputObject.edt_password);
+        _click(_submit("Login"));
+        _assertEqual(_getText(_cell("PageHeading")),$inputObject.message);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyChangePasswordPage Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyAfterLoginOptions($inputObject)
+{
+	_log("verifyAfterLoginOptions Started","success");
+	try 
+	{
+		var $afterLoginArr = $inputObject.optionList.split(";");
+		
+		for(var $i =0; $i < $afterLoginArr.length; $i++)
+		{
+			_assertTrue(_containsText(_select("AfterLogin"),$afterLoginArr[$i]));	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAfterLoginOptions Completed","success");
+}

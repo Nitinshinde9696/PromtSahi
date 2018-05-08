@@ -1,0 +1,210 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU1_1_and_TC_BRD37_FU1_2_01", "Maint/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $TC = _testcase("TC_BRD37_FU1_1_and_TC_BRD37_FU1_2","Checking Mandatory Fields and creating Risk in Normal Project."); 
+ $TC.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ _wait(6000);
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpschImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4; 
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ var $GetRiskExposure = _getText(_span("RiskExposure"));
+ 
+ var $CalRiskExposure = $inputObject.lst_DN_Probability * $inputObject.lst_DN_Impact;
+
+ _assertEqual($GetRiskExposure,$CalRiskExposure);//Checking for Risk Exposure.
+ 
+ $inputObject.edt_CM_Name = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Risk Description in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject.edt_CM_Name = $data.CM_Name4; 
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Risk Category in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Probability in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject.edt_CM_Name = $data.CM_Name4; 
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Impact in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Schedule Impact (Days) in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+  
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpschImpDays4;
+ $inputObject.txt_DN_MitigationPlan = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Mitigation Plan in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpschImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.negvID;//"Prashant_Sharma19";
+ $inputObject.msgAlert = "Error : Please enter loginid without @infosys.com";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpschImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = "--None--"; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Impact To in Details tab \n";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpschImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4; 
+ $inputObject.lst_DN_Status = $data.status4;
+ InfyFTModifyEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_RiskCategory = $data.type;
+ $inputObject.lst_DN_Probability = $data.field1;
+ $inputObject.lst_DN_Impact = $data.field2;
+ $inputObject.lst_DN_Status = $data.field12;
+ verifyEformInstanceDetails($inputObject);
+  
+ $TC.end();
+ 
+  
+
+ 
+
+
+
+ 
+ 

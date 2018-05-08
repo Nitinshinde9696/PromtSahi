@@ -1,0 +1,365 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah ");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Testing_Request_Management_Request_Creation_AT_01","Testing/Request_Management/Automation_Testing"); 
+
+ $bTN = $data.Name;
+ $review_type = $data.rev_type;//"Requirements Specifications Review";
+ $Def_type = $data.def_type;//"Test Requirements Gathering and Analysis";
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+
+ 
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Ricky_Wang	
+$inputObject.edt_loginid = $data.LoginID1;//Ricky_Wang
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;	//Automated Testing
+navigateTo($inputObject);
+
+
+// CLICK ON THE CREATE TAB //
+/*
+$inputObject = {};
+$inputObject.item = "AutT3";
+InfyFTOpenEformInstanceForLastPage($inputObject);
+*/
+
+
+
+var $t = _testcase("TC-1.2 & 1.4", "CHECK THE MANDATORY FIELDS FOR MANUAL TESTING TASK  & CHECK THE REQUEST DESCRIPTION FIELD");
+
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+_wait(100000);
+ 
+$inputObject={};
+$inputObject.txt_CM_Description = $data.Desc2;
+ModifyEformInstance($inputObject);
+
+_assertEqual("Value is not set for the below fields. Please enter the values and save:\n• Field Request Title in Details tab \n• Field Request Owner in Details tab \n• Field Complexity in Details tab \n• Field Type of Testing in Details tab \n• Field Technology Category of Application being tested in Details tab \n• Field LC Stage in Details tab", _lastAlert());
+$t.end();
+
+//clickReturn();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.Name;
+$inputObject.txt_CM_Description = $data.Desc2;
+$inputObject.lst_DN_RequestOwner = $data.Owner2;
+$inputObject.lst_DN_Complexity =  $data.Complexity2;
+$inputObject.lst_DN_TypeofTesting = $data.typtes2;
+$inputObject.lst_DN_TechnologyofApplicatio ="Package or Product";// $data.PTNo;
+$inputObject.lst_DN_LCStage = "Partial LC Stage";
+ModifyEformInstance($inputObject);
+ 
+var $ID = _getText(_span("CM_ItemCode"));
+
+
+
+var $t = _testcase("TC-1.1", "CHECK THE FIELDS AVAILABLE WHILE CREATING A AUTOMATED TESTING");
+$t.start();
+$inputObject = {};
+$inputObject.ele_CM_NameLABEL = $data.Title;//"Request Title * :";
+$inputObject.ele_CM_DescriptionLABEL = $data.R_Descr;//"Request Description * :";
+$inputObject.ele_DN_ComplexityLABEL = $data.R_Complexity;//"Complexity * :";
+$inputObject.ele_DN_ApplicationCodeLABEL = $data.R_Acode;//"Application Code :";
+$inputObject.ele_DN_ModuleCodeLABEL = $data.R_Mcode;//"Module Code :";
+$inputObject.ele_DN_TypeofTestingLABEL = $data.R_Testof;//"Type of Testing * :"; 
+$inputObject.ele_DN_TechnologyofApplicatioLABEL =  $data.R_ApplbnTestd;//"Technology Category of Application being tested * :";
+$inputObject.ele_DN_ERPNonERPLABEL = $data.R_ERP;//"ERP\non ERP :"; 
+$inputObject.ele_DN_AssociatedDevelopmentPLABEL = $data.R_ADP;//"Associated Development Project :";
+$inputObject.ele_DN_AssociatedEnhancementRLABEL = $data.R_AER;//"Associated Enhancement Request :"; 
+$inputObject.ele_DN_CustomerRequestCodeLABEL = $data.R_CRC;//"Customer Request Code :";
+$inputObject.ele_DN_RequestOwnerLABEL = $data.R_OWNER;//"Request Owner * :"; 
+$inputObject.ele_DN_SOWLABEL = $data.R_SOW;//"SOW :"; 
+$inputObject.ele_DN_ScheduleDeviationLABEL = $data.R_SD;//"Schedule Deviation :";
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC-1.3", "OPEN MANUAL TESTING REQUEST TITLE");
+$t.start();
+$inputObject = {};
+$inputObject.filterName = $data.filterName;//"CM_NAME"; 
+$inputObject.value = $data.filter_val;//"Request Title";
+InfyFTverifySpanFilterValue($inputObject);
+$t.end();
+
+
+// CLICK ON THE CREATE TAB //
+$inputObject = {};
+$inputObject.item = $ID;//"AutT3";
+InfyFTOpenEformInstanceForLastPage($inputObject);
+
+
+var $t = _testcase("TC-1.5", "CHECK THE COMPLEXITY OF FIELD");
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_Complexity = $data.VerySimple;//"Very Simple";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Complexity = $data.Simple; //Simple
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Complexity = $data.Medium;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Complexity = $data.Complex;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Complexity = $data.VeryComplex;
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+
+var $t = _testcase("TC-1.6", "CHECK THE APPLICATION CODE FIELD");
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_ApplicationCode = "--None--";
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+
+var $t = _testcase("TC-1.7", "CHECK THE MODULE CODE FIELD");
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_ModuleCode = "--None--";
+verifyEformInstanceDetails($inputObject);
+$t.end();
+
+var $t = _testcase("TC-1.8", "CHECK THE TYPE OF TESTING FIELD");
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test1;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test2;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test3;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test4;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test5;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test6;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test7;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test8;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test9;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test10;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test11;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test12;
+verifyEformInstanceDetails($inputObject);
+
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofTesting = $data.Test13;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+/*
+var $t = _testcase("TC-1.9", "CHECK THE TECHNOLOGY APPLICATION TESTED FIELD");
+
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_TechnologyofApplicatio = $data.PMPlanPT;//"Testing";
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC-1.11", "CHECK THE PACKAGE / TOOL VERSION FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.edt_DN_PackageToolVersion = "";
+verifyEformInstanceDetails($inputObject);
+
+$t.end();*/
+
+var $t = _testcase("TC-1.12", "CHECK THE ASSOCIATED DEVELOPMENT PROJECT FIELD");
+/*
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_AssociatedDevelopmentP = $data.value1;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_AssociatedDevelopmentP = $data.value2;
+verifyEformInstanceDetails($inputObject);
+*/
+$t.end();
+
+
+var $t = _testcase("TC-1.13", "CHECK THE CUSTOMER REQUEST CODE FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.edt_DN_CustomerRequestCode = "";
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC-1.14", "CHECK THE REQUEST OWNER FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_RequestOwner = $data.user1;
+verifyEformInstanceDetails($inputObject);
+
+
+//////ADDED USER IF REQUIRED //
+
+$t.end();
+
+var $t = _testcase("TC-1.15", "CHECK THE SOW FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_SOW = $data.SOW1;
+verifyEformInstanceDetails($inputObject);
+//////ADDED USER IF REQUIRED //
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC-1.16", "CHECK THE Scheduling Module Used FIELD");
+
+$t.start();
+
+_log("TC Temp deactivated");
+
+$t.end();
+
+
+$inputObject = {};
+$inputObject.item = $ID;
+InfyFTOpenEformInstanceForLastPage($inputObject);
+
+ var $s2 = _testcase("Print-Icon"," Check Printing the Request");
+ $s2.start();
+ 
+ InfyFTprint();
+ 
+ $s2.end();
+
+
+var $t = _testcase("REUSE TRACKING", "CHECK THE REUSE TRACKING SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Reuse_Tracking_Positive_AT_02.sah");
+
+$t.end();
+
+var $t = _testcase("REUSE TRACKING", "CHECK THE SIZING DETAILS SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Sizing_Details_AT_03.sah");
+
+$t.end();
+
+var $t = _testcase("REQUEST CLOSURE SEGMENT", "CHECK THE REQUEST CLOSURE SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Request_Closure_AT_06.sah");
+
+$t.end();
+
+var $t = _testcase("SCHEDULE TASK", "CHECK THE SCHEDULE TASK SEGMENT");
+
+$t.start();
+
+_include("/../Testing_Request_Management_Scheduled_Task_Report_Common_35.sah");
+
+$t.end();
+
+var $t = _testcase("REVIEWS", "CHECK THE REVIEWS SEGMENT");
+
+$t.start();
+
+_include("/../Testing_Request_Management_Rev_Def_Common_34.sah");
+
+$t.end();
+
+var $t = _testcase("REQUEST SUMMARY SEGMENT", "CHECK THE REQUEST SUMMARY SEGMENT");
+
+$t.start();
+
+_include("Testing_Request_Management_Req_Summary_AT_05.sah");
+
+$t.end();
+
+
+ var $s1 = _testcase("TC_Tools Tracking"," Verify Tools Tracking Segment");
+ $s1.start();
+  //_include("Testing_Request_Management_Tools_Tracking_AT_04.sah");
+ 
+ $s1.end();
+ 

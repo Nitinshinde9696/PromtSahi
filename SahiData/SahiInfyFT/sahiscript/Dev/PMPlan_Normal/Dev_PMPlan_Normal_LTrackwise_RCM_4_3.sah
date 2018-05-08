@@ -1,0 +1,225 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Dev_PMPlan_Normal_Language_Goals_SLA_LC_Trackwise_RCM_04","Dev/PMPlan_Normal"); 
+ 
+ /*$inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ */
+ 
+ var $t = _testcase("TC_BRD26_FU1_19", "Test step no:1 to 6");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon15;// _InfyFTclick(_image("nodeIcon15"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkProcess;// _InfyFTclick(_link("TrackWiseProcessTailoringDeviations"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ if(_isVisible(_checkbox(1)))
+ {
+ $inputObject = {};
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowCount;
+ $inputObject.colNo = $data.colno0;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ setSwiftFormData($inputObject); 
+ 
+ _click(_span("Delete"));
+
+ _wait(5000); 
+ }
+  if(_isVisible(_checkbox(1)))
+ {
+ $inputObject = {};
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowCount;
+ $inputObject.colNo = $data.colno0;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ setSwiftFormData($inputObject); 
+ 
+ _click(_span("Delete"));
+
+ _wait(5000); 
+ }
+  if(_isVisible(_checkbox(1)))
+ {
+ $inputObject = {};
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowCount;
+ $inputObject.colNo = $data.colno0;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ setSwiftFormData($inputObject); 
+ 
+ _click(_span("Delete"));
+
+ _wait(5000); 
+ }
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowCount = $data.rowOne;
+ addRowInSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Deviationfromstandardprocess;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Justificationfordeviation;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ApplicabletoLC;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Deviationtype;
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowTailoring;
+ $inputObject.colNo = $data.colTailoring;
+ $inputObject.fieldValues = $data.fieldValues8;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowTrackwise;
+ $inputObject.colNo = $data.colDeviation;
+ $inputObject.fieldValues = $data.fieldGoalValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowTrackwise;
+ $inputObject.colNo = $data.colJustification;
+ $inputObject.fieldValues = $data.fieldGoalValues1;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowTrackwise;
+ $inputObject.colNo = $data.colApplicableLC;
+ $inputObject.fieldValues = $data.fieldValues17;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableProcess;
+ $inputObject.rowNo = $data.rowTrackwise;
+ $inputObject.colNo = $data.colTailoring;
+ $inputObject.fieldValues = $data.fieldValues10;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD26_FU1_21", "Test step no:1 to 6");
+ $t.start();
+ 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon15;// _InfyFTclick(_image("nodeIcon15"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkRequirement;//_InfyFTclick(_link("Requirement/Change Management Process"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_div("1")))
+ {
+	 $inputObject = {};
+	 $inputObject.item = $data.item3;
+	 OpenEformInstance($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.item3;
+	 InfyFTDeleteEformInstance($inputObject);
+ }
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name3;
+ $inputObject.txt_DN_RequirementChangeManag = $data.DN_RequirementChangeManag;
+ InfyFTcreateLinkedItemOPPS($inputObject);//For Creating New Requirement/Change Management Process
+ 
+ _wait(2000); 
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ InfyFTclick($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkSummary;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.Reason;
+ $inputObject.rowNo = $data.reasonRequirement;
+ $inputObject.colNo = $data.reasonLbl;
+ $inputObject.fieldValues = "Either attachment is uploaded or Requirement Change Management Process is filled.";
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon15;// _InfyFTclick(_image("nodeIcon15"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.linkRequirement;//_InfyFTclick(_link("Requirement/Change Management Process"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.item3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.segment_name = $data.attachment;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup;
+ $inputObject.fileName = $data.DocfileName;
+ InfyADDAttachment($inputObject);
+ 
+ InfyFTReturnPopUp();
+ 

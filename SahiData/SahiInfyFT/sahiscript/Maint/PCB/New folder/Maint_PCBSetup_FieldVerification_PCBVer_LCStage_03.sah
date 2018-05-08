@@ -1,0 +1,125 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Maint_PCBSetup_FieldVerification_PCBVer_LCStage_03", "Maint/PCB");
+ var $t = _testcase("TC_1", "go to pcb version");
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PCBVersion3;//PCBV5
+ OpenEformInstance($inputObject);
+ _wait(25000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+ $t.end();
+  
+ var $t = _testcase("TC_2", "verifing values in ecr form");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.RequestType;
+ verifySwiftFormData($inputObject);
+ 
+   $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo15;
+ $inputObject.fieldValues = $data.LCStage;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo2;
+ $inputObject.fieldValues = $data.TechnologyGroup;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.MetricName;
+ verifySwiftFormData($inputObject);
+ 
+   $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo4;
+ $inputObject.fieldValues = $data.MetricType;
+ verifySwiftFormData($inputObject);
+ 
+    $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo5;
+ $inputObject.fieldValues = $data.UOM;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.UCL;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo7;
+ $inputObject.fieldValues = $data.Mean;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo8;
+ $inputObject.fieldValues = $data.LCL;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo9;
+ $inputObject.fieldValues = $data.CoV;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo10;
+ $inputObject.fieldValues = $data.Min;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo11;
+ $inputObject.fieldValues = $data.Max;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo12;
+ $inputObject.fieldValues = $data.thPercentile1;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo13;
+ $inputObject.fieldValues = $data.thPercentile2;
+ verifySwiftFormData($inputObject);
+ 
+  $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo14;
+ $inputObject.fieldValues = $data.PercentProjectwithinrangeorcontrollimits;
+ verifySwiftFormData($inputObject);
+ 
+  $t.end();
+  
+ 

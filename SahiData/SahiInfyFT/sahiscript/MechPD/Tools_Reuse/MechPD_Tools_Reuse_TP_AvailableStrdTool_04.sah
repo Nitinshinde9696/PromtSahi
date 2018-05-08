@@ -1,0 +1,183 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("MechPD_Tools_Reuse_TP_AvailableStrdTool_04","MechPD/Tools_Reuse");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; // Sbasheer//subhashini_k03
+$inputObject.edt_loginid = $data.LoginID1;// Sbasheer//subhashini_k03	
+$inputObject.edt_password = $data.Password1;//Allahu@1//111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Navigating to Projects ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//Projects_home
+navigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Opening the MechPD PT Project ");
+$t.start();
+
+$inputObject = {};
+$inputObject.item = $data.Projectname3;//
+OpenEformInstance($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Navigating to Tools Planning ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;//Tools Planning
+InfyFTnavigateTo($inputObject);
+
+_wait(1000); 
+ 
+$inputObject = {};
+$inputObject.item = $data.TOPL1;//"Tools Plan for Product Design";
+OpenEformInstance($inputObject);
+  
+_wait(500);
+
+$inputObject = {};
+$inputObject.segment_name = $data.navigateTo5;//Tools Planning[2]
+SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Available Links in Tools Planning section ");
+$t.start();
+
+$inputObject = {};
+$inputObject.value = $data.Link1;//Add from PRIME
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Link2;//Available Standard Tools
+InfyFTvalueisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Opening the Available Standard Tools link ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name8;//Available Standard Tools
+SelectSegment($inputObject);
+
+_wait(2000);
+
+$inputObject = {};
+$inputObject.lst_DN_LCStage = $data.LCStage8;//Product Design Requirements / Specifications
+$inputObject.lst_DN_Technology = $data.Technology8;//Administrator 
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name9;//Search Output
+SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Verifying the asset in Search Output section");
+$t.start();
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1]
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;//Notepad
+$inputObject.colNo = $data.colName8;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Notepad
+verifySwiftFormData($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Selecting the asset in Search Output section");
+$t.start(); 
+ 
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1] 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+
+$inputObject = {};
+InfyFTsaveSwiftForm($inputObject);
+ 
+clickReturn();
+
+$t.end();
+
+var $t = _testcase("TC_9", "Verifying the added tools in Planned Tools List");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName9;//Planned Tools List
+$inputObject.byColRowName = "yes";
+$inputObject.rowNo = $data.rowName8;//Notepad
+$inputObject.colNo = $data.colName8;//Tool Name_lbl
+$inputObject.fieldValues = $data.LCStage9;//Notepad
+verifySwiftFormData($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_10", "Again trying to create a tool with same combination of data ");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name8;//Available Standard Tools
+SelectSegment($inputObject);
+
+_wait(2000);
+
+$inputObject = {};
+$inputObject.lst_DN_LCStage = $data.LCStage8;//Product Design Requirements / Specifications
+$inputObject.lst_DN_Technology = $data.Technology8;//Administrator 
+ModifyEformInstance($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment_name9;//Search Output
+SelectSegment($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_11", "Verifying that tools by default checked(selected)in Search Output section");
+$t.start();
+
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName8;//Add[1] 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";
+verifySwiftFormData($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_12", "Deleting the added tool from Planned Tools List");
+$t.start();
+
+$inputObject = {};
+$inputObject.tableName = $data.tableName9;//Planned Tools List 
+$inputObject.rowNo = $data.rowNo8;//1
+$inputObject.colNo = $data.colNo8;//1_chk
+$inputObject.fieldValues = "true";//$data.LCStage9;//Notepad
+setSwiftFormData($inputObject);
+
+$inputObject = {};
+InfyFTsaveSwiftForm($inputObject);
+
+$t.end(); 

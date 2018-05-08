@@ -1,0 +1,250 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+$data = readDataFromCSV("Package_Iteration_Defect_Report_02","Package/Iteration");
+ 
+ var $t = _testcase("TS_24","Select Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;
+ $inputObject.segment_name = $data.seg_Def_Rep; 
+ SelectSegment($inputObject);
+ 
+ $t.end(); 
+ 
+ _selectWindow("openLinkedItem");
+ 
+ var $t = _testcase("TS_25","Verfify the Column Name of Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo0;//0
+ $inputObject.colNo = $data.colNo100;//"1_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl|13_lbl"
+ $inputObject.fieldValues = $data.fieldValues100;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TS_26","Verify 1st Review Critical_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues101;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo1;//"1";
+ $inputObject.colNo = $data.colNo103;//"2_lbl|_11_lbl|13_lbl";
+ $inputObject.fieldValues = $createdDef_Id1+"|"+$createdRID1+"|"+$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_27","Verify 1st Review Major_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo2;//"2";
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo2;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues102;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo2;//"1";
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id2+"|"+$createdRID1+"|"+$Review_Type1;//$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_28","Verify 1st Review Minor_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo3;//"3"
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo3;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues103;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo3;//"1";
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id3+"|"+$createdRID1+"|"+$Review_Type1;//$Review_Type1;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_29","Verify 1st Review Cosmetic_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo4;//"4"
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo4;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues104;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo4;//"1";
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id4+"|"+$createdRID1+"|"+$Review_Type1;//$Review_Type1;
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_30","Verify 2nd Review Critical_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo5;//"5"
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo5;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues101;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo5;//"5"
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id5+"|"+$createdRID2+"|"+$Review_Type2;//$Review_Type2;
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_31","Verify 2nd Review Major_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo6;//"6"
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo6;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues102;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo6;//"5"
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id6+"|"+$createdRID2+"|"+$Review_Type2;//$Review_Type2;
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_32","Verify 2nd Review Minor_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo7;//"7"
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;//
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo7;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues103;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo7;//"5"
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id7+"|"+$createdRID2+"|"+$Review_Type2;//$Review_Type2;
+ verifySwiftFormData($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TS_33","Verify 2nd Review Cosmetic_Defect Report");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo8;//"8"
+ $inputObject.colNo = $data.colNo101;//"1_lbl|3_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|12_lbl";
+ $inputObject.fieldValues = $data.fieldValues105;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo8;//"1";
+ $inputObject.colNo = $data.colNo102;//"4_lbl";
+ $inputObject.fieldValues = $data.fieldValues104;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName1;//"Name"
+ $inputObject.rowNo = $data.rowNo8;//"5"
+ $inputObject.colNo = $data.colNo103;//"13_lbl";
+ $inputObject.fieldValues = $createdDef_Id8+"|"+$createdRID2+"|"+$Review_Type2;//$Review_Type2;
+ verifySwiftFormData($inputObject);  
+ 
+ $t.end();
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data.popup_name1;
+ InfyFTclickReturnInAddItemPopupS();
+ 
+ _selectWindow();
+ 
+ _wait(500);

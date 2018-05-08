@@ -1,0 +1,214 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+ var $data = readDataFromCSV("Dev_Reviews_Defects_Generic_00","Dev/Reviews_Defects");
+ var $data1 = readDataFromCSV("Dev_Reviews_Defects_One_Per_Review_01","Dev/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $StartDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $EndDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $TC1 = _testcase("TC_BRD10_FU2.2","CHECK FOR THE MANDATORY FIELDS IN THE REVIEW FORM"); 
+ $TC1.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.User_name;
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;//CORTST
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Iterations
+ InfyFTnavigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.desc1;//Review Iteration
+ $inputObject.edt_DN_PlannedStartDate = $StartDate;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate;
+ CreateInstance($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment1;//Reviews
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.span = $data1.icon;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ $inputObject.span_Name = $data1.Button02;//save
+ $inputObject.operation = $data.operation;//Negative
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name2;//newListing
+ InfyFTReturnPopUp($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ReviewMode = $data1.Revmode05;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer06;//Ricky_Wang
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name07;//Descr
+ $inputObject.lst_reviewtype = $data1.revType08;//Acceptance test plan review
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Name in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.rev_name04;//Review1
+ $inputObject.lst_DN_Reviewer = $data1.reviewer06;//Ricky_Wang
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name07;//Descr
+ $inputObject.lst_reviewtype = $data1.revType08;//Acceptance test plan review
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Review Mode in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.rev_name04;//Review1
+ $inputObject.lst_DN_ReviewMode = $data1.Revmode05;//One Person Review
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name07;//Descr
+ $inputObject.lst_reviewtype = $data1.revType08;//Acceptance test plan review
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Reviewer in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.rev_name04;//Review1
+ $inputObject.lst_DN_ReviewMode = $data1.Revmode05;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer06;//Ricky_Wang
+ $inputObject.lst_reviewtype = $data1.revType08;//Acceptance test plan review
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Artifact Name in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.rev_name04;//Review1
+ $inputObject.lst_DN_ReviewMode = $data1.Revmode05;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer06;//Ricky_Wang
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name07;//Descr
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Review/Testing of in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data1.rev_name04;//Review1
+ $inputObject.lst_DN_ReviewMode = $data1.Revmode05;//One Person Review
+ $inputObject.lst_DN_Reviewer = $data1.reviewer06;//Ricky_Wang
+ $inputObject.txt_DN_ArtifactName = $data1.Arti_name07;//Descr
+ $inputObject.lst_reviewtype = $data1.revType08;//Acceptance test plan review
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ var $ReviewID = $inputObject.createdID;
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("TC_BRD10_FU1.1","CHECK FOR THE FIELDS AVAILABLE IN THE REVIEW FORM");
+ $TC2.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $ReviewID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(1000);
+ 
+ //******MANDATORY FIELDS******//
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.span_Name = $data1.man_fields09;//Name;Review Mode;Reviewer;Artifact Name;Review/Testing of;Status
+ InfyFTisVisible($inputObject);
+ 
+ //*******NON-MANDATORY FIELDS*****//
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.span_Name = $data1.rev_fields10;//Actual Review Effort;No of Defects;Total Review Effort;Review Efficiency;Program Code;Application Code;Module Code
+ InfyFTisVisible($inputObject);
+ 
+ //TC_BRD10_FU_6.2******TOTAL PREPARATION EFFORT SHOULD NOT BE VISIBLE*****
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.span_Name = $data1.TPEffort11;//Total Preparation Effort
+ $inputObject.operation = $data.operation;//Negative
+ InfyFTisVisible($inputObject);
+ 
+ //TC_BRD10_FU_11*****REVIEW MODE DROP DOWN******
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name1;//openLinkedItem
+ $inputObject.lst_DN_ReviewMode = $data1.Dropdown12;//--None--,One Person Review,Group Review
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ReviewID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ // TC_BRD10_FU_12*****STATUS FIELD DROP DOWN******
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject.lst_DN_Status = $data1.Dropdown13;//--None--,Not Started,In-Progress,On-Hold,Abandoned,Closed
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $ReviewID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+  
+ // TC_BRD10_FU_13******INITIAL STATUS BEFORE ADDING OF DEFECT*****
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject.lst_DN_Status = $data1.NStarted14;//Not Started
+ verifyEformInstanceDetails($inputObject);
+ 
+ //$TC2.end();
+ 
+ var $TC3 = _testcase("TC_BRD10_FU_8","VALIDATION FOR THE ACTUAL REVIEW EFFORT AND TOTAL PREPARATION EFFORT FIELDS.");
+ $TC3.start();
+
+ $inputObject = {};
+ $inputObject.item = $ReviewID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.lst_DN_Status = $data1.closed15;//Closed
+ $inputObject.msgAlert = "";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.button = $data1.button16;//"Reopen";
+ InfyFTclick($inputObject);
+ 
+ //TC_BRD10_FU_7.2*******TOTAL REVIEW EFFORT = ACTUAL REVIEW EFFORT*****
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//openLinkedItem
+ $inputObject.edt_DN_ActualReviewEffort = $data1.ARE17;//10
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix = $data.popup_name1;//openLinkedItem
+ $inputObject._lbl_DN_TotalReviewEffort = $data1.TRE18;//10.0
+ verifyEformInstanceDetails($inputObject);
+
+ $TC3.end();
+
+  
+ var $TC4 = _testcase("TC_BRD10_FU_27-30","ADDING DEFECT TO THE CREATED REVIEW"); 
+ $TC4.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $ReviewID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _include("Dev_Reviews_Defects_Add_Defect_03.sah");
+ 
+ $TC4.end();
+ 
+ 

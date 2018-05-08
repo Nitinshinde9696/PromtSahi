@@ -1,0 +1,98 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+ 
+ $data = readDataFromCSV("Dev_Tools_Reuse_Data_Creation_09","Dev/Tools_Reuse");
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+ var $GetExcel = _testcase("GetExcel"," Getting the Project name From Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "ProjectName";
+  infyFTGetValueFromExcel($inputObject);
+  $prj_Id  = $value; 
+  
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "LoginUser";
+  infyFTGetValueFromExcel($inputObject); 
+
+   $user_Id  = $value;
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "Password";
+  infyFTGetValueFromExcel($inputObject);
+  $user_pswd  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.user_name = $user_Id; 
+$inputObject.edt_loginid = $user_Id;
+$inputObject.edt_password = $user_pswd;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t2 = _testcase("TC_2", "Navigating to Projects_home ");
+$t2.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $prj_Id;
+ selectProject($inputObject)
+
+ $t2.end();
+ 
+ var $A_R = _testcase("A_R"," Creating a Analysis Research for Maint PT");
+ $A_R.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Analysis and Research
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.edt_DN_PlannedEndDate = $EndDate2;
+ $inputObject.edt_DN_PlannedStartDate = $StartDate1;
+ CreateInstance($inputObject);
+  
+  _wait(1000);
+  
+ $ITR = _getText(_span("CM_ItemCode"));
+$id = $ITR;
+
+_include("Dev_Tools_Reuse_Create_Scheduled_Task_08.sah");
+ 
+ 
+ $A_R.end(); 
+  
+  var $SetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $SetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Dev/Tools_Reuse/Dev_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.rowNo = 1;
+  $inputObject.columnNames = "ITR";
+  $inputObject.fieldValues = $ITR;
+  infyFTSetValueInExcel($inputObject)
+ 
+ $SetExcel.end(); 
+

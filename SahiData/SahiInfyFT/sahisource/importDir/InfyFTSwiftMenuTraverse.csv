@@ -1,0 +1,56 @@
+Customer Appreciation, LOCK_Monitor, LOCK_Customer Appreciation
+Customer Complaint, LOCK_Monitor, LOCK_Customer Complaint
+Engagement Level Feedback, LOCK_Monitor,LOCK_Engagement Level Feedback
+Service Improvement Tracker, LOCK_Execute,LOCK_Service Improvement Tracker
+All Items,LOCK_Home, LOCK_My_Work, LOCK_Inbox
+Action Items, LOCK_Monitor, LOCK_Action_Items
+Change Requests, LOCK_Execute, LOCK_Change_Requests
+Change Request Management, LOCK_Execute, LOCK_Change Request Management
+Risk Management,LOCK_Monitor,LOCK_Risks
+Issue Management,LOCK_Monitor,LOCK_Issues
+ALERT,LOCK_Monitor,LOCK_ALERT
+Project Tailoring,LOCK_Plan,LOCK_Project Tailoring
+SDMP,LOCK_Plan,LOCK_SDMP
+Profile,LOCK_Home[1],LOCK_Profile
+ZDP,LOCK_Plan,LOCK_Zero Distance Plan
+AQM,LOCK_Manage Roles,LOCK_AQM
+SQA,LOCK_Manage Roles,LOCK_SQA
+UQH,LOCK_Manage Roles,LOCK_UQH
+PQM,LOCK_Manage Roles,LOCK_PQM
+Risk Manager,LOCK_Manage Roles,LOCK_Risk Manager
+OrgPQM,LOCK_Organization_Name,LOCK_Manage Roles,LOCK_PQM
+Performance Scorecard, LOCK_Monitor,LOCK_Performance Scorecard
+Reuse Planning,LOCK_Plan,LOCK_Reuse Planning
+Manual Testing,LOCK_Execute,LOCK_Manual Testing
+Performance Testing,LOCK_Execute,LOCK_Performance Testing
+Automated Testing,LOCK_Execute,LOCK_Automated Testing
+Other Request,LOCK_Execute,LOCK_Other Request
+Enhancements,LOCK_Execute,LOCK_Enhancements
+Testing Request,LOCK_Execute,LOCK_Testing Request
+Bug Fixes,LOCK_Execute,LOCK_Bug Fixes
+Other Request,LOCK_Execute,LOCK_Other Request
+Analysis and Research,LOCK_Execute,LOCK_Analysis and Research
+Test Automation,LOCK_Execute,LOCK_Test Automation
+Product Design,LOCK_Execute,LOCK_Product Design
+Design Support Request,LOCK_Execute,LOCK_Design Support Request
+Meeting,LOCK_Collaborate,LOCK_Meetings
+Other Request,LOCK_Execute,LOCK_Other Request
+Project Management Request,LOCK_Execute,LOCK_Project Management Request
+PDR,LOCK_Execute,LOCK_Product Design Request
+Tools Planning,LOCK_Plan,LOCK_Tools Planning
+PT Setting, LOCK_Template_Setup, LOCK_PT Setting
+PCB Setup, LOCK_Template_Setup, LOCK_PCB Setup
+PCB Version, LOCK_Template_Setup, LOCK_PCB Version 
+Testimonial,LOCK_Setup,LOCK_Testimonial
+Iterations,LOCK_Iterations
+Closure Report,LOCK_Monitor,LOCK_Closure Report
+Status Report,LOCK_Execute,LOCK_Status Report
+Defects,LOCK_Execute,LOCK_Defects
+Status Report,LOCK_Execute,LOCK_Status Report
+Releases,LOCK_Plan,LOCK_Releases
+Sprints,LOCK_Plan,LOCK_Sprints
+Schedule Tasks,LOCK_Execute,LOCK_Schedule Tasks
+Self Project Assessment,LOCK_Monitor,LOCK_Self Project Assessment
+Themes,LOCK_Execute,LOCK_Themes
+Epics,LOCK_Execute,LOCK_Epics
+User Stories,LOCK_Execute,LOCK_User_Stories

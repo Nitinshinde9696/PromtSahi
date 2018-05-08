@@ -1,0 +1,210 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+
+$data = readDataFromCSV("Roles_MR_PQM_VExtNAsgnmnt_11","Roles");
+
+// USER SET UP AS UQH & LOGIN INTO SWIFT ALM// 
+var $t = _testcase("TC_1.1", "Logging with valid user ");
+
+$inputObject = {};
+ $inputObject.user_name = $data.Username;//Nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID;//Nethravathi_r02
+ $inputObject.edt_password = $data.Password;//123456
+ loginIntoDigite($inputObject); 
+ 
+ var $t = _testcase("TC_1", "Data creation for AQM(Creating a UQH) ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo22;//UQH
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.DN_Unit3;//ECS 
+ $inputObject.edt_SearchCriteria_DN_user = $data.UQHuserName3;//subhashini_k03
+ CreateInstance($inputObject);
+ 
+ var $uqh = _getText(_span("CM_ItemCode"));
+ 
+ clickReturn();
+ 
+ _setValue(_textbox("searchTextBox-inputEl"),$uqh);//"AQM60";
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $t.end();
+
+
+
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.user_name1; //user_name1 : Niharika Karingula
+$inputObject.edt_loginid = $data.LoginID1;//LoginID1 : Niharika.Karingula	
+$inputObject.edt_password = $data.Password1;//Password1 :111111
+loginIntoDigite($inputObject);
+
+$t.end();
+
+//Navigate To PQM // 
+var $t = _testcase("TC_1.2", "Navigating to PQM ");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo2;//PQM
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2.1 & 2.2", "Available Segments in existing PQM ");
+$t.start();
+
+ if(_isVisible(_div("1")))
+ 
+ {
+
+ _click(_div("1"));   
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment1;//Details
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment2;//Comments
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment3;//Previous Versions
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment4;//Activity Log
+ InfyFTvalueisVisible($inputObject); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_1", "Available Fields in existing PQM ");
+$t.start();
+
+$inputObject = {};
+$inputObject.value = $data.ID6;  //_isVisible(_cell("ID :")); // PQM
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.PU6;  //_isVisible(_cell("PU :"))
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Unit6;  //_isVisible(_cell("Unit :")); //PQM
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.User6;  //_isVisible(_cell("User * :"));
+InfyFTvalueisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Status6; //_isVisible(_cell("Status :")); // PQM
+InfyFTvalueisVisible($inputObject);
+
+$t.end();
+
+//ADD COMMENTS//
+
+$inputObject = {};
+$inputObject.txt_New_Comment = $data.Comment1A;//Comments //Hai
+addComment($inputObject);
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment3; // Previous Version
+SelectSegment($inputObject);
+
+var $r = 0;
+var $r = _getText(_table("QTP_versionlog"));
+_log($r);
+//_typeKeyCodeNative(java.awt.event.KeyEvent.VK_ENTER);
+
+//SELECT SEGMENT ACTIVITY LOGS//
+
+$inputObject = {};
+$inputObject.segment_name = $data.Segment4; // Activity logs
+SelectSegment($inputObject);
+
+//VERIFY COMMENTS ARE BEING LOGGED//
+
+$inputObject = {};
+var $activitylog = 0;
+$activitylog = _getText(_table("QTP_activitylog"));
+_log($activitylog);
+//_typeKeyCodeNative(java.awt.event.KeyEvent.VK_ENTER);
+$inputObject.Comments = $activitylog;
+verifyActivityLogComments($inputObject);
+
+ 
+ clickReturn();
+ 
+ }
+ 
+ _click(_span("KEY_BUTTON_Add-btnIconEl"));
+ 
+ var $t = _testcase("TC_5.1 to 5.4", "available fields in Details segment of new PQM ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.value = $data.ID6;  //_isVisible(_cell("ID :")); // PQM
+ InfyFTvalueisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.value = $data.User6;  //_isVisible(_cell("User * :"));
+ InfyFTvalueisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.value = $data.Status6; //_isVisible(_cell("Status :")); // PQM
+ InfyFTvalueisVisible($inputObject);
+ 
+ _assertFalse(_cell("EformButtonSpacing").enabled);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Return7;     //_isVisible(_button("< Return"));
+ InfyFTvalueisVisible($inputObject);
+ 
+ $t.end();
+ 
+ clickReturn();
+
+
+//CREATE PQM WITH PU (PRACTICE UNIT) CHECKING FOR MANDATORY FIELDS // 
+var $t = _testcase("TC_5.5.1", "Verifying the Mandatory fields of PQM ");
+$t.start();
+
+$inputObject = {};
+$inputObject.rdg_DN_CombineAs = $data.PU;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field User in Details tab";
+CreateInstance($inputObject);
+
+clickReturn();
+$t.end();
+
+var $t = _testcase("TC_5.5.2", "Verifying the Mandatory fields of PQM ");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_User = $data.Username5;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Based On in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+
+clickReturn();
+
+var $t = _testcase("TC_5.5.3", "Verifying the Mandatory fields of PQM ");
+$t.start();
+// CHECKING WITH INVALID EMAIL ADDRESS//
+$inputObject = {};
+$inputObject.edt_SearchCriteria_DN_User = $data.Username4;//nit@infosys.com
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Based On in Details tab";
+CreateInstance($inputObject);
+
+$t.end();
+clickReturn();

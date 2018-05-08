@@ -1,0 +1,575 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ var $s = _testcase("Script_1", "InfyFT_BR49_Dev_PT_Iteration_rules");
+ 
+ $s.start();
+ 
+ $data = readDataFromCSV("Dev_Iteration_rules_05", "Dev/Iteration");
+
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",3,$dateObj);
+ var $endDate5 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $endDate1 = "01-Oct-2007"; 
+ var $endDate2 = "31-Dec-2021";
+  /********************************************************************************************************
+ * Login 
+ *********************************************************************************************************/
+ 
+ var $t = _testcase("TC_1", "Login to SwiftALM");
+ 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_1.1", "select project");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "navigate to iteration");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; 
+ InfyFTnavigateTo($inputObject);
+
+ $t.end();
+ 
+ /********************************************************
+ * Iteration fields visibility 
+ *******************************************************/
+
+ var $t = _testcase("TC_3", "click on add button ");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.span = $data.nodeIcon11;
+ InfyFTclick($inputObject);
+
+  $t.end();
+
+ /**************************************************************
+   *Date validation
+ **************************************************************/
+ 
+ var $t = _testcase("TC_4", "start date greater than end date");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $endDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ $inputObject.msgAlert = "Planned Start Date cannot be greater than Planned End Date";
+ InfyFTModifyEformInstance1($inputObject);
+
+ $t.end();
+
+ 
+ var $t = _testcase("TC_5", "start date and end date not within project start and end date");
+ 
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $endDate1;
+ $inputObject.edt_DN_PlannedEndDate = $endDate2;
+ $inputObject.msgAlert = "Planned Start Date and Planned End Date must be in the range of project Start and End date";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end(); 
+ 
+
+/****************checking mandatory fields of iteration form********************/
+
+
+ var $t = _testcase("TC_6", "checking mandatory fields of iteration");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name1;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $data.PlannedStartDate3;
+ $inputObject.edt_DN_PlannedEndDate = $endDate;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Planned Start Date in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $data.PlannedEndDate3;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Planned End Date in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end(); 
+
+ /********************************************************
+ *Giving correct date and create one iteration
+ *********************************************************/
+
+ var $t = _testcase("TC_7", "create one iteration"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.edt_DN_PlannedStartDate = $currentDate;
+ $inputObject.edt_DN_PlannedEndDate = $currentDate;
+ InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_ActualStartDate = $currentDate;
+$inputObject.edt_DN_ActualEndDate = $endDate;
+$inputObject.msgAlert ="Error :\n-> Actual End Date cannot be greater than today's date ( "+ $currentDate +" )";//( "+ $currentDate +" )";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_ActualStartDate = $currentDate;
+$inputObject.edt_DN_ActualEndDate =  $endDate2;
+$inputObject.msgAlert = "Error :\n-> Actual End Date cannot be greater than Project End Date ( 31-Dec-2020 )";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_ActualStartDate = $currentDate;
+$inputObject.edt_DN_ActualEndDate =  $currentDate;
+InfyFTModifyEformInstance1($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListingx;
+ InfyFTgetpopupid($inputObject)
+
+ var $createdIDx = $inputObject.createdID;
+
+ $t.end();
+ 
+ /********************************************************
+ *verifing status field
+ *********************************************************/
+ 
+ var $t = _testcase("TC_8", "verifing status field");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Status; 
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $t.end();  
+ 
+ var $t = _testcase("TC_9", "filling iteration closure segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Iteration_Closure_Checks;
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo2;
+ $inputObject.colNo = $data.colNo3;
+ $inputObject.fieldValues = $data.fieldValues3;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues6;
+ setSwiftFormData($inputObject);
+ 
+/*  $inputObject = {}; 
+ $inputObject.tableName = $data.Metrics_Correlation_checks;
+ $inputObject.rowNo = $data.rowNo7;
+ $inputObject.colNo = $data.colNo6;
+ $inputObject.fieldValues = $data.fieldValues6;
+ setSwiftFormData($inputObject);  */
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $t.end(); 
+  
+ /********************************************************
+ *selecting segment subproject and link new item
+ *********************************************************/
+
+ var $t = _testcase("TC_10", "linking new sub project");
+  $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sub_Projects;//Schedule
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.nodeIcon12;
+ InfyFTclick($inputObject);
+ 
+ $t.end();  
+ 
+ var $t = _testcase("TC_11", "create one scheduled task");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ $inputObject.edt_CM_Name = $data.name;
+ $inputObject.lst_isPackageDigiteStart = $data.start;
+ InfyFTModifyEformInstance2($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status3;
+ verifyEformInstanceDetails($inputObject); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTgetpopupid($inputObject)
+
+ var $createdID1 = $inputObject.createdID;
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.newListing;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID1;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.segment_name = $data.scheduled_task;
+ SelectSegment($inputObject);
+
+ $t.end(); 
+
+ var $t = _testcase("TC_12", "creating one more subtask under schedule Task");
+
+ $t.start();
+ 
+ _wait(10000);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.edit;
+ InfyFTclickpopup($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.addTaskButton;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclickpopup($inputObject);
+
+ _selectWindow("openLinkedItem");
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.item_name = $data.item_name;//_doubleClick(_div($data1.item_name));
+ InfyFTdoubleclick($inputObject);
+ 
+  _wait(5000);
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = $data.subtaskname;//textfield-1142-inputEl
+ setAllFields($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item_name = $data.activityTask;//_doubleClick(_div($data1.activityTask));
+ InfyFTdoubleclick($inputObject);
+ 
+  _wait(5000);
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.save;//_click(_span("addTaskButton-btnIconEl"));
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok1;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span = $data.ok2;
+ InfyFTclick($inputObject);  
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.PERCENT; 
+ InfyFTisVisibleN($inputObject);
+
+ _selectWindow();
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ InfyFTReturnPopUpN($inputObject);
+
+ $t.end();
+
+/**********already checkedout set staus as closed****************/
+
+ var $t = _testcase("TC_13", " set staus as closed"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.link = $data.IterationSummary; //"Iteration Summary";//
+ InfyFTclick($inputObject);  
+ 
+ _check(_checkbox("false"), "TRUE");
+ _setValue(_textarea(21), "closing");
+ _setSelected(_select(2), "Normal");
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(1500);
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details;
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status1;
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ $t.end(); 
+ 
+ /**********set status as closed*******/
+
+ var $t = _testcase("TC_14", "set status as closed and check for edit button"); 
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sub_Projects;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID1;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ $inputObject.segment_name = $data.scheduled_task;
+ SelectSegment($inputObject);
+ 
+ _wait(8000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.span = $data.Undo;
+ InfyFTclickpopup($inputObject);
+
+ $inputObject = {};
+ //$inputObject.operation =  $data.Negative; 
+ $inputObject.popup_name = $data.openLinkedItem;;
+ $inputObject.span_Name =  $data.edit; 
+ InfyFTisVisiblep($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ $t.end(); 	
+
+ var $t = _testcase("TC_15", "route with status as closed and check for reopen button");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details;
+ SelectSegment($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status1;
+ InfyFTModifyEformInstance1($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Workflow;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members01;
+ $inputObject.workflow_stage = $data.workflow_stage2;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members1;
+ $inputObject.workflow_stage = $data.workflow_stage3;
+ WorkflowSet($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22; 
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+
+ _wait(10000); 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22; 
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.Reopen; 
+ InfyFTisVisibleN($inputObject);
+
+  $inputObject = {};
+ $inputObject.segment_name = $data.Sub_Projects;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $createdID1;
+ OpenEformInstance($inputObject);
+
+ _selectWindow("openLinkedItem");
+
+ $inputObject = {};
+ $inputObject.lbl_DN_Status = $data.status1;
+ verifyEformInstanceDetails($inputObject);
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.scheduled_task;//_link("Scheduled Task")
+ SelectSegment($inputObject); 
+ 
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.value = $data.hun;
+ $inputObject.div_name = $data.hun1;
+ InfyFTassertequal($inputObject)
+
+  _selectWindow();
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ InfyFTReturnPopUpN($inputObject);
+ 
+ InfyFTreopenInstance();
+
+ $t.end(); 
+ 
+/***************checkout and set staus as abandodned**************/
+ var $t = _testcase("TC_16", "checkout and set staus as abandodned");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sub_Projects;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID1;
+ OpenEformInstance($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ $inputObject.segment_name = $data.scheduled_task;
+ SelectSegment($inputObject);
+
+ _wait(10000);
+ $inputObject = {};
+ $inputObject.operation =  $data.Negative;
+ $inputObject.popup_name = $data.openLinkedItem;;
+ $inputObject.span_Name =  $data.edit; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ InfyFTReturnPopUpN($inputObject); 
+
+ $t.end();
+ 
+ /******iteration when abandoned and check for edit button*************/	 
+ var $t = _testcase("TC_17", "iteration when abandoned and check for edit button"); 
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details;
+ SelectSegment($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status2;
+ $inputObject.txt_DN_Reasonforabandon = "";//$data.reasonfor;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Reason for abandon in Details tab";
+ InfyFTModifyEformInstance1($inputObject);
+
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status2;
+ $inputObject.txt_DN_Reasonforabandon = $data.reasonfor;
+ InfyFTModifyEformInstance1($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name =  $data.DN_ReasonforabandonLABEL; 
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.Sub_Projects;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $createdID1;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ $inputObject.segment_name = $data.scheduled_task;
+ SelectSegment($inputObject);
+ 
+ _wait(10000); 
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;
+ $inputObject.operation =  $data.Negative;
+ $inputObject.span_Name =  $data.edit; 
+ InfyFTisVisiblep($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.openLinkedItem;;
+ InfyFTReturnPopUpN($inputObject)
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.Details;
+ SelectSegment($inputObject); 
+
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status3;
+ InfyFTModifyEformInstance1($inputObject);
+  
+ $t.end(); 
+
+ 
+/*  var $s = _testcase("Script_2", "InfyFT_BR49_Dev_PT_Sizing_details_Estimation"); 
+ $t.start();
+ 
+ _include("InfyFT_BR49_Dev_PT_Sizing_details_Estimation.sah");
+  
+ $s.end(); */
+ 

@@ -1,0 +1,137 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+
+ $generic = readDataFromCSV("Agile_Tools_genericcsv","Agile/Tools");
+ $data = readDataFromCSV("Agile_Tools_ToolsPlanning_Verify_Tools_01","Agile/Tools");
+
+ var $t = _testcase("TC_1", "Logging with valid user");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $generic.Username1; //
+ $inputObject.edt_loginid = $generic.LoginID1;//
+ $inputObject.edt_password = $generic.Password1;
+ loginIntoDigite($inputObject);
+
+ $t.end();
+ var $n = _testcase("Script 1","Agile_Tools_ToolsPlanning_Agile_01");
+ $n.start();
+ var $t = _testcase("TC_2", "Navigating to Project Tailoring for a Agile PT project ");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $generic.Projectname1;//FPEDGTST
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject ={};
+ InfyFTreopenPMP($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo2;//Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_3", "Setting Sizing details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.ptsegment1;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Type of Application Agileeloped*";
+ $inputObject.colNo = "Type of Application Agileeloped*_lst"
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Type of Application Agileeloped*";
+ $inputObject.colNo = "Type of Application Agileeloped*_lst"
+ $inputObject.fieldValues = "Agile";
+ setSwiftFormData($inputObject);
+$inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Type of Work*";
+ $inputObject.colNo = "Type of Work*_lst"
+ $inputObject.fieldValues = "New Agile";
+ setSwiftFormData($inputObject);
+$inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Primary Language";
+ $inputObject.colNo = "Primary Language_lst"
+ $inputObject.fieldValues = "Basic";
+ setSwiftFormData($inputObject);
+$inputObject = {};
+ $inputObject.tableName = "Sizing Details";
+ $inputObject.byColRowName= "Yes";
+ $inputObject.rowNo = "Sizing Technique*";
+ $inputObject.colNo = "Sizing Technique*_lst"
+ $inputObject.fieldValues = "IFPUG FP";
+ setSwiftFormData($inputObject);
+
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ $t.end();
+ var $t = _testcase("TC_2", "Navigating to PM Plan and setting Applicable LC stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.node1;//nodeIcon16
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//Applicable LC Stages
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//Applicable LC Stages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.pmrow1;//Coding|Detailed Design|Coding
+ $inputObject.colNo = $data.pmcol1;//Applicable_chk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.pmtable1;//Applicable LC Stages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.pmrow2;//High Level Design;Unit Testing;Integration Test;System Test;Acceptance and Installation;Post Implementation;Others - Engineering
+ $inputObject.colNo = $data.pmcol2;//Applicable_unchk
+ $inputObject.fieldValues = $data.true1;//Y
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ $n.end();
+ 
+   var $t = _testcase("Script 2","Agile_Tools_ToolsPlanning_addTools_02");
+ $t.start();
+  
+  _include("Agile_Tools_ToolsPlanning_addTools_02.sah");
+  
+ $t.end();  
+  

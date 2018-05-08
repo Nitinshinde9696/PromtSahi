@@ -1,0 +1,230 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data2 = readDataFromCSV("Agile_PMPlan_Normal_Assumption_Risk","Agile/PMPlan_Normal"); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_24", "User goes to Assumptions");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.assmLink; //Assumption
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_26,TC_BRD27_FU1_32", "User tests is multiple assumptions can be added");
+ $t.start(); 
+ 
+ 
+ if(_isVisible(_div("1")))
+ {
+ 	 $inputObject = {};
+	 $inputObject.item = $data2.assm1;
+	 OpenEformInstance($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.popup = $data2.popup;
+	 $inputObject.item = $data2.assm1;
+	 InfyFTDeleteEformInstance($inputObject);
+  }
+  
+  _wait(5000);
+  
+/*  if(_isVisible(_div("1")))
+ {
+ 	 $inputObject = {};
+	 $inputObject.item = $data2.assm2;
+	 OpenEformInstance($inputObject);
+	 
+	 $inputObject = {};
+	 $inputObject.popup = $data2.popup;
+	 $inputObject.item = $data2.assm2;
+	 InfyFTDeleteEformInstance($inputObject);
+  } 
+ */ 
+  _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;//PM Plan
+ navigateTo($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon2;//nodeIcon2
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.planSummary; //PM Plan Summary
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data2.tableSummary;
+ $inputObject.rowNo = $data2.linkAssumption;
+ $inputObject.colNo = $data2.colReason;
+ $inputObject.fieldValues = $data2.reasonAssumption1;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+  
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_27", "User checks if multiple assumptions can be added or not");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon6;// _InfyFTclick(_image("nodeIcon6"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.assmLink; //Assumption
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data2.assName;
+ $inputObject.txt_CM_Description = $data2.descriptionAssm;
+ $inputObject.chk_DN_CommunicatedtoClient = $data2.fieldValueYes;
+ $inputObject.chk_DN_ConverttoRisk = $data2.fieldValueYes;
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $assumption = $inputObject.createdID;
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_BRD27_FU1_28", "User checks for the fields in Assumptions");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.item = $assumption;	 
+ OpenEformInstance($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmID;
+ InfyFTisVisiblePopup($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmName;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmDesc;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmBasis;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmclient;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmrisk;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.assmStatus;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ $t.end(); 
+ 
+ /*var $t = _testcase("TC_BRD27_FU1_29", "User does field level validations for projects");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.edt_CM_Name = "";
+ $inputObject.txt_CM_Description = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:•  Field Name in Details tab •  Field Assumption Description in Details tab"
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.edt_CM_Name = $data2.assm1;
+ $inputObject.txt_CM_Description = $data2.descriptionAssm;
+ InfyFTsaveInstance($inputObject);
+ 
+ InfyFTReturnPopUp()
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ */
+ var $t = _testcase("TC_BRD27_FU1_30", "User tests the creation of Risk scenario");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.item = $assumption;	 
+ OpenEformInstance($inputObject); 
+
+ $inputObject = {};
+ $inputObject.popup_name = $data2.popup;
+ $inputObject.span_Name = $data2.riskY;
+ InfyFTisVisiblePopup($inputObject); 
+ 
+ InfyFTReturnPopUp()
+ 
+ _wait(5000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_BRD27_FU1_31", "User tests Communicated to Client scenario");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.name = $data2.navigateTo3;//PM Plan
+ navigateTo($inputObject);  
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data2.nodeIcon2;//nodeIcon2
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data2.planSummary; //PM Plan Summary
+ InfyFTclick($inputObject);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data2.tableSummary;
+ $inputObject.rowNo = $data2.linkAssumption;
+ $inputObject.colNo = $data2.colReason;
+ $inputObject.fieldValues = $data2.reasonAssumption2;
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000); 
+ 
+ $t.end();
+ 

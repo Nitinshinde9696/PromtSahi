@@ -1,0 +1,417 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_SprintPerformancePage_03","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Navigate to Sprint and check Metrics are presented or not");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.Sprint;
+InfyFTnavigateTo($inputObject);
+
+$inputObject = {};
+$inputObject.item = $SprintID; 
+OpenEformInstance($inputObject); 
+
+$inputObject = {};
+$inputObject.link = $data.SprintSummary;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Productivity;
+$inputObject.span_name = $data.Productivity;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.Defectinjection;
+$inputObject.span_name = $data.Defectinjection;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.ResidualQLT;
+$inputObject.span_name = $data.ResidualQLT;
+InfyFTassertequal($inputObject); 
+
+$inputObject = {};
+$inputObject.value = $data.storypoint;
+$inputObject.span_name = $data.storypoint;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.velocity;
+$inputObject.span_name = $data.velocity;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.residualSP;
+$inputObject.span_name = $data.residualSP;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.effortvariance;
+$inputObject.span_name = $data.effortvariance;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.DefectDensity;
+$inputObject.span_name = $data.DefectDensity;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.testProjectspfcGoals;
+$inputObject.span_name = $data.testProjectspfcGoals;
+InfyFTassertequal($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Checking UOM  of each Metrics");
+$t.start();
+
+$inputObject = {};
+$inputObject.value = $data.story;
+$inputObject.span_name = $data.story;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.person100;
+$inputObject.span_name = $data.person100;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.PHRS1000;
+$inputObject.span_name = $data.PHRS1000;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.percentage;
+$inputObject.span_name = $data.percentage;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.storypoin;
+$inputObject.span_name = $data.storypoin;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.defectper;
+$inputObject.span_name = $data.defectper;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.percen;//percen;
+$inputObject.span_name = $data.percen;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.def;
+$inputObject.span_name = $data.def;
+InfyFTassertequal($inputObject);
+
+$inputObject = {};
+$inputObject.value = $data.TestingQuality;
+$inputObject.span_name = $data.TestingQuality;
+InfyFTassertequal($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Filling values in  Base Data For Sprint ");
+$t.start();
+
+//selecting Report mode before filling value in base data//
+
+_setSelected(_select(10), "Manual");
+_setValue(_textarea(10), "aaa");
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo2;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value between 0 to 9999999 for Story Points Estimated";
+saveSwiftForm($inputObject); */
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo3;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value between 0 to 9999999 for Story Points Done";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo4;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value between 0 to 9999999 for Total defects from reviews";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo5;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value between 0 to 9999999 for Total defects from testing";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo6;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value between 0 to 9999999 for Total UAT + PROD defects";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo8;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value between for Team Size";
+saveSwiftForm($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo9;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value for Estimated Efforts in PHrs";
+saveSwiftForm($inputObject); */
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo10;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.fieldValues0;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "Error : Please enter a positive numeric value for Actual Efforts in PHrs";
+saveSwiftForm($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo2;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject); */
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo3;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo4;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo5;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo6;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo8;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo9;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject); */
+
+$inputObject = {}; 
+$inputObject.tableName = $data.tableNameBase; 
+$inputObject.rowNo = $data.rowNo10;
+$inputObject.colNo = $data.colNo3;
+$inputObject.fieldValues = $data.rowNo3;
+setSwiftFormData($inputObject);
+ 
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "Reason for deviation");
+$t.start();
+
+$inputObject = {}; 
+$inputObject.msgAlert = "There are Metrics in Sprint Performance Summary section where significant deviation is present. Please provide reasons for deviation for metrics marked in red.";
+InfyFTClickRoutewithCommentsN($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.DefectDensityT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.DefectDensityT;
+setSwiftFormData($inputObject); */
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.DIR;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.DIR;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.EV;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.EV;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.ProdT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.ProdT;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.ResidualQLT;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.ResidualQLT;
+setSwiftFormData($inputObject);
+
+/* $inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.residualSP;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.residualSP;
+setSwiftFormData($inputObject); */
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.velocity;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.velocity;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameSprint; 
+$inputObject.rowNo = $data.storypoint;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.storypoint;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Optional Metrics & Proj specific metrics -Reason for deviation");
+$t.start();
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameOptionalS; 
+$inputObject.rowNo = $data.TestingQuality;
+$inputObject.colNo = $data.TestingQualityC;
+$inputObject.fieldValues = $data.rowNo7;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameprjS; 
+$inputObject.rowNo = $data.testProjectspfcGoals;
+$inputObject.colNo = $data.TestingQualityC;
+$inputObject.fieldValues = $data.rowNo7;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "There are Metrics in Sprint Performance Summary section where significant deviation is present. Please provide reasons for deviation for metrics marked in red.";
+InfyFTClickRoutewithCommentsN($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameOptionalS; 
+$inputObject.rowNo = $data.TestingQuality;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.velocity;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.byColRowName = "Yes";
+$inputObject.tableName = $data.tableNameprjS; 
+$inputObject.rowNo = $data.testProjectspfcGoals;
+$inputObject.colNo = $data.DefectDensityC;
+$inputObject.fieldValues = $data.velocity;
+setSwiftFormData($inputObject);
+
+$inputObject = {}; 
+$inputObject.msgAlert = "";
+saveSwiftForm($inputObject);
+
+$t.end();
+
+var $t = _testcase("Agile_ReleaseAndSprint_Sprint_Release_Route_04");
+$t.start();
+
+_include("Agile_ReleaseAndSprint_Sprint_Release_Route_04.sah");
+
+$t.end();

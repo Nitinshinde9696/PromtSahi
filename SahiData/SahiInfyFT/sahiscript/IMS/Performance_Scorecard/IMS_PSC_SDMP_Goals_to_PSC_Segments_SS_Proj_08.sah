@@ -1,0 +1,262 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceSnehal.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/Task.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("IMS_PSC_SDMP_Goals_to_PSC_Segments_SS_Proj_08", "IMS/Performance_Scorecard");
+ $gen = readDataFromCSV("IMS_PSC_Common", "IMS/Performance_Scorecard");
+  
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $gen.Username11;
+ $inputObject.edt_loginid = $gen.LoginID11;
+ $inputObject.edt_password = $gen.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};// Selecting Project
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject);
+ 
+ /*****************************************************************************
+ *  TestCase_29  : Change With Metric Of GoalType is Internal in SDMP
+ *****************************************************************************/
+ 
+ var $t = _testcase("TC_29_TS_01","Check With No Metric Of GoalType is Internal");
+ 
+ $t.start();
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ //InfyFTreopenInstance();
+
+ _wait(300); 
+ 
+ InfyFTreopenInstanceS();
+ 
+ _wait(300);
+ 
+ _click(_image("nodeIcon11"));
+ 
+ _wait(300);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName41;//Goals
+ SelectSegment($inputObject);
+
+ _wait(5000);
+ 
+ _click(_link("Setup Goals"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues52;//SLA with Financial Impact
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues51;//SLA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues52;//SLA with Financial Impact
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues51;//SLA
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues52;//SLA with Financial Impact
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues51;//SLA
+ setSwiftFormData($inputObject);
+ 
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+
+
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName45;//Workflow
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name100; 
+ $inputObject.multiple_member = $gen.Username11;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name101; 
+ $inputObject.multiple_member = $gen.Username11;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.workflow_stage = $data.stage_name102; 
+ $inputObject.multiple_member = $gen.Username11;
+ WorkflowSet($inputObject);
+ 
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSC_ID;//"SDMS5";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName43;//Internal Efficiency
+ SelectSegment($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.NoData6;//No Records Found
+ InfyFTisVisibleS($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ /*********************************************************************/
+ 
+ $inputObject = {}; // giving the path for Plan - SDMP
+ $inputObject.name = $data.navigateTo33; 
+ navigateTo($inputObject);
+ 
+ _wait(3000);
+ 
+ InfyFTreopenInstanceS();
+  
+ _wait(5000);
+ 
+ _click(_image("nodeIcon11"));
+ 
+ _wait(5000);
+ 
+ $inputObject = {};//Applicable Metrics
+ $inputObject.segment_name = $data.SegmentName41;//Goals
+ SelectSegment($inputObject);
+ 
+ _click(_link("Setup Goals"));
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues53;//Internal
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues53;//Internal
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo503;//3
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues53;//Internal
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo504;//4
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues53;//Internal
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo505;//5
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues53;//Internal
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Goal Selection
+ $inputObject.rowNo = $data.rowNo506;//6
+ $inputObject.colNo = $data.colNo51;//11_lst
+ $inputObject.fieldValues = $data.fieldValues53;//Internal
+ setSwiftFormData($inputObject);
+ 
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.Comments7;
+ ClickRoutewithComments($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {}; // giving the path for Monitor - PSC
+ $inputObject.name = $data.navigateTo31; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.PSC_ID;//"SDMS5";
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.SegmentName42;//SLA Performance
+ SelectSegment($inputObject);
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.NoData6;//No Records Found
+ InfyFTisVisibleS($inputObject);
+ 
+ clickReturn();

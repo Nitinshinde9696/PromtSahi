@@ -1,0 +1,222 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+//_include("../../../../sahisource/Business/TaskGrid2.sah");
+
+ $data = readDataFromCSV("Testing_Request_Management_Scheduled_Task_Report_PT_19","Testing/Request_Management/Performance_Testing");
+/*
+  $bTN = "Siddharth";
+ $review_type = "Requirements Specifications Review";
+ 
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+  var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects_home
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Automated Testing
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.item= $ID;
+ InfyFTOpenEformInstanceForLastPage($inputObject)
+
+  
+ $inputObject = {};
+ $inputObject.segment_name ="Scheduled Tasks";
+ SelectSegment($inputObject);
+ */
+
+   
+ var $s1 = _testcase("Scheduled Task Segment"," Scheduled Task segment");
+ $s1.start()
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_scheduledTask;//_link("Scheduled Task")
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ InfyFTcheckOutProjectInGrid();
+
+ var $baseTaskID = $ID+"_TSK0";
+ 
+ $inputObject = {};
+ $inputObject.LinkedTask = "True";
+ $inputObject.baseTaskID = $baseTaskID;
+ $inputObject.baseTaskName = $bTN;
+ $inputObject.edt_Name = $data.task_name;//"test";
+ //$inputObject["edt_Planned Finish"] =$EndDate2;//"09-Sep-2015";
+ //$inputObject["edt_Planned Start"] = $StartDate1;//"07-Sep-2015";
+ $inputObject["edt_Activity Code"] = $data.Activity_Code_Id;//"PIA";
+ addTaskInGrid($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.task = $data.task_name;//"test";
+ $inputObject.resource = $data.user_name1;//"Ricky_Wang";
+ $inputObject["edt_Resource"] = "xyz";
+ assignResourceToTaskInGrid($inputObject);
+ InfyFTcheckInProjectFromGrid();
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_18.3"," Verify Task in Task report Listing");
+ $s2.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_task;//_link("Task Report")
+ SelectSegment($inputObject);
+
+ var $taskid = $ID +"_TSK1[1]";
+  
+ $inputObject = {};
+ $inputObject.span_Name = $taskid;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.task_name;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Activity_Code_Id;
+ InfyFTisVisible($inputObject);
+
+ 
+ $s2.end();
+/* 
+ var $s3 = _testcase("Scheduled Task Segment"," Scheduled Task segment-Task2");
+ $s3.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_scheduledTask;//_link("Scheduled Task")
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ InfyFTcheckOutProjectInGrid();
+ 
+ $inputObject = {};
+ $inputObject.LinkedTask = "True";
+ $inputObject.baseTaskID = $baseTaskID;
+ $inputObject.baseTaskName = $bTN;
+ $inputObject.edt_Name = $data.task_name1;//"test1";
+ //$inputObject["edt_Planned Finish"] = $EndDate2;//"09-Sep-2015";
+ //$inputObject["edt_Planned Start"] = $StartDate1;//"07-Sep-2015";
+ $inputObject["edt_Activity Code"] = $data.Activity_Code_Id1;//"PCM";
+ addTaskInGrid($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.task = $data.task_name1;//"test1";
+ $inputObject.resource = $data.user_name11;//"Ricky_Wang";
+ $inputObject["edt_Resource"] = "abc";
+ assignResourceToTaskInGrid($inputObject);
+ 
+ InfyFTcheckInProjectFromGrid();
+ $s3.end();
+ 
+ var $s4 = _testcase("TC_18.3"," Verify Task in Task report Listing -Task2");
+ $s4.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_task;//_link("Task Report")
+ SelectSegment($inputObject);
+
+ var $taskid = $ID +"_TSK2[1]";
+  
+ $inputObject = {};
+ $inputObject.span_Name = $taskid;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.task_name1;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Activity_Code_Id1;
+ InfyFTisVisible($inputObject);
+
+ 
+ $s4.end();
+ 
+var $s5 = _testcase("Scheduled Task Segment"," Scheduled Task segment-Task3");
+ $s5.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_scheduledTask;//_link("Scheduled Task")
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ InfyFTcheckOutProjectInGrid();
+ 
+ $inputObject = {};
+ $inputObject.LinkedTask = "True";
+ $inputObject.baseTaskID = $baseTaskID;//"Arr25_TSK0";
+ $inputObject.baseTaskName = $bTN;
+ $inputObject.edt_Name = $data.task_name2;//"test2";
+ //$inputObject["edt_Planned Finish"] = $EndDate2;//"09-Sep-2015";
+ //$inputObject["edt_Planned Start"] = $StartDate1;//"07-Sep-2015";
+ $inputObject["edt_Activity Code"] = $data.Activity_Code_Id2;//"GTRL";
+ addTaskInGrid($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.task = $data.task_name2;//"test2";
+ $inputObject.resource = $data.user_name1;//"Ricky_Wang";
+ $inputObject["edt_Resource"] = "ok";
+ assignResourceToTaskInGrid($inputObject);
+
+ InfyFTcheckInProjectFromGrid();
+
+ $s5.end();
+ 
+  var $s6 = _testcase("TC_18.3"," Verify Task in Task report Listing");
+ $s6.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_task;//_link("Task Report")
+ SelectSegment($inputObject);
+
+ var $taskid = $ID +"_TSK3[1]";
+  
+ $inputObject = {};
+ $inputObject.span_Name = $taskid;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.task_name2;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Activity_Code_Id2;
+ InfyFTisVisible($inputObject);
+
+ 
+ $s6.end();
+ 
+*/
+ 

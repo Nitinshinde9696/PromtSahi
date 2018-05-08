@@ -1,0 +1,474 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+
+ $data = readDataFromCSV("Dev_PCB_PT_Setting_PCB_Setup_Verification_01", "Dev/PCB");
+ $gen = readDataFromCSV("Dev_PCB_common", "Dev/PCB");
+ 
+ var $t = _testcase("TC_1_TS_1", "Login to Digite");
+ $t.start();
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $gen.Username1;//dushyant
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_1_TS_2", "Open Development PT");
+
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $gen.Process_Templates2;//process governance
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $gen.DevPT;							
+ OpenEformInstance($inputObject); 
+ 
+ $t.end();
+ 
+
+/*************navigate to pt setting***********************/
+ 
+ var $t = _testcase("TC_1_TS_3", "Navigate to PT Setting");
+
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $gen.PTSetting2;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $t.end();
+
+/*************checking only 3 segments are present************/
+
+ var $t = _testcase("TC_1_TS_4", "Checking Available Segments");
+ 
+ $t.start();
+ 
+ inputObject = {};
+ $inputObject.span_Name = $data.Details3;//DETAILS
+ InfyFTisVisibleS($inputObject);
+
+ inputObject = {};
+ $inputObject.span_Name = $data.TechnologyGroup3;//Type of Application - Technology Group
+ InfyFTisVisibleS($inputObject);
+
+ $t.end();
+
+ /***************select segment Type of Application - Technology Group in pt setting**********/
+
+ var $t = _testcase("TC_1_TS_5", " Select Segment Type of Application - Technology Group");
+  
+ $t.start();
+ $inputObject = {};
+ $inputObject.segment_name = $data.TechnologyGroup3;//Type of Application - Technology Group
+ SelectSegment($inputObject); 
+ 
+ $t.end();
+ 
+ 
+/***********add rows in type of application technology group************/
+
+ var $t = _testcase("TC_6", "Add Rows in Type of Application - Technology Group");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName52;//Type of Application - Technology Group
+ $inputObject.rowNo = $data.rowNo52;//
+ InfyFTdeleteRowInPcb($inputObject);
+  
+ $inputObject = {};
+ $inputObject.link = $data.Add_Rows;//4
+ InfyFTclickS($inputObject);
+ 
+ $t.end();
+     
+ var $t = _testcase("TC_7", "Check Values Appearing  in Type of Application Drop Down in PT Setting");
+ $t.start();
+   
+   
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;//colNo51;
+ $inputObject.fieldValues = $data.fieldValue51;//details;//--None--#BI#Development#DM#DM and BI#Package or Product#Portal or Content Management site
+ verifySwiftFormData($inputObject);
+   
+ $t.end(); 
+   
+   
+ var $t = _testcase("TC_8", "set TOA as developmet and check technology group in pt setting");
+   
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;//2_lst
+ $inputObject.fieldValues = $data.fieldValue52;//Development;//Development
+ setSwiftFormData($inputObject);
+ _wait(3000); 
+ 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo52;//3_lst
+ $inputObject.fieldValues = $data.fieldValue53;//details1;//--None--#.Net#Java#LL#Others#Others HL 
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+	
+ var $t = _testcase("TC_9", "Set TOA as BI and Check Technology Group in PT Setting");
+ $t.start();
+	
+	
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValue54;//BI;//BI
+ setSwiftFormData($inputObject);
+
+ _wait(3000); 
+ 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo52;//3_lst//technologygroup_colno;
+ $inputObject.fieldValues = $data.fieldValue55;//details2;//--None--#Others
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_10", "Set TOA as DM_and_BI and Check Technology Group in PT Setting");
+ $t.start();
+   
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValue56;//DM_and_BI;//DM_and_BI
+ setSwiftFormData($inputObject);
+
+ _wait(3000); 
+ 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo52;//3_lst//technologygroup_colno;
+ $inputObject.fieldValues = $data.fieldValue55;//details2;//--None--#Others
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+  
+ var $t = _testcase("TC_11", "Set TOA as Portal or Content Management Site and Check Technology Group in PT Setting");
+ 
+ $t.start();
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo51;
+ $inputObject.fieldValues = $data.fieldValue56;//portal;//Portal or Content Management site
+ setSwiftFormData($inputObject);
+
+ _wait(3000); 
+ 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.technologygroup_colno;
+ $inputObject.fieldValues = $data.details2;//--None--#Others
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();  
+  
+/***************************setting and deleting duplicate entry***********/
+
+ var $t = _testcase("TC_12", "setting duplicate entry and deleting duplicate entry in pt setting");	
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.link = $data.addrows;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo52;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.developmentjava;//development java
+ setSwiftFormData($inputObject);
+
+ _wait(3000); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName52;
+ $inputObject.rowNo = $data.rowNo1;
+ $inputObject.colNo = $data.colNo1;
+ $inputObject.fieldValues = $data.developmentjava;//development java
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error: Please delete duplicates entries.";
+ saveSwiftForm($inputObject);
+ _wait(3000); 
+ 
+ $inputObject = {};
+ $inputObject.tableName=$data.TableName52;
+ $inputObject.rowNo=$data.rowNo52;
+ InfyFTdeleteRowInPcb($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ $t.end();
+  
+ //newly created
+ var $t = _testcase("TC_13", "navigate to pm plan version");
+  
+ $t.start();
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name; //HEFPMYS ims-pt
+ selectProject($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.name = $gen.pmplan;
+ navigateTo($inputObject); 
+ 
+
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.PCB_Setting;
+ InfyFTclickS($inputObject);
+ 
+ var $s =_getText(_span(" EcrStrongLabel[50]"));
+ var $x = parseFloat($s);
+ var $version1 = $x+1;
+ var $y = parseFloat($s);
+ var $y = $y+2;
+ 
+ $inputObject = {}; 
+ $inputObject.name = $gen.Process_Templates;//process governance
+ navigateTo($inputObject);
+ $t.end();
+/****************select and open  development pt***************/
+
+ var $t = _testcase("TC_14", "open development pt");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $gen.dev;							
+ OpenEformInstance($inputObject); 
+ 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_15", "navigate to pcb version");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $gen.PCBVersion;
+ navigateTo($inputObject); 
+ 
+ $t.end();
+ var $t = _testcase("TC_16", "create pcb version and verifing fields in pcb version");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.add;
+ InfyFTClickButtonS($inputObject)
+  
+ /***checking fields*** in pcb version***/
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.field199;
+ InfyFTisVisibleS($inputObject);
+
+  $inputObject = {};
+ $inputObject.span_Name = $data.CM_ItemCodeLABEL;
+ InfyFTisVisibleS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.field200;
+ InfyFTisVisibleS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.field1981;//here status is inactive
+ InfyFTisVisibleS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.CM_Nameast;
+ InfyFTisVisibleS($inputObject);
+ $t.end();
+
+ var $t = _testcase("TC_17", "checking mandatory fields in pcb version");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//1.5
+ $inputObject.edt_field199 = $data.version;//null
+ $inputObject.lst_field200 = $data.apptype;//null
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type of Application in Details tab \n• Field Version in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+
+
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//test
+ $inputObject.edt_field199 = $data.version1;//1.5
+ $inputObject.lst_field200 = $data.apptype1;//None
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Type of Application in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+ 
+
+
+   
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name1;//null
+ $inputObject.edt_field199 = $data.version1;//1.5
+ $inputObject.lst_field200 = $data.apptype2;//development
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTModifyEformInstanceS($inputObject);
+  
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//test
+ $inputObject.edt_field199 = $version1;//1.5
+ $inputObject.lst_field200 = $data.apptype2;//development
+ InfyFTModifyEformInstanceP($inputObject);
+ 
+  _wait(50000); 
+ var $IDpcb = _getText(_span("CM_ItemCode"));
+               
+ clickReturn();
+ $t.end();
+ 
+  
+ 
+ var $t = _testcase("TC_18", "checking duplicate pcb version msg and creating a new pcb version");
+ 
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.add;
+ InfyFTClickButtonS($inputObject)
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.name;//test
+ $inputObject.edt_field199 = $version1;
+ $inputObject.lst_field200 = $data.apptype2;//development
+ $inputObject.msgAlert = "Error: Instance already exists.";
+ InfyFTModifyEformInstanceP($inputObject);
+ 	
+ clickReturn();
+
+ $inputObject = {};
+ $inputObject.item = $IDpcb;							
+ OpenEformInstance($inputObject);
+  _wait(50000); 
+ 
+ $t.end();
+/***************check only 2 segments are  present***********/
+
+ var $t = _testcase("TC_19", "check only 2 segments are  present in pcb version");
+  
+ $t.start();
+ inputObject = {};
+ $inputObject.span_Name = $data.Details12;
+ InfyFTisVisibleS($inputObject);
+
+ inputObject = {};
+ $inputObject.span_Name = $gen.PCBVersionDetails;
+ InfyFTisVisibleS($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_20", " verifing field ");
+
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_field200 = $data.value1;
+ $inputObject.edt_CM_Name = $data.value2;
+ verifyEformInstanceDetails($inputObject);
+
+ $inputObject = {};
+ $inputObject.rdg_Active = $data.Active;
+ verifyAllFields($inputObject);
+  
+  
+ $t.end();
+ 
+
+ var $t = _testcase("TC_21", "verifing drop down list");
+
+ $t.start(); 
+ $inputObject = {};
+ $inputObject.lst_field200 = $data.app1;
+ verifyEformInstanceDetails($inputObject);
+ $t.end();
+
+
+
+ var $t = _testcase("Script_02", "InfyFT_sahi_BRD_38_PCBsetup_dev_02");
+ 
+ $t.start();
+   
+ _include("InfyFT_sahi_BRD_38_PCBsetup_dev_02.sah");
+ 
+ $t.end();
+  
+  var $t = _testcase("Script_03", "InfyFT_sahi_BRD_38_PCBsetup_dev_03");
+ 
+ $t.start();
+   
+ _include("InfyFT_sahi_BRD_38_PCBsetup_dev_03.sah");
+ 
+ $t.end();
+
+ 
+   var $t = _testcase("Script_04", "InfyFT_sahi_BRD_38_PCBsetup_dev_04");
+ 
+ $t.start();
+   
+ _include("InfyFT_sahi_BRD_38_PCBsetup_dev_04.sah");
+ 
+ $t.end();
+     var $t = _testcase("Script_04", "InfyFT_sahi_BRD_38_PCBsetup_dev_05");
+ 
+ $t.start();
+   
+ _include("InfyFT_sahi_BRD_38_PCBsetup_dev_05.sah");
+ 
+ $t.end();
+ 
+   var $t = _testcase("Script_05", "InfyFT_sahi_BRD_38_PCBsetup_dev_06");
+ 
+ $t.start();
+   
+ _include("InfyFT_sahi_BRD_38_PCBsetup_dev_06.sah");
+ 
+ $t.end();
+ 
+ 
+   var $t = _testcase("Script_06", "InfyFT_sahi_BRD_38_PCBsetup_dev_07");
+ 
+ $t.start();
+   
+ _include("InfyFT_sahi_BRD_38_PCBsetup_dev_07.sah");
+ 
+ $t.end();
+ 
+ 
+ 

@@ -1,0 +1,350 @@
+
+/*************************************************************************************************
+@Function verifyFolder
+@author: Ram
+@example: verifyFolder()
+@description: To verify Folder
+@param: None
+@return: None
+****************************************************************************************************/
+
+function verifyFolder($inputObject)
+{
+	_log("verifyFolder Started","success");
+	try 
+	{
+		_assertTrue(_isVisible(_div( $inputObject.item)));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyFolder Completed","success");
+}
+
+/*************************************************************************************************
+@Function openFolder
+@author: Ram
+@example: openFolder()
+@description: To open Folder
+@param: None
+@return: None
+****************************************************************************************************/
+
+function openFolder($inputObject)
+{
+	_log("openFolder Started","success");
+	try 
+	{
+		
+		_click(_div($inputObject.item));
+		/*var $folderHierarchy = $inputObject.item.split(";");
+		for(var $i = 0; $i <=$folderHierarchy.length; $i++)
+		{
+			var $imageName = "x-tree-elbow-plus x-tree-expander["+$i+"]";
+			if($i == 0)
+				_click(_image("x-tree-elbow-plus x-tree-expander",_near(_div($folderHierarchy[$i]))));
+			else
+				_click(_image($imageName,_near(_div($folderHierarchy[$i]))));
+		}*/
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openFolder Completed","success");
+}
+
+/**
+ @author: Harshit 
+ @example: addFolder($inputObject)
+ @description:  Add a folder in document eform	
+ @param: String {None}
+ @return: String {None}
+ **/
+
+function addFolder($inputObject)
+{
+	_log("addFolder Started","success");
+	try 
+	{
+		var $addBtn = "addFolderButton";
+		var $extJsId = ""; 	
+		var $addbtnKey = $addBtn + $extJsId;
+		if(_exists(_link($addbtnKey)))
+		{	
+			_wait(15000,_isVisible(_link($addbtnKey)));
+			_click(_link($addbtnKey));
+		}
+		else
+		{
+			_wait(15000,_isVisible(_link("de-icon-create_new_folder")));
+			_click(_link("de-icon-create_new_folder"));
+		}
+		_selectWindow("folderprop");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addFolder Completed","success");
+}
+
+/*************************************************************************************************
+@Function deleteFolder
+@author: Ram
+@example: deleteFolder()
+@description: To delete Folder
+@param: None
+@return: None
+****************************************************************************************************/
+
+function deleteFolder()
+{
+	_log("deleteFolder Started","success");
+	try 
+	{
+		_click(_link("deleteFolderButton"));
+		_expectConfirm("Are you sure you want to delete the selected folder along with all its sub folders and documents?",true);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteFolder Completed","success");
+}
+
+/*************************************************************************************************
+@Function renameFolder
+@author: Ram
+@example: renameFolder()
+@description: To renameFolder
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function renameFolder($inputObject)
+{
+	_log("renameFolder Started","success");
+	try 
+	{
+		var $edtFolderBtn = "editFolderButton";
+		var $extJsId = ""; 
+		var $edtFolderBtnKey = $edtFolderBtn + $extJsId;		
+		_click(_link($edtFolderBtnKey));
+		_selectWindow("Folder Properties");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("renameFolder Completed","success");
+}
+
+/*************************************************************************************************
+@Function reorderSubFolder
+@author: Ram
+@example: reorderSubFolder()
+@description: To reorderSubFolder
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+function reorderSubFolder($inputObject)
+{
+	_log("reorderSubFolder Started","success");
+	try 
+	{
+		_check(_div("x-grid-row-checker"));
+		_click(_link("KEY_LABEL_MoveItem"));
+		_selectWindow("Move");
+		setAllFields($inputObject);
+				
+		_click(_submit("QTP_Ok"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("reorderSubFolder Completed","success");
+}
+
+/*************************************************************************************************
+@Function moveDocument
+@author: Ram
+@example: moveDocument()
+@description: To moveDocument
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function moveDocument($inputObject)
+{
+	_log("moveDocument Started","success");
+	try 
+	{
+		_click(_div("x-grid-row-checker",_near(_div($inputObject.docid))));
+		var $moveBtn = "KEY_LABEL_MoveItem";
+		var $extJsId = ""; 	
+		var $moveBtnKey = $moveBtn + $extJsId;		
+		_click(_link($moveBtnKey));		
+		_selectWindow("Move");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Ok"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("moveDocument Completed","success");
+}
+
+/*************************************************************************************************
+@Function addDocumentSet
+@author: Ram
+@example: addDocumentSet()
+@description: To addDocumentSet
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function addDocumentSet($inputObject)
+{
+	_log("addDocumentSet Started","success");
+	try 
+	{
+		_selectWindow("Document Management : Document Sets");
+		_click(_link("de-icon-add"));
+		_selectWindow("popup");
+		setAllFields($inputObject);
+		_click(_submit("QTP_Save"));
+		_selectWindow("Document Management : Document Sets");
+		_click(_button("QTP_Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addDocumentSet Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example OpenDocumentSet({ "item" : "DCS2" });
+* @description This function is called to open an instance from Document instance listing
+* @param {String} item, Item Name or Item Id to be open
+* @return {String}   None 
+*************************************************************************/
+function OpenDocumentSet($inputObject)
+{
+	_log("OpenDocumentSet Started","success");
+	try 
+	{
+		_selectWindow("Document Management : Document Sets");
+		_click(_link($inputObject.item));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("OpenDocumentSet Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example addDocToDocumentSet({ "item" : "DCS2" });
+* @description This function is called to add Document in documentset
+* @param {String} item, Item Name or Item Id to be add
+* @return {String}   None 
+*************************************************************************/
+
+function addDocToDocumentSet($inputObject)
+{
+	_log("addDocToDocumentSet Started","success");
+	try 
+	{
+	    _selectWindow("Document Set : Details");
+		_click(_link("Documents"));
+		_click(_link("de-icon-add"));
+		_selectWindow("popup");
+		_click(_submit("Submit"));
+		_check(_checkbox(0, _near(_cell($inputObject.item))));
+		_click(_button("QTP_Add"));
+		_selectWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addDocToDocumentSet Completed","success");
+}
+
+/*************************************************************************************************
+@Function removeDocToDocumentSet
+@author: Ram
+@example: removeDocToDocumentSet()
+@description: To removeDocToDocumentSet
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function removeDocToDocumentSet($inputObject)
+{
+	_log("removeDocToDocumentSet Started","success");
+	try 
+	{
+		_selectWindow("Document Set : Details");
+		_click(_checkbox(0,_near(_cell($inputObject.itemId))));
+		_click(_link("de-icon-delete"));
+		_click(_button("QTP_Cancel"));
+		_selectWindow("Document Management : Document Sets");
+		_click(_button("QTP_Return"));
+		_selectWindow();
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("removeDocToDocumentSet Completed","success");
+}
+
+/*************************************************************************************************
+@Function downloadDocSet
+@author: Ram
+@example: downloadDocSet()
+@description: To downloadDocSet
+@param: ($inputObject)
+@return: None
+****************************************************************************************************/
+
+function downloadDocSet($inputObject)
+{
+	_log("downloadDocSet Started","success");
+	try 
+	{
+		var $downloadPath;
+		_set($downloadPath,_getGlobal("DOWNLOAD") + $inputObject.FileName);
+		_selectWindow("Document Management : Document Sets");
+		_click(_radio(0,_near(_cell($inputObject.item))));
+		_click(_link("de-icon-batch_download"));
+		_saveDownloadedAs($downloadPath);
+		_click(_button("QTP_Return"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("downloadDocSet Completed","success");
+}

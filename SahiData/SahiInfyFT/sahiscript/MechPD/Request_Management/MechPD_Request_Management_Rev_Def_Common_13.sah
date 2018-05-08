@@ -1,0 +1,222 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("MechPD_Request_Management_Rev_Def_Common_13","MechPD/Request_Management");
+ 
+/*
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s = _testcase("TC_1.1.2"," Navigation");
+ $s.start();
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//Projects
+ navigateTo($inputObject);
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s.end();
+ var $s = _testcase("TC_2.1"," Creating a Testing for Maint PT");
+ $s.start();
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo5;//Testing Request
+ navigateTo($inputObject);
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.item = "TSTR12";//$id;
+ OpenEformInstance($inputObject);
+*/
+ var $s1 = _testcase("TC_Linked item Segment"," Linked New Review Item segment");
+ $s1.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Reviews;//"Reviews"
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_ModuleCode = $data.code;//"US";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Review Mode in Details tab \n• Field Reviewer in Details tab \n• Field Artifact Name in Details tab \n• Field Review/Testing of in Details tab";
+ InfyFTcreateLinkedItem($inputObject);
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.review_name50;
+ $inputObject.lst_DN_ReviewMode  =$data.review_mode47;//
+ $inputObject.lst_DN_Reviewer = $data.reviewer51;//
+ $inputObject.txt_DN_ArtifactName = $data.artifact_name48;//field200 
+ $inputObject.lst_reviewtype = $review_type;//
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+  _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(15000);
+
+ 
+ //Tab Defects
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.txt_DN_ClosingComments = $data.Def_closing_commen;//"test";
+ $inputObject.msgAlert="Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n• Field Description in Details tab \n• Field Owner in Details tab \n• Field Severity in Details tab";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;//openLinkedItem
+ $inputObject.span = $data.add;//"KEY_Link_New_item-btnIconEl";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.winprefix= $data.popup_name2;//"newListing";
+ $inputObject.edt_DN_Numberofinstances = $data.OneIns;//1
+ verifyEformInstanceDetails($inputObject)
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name;//"test DEF";
+ $inputObject.lst_DN_DefectType  = $data.Def_type;//"Comments" ;//
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detcted_by;//"Himanshu_Bhayana";
+ $inputObject.lst_DN_Owner = $data.Def_owner;//"Nethravathi_r02";
+ $inputObject.lst_DN_Severity = $data.Def_serverity;//"Critical";
+ $inputObject.txt_CM_Description = $data.Def_desc;//"test";
+ $inputObject.edt_DN_Numberofinstances = $data.Instances;//2
+ $inputObject.txt_DN_ClosingComments = $data.Def_closing_commen;//"test";
+ InfyFTcreateLinkedItem1($inputObject);
+
+ var $createdDefID1 = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name1;//"Defect1";
+ $inputObject.lst_DN_DefectType  = $data.Def_type;//"Comments" ;//
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detcted_by;//"Himanshu_Bhayana";
+ $inputObject.lst_DN_Owner = $data.Def_owner;//"Nethravathi_r02";
+ $inputObject.lst_DN_Severity = $data.Def_serverity1;//"Minor";
+ $inputObject.txt_CM_Description = $data.Def_desc1;//"test1";
+ $inputObject.edt_DN_Numberofinstances = $data.Instances1;//2
+ $inputObject.txt_DN_ClosingComments = $data.Def_closing_commen;//"test";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID2 = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;//openLinkedItem
+ $inputObject.item = $createdDefID2;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//"openLinkedItem__1";
+ $inputObject.lst_DN_Status = $data.abandon;//"Abandoned";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//"openLinkedItem__1";
+ $inputObject.button = $data.return;//"Return";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.Def_name1;//"Defect1";
+ $inputObject.lst_DN_DefectType  = $data.Def_type;//"Comments" ;//
+ $inputObject.lst_DN_DefectDetectedBy = $data.Def_detcted_by;//"Himanshu_Bhayana";
+ $inputObject.lst_DN_Owner = $data.Def_owner;//"Nethravathi_r02";
+ $inputObject.lst_DN_Severity = $data.Def_serverity1;//"Minor";
+ $inputObject.txt_CM_Description = $data.Def_desc1;//"test1";
+ $inputObject.edt_DN_Numberofinstances = $data.Instances1;//2
+ $inputObject.txt_DN_ClosingComments = $data.Def_closing_commen;//"test";
+ InfyFTcreateLinkedItem1($inputObject);
+ 
+ var $createdDefID3 = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;//openLinkedItem
+ $inputObject.item = $createdDefID3;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//"openLinkedItem__1";
+ $inputObject.lst_DN_Status = $data.NotaDef;//"Not a defect";
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name1;//"openLinkedItem__1";
+ $inputObject.button =$data.return;//"Return";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.button = $data.return;//"Return";
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ verifyInstanceInListing($inputObject);
+ 
+ $s1.end();
+ 
+ var $s2 = _testcase("TC_Defect Report"," Defect Report verification");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_Def_rep6;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Def_rep_headers;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $createdDefID1+";"+$data.Def_type+";"+$data.Def_serverity+";"+$createdID+";"+$data.review_name50+";"+$review_type;
+ InfyFTisVisible($inputObject);
+ 
+ $s2.end();
+ 
+ var $CR = _testcase("TC_Defect Summary Verification","Defect Summary Verification");
+ $CR.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name =  $data.Request_sum;//"Request Summary";
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.DefectSummary;//"Defect Summary"
+ $inputObject.rowNo = $data.Inprocess;//"In process defects";
+ $inputObject.colNo = $data.Inprocess_col;//"Critical_lbl|Major_lbl|Minor_lbl|Cosmetic_lbl|Total[2]_lbl";
+ $inputObject.fieldValues = $data.Inprocess_val;//"5|0|0|0|5";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.DefectSummary;//"Defect Summary"
+ $inputObject.rowNo = $data.Acceptance;//"Acceptance test defects";
+ $inputObject.colNo = $data.acc_col;//"Critical_lbl|Major_lbl|Minor_lbl|Cosmetic_lbl|Total[2]_lbl";
+ $inputObject.fieldValues = $data.acc_val;//"NA|NA|NA|NA|NA";
+ verifySwiftFormData($inputObject);
+ 
+ $CR.end();

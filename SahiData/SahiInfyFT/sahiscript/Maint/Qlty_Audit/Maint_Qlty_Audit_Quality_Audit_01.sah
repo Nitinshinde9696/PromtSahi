@@ -1,0 +1,120 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+
+
+ $data = readDataFromCSV("Maint_Qlty_Audit_Quality_Audit_01", "Maint\Qlty_Audit");
+ 
+ var $t = _testcase("TC_3", "Login to SwiftALM");
+ $t.start();
+
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1; 
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_4", "navigate to Project Quality Audit");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3; //Project Quality Audit
+ navigateTo($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_5", "Verify the list of audits planned project under the PQA module");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item= $data.item4;
+ verifyInstanceInListing($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Verify the columns present on the page.");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.pad5;//_span("Planned Audit Date")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.aad6;//_span("Actual Audit Date")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.as7;//_span("Audit Status")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.afa8;//_span("Audit Focus Area")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.a9;//_span("Auditee1")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.aa10;//_span("Auditee2")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.tn11;//_span("Total Ncrs")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.on12;//_span("Open Ncrs")
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.span_Name = $data.cn13;//_span("Closed Ncrs")
+ InfyFTisVisible($inputObject); 
+ 
+  $t.end();
+ 
+ var $t = _testcase("TC_7", "Verify the presence of the audit instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item= $data.item14;//_div("ShPr8702")
+ verifyInstanceInListing($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item= $data.item15;//_div("Test audit")
+ verifyInstanceInListing($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_8", " Open audit instance");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.audit_name17;
+ OpenEformInstance($inputObject);
+ 
+
+_selectWindow($data.popup_name16);
+ _wait(5000);
+
+ 
+ _popup($data.popup_name16)._isVisible(_span($data.spn17));
+ 
+ _popup($data.popup_name16)._assertEqual(_getValue(_textbox($data.edt_name18)),$data.edt_value19);
+ 
+ 
+ 
+ _closeWindow();
+ _selectWindow();
+ 
+  $t.end();
+ 
+ 
+ 

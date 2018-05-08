@@ -1,0 +1,2 @@
+invalidUser1,invalidLogin1,invalidPassword1,crsegments1,fields1,status1,quality1,fullpartLC1,reason1,mtrname1,reportmode1
+testdata,testdata,123456,Details;Effort;Schedule;Defects;Size;Quality And Productivity;Closure Checks;Activity Log,ID :;Status :;Quality of data :;Full / Partial LC :;Closure Report Name * :;Report Mode * :;Reason for bad data / abandoned project :,In Process,--None--,Partial LC Stage,test,test,Manual;Automatic

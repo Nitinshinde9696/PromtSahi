@@ -1,0 +1,220 @@
+﻿_include("../../sahisource/Business/DigiteCommon.sah");
+_include("../../sahisource/Business/BusinessNavigation.sah");
+_include("../../sahisource/Business/EformListing.sah");
+_include("../../sahisource/Business/Filter.sah");
+_include("../../sahisource/Business/EformInstanceSubhashini.sah");
+
+$data = readDataFromCSV("Roles_MR_AQM_1_VExtg_Nassgnmt_04","Roles");  
+ 
+ /*********************************************************************
+ DATA CREATION
+ *********************************************************************/ 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username;//Nethravathi_r02
+ $inputObject.edt_loginid = $data.LoginID;//Nethravathi_r02
+ $inputObject.edt_password = $data.Password2;//123456
+ loginIntoDigite($inputObject); 
+ 
+ var $t = _testcase("TC_1", "Data creation for AQM(Creating a UQH) ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//UQH
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.DN_Unit3;//ECS 
+ $inputObject.edt_SearchCriteria_DN_user = $data.UQHuserName3;//subhashini_k03
+ CreateInstance($inputObject);
+ 
+ var $uqh = _getText(_span("CM_ItemCode"));
+ 
+ clickReturn();
+ 
+ _setValue(_textbox("searchTextBox-inputEl"),$uqh);//"AQM60";
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $t.end();
+ 
+ /*********************************************************************
+ DATA CREATION DONE
+ *********************************************************************/
+ 
+ var $t = _testcase("TC_1.1", "Selecting the AQM Role");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo21;//AQM
+ InfyFTnavigateTo($inputObject); 
+ 
+ $t.end();
+ 
+ //_wait(1000); 
+ 
+ if(_isVisible(_div("1")))
+{
+
+  _click(_div("1")); 
+ 
+ var $t = _testcase("TC_1.2", "Available Segments in existing AQM ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment1;//Details
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment2;//Comments
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment3;//Previous Versions
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Segment4;//Activity Log
+ InfyFTvalueisVisible($inputObject); 
+ 
+ $t.end();
+ 
+  var $t = _testcase("TC_2.2", "Verifying the comments tab if any ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment2;//Comments
+ SelectSegment($inputObject);
+
+if(_isVisible(_div("commentWrap editableComment"))) 
+{
+  var $c = _getText(_div("commentWrap editableComment"));  
+  _log( $c );
+}
+
+ 
+ /*$inputObject = {};
+ $inputObject.txt_New_Comment = $data.Comments;//Comments //Hai
+ addComment($inputObject);*/
+ 
+ $t.end(); 
+ 
+ 
+ var $t = _testcase("TC_2.3", "Available content in Previous Versions Segment of existing AQM ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment3;//Previous Versions
+ SelectSegment($inputObject);
+ 
+ var $versions = 0;
+ var $versions = _getText(_table("QTP_versionlog"));
+ _log($versions);  
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_2.4", "Available content in Activity Log Segment of existing AQM ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment4;//Activity Log
+ SelectSegment($inputObject); 
+ 
+ var $activitylog = 0;
+ $activitylog = _getText(_table("QTP_activitylog"));//_row("RowOdd"));
+ _log($activitylog); 
+ 
+ $inputObject = {};
+ $inputObject.Comments = $activitylog;
+ verifyActivityLogComments($inputObject);
+ 
+ $t.end();
+ clickReturn(); 
+ 
+ } 
+
+ 
+ _click(_span("KEY_BUTTON_Add-btnIconEl"));
+ 
+ var $t = _testcase("TC_2.1 & 3.1"," Available Fields in Details segment of new & existing AQM assignment ");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field1;//ID :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field2;//Unit * :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field3;//Master Customer Code * :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field4;//Customer Code :
+ InfyFTvalueisVisible($inputObject); 
+
+ $inputObject = {};
+ $inputObject.value = $data.Field5;//User * :
+ InfyFTvalueisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Field6;//Status :
+ InfyFTvalueisVisible($inputObject); 
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_3.2 & 3.2.1", "Checking mandatory fields in add AQM"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.DN_Unit3;//BIZP
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Master Customer Code in Details tab \n• Field User in Details tab"; 
+ CreateInstance($inputObject);
+ 
+ //_assertEqual("Value must be set for the following mandatory field(s):\n• Master Customer Code\n• User\n", _lastAlert());  
+  
+ $inputObject = {};
+ $inputObject.lst_DN_Unit = $data.DN_Unit3;//BIZP
+ $inputObject.lst_DN_MasterCustomerCode = $data.DN_MasterCustomerCode5;//AIRTELIN
+ //$inputObject.lst_DN_CustomerCode = $data.DN_CustomerCode5;//AIRTELIN
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field User in Details tab";
+ ModifyEformInstance($inputObject); 
+ 
+ //_assertEqual("Value must be set for the following mandatory field(s):\n• User\n", _lastAlert());
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_3.2.2", "Available buttons in add AQM"); 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.value = $data.Button4;//< Return
+ InfyFTvalueisVisible($inputObject);
+ 
+ $t.end(); 
+ 
+ clickReturn(); 
+ 
+ var $t = _testcase("TC_", "To repeat the execution of this script"); 
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//UQH
+ InfyFTnavigateTo($inputObject);
+
+ _setValue(_textbox("searchTextBox-inputEl"),$uqh);//UQH//
+ _keyPress(_textbox("searchTextBox-inputEl"),[13,13]);
+ 
+ $inputObject = {};
+ $inputObject.item = $uqh;//"UQH465";//
+ OpenEformInstance($inputObject);  
+ 
+ _wait(1000);
+ InfyFTChangeStatusInactive(); 
+ 
+ $t.end(); 

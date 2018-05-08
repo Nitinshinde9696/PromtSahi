@@ -1,0 +1,104 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstanceNitin.sah");
+ _include("../../../sahisource/Business/EformListing.sah");
+ _include("../../../sahisource/Business/ECR.sah");
+ _include("../../../sahisource/Business/TaskGrid.sah");
+
+ $generic = readDataFromCSV("Dev_Closure_Report_Generic_00","Dev/Closure_Report");
+ $data = readDataFromCSV("Dev_Closure_Report_Iteration_Sizing_Details_04","Dev/Closure_Report");
+ 
+ var $t = _testcase("TC_1", "Logging in with valid user and navigate to Iteration");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $generic.User_name1; // Ricky_Wang
+ $inputObject.edt_loginid = $generic.LoginID1;// Ricky_Wang
+ $inputObject.edt_password = $generic.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo1;//Projects_home
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = "BGGSZ199";//$generic.projectname1;//BGGSZ199
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $generic.navigateTo3;//Iterations
+ InfyFTnavigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR1";//$data.iter1;//ITR1
+ OpenEformInstance($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Filling Sizing Details segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $generic.segment18;//Sizing Details
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table1;//Details
+ $inputObject.byColRowName = $data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowName1;//3rd Generation default
+ $inputObject.colNo = $data.colName1;//Applicable Sizing Technique_lst
+ $inputObject.fieldValues = $data.value1;//Backward FP
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowName2;//1
+ $inputObject.colNo = $data.colName2;//Added LOC_edt
+ $inputObject.fieldValues = $data.value2;//5
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowName2;//1
+ $inputObject.colNo = $data.colName3;//Modified or Deleted LOC_edt
+ $inputObject.fieldValues = $data.value3;//6
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.link1;//Add Rows
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table3;//Add Additional Languages
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowName2;//1
+ $inputObject.colNo = $data.colName4;//Language_edt
+ $inputObject.fieldValues = $data.value4;//Java
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowName2;//1
+ $inputObject.colNo = $data.colName5;//Added LOC[2]_edt
+ $inputObject.fieldValues = $data.value5;//7
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Language List as per PM Plan
+ $inputObject.byColRowName=$data.bycolrow1;//Yes
+ $inputObject.rowNo = $data.rowName2;//1
+ $inputObject.colNo = $data.colName6;//Modified or Deleted LOC[2]_edt
+ $inputObject.fieldValues = $data.value6;//8
+ setSwiftFormData($inputObject);
+ 
+ $inputObject ={};
+ saveSwiftForm($inputObject);
+ 
+ 
+ 
+
+ 
+

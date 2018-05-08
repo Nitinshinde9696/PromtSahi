@@ -1,0 +1,49 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+$data = readDataFromCSV("Agile_PrjCr_Mgr_BR2_Process_Type_Deployment_13","Agile/PrjCr_Mgr"); 
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject); 
+ 
+/*  $inputObject = {};
+ $inputObject.name = $data.navigateTo2;//Process Templates
+ navigateTo($inputObject); */
+ 
+ _click(_link("Process Governance"));
+ 
+ $inputObject = {};
+ $inputObject.item = $data.ptype;
+ OpenEformInstance($inputObject);
+ _wait(5000);
+ if(_isVisible(_button("Deploy")))
+ {
+	_click(_button("Deploy"));
+	_log($data.ptype+" Deployed successfully");
+	_assertVisible(_button("Undeploy"));
+ }
+ else
+ {
+	_log($data.ptype+" PT already Deployed ");
+ }
+ 
+ clickReturn();
+ 
+ _click(_link("Infosys"));
+ 
+ $inputObject = {};
+ $inputObject.name = "Org Events";
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = "Process Template List";
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.chk_checkAll = true;
+ regenerate($inputObject);
+ 

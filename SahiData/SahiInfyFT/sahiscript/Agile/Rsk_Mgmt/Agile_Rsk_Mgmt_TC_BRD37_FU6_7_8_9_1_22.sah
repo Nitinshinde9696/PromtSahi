@@ -1,0 +1,168 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+
+ $data = readDataFromCSV("Agile_Rsk_Mgmt_TC_BRD37_FU6_7_8_9_1_22", "Agile/Rsk_Mgmt"); 
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",60,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC = _testcase("TC_BRD37_FU6_7_8_9__1","Checking for condition in Fields Impact, Probability, Contingency Plan, Cost of Risk Mitigation."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4; 
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Cost of Risk Mitigation (USD) in Details tab \n• Field Contingency Plan in Details tab \n";
+ InfyFTcreateRiskManagement($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.edt_DN_CostofRiskMitigationUS = $data.cstOfRiskMatigation5;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4; 
+ $inputObject.txt_DN_ContingencyPlan = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Contingency Plan in Details tab \n";
+ InfyFTModifyEformInstance($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4; 
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.txt_DN_ContingencyPlan = $data.field45;
+ $inputObject.edt_DN_CostofRiskMitigationUS = $data.cstOfRiskMatigation5;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4; 
+ $inputObject.msgAlert = "Please fill either Cost impact due to schedule impact (USD) or Other cost of Risk (USD) when Probability is >= 0.7 or Impact is >= 7";
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.txt_DN_ContingencyPlan = $data.field45;
+ $inputObject.edt_DN_CostofRiskMitigationUS = $data.cstOfRiskMatigation5;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpDueToRisk5;
+ $inputObject.edt_DN_OtherCostofRiskUSD = $data.otherCstOfRisk5;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ var $CreatedID =  _getText(_span("CM_ItemCode")); 
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ //script for modifying probability and impact.
+ $inputObject = {};
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact5;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $CreatedID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ //script for modifying probability and impact.
+ $inputObject = {};
+ $inputObject.lst_DN_Probability = $data.probability6;
+ $inputObject.lst_DN_Impact = $data.impact6;
+ InfyFTModifyEformInstance($inputObject);
+
+ $TC.end();
+ /* 
+ var $TC = _testcase("TC_BRD37_FU6_7_8_9_2","Check the field Publish to Risk Database checkbox.."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_type = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact6;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.lst_DN_Status = $data.status4;
+ $inputObject.chk_field10 = "Y";
+ $inputObject.edt_CM_Name = $data.CM_Name6;
+ InfyFTcreateRiskManagement($inputObject);
+ 
+ $TC.end();
+ 
+
+ var $TC = _testcase("TC_BRD37_FU6_7_8_9__4.2","PM Plan is not baselined."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name4;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.CM_Name4;
+ DeleteEformInstance($inputObject);
+
+ $TC.end();
+ 
+ */
+
+ 
+
+
+
+ 
+ 

@@ -1,0 +1,168 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("MechPD_Reviews_Defects_product_design_user_Marks_04", "MechPD/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",15,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+
+ var $TC = _testcase("TC_36","User marks the status of the Review as Closed."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(2000);
+ 
+ //Tab Defects
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name5;
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.edt_CM_Name = $data.DefName;
+ $inputObject.txt_CM_Description = $data.DefDescription;
+ //$inputObject.lst_DN_DefectDetectedBy = $data.Deffield198;
+ $inputObject.lst_DN_Owner = $data.Deffield199;
+ $inputObject.lst_DN_Severity = $data.Deffield196;
+ InfyFTcreateLinkedItem1($inputObject);
+ var $createdDefID = $inputObject.createdID;
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.segment_name = $data.segment_name6;
+ SelectSegment($inputObject);
+    
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.lst_DN_Status = $data.closedStatus;// Status = closed
+ $inputObject.msgAlert = "You cannot close this Review since it has Open Defects linked to it.";
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.lst_DN_Status = $data.InProgressStatus;// Status = In-Progress
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(2000);
+ 
+ InfyFTReturnPopUp();
+ 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Inbox
+ navigateTo($inputObject);
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $createdDefID;
+ OpenEformInstance($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status= $data.closedStatus;
+ $inputObject.lst_DN_DefectType = $data.defectType;
+ $inputObject.lst_DN_DefectInjectedBy = $data.defInjectedBy;
+ $inputObject.lst_PhaseInjected = $data.PhaseInjected;
+ $inputObject.txt_DN_ClosingComments = $data.closingComment;
+ $inputObject.edt_DN_Numberofinstances = $data.noInstance;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name4;//Reviews
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.popup_name;
+ $inputObject.lst_DN_Status = $data.closedStatus;// Status = closed
+ InfyFTto_modifyEFormPopupDetailsWithoutName($inputObject);
+ 
+ _wait(5000);
+   
+ $inputObject = {};
+ $inputObject.popup = $data.popup_name;
+ InfyFTcloseWin($inputObject);
+ 
+ _wait(5000);
+  
+ $TC.end(); 
+
+ 
+ 
+
+ 
+
+
+
+ 
+ 

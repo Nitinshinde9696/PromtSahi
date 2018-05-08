@@ -1,0 +1,1967 @@
+
+/**
+ @Function Number: 1
+ @author:		   Vaishali	
+ @example:		 addPractice($inputObject)
+ @description:	 This function add practices 
+ @param: 
+ @return: 
+ **/
+
+function addPractice($inputObject)
+{
+	_log("addPractice Started","success");
+	try 
+	{
+		if($inputObject.visible ==="disabled")
+		{
+			_log("User has no rights to Add Practice");
+		}
+		else
+		{
+			_click(_link("QTP_Add_Practice"));
+				        
+		    _selectWindow("Add_new_practice");
+				
+		    setAllFields($inputObject);
+			
+	        if(_isVisible(_submit("create")) ||  _isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+	        	_click(_submit("create") ||  _submit("SaveBtn") || _submit("//s*Save/s*/"));
+	        else
+	        	_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+				
+			_wait(3000,null);
+			
+			if($inputObject.operation == "Negative")
+	    	{
+	    		_assertTrue(_isVisible(_span("The Practice name or code already exists. Please enter different values.")));
+	    		_closeWindow();
+	    	}
+	        _selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPractice Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:
+ @example:
+ @description: Add phase from PT 
+ @param: 
+ @return: 
+ **/
+
+function addPhase($inputObject)
+{
+	_log("addPhase Started","success");
+	try 
+	{
+		if(_isVisible(_link("QTP_Add_Phase")))
+		{
+			_click(_link("QTP_Add_Phase"));
+		}
+		_selectWindow("Add_new_phase");
+     	_wait(3000,null);
+		setAllFields($inputObject);
+     	_click(_button("QTP_Save"));
+    	_wait(2000,null);
+    	
+    	if($inputObject.operation == "Negative")
+    	{
+    		_assertTrue(_isVisible(_span("The Phase name or code already exists. Please enter different values.")));
+    		_closeWindow();
+    	}
+     	_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPhase Completed","success");
+}
+
+/**
+ @Function Number:3
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function attachItemToPhase($inputObject)
+{
+	_log("attachItemToPhase Started","success");
+	try 
+	{
+		_check(_checkbox(0, _near(_cell($inputObject.phase_id))));
+		_click(_link("de-icon-add_global_item"));
+		
+		_selectWindow("phase");
+		
+		var $itemName = $inputObject.items.split(";");
+		
+		for(var $i = 0; $i < $itemName.length; $i++)
+		{
+			_check(_checkbox(0, _near(_cell($itemName[$i]))));
+		}
+		
+		_click(_submit("QTP_Attach_Items"));
+		_wait(2000);
+		_selectWindow();
+		_uncheck(_checkbox(0, _near(_cell($inputObject.phase_id))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("attachItemToPhase Completed","success");
+}
+
+/**
+ @Function Number:4
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function importPractices($inputObject)
+{
+	_log("importPractices Started","success");
+	try 
+	{
+		_click(_link("Add from existing Practices"));
+		_selectWindow("Add Existing Practice");
+		
+		var $practices = $inputObject.edt_name.split(";");
+		
+		for(var $i = 0; $i < $practices.length; $i++)
+		{
+			_click(_checkbox(0,_near(_cell($practices[$i]))));
+		}
+		_click(_button("Save"));
+		_wait(2000);
+		_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importPractices Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function importPhases($inputObject)
+{
+	_log("importPhases Started","success");
+	try 
+	{
+		_click(_link("QTP_Add_Existing_Phase"));
+		_selectWindow("Add_new_phase");
+		_wait(2000,null);
+		
+		var $phaseName = $inputObject.edt_name.split(";");
+		for(var $i=0; $i< $phaseName.length; $i++)
+			_click(_checkbox(0,_near(_cell($phaseName[$i]))));
+		_click(_button("Save"));
+		_wait(6000,null);
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importPhases Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function associatePracticeWithActivity($inputObject)
+{
+	_log("associatePracticeWithActivity Started","success");
+	try 
+	{
+	 _click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+	 _selectWindow("Associate Activities");
+	 _click(_link("de-icon-add"));
+	 _selectWindow("Add Activity");
+	 
+	 if($inputObject.operation == "Negative")
+	 {
+		 _assertFalse(_containsText(_select("selectAvailableActivities"), $inputObject.activity_name));
+		 _click(_button("Close"));
+		 _selectWindow("Associate Activities");
+		 _click(_button("QTP_Close"));
+		 _selectWindow();
+		 return;
+	 }
+	 var $activityName = $inputObject.activity_name.split(";");
+	 for(var $i=0; $i< $activityName.length; $i++)
+	 {
+		_setSelected(_select("selectAvailableActivities"),  $activityName[$i]);
+		_click(_link("de-icon-next"));
+	 }
+	 _click(_button("Add"));
+	 _wait(2000);
+	 _selectWindow("Associate Activities");
+	 _click(_button("Close"));
+	 _selectWindow();	 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("associatePracticeWithActivity Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author: Hrishi
+ @example:
+ @description: Associate phase with activity
+ @param: 
+ @return: none
+ **/
+
+function associatePhaseWithActivity($inputObject)
+{
+	_log("associatePhaseWithActivity Started","success");
+	try 
+	{
+		 _click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+		 _selectWindow("Associate Activities");
+		 _check(_checkbox(0,_near(_cell($inputObject.activity_name))));
+		 _click(_link("de-icon-associate_phase"));
+		 
+		 if($inputObject.checkOrgActAlert)
+		 {
+			 _assertEqual("Activity has applicable phase attached to it",_lastAlert());
+		 }
+		 else
+		 {
+			 _selectWindow("tailor");
+			 _setSelected(_select("phaseList"),$inputObject.phase_name);
+			 _click(_button("QTP_Save"));
+			 _wait(1000);
+		 }
+		 _selectWindow("Associate Activities");
+		 _click(_button("btnClose"));
+		 _selectWindow();	 
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("associatePhaseWithActivity Completed","success");
+}
+
+/**
+ @Function Number:8
+ @author:
+ @example:
+ @description: instantiatePractice
+ @param: 
+ @return: 
+ **/
+
+function instantiatePractices($inputObject)
+{
+	_log("instantiatePractices Started","success");
+	try 
+	{
+		_click(_checkbox(0, _near(_cell($inputObject.practice_name))));
+		
+		if($inputObject.itemtype === "WorkPackage")
+		{	
+			_click(_link("KEY_LABEL_Instantiate_Practices"));
+			
+			if ($inputObject.generateIn == "separate_mpp")
+				_popup("GenerateTasks")._check(_radio("separate_mpp"));
+			else if ($inputObject.generateIn == "main_mpp")
+			{
+				_popup("GenerateTasks")._check(_radio("main_mpp"));
+				_popup("GenerateTasks")._setSelect(_select("summaryTaskSelected"),$inputObject.summaryTask);
+			}
+			_popup("GenerateTasks")._click(_button("OK"));
+		}
+		else
+		{	
+			_click(_link("de-icon-instantiate_practice"));
+			_assertEqual("Are you sure you want to instantiate this Practice? This will instantiate all the Activities in this Practice",_lastConfirm());
+			_expectConfirm(_lastConfirm(), true);
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("instantiatePractices Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: clickPracticeTab()
+ @description: Clicking on the Practice Tab
+ @param: None
+ @return: None
+ **/
+
+function clickPracticeTab()
+{
+	_log("clickPracticeTab Started","success");
+	try 
+	{
+		SelectSegment({ "segment_name" : "QTP_Practice" });
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickPracticeTab Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: clickPhaseTab()
+ @description:  Clicking on the Phase Tab
+ @param: None
+ @return: None
+ **/
+
+function clickPhaseTab()
+{
+	_log("clickPhaseTab Started","success");
+	try 
+	{
+		SelectSegment({ "segment_name" : "QTP_Phase" });
+		//_click(_link(""));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("clickPhaseTab Completed","success");
+}
+
+/*************************************************************************
+* @author Ram
+* @example EditPhase
+* @description This function is called to EditPhase
+* @param {String}
+* @return {String}   None 
+*************************************************************************/
+
+function EditPhase($inputObject)
+{
+	_log("EditPhase Started","success");
+	try 
+	{
+		if($inputObject.name)
+			_click(_link(_getText(_cell(0, _near(_cell($inputObject.name)), _under(_cell("ID"))))));
+		else
+			_click(_link(0,_near(_preformatted($inputObject.itemid))));
+		
+		if($inputObject.popup_name)
+		{
+			_selectWindow($inputObject.popup_name);	
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("EditPhase Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewPracticeAtProject($inputObject)
+{
+	_log("saveAndAddNewPractice Started","success");
+	try 
+	{
+		if(_isVisible(_link("QTP_Add_Practice")))
+		{
+			_click(_link("QTP_Add_Practice"));
+		}
+		_selectWindow("Add_new_practice");
+     	_wait(3000,null);
+		setAllFields($inputObject);
+     	_click(_button("QTP_KEY_BUTTON_Save_&_Add_New"));
+     	if($inputObject.cancel === "YES")
+     	{
+     		_click(_button("QTP_KEY_BUTTON_Cancel"));
+     		_selectWindow();
+     		_wait(2000,null);
+     	}
+     	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewPractice Completed","success");
+}
+
+/**
+ @Function Number:14
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function saveAndAddNewPhaseAtProject($inputObject)
+{
+	_log("saveAndAddNewPhase Started","success");
+	try 
+	{
+		if(_isVisible(_link("QTP_Add_Phase")))
+		{
+			_click(_link("QTP_Add_Phase"));
+		}
+		_selectWindow("Add_new_phase");
+     	_wait(3000,null);
+		setAllFields($inputObject);
+     	_click(_button("QTP_KEY_BUTTON_Save_&_Add_New"));
+     	if($inputObject.cancel === "YES")
+     	{
+     		_click(_button("QTP_KEY_BUTTON_Cancel"));
+     		_selectWindow();
+     		_wait(2000,null);
+     	}
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveAndAddNewPhase Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: openPractice({ "practice_id" : "PRCT4" ,  "col_id" : "3" });
+ @description: Open a perticular Practice
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function openPractice($inputObject)
+{
+	_log("openPractice Started","success");
+	try 
+	{
+		_click(_link($inputObject.practice_id) || _link(0,_near(_cell($inputObject.practice_id))));
+		_wait(3000,null);
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openPractice Completed","success");
+}
+
+/**
+ @Function Number:16
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyInstance($inputObject)
+{
+	_log("modifyInstance Started","success");
+	try 
+	{
+		if($inputObject.popup_name)
+			_selectWindow($inputObject.popup_name);
+		
+		ModifyEformInstance($inputObject);
+		
+		if($inputObject.operation == "Negative")
+		{
+			if($inputObject.itemType == "Phase")
+			{
+				_assertTrue(_isVisible(_span("The Phase name or code already exists. Please enter different values.")));
+			}
+			
+			if($inputObject.itemType == "Practice")
+			{
+				_assertTrue(_isVisible(_span("The Practice name or code already exists. Please enter different values.")));
+			}
+			
+			if($inputObject.popup_name)
+			_closeWindow();
+		}
+		
+		if($inputObject.popup_name)
+			_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyInstance Completed","success");
+}
+
+/**
+ @Function Number:17
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyPracticeAtProject($inputObject)
+{
+	_log("modifyPracticeAtProject Started","success");
+	try 
+	{
+		_selectWindow($inputObject.winprefix);
+		
+		setAllFields($inputObject);
+				
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+        if(_isVisible(_submit("create")) ||  _isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+        	_click(_submit("create") ||  _submit("SaveBtn") || _submit("//s*Save/s*/"));
+        else
+        	_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+        
+        _wait(6000,null);
+        
+        if($inputObject.operation == "Negative")
+    	{
+    		_assertTrue(_isVisible(_span("The Practice name or code already exists. Please enter different values.")));
+    		_closeWindow();
+    	}
+        
+		_selectWindow();
+		
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPracticeAtProject Completed","success");
+}
+
+/**
+ @Function Number:18
+ @author: Hrishi
+ @example: modifyPractice("edt_CM_name":"pr1")
+ @description: modifies the practice efrom
+ @param: fields on practices eform
+ @return: none
+ **/
+
+function modifyPractice($inputObject)
+{
+	_log("modifyPractice Started","success");
+	try 
+	{
+		_selectWindow("EForm");
+		if($inputObject.operation=== "Negative")
+		{
+			_click(_button("CancelBtn"));
+		}
+		
+		else
+		{
+			setAllFields($inputObject);
+			_click(_button("SaveBtn"));
+		}	
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPractice Completed","success");
+}
+
+/**
+ @Function Number:19
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyPhaseAtProject($inputObject)
+{
+	_log("modifyPhaseAtProject Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		
+		if($inputObject.winprefix)
+			_selectWindow($inputObject.winprefix);
+
+        if(_isVisible(_submit("create")) ||  _isVisible(_submit("SaveBtn")) || _isVisible(_submit("//s*Save/s*/")))
+        	_click(_submit("create") ||  _submit("SaveBtn") || _submit("//s*Save/s*/"));
+        else
+        	_click(_button("SaveBtn") || _button("//s*Save/s*/"));
+        
+        _wait(6000,null);
+        
+        if($inputObject.operation == "Negative")
+    	{
+    		_assertTrue(_isVisible(_span("The Phase name or code already exists. Please enter different values.")));
+    		_closeWindow();
+    	}
+
+        if($inputObject.winprefix)
+			_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPhaseAtProject Completed","success");
+}
+
+/**
+ @Function Number:20
+ @author: Hrishi
+ @example:modifyPhase({"edt_CM_name" : "PHS1"})
+ @description: Modifies the fields of phase eform
+ @param: Fields of Phase eform
+ @return: none
+ **/
+
+function modifyPhase($inputObject)
+{
+	_log("modifyPhase Started","success");
+	try 
+	{
+		_selectWindow("PhaseEForm");
+		if($inputObject.operation === "Negative")
+		{	
+			_log("can not edit " + $inputObject.edt_CM_Name +" as this is not editable");
+			_closeWindow();
+			_selectWindow();
+			return;
+		}
+		setAllFields($inputObject);
+		_selectWindow("PhaseEForm");
+		_click(_button("SaveBtn"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPhase Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example:deletePracticeInstanceLevel({ "item" : "a1" ,"winprefix" : "EForm"});
+ @description: To delete instance of Practice
+ @param:{String} item to be select
+ @return: {String} none
+ **/
+
+function deletePracticeInstanceLevel($inputObject)
+{
+	_log("deletePracticeInstanceLevel Started","success");
+	try 
+	{
+		_selectWindow("EForm");
+		if($inputObject.operation=== "Negative")
+		{
+			_click(_button("CancelBtn"));
+		}
+		
+		else
+		{
+		_click(_button("Delete"));
+    	_assert(_isVisible(_div("This work-item will no longer be available")));
+    	_click(_button("//s*Ok/s*/"));
+		}
+    	_selectWindow();
+    	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deletePracticeInstanceLevel Completed","success");
+}
+
+/**
+ @Function Number:24
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deletePracticeAtListing($inputObject)
+{
+	_log("deletePracticeAtListing Started","success");
+	try 
+	{
+		if($inputObject.visible ==="disabled")
+		{
+			_log("User has no rights to Delete Practice");
+		}
+		else
+		{
+		
+			var $practices = $inputObject.item.split(";");
+			
+			for(var $i = 0; $i < $practices.length; $i++)
+			{
+				_click(_checkbox(0, _near(_cell($practices[$i]))));
+				_click(_link("QTP_KEY_LABEL_Delete_Practices"));
+				_expectConfirm("Are you sure you want to delete the selected Item(s)?", true);
+			}
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deletePracticeAtListing Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: deletePhaseAtListing({ "chk_phscheckItem" : "1.0" ,  "edt_CM_Name" : "PHO3", "winprefix" : "PhaseEForm"});
+ @description: Delete A phase
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function deletePhaseAtListing($inputObject)
+{
+	_log("deletePhaseAtListing Started","success");
+	try 
+	{
+		var $phases = $inputObject.item.split(";");
+		
+		for(var $i = 0; $i < $phases.length; $i++)
+		{
+		    _click(_checkbox(0, _near(_cell($phases[$i]))));
+		    _click(_link("QTP_KEY_LABEL_Delete_Phases"));
+	        _expectConfirm("Are you sure you want to delete the selected Item(s)?", true);
+		}
+		
+        _log("deleteInstance Verification Started","success");
+        
+        _wait(2000);
+        
+        for(var $j = 0; $j < $phases.length; $j++)
+		{
+        	_assertFalse(_isVisible(_cell($phases[$j])));
+		}
+		_log("deleteInstance Verification Complete","success");
+	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deletePhaseAtListing Completed","success");
+}
+
+/**
+ @Function Number:26
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function moveAndDemoteBelowPractice($inputObject)
+{
+	_log("moveAndDemoteBelowPractice Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_cell($inputObject.practice_id))));
+		_click(_link("KEY_LABEL_Deomote_Practices"));
+		_selectWindow("MoveAndDemote");
+		_setSelected(_select("newParent"), $inputObject.lst_newParent);
+		_click(_submit("QTP_KEY_BUTTON_Ok"));
+		_wait(3000,null);
+		_selectWindow();
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("moveAndDemoteBelowPractice Completed","success");
+}
+
+/**
+ @author: Harshit
+ @example: moveAndDemoteBelowPhase({ "phase_id" : "PHO3" ,  "lst_newParent" : "tartess" });
+ @description: Demote the Phase
+ @param: {String} item to be select
+ @return: None
+ **/
+
+function moveAndDemoteBelowPhase($inputObject)
+{
+	_log("moveAndDemoteBelowPhase Started","success");
+	try 
+	{
+		_click(_checkbox(0, _near(_cell($inputObject.phase_id))));
+		_click(_link("de-icon-demote"));
+		_selectWindow("MoveAndDemote");
+		 setAllFields($inputObject); 
+		_click(_submit("OK"));
+		_wait(3000,null);
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("moveAndDemoteBelowPhase Completed","success");
+}
+
+/**
+ @Function Number:28
+ @author: Hrishi
+ @example: moveAndDemoteBelowActivity({"practice_name" : "pr1", "activity_id" : "ACTY1", "lst_ActivityMoveunder" : "ACTY3"})
+ @description: Selects the practice and opens activities associated with it and demotes
+               the activity below ActivityMoveunder
+ @param:  
+ @return: none
+ **/
+
+function moveAndDemoteBelowActivity($inputObject)
+{
+	_log("moveAndDemoteBelowActivity Started","success");
+	try 
+	{
+		_click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+		_selectWindow("EForm");
+		_click(_checkbox(0, _near(_cell($inputObject.activity_id))));
+		_click(_image("QTP_KEY_LABEL_Move_Demote_Below"));
+		_selectWindow("MoveAndDemote");
+		 setAllFields($inputObject); 
+		_click(_submit("QTP_KEY_BUTTON_Ok"));
+		_wait(3000,null);
+		_selectWindow("EForm");
+		_click(_button("QTP_Close"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("moveAndDemoteBelowActivity Completed","success");
+}
+
+/**
+ @Function Number:30
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function promotePractice($inputObject)
+{
+	_log("promotePractice Started","success");
+	try 
+	{
+		_click(_checkbox(0, _near(_cell($inputObject.practice_name))));
+		_click(_link("KEY_LABEL_Promote_Practices"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("promotePractice Completed","success");
+}
+
+/**
+ @Function Number:31
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteActivityAssociation($inputObject)
+{
+	_log("deleteActivityAssociation Started","success");
+	try 
+	{
+		_click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+		_selectWindow("Associate Activities");
+		_checkbox(0,_near(_cell($inputObject.activity_name)));
+		_click(_link("de-icon-delete"));
+		_wait(2000);
+		_click(_button("Close"));
+		_selectWindow();	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteActivityAssociation Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example navigateToMetricGoalSheet()
+* @description This function is called to navigate to Metric Goal sheet
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function navigateToMetricGoalSheet()
+{
+	_log("navigateToMetricGoalSheet Started","success");
+	try 
+	{
+		_click(_link("de-icon-view_icon"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("navigateToMetricGoalSheet Completed","success");
+}
+
+/**
+ @Function Number:	33
+ @author:			Vaishali
+ @example:			addExistingMetrics($inputObject)
+ @description: 		This function adds Existing metrics
+ @param: 			lst_ApplUpto,metrics_name
+ @return: 
+ **/
+
+function addExistingMetrics($inputObject)
+{
+	_log("addExistingMetrics Started","success");
+	try 
+	{
+		_selectWindow("popup");
+		_click(_link("de-icon-add_metric"));
+		_setSelected(_select("ApplUpto"), $inputObject.lst_ApplUpto);
+		_click(_submit("Go"));
+		 
+		var  $metricName=$inputObject.metrics_name.split(":");
+		
+		 for ($i=0;$i<$metricName.length;$i++) 
+		 {
+			 _check(_checkbox(0, _near(_cell($metricName[$i]))));
+		 }
+		_click(_submit("Add Metric"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addExistingMetrics Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example deleteExistingMetric({ "metrics_name" : "Hazardous waste generation" ,  "chk_col_id" : "1" });
+* @description This function is called to delete Existing metrics
+* @param {String} Metrics name to be deleted
+* @return {String}   None 
+*************************************************************************/
+
+function deleteExistingMetric($inputObject)
+{
+	_log("deleteExistingMetric Started","success");
+	try 
+	{    _selectWindow("popup");
+		 _click(_checkbox(0,_near(_cell($inputObject.metrics_name)),_under(_cell("ColHeader"))));
+		 _click(_link("de-icon-delete"));
+		 _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteExistingMetric Completed","success");
+}
+
+/**
+ @Function Number:35
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function editMetricGoalSheet($inputObject)
+{
+	_log("editMetricGoalSheet Started","success");
+	try 
+	{
+		_selectWindow("Metric Goal Definition Sheet");
+		if($inputObject.Internal_USL_value && $inputObject.Internal_target_value && $inputObject.Internal_LSL_value && $inputObject.External_USL_value && $inputObject.External_target_value && $inputObject.External_LSL_value)
+		{
+			_setSelected(_select("GoalTypeCombo"), "All");
+			_setValue(_textbox(0,_in(_parentRow(_cell($inputObject.metrics_name)))),$inputObject.Internal_USL_value);
+			_setValue(_textbox(1,_in(_parentRow(_cell($inputObject.metrics_name)))),$inputObject.Internal_target_value);
+			_setValue(_textbox(2,_in(_parentRow(_cell($inputObject.metrics_name)))),$inputObject.Internal_LSL_value);
+			_setValue(_textbox(0,_in(_parentRow(_cell($inputObject.metrics_name)).nextElementSibling)),$inputObject.External_USL_value);
+			_setValue(_textbox(1,_in(_parentRow(_cell($inputObject.metrics_name)).nextElementSibling)),$inputObject.External_target_value);
+			_setValue(_textbox(2,_in(_parentRow(_cell($inputObject.metrics_name)).nextElementSibling)),$inputObject.External_LSL_value);
+		}
+		if($inputObject.pcb_value)
+		{
+			_click(_checkbox(0,_near(_cell($inputObject.metrics_name)),_under(_cell("Include in PCB"))));
+		}		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("editMetricGoalSheet Completed","success");
+}
+
+/*************************************************************************
+* @author Vaishali
+* @example saveMetric()
+* @description This function is to save metric
+* @param {String} None
+* @return {String}   None 
+*************************************************************************/
+
+function saveMetric()
+{
+	_log("saveMetric Started","success");
+	try 
+	{
+		_selectWindow("popup");
+		_click(_button("Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("saveMetric Completed","success");
+}
+
+/**
+ @Function Number:37
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addTask($inputObject)
+{
+	_log("addTask Started","success");
+	try 
+	{
+		_click(_link("KEY_LABEL_Add_Task"));
+		
+		if ($inputObject.lst_SummaryTask)
+		{
+		    $inputObject.lst_SUMMARYTASKID = $inputObject.lst_SummaryTask;
+			delete $inputObject.lst_SummaryTask;
+		}
+		if ($inputObject.lst_StandardCode)
+		{
+		    $inputObject.lst_Activity_Code_Id = $inputObject.lst_StandardCode;
+			delete $inputObject.lst_StandardCode;
+		}
+		if ($inputObject.edt_TaskName)
+	    {
+		    $inputObject.edt_Name = $inputObject.edt_TaskName;
+			delete $inputObject.edt_TaskName;
+		}
+		if ($inputObject.edt_StartDate)
+		{
+		    $inputObject.edt_pref_st = $inputObject.edt_StartDate;
+			delete $inputObject.edt_StartDate;
+		}
+		if ($inputObject.edt_EndDate)
+		{
+		    $inputObject.edt_pref_fn = $inputObject.edt_EndDate;
+			delete $inputObject.edt_EndDate;
+		}
+		var $teamMember;
+		if ($inputObject.lst_TeamMember)
+		{   
+		    $teamMember = $inputObject.lst_TeamMember;
+			delete $inputObject.lst_TeamMember;
+		}
+		var $percentAlloc;
+		if ($inputObject.edt_ResourcePAlloc)
+		{   
+		    $percentAlloc = $inputObject.edt_ResourcePAlloc;
+			delete $inputObject.edt_ResourcePAlloc;
+		}
+		
+		$inputObject.lst_priority = "Medium";
+		setAllFields($inputObject);
+		
+		if ($teamMember)
+		{	
+			_click(_link("Resources"));
+			_setSelected(_select("selectFrom"), $teamMember);
+			_click(_button("Add >"));
+			
+			if ($percentAlloc)
+		    {
+				_setValue(_textbox("NewAllocation0"), $percentAlloc);
+		    }
+		}
+		_click(_button("SaveBtn"));
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addTask Completed","success");
+}
+
+/**
+ @Function Number:38
+ @author: Hrishi
+ @example: defineTailoringScenario({"edt_TailoringName":"abd","txt_Description" : "desc", "txt_Question": "quest", "options" : "o1" });
+ @description: adds Tailoring scenario.
+ @param: 
+ @return: none
+ **/
+
+function defineTailoringScenario($inputObject)
+{
+	_log("defineTailoringScenario Started","success");
+	try 
+	{
+		_click(_link("Tailoring"));
+		_click(_link("Switch to Advanced"));
+		_click(_link("QTP_KEY_LABEL_Add_Scenario"));
+	    _selectWindow("tailor");
+		setAllFields($inputObject);
+		addOption($inputObject);
+		_click(_button("QTP_Add"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("defineTailoringScenario Completed","success");
+}
+
+/**
+ @Function Number:39
+ @author: Hrishi
+ @example: updateTailoringScenario({"edt_TailoringName":"abd","txt_Description" : "desc", "txt_Question": "quest", "options" : "o1" });
+ @description: Updates tailoring Scenario
+ @param: 
+ @return: none
+ **/
+
+function updateTailoringScenario($inputObject)
+{
+	_log("updateTailoringScenario Started","success");
+	try 
+	{
+		setAllFields($inputObject);
+		addOption($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("updateTailoringScenario Completed","success");
+}
+
+/**
+ @Function Number:40
+ @author: Hrishi
+ @example: openTailoringScenario({"item":"abd"});
+ @description: open tailoring Scenario
+ @param: 
+ @return: 
+ **/
+
+function openTailoringScenario($inputObject)
+{
+	_log("openTailoringScenario Started","success");
+	try 
+	{
+		_click(_link("Tailoring"));
+		_click(_link("QTP_KEY_LABEL_Advanced_Mode"));
+		_click(_cell($inputObject.item));
+		_selectWindow("popup");
+		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openTailoringScenario Completed","success");
+}
+
+/**
+ @Function Number:41
+ @author: Hrishi
+ @example:@example: defineActionToOption({"option":"opt1","operation" : "Negative", "lst_Action": "Retain", "lst_ProcessItem":"0.1","options" : "o1", "lst_SelectedItem" : "o1" });
+ @description: add options for action
+ @param: 
+ @return: none
+ **/
+
+function defineActionToOption($inputObject)
+{
+	_log("defineActionToOption Started","success");
+	try 
+	{
+		_setSelected(_select("optionSelect"), $inputObject.option);
+		
+		if($inputObject.operation === "Negative")
+		{
+			var $actionString ="";
+			if($inputObject.lst_Action ==  "Retain")
+			{
+				$actionString = "Add|"+$inputObject.lst_ProcessItem+"|"+$inputObject.lst_SelectedItem;
+			}
+			else
+			{
+				$actionString = $inputObject.lst_Action+"|"+$inputObject.lst_ProcessItem+"|"+$inputObject.lst_SelectedItem;
+			}	
+			
+			_assertTrue(_isVisible(_option($actionString)), _in(_select("tailoringaction")));
+			_click(_button("QTP_Cancel"));
+			_selectWindow();
+			
+		}
+		else
+		{
+			_click(_span("addBut"));
+			_selectWindow("action");
+			
+			var $tmpJson={};
+			$tmpJson.lst_Action = $inputObject.lst_Action;
+			$tmpJson.lst_ProcessItem = $inputObject.lst_ProcessItem;
+			$tmpJson.lst_SelectedItem = $inputObject.lst_SelectedItem;
+			setAllFields($tmpJson);
+			_wait(1000);
+			_click(_button("QTP_KEY_BUTTON_Add"));
+			_wait(1000);
+			_selectWindow($inputObject.winprefix);
+			_click(_button("QTP_Cancel"));
+			_wait(1000);
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("defineActionToOption Completed","success");
+}
+
+/**
+ @Function Number:42
+ @author: Hrishi
+ @example:deleteOption({"options":"o1"})
+ @description: deletes option
+ @param: 
+ @return: none
+ **/
+
+function deleteOption($inputObject)
+{
+	_log("deleteOption Started","success");
+	try 
+	{
+		var $values = $inputObject.options.split(";");
+		for(var $k=0; $k<$values.length; $k++)
+		{
+			_setSelected(_select("optionSelect"),$values[$k]);
+			_click(_span("QTP_KEY_LABEL_Remove_Question_Value"));
+			_click(_button("QTP_Update"));
+		}
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteOption Completed","success");
+}
+
+/**
+ @Function Number:43
+ @author: Hrishi
+ @example: deleteAction({"option":"o1", "ActionType" : "A1", "processitem" : "p1", "SelectItem" : "s1"})
+ @description: Deletes action from tailoring scenario
+ @param: 
+ @return: none
+ **/
+
+function deleteAction($inputObject)
+{
+	_log("deleteAction Started","success");
+	try 
+	{
+		_setSelected(_select("optionSelect"),$inputObject.option);
+		var $actionString = $inputObject.ActionType+"|"+$inputObject.processitem+"|"+$inputObject.SelectItem;
+		_setSelected(_select("tailoringaction"), $actionString);
+		_click(_span("QTP_KEY_LABEL_Remove_Action_Value"));
+		_click(_button("QTP_Update"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteAction Completed","success");
+}
+
+/**
+ @Function Number:44
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteScenario($inputObject)
+{
+	_log("deleteScenario Started","success");
+	try 
+	{
+		_click(_link("Tailoring"));
+		_click(_link("QTP_KEY_LABEL_Advanced_Mode"));
+		_click(_checkbox(0, _near(_cell($inputObject.item))));
+		_click(_link("de-icon-delete"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteScenario Completed","success");
+}
+
+/**
+ @Function Number:45
+ @author: Hrishi
+ @example: verifyDeletePracticeOnActivityMatrix({"PracticeName":"P1"})
+ @description: verifies the deleted practice is not present in activity matrix  
+ @param: practice name
+ @return: nones
+ **/
+
+function verifyDeletePracticeOnActivityMatrix($inputObject)
+{
+	_log("verifyDeletePracticeOnActivityMatrix Started","success");
+	try 
+	{
+		_assertFalse(_isVisible(_cell($inputObject.PracticeName,_under(_cell("Activity Matrix")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDeletePracticeOnActivityMatrix Completed","success");
+}
+
+/**
+ @Function Number:46
+ @author: Hrishi
+ @example: verifyDeletePhaseOnActivityMatrix({"PhaseName" : "PH1"})
+ @description: verifies that the deleted pahse is not present in activity matix
+ @param: pahse name
+ @return: none
+ **/
+
+function verifyDeletePhaseOnActivityMatrix($inputObject)
+{
+	_log("verifyDeletePhaseOnActivityMatrix Started","success");
+	try 
+	{
+		_assertNotContainsText($inputObject.PhaseName,_parentRow(_cell("Activity Matrix")));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyDeletePhaseOnActivityMatrix Completed","success");
+}
+
+/**
+ @Function Number:47
+ @author: Hrishi
+ @example: verifyActivityMatrix({"PracticesName" : "P1" , "Activity" : "A1", "PhaseName" : "Ph1"})
+ @description: verifies the activity is associated with given practce ans pahse  
+ @param: practice name, phase name, activity name
+ @return: none
+ **/
+
+function  verifyActivityMatrix($inputObject)
+{
+	_log(" verifyActivityMatrix Started","success");
+	try 
+	{
+		_assertTrue(_containsText(_parentRow(_cell($inputObject.PracticesName)),$inputObject.Activity) && (_cell($inputObject.Activity, _under(_cell($inputObject.PhaseName)))!== null));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log(" verifyActivityMatrix Completed","success");
+}
+
+/**
+ @Function Number:48
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function searchActivityForRoleMapping($inputObject)
+{
+	_log("searchActivityForRoleMapping Started","success");
+	try 
+	{
+		$inputObject.segment_name = "Activity Role Mapping";
+		 SelectSegment($inputObject);
+		 
+		 if($inputObject.edt_SearchString || $inputObject.lst_Role)
+		 {
+			 setAllFields($inputObject);
+		 }
+		 
+		 _click(_submit("Search"));
+		 _wait(1000);
+		 verifySearchResultsForActivityRoleMapping($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("searchActivityForRoleMapping Completed","success");
+}
+
+/**
+ @Function Number:49
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function mapActivityToRole($inputObject)
+{
+	_log("mapActivityToRole Started","success");
+	try 
+	{
+		$inputObject.segment_name = "Activity Role Mapping";
+		SelectSegment($inputObject);
+		
+		if($inputObject.activities)
+		{
+			var $activities = $inputObject.activities.split(";");
+			
+			for(var $i = 0 ; $i < $activities.length; $i++)
+			{
+				_check(_checkbox(0,_near(_cell($activities[$i]))));
+			}
+		}
+		
+		_click(_link("Associate Roles"));
+		
+		if($inputObject.operation == "NotVisible")
+		{
+			_assertEqual("Select an Activity for associating Roles",_lastAlert());
+		}
+		
+		else
+		{
+			_selectWindow("popup");
+			
+			var $values = $inputObject.lst_PLR_Roles.split("#");
+			
+			for(var $i = 0; $i < $values.length; $i++)
+			{
+				_setSelected(_select("PLR_Roles"), $values[$i]);
+			}
+			
+			_click(_link("de-icon-next"));
+			
+			_click(_submit("Save"));
+			
+			_wait(1000);
+			
+			_selectWindow();
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("mapActivityToRole Completed","success");
+}
+
+/**
+ @Function Number:78
+ @author: Hrishi
+ @example: addOption({"options" : "o1"})
+ @description: Add option in tailoring scenario
+ @param: 
+ @return: none 
+ **/
+
+function addOption($inputObject)
+{
+	_log("addOption Started","success");
+	try 
+	{
+		var $values = $inputObject.options.split(";");
+		for(var $k=0; $k<$values.length; $k++)
+		{
+			_setValue(_textbox("textfield"), $values[$k]);
+			_click(_span("QTP_KEY_LABEL_Add_Question_Value"));
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addOption Completed","success");
+}
+
+/**
+ @Function Number:88
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyPracticeListing($inputObject)
+{
+	_log("verifyPracticeListing Started","success");
+	try 
+	{
+		var $practiceNames = $inputObject.edt_name.split(";");
+		
+		for(var $i = 0; $i <$practiceNames.length; $i++)
+		{
+			if($inputObject.operation == "Negative")
+				_assertFalse(_isVisible(_cell($practiceNames[$i], _in(_table("QTP_ListTable02")))));
+			else
+				_assertTrue(_isVisible(_cell($practiceNames[$i], _in(_table("QTP_ListTable02")))));
+		}	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPracticeListing Completed","success");
+}
+
+/**
+ @Function Number:89
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyPhaseListing($inputObject)
+{
+	_log("verifyPhaseListing Started","success");
+	try 
+	{
+		var $phaseNames = $inputObject.edt_name.split(";");
+		
+		for(var $i = 0; $i <$phaseNames.length; $i++)
+		{
+			if($inputObject.operation == "Negative")
+				_assertFalse(_isVisible(_cell($phaseNames[$i], _in(_table("QTP_ListTable01")))));
+			else
+				_assertTrue(_isVisible(_cell($phaseNames[$i], _in(_table("QTP_ListTable01")))));
+		}	
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyPhaseListing Completed","success");
+}
+
+/**
+ @Function Number:103
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifymetricgoalsheet($inputObject)
+{
+	_log("verifymetricgoalsheet Started","success");
+	try 
+	{
+		_selectWindow("Metric Goal Definition Sheet");
+		if($inputObject.Internal_USL_value && $inputObject.Internal_target_value && $inputObject.Internal_LSL_value && $inputObject.External_USL_value && $inputObject.External_target_value && $inputObject.External_LSL_value)
+		{
+			_setSelected(_select("GoalTypeCombo"), "All");
+			_assertEqual($inputObject.Internal_USL_value,_getText(_textbox(0,_in(_parentRow(_cell($inputObject.metrics_name))))));
+			_assertEqual($inputObject.Internal_target_value,_getText(_textbox(1,_in(_parentRow(_cell($inputObject.metrics_name))))));
+			_assertEqual($inputObject.Internal_LSL_value,_getText(_textbox(2,_in(_parentRow(_cell($inputObject.metrics_name))))));
+			
+			_assertEqual($inputObject.External_USL_value,_getText(_textbox(0,_in(_parentRow(_cell($inputObject.metrics_name)).nextElementSibling))));
+			_assertEqual($inputObject.External_target_value,_getText(_textbox(1,_in(_parentRow(_cell($inputObject.metrics_name)).nextElementSibling))));
+			_assertEqual($inputObject.External_LSL_value,_getText(_textbox(2,_in(_parentRow(_cell($inputObject.metrics_name)).nextElementSibling))));
+		}
+		if($inputObject.pcb_value)
+		{ 			 
+			 var $val;
+			_set($val,_checkbox(0,_near(_cell($inputObject.metrics_name)),_under(_cell("Include in PCB"))).checked);
+			if($inputObject.pcb_value === "ON")
+			{
+				_assertTrue($val);
+			}
+			else
+			{
+				_assertFalse($val);
+			}
+		}		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifymetricgoalsheet Completed","success");
+}
+
+/**
+ @Function Number:104
+ @author:Ankur
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function closeTailoringPopup()
+{
+	_log("closeTailoringPopup Started","success");
+	try 
+	{
+		_click(_button("QTP_Cancel"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("closeTailoringPopup Completed","success");
+}
+
+/**
+ @Function Number:105
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifySearchResultsForActivityRoleMapping($inputObject)
+{
+	_log("verifySearchResultsForActivityRoleMapping Started","success");
+	try 
+	{
+		var $activities = $inputObject.activities.split(";");
+		
+		for(var $i =0; $i < $activities.length; $i++)
+		{
+			if($inputObject.operation == "NotVisible")
+				_assertFalse(_isVisible(_cell($activities[$i])));
+			else
+				_assertTrue(_isVisible(_cell($activities[$i])));			
+		}		
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifySearchResultsForActivityRoleMapping Completed","success");
+}
+
+/**
+ @Function Number:106
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyActivityRoleMapping($inputObject)
+{
+	_log("verifyActivityRoleMapping Started","success");
+	try 
+	{
+		var $activities = $inputObject.activities.split(";");
+		
+		$inputObject.segment_name = "Activity Role Mapping";
+		 SelectSegment($inputObject);
+		 
+		 for(var $i=0; $i < $activities.length; $i++)
+		 {
+			 _check(_checkbox(0,_near(_cell($activities[$i])),_in(_table("QTP_ActivityList"))));
+			 _click(_link("de-icon-role"));
+			 _selectWindow("popup");
+			 _assertTrue(_containsText(_select("Assigned_Roles"),$inputObject.roles));
+			 _click(_button("Cancel"));
+			 _selectWindow();
+		 }	
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyActivityRoleMapping Completed","success");
+}
+
+/**
+ @Function Number:107
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyAssociatedActivitiesListWithPractice($inputObject)
+{
+	_log("verifyAssociatedActivitiesListWithPractice Started","success");
+	try 
+	{
+		_click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+		 _selectWindow("Associate Activities");
+		 
+		 var $activities = $inputObject.activity_name.split(";");
+		 
+		 for(var $i =0; $i < $activities.length; $i++)
+		 {
+			 _assertTrue(_isVisible(_cell($activities[$i])));
+		 }
+		 _click(_button("QTP_Close"));
+		 _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAssociatedActivitiesListWithPractice Completed","success");
+}
+
+/**
+ @Function Number:108
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyAssociatedActivitiesListWithPhase($inputObject)
+{
+	_log("verifyAssociatedActivitiesListWithPhase Started","success");
+	try 
+	{
+		_click(_image("Activities.gif", _near(_cell($inputObject.phase_name))));
+		 _selectWindow("Associate Activities");
+		 
+		 var $activities = $inputObject.activity_name.split(";");
+		 
+		 for(var $i = 0; $i < $activities.length; $i++)
+		 {
+			 if($inputObject.operation == "Negative")
+				 _assertFalse(_isVisible(_cell($activities[$i])));
+			 else
+				 _assertTrue(_isVisible(_cell($activities[$i])));
+		 }
+		 
+		 _click(_button("QTP_Close"));
+		 _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAssociatedActivitiesListWithPhase Completed","success");
+}
+
+/**
+ @Function Number:109
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyAssociatePhaseListForActivity($inputObject)
+{
+	_log("verifyAssociatePhaseListForActivity Started","success");
+	try 
+	{
+		_click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+		 _selectWindow("Associate Activities");	 
+		 _check(_checkbox(0,_near(_cell($inputObject.activity_name))));
+		_click(_link("de-icon-associate_phase"));
+		 var $phases = $inputObject.lst_phaseList.split(";"); 
+		
+		 if($inputObject.operation === "Negative")
+		 {
+			 _assertEqual("Activity has applicable phase attached to it",_lastAlert());
+			 _selectWindow();
+			 return;
+		 }
+		 
+		 _selectWindow("tailor");
+		 for(var $i =0; $i < $phases.length; $i++)
+		 {
+			 if($inputObject.operation === "PhaseNotExist")
+				 _assertFalse(_containsText(_select("phaseList"),$phases[$i]));
+			 else
+				 _assertTrue(_containsText(_select("phaseList"),$phases[$i]));
+		 }
+		 _click(_button("Cancel"));
+		 _selectWindow();
+		 _selectWindow("Associate Activities");
+		 _click(_button("QTP_Close"));
+		 _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyAssociatePhaseListForActivity Completed","success");
+}
+
+/**
+ @Function Number:110
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyPhaseAssociationWithActivity($inputObject)
+{
+	_log("modifyPhaseAssociationWithActivity Started","success");
+	try 
+	{
+		 _click(_image("Activities.gif", _near(_cell($inputObject.practice_name))));
+		 _selectWindow("Associate Activities");
+		 _click(_link(0,_near(_cell($inputObject.activity_name))));
+		 _selectWindow("AssociatePhase");
+		  setAllFields($inputObject);
+		 _click(_button("QTP_Save"));
+		 _wait(1000);
+		 _selectWindow("Associate Activities");
+		 if($inputObject.edt_w_name)
+		 {	 
+			 verifymodifyPhaseAssociationWithActivity($inputObject);
+		 }
+		 _click(_button("btnClose"));
+		 _selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyPhaseAssociationWithActivity Completed","success");
+}
+
+/**
+ @Function Number:112
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifymodifyPhaseAssociationWithActivity($inputObject)
+{
+	_log("verifymodifyPhaseAssociationWithActivity Started","success");
+	try 
+	{
+		_assertEqual($inputObject.lst_phaseList,_getText(_cell(0,_near(_cell($inputObject.edt_w_name)),_under(_cell("Associated Phase")))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifymodifyPhaseAssociationWithActivity Completed","success");
+}

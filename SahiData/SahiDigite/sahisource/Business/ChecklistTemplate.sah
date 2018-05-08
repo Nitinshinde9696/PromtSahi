@@ -1,0 +1,442 @@
+
+/**
+ @Function openCheckListTemplate
+ @author:shashank
+ @example:
+ @description: the function would click on the link provided for the key "$inputObject.item"
+ @param: json
+ @return: 
+ **/
+
+function openCheckListTemplate($inputObject)
+{
+	_log("openCheckListTemplate Started","success");
+	try 
+	{
+		OpenEformInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openCheckListTemplate Completed","success");
+}
+
+/**
+ @Function Number:2
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addPart($inputObject)
+{
+	_log("addPart Started","success");
+	try 
+	{
+		CreateInstance($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addPart Completed","success");
+}
+
+/**
+ @Function openPart
+ @author: shashank
+ @example:
+ @description: The function would click on the part name provided for "$inputObject.PartName"
+ @param: 
+ @return: 
+ **/
+
+function openPart($inputObject)
+{
+	_log("openPart Started","success");
+	try 
+	{
+		_click(_link($inputObject.PartName));
+		_log("$inputObject.PartName :",$inputObject.PartName);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openPart Completed","success");
+}
+
+/**
+ @Function deletePart
+ @author: shashank
+ @example:
+ @description: The function would select the checkbox near to the part name and click on "delete part"
+ @param: 
+ @return: 
+ **/
+
+function deletePart($inputObject)
+{
+	_log("deletePart Started","success");
+	try 
+	{
+		_log("Part to be deleted :",$inputObject.PartName);
+		_click(_checkbox("Part",_near(_link($inputObject.PartName))));
+		_click(_link("de-icon-delete"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deletePart Completed","success");
+}
+
+/**
+ @Function Number:5
+ @author:Shashank
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function repositionPart($inputObject)
+{
+	_log("repositionPart Started","success");
+	try 
+	{
+		_click(_link("de-icon-reorder"));
+		repositionAnswer($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("repositionPart Completed","success");
+}
+
+/**
+ @Function Number:6
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addQuestion($inputObject)
+{
+	_log("addQuestion Started","success");
+	try 
+	{
+		_click(_link("de-icon-add_question"));
+		setAllFields($inputObject);
+		_click(_button("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addQuestion Completed","success");
+}
+
+/**
+ @Function Number:7
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function openQuestion($inputObject)
+{
+	_log("openQuestion Started","success");
+	try 
+	{
+		_click(_link($inputObject.question));
+		_log("$inputObject.question :",$inputObject.question);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("openQuestion Completed","success");
+}
+
+/**
+ @Function deleteQuestion
+ @author:shashank
+ @example:
+ @description: function would click on the link (question) and perform delete operation
+ @param: "$inputObject.question" to be deleted
+ @return: 
+ **/
+
+function deleteQuestion($inputObject)
+{
+	_log("deleteQuestion Started","success");
+	try 
+	{
+		openQuestion($inputObject);
+		_click(_button("Delete"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteQuestion Completed","success");
+}
+
+/**
+ @Function Number:9
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function repositionQuestion($inputObject)
+{
+	_log("repositionQuestion Started","success");
+	try 
+	{
+		_click(_link("de-icon-reorder"));
+		_selectWindow($inputObject.winprefix);
+		_setSelected(_select("tree"), $inputObject.itemToMove);
+		
+		var $movePos = $inputObject.shift;
+		if($inputObject.upDown === "up")
+		{
+			for (var $i=0; $i < $movePos; $i++)
+			{
+				_click(_link("de-icon-moveto_up"));
+			}
+		}
+		else if($inputObject.upDown === "down")
+		{
+			for (var $i=0; $i < $movePos; $i++)
+			{
+				_click(_link("de-icon-moveto_down"));
+			}
+		}
+		_click(_link("de-icon-save"));
+		_selectWindow();
+
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("repositionQuestion Completed","success");
+}
+
+/**
+ @Function regroupQuestion
+ @author:shashank
+ @example:
+ @description: the function would perform the regrouping of the question from one part to another.
+ @param: 
+ @return: 
+ **/
+
+function regroupQuestion($inputObject)
+{
+	_log("regroupQuestion Started","success");
+	try 
+	{
+		 _click(_link($inputObject.openPart));
+		 _click(_link("de-icon-move_document"));
+		 _setSelected(_select("ToPart"), $inputObject.lst_ToPart);
+		 _click(_checkbox("Question",_near(_cell($inputObject.question))));
+		 _click(_button("Move"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("regroupQuestion Completed","success");
+}
+
+/**
+ @Function Number:11
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function importQuestion($inputObject)
+{
+	_log("importQuestion Started","success");
+	try 
+	{
+		_click(_link("de-icon-imp_question"));
+		setAllFields($inputObject);
+		_click(_submit("Search"));
+		_click(_checkbox("selectAllQuestions"));
+		_click(_button("Add Questions"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("importQuestion Completed","success");
+}
+
+/**
+ @Function Number:12
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function addAnswer($inputObject)
+{
+	_log("addAnswer Started","success");
+	try 
+	{
+		_click(_link("de-icon-add_answer"));
+		
+		setAllFields($inputObject);
+		
+		_selectWindow($inputObject.winprefix);
+		_click(_submit("Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("addAnswer Completed","success");
+}
+
+/**
+ @Function Number:13
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function modifyAnswer($inputObject)
+{
+	_log("modifyAnswer Started","success");
+	try 
+	{
+		_click(_link($inputObject.edt_AnswerToModify));
+		var $tempJson = {};
+		$tempJson.txt_Answer = $inputObject.txt_Answer;
+		$tempJson.winprefix = $inputObject.winprefix;
+		setAllFields($tempJson);
+		_selectWindow($inputObject.winprefix);
+		_click(_submit("Save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("modifyAnswer Completed","success");
+}
+
+/**
+ @Function Number:15
+ @author:
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function deleteAnswer($inputObject)
+{
+	_log("deleteAnswer Started","success");
+	try 
+	{
+		_click(_checkbox(0,_near(_link($inputObject.edt_Answer))));
+		_click(_link("QTP_KEY_LABEL_Delete_Answers"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("deleteAnswer Completed","success");
+}
+
+/**
+ @Function repositionAnswer
+ @author: shashank
+ @example:
+ @description: The function would perform the reordering of the answer
+ @param: 1) $inputObject.shift would indicate the position by which the item is to be shifted up
+ 		 2) $inputObject.upDown would indicate if the item is to be shifted up or down 
+ @return: 
+ **/
+
+function repositionAnswer($inputObject)
+{
+	_log("repositionAnswer Started","success");
+	try 
+	{
+		_click(_link("de-icon-reorder"));
+		setAllFields($inputObject);
+		
+		_selectWindow($inputObject.winprefix);
+		var $numofclick = $inputObject.shift;
+		//_log("$inputObject.shift :" +$numofclick);
+		var $upOrdown = $inputObject.upDown;
+		for(var $k=0; $k<$numofclick; $k++)
+		{
+			if($upOrdown === "up")
+				_click(_link("de-icon-moveto_up"));
+			if($upOrdown === "down")
+				_click(_link("de-icon-moveto_down"));
+		}
+		_click(_link("de-icon-save"));
+		_selectWindow();
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("repositionAnswer Completed","success");
+}
+
+/**
+ @Function Number:34
+ @author:Pariksheet
+ @example:
+ @description: 
+ @param: 
+ @return: 
+ **/
+
+function verifyChecklistAnswerWithComment($inputObject)
+{
+	_log("verifyChecklistAnswerWithComment Started","success");
+	try 
+	{
+		_click(_radio(0, _near(_cell($inputObject.Answer, _in(_table("QTP_CheckListTable"))))));
+		_click(_span("de-icon-comment", _near(_cell($inputObject.Question))));
+		_selectWindow("Question Comments");
+		_setValue(_textarea("comment"), $inputObject.comment);
+		_click(_button("Submit"));
+		_closeWindow();
+		_selectWindow();
+		_click(_button(" Save "));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyChecklistAnswerWithComment Completed","success");
+}

@@ -1,0 +1,299 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+
+var $projectbeyondStart = "1-Jan-2011"; //	30-Oct-2015   	30-Oct-2019  
+var $projectbeyondEnd = "1-Jan-2021";
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",2,$dateObj1);
+var $EndDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",7,$dateObj1);
+var $startDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",8,$dateObj1);
+var $startDate1 = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj1 = new Date();
+$dateObj1 = DateAdd("d",45,$dateObj1);
+var $sixweekDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj1);
+
+var $dateObj = new Date();
+var $currentDate = new java.text.SimpleDateFormat("d-MMM-yyyy").format($dateObj);
+
+$data = readDataFromCSV("Agile_ReleaseAndSprint_SprintDetailPage_02","Agile/ReleaseAndSprint");
+
+var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+$inputObject = {};
+$inputObject.user_name = $data.Username1; 
+$inputObject.edt_loginid = $data.LoginID1;
+$inputObject.edt_password = $data.Password1;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_2", "Select Project");
+$t.start();
+
+$inputObject = {};
+$inputObject.projectname = $data.Project_name2;
+selectProject($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_3", "Navigating to Sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo4;
+InfyFTnavigateTo($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_4", "checking field visibility and default status check");
+$t.start();
+
+$inputObject = {};
+$inputObject.icon = $data.icon;
+clickAddIcon($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Fields;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DStatus;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofSprint1 = $data.DN_TypeofSprint; 
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_TypeOfWork = $data.DN_TypeOfWork; 
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_5", "Mandatory field check");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.CM_Name;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Type of Sprint in Details tab \n•  Field Type Of Work in Details tab \n•  Field Planned Start Date in Details tab \n•  Field Planned End Date in Details tab  \n•  Field Release in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_6", "Date validation");
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_TypeOfWork = $data.testing;
+$inputObject.lst_DN_TypeofSprint1 = $data.Initiation;
+$inputObject.lst_CM_Release = $NameRel;//$data1.CM_Name;//"Rel73";//$data.CM_Release;
+$inputObject.edt_DN_PlannedStartDate = $projectbeyondStart;
+$inputObject.edt_DN_PlannedEndDate = $EndDate;
+$inputObject.msgAlert = "A sprint should be planned for minimum duration for 1 week and maximum duration for 6 weeks.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $currentDate;
+$inputObject.msgAlert = "A sprint should be planned for minimum duration for 1 week and maximum duration for 6 weeks.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $EndDate;
+$inputObject.edt_DN_PlannedEndDate = $currentDate;
+$inputObject.msgAlert = "A sprint should be planned for minimum duration for 1 week and maximum duration for 6 weeks.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $EndDate;
+$inputObject.msgAlert = "A sprint should be planned for minimum duration for 1 week and maximum duration for 6 weeks.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {}; 
+$inputObject.edt_DN_PlannedStartDate = $EndDate;
+$inputObject.edt_DN_PlannedEndDate = $projectbeyondEnd;
+$inputObject.msgAlert = "A sprint should be planned for minimum duration for 1 week and maximum duration for 6 weeks.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {}; 
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate1;
+$inputObject.msgAlert = "Sprint Date must be within the Release Start Date("+$currentDate+") and Release Planned End("+$startDate+").";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $sixweekDate;
+$inputObject.msgAlert = "A sprint should be planned for minimum duration for 1 week and maximum duration for 6 weeks.";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_7", "Creation of Sprint");
+$t.start();
+
+$inputObject = {};
+$inputObject.edt_DN_PlannedStartDate = $currentDate;
+$inputObject.edt_DN_PlannedEndDate = $startDate;
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.segments;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.sprintSegment;
+$inputObject.operation = "Negative";
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_8", "Workflow");
+$t.start();
+
+$inputObject = {};
+$inputObject.segment_name = $data.workflow;
+SelectSegment($inputObject);
+ 
+$inputObject = {};
+$inputObject.multiple_member = $data.Multiple_members;
+$inputObject.workflow_stage = $data.workflow_stage0;
+WorkflowSet($inputObject);
+ 
+$inputObject = {};
+$inputObject.multiple_member = $data.Multiple_members;
+$inputObject.workflow_stage = $data.workflow_stage1;
+WorkflowSet($inputObject);
+ 
+$inputObject = {};
+$inputObject.multiple_member = $data.Multiple_members;
+$inputObject.workflow_stage = $data.workflow_stage2;
+WorkflowSet($inputObject);
+
+$t.end(); 
+
+var $t = _testcase("TC_9", "navigating to Details segment");
+$t.start();
+
+$inputObject = {};
+$inputObject.link = $data.Details;
+InfyFTclick($inputObject);
+
+$t.end(); 
+
+var $t = _testcase("TC_10", "checking mandatory Field for Closed");
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_Status;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Actual End Date in Details tab\n•  Field Remarks in Details tab\n•  Field Actual Start Date in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_StatusA;
+$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Remarks in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_11", "status as Abandon when release is linked to it");
+$t.start();
+
+ _clearLastAlert();
+$inputObject = {};
+$inputObject.txt_DN_Remarks = $data.DN_StatusA;
+InfyFTModifyEformInstance1($inputObject);
+_expectConfirm("This sprint is tagged to a release,do you want to continue?",true);
+
+$t.end();
+
+var $t = _testcase("TC_12", "status as Closed when release is linked to it");
+$t.start();
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.DN_Status;
+$inputObject.edt_DN_ActualStartDate = $currentDate;
+$inputObject.edt_DN_ActualEndDate = $startDate;
+//$inputObject.lst_DN_TypeofData = $data.Bad;
+//$inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n•  Field Reason for Bad Data in Details tab";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofData = $data.DN_TypeofData; 
+verifyEformInstanceDetails($inputObject); 
+
+$inputObject = {};
+$inputObject.lst_DN_TypeofData = $data.Normal;
+InfyFTModifyEformInstance1($inputObject);
+
+InfyFTgettingValueforIDCheck($inputObject); 
+var $SprintID = $inputObject.eformID;
+
+var $nameSprint = _getText(_textbox("_Text_Check_CM_Name"));
+
+$inputObject = {};
+$inputObject.edt_DN_ActualStartDate = $startDate;
+$inputObject.edt_DN_ActualEndDate = $currentDate;
+$inputObject.msgAlert = "Actual End Date cannot be earlier than Actual Start Date.";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {}; 
+$inputObject.edt_DN_ActualStartDate = $EndDate;
+$inputObject.edt_DN_ActualEndDate = $projectbeyondEnd;
+$inputObject.msgAlert = "Actual Start Date and Actual End Date should be within Project Start Date (1-Jun-2015) and Project End Date (31-Dec-2019).";
+InfyFTModifyEformInstance1($inputObject);
+
+$inputObject = {}; 
+$inputObject.edt_DN_ActualStartDate = $currentDate;
+$inputObject.edt_DN_ActualEndDate = $startDate;
+$inputObject.msgAlert = "Actual Start Date and Actual End Date should be within Project Start Date (1-Jun-2015) and Project End Date (31-Dec-2019).";
+InfyFTModifyEformInstance1($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC_13", "Sprint performance summary");
+$t.start();
+
+$inputObject = {};
+$inputObject.msgAlert = "Following fields in Sprint Performance Summary section are mandatory :\n* Story Points Estimated\n* Story Points Done\n* Estimated Efforts in PHrs\n* Actual Efforts in PHrs\n* Total defects from reviews\n* Total UAT + PROD defects\n* Team Size\n* Total defects from testing";
+InfyFTClickRoutewithCommentsN($inputObject);
+
+$inputObject = {};
+$inputObject.link = $data.sprintSegment;
+InfyFTclick($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.Tables;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.BaseDataValue;
+InfyFTisVisible($inputObject);
+
+$inputObject = {};
+$inputObject.span_Name = $data.SprintPTablecolumn;
+InfyFTisVisible($inputObject);
+
+$t.end();
+
+var $t = _testcase("Agile_ReleaseAndSprint_SprintPerformancePage_03");
+$t.start();
+
+_include("Agile_ReleaseAndSprint_SprintPerformancePage_03.sah");
+
+$t.end();

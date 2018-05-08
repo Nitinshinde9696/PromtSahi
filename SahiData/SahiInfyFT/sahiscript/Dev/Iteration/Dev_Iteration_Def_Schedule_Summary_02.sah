@@ -1,0 +1,317 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformInstanceNethra.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("InfyFT_sahi_00_BR49_Dev_PT_Defect_Report_Summary","Phase2/Iteration");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj = new Date();
+ $dateObj = DateAdd("d",4,$dateObj);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+
+ var $Review_Type ="Requirements Review - DM";
+  
+ var $t = _testcase("Step_1","Login");
+ 
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;//jyothi_rajan
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;//111111
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $s = _testcase("Step_2","Select Project");
+ 
+ $s.start();
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.projectName;//1300CTD
+ selectProject($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("Step_3","Navigate to Iteration");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo;//Iterations
+ navigateTo($inputObject);
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.item = "ITR57";
+ OpenEformInstance($inputObject);
+ 
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Sub_Projects;
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span = $data.newlink;//"KEY_Link_New_item-btnIconEl";
+ InfyFTclick($inputObject); 
+ 
+ _selectWindow("newListing"); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name1;//"test1";
+ $inputObject.lst_isPackageDigiteStart = $data.isPackageDigiteStart;//"STaRT"
+ InfyFTModifyEformInstance1($inputObject);
+ 
+ var $IDsp =  _getText(_span("CM_ItemCode")); 
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Scheduled_Tasks;
+ SelectSegment($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.span = "Edit";
+ InfyFTclick($inputObject); 
+  
+ /* $inputObject = {};
+ $inputObject.span = "Undo";
+ InfyFTclick($inputObject);  */
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "addTaskButton-btnIconEl";
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "x-grid-cell-inner [38]";
+ InfyFTDoubleClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_NAME[1]"] = "Test1";
+ setAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "x-grid-cell-inner [44]";
+ InfyFTDoubleClickButtonS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject["edt_ACTIVITY_CODE_ID[1]"] = $data.activityCode;//textfield-1142-inputEl
+ setAllFields($inputObject);
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.span = "Save and Checkin";
+ InfyFTclick($inputObject);
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.span = "button-1005-btnIconEl";
+ InfyFTclick($inputObject);
+ 
+ _wait(3500);
+ 
+ $inputObject = {};
+ $inputObject.popupname = $data.newListing;//"newListing";
+ InfyFTclickReturnInAddItemPopup();
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Sizing_Details;
+ SelectSegment($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = "Details";//$data.TableName6;//"Add Additional Languages";
+ $inputObject.rowNo = "1";//$data.rowNo1;
+ $inputObject.colNo = "0_lst|1_lst|6_lst";//$data.colNo104;//"2_edt|3_edt|4_edt";
+ $inputObject.fieldValues = "DM and BI|Re-Engineering|Backward FP";//$data.fieldValues106;//"UK|23|20";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = "Add[1]";//$data.AddRow;//"Add";
+ InfyFTClickButtonS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName6;//"Add Additional Languages";
+ $inputObject.rowNo = "2";//$data.rowNo1;//"1";
+ $inputObject.colNo = $data.colNo104;//"2_edt|3_edt|4_edt";
+ $inputObject.fieldValues = $data.fieldValues106;//"UK|23|20";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName7;//"DM Sub-Service Selection";
+ $inputObject.rowNo = $data.rowNo4;//"1|2";
+ $inputObject.colNo = $data.colNo105;//"0_chk";
+ $inputObject.fieldValues = $data.fieldValues107;//"TRUE";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $s.end();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.seg_Iteration_Summary;//"Iteration Summary"
+ SelectSegment($inputObject);
+ 
+ var $s = _testcase("TC_7_2","Verifying the Numeric Actual field");
+ 
+ $s.start();
+ 
+ /* $inputObject = {};
+ $inputObject.tableName = $data.TableName9;//"Project Specific Metrics"
+ $inputObject.rowNo = $data.rowNo1;//"1"
+ $inputObject.colNo = $data.colNo108;//"3_edt"
+ $inputObject.fieldValues = $data.fieldValues111;//"Test"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.NumericAlert;//"Error : Please enter a positive numeric value for Actual";
+ saveSwiftForm($inputObject); */
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_7_3","Filling values in the Numeric Actual field");
+ 
+ $s.start();
+ 
+ /* $inputObject = {};
+ $inputObject.tableName = $data.TableName9;//"Project Specific Metrics"
+ $inputObject.rowNo = $data.rowNo1;//"1"
+ $inputObject.colNo = $data.colNo108;//"3_edt|5_txt"
+ $inputObject.fieldValues = $data.fieldValues112;//"2.0|Test";//
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName9;//"Project Specific Metrics"
+ $inputObject.rowNo = $data.rowNo5;//"2"
+ $inputObject.colNo = $data.colNo108;//"3_edt|5_txt"
+ $inputObject.fieldValues = $data.fieldValues112;//"2.0|Test"
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); */
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_7_1","Check the Project Specific metrics");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";//$data.TableName3
+ $inputObject.rowNo = "0";//$data.rowNo101
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";//$data.colNo102
+ $inputObject.fieldValues = "MetricName|UOM|Goal|Actual|% Deviation|Reason for deviation";//$data.fieldValues103
+ verifySwiftFormData($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_7_2","Verifying the Numeric Actual field");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";//$data.TableName3
+ $inputObject.rowNo = "1";//$data.rowNo101
+ $inputObject.colNo = "3_edt";//$data.colNo102
+ $inputObject.fieldValues = "Test";//$data.fieldValues103
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter a positive numeric value for Actual";
+ saveSwiftForm($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_7_1","Check the Project Specific metrics");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";//$data.TableName3
+ $inputObject.rowNo = "0";//$data.rowNo101
+ $inputObject.colNo = "0_lbl|1_lbl|2_lbl|3_lbl|4_lbl|5_lbl";//$data.colNo102
+ $inputObject.fieldValues = "MetricName|UOM|Goal|Actual|% Deviation|Reason for deviation";//$data.fieldValues103
+ verifySwiftFormData($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_7_2","Verifying the Numeric Actual field");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";//$data.TableName3
+ $inputObject.rowNo = "1";//$data.rowNo101
+ $inputObject.colNo = "3_edt";//$data.colNo102
+ $inputObject.fieldValues = "Test";//$data.fieldValues103
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter a positive numeric value for Actual";
+ saveSwiftForm($inputObject);
+ 
+ $s.end();
+ 
+ var $s = _testcase("TC_7_3","Filling values in the Numeric Actual field");
+ 
+ $s.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";//$data.TableName3
+ $inputObject.rowNo = "1";//$data.rowNo101
+ $inputObject.colNo = "3_edt|5_txt";//$data.colNo102
+ $inputObject.fieldValues = "2.0|Test";//$data.fieldValues103
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ /* $inputObject = {};
+ $inputObject.tableName = "Project Specific Metrics";//$data.TableName3
+ $inputObject.rowNo = "2";//$data.rowNo101
+ $inputObject.colNo = "3_edt|5_txt";//$data.colNo102
+ $inputObject.fieldValues = "2.0|Test";//$data.fieldValues103
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject); */
+ 
+ $s.end();
+ 
+ _dynamicInclude("InfyFT_sahi_03_BR49_Dev_PT_Verify_Iteration_Summary.sah");
+ 
+ _dynamicInclude("InfyFT_BR49_Dev_PT_Sizing_details_Estimation.sah");

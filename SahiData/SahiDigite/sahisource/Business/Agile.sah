@@ -1,0 +1,1287 @@
+
+//Planning Board
+/*************************************************************************
+* @author Alpesh
+* @example applyGroupView({"attributeNames":"Priority|Complexity"});
+* @description This function is called to apply Group View
+* @return {String} None 
+*************************************************************************/
+function applyGroupView($inputObject)
+{
+	_log("applyGroupView Started","success");
+	try 
+	{   
+	    var $lastUnSelectedChild, $lastSelectedChild;
+		
+	    _click(_link("leftKEY_Group_View"));
+		
+		var $arrAttributes = $inputObject.attributeNames.split("|");
+		
+		_set($lastUnSelectedChild, _getText(_list("x-list-plain").lastElementChild));
+		_set($lastSelectedChild, _getText(_list("x-list-plain[1]").lastElementChild));
+		
+		//Reading Selected Attribute
+		var $arrAttributesToRemove = new Array();
+		for (var $i = 0; $i < 2; $i++)
+		{
+		    _set($arrAttributesToRemove[$i], _getText(_list("x-list-plain[1]").children[$i]));
+		}
+		
+		for (var $i = 0; $i < $arrAttributes.length; $i++)
+		{
+		    _mouseDown(_listItem($arrAttributes[$i]));
+            _mouseOver(_listItem($arrAttributes[$i]));
+            _mouseOver(_listItem($lastSelectedChild));
+            _mouseOver(_listItem($lastSelectedChild));
+            _mouseUp(_listItem($lastSelectedChild));
+		}
+        
+		//Removing Selected Attribute
+		for (var $i = 0; $i < 2; $i++)
+		{
+			_mouseDown(_listItem($arrAttributesToRemove[$i]));
+			_mouseOver(_listItem($arrAttributesToRemove[$i]));
+			_mouseOver(_listItem($lastUnSelectedChild));
+			_mouseOver(_listItem($lastUnSelectedChild));
+			_mouseUp(_listItem($lastUnSelectedChild));
+		}
+		
+		_click(_link("Save"));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("applyGroupView Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyInstanceParentInPlanningBoard({"instanceName":"NEW1|NEW2","parentName":"Sprint1"});
+* @description This function is called to verify parent of given instance
+* @return {String} None 
+*************************************************************************/
+function verifyInstanceParentInPlanningBoard($inputObject)
+{
+	_log("verifyInstanceParentInPlanningBoard Started","success");
+	try 
+	{   
+	    var $parentName = $inputObject.parentName;
+	    var $arrInstanceName = $inputObject.instanceName.split("|");
+		
+		for (var $i = 0; $i < $arrInstanceName.length; $i++)
+		{
+			var $prow = _parentRow(_span("/" + $parentName + "/")).nextSibling;
+		    var $rowDetails = _getText($prow);
+		
+			var $instr = $rowDetails.indexOf($arrInstanceName[$i]);
+			while($instr === -1)
+			{
+				$prow = $prow.nextSibling;
+				$rowDetails = _getText($prow);
+				$instr = $rowDetails.indexOf($arrInstanceName[$i]);
+			}
+			
+			if($instr === -1)
+				_log("Instance = " + $arrInstanceName[$i] + " not present under Parent = " + $parentName,"failure");
+			else
+				_log("Instance = " + $arrInstanceName[$i] + " present under Parent = " + $parentName,"success");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyInstanceParentInPlanningBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example moveInstanceInPlanningBoard({"instanceName":"NEW1","parentName":"Sprint1"});
+* @description This function is called to move card in planning board
+* @return {String} None 
+*************************************************************************/
+function moveInstanceInPlanningBoard($inputObject)
+{
+	_log("moveInstanceInPlanningBoard Started","success");
+	try 
+	{   
+	    var $prow = _parentRow(_span("/" + $inputObject.parentName + "/")).nextSibling;
+        _mouseDown(_div($inputObject.instanceName));
+        _mouseOver(_div($inputObject.instanceName));
+        _mouseOver($prow);
+        _mouseOver($prow);
+        _mouseUp($prow);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("moveInstanceInPlanningBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyRowDetailsInPlanningBoard({"instanceName":"USTRR3","attributeDetails":"UST3|USTRR3|01-Oct-2014|3|Open|REL1|--None--|0","type":"parent"});
+* @description This function is called to verify any row details in planning board
+* @return {String} None 
+*************************************************************************/
+function verifyRowDetailsInPlanningBoard($inputObject)
+{
+	_log("verifyRowDetailsInPlanningBoard Started","success");
+	try 
+	{   
+	    var $instance = $inputObject.instanceName;
+		
+	    if ($inputObject.rowtype === "parent")
+		{
+		    if ($inputObject.type === "Release")
+			{
+			    $instance = "Release : " + $inputObject.instanceName;
+			}
+			else if ($inputObject.type === "Sprint")
+			{
+			    $instance = "Sprint : " + $inputObject.instanceName;
+			}
+				
+		    var $prow = _parentRow(_span($instance));
+		}
+		else if ($inputObject.rowtype === "child")
+		{
+		    var $prow = _parentRow(_div($inputObject.instanceName));
+		}
+		
+		var $actualDetails = _getText($prow);
+		var $arrExpectedDetails = $inputObject.attributeDetails.split("|");
+		
+		for (var $i = 0; $i < $arrExpectedDetails.length; $i++)
+		{
+		    if($actualDetails.indexOf($arrExpectedDetails[$i]) === -1)
+			    _log("For Instance = " + $inputObject.instanceName + ", Expected Value = " + $arrExpectedDetails[$i] + " and Actual Value = " + $actualDetails,"failure");
+		}
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyRowDetailsInPlanningBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyReleaseSprintDetailsInPlanningBoard({"instanceName":"Sprint1","attributeDetails":"Sprint1|Oct-01 - Oct-10|0%P|22.5%C|Total: 1 Items","type":"Release"});
+* @description This function is called to verify any Release or Sprint details in planning board
+* @return {String} None 
+*************************************************************************/
+function verifyReleaseSprintDetailsInPlanningBoard($inputObject)
+{
+	_log("verifyReleaseSprintDetailsInPlanningBoard Started","success");
+	try 
+	{   
+	    $inputObject.rowtype = "parent";
+	    verifyRowDetailsInPlanningBoard($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyReleaseSprintDetailsInPlanningBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyInstanceDetailsInPlanningBoard({"instanceName":"USTRR3","attributeDetails":"UST3|USTRR3|01-Oct-2014|3|Open|REL1|--None--|0"});
+* @description This function is called to verify any Instance details in planning board
+* @return {String} None 
+*************************************************************************/
+function verifyInstanceDetailsInPlanningBoard($inputObject)
+{
+	_log("verifyInstanceDetailsInPlanningBoard Started","success");
+	try 
+	{   
+	    $inputObject.rowtype = "child";
+	    verifyRowDetailsInPlanningBoard($inputObject);
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyInstanceDetailsInPlanningBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example selectItemTypeInProductBacklog({"itemType":"User Story"});
+* @description This function is called to select Item Type in Product Backlog
+* @return {String} None 
+*************************************************************************/
+function selectItemTypeInProductBacklog($inputObject)
+{
+	_log("selectItemTypeInProductBacklog Started","success");
+	try 
+	{
+	    _click(_xy(_link("moreMenuButton-left"),-5,5));
+		_click(_link($inputObject.itemType, _in(_div("leftPanelMoreMenu-innerCt"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectItemTypeInProductBacklog Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example selectItemTypeInSprintPlanning({"itemType":"User Story"});
+* @description This function is called to select Item Type in Sprint Planning
+* @return {String} None 
+*************************************************************************/
+function selectItemTypeInSprintPlanning($inputObject)
+{
+	_log("selectItemTypeInSprintPlanning Started","success");
+	try 
+	{
+	    _click(_xy(_link("moreMenuButton-right"),-5,5));
+		_click(_link($inputObject.itemType, _in(_div("rightPanelMoreMenu-innerCt"))));
+		_click(_link("Apply", _in(_div("rightPanelMoreMenu-innerCt"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectItemTypeInSprintPlanning Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example selectReleaseInSprintPlanning({"releaseNames":"REL1"});
+* @description This function is called to select Release In Sprint Planning
+* @return {String} None 
+*************************************************************************/
+function selectReleaseInSprintPlanning($inputObject)
+{
+	_log("selectReleaseInSprintPlanning Started","success");
+	try 
+	{
+        _click(_xy(_link("releaseCombo"),-5,5));
+		var $arrReleaseNames = $inputObject.releaseNames.split("|");
+		for (var $i = 0; $i < $arrReleaseNames.length; $i++)
+		{
+		    _click(_link($arrReleaseNames[$i], _in(_div("/searchselectmenu/"))));
+		}
+		_click(_link("Apply", _in(_div("/searchselectmenu/"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectReleaseInSprintPlanning Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example selectSprintInSprintPlanning({"sprintNames":"User Story"});
+* @description This function is called to select Sprint In Sprint Planning
+* @return {String} None 
+*************************************************************************/
+function selectSprintInSprintPlanning($inputObject)
+{
+	_log("selectSprintInSprintPlanning Started","success");
+	try 
+	{
+        _click(_xy(_link("sprintCombo"),-5,5));
+		var $arrSprintNames = $inputObject.sprintNames.split("|");
+		for (var $i = 0; $i < $arrSprintNames.length; $i++)
+		{
+		    _click(_link($arrSprintNames[$i], _in(_div("/searchselectmenu/"))));
+		}
+		_click(_link("Apply", _in(_div("/searchselectmenu/"))));
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("selectSprintInSprintPlanning Completed","success");
+}
+//Execution Board Editor
+
+//getTargetLane({"laneName": "Ready"});
+//getTargetLane({"laneName":"Development>In-Progress"});
+//$popUpObject = _parentNode(_div(/Movement History for .* Special Char support/));//
+//getTargetLane({"laneName": "Ready", "container":$popUpObject});
+//getTargetLane({"laneName":"Development>In-Progress", "container":$popUpObject});
+function getTargetLane($inputObject)
+{
+	try 
+	{
+	    var $j;
+		var $laneArr;
+		var $prntHeader;
+		var $subHeader;
+		var $targetLane;
+		var $containerObject;
+		
+		$containerObject = ($inputObject.container !== undefined)?",_in("+$inputObject.container+")":"";
+
+		if($inputObject.laneName.indexOf(">",1) != -1) 
+		{
+			$j = 0;
+			$laneArr = $inputObject.laneName.split(">");
+
+			for(var $i=0; $i<$laneArr.length; $i++) 
+			{
+				if($i == 0)
+				{
+					$prntHeader = "_tableHeader(" + "/" + $laneArr[$i] + ".*/"+$containerObject+")";
+				} 
+				else 
+				{
+					$subHeader = "_tableHeader(" + "/" + $laneArr[$i] + ".*/" + ", _under(" + $prntHeader;
+					$prntHeader = $subHeader;
+					$j = $j + 2;
+				}
+			}
+
+			while($j!=0) 
+			{
+				$subHeader = $subHeader + ")";
+				$j--;
+			}
+			$targetLane = eval($subHeader);
+		} 
+		else 
+		{
+			if ($inputObject.container !== undefined)
+				$targetLane = _tableHeader("/" + $inputObject.laneName + ".*/", _in($inputObject.container));
+			else
+			    $targetLane = _tableHeader("/" + $inputObject.laneName + ".*/");
+		}
+		return $targetLane;
+	}
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clickOnModifyProcess();
+* @description This function is called to click on modify process
+* @return {String} None 
+*************************************************************************/
+function clickOnModifyProcess($inputObject)
+{
+	_log("clickOnModifyProcess Started","success");
+	try 
+	{
+		if($inputObject!== undefined && $inputObject.type !== undefined && $inputObject.type === "negative")
+		{
+			_assertNotTrue(_isVisible(_label("modify")));
+		}
+		else
+		{
+			_click(_label("modify"));
+		    _assert(_isVisible(_div("Execution board")));
+		}
+	} 
+	catch(e) 
+	{
+	    handleFailure(e);
+    }
+	_log("clickOnModifyProcess Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clickConfigureLane({"laneName":"Ready"});
+*          clickConfigureLane({"laneName":"Development>In-Progress"});
+* @description This function is called to click on lane configure icon
+* @return {String} None 
+*************************************************************************/
+function clickConfigureLane($inputObject)
+{
+	_log("clickConfigureLane Started","success");
+	try 
+	{
+		var $targetLane;
+		$targetLane = getTargetLane($inputObject);
+		_click(_div("/gd-sb-td-editorActions.*/", _in($targetLane)));
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("clickConfigureLane Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example setLaneAttributes({"edt_laneName":"Development","edt_laneDescription":"Cards that are currently being worked upon"});
+* @description This function is called to set lane attributes
+* @return {String} None 
+*************************************************************************/
+function setLaneAttributes($inputObject)
+{
+	_log("setLaneAttributes Started","success");
+	try 
+	{
+		if(_isVisible(_textbox("label")) === false && _isVisible(_div("gd-sb-td-editorActionsBar")) === true) 
+		{
+			_click(_div("gd-sb-editor-btn gd-sb-editor-info"));
+		}
+		if($inputObject.edt_laneName) 
+		{
+			_setValue(_textbox("label"), $inputObject.edt_laneName);
+		}
+		if($inputObject.edt_laneDescription) 
+		{
+			_setValue(_textarea("label"), $inputObject.edt_laneDescription);
+		}
+		_click(_button("Submit"));
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("setLaneAttributes Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addLane({"position":"Left","laneName": "Ready","edt_laneName":"Develop","edt_laneDescription":"Cards that are currently being worked upon"});
+*          addLane({"position":"Right","laneName":"Development>In-Progress","edt_laneName":"Develop","edt_laneDescription":"Cards that are currently being worked upon"});
+*          position : Left,Right,Top or Bottom
+* @description This function is called to add lane
+* @return {String} None 
+*************************************************************************/
+function addLane($inputObject)
+{
+    _log("addLane Started","success");
+	try 
+	{
+		var $newLane;
+		var $newTargetLane;
+
+		clickConfigureLane($inputObject);
+
+		switch($inputObject.position)
+		{
+			case "Left":
+				_click(_div("gd-sb-editor-btn gd-sb-editor-aleft", _in(_div("gd-sb-td-editorActionsBar"))));
+				break;
+			case "Right":
+				_click(_div("gd-sb-editor-btn gd-sb-editor-aright", _in(_div("gd-sb-td-editorActionsBar"))));
+				break;
+			case "Top":
+				 _click(_div("gd-sb-editor-btn gd-sb-editor-atop", _in(_div("gd-sb-td-editorActionsBar"))));
+				 break;
+			case "Bottom":
+				_click(_div("gd-sb-editor-btn gd-sb-editor-abottom", _in(_div("gd-sb-td-editorActionsBar"))));
+				break;
+			default:
+				_log("addLane : Position not proper " + $inputObject.position,"failure");
+		}
+
+		if($inputObject.laneName.indexOf(">",1) != -1) {
+			//new lane added is sibling of In-Progress and Child of Development ie"Development>New Lane"
+			$newLane = $inputObject.laneName.substring(0, $inputObject.laneName.lastIndexOf(">")+1) + "New Lane";
+		} 
+		else 
+		{
+			$newLane = "New Lane";
+		}
+
+		_log("addLane -- New Lane:-" + $newLane,"success");
+
+		$newTargetLane = getTargetLane({"laneName":$newLane});
+
+		_click($newTargetLane);
+
+		setLaneAttributes($inputObject);
+
+	} catch(e) {
+		handleFailure(e);
+	}
+	_log("addLane Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example deleteLane({"laneName":"Ready"});
+*          deleteLane({"laneName":"Develop>In-Progress"});
+*          deleteLane({"laneName":"Testing","type":"negative"});
+* @description This function is called to delete lane
+* @return {String} None 
+*************************************************************************/
+function deleteLane($inputObject)
+{
+    _log("deleteLane Started","success");
+	try 
+	{
+		clickConfigureLane($inputObject);
+
+		if(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-delete", _in(_div("gd-sb-td-editorActionsBar")))))
+		{
+			_log("LANE CAN BE DELETED","success");
+			_click(_div("gd-sb-editor-btn gd-sb-editor-delete", _in(_div("gd-sb-td-editorActionsBar"))));
+		}
+		else if ($inputObject.type === "negative")
+		{
+			_log("LANE CANNOT BE DELETED - negative test","success");
+			_assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-delete", _in(_div("gd-sb-td-editorActionsBar")))));
+		}
+	} 
+	catch(e) 
+	{
+        handleFailure(e);
+	}
+	_log("deleteLane Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example splitLane({"type":"Vertical","laneName":"Develop>In-Progress","subLane1":{"edt_laneName":"Design","edt_laneDescription":"Design"},"subLane2":{"edt_laneName":"Coding","edt_laneDescription":"Coding"}}); 
+* @description This function is called to split lane
+* @return {String} None 
+*************************************************************************/
+function splitLane($inputObject)
+{
+	_log("SplitLane Started","success");
+	try 
+	{
+		var $subLane1;
+		var $subLane2;
+		var $targetLane;
+
+		$targetLane = getTargetLane($inputObject);
+		clickConfigureLane($inputObject);
+
+		if($inputObject.type == "Vertical") 
+		{
+			_click(_div("gd-sb-editor-btn gd-sb-editor-vsplit", _in(_div("gd-sb-td-editorActionsBar"))));
+		} 
+		else if($inputObject.type == "Horizontal") 
+		{
+			_click(_div("gd-sb-editor-btn gd-sb-editor-hsplit", _in(_div("gd-sb-td-editorActionsBar"))));
+		}
+		else
+		{
+			_log("splitLane : type is not specified", "failure");
+			return;
+		}
+
+		$subLane1 = _tableHeader(0, _under($targetLane,5));
+		_assertContainsText("/New Lane.*/", $subLane1);
+		_click($subLane1);
+		setLaneAttributes($inputObject.subLane1);
+		
+		$subLane2 = _tableHeader(1,_under($targetLane,5));
+		_assertContainsText("/New Lane.*/", $subLane2);
+		_click($subLane2);
+		setLaneAttributes($inputObject.subLane2);
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("SplitLane Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example moveLane({"position":"Left","laneName": "Ready"});
+*          moveLane({"position":"Right","laneName":"Development>In-Progress"});
+* @description This function is called to move lane
+* @return {String} None 
+*************************************************************************/
+function moveLane($inputObject)
+{
+	_log("moveLane Started","success");
+	try 
+	{
+		clickConfigureLane($inputObject);
+
+		switch($inputObject.position) 
+		{
+			case "Left":
+				_click(_div("gd-sb-editor-btn gd-sb-editor-mleft", _in(_div("gd-sb-td-editorActionsBar"))));
+				break;
+			case "Right":
+				_click(_div("gd-sb-editor-btn gd-sb-editor-mright", _in(_div("gd-sb-td-editorActionsBar"))));
+				break;
+			case "Up":
+				 _click(_div("gd-sb-editor-btn gd-sb-editor-mup", _in(_div("gd-sb-td-editorActionsBar"))));
+				 break;
+			case "Down":
+				_click(_div("gd-sb-editor-btn gd-sb-editor-mdown", _in(_div("gd-sb-td-editorActionsBar"))));
+				break;
+			default:
+				_log("addLane : position is not specified","failure");
+	    }
+
+	} 
+	catch (e) 
+	{
+		handleFailure(e);
+	}
+	_log("moveLane Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyLaneToolbarActions({"laneName":"Ready", "disable":"Vertical Split"});
+*          verifyLaneToolbarActions({"laneName":"Develop>In-Progress", "disable":"Vertical Split"});
+* @description This function is called to verify Lane Toolbar Actions
+* @return {String} None 
+*************************************************************************/
+function verifyLaneToolbarActions($inputObject)
+{
+	_log("verifyLaneToolbarActions Started","success");
+	try 
+	{
+		clickConfigureLane($inputObject);
+
+		switch($inputObject.disable)
+		{
+			case "Vertical Split":
+				_assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-vsplit")));
+				break;
+			case "Horizontal Split":
+				_assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-hsplit")));
+				break;
+			case "Move Left":
+				 _assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-mleft")));
+				 break;
+			case "Move Right":
+				_assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-mright")));
+				 break;
+			case "Move Up":
+				 _assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-mup")));
+				 break;
+			case "Move Down":
+				_assertFalse(_isVisible(_div("gd-sb-editor-btn gd-sb-editor-mdown")));
+				 break;
+
+			default:
+				_log("verifyLaneToolbarActions : action is not specified","failure");
+		}
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("verifyLaneToolbarActions Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clickSaveSwim({"swimName":"Execution Board"});
+* @description This function is called to click Save board editor
+* @return {String} None 
+*************************************************************************/
+function clickSaveSwim($inputObject)
+{
+	_log("clickSaveSwim Started","success");
+	try
+	{
+		_click(_label("save"));
+		_assert(_isVisible(_div("Saved successfully")));
+		_click(_label("backLink"));
+	} 
+	catch (e)
+	{
+		handleFailure(e);
+	}
+	_log("clickSaveSwim Completed","success");
+}
+
+
+//Execution Board
+
+/*************************************************************************
+* @author Alpesh
+* @example applyBoardFilter({"attributes":"Priority|Release","attributeValues":"Critical;High|1.4.1"});
+* @description This function is called to apply Board Filter
+* @return {String} None 
+*************************************************************************/
+function applyBoardFilter($inputObject)
+{
+	_log("applyBoardFilter Started","success");
+  	try
+	{	
+		_click(_label("gd-knbn-filterButton"));
+			
+		var $arrAttributes = $inputObject.attributes.split("|");
+		var $arrAttributeValues = $inputObject.attributeValues.split("|");
+		
+		for (var $i = 0; $i < $arrAttributes.length; $i++)
+		{
+		    _click(_listItem($arrAttributes[$i]));
+			$arrFilterValues = $arrAttributeValues[$i].split(";");
+			
+			//Getting right panel name
+			_set($rightPanel, _parentNode(_listItem($arrFilterValues[0]),"DIV",2).id);
+			$rightPanel = $rightPanel + "-right-recordset";
+			
+			for (var $j = 0; $j < $arrFilterValues.length; $j++)
+			{
+			    _dragDrop(_listItem($arrFilterValues[$j]),_div($rightPanel));
+			}
+		}
+		_click(_div("Apply"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("applyBoardFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clearBoardFilter();
+* @description This function is called to Clear Board Filter
+* @return {String} None 
+*************************************************************************/
+function clearBoardFilter($inputObject)
+{
+	_log("clearBoardFilter Started","success");
+  	try
+	{	
+		_click(_label("gd-knbn-filterButton"));
+		_click(_div("Clear"));
+		_click(_div("Apply"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("clearBoardFilter Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example blockCard({"cardName":"UserStory1","comment":"Card Blocked prs"});
+* @description This function is called to block card
+* @return {String} None 
+*************************************************************************/
+function blockCard($inputObject)
+{
+	_log("blockCard Started","success");
+  	try
+	{	
+		var $cardName = $inputObject.cardName;
+		_mouseOver(_parentNode(_div($cardName),"DIV",5));
+	    var $recId = _parentNode(_div($cardName),"DIV",5).id;
+		
+	    var $block_button = (_div("/gd-story-lock.*/", _in(_div($recId))));
+		_click($block_button);
+		_setValue(_textarea("gd-cmt-reply"), $inputObject.comment);
+		_click(_span("Save"));
+
+		//Verification
+		var $searchStrNumber, $searchStr;
+		_set($searchStr,(_parentNode(_parentNode(_parentNode(_parentNode(_div($cardName)))))).getAttribute("class"));
+		_set($searchStrNumber, $searchStr.search("block"));
+		if ($searchStrNumber === -1)
+			_log("Card is not blocked","failure");
+		else
+			_log("Card is sucessfully blocked","success");
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("blockCard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example unBlockCard({"cardName":"UserStory1","comment":"Card Blocked prs"});
+* @description This function is called to unblock card
+* @return {String} None 
+*************************************************************************/
+function unBlockCard($inputObject)
+{
+	_log("unBlockCard Started","success");
+  	try
+	{	
+		var $cardName = $inputObject.cardName;
+		_mouseOver(_parentNode(_div($cardName),"DIV",5));
+	    var $recId = _parentNode(_div($cardName),"DIV",5).id;
+		
+	    var $block_button = (_div("/gd-story-lock.*/", _in(_div($recId))));
+		_click($block_button);
+		_setValue(_textarea("gd-cmt-reply"), $inputObject.comment);
+		_click(_span("Save"));
+
+		//Verification
+		var $searchStrNumber, $searchStr;
+		_set($searchStr,(_parentNode(_parentNode(_parentNode(_parentNode(_div($cardName)))))).getAttribute("class"));
+		_set($searchStrNumber, $searchStr.search("block"));
+		if ($searchStrNumber === -1)
+			_log("Card is sucessfully Unblocked", "success");
+		else 
+			_log("Card is not unblocked","failure");
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("unBlockCard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example openCardDetails({"cardName":"UserStory1"});
+* @description This function is called to open Card Details From Planning and Execution Board
+* @return {String} None 
+*************************************************************************/
+function openCardDetails($inputObject)
+{
+	_log("openCardDetails Started","success");
+  	try
+	{	
+	    var $cardName = $inputObject.cardName;
+	    if (!(_isVisible(_label("Product Backlog"))))
+            _click(_div($cardName));
+		else
+		    _click(_link(0, _in(_parentRow(_div($cardName)))));
+		
+		_assertEqual($cardName, _getValue(_textbox("CM_Name")));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("openCardDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example modifyCardDetails({"cardName":"UserStory1","edt_CM_Name":"ModUST","edt_CM_DATEIDENTIFIED":"02-Oct-2014","lst_CM_Priority":"High","edt_AG_RANK":"2","lst_AG_SIZE":"XL","lst_CM_Release":"REL1","lst_AG_SPRINT":"Sprint2"});
+* @description This function is called to modify Card Details From Planning and Execution Board
+* @return {String} None 
+*************************************************************************/
+function modifyCardDetails($inputObject)
+{
+	_log("modifyCardDetails Started","success");
+  	try
+	{	
+	    openCardDetails($inputObject);
+		setAllFields($inputObject);
+		_click(_button("Save"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("modifyCardDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addToDoInCard({"cardName":"UserStory1","todoDetails":"task1|test14 test14|act1|8"});
+* @description This function is called to add a ToDo in a card
+* @return {String} None 
+*************************************************************************/
+function addToDoInCard($inputObject)
+{
+	_log("addToDoInCard Started","success");
+  	try
+	{	
+	    var $cardName = $inputObject.cardName;
+		
+		if (!(_isVisible(_link("ToDos"))))
+		{
+			_mouseOver(_parentNode(_div($cardName),"DIV",5));
+			var $recId = _parentNode(_div($cardName),"DIV",5).id;
+			var $todo_button = (_div("/gd-story-tasks.*/", _in(_div($recId))));
+			_click($todo_button);
+		}
+	
+		_click(_submit("Add"));
+		var $arrToDoDetails = $inputObject.todoDetails.split("|");
+		_click(_cell("Click to enter ToDo"));
+		
+		_setValue(_textbox("name"), $arrToDoDetails[0]);
+		var $prow = _parentRow(_cell($arrToDoDetails[0]));
+		_click(_cell("UnAssigned"));
+		
+        _click(_cell(5, _in($prow)));  //ToDo Owner
+		_setSelected(_select("owner"), $arrToDoDetails[1]);
+		
+		_click(_cell(6, _in($prow)));  //Standard Code
+		_setSelected(_select("activity_code_id"), $arrToDoDetails[2]);
+		
+		_click(_cell(7, _in($prow)));  //Estimate
+		_setValue(_textbox("estimate"), $arrToDoDetails[3]);
+		_click(_cell($arrToDoDetails[0]));
+		
+		if (_isVisible(_button("Close")))
+		    _click(_button("Close"));
+		else 
+	        _click(_button("ui-dialog-titlebar-close"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("addToDoInCard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addToDoFromCardDetails({"cardName":"UserStory1","todoDetails":"task1|test14 test14|act1|8"});
+* @description This function is called to add ToDo From Card Details From Planning and Execution Board
+* @return {String} None 
+*************************************************************************/
+function addToDoFromCardDetails($inputObject)
+{
+	_log("addToDoFromCardDetails Started","success");
+  	try
+	{	
+        openCardDetails($inputObject);
+		_click(_link("ToDos"));
+		addToDoInCard($inputObject);
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("addToDoFromCardDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyToDoInCard({"cardName":"UserStory1","todoDetails":"task1|Open|test14 test14|act1|8|2|6"});
+* @description This function is called to verify ToDo in a card
+* @return {String} None 
+*************************************************************************/
+function verifyToDoInCard($inputObject)
+{
+	_log("verifyToDoInCard Started","success");
+  	try
+	{	
+		var $cardName = $inputObject.cardName;
+		
+		if (!(_isVisible(_link("ToDos"))))
+		{
+			_mouseOver(_parentNode(_div($cardName),"DIV",5));
+			var $recId = _parentNode(_div($cardName),"DIV",5).id;
+			var $todo_button = (_div("/gd-story-tasks.*/", _in(_div($recId))));
+			_click($todo_button);
+		}
+		
+		var $arrToDoDetails = $inputObject.todoDetails.split("|");
+		var $prow = _parentRow(_cell($arrToDoDetails[0]));
+		
+		_assertEqual($arrToDoDetails[1], _getText(_cell(4, _in($prow)))); //Current State
+        _assertEqual($arrToDoDetails[2], _getText(_cell(5, _in($prow)))); //ToDo Owner
+		_assertEqual($arrToDoDetails[3], _getText(_cell(6, _in($prow)))); //Standard Code
+		_assertEqual($arrToDoDetails[4], _getText(_cell(7, _in($prow)))); //Estimate
+		_assertEqual($arrToDoDetails[5], _getText(_cell(8, _in($prow)))); //Actual
+		_assertEqual($arrToDoDetails[6], _getText(_cell(9, _in($prow)))); //Remaining
+	    
+		if (_isVisible(_button("Close")))
+		    _click(_button("Close"));
+		else 
+	        _click(_button("ui-dialog-titlebar-close"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("verifyToDoInCard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example deleteToDo({"cardName":"UserStory1","todoName":"task1"});
+* @description This function is called to delete ToDo from card
+* @return {String} None 
+*************************************************************************/
+function deleteToDo($inputObject)
+{
+	_log("deleteToDo Started","success");
+  	try
+	{	
+		var $cardName = $inputObject.cardName;
+		
+		if (!(_isVisible(_link("ToDos"))))
+		{
+			_mouseOver(_parentNode(_div($cardName),"DIV",5));
+			var $recId = _parentNode(_div($cardName),"DIV",5).id;
+			var $todo_button = (_div("/gd-story-tasks.*/", _in(_div($recId))));
+			_click($todo_button);
+		}
+		
+		var $toDoName = $inputObject.todoName;
+		var $prow = _parentRow(_cell($toDoName));
+        _check(_checkbox("/jqg_toDoGridTable_.*/", _in($prow)));
+	    _click(_submit("Delete"));
+		_assertFalse(_cell($toDoName));
+		
+		if (_isVisible(_button("Close")))
+		    _click(_button("Close"));
+		else 
+	        _click(_button("ui-dialog-titlebar-close"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("deleteToDo Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addCommentInCard({"cardName":"UserStory1","comment":"Card Done"});
+* @description This function is called to add comment in a card
+* @return {String} None 
+*************************************************************************/
+function addCommentInCard($inputObject)
+{
+	_log("addCommentInCard Started","success");
+  	try
+	{	
+		var $cardName = $inputObject.cardName;
+		
+		if (!(_isVisible(_link("Comments"))))
+		{
+		    _mouseOver(_parentNode(_div($cardName),"DIV",5));
+	        var $recId = _parentNode(_div($cardName),"DIV",5).id;
+	        var $comment_button = (_div("/gd-story-comments.*/", _in(_div($recId))));
+		    _click($comment_button);
+		}
+		
+        _click(_span("de-icon-add_comment"));
+		_setValue(_textarea("addCommentTextArea"), $inputObject.comment);
+	    _click(_submit("Add"));
+		
+		//Verification
+		_assert(_isVisible(_div($inputObject.comment)));
+		
+		if (_isVisible(_button("Close")))
+		    _click(_button("Close"));
+		else 
+	        _click(_button("ui-dialog-titlebar-close"));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("addCommentInCard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example addCommentFromCardDetails({"cardName":"UserStory1","comment":"Card Done"});
+* @description This function is called to add Comment From Card Details From Planning and Execution Board
+* @return {String} None 
+*************************************************************************/
+function addCommentFromCardDetails($inputObject)
+{
+	_log("addCommentFromCardDetails Started","success");
+  	try
+	{	
+        openCardDetails($inputObject);
+		_click(_link("Comments"));
+		addCommentInCard($inputObject);
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("addCommentFromCardDetails Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example clickCardMoreSettings({"cardName":"UserStory1"});
+* @description This function is called to click on card more settings icon
+* @return {String} None 
+*************************************************************************/
+function clickCardMoreSettings($inputObject)
+{
+	_log("clickCardMoreSettings Started","success");
+  	try
+	{	
+	    var $cardName = $inputObject.cardName;
+	    var $recId = _parentNode(_div($cardName),"DIV",5).id;
+	    var $settings_button = (_div("/gd-story-settings-cardActions/", _in(_div($recId))));
+		_click($settings_button);
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("clickCardMoreSettings Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example closeCardFromBoard({"cardName":"UserStory1"});
+* @description This function is called to close card from board
+* @return {String} None 
+*************************************************************************/
+function closeCardFromBoard($inputObject)
+{
+	_log("closeCardFromBoard Started","success");
+  	try
+	{	
+	    clickCardMoreSettings($inputObject)
+		_click(_link("Close Card"));
+		_assertFalse(_isVisible(_div($inputObject.cardName)));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("closeCardFromBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example deleteCardFromBoard({"cardName":"UserStory1"});
+* @description This function is called to delete card from board
+* @return {String} None 
+*************************************************************************/
+function deleteCardFromBoard($inputObject)
+{
+	_log("deleteCardFromBoard Started","success");
+  	try
+	{	
+	    clickCardMoreSettings($inputObject)
+		_click(_link("Delete Card"));
+		_assertFalse(_isVisible(_div($inputObject.cardName)));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("deleteCardFromBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example moveCardUsingMoveTo({"cardName":"UserStory1","lane":"Develop>In-Progress"});
+* @description This function is called to move card using moveto option
+* @return {String} None 
+*************************************************************************/
+function moveCardUsingMoveTo($inputObject)
+{
+	_log("moveCardUsingMoveTo Started","success");
+  	try
+	{	
+	    clickCardMoreSettings($inputObject)
+		$arrlane = $inputObject.lane.split(">");
+		_mouseOver(_link("Move To"));
+		
+		for (var $i = 0; $i < ($arrlane.length - 1); $i++)
+		{
+		    _wait(500);
+		    _mouseOver(_link($arrlane[$i]));
+		}
+		
+		_click(_link($arrlane[$i]));
+	} 
+	catch(e) 
+	{
+		handleFailure(e);
+	}
+	_log("moveCardUsingMoveTo Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example moveCard({"laneName":"Develop>Done","cardName":"Sahi Automation"});
+* @description This function is called to move card using drag drop
+* @return {String} None 
+*************************************************************************/
+function moveCard($inputObject)
+{
+    _log("moveCard Started","success");
+    try 
+	{
+		var $targetLane = getTargetLane($inputObject);
+		
+        var $draggable = _parentNode(_div($inputObject.cardName),"DIV",3);
+		var $droppable = _cell("/gd-sp-queue/", _under($targetLane));
+		
+		_highlight($draggable);
+		_highlight($droppable);
+		
+		_dragDrop($draggable,$droppable);
+
+		//VERIFICATION
+		verifyKanbanBoard($inputObject);
+
+    } catch(e) {
+		handleFailure(e);
+    }
+    _log("moveCard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyKanbanBoard({"laneName":"Develop>In-Progress","cardName":"defect10|defegct45"});
+* @description This function is called to move card using moveto option
+* @return {String} None 
+*************************************************************************/
+function verifyKanbanBoard($inputObject)
+{
+	_log("verifyKanbanBoard Started","success");
+     try 
+	 {
+		var $targetLane = getTargetLane($inputObject);
+		var $arrCardNames = $inputObject.cardName.split("|");
+		for (var $i = 0; $i < $arrCardNames.length; $i++)
+		{
+		    if ($inputObject.type !== "negative")
+			    _assert(_isVisible(_div($arrCardNames[$i], _under($targetLane))));
+		    else
+			    _assertFalse(_isVisible(_div($arrCardNames[$i], _under($targetLane))));
+		}
+
+	} catch(e) {
+	    handleFailure(e);
+    }
+	_log("verifyKanbanBoard Completed","success");
+}
+
+/*************************************************************************
+* @author Alpesh
+* @example verifyCardCarousalDetails({"cardName":"defect10","fieldLabel":"Priority|Rank","fieldValues":"Medium|2"});
+* @description This function is called to verify Card Carousal Details
+* @return {String} None 
+*************************************************************************/
+function verifyCardCarousalDetails($inputObject)
+{
+	_log("verifyCardCarousalDetails Started","success");
+    try 
+	{	
+		var $arrFieldLabel = $inputObject.fieldLabel.split("|");
+		var $arrFieldValues = $inputObject.fieldValues.split("|");
+        var $cardContainer = _parentNode(_div($inputObject.cardName),"DIV",5);
+
+		for (var $i = 0; $i < $arrFieldLabel.length; $i++)
+		{ 
+		    $arrFieldLabel[$i] = _div($arrFieldLabel[$i] + ":", _in($cardContainer));
+		    _set($actualValue, $arrFieldLabel[$i].nextSibling.textContent);
+			_assertEqual($arrFieldValues[$i], $actualValue, "For Card = " + $inputObject.cardName);
+		}
+
+	} catch(e) {
+	    handleFailure(e);
+    }
+	_log("verifyCardCarousalDetails Completed","success");
+}
+
+/*
+verifyBurndownChart
+addSmartLane
+deleteSmartLane
+moveSmartLane
+*/

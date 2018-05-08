@@ -1,0 +1,322 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+
+ $data = readDataFromCSV("Maint_PCB_PM_Plan_Validation_06", "Maint/PCB");
+ 
+ var $t = _testcase("TS_01", "Login to Digite");
+ $t.start();
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username11;
+ $inputObject.edt_loginid = $data.LoginID11;
+ $inputObject.edt_password = $data.Password11;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name21;//QTOOLS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo21;//PM Plan
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name302;//PCB Setting
+ SelectSegment($inputObject);
+ 
+ $inputObject.tableName = $data.tableName501;//Current PCB Setting	
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo501;//3_chk
+ $inputObject.fieldValues = $data.fieldValues501;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name301;//Goals
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PCB_Version_Availability_Msg;//PCB Version is not selected or not available.";
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo22;//Process Template
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject);
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo23;//PCB Version
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = "PCBV4";//$IDpcbVer;							
+ OpenEformInstance($inputObject);
+ 
+ var $PCB_Version = _getText(_textbox("field199"));
+ 
+ $inputObject = {};
+ $inputObject.rdg_field198 = $data.Active;//TRUE
+ verifyAllFields($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_Name21;//ALTSBF10
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo21;//PM_Plan;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name302;//PCB Setting
+ SelectSegment($inputObject);
+ 
+ $inputObject.tableName = $data.tableName501;//Current PCB Setting	
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo501;//3_chk
+ $inputObject.fieldValues = $data.fieldValues501;//TRUE
+ setSwiftFormData($inputObject);
+ 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name301;//Goals
+ SelectSegment($inputObject);
+ /* 
+ $inputObject = {};
+ $inputObject.span_Name = $PCB_Version;//1.5
+ InfyFTisVisibleS($inputObject);
+  */
+  
+ _isVisible(_span("1.5[2]"));
+  
+ //Select language from PMPlan Overview segment
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name303;//Overview
+ SelectSegment($inputObject);
+ 
+ $inputObject.tableName = $data.tableName502;//Sizing Details
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo502;//1_lst|2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues502;//Custom Application|Visual C#.Net (Version 1.0)|Backward FP
+ setSwiftFormData($inputObject);
+ 
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name304;//PM Plan Summary
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PCB_Version_Availability_Msg_2;
+ InfyFTisVisibleS($inputObject);
+ /* 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+  */
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name302;//PCB Setting
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName503;//Latest PCB applicable based on selection in Overview selection
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo503;//0_lbl|1_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues503;//Custom Application|1.5|.NET&HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName504;//Current PCB Setting
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo503;//0_lbl|1_lbl|2_lbl
+ $inputObject.fieldValues = $data.fieldValues503;//Custom Application|1.5|.NET&HL
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name301;//Goals
+ SelectSegment($inputObject);
+ 
+ _assertExists(_span($PCB_Version, _near(_cell("PCB Report:"))));
+ 
+ $inputObject = {};
+ $inputObject.spanName = $PCB_Version;
+ InfyFTclickS($inputObject);
+ 
+ _selectWindow("PCB Version Report : Details (PCBR1)");
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.PCB_Version_ReportsSegments;//Details;Major Enhancement;Minor Enhancement;Bug Fix
+ InfyFTisVisibleS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name305;//Major Enhancement
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName505;//Track Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//0
+ $inputObject.colNo = $data.colNo504;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl
+ $inputObject.fieldValues = $data.fieldValues504;//Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+ /* Due to Defect
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName505;//Track Metrics Details
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo504;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl
+ $inputObject.fieldValues = $data.fieldValues505;//Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+  */
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName506;//LC Stage Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//0
+ $inputObject.colNo = $data.colNo505;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl
+ $inputObject.fieldValues = $data.fieldValues506;//LC Stage|Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+ 
+ /* Due to Defect 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName506;//LC Stage Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo506;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl
+ $inputObject.fieldValues = $data.fieldValues507;//LC Stage|Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name306;//Minor Enhancement 
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName505;//Track Metrics Details
+ $inputObject.rowNo = "0";//$data.rowNo501;//8
+ $inputObject.colNo = $data.colNo504;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl
+ $inputObject.fieldValues = $data.fieldValues505;//Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+ /* Due to Defect
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName505;//Track Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo505;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl
+ $inputObject.fieldValues = $data.fieldValues508;//Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+  */
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName506;//LC Stage Metrics Details
+ $inputObject.rowNo = "0";//$data.rowNo501;//8
+ $inputObject.colNo = $data.colNo505;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl
+ $inputObject.fieldValues = $data.fieldValues506;//LC Stage|Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+ 
+ /* Due to Defect 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName506;//LC Stage Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo506;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl
+ $inputObject.fieldValues = $data.fieldValues510;//LC Stage|Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject); */
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name307;//Bug Fix
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName505;//Track Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//"0"
+ $inputObject.colNo = $data.colNo505;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl
+ $inputObject.fieldValues = $data.fieldValues505;//Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecordsFound_1;//No Records Found[1]
+ InfyFTisVisibleS($inputObject);
+ 
+ /* Due to Defect
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName505;//Track Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo505;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl
+ $inputObject.fieldValues = $data.fieldValues509;//Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+  */
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName506;//LC Stage Metrics Details
+ $inputObject.rowNo = "0";//$data.rowNo501;//8
+ $inputObject.colNo = $data.colNo506;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl
+ $inputObject.fieldValues = $data.fieldValues507;//LC Stage|Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NoRecordsFound_2;//No Records Found[2]
+ InfyFTisVisibleS($inputObject);
+ 
+ /* Due to Defect 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableName506;//LC Stage Metrics Details
+ $inputObject.rowNo = $data.rowNo501;//2
+ $inputObject.colNo = $data.colNo506;//1_lbl|2_lbl|3_lbl|4_lbl|5_lbl|6_lbl|7_lbl|8_lbl|9_lbl|10_lbl|11_lbl|12_lbl
+ $inputObject.fieldValues = $data.fieldValues510;//LC Stage|Metric Name|UOM|UCL|Mean|LCL|CoV|Min|Max|25th Percentile|75th Percentile|Percent Project within range or control limits
+ verifySwiftFormData($inputObject); */
+ 
+ _selectWindow();
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;//nodeIcon2
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name303;//Overview
+ SelectSegment($inputObject);
+ 
+ $inputObject.tableName = $data.tableName502;//Sizing Details
+ $inputObject.rowNo = $data.rowNo502;//2
+ $inputObject.colNo = $data.colNo502;//1_lst|2_lst|3_lst
+ $inputObject.fieldValues = $data.fieldValues502;//Custom Application|Visual C#.Net (Version 1.0)|Backward FP
+ verifySwiftFormData($inputObject);
+ 
+ /* $inputObject = {}; 
+ $inputObject.name = $data.navigateTo22;//Process Template
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject);
+ 
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo23;//PCB Version
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcbVer;							
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.thirty;//19
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject); */

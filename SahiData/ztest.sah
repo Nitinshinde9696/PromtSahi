@@ -1,0 +1,22 @@
+///_execute("stop_server.bat",true);
+function abc($year){
+ var $ele= _collect("_svg_rect","/ext-sprite/",_in(_div("x-surface x-surface-default x-border-box")),_aboveOrUnder(_svg_tspan("/"+$year+"/"),50));
+//_highlight($ele[1]);
+
+for(var $i=0;$i<$ele.length;$i++){
+
+var $bBox = $ele[$i].getBBox();
+_log($bBox.height);
+	
+		
+ //var $ele=_collect("_svg_rect","/ext-sprite/",_in(_div("x-surface x-surface-default x-border-box")),_aboveOrUnder(_svg_tspan("/Q1 FY17/"),50));
+_mouseOver($ele[$i]);
+	_wait(2000);
+var $a=_getText(_label("/"+$year+"/"))
+	_log($a);
+	var $b=_extract($a,"=(.*)",true)
+		_log($b);
+	
+}
+}
+abc("Q1 FY17");

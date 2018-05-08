@@ -1,0 +1,325 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ var $newui = _getGlobal("New_UI");
+
+ $data8 = readDataFromCSV("Testing_PMPlan_Normal_penality_and_reward_details_process_deviation_LC_stages_05","Testing/PMPlan_Normal"); 
+ 
+ var $t = _testcase("Script 30", "TC 13, 14, 15");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.name = $data8.navigateTo3; //PM Plan
+ navigateTo($inputObject);
+ 
+ _wait(5000);
+ $t.end(); 
+ 
+ var $t = _testcase("TC_13.1", "SLA Penalty and Reward Details");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.SLAPenaltyAndReward;// _InfyFTclick(_link("SLA Penalty And Reward Details"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = "";
+ $inputObject.edt_DN_PoolPercentage = "";
+ $inputObject.lst_DN_MeasurementPeriod = $data8.DN_MeasurementPeriod;
+ $inputObject.edt_DN_Currency = $data8.DN_Currency;
+ $inputObject.lst_DN_Subjecttoearnback = $data8.DN_Subjecttoearnback;
+ $inputObject.lst_DN_SLAresponsibilityshare = $data8.DN_SLAresponsibilityshare;
+ $inputObject.lst_DN_PenaltyFramework = $data8.DN_PenaltyFramework;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(3000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data8.tableName9;
+ $inputObject.rowNo = $data8.SLA;//7
+ $inputObject.colNo = $data8.reasonlbl;
+ $inputObject.fieldValues = $data8.reason6;//Reason 6
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon10;// _InfyFTclick(_image("nodeIcon10"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.SLAPenaltyAndReward;// _InfyFTclick(_link("SLA Penalty And Reward Details"));
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_DN_AtRisk = $data8.DN_AtRisk;
+ $inputObject.edt_DN_PoolPercentage = $data8.DN_PoolPercentage;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName9;
+ $inputObject.rowNo = $data8.SLA;//7
+ $inputObject.colNo = $data8.reasonlbl;
+ $inputObject.fieldValues = $data8.reason2;//Reason 2
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_14", "Applicable LC Stages");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon13;// _InfyFTclick(_image("nodeIcon13"));
+ infyFTClickForPmPlan($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data8.link44;// _InfyFTclick(_link("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName7;//Applicable LC Stages for  Manual Testing
+ $inputObject.rowNo = $data8.rowName1;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName8;//Applicable LC Stages for Automated Testing
+ $inputObject.rowNo = $data8.rowName1;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName10;//Applicable LC Stages for Test Automation
+ $inputObject.rowNo = $data8.rowName2;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName11;//Applicable LC Stages for Performance Testing
+ $inputObject.rowNo = $data8.rowName3;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName9;
+ $inputObject.rowNo = $data8.LCStages;//9
+ $inputObject.colNo = $data8.reasonlbl;
+ $inputObject.fieldValues = $data8.reason13;//Reason 13
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon13;// _InfyFTclick(_image("nodeIcon13"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.link44;// _InfyFTclick(_link("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data8.tableName7;//Applicable LC Stages for Manual Testing
+ $inputObject.rowNo = $data8.rowName1;
+ $inputObject.colNo = $data8.colName1;
+ $inputObject.fieldValues = $data8.fieldValues12;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data8.tableName8;//Applicable LC Stages for Automated Testing
+ $inputObject.rowNo = $data8.rowName1;
+ $inputObject.colNo = $data8.colName1;
+ $inputObject.fieldValues = $data8.fieldValues13;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data8.tableName10;//Applicable LC Stages for Test Automation
+ $inputObject.rowNo = $data8.rowName2;
+ $inputObject.colNo = $data8.colName1;
+ $inputObject.fieldValues = $data8.fieldValues13;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";  
+ $inputObject.tableName = $data8.tableName11;//Applicable LC Stages for Performance Testing
+ $inputObject.rowNo = $data8.rowName3;
+ $inputObject.colNo = $data8.colName1;
+ $inputObject.fieldValues = $data8.fieldValues13;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon2;// _InfyFTclick(_image("nodeIcon2"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.link26;// _InfyFTclick(_link("PM Plan Summary"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName9;
+ $inputObject.rowNo = $data8.LCStages;//9
+ $inputObject.colNo = $data8.reasonlbl;
+ $inputObject.fieldValues = $data8.reason12;//Reason 12
+ InfyFTverifySwiftFormDataWithCell($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon13;// _InfyFTclick(_image("nodeIcon13"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.link44;// _InfyFTclick(_link("Applicable LC Stages"));
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName7;//Applicable LC Stages for  Manual Testing
+ $inputObject.rowNo = $data8.rowName1;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName8;//Applicable LC Stages for Automated Testing
+ $inputObject.rowNo = $data8.rowName1;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName10;//Applicable LC Stages for Test Automation
+ $inputObject.rowNo = $data8.rowName2;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data8.tableName11;//Applicable LC Stages for Performance Testing
+ $inputObject.rowNo = $data8.rowName3;
+ $inputObject.colNo = $data8.colName2;
+ $inputObject.fieldValues = $data8.fieldValues8;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_15", "Track wise Process Deviations");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data8.nodeIcon13;// _InfyFTclick(_image("nodeIcon13"));
+ infyFTClickForPmPlan($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data8.TrackWiseProcessTailoringDeviations;// _InfyFTclick(_link("TrackWiseProcessTailoringDeviations"));
+ InfyFTclick($inputObject); 
+ 
+ _wait(5000);
+ 
+ if(_isVisible(_checkbox(1)))
+ {
+    $inputObject = {};
+	$inputObject.tableName = $data8.tableName2;
+	$inputObject.rowNo = $data8.rowNo1;
+	$inputObject.colNo = $data8.colNo18;
+	$inputObject.fieldValues = $data8.fieldValues8;
+	setSwiftFormData($inputObject); 
+	
+    _click(_span("Delete"));	
+	
+	_wait(5000);
+ }
+ 
+ _click(_link("Add Rows"));
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data8.tableName2;
+ $inputObject.rowNo = $data8.rowNo1;
+ $inputObject.colNo = $data8.colNo2;
+ $inputObject.fieldValues = $data8.fieldValues2;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(2000);
+  
+ $t.end();

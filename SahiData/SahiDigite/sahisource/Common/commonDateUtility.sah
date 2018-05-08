@@ -1,0 +1,124 @@
+
+/**
+ @Function Number:2
+ @author: Dinesh
+ @example:
+ @description: 
+ @param: 
+ @return: weekday date of previous week.
+ **/
+
+function getWeekDayDate_anyWeek($inputObject)
+{
+	_log("getWeekDayDate_anyWeek Started","success");
+	try 
+	{
+		var $date = null;
+		_set($date,getWeedDayDate_anyWeek_browser($inputObject.weekDay,$inputObject.weekIndex));
+		var $dateFormat = $inputObject.DateFormat != null && $inputObject.DateFormat != undefined ?
+		$inputObject.DateFormat : "dd-MMM-yyyy";
+		$dateObj = new java.text.SimpleDateFormat("yyyy-MM-dd").parse($date);
+		var $formattedDate = new java.text.SimpleDateFormat($dateFormat).format($dateObj);
+		return $formattedDate;
+	}
+	catch(e)
+	{
+		handleFailure(e);
+	}
+	_log("getWeekDayDate_anyWeek Completed","success");
+}
+
+<browser>
+function getWeedDayDate_anyWeek_browser(a_weekDay, a_weekIndex)
+{
+	var w_weekDayIndex = 0;
+	switch(a_weekDay)
+	{
+		case "monday":
+			w_weekDayIndex = 1;
+			break;
+		case "tuesday":
+			w_weekDayIndex = 2;
+			break;
+		case "wednesday":
+			w_weekDayIndex = 3;
+			break;
+		case "thursday":
+			w_weekDayIndex = 4;
+			break;
+		case "friday":
+			w_weekDayIndex = 5;
+			break;
+		case "saturday":
+			w_weekDayIndex = 6;
+			break;
+		case "sunday":
+			w_weekDayIndex = 7;
+			break;
+		default:
+		  _log("Invalid parameters passed to getWeekDayDate_anyWeek","failure");
+	}
+	var w_currDate = new Date();
+	
+	var w_currDateMs = w_currDate.getTime();
+	w_currDateMs = w_currDateMs - (a_weekIndex*7*24*60*60*1000);
+	var w_currDateWeekDayIndex = w_currDate.getUTCDay();
+	if(w_currDateWeekDayIndex == 0)
+		w_currDateWeekDayIndex = 7;
+	var w_requiredDateMs = w_currDateMs - ((w_currDateWeekDayIndex-w_weekDayIndex)*24*60*60*1000);
+	var w_requiredDate = new Date(w_requiredDateMs);
+	return(w_requiredDate.getFullYear()+"-"+(w_requiredDate.getMonth()+1)+"-"+w_requiredDate.getDate());
+}
+</browser>
+
+//Author : Mukesh Verma
+//This API gives monday dates of specified week relative to current week that is future monday dates or psat monday dated
+function getRequiredDate($inputObject){
+	_log("getRequiredDate started,Success");
+	try{
+		var $month=new Array();
+		$month=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+		var $date=new Date();
+		var $type=$inputObject.type;
+		
+		var $dateArray=((new Date()).toString()).split(" ");
+		
+		/*noOfWeek let the function decide to what week you want the monday date
+		* by defualt it is set to 1 which means immedate next or previous monday date 
+		* if it is 2 it means two week in future or past from current date and so on. 
+		*/
+		if($inputObject.noOfWeek !==undefined){
+			var $noOfWeek=$inputObject.noOfWeek;
+		}
+		else
+			var $noOfWeek=1; //Default
+		
+		if($type=="todaysDate"){
+			return $dateArray[2]+"-"+$dateArray[3]+"-"+$dateArray[4];
+		}
+		else if($type=="currentWeekDate"){
+			var $temp=0;
+			var $date=0;
+			var $today=new Date();
+			$date=new Date($today.getFullYear(),$today.getMonth(),$today.getDate()-($today.getDay()-1));
+			return $date.getDate()+"-"+$month[$date.getMonth()]+"-"+$date.getFullYear();
+			//return $date+"-"+(new Date().getFullYear());
+		}		
+		else if($type=="nextWeekDate"){
+			var $today = new Date();
+			var $nextweek = new Date($today.getFullYear(), $today.getMonth(), $today.getDate()-($today.getDay()-1)+7*$noOfWeek);
+		    var $returnDate= ($nextweek.toString()).split(" ");
+		    return $returnDate[2]+"-"+$returnDate[1]+"-"+$returnDate[3];
+		}
+		else if($type=="previousWeekDate"){
+			var $today = new Date();
+			var $prevweek = new Date($today.getFullYear(), $today.getMonth(), $today.getDate()-($today.getDay()-1)-7*$noOfWeek);
+		    var $returnDate= ($prevweek.toString()).split(" ");
+		    return $returnDate[2]+"-"+$returnDate[1]+"-"+$returnDate[3];
+		}
+	}
+	catch(e){
+		handleFailure(e);
+	}
+	_log("getRequiredDate completed,Success");
+}

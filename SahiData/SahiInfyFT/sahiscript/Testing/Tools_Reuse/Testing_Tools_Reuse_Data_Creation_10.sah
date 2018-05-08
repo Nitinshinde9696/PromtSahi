@@ -1,0 +1,262 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+ 
+ $data = readDataFromCSV("Testing_Tools_Reuse_Data_Creation_10","Testing/Tools_Reuse");
+
+ var $t = _testcase("TC_1", "Logging with valid user ");
+$t.start();
+
+ var $GetExcel = _testcase("GetExcel"," Getting the Project name From Excel Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "ProjectName";
+  infyFTGetValueFromExcel($inputObject);
+  $prj_Id  = $value; 
+  
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "LoginUser";
+  infyFTGetValueFromExcel($inputObject); 
+
+   $user_Id  = $value;
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Project_Users";
+  $inputObject.columnName = "Password";
+  infyFTGetValueFromExcel($inputObject);
+  $user_pswd  = $value;
+ 
+ $GetExcel.end();
+ 
+$inputObject = {};
+$inputObject.user_name = $user_Id; 
+$inputObject.edt_loginid = $user_Id;
+$inputObject.edt_password = $user_pswd;
+loginIntoDigite($inputObject);
+
+$t.end();
+
+var $t2 = _testcase("TC_2", "Navigating to Projects_home ");
+$t2.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $prj_Id;
+ selectProject($inputObject)
+
+ 
+ 
+ $t2.end();
+ 
+ var $MT = _testcase("Manual Testing"," Creating a Manual Testing for Testing PT");
+ $MT.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToMT;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+ 
+ $inputObject = {};
+$inputObject.edt_CM_Name = $data.requestTitle;//"Manual Testing";
+$inputObject.txt_CM_Description = $data.desc221;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.lst_DN_Complexity =  $data.complexity;
+$inputObject.lst_DN_TypeofTesting = $data.typtes2;
+$inputObject.lst_DN_TechnologyofApplicatio = $data.PTNo;
+$inputObject.lst_DN_PrimaryEAI = $data.Gentran;//"Gentran";
+$inputObject.lst_DN_LCStage = $data.LC_stage;
+$inputObject.lst_DN_PrimaryPackage = $data.PrimaryPackage;
+ModifyEformInstance($inputObject);
+
+  _wait(1000);
+  
+ $M_T = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $M_T;
+
+_include("Testing_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+ 
+ 
+ $MT.end(); 
+ var $PT = _testcase("Performance Testing"," Creating a Performance Testing for Testing PT");
+ $PT.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPT;//Performance Testing
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+$inputObject = {};
+$inputObject.edt_CM_Name = $data.requestTitle;
+$inputObject.txt_CM_Description = $data.desc221;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.lst_DN_Complexity =  $data.complexity;
+$inputObject.lst_DN_TypeofTesting = $data.typtes3;
+$inputObject.lst_DN_LCStage = $data.LC_stage;
+$inputObject.lst_DN_TechnologyofApplicatio =$data.PTNo;//"Package or Product";
+ModifyEformInstance($inputObject);
+  
+  _wait(1000);
+  
+ $P_T = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $P_T;
+
+_include("Testing_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+ $PT.end(); 
+ var $TA = _testcase("Test Automation"," Creating a Test Automation for Testing PT");
+ $TA.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToTA;//Test Automation
+ navigateTo($inputObject);
+
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+	$inputObject = {};
+	$inputObject.edt_CM_Name = $data.requestTitle;
+	$inputObject.txt_CM_Description = $data.desc221;
+	$inputObject.lst_DN_RequestOwner = $data.user_name1;
+	$inputObject.lst_DN_Complexity =  $data.complexity;
+	$inputObject.lst_DN_TypeofTesting = $data.typtes2;
+	$inputObject.lst_DN_LCStage =  $data.LC_stage;
+	$inputObject.lst_DN_TechnologyofApplicatio =$data.PTNo;//"Package or Product";
+	ModifyEformInstance($inputObject);
+
+  _wait(1000);
+  
+ $T_A = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $T_A;
+
+_include("Testing_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+ $TA.end();
+ var $AT = _testcase("Automated Testing"," Creating a Automated Testing for Testing PT");
+ $AT.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToAT;
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+ $inputObject = {};
+$inputObject.edt_CM_Name = $data.requestTitle;
+$inputObject.txt_CM_Description = $data.desc221;
+$inputObject.lst_DN_RequestOwner = $data.user_name1;
+$inputObject.lst_DN_Complexity =  $data.complexity;
+$inputObject.lst_DN_TypeofTesting = $data.typtes2;
+$inputObject.lst_DN_TechnologyofApplicatio = $data.PTNo;
+$inputObject.lst_DN_LCStage = $data.LC_stage;
+ModifyEformInstance($inputObject);
+  
+  _wait(1000);
+  
+$A_T = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id =$A_T;
+
+_include("Testing_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+ $AT.end();
+ var $Other_Req = _testcase("Other_Request"," Creating a Other Request for Testing PT");
+ $Other_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToOther_Request;
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestOwner = $data.user_name1;
+ $inputObject.lst_DN_Complexity = $data.complexity;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ModifyEformInstance($inputObject);
+  
+  _wait(1000);
+  
+ $Other_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $Other_Request;
+
+_include("Testing_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+
+ $Other_Req.end(); 
+ var $PM_Req = _testcase("PM_Request"," Creating a Project Mgmt Request for Testing PT");
+ $PM_Req.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateToPM_Request;
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject)
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc221;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ModifyEformInstance($inputObject);
+  
+  _wait(1000);
+  
+ $PM_Request = _getText(_span("CM_ItemCode"));
+$bTN = $data.requestTitle;
+$id = $PM_Request;
+
+_include("Testing_Tools_Reuse_Data_Scheduled_Task_Creation_09.sah");
+
+
+ $PM_Req.end();
+  
+  var $SetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $SetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.rowNo = 1;
+  $inputObject.columnNames = "P_T|M_T|OR|T_A|PMR|A_T";
+  $inputObject.fieldValues = $P_T+"|"+$M_T+"|"+$Other_Request+"|"+$T_A+"|"+$PM_Request+"|"+$A_T;
+  infyFTSetValueInExcel($inputObject)
+ 
+ $SetExcel.end(); 
+  
+/*  var $GetExcel = _testcase("SetExcel"," Setting the value in Excel");
+ $GetExcel.start();
+ 
+  $inputObject = {};
+  $inputObject.ExcelLocation = "Testing/Tools_Reuse/Testing_Tools_Reuse_Data.xlsx";
+  $inputObject.sheetName = "Sheet1";
+  $inputObject.columnName = "P_T";
+  infyFTGetValueFromExcel($inputObject);
+  
+  _log("P_T Id "+$value);
+ 
+ $GetExcel.end(); */

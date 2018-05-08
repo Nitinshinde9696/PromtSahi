@@ -1,0 +1,113 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+
+ $data = readDataFromCSV("Maint_Rsk_Mgmt_TC_BRD37_FU2_12_06", "Maint/Rsk_Mgmt");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC = _testcase("InfyFT_sahi7_TC_BRD37_FU2_13","Check for the condition to change the status of the Risk to Closed."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ //script for creating Risk.
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description4;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory4;
+ $inputObject.lst_DN_Probability = $data.probability4;
+ $inputObject.lst_DN_Impact = $data.impact4;
+ $inputObject.edt_DN_Priority = $data.CM_Priority4;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays4;
+ $inputObject.edt_DN_CostImpactduetoSchedul = $data.cstImpschImp4;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan4;
+ $inputObject.txt_DN_ContingencyPlan = $data.contigencyPlan4;
+ $inputObject.edt_DN_OtherCostofRiskUSD = $data.otherCostOfRisk4;
+ $inputObject.edt_DN_CostofRiskMitigationUS = $data.cstOfRiskMitigation4;
+ $inputObject.chk_DN_RiskMaterialized = $data.field3;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4;  
+ InfyFTcreateRiskManagement($inputObject);
+  
+ var $CreatedID =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.field12;
+ verifyEformInstanceDetails($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status5;
+ $inputObject.msgAlert = "Risk cannot be Closed as there are open linked Issues.";
+ InfyFTModifyEformInstance($inputObject); 
+  
+ $TC.end();
+ 
+ var $TC = _testcase("InfyFT_sahi7_TC_BRD37_FU2_14","Check for the condition to change the status of the Risk to Abandoned."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name4;
+ $inputObject.txt_CM_Description = $data.CM_Description5;
+ $inputObject.lst_DN_RiskCategory = $data.riskCategory5;
+ $inputObject.lst_DN_Probability = $data.probability5;
+ $inputObject.lst_DN_Impact = $data.impact5;
+ $inputObject.edt_DN_ScheduleImpactDays = $data.schImpDays5;
+ $inputObject.txt_DN_MitigationPlan = $data.mitigationPlan5;
+ $inputObject.edt_DN_RiskOwner = $data.LoginID1;
+ $inputObject.lst_DN_ImpactTo = $data.impactTo4;  
+ InfyFTcreateRiskManagement($inputObject);
+ 
+  var $CreatedID1 =  _getText(_span("CM_ItemCode"));
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status6;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _assertVisible(_button("Reopen"),"Reopen");
+ 
+ _wait(2000);
+ 
+ _click(_button("Reopen"));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.lst_DN_Status = $data.status4;
+ InfyFTModifyEformInstance($inputObject);
+ 
+ _wait(2000);
+  
+ $TC.end();
+ 
+ 
+
+ 
+
+
+
+ 
+ 

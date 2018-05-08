@@ -1,0 +1,130 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceSiddharth.sah");
+
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Closure_AT_06","Testing/Request_Management/Automation_Testing"); 
+ /*
+$inputObject = {};
+$inputObject.user_name = $data.Username1;//Ricky_Wang	
+$inputObject.edt_loginid = $data.LoginID1;//Ricky_Wang
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+// CLICK ON THE CREATE TAB //
+/*
+$inputObject = {};
+$inputObject.icon = ""; 
+clickAddIcon($inputObject);
+
+
+$inputObject = {};
+$inputObject.item = "AutT3";
+OpenEformInstance($inputObject);
+*/
+var $t = _testcase("TC-6.1", "CHECK THE FIELDS DURING EXECUTION/CLOSURE IN TEST AUTOMATION TESTING");
+
+$t.start();
+
+$inputObject={};
+$inputObject.segment_name= $data.Details;//"Details";
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.ele_DN_RemarksLABEL = $data.C_Remarks;//"Remarks :";
+$inputObject.txt_DN_Remarks = "";
+$inputObject.ele_DN_StatusLABEL = $data.C_Status;//"Status :";  
+$inputObject.ele_DN_CurrentBaselineSetByLABEL =  $data.CBSB;//"Current Baseline Set By :";
+$inputObject.ele_DN_CurrentBaselineSetOnLABEL = $data.CBSO;//"Current Baseline Set On :";
+$inputObject.ele_DN_LastPushtoTimesheetLABEL = $data.LPTT;//"Last Push to Timesheet :";
+$inputObject.ele_DN_LastfetchfromTimesheetLABEL = $data.LFFT;//"Last Fetch from Timesheet :";
+$inputObject.ele_DN_TypeofDataLABEL = $data.TofData;//"Type of Data :";
+$inputObject.ele_DN_ReasonforBadDataLABEL = $data.Reason;//"Reason for Bad Data :";
+$inputObject.ele_DN_ActualStartDateLABEL = $data.Astart;//"Actual Start Date :"; 
+$inputObject.ele_DN_ActualEndDateLABEL = $data.Aend;//"Actual End Date :";
+$inputObject.ele_DN_ScheduleDeviationLABEL = $data.R_SD;//"Schedule Deviation :";
+$inputObject.ele_DN_EffortDeviationLABEL = $data.ED;//"Effort Deviation :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.ele_DN_NoOfScenariosCreatedLABEL = $data.val1;//"No Of Scenarios Created :";
+$inputObject.ele_DN_NoOfApplicationDefectsLABEL = $data.val2;//"No Of Application Defects Reported :";
+$inputObject.ele_DN_NoOfApplicationDefects1LABEL = $data.val3;//"No Of Application Defects Rejected By Client :";
+$inputObject.ele_DN_UATProductiondataexistLABEL= $data.val4;//"UAT/ Production data exists :";
+$inputObject.ele_DN_UATProductiondefectcouLABEL = $data.val5;//"UAT/ Production defect count :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UATProductiondataexist = $data.Dropdown1;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UATProductiondataexist = $data.Dropdown2;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_UATProductiondataexist = $data.Dropdown3;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+var $t = _testcase("TC-5.3", "CHECK THE STATUS FIELD");
+
+$t.start();
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown4;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown5;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown6;
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_Status = $data.Dropdown7;
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+
+/*
+$inputObject = {};
+$inputObject.item = "MtSt12"; 
+InfyFTOpenEformInstanceForLastPage($inputObject);
+*/
+
+
+var $t = _testcase("TC-5.12", "CHECK EFFORT DEVIATION FIELD & CHECK SCHEDULE DEVIATION FIELD");
+$t.start();
+
+// SCHEDULE DEVIATION // 
+$inputObject = {};
+$inputObject.status = "";
+$inputObject.RYGname = $data.RYGname;
+InfyVerifyRYGStatus($inputObject);
+
+
+// EFFORT DEVIATION //
+$inputObject = {};
+$inputObject.status = "";
+$inputObject.RYGname = $data.RYGname;
+InfyVerifyRYGStatus($inputObject);
+
+
+
+$t.end();
+

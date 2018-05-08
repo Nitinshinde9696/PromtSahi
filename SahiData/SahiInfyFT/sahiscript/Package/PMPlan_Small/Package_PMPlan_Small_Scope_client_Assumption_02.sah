@@ -1,0 +1,431 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Package_PMPlan_Small_Gen","Package/PMPlan_Small");
+ $data = readDataFromCSV("Package_PMPlan_Small_Login_Overview_Scope_client","Package/PMPlan_Small"); 
+ 
+/* $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject); 
+ 
+ _wait(2000);
+ 
+ */
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("Navigating to scope description and Assertion of labels");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.scopeDescription;
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.projectScope;
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.clientObjectives;
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.projectBusinessContext;
+ InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = "";  
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.scopeReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("PM Plan summary message section for Scope description");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.scopeDescription;
+ InfyFTclick($inputObject);  
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.fieldValueTest;
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = "";  
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.scopeReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.scopeDescription;
+ InfyFTclick($inputObject);  
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = $data.fieldValueTest;
+ $inputObject.txt_DN_ProjectandBusinessCont = "";  
+ InfyFTsaveInstance($inputObject);  
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.scopeReason3;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.scopeDescription;
+ InfyFTclick($inputObject);  
+ 
+ _wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = "";
+ $inputObject.txt_DN_ClientsObjectives = "";
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.fieldValueTest;  
+ InfyFTsaveInstance($inputObject);  
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.scopeReason4;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.scopeDescription;
+ InfyFTclick($inputObject);  
+ 
+ _wait(1000);  
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_ProjectScope = $data.fieldValueTest;
+ $inputObject.txt_DN_ClientsObjectives = $data.fieldValueTest;
+ $inputObject.txt_DN_ProjectandBusinessCont = $data.fieldValueTest;  
+ InfyFTsaveInstance($inputObject);  
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.scopeDescription;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.scopeReason5;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);   
+ 
+ $t.end();  
+ 
+ var $t = _testcase("PM Plan summary message for client commitments");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.clientCommitment;
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+ 
+ if(_isVisible(_checkbox("false[1]")))
+{
+ 
+ _wait(5000);
+ 
+ _click(_checkbox("on"));
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+}
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.clientCommitment;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.reasonClient1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.clientCommitment;
+ InfyFTclick($inputObject);  
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.tableClient;
+ $inputObject.rowCount = $data.add;
+ addRowInSwiftForm($inputObject); 
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableClient;
+ $inputObject.rowNo = $data.rowCol;
+ $inputObject.colNo = $data.colClientcommitement;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.clientCommitment;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.reasonClient2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $t.end(); 
+
+ var $t = _testcase("Add multiple Client commitments");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.clientCommitment;
+ InfyFTclick($inputObject); 
+
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableClient;
+ $inputObject.rowCount = $data.add2;
+ addRowInSwiftForm($inputObject);
+
+_wait(1000); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableClient;
+ $inputObject.rowNo = $data.rowNo4;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tableClient;
+ $inputObject.rowNo = $data.rowNo5;
+ $inputObject.colNo = $data.colNo0;
+ $inputObject.fieldValues = $data.fieldValueYes;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject); 
+
+ $t.end();  
+ 
+ var $t = _testcase("PM Plan summary message for Assumption");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.assumption;
+ InfyFTclick($inputObject); 
+ 
+ _wait(1000);
+ 
+ if(_isVisible(_div("1")))
+{ 
+	 $inputObject = {};
+	 $inputObject.item = $data.assm;
+	 OpenEformInstance($inputObject);
+ 
+	 _wait(2000);
+ 
+	 $inputObject = {};
+	 $inputObject.popup = $data.popup;
+	 $inputObject.item = $data.assm;
+	 InfyFTDeleteEformInstance($inputObject); 
+}
+
+_wait(5000);
+
+/*
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.assumptionsSummary;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.assmReason1;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon6;
+ InfyFTclick($inputObject); 
+
+ $inputObject = {};
+ $inputObject.link = $data.assumption;
+ InfyFTclick($inputObject);
+ */
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.assm;
+ $inputObject.txt_CM_Description = $data.descriptionAssm;
+ $inputObject.chk_DN_CommunicatedtoClient = $data.fieldValueYes;
+ $inputObject.chk_DN_ConverttoRisk = $data.fieldValueYes;
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.assumptionsSummary;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.assmReason2;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ $t.end();  
+ 

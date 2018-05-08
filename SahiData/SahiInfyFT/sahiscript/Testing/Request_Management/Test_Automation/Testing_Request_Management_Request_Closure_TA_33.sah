@@ -1,0 +1,72 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstance.sah");
+_include("../../../../sahisource/Business/Filter.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/InfyECR.sah");
+
+$data = readDataFromCSV("Testing_Request_Management_Request_Closure_TA_33","Testing/Request_Management/Test_Automation"); 
+/*
+$bTN = "Siddharth";
+$review_type = "Test Plan Review";
+
+var $dateObj1 = new Date();
+var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+var $dateObj2 = new Date();
+$dateObj2 = DateAdd("d",10,$dateObj2);
+var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2); 
+ 
+$inputObject = {};
+$inputObject.user_name = $data.Username1;/\nitin_shinde05	
+$inputObject.edt_loginid = $data.LoginID1;/\nitin_shinde05
+$inputObject.edt_password = $data.Password1;//111111
+loginIntoDigite($inputObject); 
+
+
+$inputObject = {};
+$inputObject.projectname = $data.projectname2;    //  | PROJECT NAMEBARRABS |  //
+selectProject($inputObject);
+
+$inputObject = {};
+$inputObject.name = $data.navigateTo1;
+navigateTo($inputObject);
+
+// CLICK ON THE CREATE TAB //
+
+$inputObject = {};
+$inputObject.item = "AutS5";
+OpenEformInstance($inputObject);
+
+*/
+
+var $t = _testcase("TC-6.1", "CHECK THE FIELDS DURING EXECUTION/CLOSURE IN TEST AUTOMATION TESTING");
+
+$t.start();
+
+$inputObject={};
+$inputObject.segment_name= $data.Details;//"Details";
+SelectSegment($inputObject);
+
+$inputObject = {};
+$inputObject.ele_DN_RemarksLABEL = $data.C_Remarks;//"Remarks :";
+$inputObject.txt_DN_Remarks = "";
+$inputObject.ele_DN_StatusLABEL = $data.C_Status;//"Status :";  
+$inputObject.ele_DN_CurrentBaselineSetByLABEL =  $data.CBSB;//"Current Baseline Set By :";
+$inputObject.ele_DN_CurrentBaselineSetOnLABEL = $data.CBSO;//"Current Baseline Set On :";
+$inputObject.ele_DN_LastPushtoTimesheetLABEL = $data.LPTT;//"Last Push to Timesheet :";
+$inputObject.ele_DN_LastfetchfromTimesheetLABEL = $data.LFFT;//"Last Fetch from Timesheet :";
+$inputObject.ele_DN_TypeofDataLABEL = $data.TofData;//"Type of Data :";
+$inputObject.ele_DN_ActualStartDateLABEL = $data.Astart;//"Actual Start Date :"; 
+$inputObject.ele_DN_ActualEndDateLABEL = $data.Aend;//"Actual End Date :";
+$inputObject.ele_DN_ScheduleDeviationLABEL = $data.R_SD;//"Schedule Deviation :";
+$inputObject.ele_DN_EffortDeviationLABEL = $data.ED;//"Effort Deviation :";
+verifyEformInstanceDetails($inputObject);
+
+$inputObject = {};
+$inputObject.lst_DN_AgileTestingAdopted = $data.Dropdown5;//Yes;No
+verifyEformInstanceDetails($inputObject);
+
+$t.end();
+

@@ -1,0 +1,1710 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+
+ $data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_07", "InfyFTSahi/pcb");
+ 
+ var $q = _testcase("TC_01", " login and go to pm plan");
+ 
+ $q.start();
+ 
+ $inputObject = {}; //for login Window using valid ID/Password
+ $inputObject.user_name = $data.Username;
+ $inputObject.edt_loginid = $data.LoginID;
+ $inputObject.edt_password = $data.Password;
+ loginIntoDigite($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.pcbset;
+ InfyFTclickS($inputObject);
+
+ var $i = 	_getText(_cell(_table("TableData_1_1"), 1, 1));
+ var $oldversion = parseFloat($i);
+ var $z = parseFloat($i);
+ var $version = $z+1;
+  
+ $q.end();
+ var $q = _testcase("TC_02", "go to pcb and create a duplicate pcb version");
+ $q.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+
+ $inputObject = {};
+ $inputObject.span = $data.add;
+ InfyFTclickS($inputObject);
+  _wait(5000);
+   _wait(5000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.Inactive;
+ InfyFTisVisibleN($inputObject);
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.pcbname;//null
+ $inputObject.edt_field199 = $data.duplicateversion;//1.1
+ $inputObject.lst_field200 =  $data.Custom_Application;//customer app
+ $inputObject.msgAlert = "Error: Instance already exists.";
+ InfyFTModifyEformInstanceS($inputObject);
+  
+ $q.end();
+	
+ var $q = _testcase("TC_03", "create a new one and check status while creating");
+ 
+ $q.start();
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Inactive;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.pcbname;//null
+ $inputObject.edt_field199 = $version ;//1.5
+ $inputObject.lst_field200 = $data.Custom_Application;//customer app
+ InfyFTModifyEformInstanceP($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.Details;
+ InfyFTisVisibleN($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data.VersionDetails;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Inactive = $data.Inactive;
+ verifyAllFields($inputObject);
+
+ var $IDpcb = _getText(_span("CM_ItemCode"));
+ var $pcb = _getText(_textbox("field199"));
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ verifyInstanceInListing($inputObject);
+ $q.end();
+ 
+ var $q = _testcase("TC_04", "when a version status is active all other version will be inactive");
+ 
+ $q.start();
+ 
+_click(_div(/$oldversion/));
+ _wait(20000);
+ $inputObject = {};
+ $inputObject.rdg_Active = $data.Active;
+ verifyAllFields($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.radio = $data.f1981;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+
+ _wait(20000);
+ clickReturn();
+  
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ _wait(5000);
+ _wait(5000);
+ _wait(20000);
+ $inputObject = {}; 
+ $inputObject.radio = $data.f198;
+ InfyFTclickS($inputObject);
+
+ 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ $q.end();
+ 
+ var $q = _testcase("TC_05", "go to pcb version and verify whether data have flown into new pcb version");
+ 
+ $q.start();
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+ 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.fieldValues606;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues509;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject.tableName = $data.LCStageMetricsDetails4;	
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.COLOL;
+ $inputObject.fieldValues = $data.fieldValues509;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo50801;
+ $inputObject.colNo = $data.colNo5080;
+ $inputObject.fieldValues = $data.fieldValues50801;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo5080;
+ $inputObject.colNo = $data.colNo5080;
+ $inputObject.fieldValues = $data.fieldValues5080;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(20000);
+  $q.end();
+ var $q = _testcase("TC_06", "remove all values in pcb version and check if rows are appearing under pcb report");
+ $q.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ _wait(5000);
+ _wait(5000);
+ _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+  _wait(5000);
+ _wait(5000);
+   $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.fieldValues606;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues50801;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.five;
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fieldValues514;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject.tableName = $data.LCStageMetricsDetails4;	
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.COLOL;
+ $inputObject.fieldValues = $data.fieldValues50801;
+ setSwiftFormData($inputObject);
+  
+   $inputObject.tableName = $data.LCStageMetricsDetails4;	
+ $inputObject.rowNo = $data.workflow_stage3;
+ $inputObject.colNo = $data.colNo503;
+ $inputObject.fieldValues = $data.fieldValues514;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo50801;
+ $inputObject.colNo = $data.colNo5080;
+ $inputObject.fieldValues = $data.fieldValues50801;
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo5080;
+ $inputObject.colNo = $data.colNo508;
+ $inputObject.fieldValues = $data.fieldValues50801;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  
+
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.pcbset;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCB_Setting;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+ 
+ _click(_span(/$version/, _near(_cell("PCB Report:"))));
+  _wait(20000);
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.norecords;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.norecords1;
+ InfyFTisVisibleN($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.segment_name =  $data.Min1; //Goals
+ InfyFTSelectSegmentS($inputObject);
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.norecords2;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.norecords3;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ InfyFTReturnPopUpN($inputObject)
+ 
+ $q.end();
+ 
+ var $q = _testcase("TC_07", "reset all values and make pcb version incative");
+   
+ $q.start();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+  _wait(5000);
+ _wait(5000);
+ _wait(20000);
+ $inputObject = {}; 
+ $inputObject.radio = $data.f1981;
+ InfyFTclickS($inputObject);
+ 
+ _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+ 
+ $inputObject.tableName = $data.TableName51;	
+ $inputObject.rowNo = $data.fieldValues606;
+ $inputObject.colNo = $data.colNo5080;
+ $inputObject.fieldValues = $data.fieldValues5080;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject.tableName = $data.LCStageMetricsDetails4;	
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.COLOL1;
+ $inputObject.fieldValues = $data.fieldValues5080;
+ setSwiftFormData($inputObject);
+  
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo5080;
+ $inputObject.colNo = $data.colNo5080;
+ $inputObject.fieldValues = $data.fieldValues5080;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  $q.end();
+
+ var $q = _testcase("TC_08", "check for pcb version is not selected message");
+ $q.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.pcbset;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCB_Setting;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+  _wait(20000);
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.span_Name = "PCB Version is not selected or not available.";
+ InfyFTisVisibleN($inputObject);
+ 
+  $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ _wait(5000);
+ _wait(20000);
+
+ $inputObject = {}; 
+ $inputObject.radio = $data.f198;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ clickReturn();
+  
+ $q.end();
+ var $q = _testcase("TC_09", "set different language in overview and check pcb setting ");
+ 
+ $q.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name;
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview;
+ InfyFTclickS($inputObject);
+
+ 
+ $inputObject.tableName = $data.Sizing_Details;	
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.sizingdetails_colno;
+ $inputObject.fieldValues = $data.sizingdetails_value1;
+ setSwiftFormData($inputObject);
+ 
+   $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+   $inputObject = {};
+ $inputObject.link = $data.SUM;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.fieldValues609;
+ $inputObject.colNo = $data.rowNoa2;
+ $inputObject.fieldValues = $data.REC;//Revised version of PCB is available.
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.pcbset;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.LL;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCB_Setting;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+  _assertExists(_span(/$version/, _near(_cell("PCB Report:"))));
+ _click(_span(/$version/, _near(_cell("PCB Report:"))));
+ //_selectWindow("PCB Version Report : Details (PCBR1)");
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.tl;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.operation = "Negative";
+ $inputObject.span_Name = $data.Acceptance_and_Installation;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.operation = "Negative";
+ $inputObject.span_Name = $data.COQ;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.segment_name =  $data.Min1; //Goals
+ InfyFTSelectSegmentS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.norecords;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ InfyFTReturnPopUpN($inputObject)
+// _selectWindow();
+ 
+ $q.end();
+ 
+ var $q = _testcase("TC_10", "set language in overview and verify values shown under pcb setting table");
+ 
+ $q.start();
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject.tableName = $data.Sizing_Details;	
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.sizingdetails_colno;
+ $inputObject.fieldValues = $data.sizingdetails_values;
+ setSwiftFormData($inputObject);
+  
+ $inputObject.tableName = $data.Sizing_Details;	
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.sizingdetails_colno;
+ $inputObject.fieldValues = $data.sizingdetails_values;
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.pcbset;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.active;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NatureOfWorkValue41;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.NatureOfWorkValue411;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.net_HL;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.LL;
+ InfyFTisVisibleN($inputObject);
+ 
+
+ _assertVisible(_span(/$version/));
+ _assertVisible(_span(/$version/));
+ $q.end();
+  
+ var $q = _testcase("TC_11", "update to latest active and verify tables and values  under pcb report ");
+ 
+ $q.start();
+ $inputObject = {};
+ $inputObject.tableName = $data.Current_PCB_Setting;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.colno3_chk;
+ $inputObject.fieldValues = $data.fieldValues7;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+   
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+ 
+ _click(_span(/$version/, _near(_cell("PCB Report:"))));
+ //_selectWindow("PCB Version Report : Details (PCBR1)");
+     
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.newcol;
+ $inputObject.fieldValues = $data.fieldValuesb1;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.tableName = $data.LCStageMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.newcol1;
+ $inputObject.fieldValues = $data.fieldValuesb1;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.maj;
+ InfyFTisVisibleN($inputObject);
+ 
+ inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.Min;
+ InfyFTisVisibleN($inputObject);
+ 
+ inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.Bugfix;
+ InfyFTisVisibleN($inputObject);
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.net;
+ InfyFTisVisibleN($inputObject);
+ 
+  
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.TrackMetricsDetails4;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.LCStageMetricsDetails4;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.segment_name =  $data.Min1; //Goals
+ InfyFTSelectSegmentS($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.rowNo5011;
+ $inputObject.colNo = $data.newcol;
+ $inputObject.fieldValues = $data.fieldValuesb1;
+ InfyFTverifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.TrackMetricsDetails5;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.LCStageMetricsDetails5;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.hl;
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.segment_name =  $data.Bugfix; //Goals
+ InfyFTSelectSegmentS($inputObject);
+
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.TrackMetricsDetails6;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ $inputObject.span_Name = $data.LCStageMetricsDetails6;
+ InfyFTisVisibleN($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.pcbr1;
+ InfyFTReturnPopUpN($inputObject)
+   
+// _selectWindow();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject); 
+ _wait(5000);
+  
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+
+ _wait(5000);
+  _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+ 
+ $q.end();
+/* var $t = _testcase("TC_12", "inserting  mean values and verify baseline values in goals");
+ $t.start();
+   
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.thirty;//19
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.fiftyeight;//23
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.twentysix;//24
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.fifty;//27
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.sixtyfour;//60
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.sixtythree;//61
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+//verify in development goals
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject)
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Basis;
+ $inputObject.rowNo = $data.rowNo500;
+ $inputObject.colNo = $data.ONE;
+ $inputObject.fieldValues = $data.pcb;
+ setSwiftFormDataPCB($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;//schedule adherence
+ $inputObject.rowNo = $data.two;//2
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.five;//6//quality effort
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.four1;//13Productivity - Nesma FP 
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+  
+//minor enhancement
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;//schedule adherence
+ $inputObject.rowNo = $data.six;//6
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;//quality effort
+ $inputObject.rowNo = $data.ten;//14
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fourteen;//custom application others
+ verifySwiftFormData($inputObject);
+ $q.end();
+   
+  var $t = _testcase("TC_13", "for +ve metric for major and minor  set mean value in '75th percentile' and verify and verify in goals");
+  $t.start();
+ // for +ve metric under major and minor goals set 75 and verify
+  
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;							
+ OpenEformInstance($inputObject); 
+ _wait(20000);
+ _wait(5000);
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject); 
+ 
+  $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+  _wait(20000);
+   _wait(20000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+ 
+  //major
+ _wait(5000);
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.fiftyeight;//19
+ $inputObject.colNo = $data.seven1;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ //minor
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.sixtyfour;//61
+ $inputObject.colNo = $data.seven1;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ //verify positive metric value for 75th
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject)
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.two;//2
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues515;//14
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+ $q.end();
+ 
+ var $t = _testcase("TC_14", "for +ve metric for major and minor  set mean value in '25th percentile' and  verify in goals");
+ $t.start();
+
+ // for +ve metric under major and minor goals set 25th and verify
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;1							
+ OpenEformInstance($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ _wait(20000);
+  _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+  //major
+
+ _wait(5000);
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.fiftyeight;//19
+ $inputObject.colNo = $data.seven2;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ //minor
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.sixtyfour;//61
+ $inputObject.colNo = $data.seven2;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+//verify positive metric value for 75th
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject)
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.two;//2
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues515;//14
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_15", "for -ve metric for major and minor  set mean value in '25th percentile' and  verify in goals");
+ $t.start();
+ // for -ve metric under major and minor goals set 25 and verify
+
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;1							
+ OpenEformInstance($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(5000);
+ _wait(5000);
+  _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+
+ _wait(5000);
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.twentysix;//23
+ $inputObject.colNo = $data.seven3;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.sixtythree;//60
+ $inputObject.colNo = $data.seven3;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+//verify -ve metric value for 25th
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject)
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues501;//6
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues502;//10
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_16", "for -ve metric for major and minor  set mean value in '75th percentile' and  verify in goals");
+ $t.start();
+ // for -ve metric under major and minor goals set 75 and verify
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;1							
+ OpenEformInstance($inputObject); 
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ _wait(20000);
+ _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+
+ _wait(5000);
+ _wait(5000);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.twentysix;//23
+ $inputObject.colNo = $data.seven4;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.sixtythree;//60
+ $inputObject.colNo = $data.seven4;
+ $inputObject.fieldValues = $data.fifteen1;//custom application others
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+//verify -ve metric value for 75th
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //HEFPMYS
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject)
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues501;//6
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues502;//6
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fifteen;//custom application others
+ verifySwiftFormData($inputObject);
+ $t.end();*/
+
+ var $t = _testcase("TC_17", "change basis of goals value from pcb and verify pcb setting");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name; //
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Basis;
+ $inputObject.rowNo = $data.rowNo500;
+ $inputObject.colNo = $data.ONE;
+ $inputObject.fieldValues = $data.fieldValues503;//similar project
+ setSwiftFormDataPCB($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+_wait(20000);
+
+ _assertExists(_span(/$version/));
+
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SUM;
+ InfyFTclickS($inputObject);
+ 
+ $t.end();
+ 
+ /*var $t = _testcase("TC_18", "for +ve metric set value less than baseline value in major and minor goals and verify pcb confermance status");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+
+//for +ve metric less than baseline value in major and minor
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.two;
+ $inputObject.colNo = $data.d4;
+ $inputObject.fieldValues = $data.thirteen;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ambera;
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues515;
+ $inputObject.colNo = $data.d4;
+ $inputObject.fieldValues = $data.thirteen;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.am1;
+ InfyFTisVisibleN($inputObject);
+
+ $t.end();
+
+ var $t = _testcase("TC_19", "for +ve metric set value greater than baseline value in major and minor goals and verify pcb confermance status");
+ $t.start();
+//for +ve metric greater than baseline value in major and minor
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.two;
+ $inputObject.colNo = $data.d4;
+ $inputObject.fieldValues = $data.sixteen;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.green1;
+ InfyFTisVisibleN($inputObject);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.fieldValues515;
+ $inputObject.colNo = $data.d4;
+ $inputObject.fieldValues = $data.sixteen;
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(20000);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.green;
+ InfyFTisVisibleN($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_20", "for -ve metric set value less than baseline value in major and minor goals and verify pcb confermance status");
+  $t.start();
+//for -ve metric less than baseline value in major and minor
+
+//major
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.five;//5
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fourteen;//custom application others
+ setSwiftFormData($inputObject);
+   
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ _wait(20000);
+ $inputObject = {};
+ $inputObject.span_Name = $data.gr5;
+ InfyFTisVisibleN($inputObject);
+ 
+//minor
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.ten;//14
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.fourteen;//custom application others
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ambera1;
+ InfyFTisVisibleN($inputObject);
+ $t.end();
+
+ var $t = _testcase("TC_21", "for -ve metric set value greater than baseline value in major and minor goals and verify pcb confermance status");
+ $t.start();
+//for -ve metric greater than baseline value in major and minor
+//major
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Major_Enhancement_Goals;
+ $inputObject.rowNo = $data.five;//6
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.sixteen;//custom application others
+ setSwiftFormData($inputObject);
+   
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ambera;
+ InfyFTisVisibleN($inputObject);
+ 
+//minor
+ $inputObject = {}; 
+ $inputObject.tableName = $data.Minor_Enhancement_Goals;
+ $inputObject.rowNo = $data.ten;//14
+ $inputObject.colNo = $data.four;
+ $inputObject.fieldValues = $data.sixteen;//custom application others
+ setSwiftFormData($inputObject);
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.ambera1;
+ InfyFTisVisibleN($inputObject);
+ $t.end();
+ 
+ var $t = _testcase("TC_22", "remove mean values form pcb version");
+ $t.start();
+//remove pcb values form pcb version
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;1							
+ OpenEformInstance($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ _wait(20000);
+ _wait(20000);
+ $inputObject = {};
+ $inputObject.segment_name = $data.PCBVersionDetails3;//PCB Version Details
+ InfyFTSelectSegmentS($inputObject);
+
+ _wait(5000);
+ _wait(5000);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo5080;
+ $inputObject.colNo = $data.colNo5080;
+ $inputObject.fieldValues = $data.fieldValues50801;
+ setSwiftFormData($inputObject);
+ 
+//remove negative metric values
+
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.twentysix;//23
+ $inputObject.colNo = $data.seven4;
+ $inputObject.fieldValues = $data.none;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.sixtythree;//60
+ $inputObject.colNo = $data.seven4;
+ $inputObject.fieldValues = $data.none;//custom application others
+ setSwiftFormData($inputObject);
+
+ //remove positive metric values
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.fiftyeight;//19
+ $inputObject.colNo = $data.seven2;
+ $inputObject.fieldValues = $data.none;//custom application others
+ setSwiftFormData($inputObject);
+ 
+//minor
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TrackMetricsDetails4;
+ $inputObject.rowNo = $data.sixtyfour;//61
+ $inputObject.colNo = $data.seven2;
+ $inputObject.fieldValues = $data.none;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.thirty;//19
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.zero1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.fiftyeight;//23
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.zero1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.twentysix;//24
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.zero1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.fifty;//27
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.zero1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+_wait(20000);
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.sixtyfour;//60
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.zero1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName53;
+ $inputObject.rowNo = $data.sixtythree;//61
+ $inputObject.colNo = $data.seven;
+ $inputObject.fieldValues = $data.zero1;//custom application others
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(20000);
+ $t.end();*/
+
+ var $q = _testcase("TC_23", "check pcb setting status when pm plan is routed and recalled and baselined ");
+ 
+ $q.start();
+ 
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2; 
+ selectProject($inputObject);
+
+ $inputObject = {};
+ $inputObject.name = $data.Pmplan; 
+ navigateTo($inputObject);
+ 
+   $inputObject = {};
+ $inputObject.image = $data.nodeIcon11;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.GOALS;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.Basis;
+ $inputObject.rowNo = $data.rowNo500;
+ $inputObject.colNo = $data.ONE;
+ $inputObject.fieldValues = $data.pcb;
+ setSwiftFormDataPCB($inputObject); 
+
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert501;
+ saveSwiftForm($inputObject);
+_wait(20000);
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SUM;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.fieldValues609;
+ $inputObject.colNo = $data.rowNoa2;
+ $inputObject.fieldValues = $data.pc1;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Workflow;
+ InfyFTclickS($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members01;
+ $inputObject.workflow_stage = $data.workflow_stage1;
+ WorkflowSet($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members01;
+ $inputObject.workflow_stage = $data.workflow_stage2;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.multiple_member = $data.Multiple_members01;
+ $inputObject.workflow_stage = $data.workflow_stage3;
+ WorkflowSet($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22; 
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.Recall;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SUM;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.fieldValues609;
+ $inputObject.colNo = $data.rowNoa2;
+ $inputObject.fieldValues = $data.pc1;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Workflow;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22; 
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22; 
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ 
+ _wait(5000);
+ $inputObject = {};
+ $inputObject.txt_Comments = $data.fieldValues22; 
+ $inputObject.alert = $data.fieldValues7;
+ ClickRoutewithComments($inputObject);
+ _wait(5000);
+ 
+ InfyFTreopenpcb();
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.image = $data.nodeIcon2;
+ InfyFTclickS($inputObject);
+
+ $inputObject = {};
+ $inputObject.link = $data.SUM;
+ InfyFTclickS($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;
+ $inputObject.rowNo = $data.fieldValues609;
+ $inputObject.colNo = $data.rowNoa2;
+ $inputObject.fieldValues = $data.pc1;
+ verifySwiftFormData($inputObject);
+
+ $t.end();
+ 
+/*******for successfull completion of script*************************/
+ $data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_06", "InfyFTSahi/pcb");
+ $data = readDataFromCSV("InfyFT_sahi_BRD_38_PCBsetup_maint_01", "InfyFTSahi/pcb");
+ var $t = _testcase("TC_24", "navigate to pt setting");
+ $t.start();
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo21;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.MaintPT3;
+ OpenEformInstance($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo1;
+ InfyFTnavigateTo($inputObject);   
+ 
+ $t.end();
+//select segment Type of Application - Technology Group
+
+  var $t = _testcase("TC_25", "Type of Application - Technology Group");
+  $t.start();
+  $inputObject = {};
+  $inputObject.segment_name = $data.Details3;//Details
+  InfyFTSelectSegmentS($inputObject);
+
+
+  $inputObject = {};
+  $inputObject.tableName=$data.TableName52;
+  $inputObject.rowNo=$data.rowNo17;
+  InfyFTdeleteRowInPcb($inputObject);
+  $t.end();
+ var $t = _testcase("TC_26", "navigate to PCB Setup  ");
+
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.name = $data.navigateTo2;
+ InfyFTnavigateTo($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.tableName=$data.TableName53;
+ $inputObject.rowNo=$data.rowNo11;
+ InfyFTdeleteRowInPcb($inputObject);
+ 
+ $t.end();

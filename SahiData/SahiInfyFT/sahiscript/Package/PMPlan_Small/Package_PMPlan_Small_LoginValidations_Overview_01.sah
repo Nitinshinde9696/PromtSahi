@@ -1,0 +1,326 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstance.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $gen = readDataFromCSV("Package_PMPlan_Small_Gen","Package/PMPlan_Small");
+ $data = readDataFromCSV("Package_PMPlan_Small_Login_Overview_Scope_client","Package/PMPlan_Small"); 
+ 
+ var $t = _testcase("Login with In-Correct ID");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.inCorrectUser;
+ $inputObject.edt_loginid = $data.inCorrectId;
+ $inputObject.edt_password = $data.inCorrectId;
+ InfyFTloginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("Login with Correct ID");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $gen.user_name1;
+ $inputObject.edt_loginid = $gen.LoginID1;
+ $inputObject.edt_password = $gen.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.projectname = $gen.Project_name2;
+ selectProject($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject); 
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.smallProject;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("Overview labels verification and Name of large deal program validation");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(1000);
+ 
+ //**check for the mentioned entries in the E-form:**\\
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.projectCode;
+ $inputObject.colNo = $data.colNames;
+ $inputObject.fieldValues = $data.fieldValues;
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.MasterProjectCode;
+ $inputObject.colNo = $data.colNames1;
+ $inputObject.fieldValues = $data.fieldValues1;
+ verifySwiftFormData($inputObject); 
+ 
+ //**Checking for validation of Part of Large Deal/Program**\\
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowPartDeal;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.fieldValue1;//Yes|No
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowPartDeal;
+ $inputObject.colNo = $data.colMortgage;
+ $inputObject.fieldValues = $data.fieldValue2;
+ setSwiftFormData($inputObject); 
+ 
+ //**Name of Large Deal/Program should be editable when selected as Yes**\\
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowNameDeal;
+ $inputObject.colNo = $data.colNo;
+ $inputObject.fieldValues = $data.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+
+ _wait(2000); 
+ 
+ $t.end();
+ 
+ var $t = _testcase("Checking of date difference between start date and end date validation");
+ $t.start(); 
+
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Profile
+ navigateTo($inputObject);  
+ 
+ var $projectStartDate = _getText(_span("STARTDATE"));
+ var $projectEndDate = _getText(_span("ENDDATE"));
+ 
+ _wait(1000);
+
+ $inputObject = {}; 
+ $inputObject.date1 = $projectStartDate;
+ $inputObject.date2 = $projectEndDate;
+ dateDifference($inputObject);
+
+ _log("The difference between"+$projectStartDate+"and"+$projectEndDate+"is"+$inputObject.dateDifference+"and is >=365");
+ 
+ var dateVar = parseInt($inputObject.dateDifference);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.link = $data.Overview; //Overview
+ InfyFTclick($inputObject); 
+ 
+ _wait(2000);
+ 
+ if( dateVar >= 365 )
+ {
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowLRP;
+ $inputObject.colNo = $data.mortagaeLbl;
+ $inputObject.fieldValues = $data.fieldValue2;//Yes
+ verifySwiftFormData($inputObject);
+ }
+ else
+{
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableOverview;
+ $inputObject.rowNo = $data.rowLRP;
+ $inputObject.colNo = $data.mortagaeLbl;
+ $inputObject.fieldValues = $data.fieldValue3;//No
+ verifySwiftFormData($inputObject);
+ } 
+
+ $t.end();
+ 
+ _wait(2000);
+  var $t = _testcase("TC_1_New Changes", "The field DevOps Applicability should be available as a multi-select field in the Overview section.");
+ $t.start(); 
+ 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableOverview1;
+ $inputObject.rowNo = $data.devOps;
+ $inputObject.colNo = $data.underProject;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+ 
+ //Checking for the Drop down Values of DevOps
+ 
+ _wait(2000);
+ 
+ _setSelected(_select(11), "CD");
+ 
+ _setSelected(_select(11), "--All--");
+ 
+ _wait(2000);
+ 
+ _assertEqual("CD,CI", _getSelectedText(_select(11)));
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply;
+ InfyFTclick($inputObject)
+ 
+ _wait(5000);
+ 
+ //Checking Whether the DevOps section is mandatory
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";   
+ $inputObject.tableName = $data.tableOverview1;
+ $inputObject.rowNo = $data.devOps;
+ $inputObject.colNo = $data.underProject;
+ $inputObject.fieldValues = $data.fieldValuesYes;
+ InfyFTsetSwiftFormData($inputObject);
+
+ _wait(2000); 
+
+ _setSelected(_select(11), "--None--");
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.button = $data.apply;
+ InfyFTclick($inputObject)
+ 
+ _wait(2000); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(5000); 
+ 
+  $t.end();
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+
+_wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.Overview;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.reasonOverview;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;//PM Plan
+ navigateTo($inputObject);
+
+_wait(2000);
+
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data.tableSummary;
+ $inputObject.rowNo = $data.Overview;
+ $inputObject.colNo = $data.colReason;
+ $inputObject.fieldValues = $data.reasonOverview;
+ InfyFTverifySwiftFormDataWithCell($inputObject); 
+ 
+ _wait(2000);
+ 
+ var $t = _testcase("Package_PMPlan_Small_Scope_client_Assumption_02");
+ $t.start();
+ 
+ _include("Package_PMPlan_Small_Scope_client_Assumption_02.sah");
+
+ $t.end(); 
+ 
+ _wait(2000); 
+
+ var $t = _testcase("Package_PMPlan_Small_TCRiskLog_Risk_Management_03");
+ $t.start();
+ 
+ _include("Package_PMPlan_Small_TCRiskLog_Risk_Management_03.sah");
+
+ $t.end(); 
+ 
+ _wait(2000); 
+ /*
+ var $t = _testcase("InfyFT_BRD26_PM_Plan_Package_TailoringDeviation_RCM");
+ $t.start();
+ 
+ _include("InfyFT_BRD26_PM_Plan_Package_TailoringDeviation_RCM.sah");
+
+ $t.end(); 
+ */
+ _wait(2000); 
+ 
+ var $t = _testcase("Package_PMPlan_Small_Goals_ProjectAdmin_05");
+ $t.start();
+ 
+ _include("Package_PMPlan_Small_Goals_ProjectAdmin_05.sah");
+
+ $t.end();  
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("Package_PMPlan_Small_Goals_SLAPenalty_06");
+ $t.start();
+ 
+ _include("Package_PMPlan_Small_Goals_SLAPenalty_06.sah");
+
+ $t.end();  
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("Package_PMPlan_Small_IterationCreation_MileStones_07");
+ $t.start();
+ 
+ _include("Package_PMPlan_Small_IterationCreation_MileStones_07.sah");
+
+ $t.end();  
+ 
+ _wait(2000); 
+ 
+ var $t = _testcase("Package_PMPlan_Small_IterationApplicable_Goals_08");
+ $t.start();
+ 
+ _include("Package_PMPlan_Small_IterationApplicable_Goals_08.sah");
+
+ $t.end();   
+ 

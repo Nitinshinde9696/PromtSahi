@@ -1,0 +1,336 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+/*********************************
+DATASETUP: PROJECT TAILORING PART
+**********************************/
+ $data = readDataFromCSV("Maint_Status_Report_ProjTailoring_02","Maint/Status_Report"); 
+ 
+ var $t = _testcase("TC_1", "Login with PM");
+ $t.start();
+
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_2", "Navigate to project tailoring");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo1; //Projects_home
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.projectname  = $data.Project_name1;//TJCSTMEP
+ selectProject($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo2; //Project Tailoring
+ navigateTo($inputObject);
+ 
+ $t.end();
+ 
+
+
+ var $t = _testcase("TC_4", "Status Report Frequency segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name2;//Status Report Frequency
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.rdg_Monthly = $data.rdg1;//Monthly
+ ModifyEformInstance($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5", "Request Type Selection segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name3;//Request Type Selection
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName  = $data.table1;//"Name";
+ $inputObject.rowNo = $data.rowname1;//"Analysis and Research|Bug Fix|Major Enhancement|Minor Enhancement|Other Request|Production Support|Testing Request";
+ $inputObject.colNo  = $data.colname01;//"Selected_unchk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName  = $data.table1;//"Name";
+ $inputObject.rowNo = $data.rowname1;//"Analysis and Research|Bug Fix|Major Enhancement|Minor Enhancement|Other Request|Production Support|Testing Request";
+ $inputObject.colNo  = $data.colname1;//"Selected_chk";
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+
+ var $t = _testcase("TC_5", "Project Specific Metrics segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name4;//Project Specific Metrics
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tblname = $data.Segment_Name4;
+ $inputObject.row_id = 3;
+ $inputObject.col_id =1;
+ InfyFTDeleteRows($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno2;//2
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value2;//Analysis and Research|test|Negative|Number|test
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno3;//3
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value3;//Major Enhancement|test1|Positive|Percentage|test1
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno4;//4
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value4;//Bug Fix|test1|Positive|Percentage|test1
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno5;//5
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value5;//Minor Enhancement|test1|Positive|Percentage|test1
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno6;//5
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value6;//Other Request|test1|Positive|Percentage|test1
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table2;//Project Specific Metrics
+ $inputObject.rowNo = $data.rowno7;//7
+ $inputObject.colNo  = $data.colno2;//1_lst|2_edt|3_lst|4_lst|5_edt
+ $inputObject.fieldValues = $data.value7;//Testing Request|test1|Positive|Percentage|test1
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_6", "Applicable Services segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name5;//Applicable Services
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.rowname2;//Application Support
+ $inputObject.rowNo = $data.rowname2;//Application Support
+ $inputObject.colNo = $data.colname2;//Is Applicable?_chk
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("TC_7", "Applicable ITIL Processes segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name6;//Applicable ITIL Processes
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.link = $data.SP2;
+ InfyFTclick($inputObject);
+
+ 
+ _wait(2000);
+ 
+ clickReturn();
+ 
+   $inputObject = {};
+ $inputObject.link = $data.SP2;
+ InfyFTclick($inputObject);
+
+ 
+ _wait(2000);
+  
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.table5;//ITIL Process Selection
+ $inputObject.rowNo = $data.rowname3;//Event Management|Incident Management
+ $inputObject.colNo = $data.colname2;//Is Applicable?_chk
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ _wait(5000);
+
+ var $t = _testcase("TC_7", "Applicable Metrics");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name7;//Applicable Metrics
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+   $inputObject = {};
+ $inputObject.link = $data.SM2;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.table6;//Metrics Selection
+ $inputObject.rowNo = $data.rowname4;//Incident Productivity|Event Quality
+ $inputObject.colNo = $data.colname2;//Is Applicable?_chk
+ $inputObject.fieldValues = "true";
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ clickReturn();
+ 
+ $t.end();
+ 
+ _wait(5000);
+ 
+ var $t = _testcase("TC_8", "Production Support Custom Metrics segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name8;//Production Support Custom Metrics
+ SelectSegment($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.table7;//Production Support Custom Metrics[1]
+ $inputObject.rowNo = $data.rowno8;//1
+ $inputObject.colNo  = $data.colno4;//7_lst|11_lst|13_edt
+ $inputObject.fieldValues = $data.value8;//Event Management|Event Management Coverage|test
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.link = $data.AR;
+ InfyFTclick($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "yes";
+ $inputObject.tableName = $data.table7;//Production Support Custom Metrics[1]
+ $inputObject.rowNo = $data.rowno9;//3
+ $inputObject.colNo  = $data.colno4;//7_lst|11_lst|13_edt
+ $inputObject.fieldValues = $data.value9;//Incident Management|Average Response Time|test2
+ setSwiftFormData($inputObject);
+ saveSwiftForm($inputObject);
+ 
+ $t.end();
+
+ 
+ var $t = _testcase("TC_8", "SLA Category segment");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.Segment_Name9;//SLA Category
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table8;//Category 1
+ $inputObject.rowNo = $data.rowno10;//0
+ $inputObject.colNo = $data.colno5;//1_edt
+ $inputObject.fieldValues = $data.value10;//Severity
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table8;//Categories
+ $inputObject.rowNo = $data.rowno10;//0
+ $inputObject.colNo = $data.colno6;//2_txt
+ $inputObject.fieldValues = $data.value11;//Critical,Major,Minor
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table8;//Category 1
+ $inputObject.rowNo = $data.rowno11;//1
+ $inputObject.colNo = $data.colno5;//1_edt
+ $inputObject.fieldValues = $data.value12;//Location
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.table8;//Category 1
+ $inputObject.rowNo = $data.rowno11;//1
+ $inputObject.colNo = $data.colno6;//2_txt
+ $inputObject.fieldValues = $data.value13;//India,US,Korea
+ setSwiftFormData($inputObject);
+
+ saveSwiftForm($inputObject);
+ $t.end();
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

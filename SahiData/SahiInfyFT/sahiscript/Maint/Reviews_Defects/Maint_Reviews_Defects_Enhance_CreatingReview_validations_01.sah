@@ -1,0 +1,187 @@
+﻿_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+_include("../../../sahisource/Business/TestManagement.sah");
+_include("../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Reviews_Defects_Enhance_CreatingReview_validations_01", "Maint/Reviews_Defects");
+ 
+ var $dateObj = new Date();
+ var $currentDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj);
+ 
+ var $dateObj1 = new Date();
+ $dateObj1 = DateAdd("d",10,$dateObj1);
+ var $endDate = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+
+ var $TC = _testcase("TC_BRD10_FU1_5__1_2","Checking for availability and mandatory fields."); 
+ $TC.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+  
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ navigateTo($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.item = $data.Enhancements4;
+ OpenEformInstance($inputObject);
+ 
+ _wait(10000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_name3;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;//reviewer
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab \n";
+ InfyFTcreateLinkedItem($inputObject);
+  
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = "--None--";
+ $inputObject.lst_DN_Reviewer = $data.field200;//reviewer
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Review Mode in Details tab \n"
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = "--None--";//reviewer
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Reviewer in Details tab \n";
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;//reviewer
+ $inputObject.txt_DN_ArtifactName = "";
+ $inputObject.lst_reviewtype = $data.reviewType;
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Artifact Name in Details tab \n"
+ InfyFTcreateLinkedItem($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;//reviewer
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = "--None--";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Review/Testing of in Details tab \n";
+ InfyFTcreateLinkedItem($inputObject); 
+
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.CM_Name;
+ $inputObject.lst_DN_ReviewMode = $data.reviewMode;
+ $inputObject.lst_DN_Reviewer = $data.field200;
+ $inputObject.txt_DN_ArtifactName = $data.artifactName;
+ $inputObject.lst_reviewtype = $data.reviewType; 
+ InfyFTcreateLinkedItem($inputObject);
+ var $createdID = $inputObject.createdID;
+ 
+ $inputObject = {};
+ $inputObject.item = $createdID;
+ InfyFTOpenEformInstanceForLastPage($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblName;//Name
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblreviewMode;//reviewMode
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblreviewer;//reviewer
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblartifactName;//artifactName
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblreviewType;//reviewType
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblactualReviewEffort;//ActualReviewEffort
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblNoOfDefect;//Actual Review Effort
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblTotalReviewEffort;//Total Review Effort
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblReviewEfficency;//Review Efficiency
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblProgCode;//Program Code
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblAppCode;//Application Code
+ InfyFTisVisible($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblModCode;//Module Code
+ InfyFTisVisible($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.popup_name = $data.winprefix;
+ $inputObject.span_Name = $data.lblStatus;//Status
+ InfyFTisVisible($inputObject); 
+ 
+ InfyFTReturnPopUp();
+  
+ $TC.end();
+ 
+
+ 
+ 
+
+ 
+
+
+
+ 
+ 

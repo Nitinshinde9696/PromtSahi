@@ -1,0 +1,104 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceKunal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Filter.sah");
+_include("../../../sahisource/Business/EformEditor.sah");
+_include("../../../sahisource/Business/ECR.sah");
+
+ $data = readDataFromCSV("Agile_statusReport_Details_highlightsAndNeeds_Validations_01", "Agile/StatusReport");
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.Username1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password = $data.Password1;
+ loginIntoDigite($inputObject);
+  
+ $inputObject = {};
+ $inputObject.projectname = $data.Project_name2;
+ selectProject($inputObject);
+ 
+ _wait(5000);
+ 
+ var $TC1 = _testcase("TC 1.1 to 1.5","Details page validations and Name field"); 
+ $TC1.start(); 
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo3;
+ InfyFTnavigateTo($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.item = $data.statusReportInstance;
+ InfyFTOpenEformInstanceForLastPage($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.detailsLabels;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.nilData;
+ InfyFTsaveInstance($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ InfyFTsaveInstance($inputObject);
+
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ verifyEformInstanceDetails($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = "";
+ $inputObject.msgAlert = "Value is not set for the below fields. Please enter the values and save:\n• Field Name in Details tab";
+ InfyFTsaveInstance($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.edt_CM_Name = $data.Name;
+ InfyFTsaveInstance($inputObject);
+
+ _wait(5000); 
+ 
+ $TC1.end();
+ 
+ var $TC2 = _testcase("TC 2.1 to 2.3","Details page validations and Name field"); 
+ $TC2.start(); 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segmentHighlightsAttention;//Highlights and Needs Attention
+ SelectSegment($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.highlightsAttentionLabels;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(2000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = "";
+ $inputObject.txt_DN_NeedsAttentionitems = "";
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.txt_DN_Highlightsofthereporti = $data.fieldValueTest;
+ $inputObject.txt_DN_NeedsAttentionitems = $data.fieldValueTest;
+ InfyFTsaveInstance($inputObject);
+ 
+ _wait(5000);
+ 
+ $TC2.end();

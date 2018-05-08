@@ -1,0 +1,600 @@
+_include("../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../sahisource/Business/EformInstanceSnehal.sah");
+_include("../../../sahisource/Business/EformListing.sah");
+_include("../../../sahisource/Business/Task.sah");
+_include("../../../sahisource/Business/InfyECR.sah");
+
+ $data = readDataFromCSV("Package_PCB_FieldVerification_PCBVer_Track_04", "Package/PCB");
+ $data1 = readDataFromCSV("Package_PCB_common_csv", "Package/PCB");
+ 
+ 
+ 
+ 
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;//PCB Version Details
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ 
+  /**REMOVE ALL VALUES**/
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo601;
+ $inputObject.fieldValues = $data.fieldValues701;
+ setSwiftFormData($inputObject);
+  
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {}; 
+ $inputObject.import = $data.imprt;
+ $inputObject.attfilename = $data.attfilename;
+ InfyMyADDAttachment($inputObject);
+ _click(_submit("Close"));
+  
+ _wait(5000);
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+ /*$inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo601;
+ $inputObject.fieldValues = $data.correctvalues;
+ verifySwiftFormData($inputObject);*/
+  
+  
+  $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo601;
+ $inputObject.fieldValues = $data.fieldValues701;
+ setSwiftFormData($inputObject);
+  
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ var $t = _testcase("TC_1","Fill the field UCL and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//LC Stage Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//6_edt//UCL
+ $inputObject.fieldValues = $data.fieldValues501;//15
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Issue in LC Stage Metric Details: \nRow 1: Please enter LCL CoV. Please enter mean. ";//$data.Alert501;
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ 
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+
+  $t.end();
+ var $t = _testcase("TC_2","Fill the field LCL and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//3
+ $inputObject.colNo = $data.colNo503;//8_edt//LCL
+ $inputObject.fieldValues = $data.fieldValues501;//15
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert502;
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+
+ 
+var $t = _testcase("TC_3","Fill the field COV and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo504;//9_edt//COV
+ $inputObject.fieldValues = $data.fieldValues501;//15
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert =" Issue in LC Stage Metric Details: \nRow 1: Please enter UCL LCL. Please enter mean. ";//$data.Alert503;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_4","Fill the field UCL with less value compared to the field Mean and LCL and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo505;//6_edt|7_edt|8_edt|9_edt
+ $inputObject.fieldValues = $data.fieldValues502;//5|10|5|5
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Issue in LC Stage Metric Details: \nRow 1: Mean cannot be greater than UCL. UCL cannot be less than LCL and Mean. ";//$data.Alert504;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_5","Fill the field Mean with less value compared to the field  LCL and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo505;//6_edt|7_edt|8_edt|9_edt
+ $inputObject.fieldValues = $data.fieldValues503;//5|10|15|5
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert ="Issue in LC Stage Metric Details: \nRow 1: LCL cannot be greater than Mean.";//$data.Alert505;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+
+ $t.end();
+ 
+ var $t = _testcase("TC_6","Fill the field Mean with greater value compared to the field UCL and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo505;//6_edt|7_edt|8_edt|9_edt
+ $inputObject.fieldValues = $data.fieldValues504;//5|15|15|5
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert =" Issue in LC Stage Metric Details: \nRow 1: Mean cannot be greater than UCL. UCL cannot be less than LCL and Mean. ";//$data.Alert506;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_7","Fill the field LCL with greater value compared to the fields UCL and Mean and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo505;//6_edt|7_edt|8_edt|9_edt
+ $inputObject.fieldValues = $data.fieldValues505;//5|5|15|5
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = " Issue in LC Stage Metric Details: \nRow 1: LCL cannot be greater than Mean. UCL cannot be less than LCL and Mean. ";//$data.Alert507;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+var $t = _testcase("TC_8","Fill the field Min and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo506;//6_edt|7_edt|8_edt|9_edt|10_edt
+ $inputObject.fieldValues = $data.fieldValues506;//15|15|5|5|28
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Min value cannot be greater than Max value. Please check Min and Max values for LC Stage level metric at row number 1.";//$data.Alert508;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+  clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ 
+ var $t = _testcase("TC_9","Fill the field Max and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo506;//6_edt|7_edt|8_edt|9_edt|10_edt
+ $inputObject.fieldValues = $data.fieldValues507;//15|15|5|5|28
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert508;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+SelectSegment($inputObject);
+ 
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_10","Fill the field min with greter value than max and click on Complete button");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo509;//6_edt|7_edt|8_edt|9_edt|10_edt
+ $inputObject.fieldValues = $data.fieldValues508;//15|15|5|5|28
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//$data.Alert508;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ clickReturn();
+ 
+ $inputObject = {};
+ $inputObject.item = $IDpcb;
+ OpenEformInstance($inputObject);
+ 
+ _wait(30000);
+ _wait(30000);
+ 
+  $inputObject = {};
+ $inputObject.segment_name = $data1.PCBVersionDetails;
+ SelectSegment($inputObject);
+ 
+ _wait(5000);
+
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo508;//6_edt|7_edt|8_edt|9_edt|10_edt|11_edt
+ $inputObject.fieldValues = $data.fieldValues509;//15|15|5|5|28|30
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";
+ saveSwiftForm($inputObject);
+ 
+  $t.end();
+  
+
+ var $t = _testcase("TC_12","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo501;//6_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "Error : Please enter numeric value for UCL of LC Stage level metric at row number 1.";//$data.Alert509;
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_13","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo502;//7_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert510;//"Error : Please enter numeric value for Mean of LC level metric at row number 3";
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_14","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo503;//8_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert511;//"Error : Please enter numeric value for LCL of LC level metric at row number 3";
+ saveSwiftForm($inputObject);
+
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_15","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo504;//9_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert512;//"Error : Please enter numeric value for CoV of track level metric at row number 3";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_16","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo509;//10_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert513;//"Error : Please enter numeric value for Min of track level metric at row number 3";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_17","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo510;//11_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert514;//"Error : Please enter numeric value for Max of track level metric at row number 3";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_18","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo511;//12_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert515;//"Error : Please enter numeric value for 25th Percentile of track level metric at row number 3";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ $t.end();
+ 
+ var $t = _testcase("TC_19","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo512;//13_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = $data.Alert516;//"Error : Please enter numeric value for 75th Percentile of track level metric at row number 3";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ $t.end();
+ 
+/* var $t = _testcase("TC_20","Enter the alphabets values to the fields");
+ $t.start();
+ 
+ $inputObject = {}; 
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo513;//14_edt
+ $inputObject.fieldValues = $data.fieldValues510;//Test
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {}; 
+ $inputObject.msgAlert = "";//"Error : Please enter numeric value for Percent Project within range or control limits of track level metric at row number 1";
+ saveSwiftForm($inputObject);
+ _wait(5000);
+ $t.end();*/
+ 
+ var $t = _testcase("TC_21","Verify the fields are read only in 'Track level table'");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;//Track Metrics Details	
+ $inputObject.rowNo = $data.rowNo501;//1
+ $inputObject.colNo = $data.colNo514;
+ $inputObject.fieldValues = $data.fieldValues511;//"Major Enhancement"
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_22","Verify the fields are read only in 'Track level table'");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo515;
+ $inputObject.fieldValues = $data.fieldValues512;//"Acceptance and Installation"
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_23","Verify the fields are read only in 'Track level table'");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo516;
+ $inputObject.fieldValues = $data.fieldValues513;//".NET"
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_24","Verify the fields are read only in 'Track level table'");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo517;
+ $inputObject.fieldValues = $data.fieldValues514;//"Effort Distribution"
+ verifySwiftFormData($inputObject);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_25","Verify the fields are read only in 'Track level table'");
+ $t.start();
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.TableName51;
+ $inputObject.rowNo = $data.rowNo501;
+ $inputObject.colNo = $data.colNo518;
+ $inputObject.fieldValues = $data.fieldValues515;//"Positive"
+ verifySwiftFormData($inputObject);
+ clickReturn();
+ $t.end();
+ 
+ 
+

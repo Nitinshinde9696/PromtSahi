@@ -1,0 +1,566 @@
+_include("../../../../sahisource/Business/DigiteCommon.sah");
+_include("../../../../sahisource/Business/BusinessNavigation.sah");
+_include("../../../../sahisource/Business/EformInstanceNitin.sah");
+_include("../../../../sahisource/Business/Task.sah");
+_include("../../../../sahisource/Business/ECR.sah");
+_include("../../../../sahisource/Business/EformListing.sah");
+_include("../../../../sahisource/Business/TaskGrid.sah");
+
+ $data = readDataFromCSV("Maint_Request_Management_Enhancement_Sizing_Details_15","Maint/Request_Management/Enhancements");
+
+ var $dateObj1 = new Date();
+ var $StartDate1 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj1);
+ 
+ var $dateObj2 = new Date();
+ $dateObj2 = DateAdd("d",10,$dateObj2);
+ var $EndDate2 = new java.text.SimpleDateFormat("dd-MMM-yyyy").format($dateObj2);
+ 
+ var $t = _testcase("TC_1.1.1","Login");
+ $t.start();
+ 
+ $inputObject = {};
+ $inputObject.user_name = $data.user_name1;
+ $inputObject.edt_loginid = $data.LoginID1;
+ $inputObject.edt_password =$data.Password1;
+ loginIntoDigite($inputObject);
+ 
+ $t.end();
+ var $s1 = _testcase("TC_1.1.2"," Navigation");
+ $s1.start();
+   
+ $inputObject = {};
+ $inputObject.projectname = $data.projectname4;//projectname
+ selectProject($inputObject);
+ 
+ $s1.end();
+ var $s2 = _testcase("TC_1.1.3"," Check the Fields");
+ $s2.start();
+ 
+ $inputObject = {};
+ $inputObject.name = $data.navigateTo4;//Enhancements
+ navigateTo($inputObject);
+ $s2.end();
+ var $s3 = _testcase("TC_5.1"," Check available Fields after saving");
+ $s3.start();
+
+ $inputObject = {};
+ $inputObject.txt_CM_Description = $data.desc16;
+ $inputObject.edt_CM_Name = $data.requestTitle;
+ $inputObject.lst_DN_RequestType = $data.reqtype20;//Minor
+ $inputObject.lst_DN_RequestOwner = $data.reqowner16;
+ $inputObject.lst_DN_Complexity = $data.complexity17;//Simple
+ $inputObject.lst_isPackageDigiteStart = $data.module21;
+ $inputObject.lst_DN_LCStage = $data.LC;//"Partial LC Stage";
+ CreateInstance($inputObject);
+ 
+  $s3.end();
+  
+ var $s4 = _testcase("TC_9.2"," Open Sizing Detail segment");
+ $s4.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sizing_details;//_link("Sizing Details")
+ SelectSegment($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.Detail32;//_span("Details")
+ InfyFTisVisible($inputObject);
+ 
+ /*
+ $inputObject = {};
+ $inputObject.span_Name = $data.Toa32;//_cell("Type of Application")
+ InfyFTisVisible($inputObject);*/
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.ast32;//_cell("Applicable Sizing Technique")
+ InfyFTisVisible($inputObject); 
+ 
+ $s4.end(); 
+ var $s5 = _testcase("TC_10.2"," verify drop down values of Sizing Detail ");
+ $s5.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1";
+ $inputObject.colNo = $data.Dcol33;// "0_lst"
+ $inputObject.fieldValues = $data.D_val33;//"--None--#Custom Application#BPM / EAI#ETL only#ETL Reports only#ETL & Reports#Portal or Content Management Site#Package or Product"
+ verifySwiftFormData($inputObject);
+ 
+ $s5.end();
+ 
+ var $s6 = _testcase("TC_10.3"," Verify Type of Application field");
+ $s6.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.D_val34;//"--None--"
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.operation =$data.neg33;//"Negative";
+ $inputObject.span_Name = $data.plang33;//"Primary Language";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol35;//"8_lst"
+ $inputObject.fieldValues = $data.D_val34;//"--None--";
+ verifySwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.D_val36;//"Custom Application";
+ setSwiftFormData($inputObject);
+  
+ $inputObject = {};
+ $inputObject.span_Name = $data.plang33;//"Primary Language";
+ InfyFTisVisible($inputObject); 
+  
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol37;//"Dcol37"
+ $inputObject.fieldValues = $data.D_val38;//"--None--|3rd Generation default|4th Generation default|ABAP/4|Access|Ada 83|Ada 95|ANSI COBOL 85|ANSI SQL|ASP|Assembly (Basic)|Assembly (Macro)|Awk|Basic|Basic assembly|BMSGEN|BRIO|C|C++|CBASIC|CICS|COBOL|COBOL OS/390|COBOL/400|COGNOS|ColdFusion|CORBA|Crystal Rpts|CSPs|DCL|DELPHI|EASEL|Easytrieve|EDA/SQL|Excel 1-2|Excel 3-4|Excel 5|Expect|FORTRAN|FORTRAN 77|FORTRAN/90|Fortran/95|HTML 2.0|HTML 3.00|HTML 4.0|IDMS|INFORMIX|INSTALL/1|JAVA|JavaScript|JCL|JSP|LISP|Lotus Macros|Lotus Notes|Lotus123DOS|MicroF COBOL|NATURAL Lang|NATURAL-1|NATURAL-2|NATURALCONST|Objective C|ORACLE|ORACLE D2K|Others|PACBASE|Paradox|PASCAL|PERL|PersistBuild|PL/1|PL/SQL|PowerBuilder|PPL(PLUS)|Pro-C|PROGRESS|PROLOG|Protel|QBASIC|QMF|Rexx|RPG I|RPG II|RPG III|S-PLUS|SAPIENS|SAS|SEQUAL|SQL|SQL-Windows|SYBASE|Tcl/Tk|TELON|TURBO C|TURBO C++|TURBOPAS1-4|TURBOPAS4-5|UnifaceProg|UNIX Shell|VAX ACMS|VAX ADE|VB.net|VisBasDos|Visible C|VisibleCOBOL|Visual C++|Visual C++6|VisualBasic1|VisualBasic2|VisualBasic3|VisualBasic4|VisualBasic5|VisualBasic6|XLISP|XML|ZLISP";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol35;//"8_lst"
+ $inputObject.fieldValues = $data.D_val39;//"--None--|No Standard Sizing Technique Applicable|Others|IFPUG FP|Nesma FP";
+ verifySwiftFormData($inputObject);
+ 
+ $s6.end();
+ 
+ var $n1 = _testcase("TC_10.4"," verifying the BPM or EAI");
+ $n1.start();
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1";
+ $inputObject.colNo = $data.Drow33;//"0_lst";
+ $inputObject.fieldValues = $data.BoE38;//BPM / EAI
+ setSwiftFormData($inputObject);
+ 
+ _wait(500);
+ $inputObject = {};
+ $inputObject.span_Name = $data.pe39;//_cell("Primary EAI")
+ $inputObject.operation = $data.neg33;//"Negative";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.AST36;// _cell("Applicable Sizing Technique")
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details";
+ $inputObject.rowNo = $data.Drow33;//"1";
+ $inputObject.colNo = $data.Dcol41;//"2_lst";
+ $inputObject.fieldValues = $data.D_val42;//"--None--#IBM BPM#IBM Datapower#IBM ESB#IBM MB#IBM MDM#IBM MQ#IBM Sterling Integrator#IBM WPS#MS Biztalk#Oracle MDM#Pega#SAG SOA#SAP PI#Software AG Webmethods#TIBCO BPM#TIBCO BW#TIBCO MDM"; 
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol35;//"8_lst"
+ $inputObject.fieldValues = $data.D_val43;// "--None--|No Standard Sizing Technique Applicable"
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $n1.end();
+
+ var $n2 = _testcase("TC_10.5"," verifying the DM");
+ $n2.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.ETL41;//DM
+ setSwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.AST36;// _cell("Applicable Sizing Technique")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol44;//"3_lst"
+ $inputObject.fieldValues = $data.D_val45;//"--None--|Ab Initio|CloverETL|Cognos|Datastage|Hyperion|IBM DB2|Informatica|Information builder|Jaspersoft|MS SSIS|Oracle Data Integrator|Oracle PL/SQL|Oracle Warehouse Builder - OWB|Others|OWB|Pentaho|QLikview|SAP BI|Siebel|SpagoBI|Spotfire|Sybase ETL Developer|Tableau|Tactic|Talend|Teradata";
+ verifySwiftFormData($inputObject);
+
+  _wait(500);
+
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $n2.end();
+  
+ var $n3 = _testcase("TC_10.6"," verifying the BI");
+ $n3.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.ER44;//BI
+ setSwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.dcol47;//"4_lst"
+ $inputObject.fieldValues = $data.D_val48;//"--None--|Cognos|MicroStrategy|MS PowerView|MS SSAS|MS SSRS|Others|SAP Crystal Reports"
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+
+
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $n3.end();
+  
+ var $n4 = _testcase("TC_10.7"," verifying the DM & BI");
+ $n4.start();
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.ER47;//ETL & Reports
+ setSwiftFormData($inputObject);
+ 
+ _wait(500);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol44;//"3_lst"
+ $inputObject.fieldValues = $data.D_val50;//"--None--#Ab Initio#Actuate#Business objects - BO#CloverETL#Cognos#Datastage#Hyperion#IBM DB2#Informatica#Information builder#Jaspersoft#MicroStrategy#MS PowerView#MS SSAS#MS SSIS#MS SSRS#Oracle Data Integrator#Oracle PL/SQL#Oracle Warehouse Builder - OWB#Others#OWB#Pentaho#QLikview#SAP BI#SAP Crystal Reports#Siebel#SpagoBI#Spotfire#Sybase ETL Developer#Tableau#Tactic#Talend#Teradata";
+ verifySwiftFormData($inputObject);
+ 
+
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+  
+ $n4.end(); 
+
+ var $n5 = _testcase("TC_10.8"," verifying the Portal or Content Management Site");
+ $n5.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.pcms48;//Portal or content management site
+ setSwiftFormData($inputObject);
+  
+ _wait(500);
+ $inputObject = {};
+ $inputObject.span_Name = $data.pt49+";"+$data.Tpd50+";"+$data.AST36;//_cell("Primary Technology")
+ //InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.Tpd50;// _cell("Type of Portal Development")
+ //InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.AST36;// _cell("Applicable Sizing Technique")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol53;// "5_lst"
+ $inputObject.fieldValues = $data.D_val54;//"--None--#Adobe CQ5 or AEM#Adobe Insights#Google Analytics or Search Appliance#Hybris#IBM Portal Server#IBM Webpshere Commerce#Oracle ATG#Oracle Endeca#Oracle Webcentre#ORC eBilling#Sitecore#SOLR#Unica";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol55;//"7_lst"
+ $inputObject.fieldValues = $data.D_val56;//"--None--#Code Intensive#Tool Intensive";
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo =$data.Dcol35;//"8_lst"
+ $inputObject.fieldValues =$data.D_val57// "--None--#No Standard Sizing Technique Applicable#Others#IFPUG FP#Nesma FP";
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $n5.end();  
+  
+ var $n6 = _testcase("TC_10.9"," verifying the Package or Product");
+ $n6.start();
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.pp53;//Package or Product
+ setSwiftFormData($inputObject);
+ 
+ _wait(500);
+ $inputObject = {};
+ $inputObject.span_Name = $data.pp54;//_cell("Primary Package")
+ //InfyFTisVisible($inputObject);
+
+ $inputObject = {};
+ $inputObject.span_Name = $data.AST36;// _cell("Applicable Sizing Technique")
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol58;//"6_lst"
+ $inputObject.fieldValues = $data.val33;//"--None--#Amdocs#Ariba#EMC Documentum#Epiphany#Geneva#IBM Maximo#JDA Demand & Fulfillment#Kenan#Kronos#Locanis WMS#Manhattan WMS#Maximo#Microsoft Dynamics - AXAPTA#Microsoft Dynamics - CRM#Microsoft Dynamics - GP#Microsoft Dynamics - NAVISION#Oracle APS#Oracle CRM#Oracle ERP#Oracle HRMS#Others#PeopleSoft ERP#PeopleSoft HRMS#Red Prairie WMS#Retek#Salesforce.com#SAP APO#SAP CRM#SAP ERP#SAP HRMS#SAP NetWeaver#SAP SCM#SAP SRM#Siebel CRM#Sterling Commerce#Sterling WMS#Yantra";
+ verifySwiftFormData($inputObject);
+ 
+ _wait(500);
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo =$data.Dcol35;//"8_lst"
+ $inputObject.fieldValues = $data.D_val59;//"--None--#No Standard Sizing Technique Applicable#Others#IFPUG FP#Nesma FP";
+ verifySwiftFormData($inputObject);
+
+ $inputObject = {};
+ $inputObject.button = " Save ";
+ InfyFTclick($inputObject);
+ 
+ $n6.end(); 
+
+ var $n7 = _testcase("TC_11.0"," verifying Application sizing Technique others");
+ $n7.start();
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol33;//"0_lst"
+ $inputObject.fieldValues = $data.D_val60;//"Custom Application";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol61;//"1_lst"
+ $inputObject.fieldValues = $data.D_val62;//"C++";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo =$data.Dcol35;//"8_lst"
+ $inputObject.fieldValues = $data.D_val63;//"Others";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.seg_val64;//"Others;Size;UOM"
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert= "Value is not set for the below fields.Please enter the values and save:\n• UOM field inside Others Table of Sizing Details Tab\n";//"Value must be set for Sizing Details--Others--.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.O_tab66;//"Others"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.O_col67;//"0_edt"
+ $inputObject.fieldValues = $data.O_val68;//"test";
+ setSwiftFormData($inputObject);
+ 
+ 
+ _assertEqual("Error : Please enter a positive numeric value for Size",_lastAlert());//Error Please enter a positive numeric value for Size
+ 
+
+ $inputObject = {};
+ $inputObject.tableName = $data.O_tab66;//"Others"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.O_col69;//"0_edt|1_edt"
+ $inputObject.fieldValues = $data.O_val70;//"12|23"
+ setSwiftFormData($inputObject);
+ 
+  _assertEqual("Error : Please enter valid UOM",_lastAlert());
+ $inputObject = {};
+// $inputObject.msgAlert= "Error Please enter valid UOM";//Error Please enter a positive numeric value for Size
+ //saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.O_tab66;//"Others"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo =  $data.O_col69;//"0_edt|1_edt"
+ $inputObject.fieldValues = $data.O_val71;//"2|test";
+ setSwiftFormData($inputObject);
+ 
+  $inputObject = {};
+  saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.seg72;//"Size Summary"
+ $inputObject.rowNo = $data.s_row73;//"0|1|2"
+ $inputObject.colNo = $data.s_col73;//"0_lbl"
+ $inputObject.fieldValues = $data.s_val73;//"UOM of Size|Enhancement Size|Testing Size"
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.seg72;//"Size Summary"
+ $inputObject.rowNo = $data.s_row73;//"0|1|2"
+ $inputObject.colNo = $data.s_col74;//"1_lbl";
+ $inputObject.fieldValues = $data.s_val75;//"test|2.0|0.0";
+ verifySwiftFormData($inputObject); 
+  
+ $n7.end(); 
+ 
+ var $n8 = _testcase("TC_11.1"," verifying Application sizing Technique");
+ $n8.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sizing_details;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.Dcol76;// "0_lst|1_lst|8_lst"
+ $inputObject.fieldValues = $data.Dval77;//"Custom Application|C++|IFPUG FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.tblname78;//"IFPUG FP"
+ InfyFTisVisible($inputObject);
+ 
+  $inputObject = {};
+ $inputObject.tableName = $data.tblname78;//"IFPUG FP"
+ $inputObject.rowNo = $data.I_row78;//"0"
+ $inputObject.colNo = $data.s_col73;//"0_lbl"
+ $inputObject.fieldValues = $data.I_val78;//"Adjusted Function Points";
+ verifySwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert="Value is not set for the below fields.Please enter the values and save:\n• Value field inside IFPUG FP Table of Sizing Details Tab\n";//"Value must be set for Sizing Details--IFPUG FP--.";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tblname78;//"IFPUG FP"
+ $inputObject.rowNo = $data.I_row78;//"0"
+ $inputObject.colNo = $data.Icol78;//"1_edt"
+ $inputObject.fieldValues = $data.val79;//"test";
+ setSwiftFormData($inputObject);
+  
+ _assertEqual("Error : Please enter a positive numeric value for Adjusted Function Points",_lastAlert());//Error Please enter a positive numeric value for Size
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tblname78;//"IFPUG FP"
+ $inputObject.rowNo = $data.I_row78;//"0"
+ $inputObject.colNo = $data.Icol78;//"1_edt"
+ $inputObject.fieldValues = $data.Ival80;//"23";
+ setSwiftFormData($inputObject);
+  
+  $inputObject = {};
+  saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.seg72;//"Size Summary"
+ $inputObject.rowNo =  $data.s_row73;//"0|1|2"
+ $inputObject.colNo = $data.s_col81;//"0_lbl|1_lbl";
+ $inputObject.fieldValues = $data.val81;//"UOM of Size|FP|Enhancement Size|23.0|Testing Size|0.0";
+ verifySwiftFormData($inputObject);
+   
+ $n8.end(); 
+ 
+ var $n9 = _testcase("TC_11.2"," verifying Application sizing Technique");
+ $n9.start();
+ 
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_sizing_details;//_link("Sizing Details")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.D_tab33;//"Details"
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.s_col82;//"0_lst|1_lst|8_lst"
+ $inputObject.fieldValues = $data.val82; //"Custom Application|C++|Nesma FP";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data.seg83;//"Nesma FP;Enhancement FP;Testing FP";
+ InfyFTisVisible($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.msgAlert= "Value is not set for the below fields.Please enter the values and save:\n• Enhancement FP field inside Nesma FP Table of Sizing Details Tab\n";
+ saveSwiftForm($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tab85;//"Nesma FP";
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo = $data.O_col67;//"0_edt"
+ $inputObject.fieldValues = $data.val79;//"test";
+ setSwiftFormData($inputObject);
+  
+ _assertEqual("Error : Please enter a positive non-zero numeric value for Enhancement FP.",_lastAlert());
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tab85;//"Nesma FP";
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo =  $data.O_col69;//"0_edt|1_edt"
+ $inputObject.fieldValues = $data.val86;//"23|tests";
+ setSwiftFormData($inputObject);
+  
+  _assertEqual("Error : Please enter a positive numeric value for Testing FP.",_lastAlert()); 
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.tab85;//"Nesma FP";
+ $inputObject.rowNo = $data.Drow33;//"1"
+ $inputObject.colNo =  $data.O_col69;//"0_edt|1_edt"
+ $inputObject.fieldValues = $data.val87;//"64|54";
+ setSwiftFormData($inputObject);
+
+  $inputObject = {};
+  saveSwiftForm($inputObject);
+  
+ $inputObject = {};
+ $inputObject.segment_name = $data.segment_req_summery;//_link("Request Summary")
+ SelectSegment($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.tableName = $data.seg72;//"Size Summary"
+ $inputObject.rowNo = $data.s_row73;//"0|1|2"
+ $inputObject.colNo = $data.s_col81;//"0_lbl|1_lbl";
+ $inputObject.fieldValues = $data.val88;//"UOM of Size|Nesma FP|Enhancement Size|64.00|Testing Size|54.00"
+ verifySwiftFormData($inputObject);
+   
+ $n9.end();

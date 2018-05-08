@@ -1,0 +1,646 @@
+ _include("../../../sahisource/Business/DigiteCommon.sah");
+ _include("../../../sahisource/Business/BusinessNavigation.sah");
+ _include("../../../sahisource/Business/EformInstance.sah");
+ _include("../../../sahisource/Business/InfyECR.sah");
+ _include("../../../sahisource/Business/EformInstanceKunal.sah");
+
+ $data1 = readDataFromCSV("Agile_ProjectTailoring_SizingDetails_FillingtheFields","Agile/ProjectTailoring"); 
+ 
+ var $t = _testcase("TC_11", "To check for the mandatory fields in the Sizing details tab");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = "--None--";
+ setSwiftFormData($inputObject);  
+ 
+ $inputObject = {};
+ $inputObject.msgAlert = "Value is not set for the below fields.Please enter the values and save:\n• Field Type of Work in table Nature of Work in Project Configuration tab\n• Field ALM Tool in table Nature of Work in Project Configuration tab\n• Field Sizing Technique in table Sizing Details in Project Configuration tab\n• Field Timesheet Module in table Others in Project Configuration tab\n• Field Application for Defects Tracking in table Others in Project Configuration tab";
+ InfyFTsaveSwiftForm($inputObject);
+ 
+ _wait(1000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_12", "To check for all the drop-down lists");
+ $t.start();  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = $data1.fieldValuesTypeWork;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldVlauesALM;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldValuesSizing;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = $data1.fieldValueTimesheetModule;
+ verifySwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = $data1.fieldValuesDefectTracking;
+ verifySwiftFormData($inputObject);
+
+ _wait(5000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_13", "To check for the saving of the data after filling all the mandatory fields");
+ $t.start(); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = $data1.fieldValueDev;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldInfySP;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = $data1.fieldValueinfyTimesheet;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end();
+ 
+ var $t = _testcase("TC_14", "Validations while selecting Type of Work as DM");
+ $t.start(); 
+ 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = $data1.fieldValueDM;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldInfySP;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = $data1.fieldValueinfyTimesheet;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.labelDM;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colSelectTechnology;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue7;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply7;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colSelectTechnology;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue7;
+ $inputObject.fieldValues = $data1.fieldValueStorm;//Storm
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply7;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colSelectTechnology;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue7;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply7;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ //To check for the Remarks- applicable if selected technology is others is enabled or not
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colRemarksApplicable;
+ $inputObject.fieldValues = $data1.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_15", "Validations while selecting Type of Work as BI");
+ $t.start(); 
+ 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = $data1.fieldValueBI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldInfySP;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = $data1.fieldValueinfyTimesheet;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $inputObject = {};
+ $inputObject.span_Name = $data1.labelBI;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colSelectTechnology2;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue14;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply14;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colSelectTechnology2;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue14;
+ $inputObject.fieldValues = $data1.fieldSAP;//SAP
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply14;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colSelectTechnology2;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue14;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply14;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ //To check for the Remarks- applicable if selected technology is others is enabled or not
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colRemarkApplicable;
+ $inputObject.fieldValues = $data1.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+ $t.end(); 
+ 
+ var $t = _testcase("TC_16", "Validations while selecting Type of Work as DM and BI");
+ $t.start();  
+ 
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowTypeWork;
+ $inputObject.colNo = $data1.colTypeWork;
+ $inputObject.fieldValues = $data1.fieldDMBI;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tablenatureOfWork;
+ $inputObject.rowNo = $data1.rowALM;
+ $inputObject.colNo = $data1.colALM;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableSizingDetails;
+ $inputObject.rowNo = $data1.rowSizingTechnique;
+ $inputObject.colNo = $data1.colSizingTechnique;
+ $inputObject.fieldValues = $data1.fieldInfySP;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowTimesheet;
+ $inputObject.colNo = $data1.colTimesheet;
+ $inputObject.fieldValues = $data1.fieldValueinfyTimesheet;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableOthers;
+ $inputObject.rowNo = $data1.rowAppDefect;
+ $inputObject.colNo = $data1.colAppDefect;
+ $inputObject.fieldValues = $data1.fieldValuePROMT;
+ setSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+
+ $inputObject = {};
+ $inputObject.span_Name = $data1.labelDM;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000); 
+ 
+  $inputObject = {};
+ $inputObject.span_Name = $data1.labelBI;
+ InfyFTisVisible($inputObject);
+ 
+ _wait(1000);
+ 
+  $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colSelectTechnology;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue7;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply7;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colSelectTechnology;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue7;
+ $inputObject.fieldValues = $data1.fieldValueStorm;//Storm
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply7;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colSelectTechnology;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue7;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply7;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ //To check for the Remarks- applicable if selected technology is others is enabled or not
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colRemarksApplicable;
+ $inputObject.fieldValues = $data1.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000);
+ 
+  $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colSelectTechnology2;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue14;
+ $inputObject.fieldValues = "--All--";//All
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply14;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000); 
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colSelectTechnology2;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue14;
+ $inputObject.fieldValues = $data1.fieldSAP;//SAP
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply14;
+ InfyFTclick($inputObject);
+ 
+ _wait(5000);  
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tabelBIsubSelection;
+ $inputObject.rowNo = $data1.rowEPM;
+ $inputObject.colNo = $data1.colSelectTechnology2;
+ $inputObject.fieldValues = $data1.fieldValueYes;
+ InfyFTsetSwiftFormData($inputObject); 
+ 
+ $inputObject = {};
+ $inputObject.lst = "Yes";
+ $inputObject.element = $data1.tableSelectValue14;
+ $inputObject.fieldValues = $data1.fieldValueOthers;//Others
+ InfyFTsetData($inputObject);
+ 
+ $inputObject = {};
+ $inputObject.button = $data1.apply14;
+ InfyFTclick($inputObject);
+ 
+ _wait(2000);
+
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ //To check for the Remarks- applicable if selected technology is others is enabled or not
+ 
+ $inputObject = {};
+ $inputObject.byColRowName = "Yes";
+ $inputObject.tableName = $data1.tableDMSubservice;
+ $inputObject.rowNo = $data1.rowBigData;
+ $inputObject.colNo = $data1.colRemarksApplicable;
+ $inputObject.fieldValues = $data1.fieldValueTest;
+ setSwiftFormData($inputObject);
+ 
+ $inputObject = {};
+ InfyFTsaveSwiftForm($inputObject); 
+ 
+ _wait(5000); 
+ 
+ $t.end();
